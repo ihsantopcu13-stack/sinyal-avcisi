@@ -1820,7 +1820,32 @@ if(currentUser)kisiselSelam(currentUser);
 const xCSS=document.createElement('style');
 xCSS.textContent='.scroll-hidden{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}.scroll-hidden.visible{opacity:1!important;transform:none!important;pointer-events:auto!important}.step.scroll-hidden:nth-child(2){transition-delay:.1s}.step.scroll-hidden:nth-child(3){transition-delay:.2s}.fc.scroll-hidden:nth-child(2){transition-delay:.1s}.fc.scroll-hidden:nth-child(3){transition-delay:.2s}@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}.vis-sig,.vis-trap,.vis-key{transition:opacity .3s,transform .3s}';
 document.head.appendChild(xCSS);
-
+// EXIT INTENT
+let exitShown=false;
+document.addEventListener('mouseleave',(e)=>{
+  if(e.clientY<10&&!exitShown&&!document.getElementById('modal').classList.contains('open')){
+    exitShown=true;
+    setTimeout(()=>{const p=document.getElementById('exit-popup');p.style.display='flex';},300);
+  }
+});
+function exitKapat(){document.getElementById('exit-popup').style.display='none';}
+document.getElementById('exit-popup').addEventListener('click',function(e){if(e.target===this)exitKapat();});
 </script>
-</body>
+<!-- EXİT INTENT POPUP -->
+<div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
+    <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="font-size:52px;margin-bottom:12px">⏳</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px">Bir saniye dur!</div>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gün ücretsiz</strong> dene — kredi kartı yok, taahhüt yok.</p>
+    <div style="background:#e8eeff;border-radius:10px;padding:14px;margin:16px 0;display:flex;align-items:center;justify-content:center;gap:10px">
+      <span style="font-size:14px;font-weight:700;color:#2d5be3">Pro paket · 7 gün ücretsiz</span>
+      <span style="background:#2d5be3;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">BEDAVA</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+      <button onclick="exitKapat();openModal('Pro YDS &amp; YÖKDİL','₺399')" style="background:#2d5be3;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Evet, ücretsiz başlayım →</button>
+      <button onclick="exitKapat()" style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:Inter,sans-serif;padding:6px;text-decoration:underline">Hayır, hazırlıksız girmek istiyorum</button>
+    </div>
+  </div>
+</div></body>
 </html>
