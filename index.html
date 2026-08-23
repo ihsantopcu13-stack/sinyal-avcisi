@@ -1823,7 +1823,7 @@ document.head.appendChild(xCSS);
 // EXIT INTENT
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{
-  if(e.clientY<10&&!exitShown&&!document.getElementById('modal').classList.contains('open')){
+  if(!exitShown&&!document.getElementById('modal').classList.contains('open')){
     exitShown=true;
     setTimeout(()=>{const p=document.getElementById('exit-popup');p.style.display='flex';},300);
   }
