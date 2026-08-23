@@ -1832,7 +1832,7 @@ function exitKapat(){document.getElementById('exit-popup').style.display='none';
 window.addEventListener('load',function(){const ep=document.getElementById('exit-popup');if(ep)ep.addEventListener('click',function(e){if(e.target===this)exitKapat();});});
 </script>
 <!-- EXİT INTENT POPUP -->
-<div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:center;justify-content:center;padding:20px">
+<div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
     <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
     <div style="font-size:52px;margin-bottom:12px">⏳</div>
