@@ -1829,7 +1829,7 @@ document.addEventListener('mouseleave',(e)=>{
   }
 });
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
-document.getElementById('exit-popup').addEventListener('click',function(e){if(e.target===this)exitKapat();});
+window.addEventListener('load',function(){const ep=document.getElementById('exit-popup');if(ep)ep.addEventListener('click',function(e){if(e.target===this)exitKapat();});});
 </script>
 <!-- EXİT INTENT POPUP -->
 <div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:none;align-items:center;justify-content:center;padding:20px">
