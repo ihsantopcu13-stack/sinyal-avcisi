@@ -1556,7 +1556,38 @@ function sinavGeriSayim() {
   gsTimer = setInterval(guncelle, 60000);
 }
 
-pUpdate();
+pUpdate();// SCROLL ANİMASYONLARI
+const scrollObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('[data-count]').forEach(el=>{
+        if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}
+      });
+      e.target.querySelectorAll('[data-target]').forEach(bar=>{
+        if(!bar.dataset.animated){bar.dataset.animated='1';setTimeout(()=>{bar.style.width=bar.dataset.target+'%';},200);}
+      });
+    }
+  });
+},{threshold:0.12});
+
+function animateCount(el){
+  const target=parseInt(el.dataset.count);
+  const suffix=el.dataset.suffix||'';
+  const prefix=el.dataset.prefix||'';
+  let cur=0;
+  const step=Math.max(1,Math.ceil(target/60));
+  const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);
+}
+
+document.querySelectorAll('.step,.fc,.yorum,.hedef-card').forEach(el=>{
+  el.classList.add('scroll-hidden');scrollObs.observe(el);
+});
+document.querySelectorAll('.sosyal,.hayir-inner').forEach(el=>{
+  el.classList.add('scroll-hidden');scrollObs.observe(el);
+});
+const hataCard=document.getElementById('hata-card');
+if(hataCard)scrollObs.observe(hataCard);
   if(!pPlaying){playerToggle();}
   // Ses kurs bölümüne scroll et
   document.getElementById('ses').scrollIntoView({behavior:'smooth'});
