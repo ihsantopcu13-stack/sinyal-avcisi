@@ -1825,8 +1825,9 @@ let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{
   if(!exitShown&&!document.getElementById('modal').classList.contains('open')){
     exitShown=true;
-    setTimeout(()=>{const p=document.getElementById('exit-popup');p.style.display='flex';},300);
+    setTimeout(()=>{const p=document.getElementById('exit-popup');if(p)p.style.display='flex';},300);
   }
+});
 });
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
 window.addEventListener('load',function(){const ep=document.getElementById('exit-popup');if(ep)ep.addEventListener('click',function(e){if(e.target===this)exitKapat();});});
