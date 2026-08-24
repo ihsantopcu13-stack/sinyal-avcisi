@@ -1836,15 +1836,11 @@ function animateCount(el) {
 // Sosyal kanıt sayaçları
 document.querySelectorAll('.stat-num').forEach(el => {
   const txt = el.textContent.trim();
-  if (txt.includes('2.400')) { 
-  el.dataset.count='2400'; 
-  el.dataset.suffix='+'; 
-  el.textContent='0'; 
-}
-  else if (txt.includes('19')) { el.dataset.count='19'; el.textContent='0'; }
-  else if (txt.includes('%87')) { el.dataset.count='87'; el.dataset.prefix='%'; el.textContent='%0'; }
-  else if (txt.includes('90')) { el.dataset.count='90'; el.textContent='0'; }
- scrollObs.observe(el.closest('div') || el);
+  if (txt.includes('2.400'))    { el.dataset.count='2400'; el.dataset.suffix='+'; el.textContent='0'; }
+  else if (txt.includes('19'))  { el.dataset.count='19';   el.textContent='0'; }
+  else if (txt.includes('%87')) { el.dataset.count='87';   el.dataset.prefix='%'; el.textContent='0'; }
+  else if (txt.includes('90'))  { el.dataset.count='90';   el.textContent='0'; }
+  scrollObserver.observe(el.closest('div') || el);
 });
 const sosy = document.querySelector('.sosyal');
 if(sosy){ sosy.classList.add('scroll-hidden'); scrollObserver.observe(sosy); }
