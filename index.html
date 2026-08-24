@@ -1840,7 +1840,7 @@ document.querySelectorAll('.stat-num').forEach(el => {
   else if (txt.includes('19')) { el.dataset.count='19'; el.textContent='0'; }
   else if (txt.includes('%87')) { el.dataset.count='87'; el.dataset.prefix='%'; el.textContent='%0'; }
   else if (txt.includes('90')) { el.dataset.count='90'; el.textContent='0'; }
-  scrollObserver.observe(el.closest('.stat-num') || el);
+ scrollObs.observe(el.closest('div') || el);
 });
 const sosy = document.querySelector('.sosyal');
 if(sosy){ sosy.classList.add('scroll-hidden'); scrollObserver.observe(sosy); }
