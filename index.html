@@ -385,7 +385,26 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
   .nasil-header{margin-bottom:44px}
 }
-</style>
+.scroll-hidden{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.scroll-hidden.visible{opacity:1;transform:none}
+.step.scroll-hidden:nth-child(1){transition-delay:.05s}
+.step.scroll-hidden:nth-child(2){transition-delay:.1s}
+.step.scroll-hidden:nth-child(3){transition-delay:.15s}
+.step.scroll-hidden:nth-child(4){transition-delay:.2s}
+.step.scroll-hidden:nth-child(5){transition-delay:.25s}
+.fc.scroll-hidden:nth-child(1){transition-delay:0s}
+.fc.scroll-hidden:nth-child(2){transition-delay:.1s}
+.fc.scroll-hidden:nth-child(3){transition-delay:.2s}
+.hedef-card.scroll-hidden:nth-child(1){transition-delay:0s}
+.hedef-card.scroll-hidden:nth-child(2){transition-delay:.07s}
+.hedef-card.scroll-hidden:nth-child(3){transition-delay:.14s}
+.hedef-card.scroll-hidden:nth-child(4){transition-delay:.21s}
+.hedef-card.scroll-hidden:nth-child(5){transition-delay:.28s}
+.hedef-card.scroll-hidden:nth-child(6){transition-delay:.35s}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
+@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}</style>
 </head>
 <body>
 
