@@ -684,7 +684,30 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     </div>
   </div>
 </section>
-
+<!-- HATA ANALİZİ -->
+<section style="background:linear-gradient(135deg,#f0f4ff,#f7f6f2);padding:72px 5vw;border-top:1px solid #e5e3dc">
+  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+    <div>
+      <div class="eyebrow" style="color:var(--signal)">Hata Analizi Motoru</div>
+      <div class="section-title">Kör noktanı bul</div>
+      <p style="font-size:15px;color:var(--muted);line-height:1.7;margin:12px 0 20px">"Modal perfect'te değil, actually inversion'da hata yapıyorsun" der. Tam olarak nerede yanlış yaptığını gösterir.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--sl);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--signal);font-weight:600;display:flex;align-items:center;gap:10px"><span>🎯</span><span>Son 30 soruda 7 yanlış → Hepsi inversion yapısında</span></div>
+        <div style="background:#fef2f2;border-radius:10px;padding:14px 16px;font-size:13px;color:#e03c3c;font-weight:600;display:flex;align-items:center;gap:10px"><span>⚠️</span><span>"No sooner...than" devrik yapısında %40 başarı</span></div>
+        <div style="background:#f0fdf4;border-radius:10px;padding:14px 16px;font-size:13px;color:#16a34a;font-weight:600;display:flex;align-items:center;gap:10px"><span>✓</span><span>Modal perfect güçlendi — son 15 soruda 14 doğru</span></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #e5e3dc;border-radius:14px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,.06)" id="hata-card">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:16px">Yapı Bazlı Başarı Analizi</div>
+      <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:600">Modal Perfect</span><span style="color:#16a34a;font-weight:700">%93</span></div><div style="height:8px;background:#f7f6f2;border-radius:4px;overflow:hidden;border:1px solid #e5e3dc"><div style="height:100%;border-radius:4px;background:#22c55e;width:0%;transition:width 1.2s ease" data-target="93"></div></div></div>
+      <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:600">Bağlaç Sinyalleri</span><span style="color:#2d5be3;font-weight:700">%81</span></div><div style="height:8px;background:#f7f6f2;border-radius:4px;overflow:hidden;border:1px solid #e5e3dc"><div style="height:100%;border-radius:4px;background:#2d5be3;width:0%;transition:width 1.2s ease" data-target="81"></div></div></div>
+      <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:600">Conditionals</span><span style="color:#f59e0b;font-weight:700">%67</span></div><div style="height:8px;background:#f7f6f2;border-radius:4px;overflow:hidden;border:1px solid #e5e3dc"><div style="height:100%;border-radius:4px;background:#f59e0b;width:0%;transition:width 1.2s ease" data-target="67"></div></div></div>
+      <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:600">Inversion</span><span style="color:#e03c3c;font-weight:700">%40</span></div><div style="height:8px;background:#f7f6f2;border-radius:4px;overflow:hidden;border:1px solid #e5e3dc"><div style="height:100%;border-radius:4px;background:#e03c3c;width:0%;transition:width 1.2s ease" data-target="40"></div></div></div>
+      <div style="margin-bottom:0"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px"><span style="font-weight:600">Passive Voice</span><span style="color:#16a34a;font-weight:700">%88</span></div><div style="height:8px;background:#f7f6f2;border-radius:4px;overflow:hidden;border:1px solid #e5e3dc"><div style="height:100%;border-radius:4px;background:#22c55e;width:0%;transition:width 1.2s ease" data-target="88"></div></div></div>
+      <div style="margin-top:14px;background:#e8eeff;border-radius:8px;padding:10px 12px;font-size:12px;color:#2d5be3;font-weight:600">🔍 KLOD öneriyor: Bu hafta inversion odaklı çalış → +12 puan bekleniyor</div>
+    </div>
+  </div>
+</section>
 <!-- DASHBOARD -->
 <section id="dashboard" class="dash">
   <div class="dash-inner">
