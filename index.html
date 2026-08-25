@@ -1693,11 +1693,16 @@ function kkGetNextDueTime(){
   document.getElementById('kk-back').style.display='none';
   document.getElementById('kk-actions').style.display='none';
   const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-  if(eyebrow) eyebrow.textContent='Spaced Repetition · '+(kkQueue.length+1)+' kart bekliyor';
-}
+  function kkGetNextDueTime(){
+  const future=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);
   if(!future.length) return null;
   const ms=future[0].due-Date.now();
   const h=Math.floor(ms/3600000);
+  const m=Math.floor((ms%3600000)/60000);
+  return h>0?h+' saat '+m+' dk':m+' dk';
+}
+
+function kkShow(){
   const m=Math.floor((ms%3600000)/60000);
   return h>0?h+' saat '+m+' dk':m+' dk';
 }
