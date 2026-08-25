@@ -1703,15 +1703,33 @@ function kkGetNextDueTime(){
 }
 
 function kkShow(){
-  const m=Math.floor((ms%3600000)/60000);
-  return h>0?h+' saat '+m+' dk':m+' dk';
-}
-  const future=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);
-  if(!future.length) return null;
-  const ms=future[0].due-Date.now();
-  const h=Math.floor(ms/3600000);
-  const m=Math.floor((ms%3600000)/60000);
-  return h>0?h+' saat '+m+' dk':m+' dk';
+  kkBuildQueue();
+  if(kkQueue.length===0){
+    const sonraki=kkGetNextDueTime();
+    const eyebrow=document.querySelector('#mod-kelime .dm-eye');
+    if(eyebrow) eyebrow.textContent='Spaced Repetition · Bugün tamamlandı ✅';
+    document.getElementById('kk').innerHTML=`
+      <div style="text-align:center;padding:24px 16px">
+        <div style="font-size:40px;margin-bottom:12px">🎉</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Bugünlük bitti!</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">
+          ${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra tekrar edilecek.':'Tüm kartlar tekrar edildi.'}
+          <br>Yarın devam et 💪
+        </div>
+      </div>`;
+    document.getElementById('kk-actions').style.display='none';
+    return;
+  }
+  kkCurrent=kkQueue.shift();
+  kkOpen=false;
+  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
+  document.getElementById('kk-front').innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tıkla → Türkçe gör</div>';
+  document.getElementById('kk-back').innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
+  document.getElementById('kk-front').style.display='block';
+  document.getElementById('kk-back').style.display='none';
+  document.getElementById('kk-actions').style.display='none';
+  const eyebrow=document.querySelector('#mod-kelime .dm-eye');
+  if(eyebrow) eyebrow.textContent='Spaced Repetition · '+(kkQueue.length+1)+' kart bekliyor';
 }
 function kkShow(){
   kkBuildQueue();
