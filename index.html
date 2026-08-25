@@ -790,7 +790,19 @@ function dnav(el){
     document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
   } else if(txt.includes('KLOD')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
-    t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">🤖 KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="if(event.key==\'Enter\')dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">→</button></div>';
+    t.innerHTML=`
+      <div class="dm-eye">KLOD — AI Ogretmen · Gercek Claude API</div>
+      <div style="background:var(--sl);border-radius:10px;padding:10px 14px;font-size:12px;margin-bottom:10px;color:var(--signal);font-weight:500">
+        🤖 KLOD aktif — YDS/YOKDiL sorularını Türkçe açıklar
+      </div>
+      <div class="chat-body" id="dnav-chat" style="min-height:200px;max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0">
+        <div class="msg k">Merhaba! Takıldığın bir yapı ya da soru var mı? "despite", "far from", "must have" gibi yapıları veya çözemediğin bir cümleyi yazabilirsin.</div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px">
+        <input class="chat-in" id="dnav-in" placeholder="Soruyu yaz... (örn: 'must have ne demek?')" onkeydown="if(event.key==='Enter')dnavChat()" style="flex:1">
+        <button class="chat-send" onclick="dnavChat()">→</button>
+      </div>
+    `;
   } else if(txt.includes('Kelime')){
     document.getElementById('mod-kelime').style.display='block';kkShow();
   } else if(txt.includes('Gunluk')){
@@ -804,7 +816,47 @@ function dnav(el){
   }
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
-function dnavChat(){const inp=document.getElementById('dnav-in');if(!inp||!inp.value.trim())return;const val=inp.value.trim();const body=document.getElementById('dnav-chat');const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;setTimeout(()=>{const km=document.createElement('div');km.className='msg k';km.textContent=KB_GENEL[Math.floor(Math.random()*KB_GENEL.length)];body.appendChild(km);body.scrollTop=body.scrollHeight;},700);}
+let dnavHistory=[];
+async function dnavChat(){
+  const inp=document.getElementById('dnav-in');
+  if(!inp||!inp.value.trim())return;
+  const val=inp.value.trim();
+  const body=document.getElementById('dnav-chat');
+  // Kullanıcı mesajı
+  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
+  inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
+  // Typing göstergesi
+  const tp=document.createElement('div');tp.className='msg k';
+  tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
+  body.appendChild(tp);body.scrollTop=body.scrollHeight;
+  dnavHistory.push({role:'user',content:val});
+  try{
+    const res=await fetch('/api/klod',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        messages:dnavHistory,
+        system:`Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin. Türkçe konuşuyorsun. Gramer yapılarını Türkçe açıklıyorsun. Öğrenciyi düşündürmek için soru soruyorsun, direkt cevap vermek yerine. despite, although, far from, by no means, hardly, must have gibi sinyal yapılarında uzmanlaşmışsın. Kısa ve net cevaplar ver, max 3-4 cümle.`
+      })
+    });
+    const data=await res.json();
+    tp.remove();
+    const cevap=data.content?.[0]?.text||data.error||'Bir hata oluştu.';
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    dnavHistory.push({role:'assistant',content:cevap});
+  } catch(err){
+    tp.remove();
+    // API erişimi yoksa akıllı fallback
+    const m=val.toLowerCase();let cevap='';
+    for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
+    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30)+'..." için OSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
+    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    dnavHistory.push({role:'assistant',content:cevap});
+  }
+  inp.disabled=false;inp.focus();
+}
 function dAns(btn,correct){
   if(slAnswered)return;
   slAnswered=true;
