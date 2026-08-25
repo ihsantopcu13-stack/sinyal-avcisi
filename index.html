@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -629,8 +628,8 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span></div>
   <div class="footer-copy">2026 Sinyal Avcisi - YDS & YOKDiL hazirlik platformu - Turkiye - Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
 </footer>
-<div id="hedef-modal" onclick="if(event.target===this)closeHedefModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:20px"><div style="background:#fff;border-radius:20px;padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative"><button onclick="closeHedefModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">X</button><div id="hedef-modal-icerik"></div></div></div>
-<div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
+<div id="hedef-modal" onclick="if(event.target==this)closeHedefModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:20px"><div style="background:#fff;border-radius:20px;padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative"><button onclick="closeHedefModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">X</button><div id="hedef-modal-icerik"></div></div></div>
+<div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">X</button>
     <div id="modal-body">
@@ -721,7 +720,7 @@ function demoAns(btn,correct){
   else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='Yanlis. '+d.exp;}
   document.getElementById('dnext').style.display='inline';
 }
-function demoNext(){demoIdx=(demoIdx+1)%alanOrder.length;const alan=alanOrder[demoIdx];const d=ALAN[alan];document.getElementById('dlbl').textContent=d.lbl;const s=document.getElementById('dsent');s.style.opacity='0';setTimeout(()=>{s.innerHTML=d.sent;s.style.opacity='1';},200);document.getElementById('dq').textContent=d.q;document.getElementById('dopts').innerHTML=d.opts.map((t,i)=>`<button class="dopt" onclick="demoAns(this,${i===d.ans})">${t}</button>`).join('');document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;}
+function demoNext(){demoIdx=(demoIdx+1)%alanOrder.length;const alan=alanOrder[demoIdx];const d=ALAN[alan];document.getElementById('dlbl').textContent=d.lbl;const s=document.getElementById('dsent');s.style.opacity='0';setTimeout(()=>{s.innerHTML=d.sent;s.style.opacity='1';},200);document.getElementById('dq').textContent=d.q;document.getElementById('dopts').innerHTML=d.opts.map((t,i)=>`<button class="dopt" onclick="demoAns(this,${i==d.ans})">${t}</button>`).join('');document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;}
 
 function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='Harika! E-kitap '+el.value+' adresine gonderildi.';el.value='';}
 
@@ -737,7 +736,7 @@ async function modalSubmit(e){
 }
 
 // DASHBOARD
-function dtab(el,mod){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod==='kelime')kkShow();}}
+function dtab(el,mod){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();}}
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
@@ -745,13 +744,13 @@ function dnav(el){
   main.querySelector('.dash-karts').style.display='none';
   main.querySelector('.dash-tabs').style.display='none';
   main.querySelector('.dash-welcome').style.display='none';
-  if(txt==='Dashboard'){main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
-  else if(txt==='Sinyal Lab'){main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
-  else if(txt==='KLOD'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="if(event.key=='Enter')dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">G</button></div>';}
-  else if(txt==='Kelime Kartlari'){document.getElementById('mod-kelime').style.display='block';kkShow();}
-  else if(txt==='Gunluk Tuzak'){document.getElementById('mod-tuzak').style.display='block';}
-  else if(txt==='Ses Kurs'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">SES KURSU - 19 Konu</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between"><span>${p.t}</span><span style="color:var(--signal)">play</span></div>`).join('')+'</div>';}
-  else if(txt==='Raporlar'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="text-align:center;padding:20px 0"><div style="font-family:DM Serif Display,serif;font-size:56px;color:var(--signal)">73</div><div style="font-size:12px;color:var(--muted);margin-bottom:20px">Tahmini puan - Hedef: 85</div></div>';}
+  if(txt=='Dashboard'){main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
+  else if(txt=='Sinyal Lab'){main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
+  else if(txt=='KLOD'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="if(event.key=='Enter')dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">G</button></div>';}
+  else if(txt=='Kelime Kartlari'){document.getElementById('mod-kelime').style.display='block';kkShow();}
+  else if(txt=='Gunluk Tuzak'){document.getElementById('mod-tuzak').style.display='block';}
+  else if(txt=='Ses Kurs'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">SES KURSU - 19 Konu</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between"><span>${p.t}</span><span style="color:var(--signal)">play</span></div>`).join('')+'</div>';}
+  else if(txt=='Raporlar'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="text-align:center;padding:20px 0"><div style="font-family:DM Serif Display,serif;font-size:56px;color:var(--signal)">73</div><div style="font-size:12px;color:var(--muted);margin-bottom:20px">Tahmini puan - Hedef: 85</div></div>';}
 }
 function dashPlaySes(idx){pIdx=idx;pUpdate();if(!pPlaying){playerToggle();}document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 function dnavChat(){const inp=document.getElementById('dnav-in');if(!inp||!inp.value.trim())return;const val=inp.value.trim();const body=document.getElementById('dnav-chat');const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;setTimeout(()=>{const km=document.createElement('div');km.className='msg k';km.textContent=KB_GENEL[Math.floor(Math.random()*KB_GENEL.length)];body.appendChild(km);body.scrollTop=body.scrollHeight;},700);}
@@ -774,7 +773,6 @@ kkData.forEach(k=>{k.interval=1;k.rep=0;k.ef=2.5;k.due=0;});
 function kkSave(){localStorage.setItem('kkData',JSON.stringify(kkData.map(k=>({interval:k.interval,rep:k.rep,ef:k.ef,due:k.due}))));}
 function kkLoad(){try{const s=localStorage.getItem('kkData');if(s){const d=JSON.parse(s);d.forEach((v,i)=>{if(kkData[i]){kkData[i].interval=v.interval??1;kkData[i].rep=v.rep??0;kkData[i].ef=v.ef??2.5;kkData[i].due=v.due??0;}});}}catch(e){}}
 kkLoad();
-kkData.forEach(k=>{if(k.interval===undefined){k.interval=1;k.rep=0;k.ef=2.5;k.due=0;}});
 let kkQueue=[],kkCurrent=null,kkOpen=false;
 function kkBuildQueue(){const now=Date.now();const due=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);kkQueue=due.length>0?[...due]:[];}
 function kkGetNextDueTime(){const f=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);if(!f.length)return null;const ms=f[0].due-Date.now();const h=Math.floor(ms/3600000);const m=Math.floor((ms%3600000)/60000);return h>0?h+' saat '+m+' dk':m+' dk';}
@@ -782,7 +780,7 @@ function kkUpdateDashCard(){const now=Date.now();const c=kkData.filter(k=>k.due<
 function kkShow(){
   kkBuildQueue();
   const eyebrow=document.getElementById('kk-eyebrow');
-  if(kkQueue.length===0){
+  if(kkQueue.length==0){
     const sonraki=kkGetNextDueTime();
     if(eyebrow)eyebrow.textContent='Spaced Repetition - Bugün tamamlandi';
     const kkEl=document.getElementById('kk');
@@ -803,7 +801,7 @@ function kkShow(){
 function kkFlip(){kkOpen=!kkOpen;const front=document.getElementById('kk-front');const back=document.getElementById('kk-back');const act=document.getElementById('kk-actions');if(front)front.style.display=kkOpen?'none':'block';if(back)back.style.display=kkOpen?'block':'none';if(act)act.style.display=kkOpen?'flex':'none';if(kkOpen&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.tr);u.lang='tr-TR';u.rate=0.9;speechSynthesis.speak(u);}}
 function kkAnswer(q){
   if(!kkCurrent)return;
-  if(q>=3){if(kkCurrent.rep===0)kkCurrent.interval=1;else if(kkCurrent.rep===1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));}
+  if(q>=3){if(kkCurrent.rep==0)kkCurrent.interval=1;else if(kkCurrent.rep==1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));}
   else{kkCurrent.rep=0;kkCurrent.interval=1;}
   kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
   kkSave();kkUpdateDashCard();kkShow();
