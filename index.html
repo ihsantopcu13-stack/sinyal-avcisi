@@ -1669,8 +1669,13 @@ function kkFlip(){
   document.getElementById('kk-front').style.display=kkOpen?'none':'block';
   document.getElementById('kk-back').style.display=kkOpen?'block':'none';
   document.getElementById('kk-actions').style.display=kkOpen?'flex':'none';
+  if(kkOpen && window.speechSynthesis){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(kkCurrent.tr);
+    u.lang='tr-TR'; u.rate=0.9;
+    speechSynthesis.speak(u);
+  }
 }
-
 function kkAnswer(q){
   if(!kkCurrent) return;
   // SM-2 algoritması
