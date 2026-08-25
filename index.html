@@ -1654,7 +1654,8 @@ function kkBuildQueue(){
 function kkShow(){
   if(!kkQueue.length) kkBuildQueue();
   kkCurrent=kkQueue.shift();
-  kkOpen=false;
+ kkOpen=false;
+if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
   document.getElementById('kk-front').innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tıkla → Türkçe gör</div>';
   document.getElementById('kk-back').innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
   document.getElementById('kk-front').style.display='block';
