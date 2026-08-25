@@ -35,7 +35,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .btn-ghost{background:none;border:none;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif}
 .hero-badges{margin-top:20px;display:flex;gap:16px;flex-wrap:wrap}
 .hero-badge{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
-.hero-badge::before{content:'checkmark';color:var(--signal);font-weight:700}
+.hero-badge::before{content:'✓';color:var(--signal);font-weight:700}
 .demo-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:0 4px 32px rgba(0,0,0,.07)}
 .demo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .demo-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -106,7 +106,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .ekitap-desc{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:22px}
 .ekitap-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
 .ekitap-list li{font-size:13px;color:rgba(255,255,255,.85);display:flex;gap:8px}
-.ekitap-list li::before{content:'arrow';color:var(--contrast);flex-shrink:0}
+.ekitap-list li::before{content:'→';color:var(--contrast);flex-shrink:0}
 .ekitap-form{display:flex;gap:8px;flex-wrap:wrap}
 .ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;background:rgba(255,255,255,.15);color:#fff;outline:none}
 .ekitap-submit{background:#fff;color:var(--signal);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
@@ -119,7 +119,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .klod-desc{font-size:15px;color:var(--muted);line-height:1.7;margin:12px 0 24px}
 .klod-feat{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:10px;transition:all .2s}
 .klod-feat:hover,.klod-feat.open{background:var(--sl);border-color:var(--signal)}
-.klod-feat-icon{width:44px;height:44px;border-radius:10px;background:var(--signal);display:grid;place-items:center;font-size:22px;flex-shrink:0}
+.klod-feat-icon{width:44px;height:44px;border-radius:10px;background:var(--signal);display:grid;place-items:center;font-size:20px;flex-shrink:0}
 .klod-feat-text b{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
 .klod-feat-text span{font-size:12px;color:var(--muted)}
 .klod-feat-detail{display:none;font-size:12px;color:var(--signal);margin-top:6px;line-height:1.6;font-weight:500}
@@ -149,13 +149,13 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .ses-modes{display:flex;flex-direction:column;gap:10px}
 .ses-mode{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
 .ses-mode:hover,.ses-mode.active{background:rgba(45,91,227,.2);border-color:var(--signal)}
-.ses-mode-icon{font-size:26px;flex-shrink:0;width:44px;height:44px;background:rgba(255,255,255,.08);border-radius:10px;display:grid;place-items:center}
+.ses-mode-icon{font-size:22px;flex-shrink:0;width:44px;height:44px;background:rgba(255,255,255,.08);border-radius:10px;display:grid;place-items:center}
 .ses-mode-name{font-size:13px;font-weight:600;margin-bottom:2px}
 .ses-mode-desc{font-size:12px;color:rgba(247,246,242,.5)}
 .player{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px}
 .p-topic{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,246,242,.4);margin-bottom:7px;font-family:'JetBrains Mono',monospace}
 .p-en{font-size:16px;font-weight:600;line-height:1.5;margin-bottom:4px;min-height:48px}
-.p-tr{font-size:13px;font-weight:400;font-style:italic;color:rgba(247,246,242,.55)}
+.p-tr{font-size:13px;font-style:italic;color:rgba(247,246,242,.55)}
 .p-bar{height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:16px 0 12px;cursor:pointer}
 .p-fill{height:100%;background:linear-gradient(90deg,var(--signal),#818cf8);border-radius:2px;width:0%;transition:width .4s linear}
 .p-controls{display:flex;align-items:center;justify-content:space-between}
@@ -172,7 +172,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .dash-logo{font-family:'DM Serif Display',serif;font-size:15px;color:var(--paper);padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
 .dash-logo b{color:var(--contrast);font-weight:400}
 .dash-nav{flex:1;padding:8px 0}
-.dn-item{font-size:13px;font-weight:500;color:rgba(247,246,242,.45);padding:10px 16px;cursor:pointer;transition:all .15s;border-left:2px solid transparent;display:flex;align-items:center;gap:8px}
+.dn-item{font-size:13px;font-weight:500;color:rgba(247,246,242,.45);padding:10px 16px;cursor:pointer;transition:all .15s;border-left:2px solid transparent}
 .dn-item:hover{color:var(--paper);background:rgba(255,255,255,.04)}
 .dn-item.active{color:var(--paper);border-left-color:var(--signal);background:rgba(45,91,227,.12)}
 .dash-alan{padding:13px 16px;border-top:1px solid rgba(255,255,255,.08)}
@@ -187,7 +187,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .dk.purple{background:#f5f3ff;border-color:rgba(124,58,237,.2)}
 .dk.green{background:#f0fdf4;border-color:rgba(34,197,94,.2)}
 .dk.amber{background:#fffbeb;border-color:rgba(245,158,11,.2)}
-.dk-icon{font-size:26px;margin-bottom:6px}
+.dk-icon{font-size:18px;margin-bottom:6px}
 .dk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
 .dk-val{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .dk-sub{font-size:11px;color:var(--muted)}
@@ -209,7 +209,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .dmo.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
 .dm-fb{font-size:12px;font-weight:500;min-height:14px}
 .dm-fb.ok{color:#16a34a}.dm-fb.err{color:var(--trap)}
-.kk{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
+.kk{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px;transition:border-color .15s}
 .kk:hover{border-color:var(--signal)}
 .kk-word{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:6px;color:var(--ink)}
 .kk-hint{font-size:12px;color:var(--muted)}
@@ -224,8 +224,9 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .tuzak-opt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
 .tuzak-opt.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
 .tuzak-opt.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
-.tuzak-fb{font-size:12px;font-weight:500;min-height:14px}
+.tuzak-fb{font-size:12px;font-weight:500;min-height:14px;margin-bottom:6px}
 .tuzak-fb.ok{color:#16a34a}.tuzak-fb.err{color:var(--trap)}
+.tuzak-next-btn{display:none;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 .fiyat{padding:80px 5vw;background:var(--paper)}
 .fiyat-inner{max-width:1020px;margin:0 auto}
 .fiyat-header{text-align:center;margin-bottom:52px}
@@ -239,9 +240,9 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .fc-period{font-size:12px;color:var(--muted);margin-bottom:20px}
 .fc-feats{list-style:none;flex:1;margin-bottom:22px;display:flex;flex-direction:column;gap:8px}
 .fc-feats li{font-size:13px;display:flex;gap:8px;align-items:flex-start}
-.fc-feats li::before{content:'check';color:var(--signal);font-weight:700;flex-shrink:0;margin-top:1px}
+.fc-feats li::before{content:'✓';color:var(--signal);font-weight:700;flex-shrink:0;margin-top:1px}
 .fc-feats li.no{color:var(--muted)}
-.fc-feats li.no::before{content:'dash';color:var(--border)}
+.fc-feats li.no::before{content:'–';color:var(--border)}
 .fc-btn{display:block;width:100%;text-align:center;padding:12px;border-radius:8px;font-size:14px;font-weight:600;border:1px solid var(--border);color:var(--ink);background:transparent;cursor:pointer;font-family:'Inter',sans-serif}
 .fc-btn:hover{border-color:var(--signal);color:var(--signal)}
 .fc.featured .fc-btn{background:var(--signal);color:#fff;border-color:var(--signal)}
@@ -256,7 +257,7 @@ nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,24
 .sss-item.open .sss-a{display:block}
 .hayir-section{background:linear-gradient(135deg,#0c0e14,#1a1f35);padding:80px 5vw;text-align:center;color:var(--paper)}
 .hayir-inner{max-width:680px;margin:0 auto}
-.hayir-baslik{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,36px);line-height:1.3;margin-bottom:20px;color:var(--paper)}
+.hayir-baslik{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,36px);line-height:1.3;margin-bottom:20px}
 .hayir-metin{font-size:15px;color:rgba(247,246,242,.65);line-height:1.85;margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto}
 .hayir-alinti{font-family:'DM Serif Display',serif;font-style:italic;font-size:17px;color:var(--contrast);margin-bottom:28px;padding:0 20px;line-height:1.6}
 .hayir-etiketler{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -280,7 +281,6 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 .modal-form{display:flex;flex-direction:column;gap:11px}
 .modal-input{border:1px solid var(--border);border-radius:8px;padding:12px 13px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:var(--paper);outline:none}
 .modal-input:focus{border-color:var(--signal)}
-.modal-input.invalid{border-color:var(--trap)}
 .modal-submit{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:2px}
 .modal-legal{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
 .modal-success{display:none;text-align:center;padding:20px 0}
@@ -303,12 +303,47 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
 @keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+/* STREAK */
+.streak-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#1a1f35,#0c1428);border-bottom:1px solid rgba(255,255,255,.07);padding:8px 5vw;font-size:12px;color:rgba(247,246,242,.6)}
+.streak-fire{font-size:18px;line-height:1}
+.streak-count{font-family:'DM Serif Display',serif;font-size:20px;color:#e8d5a3;line-height:1}
+.streak-label{font-size:11px;color:rgba(247,246,242,.4)}
+.streak-divider{width:1px;height:20px;background:rgba(255,255,255,.1);margin:0 4px}
+.streak-badges{display:flex;gap:6px;margin-left:auto}
+.rozet{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:rgba(247,246,242,.7);cursor:help;transition:all .2s}
+.rozet.altin{background:rgba(232,213,163,.15);border-color:rgba(232,213,163,.3);color:#e8d5a3}
+.rozet.sinyal{background:rgba(45,91,227,.2);border-color:rgba(45,91,227,.4);color:#818cf8}
+.rozet.modal{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.3);color:#a78bfa}
+/* HATA DEFTERİ */
+.hata-defteri-btn{display:inline-flex;align-items:center;gap:6px;background:var(--sl);color:var(--signal);border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:10px}
+.hata-item{background:var(--paper);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:12px;line-height:1.6}
+.hata-item-word{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink);margin-bottom:2px}
+.hata-item-tip{font-size:11px;color:var(--muted);margin-bottom:6px}
+.hata-item-actions{display:flex;gap:6px}
+.hata-tekrar-btn{background:var(--sl);color:var(--signal);border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.hata-sil-btn{background:#fef2f2;color:var(--trap);border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+/* ADAPTIF zorluk badge */
+.zorluk-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.zorluk-badge.kolay{background:#f0fdf4;color:#16a34a}
+.zorluk-badge.orta{background:#fffbeb;color:#d97706}
+.zorluk-badge.zor{background:#fef2f2;color:var(--trap)}
+/* PWA install banner */
+.pwa-banner{display:none;position:fixed;bottom:0;inset:auto 0;background:var(--ink);color:var(--paper);padding:14px 5vw;z-index:400;flex-direction:row;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.1)}
+.pwa-banner.show{display:flex}
+.pwa-banner-text{flex:1;font-size:13px}
+.pwa-banner-text b{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
+.pwa-install-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.pwa-close-btn{background:none;border:none;color:rgba(247,246,242,.4);font-size:20px;cursor:pointer;padding:4px}
 </style>
 </head>
 <body>
-<form name="ekitap" netlify netlify-honeypot="bot-field" hidden><input type="email" name="email"><input name="bot-field"></form>
-<form name="kayit" netlify netlify-honeypot="bot-field2" hidden><input type="text" name="ad"><input type="email" name="email"><input name="bot-field2"></form>
+<!-- PWA Banner -->
+<div class="pwa-banner" id="pwa-banner">
+  <span style="font-size:24px">📱</span>
+  <div class="pwa-banner-text"><b>Uygulamaya ekle</b>Sinyal Avcısı'nı ana ekranına ekle, uygulama gibi kullan</div>
+  <button class="pwa-install-btn" onclick="pwaInstall()">Ekle</button>
+  <button class="pwa-close-btn" onclick="pwaBanner(false)">✕</button>
+</div>
 <nav>
   <div class="nav-logo" onclick="goTo('hero')">Sinyal <b>Avcisi</b></div>
   <div class="nav-links">
@@ -320,8 +355,22 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <span onclick="goTo('sss')">SSS</span>
   </div>
   <button class="btn-nav" onclick="openModal('Pro YDS & YOKDiL','399TL')">Ucretsiz Basla</button>
-  <button class="hamburger" onclick="toggleMenu()">menu</button>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+<!-- STREAK BAR -->
+<div class="streak-bar" id="streak-bar">
+  <span class="streak-fire">🔥</span>
+  <div>
+    <div class="streak-count" id="streak-sayi">0</div>
+    <div class="streak-label">günlük seri</div>
+  </div>
+  <div class="streak-divider"></div>
+  <div>
+    <div style="font-size:11px;color:rgba(247,246,242,.4);margin-bottom:1px">Bu hafta</div>
+    <div style="font-size:13px;font-weight:600;color:rgba(247,246,242,.7)" id="streak-bu-hafta">0 soru</div>
+  </div>
+  <div class="streak-badges" id="streak-badges"></div>
+</div>
 <div class="mmenu" id="mmenu">
   <a onclick="closeMenuGoTo('nasil')">Nasil Calisir?</a>
   <a onclick="closeMenuGoTo('klod')">KLOD</a>
@@ -363,7 +412,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
         <button class="dopt" onclick="demoAns(this,false)">Tedavi basariyla tamamlandi.</button>
       </div>
       <div class="demo-fb" id="dfb"></div>
-      <button class="demo-next-btn" id="dnext" onclick="demoNext()">Sonraki alan</button>
+      <button class="demo-next-btn" id="dnext" onclick="demoNext()">Sonraki alan →</button>
     </div>
   </div>
 </section>
@@ -374,16 +423,16 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#f7f6f2">Sinav tarihin ne zaman?</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <input type="date" id="sinav-tarih" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:Inter,sans-serif;font-size:14px;outline:none;cursor:pointer">
+      <input type="date" id="sinav-tarih-input" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:Inter,sans-serif;font-size:14px;outline:none;cursor:pointer">
       <button onclick="sinavGeriSayim()" style="background:#2d5be3;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Baslat</button>
     </div>
     <div id="geri-sayim-display" style="display:none;text-align:center">
       <div style="display:flex;gap:16px;justify-content:center">
-        <div style="text-align:center"><div id="gs-gun" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Gun</div></div>
+        <div><div id="gs-gun" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Gun</div></div>
         <div style="font-family:'DM Serif Display',serif;font-size:42px;color:rgba(247,246,242,.2);line-height:1">:</div>
-        <div style="text-align:center"><div id="gs-saat" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Saat</div></div>
+        <div><div id="gs-saat" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Saat</div></div>
         <div style="font-family:'DM Serif Display',serif;font-size:42px;color:rgba(247,246,242,.2);line-height:1">:</div>
-        <div style="text-align:center"><div id="gs-dak" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Dakika</div></div>
+        <div><div id="gs-dak" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Dakika</div></div>
       </div>
       <div id="gs-mesaj" style="font-size:13px;color:rgba(247,246,242,.5);margin-top:10px"></div>
     </div>
@@ -401,23 +450,23 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div><div class="stat-num" data-count="90">0</div><div class="stat-lbl">Gunde sonuc</div></div>
     </div>
     <div class="yorumlar">
-      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"Modal perfect'te surekli hata yapiyordum. Sinyal metodolojisini ogrendikten sonra tuzagi ilk bakista goruyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">Aras. Gor. A. Yilmaz</div><div class="yorum-unvan">Sosyoloji - YDS 78</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"Hukuk alanindan metinlerle calismak cok daha verimli. 3 ayda 22 puanlik artis yaparak YDS zorunluluğumu tamamladim."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">Av. M. Kaya</div><div class="yorum-unvan">Hukuk - YDS 82</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"KLOD gercekten ogretiyor. 'Dogru cevap B' demiyor, neden B oldugunu anlatiyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">Dr. D. Sahin</div><div class="yorum-unvan">Saglik - YOKDiL 91</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te surekli hata yapiyordum. Sinyal metodolojisini ogrendikten sonra tuzagi ilk bakista goruyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">Aras. Gor. A. Yilmaz</div><div class="yorum-unvan">Sosyoloji - YDS 78</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk alanindan metinlerle calismak cok daha verimli. 3 ayda 22 puanlik artis yaparak YDS zorunluluğumu tamamladim."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">Av. M. Kaya</div><div class="yorum-unvan">Hukuk - YDS 82</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"KLOD gercekten ogretiyor. 'Dogru cevap B' demiyor, neden B oldugunu anlatiyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">Dr. D. Sahin</div><div class="yorum-unvan">Saglik - YOKDiL 91</div></div></div></div>
     </div>
   </div>
 </section>
 <section class="hedef">
   <div class="hedef-inner">
     <div class="eyebrow" style="color:var(--contrast)">Platformumuz Kimin icin?</div>
-    <div class="section-title" style="color:var(--paper)">YDS veya YOKDiL sinavina hazırlanan herkes</div>
+    <div class="section-title" style="color:var(--paper)">YDS veya YOKDiL sinavina hazirlanan herkes</div>
     <div class="hedef-grid">
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">graduation</div><div class="hedef-name">Akademisyenler</div><div class="hedef-desc">Docentlik ve uluslararasi yayin icin YDS/YOKDiL zorunlulugu olan arastirmacilar.</div><div class="hedef-tag">YDS - YOKDiL Sosyal/Fen/Saglik</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">scale</div><div class="hedef-name">Hukukcular</div><div class="hedef-desc">YDS zorunlulugu olan avukat, hakim ve hukuk akademisyeni.</div><div class="hedef-tag">YDS - Alan: Hukuk</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">stethoscope</div><div class="hedef-name">Saglik Profesyonelleri</div><div class="hedef-desc">YOKDiL Saglik sinavina hazirlanan doktor, hemsire ve saglik akademisyeni.</div><div class="hedef-tag">YOKDiL Saglik</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">chart</div><div class="hedef-name">Sosyal Bilimciler</div><div class="hedef-desc">YOKDiL Sosyal sinavina hazirlanan sosyolog, psikolog ve egitimci.</div><div class="hedef-tag">YOKDiL Sosyal</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">microscope</div><div class="hedef-name">Fen & Muhendislik</div><div class="hedef-desc">YOKDiL Fen sinavina hazirlanan muhendis, fizikci ve biyolog.</div><div class="hedef-tag">YOKDiL Fen</div></div>
-      <div class="hedef-card" style="background:rgba(45,91,227,.15);border-color:var(--signal)"><div style="font-size:26px;margin-bottom:10px">target</div><div class="hedef-name">Genel YDS/YOKDiL Adayi</div><div class="hedef-desc">OSYM tuzaklarini taniyarak net artisini gerceklestirmek isteyen her aday.</div><div class="hedef-tag">YDS - YOKDiL (tum branşlar)</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🎓</div><div class="hedef-name">Akademisyenler</div><div class="hedef-desc">Docentlik ve uluslararasi yayin icin YDS/YOKDiL zorunlulugu olan arastirmacilar.</div><div class="hedef-tag">YDS - YOKDiL Sosyal/Fen/Saglik</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">⚖️</div><div class="hedef-name">Hukukcular</div><div class="hedef-desc">YDS zorunlulugu olan avukat, hakim ve hukuk akademisyeni.</div><div class="hedef-tag">YDS - Alan: Hukuk</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🩺</div><div class="hedef-name">Saglik Profesyonelleri</div><div class="hedef-desc">YOKDiL Saglik sinavina hazirlanan doktor, hemsire ve saglik akademisyeni.</div><div class="hedef-tag">YOKDiL Saglik</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">📊</div><div class="hedef-name">Sosyal Bilimciler</div><div class="hedef-desc">YOKDiL Sosyal sinavina hazirlanan sosyolog, psikolog ve egitimci.</div><div class="hedef-tag">YOKDiL Sosyal</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🔬</div><div class="hedef-name">Fen & Muhendislik</div><div class="hedef-desc">YOKDiL Fen sinavina hazirlanan muhendis, fizikci ve biyolog.</div><div class="hedef-tag">YOKDiL Fen</div></div>
+      <div class="hedef-card" style="background:rgba(45,91,227,.15);border-color:var(--signal)"><div style="font-size:26px;margin-bottom:10px">🎯</div><div class="hedef-name">Genel YDS/YOKDiL Adayi</div><div class="hedef-desc">OSYM tuzaklarini taniyarak net artisini gerceklestirmek isteyen her aday.</div><div class="hedef-tag">YDS - YOKDiL (tum branşlar)</div></div>
     </div>
   </div>
 </section>
@@ -426,11 +475,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="section-title">Alanini sec, platform sana gore ayarlansın</div>
   <p class="alan-sub">Demo cumlesi, kelime bankasi ve metin ornekleri alanina gore degisir.</p>
   <div class="alan-cards">
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','H')"><div class="alan-icon">H</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','S')"><div class="alan-icon">S</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','F')"><div class="alan-icon">F</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','SG')"><div class="alan-icon">SG</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
-    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','G')"><div class="alan-icon">G</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','⚖️')"><div class="alan-icon">⚖️</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','📊')"><div class="alan-icon">📊</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','🔬')"><div class="alan-icon">🔬</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','🩺')"><div class="alan-icon">🩺</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
+    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','🎯')"><div class="alan-icon">🎯</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
   </div>
   <div id="alan-kelime-strip" style="margin-top:28px;text-align:center;min-height:28px"><span id="alan-kelime" style="font-family:JetBrains Mono,monospace;font-size:13px;color:var(--contrast);letter-spacing:.08em"></span></div>
 </section>
@@ -452,19 +501,14 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ucretsiz E-Kitap</div>
       <h2>30 Gunluk Metin Fetih Kilavuzu</h2>
       <p class="ekitap-desc">37 sayfalik PDF rehber. Sinyal metodolojisinin tum adimlari, baglac haritalari, modal perfect rehberi ve gunluk calisma plani.</p>
-      <ul class="ekitap-list">
-        <li>Baglac sinyal haritalari</li>
-        <li>Modal perfect tuzak rehberi</li>
-        <li>30 gunluk calisma plani</li>
-        <li>OSYM en sik tuzak listesi</li>
-      </ul>
+      <ul class="ekitap-list"><li>Baglac sinyal haritalari</li><li>Modal perfect tuzak rehberi</li><li>30 gunluk calisma plani</li><li>OSYM en sik tuzak listesi</li></ul>
       <form onsubmit="ekitapIndir(event)" class="ekitap-form">
         <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required>
         <button class="ekitap-submit" type="submit">Ucretsiz Indir</button>
       </form>
       <div class="ekitap-note" id="ekitap-note">2.400+ kisi indirdi - Spam yok - Istediginde cik</div>
     </div>
-    <div class="ekitap-mockup"><div style="font-size:48px;margin-bottom:12px">book</div><div class="ekitap-mockup-title">30 Gunluk Metin Fetih Kilavuzu</div><div class="ekitap-mockup-sub">YDS & YOKDiL Sinyal Metodolojisi</div><div class="ekitap-mockup-pages">37 sayfa - PDF - Ucretsiz</div></div>
+    <div class="ekitap-mockup"><div style="font-size:48px;margin-bottom:12px">📖</div><div class="ekitap-mockup-title">30 Gunluk Metin Fetih Kilavuzu</div><div class="ekitap-mockup-sub">YDS & YOKDiL Sinyal Metodolojisi</div><div class="ekitap-mockup-pages">37 sayfa - PDF - Ucretsiz</div></div>
   </div>
 </section>
 <section id="klod" class="klod">
@@ -472,17 +516,17 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <div class="eyebrow" style="color:var(--signal)">AI Ogretmen</div>
     <div class="section-title">KLOD cevap vermez - dusundurur</div>
     <p class="klod-desc">Cogu AI "dogru cevap B'dir" der. KLOD neden yanlis dusundugunu bulur ve oradan ogretir.</p>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">target</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">search</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">TR</div><div class="klod-feat-text"><b>Tamamen Turkce</b><span>Aciklamalar, ipuclari ve geri bildirim hep Turkce</span><div class="klod-feat-detail">Gramer kurallari Turkce aciklanir. OSYM tuzaklari Turkce analiz edilir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Turkce</b><span>Aciklamalar, ipuclari ve geri bildirim hep Turkce</span><div class="klod-feat-detail">Gramer kurallari Turkce aciklanir. OSYM tuzaklari Turkce analiz edilir.</div></div></div>
   </div>
   <div class="chat-ui">
-    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni - Cevrimici</div></div></div>
+    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni · Cevrimici</div></div></div>
     <div class="chat-body" id="chat-body">
       <div class="msg k">Merhaba! Sana bir OSYM cumlesi gostereyim. "must have left" ne anlama geliyor?</div>
       <div class="msg k">"She must have left before the meeting started."</div>
     </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key=='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">G</button></div>
+    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key=='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">→</button></div>
   </div>
 </section>
 <section id="ses" class="ses">
@@ -492,9 +536,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div class="section-title" style="color:var(--paper)">Beyin sesten ogrenir</div>
       <p class="ses-desc">19 YDS/YOKDiL gramer konusu - otobuzte, yuruyuste, yatmadan once.</p>
       <div class="ses-modes">
-        <div class="ses-mode active" onclick="setSesMod(this)"><div class="ses-mode-icon">grad</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">flash</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">quiz</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
+        <div class="ses-mode active" onclick="setSesMod(this)"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
       </div>
     </div>
     <div class="player">
@@ -503,11 +547,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div class="p-tr" id="p-tr">Daha cok calisaydı sinavi gecmis olurdu.</div>
       <div class="p-bar" onclick="seekPlayer(event)"><div class="p-fill" id="p-fill"></div></div>
       <div class="p-controls">
-        <button class="p-btn" onclick="playerPrev()">prev</button>
-        <button class="p-btn" onclick="playerBack()">back</button>
-        <button class="p-play" id="p-play" onclick="playerToggle()">play</button>
-        <button class="p-btn" onclick="playerFwd()">fwd</button>
-        <button class="p-btn" onclick="playerNext()">next</button>
+        <button class="p-btn" onclick="playerPrev()">⏮</button>
+        <button class="p-btn" onclick="playerBack()">⏪</button>
+        <button class="p-play" id="p-play" onclick="playerToggle()">▶</button>
+        <button class="p-btn" onclick="playerFwd()">⏩</button>
+        <button class="p-btn" onclick="playerNext()">⏭</button>
       </div>
       <div class="p-speeds">
         <button class="p-speed" onclick="playerSpeed(0.7,this)">0.7x</button>
@@ -520,33 +564,38 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 </section>
 <section id="dashboard" class="dash">
   <div class="dash-inner">
-    <div class="dash-header"><div class="eyebrow" style="color:var(--signal)">Canli Onizleme</div><div class="section-title">Kayit sonrasi seni karsilayan ekran</div></div>
+    <div class="dash-header">
+      <div class="eyebrow" style="color:var(--signal)">Canli Onizleme</div>
+      <div class="section-title">Platforma giris yap ve calismaya basla</div>
+      <p style="font-size:14px;color:var(--muted);margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6">Her gun sana ozel soru rotasi, tekrar edilecek kelimeler ve sinyal analizi hazir bekliyor.</p>
+    </div>
     <div class="dash-ui">
       <div class="dash-sb">
         <div class="dash-logo">Sinyal <b>Avcisi</b></div>
         <div class="dash-nav">
-          <div class="dn-item active" onclick="dnav(this)">Dashboard</div>
-          <div class="dn-item" onclick="dnav(this)">Sinyal Lab</div>
-          <div class="dn-item" onclick="dnav(this)">KLOD</div>
-          <div class="dn-item" onclick="dnav(this)">Ses Kurs</div>
-          <div class="dn-item" onclick="dnav(this)">Kelime Kartlari</div>
-          <div class="dn-item" onclick="dnav(this)">Gunluk Tuzak</div>
-          <div class="dn-item" onclick="dnav(this)">Raporlar</div>
+          <div class="dn-item active" onclick="dnav(this)">📊 Dashboard</div>
+          <div class="dn-item" onclick="dnav(this)">🔬 Sinyal Lab</div>
+          <div class="dn-item" onclick="dnav(this)">🤖 KLOD</div>
+          <div class="dn-item" onclick="dnav(this)">🎧 Ses Kurs</div>
+          <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
+          <div class="dn-item" onclick="dnav(this)">⚡ Gunluk Tuzak</div>
+          <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
         </div>
-        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">Genel</div></div>
+        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
       </div>
       <div class="dash-main">
-        <div class="dash-welcome">Gunaydın - <b>Bugunun sinyal rotasi hazir</b></div>
+        <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
         <div class="dash-karts">
-          <div class="dk blue"><div class="dk-icon">target</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
-          <div class="dk purple"><div class="dk-icon">warn</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis</div></div>
-          <div class="dk green"><div class="dk-icon">chart</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 - +12 puan kaldi</div></div>
-          <div class="dk amber"><div class="dk-icon">card</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yukleniyor...</div></div>
+          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
+          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis →</div></div>
+          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 — +12 puan kaldi</div></div>
+          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yukleniyor...</div></div>
         </div>
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
           <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
+          <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <div class="dm-eye">Genel - YDS Metni - Soru 13/30</div>
@@ -561,28 +610,24 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dm-fb" id="dm-fb"></div>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
-          <div class="dm-eye" id="kk-eyebrow">Spaced Repetition - yukleniyor...</div>
+          <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yukleniyor...</div>
           <div class="kk" id="kk" onclick="kkFlip()">
-            <div id="kk-front"><div class="kk-word"></div><div class="kk-hint">Tikla - Turkce gor</div></div>
-            <div id="kk-back" style="display:none"><div class="kk-word"></div><div class="kk-ex"></div></div>
+            <div id="kk-front"><div class="kk-word" id="kk-word-front"></div><div class="kk-hint">Tikla — Türkçe gör</div></div>
+            <div id="kk-back" style="display:none"><div class="kk-word" id="kk-word-back"></div><div class="kk-ex" id="kk-ex-back"></div></div>
           </div>
           <div class="kk-actions" id="kk-actions" style="display:none">
-            <button class="kk-btn kk-hard" onclick="kkAnswer(1)">Zor</button>
-            <button class="kk-btn kk-ok" onclick="kkAnswer(3)">Tamam</button>
-            <button class="kk-btn kk-easy" onclick="kkAnswer(5)">Kolay</button>
+            <button class="kk-btn kk-hard" onclick="kkAnswer(1)">😰 Zor</button>
+            <button class="kk-btn kk-ok" onclick="kkAnswer(3)">👍 Tamam</button>
+            <button class="kk-btn kk-easy" onclick="kkAnswer(5)">⚡ Kolay</button>
           </div>
         </div>
         <div class="dmod" id="mod-tuzak" style="display:none">
-          <div class="dm-eye" id="tuzak-tarih">Gunluk Tuzak - yukleniyor...</div>
-          <div class="tuzak-q">Hangi seceneek cumleyi dogru tamamlar?</div>
-          <div class="tuzak-sent">"She would have attended the conference _____ she received the invitation in time."</div>
-          <div class="tuzak-opts" id="tuzak-opts">
-            <button class="tuzak-opt" onclick="tuzakAns(this,false)">A) if</button>
-            <button class="tuzak-opt" onclick="tuzakAns(this,true)">B) had</button>
-            <button class="tuzak-opt" onclick="tuzakAns(this,false)">C) unless</button>
-            <button class="tuzak-opt" onclick="tuzakAns(this,false)">D) although</button>
-          </div>
-          <div class="tuzak-fb" id="tuzak-fb"></div>
+          <div class="dm-eye" id="tuzak-tarih-lbl">Gunluk Tuzak — yukleniyor...</div>
+          <div id="tuzak-container"></div>
+        </div>
+        <div class="dmod" id="mod-hatalar" style="display:none">
+          <div class="dm-eye">HATA DEFTERİ — Yanliş cevapladıkların</div>
+          <div id="hata-liste-container"></div>
         </div>
       </div>
     </div>
@@ -604,14 +649,14 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YOKDiL mi - platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi icin de uygundur. Platform, alan secimine gore ornek metinleri kisisellestirir.</div></div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gercek bir yapay zeka mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. KLOD, Claude API uzerine kurulu gercek bir yapay zeka ogretmenidir.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>iptal etmek istesem ne yapmaliyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Istedigin zaman, tek tikla iptal edebilirsin. Herhangi bir iptal ucreti yoktur.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Iptal etmek istesem ne yapmaliyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Istedigin zaman, tek tikla iptal edebilirsin. Herhangi bir iptal ucreti yoktur.</div></div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses kurs internet baglantisi gerektiriyor mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Ses kurs tarayici tabanli TTS kullandigi icin internet baglantisi gerektirir.</div></div>
     </div>
   </div>
 </section>
 <section class="hayir-section">
   <div class="hayir-inner">
-    <div style="font-size:48px;margin-bottom:20px;animation:pulse 2.5s ease-in-out infinite">heart</div>
+    <div style="font-size:48px;margin-bottom:20px;animation:pulse 2.5s ease-in-out infinite">❤️</div>
     <div class="hayir-baslik">Her aboneligin bir kismi, bir cocugun gelecegine dokunuyor</div>
     <p class="hayir-metin">Sinyal Avcisi'ni tercih ettiginde sadece kendi hedefine yatirim yapmiyorsun. Platformdan elde edilen gelirin bir bolumu, yetim ve kimsesiz cocuklarin egitimine bagiSlaniyor.</p>
     <div class="hayir-alinti">"insanlarin en hayirlisi, insanlara en cok faydali olandir."</div>
@@ -626,12 +671,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <footer>
   <div class="footer-logo">Sinyal <b>Avcisi</b></div>
   <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span></div>
-  <div class="footer-copy">2026 Sinyal Avcisi - YDS & YOKDiL hazirlik platformu - Turkiye - Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
+  <div class="footer-copy">2026 Sinyal Avcisi · YDS & YOKDiL hazirlik platformu · Turkiye · Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
 </footer>
-<div id="hedef-modal" onclick="if(event.target==this)closeHedefModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:20px"><div style="background:#fff;border-radius:20px;padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative"><button onclick="closeHedefModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">X</button><div id="hedef-modal-icerik"></div></div></div>
 <div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">X</button>
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-body">
       <div class="modal-eye">7 Gun Ucretsiz Basla</div>
       <h2>Hesap olustur</h2>
@@ -645,13 +689,13 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       </form>
       <div class="modal-legal">Kayit olarak Kullanim Kosullarini kabul etmis olursun.</div>
     </div>
-    <div class="modal-success" id="modal-success"><div class="ms-icon">tada</div><div class="ms-h">Hos geldin, Avci!</div><p class="ms-p">Hesabin olusturuldu. 7 gunluk ucretsiz denemen basladi.</p></div>
+    <div class="modal-success" id="modal-success"><div class="ms-icon">🎉</div><div class="ms-h">Hos geldin, Avci!</div><p class="ms-p">Hesabin olusturuldu. 7 gunluk ucretsiz denemen basladi.</p></div>
   </div>
 </div>
 <div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
-    <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">X</button>
-    <div style="font-size:52px;margin-bottom:12px">timer</div>
+    <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="font-size:52px;margin-bottom:12px">⏰</div>
     <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px">Bir saniye dur!</div>
     <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gun ucretsiz</strong> dene - kredi karti yok, taahhut yok.</p>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
@@ -661,38 +705,24 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   </div>
 </div>
 <script>
-// SUPABASE
 const SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 const SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null;
 sb.auth.onAuthStateChange((event,session)=>{if(session){currentUser=session.user;showUserMenu(session.user);}else{currentUser=null;showGuestMenu();}});
-function showUserMenu(user){const navCta=document.querySelector('.btn-nav');if(navCta){const ad=user.user_metadata?.ad||user.email.split('@')[0];navCta.textContent='Hosgeldin '+ad;navCta.style.background='var(--signal)';}}
-function showGuestMenu(){const navCta=document.querySelector('.btn-nav');if(navCta){navCta.textContent='Ucretsiz Basla';navCta.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');navCta.style.background='var(--ink)';}}
-async function signOut(){await sb.auth.signOut();showGuestMenu();}
-
-// YARDIMCI
+function showUserMenu(u){const n=document.querySelector('.btn-nav');if(n){const ad=u.user_metadata?.ad||u.email.split('@')[0];n.textContent='Hosgeldin '+ad;n.style.background='var(--signal)';}}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='Ucretsiz Basla';n.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');n.style.background='var(--ink)';}}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
 function closeMenuGoTo(id){closeMenu();setTimeout(()=>goTo(id),120);}
-
-// MODAL
-function openModal(plan,price){
-  document.getElementById('modal-plan-name').textContent=plan;
-  document.getElementById('modal-plan-price').textContent=price+'/ay';
-  document.getElementById('modal-body').style.display='block';
-  document.getElementById('modal-success').style.display='none';
-  document.getElementById('modal').classList.add('open');
-}
+function openModal(plan,price){document.getElementById('modal-plan-name').textContent=plan;document.getElementById('modal-plan-price').textContent=price+'/ay';document.getElementById('modal-body').style.display='block';document.getElementById('modal-success').style.display='none';document.getElementById('modal').classList.add('open');}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
 
-// ALAN
 const alanKelimeler={Hukuk:['jurisdiction','liability','precedent','statute','injunction'],Sosyal:['stratification','hegemony','discourse','paradigm','socialization'],Fen:['hypothesis','catalyst','synthesis','empirical','osmosis'],Saglik:['diagnosis','prognosis','etiology','contraindication','pathogen'],Genel:['despite','however','nevertheless','by no means','far from']};
-let kelimeTimer=null;
+let kelimeTimer=null,curAlan='Genel';
 function setAlanVeGoster(el,alan,icon){
-  document.querySelectorAll('.alan-card').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
+  document.querySelectorAll('.alan-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');
   document.querySelectorAll('.alan-preview').forEach(p=>p.classList.remove('show'));
   const prev=document.getElementById('prev-'+alan);if(prev)prev.classList.add('show');
   clearInterval(kelimeTimer);
@@ -704,39 +734,51 @@ function setAlanVeGoster(el,alan,icon){
   curAlan=alan;
 }
 
-// DEMO
-const ALAN={Genel:{lbl:'Gercek OSYM Cumlesi - Genel',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."',q:'Bu cumleye gore arastirmacilar ne sonucuna vardi?',opts:['Tedavi tum hastalar icin etkilidir.','Tedavi umit verici ama garantili degildir.','Sonuclar yetersiz kaldi.','Tedavi basariyla tamamlandi.'],ans:1,exp:'Dogru! "Despite" zitlik + "far from guaranteed" = garantili degil.'},
-Hukuk:{lbl:'Gercek OSYM Cumlesi - Hukuk',sent:'"The appellate court held that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the procedural errors, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu cumleye gore mahkeme karari icin ne soylenebilir?',opts:['Usul hatalari karari gecersiz kildi.','Usul hatalarina ragmen karar gecerlidir.','Mahkeme yeniden yargilama istedi.','Karar temyize tasindi.'],ans:1,exp:'Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.'},
-Sosyal:{lbl:'Gercek OSYM Cumlesi - Sosyal',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Tuzak: neredeyse hic degil">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalasmayı nasil aciklar?',opts:['Tabakalasma kulturel normlardan bagimsizdır.','Tabakalasma kulturel normlarla yakindan iliskilidir.','Tabakalasma onemsenmeyen bir kavramdir.','Tabakalasma yalnizca ekonomik faktörlere baglidir.'],ans:1,exp:'Dogru! "Hardly operates independently" = neredeyse bagimsiz degil.'},
-Fen:{lbl:'Gercek OSYM Cumlesi - Fen',sent:'"The catalyst <span class="s-trap" data-tip="Tuzak: basaramadi">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zitlik sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Bu cumleye gore katalizor icin ne soylenebilir?',opts:['Katalizor reaksiyonu basariyla hizlandirdi.','Sicaklik optimum olsa da katalizor basarisiz oldu.','Sicaklik cok dusuktu.','Katalizor ve sicaklik birlikte etkili oldu.'],ans:1,exp:'Dogru! "Failed to accelerate" = basaramadi + "even though optimal" = tezat.'},
-Saglik:{lbl:'Gercek OSYM Cumlesi - Saglik',sent:'"The treatment was <span class="s-trap" data-tip="Tuzak: etkili degil">far from effective</span> <span class="s-sig" data-tip="Zitlik sinyali">although</span> it had shown <span class="s-key">promising</span> results."',q:'Bu cumleye gore tedavi hakkinda ne soylenebilir?',opts:['Tedavi denemelerde de etkili bulundu.','Umit verici sonuclara ragmen tedavi etkili olmadi.','Tedavi klinik denemelerde basarisiz oldu.','Sonuclar henuz degerlendirilmedi.'],ans:1,exp:'Dogru! "Far from effective" = etkili degil + "although promising" = tezat.'}};
-let curAlan='Genel',demoAnswered=false;
+const ALAN={
+  Genel:{lbl:'Gercek OSYM Cumlesi - Genel',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."',q:'Bu cumleye gore arastirmacilar ne sonucuna vardi?',opts:['Tedavi tum hastalar icin etkilidir.','Tedavi umit verici ama garantili degildir.','Sonuclar yetersiz kaldi.','Tedavi basariyla tamamlandi.'],ans:1,exp:'Dogru! "Despite" zitlik + "far from guaranteed" = garantili degil.'},
+  Hukuk:{lbl:'Gercek OSYM Cumlesi - Hukuk',sent:'"The appellate court held that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the procedural errors, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu cumleye gore mahkeme karari icin ne soylenebilir?',opts:['Usul hatalari karari gecersiz kildi.','Usul hatalarina ragmen karar gecerlidir.','Mahkeme yeniden yargilama istedi.','Karar temyize tasindi.'],ans:1,exp:'Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.'},
+  Sosyal:{lbl:'Gercek OSYM Cumlesi - Sosyal',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Tuzak: neredeyse hic degil">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalasmayı nasil aciklar?',opts:['Tabakalasma kulturel normlardan bagimsizdır.','Tabakalasma kulturel normlarla yakindan iliskilidir.','Tabakalasma onemsenmeyen bir kavramdir.','Tabakalasma yalnizca ekonomik faktörlere baglidir.'],ans:1,exp:'Dogru! "Hardly operates independently" = neredeyse bagimsiz degil.'},
+  Fen:{lbl:'Gercek OSYM Cumlesi - Fen',sent:'"The catalyst <span class="s-trap" data-tip="Tuzak: basaramadi">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zitlik sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Bu cumleye gore katalizor icin ne soylenebilir?',opts:['Katalizor reaksiyonu basariyla hizlandirdi.','Sicaklik optimum olsa da katalizor basarisiz oldu.','Sicaklik cok dusuktu.','Katalizor ve sicaklik birlikte etkili oldu.'],ans:1,exp:'Dogru! "Failed to accelerate" = basaramadi + "even though optimal" = tezat.'},
+  Saglik:{lbl:'Gercek OSYM Cumlesi - Saglik',sent:'"The treatment was <span class="s-trap" data-tip="Tuzak: etkili degil">far from effective</span> <span class="s-sig" data-tip="Zitlik sinyali">although</span> it had shown <span class="s-key">promising</span> results."',q:'Bu cumleye gore tedavi hakkinda ne soylenebilir?',opts:['Tedavi denemelerde de etkili bulundu.','Umit verici sonuclara ragmen tedavi etkili olmadi.','Tedavi klinik denemelerde basarisiz oldu.','Sonuclar henuz degerlendirilmedi.'],ans:1,exp:'Dogru! "Far from effective" = etkili degil + "although promising" = tezat.'}
+};
+let demoAnswered=false;
 const alanOrder=['Hukuk','Sosyal','Fen','Saglik','Genel'];let demoIdx=4;
 function demoAns(btn,correct){
   if(demoAnswered)return;demoAnswered=true;
   const opts=document.querySelectorAll('#dopts .dopt');opts.forEach(o=>o.disabled=true);
   const d=ALAN[curAlan];const fb=document.getElementById('dfb');
-  if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent=d.exp;}
-  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='Yanlis. '+d.exp;}
+  if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent='✅ '+d.exp;}
+  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='❌ Yanlis. '+d.exp;}
   document.getElementById('dnext').style.display='inline';
 }
-function demoNext(){demoIdx=(demoIdx+1)%alanOrder.length;const alan=alanOrder[demoIdx];const d=ALAN[alan];document.getElementById('dlbl').textContent=d.lbl;const s=document.getElementById('dsent');s.style.opacity='0';setTimeout(()=>{s.innerHTML=d.sent;s.style.opacity='1';},200);document.getElementById('dq').textContent=d.q;document.getElementById('dopts').innerHTML=d.opts.map((t,i)=>`<button class="dopt" onclick="demoAns(this,${i==d.ans})">${t}</button>`).join('');document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;}
-
-function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='Harika! E-kitap '+el.value+' adresine gonderildi.';el.value='';}
-
+function demoNext(){
+  demoIdx=(demoIdx+1)%alanOrder.length;const alan=alanOrder[demoIdx];const d=ALAN[alan];
+  document.getElementById('dlbl').textContent=d.lbl;
+  const s=document.getElementById('dsent');s.style.opacity='0';
+  setTimeout(()=>{s.innerHTML=d.sent;s.style.opacity='1';},200);
+  document.getElementById('dq').textContent=d.q;
+  document.getElementById('dopts').innerHTML=d.opts.map((t,i)=>`<button class="dopt" onclick="demoAns(this,${i==d.ans})">${t}</button>`).join('');
+  document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';
+  document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;
+}
+function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='🎉 E-kitap '+el.value+' adresine gonderildi!';el.value='';}
 async function modalSubmit(e){
   e.preventDefault();const ad=document.getElementById('m-ad'),em=document.getElementById('m-email'),si=document.getElementById('m-sifre');
   if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
   const btn=document.querySelector('.modal-submit');btn.textContent='Kaydediliyor...';btn.disabled=true;
-  try{const{data,error}=await sb.auth.signUp({email:em.value,password:si.value,options:{data:{ad:ad.value}}});
+  try{const{error}=await sb.auth.signUp({email:em.value,password:si.value,options:{data:{ad:ad.value}}});
   if(error){const{error:le}=await sb.auth.signInWithPassword({email:em.value,password:si.value});if(le){si.placeholder='Sifre hatali';btn.textContent='Ucretsiz Basla';btn.disabled=false;return;}}}catch(err){}
   btn.textContent='Ucretsiz Basla';btn.disabled=false;
   document.getElementById('modal-body').style.display='none';document.getElementById('modal-success').style.display='block';
   setTimeout(()=>{closeModal();goTo('dashboard');},2000);
 }
 
-// DASHBOARD
-function dtab(el,mod){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();}}
+// DASHBOARD NAV
+function dtab(el,mod){
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
+  document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();}
+}
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
@@ -744,19 +786,36 @@ function dnav(el){
   main.querySelector('.dash-karts').style.display='none';
   main.querySelector('.dash-tabs').style.display='none';
   main.querySelector('.dash-welcome').style.display='none';
-  if(txt=='Dashboard'){main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
-  else if(txt=='Sinyal Lab'){main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
-  else if(txt=='KLOD'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">G</button></div>';}
-  else if(txt=='Kelime Kartlari'){document.getElementById('mod-kelime').style.display='block';kkShow();}
-  else if(txt=='Gunluk Tuzak'){document.getElementById('mod-tuzak').style.display='block';}
-  else if(txt=='Ses Kurs'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">SES KURSU - 19 Konu</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between"><span>${p.t}</span><span style="color:var(--signal)">play</span></div>`).join('')+'</div>';}
-  else if(txt=='Raporlar'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="text-align:center;padding:20px 0"><div style="font-family:DM Serif Display,serif;font-size:56px;color:var(--signal)">73</div><div style="font-size:12px;color:var(--muted);margin-bottom:20px">Tahmini puan - Hedef: 85</div></div>';}
+  if(txt.includes('Dashboard')){
+    main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
+    document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
+  } else if(txt.includes('Sinyal Lab')){
+    main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';
+    document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
+  } else if(txt.includes('KLOD')){
+    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">🤖 KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="if(event.key==\'Enter\')dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">→</button></div>';
+  } else if(txt.includes('Kelime')){
+    document.getElementById('mod-kelime').style.display='block';kkShow();
+  } else if(txt.includes('Gunluk')){
+    document.getElementById('mod-tuzak').style.display='block';tuzakRender();
+  } else if(txt.includes('Ses')){
+    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between;align-items:center"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
+  } else if(txt.includes('Rapor')){
+    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><div style="background:var(--sl);border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--signal)">73</div><div style="font-size:11px;color:var(--muted)">Tahmini Puan</div></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:#16a34a">42</div><div style="font-size:11px;color:var(--muted)">Bu Hafta Soru</div></div><div style="background:#fef2f2;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--trap)">%31</div><div style="font-size:11px;color:var(--muted)">Hata Orani</div></div><div style="background:#fffbeb;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:28px;color:#d97706">Modal</div><div style="font-size:11px;color:var(--muted)">Zayif Yapi</div></div></div><div style="margin-top:12px;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--muted);line-height:1.7">💡 Bu hafta Modal Perfect yapısında yogunlaşman gerekiyor.</div>';
+  }
 }
-function dashPlaySes(idx){pIdx=idx;pUpdate();if(!pPlaying){playerToggle();}document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
+function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 function dnavChat(){const inp=document.getElementById('dnav-in');if(!inp||!inp.value.trim())return;const val=inp.value.trim();const body=document.getElementById('dnav-chat');const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;setTimeout(()=>{const km=document.createElement('div');km.className='msg k';km.textContent=KB_GENEL[Math.floor(Math.random()*KB_GENEL.length)];body.appendChild(km);body.scrollTop=body.scrollHeight;},700);}
-function dAns(btn,correct){const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('dm-fb');if(correct){btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.';}else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='dm-fb err';fb.textContent='Yanlis. "by no means invalid" = kesinlikle gecersiz degil!';}}
+function dAns(btn,correct){
+  const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('dm-fb');
+  if(correct){btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.';streakSoruEkle('sinyal');}
+  else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. "by no means invalid" = kesinlikle gecersiz degil!';hataEkle('"...the verdict was by no means invalid."','Yanlış seçenek','Usul hatalarına rağmen karar geçerliydi','sinyal');}
+}
 
-// KELIME KARTLARI (SM-2 + localStorage + Due Date)
+// KELIME KARTLARI SM-2
 const kkData=[
   {en:'liability',tr:'sorumluluk / yukumluluk',ex:'"Strict liability requires no proof of intent."'},
   {en:'precedent',tr:'emsal / ictihat',ex:'"This ruling sets a precedent for future cases."'},
@@ -768,62 +827,146 @@ const kkData=[
   {en:'refute',tr:'curutmek',ex:'"The evidence refutes the original hypothesis."'},
   {en:'stipulate',tr:'sart kosmak / belirtmek',ex:'"The contract stipulates a 30-day notice period."'},
   {en:'subsequent',tr:'sonraki / akabindeki',ex:'"Subsequent studies confirmed the initial findings."'},
+  {en:'notwithstanding',tr:'buna ragmen / karsin',ex:'"Notwithstanding the risks, they proceeded."'},
+  {en:'mitigate',tr:'hafifletmek / azaltmak',ex:'"Measures were taken to mitigate the damage."'},
+  {en:'ambiguous',tr:'muphemli / belirsiz',ex:'"The clause was deliberately ambiguous."'},
+  {en:'contingent',tr:'bagimli / kosullu',ex:'"The decision is contingent on approval."'},
+  {en:'curtail',tr:'kısmak / azaltmak',ex:'"The new policy will curtail emissions."}'},
 ];
 kkData.forEach(k=>{k.interval=1;k.rep=0;k.ef=2.5;k.due=0;});
-function kkSave(){localStorage.setItem('kkData',JSON.stringify(kkData.map(k=>({interval:k.interval,rep:k.rep,ef:k.ef,due:k.due}))));}
-function kkLoad(){try{const s=localStorage.getItem('kkData');if(s){const d=JSON.parse(s);d.forEach((v,i)=>{if(kkData[i]){kkData[i].interval=v.interval??1;kkData[i].rep=v.rep??0;kkData[i].ef=v.ef??2.5;kkData[i].due=v.due??0;}});}}catch(e){}}
+function kkSave(){try{localStorage.setItem('sa_kk',JSON.stringify(kkData.map(k=>({interval:k.interval,rep:k.rep,ef:k.ef,due:k.due}))));}catch(e){}}
+function kkLoad(){try{const s=localStorage.getItem('sa_kk');if(s){const d=JSON.parse(s);d.forEach((v,i)=>{if(kkData[i]){kkData[i].interval=v.interval??1;kkData[i].rep=v.rep??0;kkData[i].ef=v.ef??2.5;kkData[i].due=v.due??0;}});}}catch(e){}}
 kkLoad();
-let kkQueue=[],kkCurrent=null,kkOpen=false;
-function kkBuildQueue(){const now=Date.now();const due=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);kkQueue=due.length>0?[...due]:[];}
-function kkGetNextDueTime(){const f=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);if(!f.length)return null;const ms=f[0].due-Date.now();const h=Math.floor(ms/3600000);const m=Math.floor((ms%3600000)/60000);return h>0?h+' saat '+m+' dk':m+' dk';}
-function kkUpdateDashCard(){const now=Date.now();const c=kkData.filter(k=>k.due<=now).length;const el=document.getElementById('dk-kelime-bugun');const sub=document.getElementById('dk-kelime-durum');if(el)el.textContent=c>0?c:'OK';if(sub)sub.textContent=c>0?'kart tekrar bekliyor':'Bugün tamamlandi!';}
+let kkQueue=[],kkCurrent=null,kkFlipped=false;
+function kkBuildQueue(){const now=Date.now();kkQueue=[...kkData.filter(k=>k.due<=now)].sort(()=>Math.random()-0.5);}
+function kkNextDue(){const f=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);if(!f.length)return null;const ms=f[0].due-Date.now();const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);return h>0?(h+' saat '+m+' dk'):(m+' dk');}
+function kkUpdateDashCard(){const c=kkData.filter(k=>k.due<=Date.now()).length;const el=document.getElementById('dk-kelime-bugun'),sub=document.getElementById('dk-kelime-durum');if(el)el.textContent=c>0?c:'✓';if(sub)sub.textContent=c>0?'kart tekrar bekliyor':'Bugun tamamlandi!';}
 function kkShow(){
   kkBuildQueue();
-  const eyebrow=document.getElementById('kk-eyebrow');
-  if(kkQueue.length==0){
-    const sonraki=kkGetNextDueTime();
-    if(eyebrow)eyebrow.textContent='Spaced Repetition - Bugün tamamlandi';
-    const kkEl=document.getElementById('kk');
-    if(kkEl)kkEl.innerHTML='<div style="text-align:center;padding:24px 16px"><div style="font-size:40px;margin-bottom:12px">tada</div><div style="font-family:DM Serif Display,serif;font-size:20px;margin-bottom:8px">Bugünlük bitti!</div><div style="font-size:13px;color:var(--muted);line-height:1.7">'+(sonraki?'Sonraki kart '+sonraki+' sonra tekrar edilecek.':'Tüm kartlar tekrar edildi.')+'<br>Yarin devam et</div></div>';
-    const act=document.getElementById('kk-actions');if(act)act.style.display='none';
-    return;
+  const eyebrow=document.getElementById('kk-eyebrow'),kkEl=document.getElementById('kk'),front=document.getElementById('kk-front'),back=document.getElementById('kk-back'),act=document.getElementById('kk-actions');
+  if(kkQueue.length===0){
+    const sonraki=kkNextDue();
+    if(eyebrow)eyebrow.textContent='Spaced Repetition — Bugun tamamlandi ✓';
+    if(kkEl)kkEl.innerHTML=`<div style="text-align:center;padding:20px 0"><div style="font-size:40px;margin-bottom:10px">🎉</div><div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Harika! Bugunluk bitti.</div><div style="font-size:13px;color:var(--muted);line-height:1.7">${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra gelecek.':'Tum kartlar tekrar edildi.'}<br>Yarin devam et 💪</div></div>`;
+    if(act)act.style.display='none';return;
   }
-  kkCurrent=kkQueue.shift();kkOpen=false;
-  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
-  const front=document.getElementById('kk-front');const back=document.getElementById('kk-back');const act=document.getElementById('kk-actions');
-  if(front)front.innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tikla - Turkce gor</div>';
-  if(back)back.innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
-  if(front)front.style.display='block';
-  if(back)back.style.display='none';
-  if(act)act.style.display='none';
-  if(eyebrow)eyebrow.textContent='Spaced Repetition - '+(kkQueue.length+1)+' kart bekliyor';
+  kkCurrent=kkQueue.shift();kkFlipped=false;
+  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.85;speechSynthesis.speak(u);}
+  const wf=document.getElementById('kk-word-front'),wb=document.getElementById('kk-word-back'),eb=document.getElementById('kk-ex-back');
+  if(wf)wf.textContent=kkCurrent.en;
+  if(wb)wb.textContent=kkCurrent.tr;
+  if(eb)eb.textContent=kkCurrent.ex;
+  if(front)front.style.display='block';if(back)back.style.display='none';if(act)act.style.display='none';
+  if(eyebrow)eyebrow.textContent='Spaced Repetition — '+(kkQueue.length+1)+' kart bekliyor';
 }
-function kkFlip(){kkOpen=!kkOpen;const front=document.getElementById('kk-front');const back=document.getElementById('kk-back');const act=document.getElementById('kk-actions');if(front)front.style.display=kkOpen?'none':'block';if(back)back.style.display=kkOpen?'block':'none';if(act)act.style.display=kkOpen?'flex':'none';if(kkOpen&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.tr);u.lang='tr-TR';u.rate=0.9;speechSynthesis.speak(u);}}
+function kkFlip(){
+  kkFlipped=!kkFlipped;
+  const front=document.getElementById('kk-front'),back=document.getElementById('kk-back'),act=document.getElementById('kk-actions');
+  if(front)front.style.display=kkFlipped?'none':'block';
+  if(back)back.style.display=kkFlipped?'block':'none';
+  if(act)act.style.display=kkFlipped?'flex':'none';
+  if(kkFlipped&&kkCurrent&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.tr.split('/')[0].trim());u.lang='tr-TR';u.rate=0.9;speechSynthesis.speak(u);}
+}
 function kkAnswer(q){
   if(!kkCurrent)return;
-  if(q>=3){if(kkCurrent.rep==0)kkCurrent.interval=1;else if(kkCurrent.rep==1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));}
-  else{kkCurrent.rep=0;kkCurrent.interval=1;}
+  if(q>=3){
+    if(kkCurrent.rep===0)kkCurrent.interval=1;else if(kkCurrent.rep===1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);
+    kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
+    streakSoruEkle('kelime');
+  } else {
+    kkCurrent.rep=0;kkCurrent.interval=1;
+    // Zor diyince hata defterine ekle
+    hataEkle(kkCurrent.en, '(Hatırlamadım)', kkCurrent.tr, 'kelime');
+  }
   kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
-  kkSave();kkUpdateDashCard();kkShow();
+  kkSave();kkUpdateDashCard();setTimeout(kkShow,150);
 }
 kkUpdateDashCard();
 
-// TUZAK
-const bugun=new Date();const aylar=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
-const tarihEl=document.getElementById('tuzak-tarih');if(tarihEl)tarihEl.textContent='Gunluk Tuzak - '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
-function tuzakAns(btn,correct){const opts=document.querySelectorAll('#tuzak-opts .tuzak-opt');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('tuzak-fb');if(correct){btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='Dogru! 3rd conditional inverted: "if" dustugunde "had" one cikar.';}else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='Yanlis. 3rd conditional devrik: "if" kalktıgında yardimci fiil one gecer.';}}
+// GUNLUK TUZAK — 30 soruluk havuz
+const TUZAK_HAVUZ=[
+  {q:'Hangi secenek cumleyi dogru tamamlar?',sent:'"She would have attended the conference _____ she received the invitation in time."',opts:['A) if','B) had','C) unless','D) although'],dogru:1,fb:'3rd conditional devrik yapi: "if" dustugunde "had" one cikar.'},
+  {q:'Boslugu dogru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e ragmen + tam cumle. Zitlik sinyali.'},
+  {q:'Anlamca en yakin secenek hangisi?',sent:'"The findings were by no means conclusive."',opts:['A) tamamen kesin','B) kesinlikle kesin degil','C) bir olcude kesin','D) tartismali'],dogru:1,fb:'"By no means" = gizli olumsuz; kesinlikle degil.'},
+  {q:'Bosluga hangisi gelmelidir?',sent:'"_____ the new policy, employees were given more flexibility."',opts:['A) Despite','B) Although','C) Under','D) However'],dogru:2,fb:'"Under + isim" = bir duzenleme altinda. Edat, baglac degil.'},
+  {q:'Modal yapiyi dogru tanimlayin:',sent:'"She must have forgotten the meeting."',opts:['A) Zorunluluk','B) Gecmise dair guclu cıkarim','C) Izin','D) Gelecek tahmin'],dogru:1,fb:'"Must have + V3" = gecmise dair kanita dayali guclu cıkarim. Zorunluluk degil!'},
+  {q:'Cumlede "far from" ne anlama gelir?',sent:'"The solution was far from perfect."',opts:['A) mukemmele yakin','B) mukemmeldi','C) mukemmel degildi','D) mukemmel olabilirdi'],dogru:2,fb:'"Far from" = gizli olumsuz. Anlaminda "degil" vardir.'},
+  {q:'Boslugu dogru doldurun:',sent:'"The report was submitted _____ the deadline."',opts:['A) despite','B) prior to','C) although','D) however'],dogru:1,fb:'"Prior to" = once (edat). Zaman iliskisi kurar.'},
+  {q:'Hangi secenek dogruda?',sent:'"Had she known the truth, she _____ differently."',opts:['A) will behave','B) would behave','C) would have behaved','D) had behaved'],dogru:2,fb:'3rd conditional: "Had she known..." → "would have + V3"'},
+  {q:'"Hardly" kelimesinin anlami nedir?',sent:'"The committee hardly considered the proposal."',opts:['A) Mutlaka','B) Neredeyse hic','C) Kesinlikle','D) Buyuk olcude'],dogru:1,fb:'"Hardly" = gizli olumsuz; neredeyse hic. OSYM tuzak yapisi.'},
+  {q:'Dogru secenegi bulun:',sent:'"The new regulation aims to _____ the impact of pollution."',opts:['A) amplify','B) mitigate','C) accelerate','D) neglect'],dogru:1,fb:'"Mitigate" = hafifletmek, azaltmak. OSYM akademik kelime.'},
+  {q:'Bosluga hangi baglac gelir?',sent:'"_____ its flaws, the study was widely cited."',opts:['A) Because of','B) Despite','C) Unless','D) Whenever'],dogru:1,fb:'"Despite + isim" = -e ragmen. Zitlik sinyali.'},
+  {q:'"Notwithstanding" hangi anlamda kullanilir?',sent:'"Notwithstanding the difficulties, the project succeeded."',opts:['A) Nedeniyle','B) Buna ragmen','C) Bundan dolayi','D) Aksi halde'],dogru:1,fb:'"Notwithstanding" = buna ragmen / karsin. Resmi dilde despite ile esdeger.'},
+  {q:'Hangi secenek modalin dogru anlamini verir?',sent:'"The patient might have reacted to the medication."',opts:['A) Kesinlikle reaksiyon gosterdi','B) Zorunlu olarak gosterdi','C) Belki reaksiyon gostermis olabilir','D) Gostermeli'],dogru:2,fb:'"Might have + V3" = gecmise dair zayif ihtimal. "Must have" ile karistirmayin!'},
+  {q:'Boslugu tamamlayin:',sent:'"The committee was _____ divided on the issue."',opts:['A) deeply','B) deep','C) depth','D) deepen'],dogru:0,fb:'"Deeply divided" = derin bicimde bolunmus. Sifati niteleyen zarf kullanilir.'},
+  {q:'Anlam sorusu - ne ifade eder?',sent:'"The results were anything but conclusive."',opts:['A) Sonuclar tamamen kesin','B) Sonuclar kesin degildi','C) Sonuclar yeterliydi','D) Sonuclar beklendik'],dogru:1,fb:'"Anything but" = ... degil. Guclu gizli olumsuz. "Far from" ile ayni islev.'},
+  {q:'Hangi secenek dogruda?',sent:'"The findings suggest that the hypothesis _____ further testing."',opts:['A) require','B) requires','C) required','D) requiring'],dogru:1,fb:'Subject (hypothesis) tekil → "requires". Subject-verb agreement tuzagi!'},
+  {q:'Boslugu tamamlayin:',sent:'"The law was enacted _____ protect consumers."',opts:['A) so as to','B) despite','C) although','D) however'],dogru:0,fb:'"So as to" = amaci ifade eder (= in order to). Amac baglaci.'},
+  {q:'Modal yapi sorusu:',sent:'"You should have submitted the form earlier."',opts:['A) Formu gonderdin','B) Gondermeliydin ama gondermedin','C) Gondereceksin','D) Gonderebilirdin'],dogru:1,fb:'"Should have + V3" = gecmiste yapilmasi gerekirdi ama yapilmadi. Pismanlık yapisi.'},
+  {q:'Hangi kelime bosluga uyar?',sent:'"The evidence was _____ to support the claim."',opts:['A) insufficient','B) sufficient','C) proficient','D) efficient'],dogru:0,fb:'"Insufficient" = yetersiz. "Insufficient to + V" kalibina dikkat.'},
+  {q:'Baglac sorusu:',sent:'"_____ the budget was limited, they completed the project."',opts:['A) Despite','B) Although','C) Because','D) Therefore'],dogru:1,fb:'"Although" + tam cumle = -e ragmen. "Despite" isim/V-ing ister.'},
+  {q:'Anlamca yakin secenek hangisi?',sent:'"The policy is contingent on approval."',opts:['A) Onaydan bagimsiz','B) Onaya bagli','C) Onaya ragmen','D) Onay gerektirmeyen'],dogru:1,fb:'"Contingent on" = -e bagli, kosullu. Akademik metinlerde sik.'},
+  {q:'Hangi yapi yanlıstir?',sent:'A) Despite working hard / B) Despite she worked hard / C) Although she worked hard / D) Even though she worked hard',opts:['A) A sik','B) B yanlis','C) C dogru','D) D dogru'],dogru:1,fb:'"Despite" + isim/gerund. "Despite she worked" yanlis - sonrasinda cumle gelmez!'},
+  {q:'Modal + have + V3 sorusu:',sent:'"The documents _____ been misplaced."',opts:['A) can','B) could have','C) should','D) might'],dogru:1,fb:'"Could have + V3" = gecmiste mumkun olmus olabilirdi.'},
+  {q:'Hangi kelime "azaltmak" anlamina gelir?',sent:'Bagdam: "The new policy will _____ emissions."',opts:['A) amplify','B) sustain','C) curtail','D) enhance'],dogru:2,fb:'"Curtail" = kismak, azaltmak. OSYM Fen/Sosyal metinlerinde sik.'},
+  {q:'Boslugu tamamlayin:',sent:'"The researcher\'s conclusion was _____ by subsequent studies."',opts:['A) refuted','B) stipulated','C) mitigated','D) amplified'],dogru:0,fb:'"Refute" = curutmek. "Subsequent" = sonraki. Ikisi birlikte OSYM kalibı.'},
+  {q:'Inversion sorusu:',sent:'"Never _____ such a significant error in the data."',opts:['A) we have seen','B) have we seen','C) we had seen','D) had we been seeing'],dogru:1,fb:'"Never" basa gelince devrik yapi: Never + yardimci + ozne + V. OSYM tuzagi!'},
+  {q:'Hangi secenek dogru anlami verir?',sent:'"The council is reluctant to adopt the new measures."',opts:['A) istekli','B) isteksiz','C) zorunlu','D) kararli'],dogru:1,fb:'"Reluctant" = isteksiz, cekingen. "Reluctant to + V" OSYM\'de sik.'},
+  {q:'Boslugu tamamlayin:',sent:'"The results were _____ with previous findings."',opts:['A) consistent','B) consisted','C) consistency','D) consistently'],dogru:0,fb:'"Consistent with" = ile tutarli/uyumlu. Sifat (be + consistent) kalibi.'},
+  {q:'Tuzak soru - anlamine dikkat:',sent:'"The proposal was not without merit."',opts:['A) Tamamen degersizdi','B) Degerliydi','C) Tartismaliydi','D) Degeri yoktu'],dogru:1,fb:'"Not without merit" = cift olumsuz = olumlu. Degersiz degildi → degerliydi!'},
+  {q:'Gerund / infinitive sorusu:',sent:'"She was accused of _____ the report."',opts:['A) to falsify','B) falsifying','C) falsify','D) having falsify'],dogru:1,fb:'"Accused of + V-ing". Edat (of) sonrasinda gerund gelir.'},
+];
 
-// SSS
+let tuzakIdx=0,tuzakAnswered=false;
+function tuzakGetDailyIdx(){const day=Math.floor(Date.now()/(1000*60*60*24));return day%TUZAK_HAVUZ.length;}
+function tuzakRender(){
+  tuzakIdx=tuzakGetDailyIdx();tuzakAnswered=false;
+  const soru=TUZAK_HAVUZ[tuzakIdx];
+  const bugun=new Date();
+  const aylar=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
+  const lbl=document.getElementById('tuzak-tarih-lbl');
+  const z=adaptifZorlukBadge();
+  if(lbl)lbl.innerHTML='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear()+' · Soru '+(tuzakIdx+1)+'/'+TUZAK_HAVUZ.length+` <span class="zorluk-badge ${z.cls}">${z.ikon} ${z.seviye}</span>`;
+  const cont=document.getElementById('tuzak-container');if(!cont)return;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button>`;
+}
+function tuzakAns(btn,correct,dogru){
+  if(tuzakAnswered)return;tuzakAnswered=true;
+  const opts=document.querySelectorAll('#tuzak-opts-inner .tuzak-opt');opts.forEach(o=>o.disabled=true);
+  const fb=document.getElementById('tuzak-fb-inner'),soru=TUZAK_HAVUZ[tuzakIdx];
+  if(correct){
+    btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    streakSoruEkle('tuzak');
+  } else {
+    btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    // Hata defterine ekle
+    hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
+  }
+  const nb=document.getElementById('tuzak-next-btn');if(nb)nb.style.display='inline-block';
+}
+function tuzakSonraki(){
+  tuzakIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;tuzakAnswered=false;
+  const soru=TUZAK_HAVUZ[tuzakIdx];
+  const cont=document.getElementById('tuzak-container');if(!cont)return;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button>`;
+}
+// Tarih etiketini sayfa açılışında set et
+(function(){
+  const bugun=new Date();const aylar=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
+  const lbl=document.getElementById('tuzak-tarih-lbl');
+  if(lbl)lbl.textContent='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
+})();
+
 function sssToggle(el){el.parentElement.classList.toggle('open');}
 
-// KLOD
+// KLOD CHAT
 const KB=[
-  {keys:['must','modal perfect'],r:['<b>must have + V3</b> = gecmise dair kanita dayali guclu cıkarim. "might have" ile karıstirmak OSYM tuzagi.','<b>Must</b> = neredeyse kesin, kanit var. <b>Might</b> = sadece ihtimal.']},
-  {keys:['despite','although','zitlik','however'],r:['<b>Despite</b> + isim/V-ing. "Although" ise + cumle ister. "Despite the rain" dogru.','Zitlik sinyalleri cumlenin anlamını tersine cevirir.']},
-  {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.','"Far from" gordugunde zihninde "degil" ekle.']},
-  {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi.','"Would have + V3" gordugunde Type 3 conditional dusun.']},
+  {keys:['must','modal perfect'],r:['<b>must have + V3</b> = gecmise dair kanita dayali guclu cıkarim. "might have" ile karistirmak OSYM tuzagi.']},
+  {keys:['despite','although','zitlik','however'],r:['<b>Despite</b> + isim/V-ing. "Although" ise + cumle ister. Zitlik sinyalleri anlami tersine cevirir.']},
+  {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.']},
+  {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi. "Had she known" devrik kullanim.']},
 ];
-const KB_GENEL=['Ilginc! Daha acayabilir misin?','Dogru yonde gidiyorsun. Hangi sinyale bakman gerekir?','Bu cumlede sinyal kelimesini buldun mu?','OSYM bu yapıyı nasil sorar? Dusun.'];
+const KB_GENEL=['Ilginc! Daha acayabilir misin?','Dogru yonde gidiyorsun. Hangi sinyale bakman gerekir?','Bu cumlede sinyal kelimesini buldun mu?','OSYM bu yapiyi nasil sorar? Duşun.'];
 let chatHistory=[];
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
@@ -840,10 +983,21 @@ async function sendChat(){
 }
 
 // PLAYER
-const PD=[{t:'KONU 1/19 - TENSES',en:'She has been studying for three hours.',tr:'3 saattir ders calisıyor.'},{t:'KONU 2/19 - MODALS',en:'You must have left before the announcement.',tr:'Duyurudan once ayrilmis olmalisin.'},{t:'KONU 3/19 - CONDITIONALS',en:'If she had studied harder, she would have passed.',tr:'Daha cok calisaydı gecmis olurdu.'},{t:'KONU 4/19 - PASSIVE',en:'The report had been submitted before the deadline.',tr:'Rapor son tarihten once teslim edilmisti.'},{t:'KONU 5/19 - RELATIVE',en:'The man whose car was stolen called the police.',tr:'Arabası calınan adam polisi ardi.'},{t:'KONU 6/19 - CONJUNCTIONS',en:'Despite the rain, they continued the experiment.',tr:'Yagmura ragmen deneye devam ettiler.'},{t:'KONU 7/19 - INVERSION',en:'Never have I seen such a clear example.',tr:'Bu kadar net bir ornek hic gormedim.'},{t:'KONU 8/19 - REPORTED',en:'She said she had finished the report.',tr:'"Raporu bitirdim" dedi.'},{t:'KONU 9/19 - GERUND',en:'She avoided making eye contact.',tr:'Goz temasindan kaçındı.'},{t:'KONU 10/19 - WISHES',en:'I wish I had studied harder.',tr:'Keske daha cok calisaydim.'}];
+const PD=[
+  {t:'KONU 1/19 - TENSES',en:'She has been studying for three hours.',tr:'3 saattir ders calisıyor.'},
+  {t:'KONU 2/19 - MODALS',en:'You must have left before the announcement.',tr:'Duyurudan once ayrilmis olmalisin.'},
+  {t:'KONU 3/19 - CONDITIONALS',en:'If she had studied harder, she would have passed.',tr:'Daha cok calisaydı gecmis olurdu.'},
+  {t:'KONU 4/19 - PASSIVE',en:'The report had been submitted before the deadline.',tr:'Rapor son tarihten once teslim edilmisti.'},
+  {t:'KONU 5/19 - RELATIVE',en:'The man whose car was stolen called the police.',tr:'Arabası calınan adam polisi ardi.'},
+  {t:'KONU 6/19 - CONJUNCTIONS',en:'Despite the rain, they continued the experiment.',tr:'Yagmura ragmen deneye devam ettiler.'},
+  {t:'KONU 7/19 - INVERSION',en:'Never have I seen such a clear example.',tr:'Bu kadar net bir ornek hic gormedim.'},
+  {t:'KONU 8/19 - REPORTED',en:'She said she had finished the report.',tr:'"Raporu bitirdim" dedi.'},
+  {t:'KONU 9/19 - GERUND',en:'She avoided making eye contact.',tr:'Goz temasindan kacindi.'},
+  {t:'KONU 10/19 - WISHES',en:'I wish I had studied harder.',tr:'Keske daha cok calisaydim.'},
+];
 let pIdx=2,pPlaying=false,pSpeed=1,pFill=0,pTimer=null;
 function pUpdate(){const d=PD[pIdx%PD.length];document.getElementById('p-topic').textContent=d.t;document.getElementById('p-en').textContent=d.en;document.getElementById('p-tr').textContent=d.tr;}
-function playerToggle(){pPlaying=!pPlaying;document.getElementById('p-play').textContent=pPlaying?'pause':'play';if(pPlaying){pTTS();pStartFill();}else{speechSynthesis.cancel();clearInterval(pTimer);}}
+function playerToggle(){pPlaying=!pPlaying;document.getElementById('p-play').textContent=pPlaying?'⏸':'▶';if(pPlaying){pTTS();pStartFill();}else{speechSynthesis.cancel();clearInterval(pTimer);}}
 function pTTS(){if(!window.speechSynthesis)return;speechSynthesis.cancel();const d=PD[pIdx%PD.length];const u1=new SpeechSynthesisUtterance(d.en);u1.lang='en-US';u1.rate=pSpeed;const u2=new SpeechSynthesisUtterance(d.tr);u2.lang='tr-TR';u2.rate=pSpeed;u2.onend=()=>{if(pPlaying){pIdx++;pFill=0;pUpdate();pTTS();}};speechSynthesis.speak(u1);speechSynthesis.speak(u2);}
 function pStartFill(){clearInterval(pTimer);pTimer=setInterval(()=>{pFill=Math.min(pFill+0.5,100);document.getElementById('p-fill').style.width=pFill+'%';if(pFill>=100)pFill=0;},80);}
 function playerFwd(){speechSynthesis.cancel();pIdx++;pFill=0;pUpdate();if(pPlaying)pTTS();}
@@ -855,35 +1009,186 @@ function playerSpeed(s,el){pSpeed=s;document.querySelectorAll('.p-speed').forEac
 function setSesMod(el){document.querySelectorAll('.ses-mode').forEach(m=>m.classList.remove('active'));el.classList.add('active');}
 pUpdate();
 
-// SINAV GERI SAYIM
 let gsTimer=null;
 function sinavGeriSayim(){
-  const inp=document.getElementById('sinav-tarih');if(!inp||!inp.value){alert('Lutfen bir tarih secin!');return;}
-  const hedef=new Date(inp.value+'T10:15:00').getTime();const display=document.getElementById('geri-sayim-display');display.style.display='block';
+  const inp=document.getElementById('sinav-tarih-input');if(!inp||!inp.value){alert('Lutfen bir tarih secin!');return;}
+  const hedef=new Date(inp.value+'T10:15:00').getTime();
+  document.getElementById('geri-sayim-display').style.display='block';
   if(gsTimer)clearInterval(gsTimer);
-  function guncelle(){const fark=hedef-Date.now();if(fark<=0){document.getElementById('gs-gun').textContent='0';document.getElementById('gs-saat').textContent='0';document.getElementById('gs-dak').textContent='0';document.getElementById('gs-mesaj').textContent='Sinav gunu geldi! Basarilar!';clearInterval(gsTimer);return;}document.getElementById('gs-gun').textContent=Math.floor(fark/86400000);document.getElementById('gs-saat').textContent=Math.floor((fark%86400000)/3600000);document.getElementById('gs-dak').textContent=Math.floor((fark%3600000)/60000);const gun=Math.floor(fark/86400000);document.getElementById('gs-mesaj').textContent=gun>60?'Harika! Cok vaktin var.':gun>30?'iyi tempo!':gun>14?'Son sprint!':'Son 2 hafta!';}
+  function guncelle(){const fark=hedef-Date.now();if(fark<=0){['gs-gun','gs-saat','gs-dak'].forEach(id=>document.getElementById(id).textContent='0');document.getElementById('gs-mesaj').textContent='Sinav gunu geldi! Basarilar! 🎯';clearInterval(gsTimer);return;}document.getElementById('gs-gun').textContent=Math.floor(fark/86400000);document.getElementById('gs-saat').textContent=Math.floor((fark%86400000)/3600000);document.getElementById('gs-dak').textContent=Math.floor((fark%3600000)/60000);const gun=Math.floor(fark/86400000);document.getElementById('gs-mesaj').textContent=gun>60?'💪 Cok vaktin var!':gun>30?'📈 Iyi tempo!':gun>14?'🔥 Son sprint!':'⚡ Son 2 hafta!';}
   guncelle();gsTimer=setInterval(guncelle,60000);
 }
 
-// SCROLL ANIMASYONLARI
-const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.15});
-document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>{scrollObserver.observe(el);});
-function animateCount(el){const target=parseInt(el.dataset.count);const suffix=el.dataset.suffix||'';const prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
+// ============================================================
+// STREAK SİSTEMİ
+// ============================================================
+const ROZET_LISTESI=[
+  {id:'ilk_gun',icon:'🌱',ad:'İlk Adım',desc:'İlk günü tamamladın',kosul:s=>s.streak>=1},
+  {id:'uc_gun',icon:'🔥',ad:'Ateş Yakıldı',desc:'3 gün üst üste',kosul:s=>s.streak>=3},
+  {id:'yedi_gun',icon:'⚡',ad:'Haftalık Avcı',desc:'7 gün seri',kosul:s=>s.streak>=7},
+  {id:'on_gun',icon:'💎',ad:'Elmas Avci',desc:'10 gün seri',kosul:s=>s.streak>=10},
+  {id:'modal_usta',icon:'🧠',ad:'Modal Ustası',desc:'Modal soruda 5 doğru',kosul:s=>s.modalDogru>=5},
+  {id:'sinyal_usta',icon:'🎯',ad:'Sinyal Ustası',desc:'50 soru çözdün',kosul:s=>s.toplamSoru>=50},
+  {id:'hata_yok',icon:'✨',ad:'Kusursuz Gün',desc:'Hiç hata yapmadan bir tur',kosul:s=>s.kusursuzTur>=1},
+];
+function streakLoad(){
+  try{return JSON.parse(localStorage.getItem('sa_streak')||'{}');}catch(e){return {};}
+}
+function streakSave(d){try{localStorage.setItem('sa_streak',JSON.stringify(d));}catch(e){}}
+function streakInit(){
+  let d=streakLoad();
+  const bugun=new Date().toDateString();
+  if(!d.son){d={son:null,streak:0,enUzun:0,bugunCalistiMi:false,toplamSoru:0,modalDogru:0,kusursuzTur:0,kazanilanRozetler:[],buHaftaSoru:0};}
+  // Gün kontrolü
+  if(d.son!==bugun){
+    const dun=new Date();dun.setDate(dun.getDate()-1);
+    if(d.son===dun.toDateString()){d.streak++;}
+    else if(d.son!==null){d.streak=1;}
+    else{d.streak=1;}
+    d.son=bugun;d.bugunCalistiMi=false;
+    if(d.streak>d.enUzun)d.enUzun=d.streak;
+  }
+  streakSave(d);streakRender(d);return d;
+}
+function streakRender(d){
+  const sayiEl=document.getElementById('streak-sayi');
+  const haftaEl=document.getElementById('streak-bu-hafta');
+  if(sayiEl)sayiEl.textContent=d.streak||0;
+  if(haftaEl)haftaEl.textContent=(d.buHaftaSoru||0)+' soru';
+  rozetRender(d);
+}
+function rozetRender(d){
+  const cont=document.getElementById('streak-badges');
+  if(!cont)return;
+  const kazanilan=ROZET_LISTESI.filter(r=>d.kazanilanRozetler&&d.kazanilanRozetler.includes(r.id));
+  cont.innerHTML=kazanilan.slice(-4).map(r=>`<span class="rozet ${rozetClass(r.id)}" title="${r.desc}">${r.icon} ${r.ad}</span>`).join('');
+}
+function rozetClass(id){if(id.includes('usta'))return 'sinyal';if(id.includes('gun')||id.includes('yedi')||id.includes('on_'))return 'modal';return 'altin';}
+function rozetKontrol(d){
+  let yeni=[];
+  ROZET_LISTESI.forEach(r=>{
+    if(!(d.kazanilanRozetler||[]).includes(r.id)&&r.kosul(d)){
+      d.kazanilanRozetler=d.kazanilanRozetler||[];
+      d.kazanilanRozetler.push(r.id);
+      yeni.push(r);
+    }
+  });
+  if(yeni.length>0){streakSave(d);yeni.forEach(r=>rozetBildirim(r));streakRender(d);}
+}
+function rozetBildirim(r){
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:600;background:#fff;border:2px solid var(--signal);border-radius:16px;padding:16px 24px;text-align:center;box-shadow:0 8px 40px rgba(45,91,227,.2);animation:fadeInDown .4s ease;font-family:Inter,sans-serif;min-width:220px';
+  div.innerHTML=`<div style="font-size:36px;margin-bottom:6px">${r.icon}</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:4px;font-family:'JetBrains Mono',monospace">Rozet Kazandın!</div><div style="font-size:16px;font-weight:700;color:var(--ink)">${r.ad}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${r.desc}</div>`;
+  document.body.appendChild(div);
+  setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},3500);
+}
+function streakSoruEkle(tip){
+  let d=streakLoad();
+  d.toplamSoru=(d.toplamSoru||0)+1;
+  d.buHaftaSoru=(d.buHaftaSoru||0)+1;
+  d.bugunCalistiMi=true;
+  if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
+  rozetKontrol(d);streakSave(d);streakRender(d);
+}
+function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
+let streakData=streakInit();
 
-// CANLI BILDIRIMLER
+// ============================================================
+// HATA DEFTERİ
+// ============================================================
+function hataLoad(){try{return JSON.parse(localStorage.getItem('sa_hatalar')||'[]');}catch(e){return[];}}
+function hataSave(d){try{localStorage.setItem('sa_hatalar',JSON.stringify(d));}catch(e){}}
+function hataEkle(soru,verilenCevap,dogruCevap,tip){
+  let d=hataLoad();
+  const kayit={id:Date.now(),soru,verilenCevap,dogruCevap,tip,tarih:new Date().toLocaleDateString('tr-TR'),tekrarSayisi:0};
+  // Aynı soru zaten varsa güncelle
+  const idx=d.findIndex(h=>h.soru===soru);
+  if(idx>=0){d[idx].tekrarSayisi++;d[idx].tarih=kayit.tarih;}
+  else{d.unshift(kayit);}
+  if(d.length>30)d=d.slice(0,30); // max 30 kayıt
+  hataSave(d);hataCountGuncelle();
+}
+function hataCountGuncelle(){
+  const d=hataLoad();
+  // Tab badge güncelle
+  const tab=document.querySelector('.dtab[onclick*="hatalar"]');
+  if(tab)tab.textContent=`📝 Hata Defteri${d.length>0?' ('+d.length+')':''}`;
+}
+function hataDefteriniGoster(){
+  const d=hataLoad();
+  const cont=document.getElementById('hata-liste-container');
+  if(!cont)return;
+  if(d.length===0){
+    cont.innerHTML=`<div style="text-align:center;padding:32px 0"><div style="font-size:40px;margin-bottom:12px">✨</div><div style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:8px">Hata defteri boş!</div><div style="font-size:13px;color:var(--muted)">Hiç hata yapmadın veya henüz soru çözmedin.</div></div>`;
+    return;
+  }
+  cont.innerHTML=`<div style="font-size:12px;color:var(--muted);margin-bottom:10px">${d.length} hatalı konu kayıtlı — Tekrar et ve sil</div>`+
+  d.map(h=>`
+    <div class="hata-item" id="hata-${h.id}">
+      <div class="hata-item-word">${h.soru.length>60?h.soru.substring(0,60)+'...':h.soru}</div>
+      <div class="hata-item-tip">Senin cevabın: <b style="color:var(--trap)">${h.verilenCevap}</b> → Doğrusu: <b style="color:#16a34a">${h.dogruCevap}</b></div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">${h.tarih} · ${h.tekrarSayisi>0?h.tekrarSayisi+' kez tekrar edildi':'İlk hata'}</div>
+      <div class="hata-item-actions">
+        <button class="hata-tekrar-btn" onclick="hataTekrar('${h.id}')">🔁 Tekrar et</button>
+        <button class="hata-sil-btn" onclick="hataSil('${h.id}')">✕ Sil</button>
+      </div>
+    </div>
+  `).join('');
+}
+function hataSil(id){
+  let d=hataLoad();d=d.filter(h=>String(h.id)!==String(id));hataSave(d);hataDefteriniGoster();hataCountGuncelle();}
+function hataTekrar(id){
+  const d=hataLoad();const h=d.find(h=>String(h.id)===String(id));
+  if(!h)return;
+  // Tab'ı tuzağa geç, ilgili soruyu ön plana al
+  dtab(document.querySelector('.dtab[onclick*="tuzak"]'),'tuzak');
+  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
+  // Hata bildirim
+  const fb=document.createElement('div');
+  fb.style.cssText='background:#fffbeb;border:1px solid #d97706;border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:10px;color:#92400e;';
+  fb.innerHTML=`🔁 <b>Hata tekrarı:</b> "${h.soru.substring(0,50)}..." — Doğru cevap: <b>${h.dogruCevap}</b>`;
+  const cont=document.getElementById('tuzak-container');if(cont)cont.insertAdjacentElement('afterbegin',fb);
+}
+
+// ============================================================
+// ADAPTİF ZORLUK
+// ============================================================
+function adaptifZorlukBadge(){
+  const d=streakLoad();
+  const toplamSoru=d.toplamSoru||0;
+  if(toplamSoru<10)return{seviye:'Kolay',cls:'kolay',ikon:'🌱'};
+  if(toplamSoru<30)return{seviye:'Orta',cls:'orta',ikon:'⚡'};
+  return{seviye:'Zor',cls:'zor',ikon:'🔥'};
+}
+function adaptifSoruHavuzu(){
+  const z=adaptifZorlukBadge();
+  // Zorluğa göre havuzdan farklı indeks aralığı döndür
+  if(z.cls==='kolay')return[0,9];
+  if(z.cls==='orta')return[10,19];
+  return[20,TUZAK_HAVUZ.length-1];
+}
+
+// ============================================================
+// PWA
+// ============================================================
+let pwaPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pwaPrompt=e;setTimeout(()=>pwaBanner(true),8000);});
+function pwaBanner(show){const b=document.getElementById('pwa-banner');if(b){b.classList.toggle('show',show);if(show){document.body.style.paddingBottom='70px';}else{document.body.style.paddingBottom='0';}}}
+async function pwaInstall(){if(pwaPrompt){pwaPrompt.prompt();const r=await pwaPrompt.userChoice;if(r.outcome==='accepted'){pwaBanner(false);pwaPrompt=null;}}}
+
+const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.15});
+document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
+function animateCount(el){const target=parseInt(el.dataset.count),suffix=el.dataset.suffix||'',prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
+
 const bildirimler=[{isim:'Aras. Gor. A. Yilmaz',eylem:'Pro pakete katildi',sure:'2 dk once'},{isim:'Av. M. Kaya',eylem:'ilk dersini tamamladi',sure:'5 dk once'},{isim:'Dr. D. Sahin',eylem:'e-kitabi indirdi',sure:'8 dk once'}];
 let bIdx=0;
-function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">A</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:11px;color:#6b7280">'+b.eylem+' - '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
+function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">🎓</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:11px;color:#6b7280">'+b.eylem+' · '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
 setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
-
-// EXIT INTENT
+// Sayfa açılışında hata count badge güncelle
+setTimeout(hataCountGuncelle, 500);
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
-
-// DINAMIK CSS
-const xCSS=document.createElement('style');xCSS.textContent='.scroll-hidden{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}.scroll-hidden.visible{opacity:1!important;transform:none!important}@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.5}}.chat-typing span{animation:tdot 1.2s infinite}';
-document.head.appendChild(xCSS);
 </script>
 </body>
 </html>
