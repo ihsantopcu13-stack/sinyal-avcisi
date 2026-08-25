@@ -1697,6 +1697,7 @@ function kkNext(){ kkAnswer(3); } // geriye dönük uyumluluk
 
 kkBuildQueue();
 kkShow();
+  const bugun=new Date();const aylar=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];const tarihEl=document.getElementById('tuzak-tarih');if(tarihEl)tarihEl.textContent='Günlük Tuzak · '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
 // ── TUZAK ──
 function tuzakAns(btn,correct){
   const opts=document.querySelectorAll('#tuzak-opts .tuzak-opt');
