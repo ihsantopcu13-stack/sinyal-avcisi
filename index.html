@@ -1692,7 +1692,7 @@ function kkAnswer(q){
     kkCurrent.rep=0; kkCurrent.interval=1;
   }
   kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
-  kkShow();
+  kkSave();kkShow();
 }
 
 function kkNext(){ kkAnswer(3); } // geriye dönük uyumluluk
