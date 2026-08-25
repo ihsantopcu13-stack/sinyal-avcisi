@@ -1731,7 +1731,7 @@ function kkShow(){
   const eyebrow=document.querySelector('#mod-kelime .dm-eye');
   if(eyebrow) eyebrow.textContent='Spaced Repetition · '+(kkQueue.length+1)+' kart bekliyor';
 }
-function kkShow(){
+
   kkBuildQueue();
   if(kkQueue.length===0){
     const sonraki=kkGetNextDueTime();
