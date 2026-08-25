@@ -816,7 +816,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
         </div>
         <!-- Günlük Tuzak -->
         <div class="dmod" id="mod-tuzak" style="display:none">
-          <div class="dm-eye">Günlük Tuzak · 21 Ağustos 2026</div>
+         // Günlük Tuzak tarihi
+const bugun=new Date();
+const aylar=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const tarihEl=document.getElementById('tuzak-tarih');
+if(tarihEl) tarihEl.textContent='Günlük Tuzak · '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
           <div class="tuzak-q">Hangi seçenek cümleyi doğru tamamlar?</div>
           <div class="tuzak-sent">"She would have attended the conference _____ she received the invitation in time."</div>
           <div class="tuzak-opts" id="tuzak-opts">
