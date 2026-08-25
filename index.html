@@ -1637,6 +1637,10 @@ const kkData=[
 ];
 
 // Her karta SM-2 verisi ekle
+  // localStorage'dan SR verilerini yükle
+function kkSave(){localStorage.setItem('kkData',JSON.stringify(kkData.map(k=>({interval:k.interval,rep:k.rep,ef:k.ef,due:k.due}))));}
+function kkLoad(){try{const s=localStorage.getItem('kkData');if(s){const d=JSON.parse(s);d.forEach((v,i)=>{if(kkData[i]){kkData[i].interval=v.interval;kkData[i].rep=v.rep;kkData[i].ef=v.ef;kkData[i].due=v.due;}});}}catch(e){}}
+kkLoad();
 kkData.forEach(k=>{
   k.interval=1; k.rep=0; k.ef=2.5; k.due=0;
 });
