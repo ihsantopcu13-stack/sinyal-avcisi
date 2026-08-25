@@ -1658,7 +1658,21 @@ function kkBuildQueue(){
   kkQueue=[...dueNow];
 }
 
+function kkBuildQueue(){
+  const now=Date.now();
+  const dueNow=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);
+  if(dueNow.length===0){ kkQueue=[]; return; }
+  kkQueue=[...dueNow];
+}
+
 function kkGetNextDueTime(){
+  const future=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);
+  if(!future.length) return null;
+  const ms=future[0].due-Date.now();
+  const h=Math.floor(ms/3600000);
+  const m=Math.floor((ms%3600000)/60000);
+  return h>0?h+' saat '+m+' dk':m+' dk';
+}
   const future=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);
   if(!future.length) return null;
   const ms=future[0].due-Date.now();
