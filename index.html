@@ -815,17 +815,13 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           </div>
         </div>
         <!-- Günlük Tuzak -->
-        <div class="dmod" id="mod-tuzak" style="display:none">
-         // Günlük Tuzak tarihi
-const bugun=new Date();
-const aylar=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-const tarihEl=document.getElementById('tuzak-tarih');
-if(tarihEl) tarihEl.textContent='Günlük Tuzak · '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
+      <div class="dmod" id="mod-tuzak" style="display:none">
+      
           <div class="tuzak-q">Hangi seçenek cümleyi doğru tamamlar?</div>
           <div class="tuzak-sent">"She would have attended the conference _____ she received the invitation in time."</div>
           <div class="tuzak-opts" id="tuzak-opts">
             <button class="tuzak-opt" onclick="tuzakAns(this,false)">A) if</button>
-            <button class="tuzak-opt" onclick="tuzakAns(this,true)">B) had</button>
+            <button class="tuzak-opt" onclick="tuzakAns(this,true)">B) had</button><div class="dm-eye" id="tuzak-tarih">Günlük Tuzak · yükleniyor...</div>
             <button class="tuzak-opt" onclick="tuzakAns(this,false)">C) unless</button>
             <button class="tuzak-opt" onclick="tuzakAns(this,false)">D) although</button>
           </div>
