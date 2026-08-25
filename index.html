@@ -598,16 +598,12 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
         </div>
         <div class="dmod" id="mod-sinyal">
-          <div class="dm-eye">Genel - YDS Metni - Soru 13/30</div>
-          <div class="dm-sent">"The appellate court ruled that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the irregularities, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."</div>
-          <div class="dm-q">Bu metne gore mahkeme karari hakkinda ne soylenebilir?</div>
-          <div class="dm-opts" id="dm-opts">
-            <button class="dmo" onclick="dAns(this,false)">Usul hatalari karari gecersiz kildi.</button>
-            <button class="dmo" onclick="dAns(this,true)">Usul hatalarina ragmen karar gecerlilligini korodu.</button>
-            <button class="dmo" onclick="dAns(this,false)">Mahkeme yeniden yargilama istedi.</button>
-            <button class="dmo" onclick="dAns(this,false)">Karar kesinlikle gecersiz bulundu.</button>
-          </div>
+          <div class="dm-eye" id="sl-eyebrow">Genel - YDS Metni - Soru 1/15</div>
+          <div class="dm-sent" id="sl-sent"></div>
+          <div class="dm-q" id="sl-q"></div>
+          <div class="dm-opts" id="dm-opts"></div>
           <div class="dm-fb" id="dm-fb"></div>
+          <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
           <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yukleniyor...</div>
@@ -810,9 +806,20 @@ function dnav(el){
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 function dnavChat(){const inp=document.getElementById('dnav-in');if(!inp||!inp.value.trim())return;const val=inp.value.trim();const body=document.getElementById('dnav-chat');const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;setTimeout(()=>{const km=document.createElement('div');km.className='msg k';km.textContent=KB_GENEL[Math.floor(Math.random()*KB_GENEL.length)];body.appendChild(km);body.scrollTop=body.scrollHeight;},700);}
 function dAns(btn,correct){
-  const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('dm-fb');
-  if(correct){btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.';streakSoruEkle('sinyal');}
-  else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. "by no means invalid" = kesinlikle gecersiz degil!';hataEkle('"...the verdict was by no means invalid."','Yanlış seçenek','Usul hatalarına rağmen karar geçerliydi','sinyal');}
+  if(slAnswered)return;
+  slAnswered=true;
+  const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);
+  const fb=document.getElementById('dm-fb');
+  const nextBtn=document.getElementById('sl-next-btn');
+  const soru=SL_HAVUZ[slIdx];
+  if(correct){
+    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    streakSoruEkle('sinyal');
+  } else {
+    btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
+  }
+  if(nextBtn)nextBtn.style.display='inline-block';
 }
 
 // KELIME KARTLARI SM-2
@@ -1020,7 +1027,52 @@ function sinavGeriSayim(){
 }
 
 // ============================================================
-// STREAK SİSTEMİ
+// SİNYAL LAB — 15 soruluk havuz + sonraki soru
+// ============================================================
+const SL_HAVUZ=[
+  {eye:'Genel - YDS Metni',sent:'"The appellate court ruled that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the irregularities, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu metne gore mahkeme karari hakkinda ne soylenebilir?',opts:['Usul hatalari karari gecersiz kildi.','Usul hatalarina ragmen karar gecerlilligini korodu.','Mahkeme yeniden yargilama istedi.','Karar kesinlikle gecersiz bulundu.'],ans:1,fb:'"Despite" = zitlik, "by no means invalid" = kesinlikle gecersiz degil.'},
+  {eye:'Genel - YDS Metni',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz">far from</span> <span class="s-key">guaranteed</span>."',q:'Arastirmacilar tedavi hakkinda ne soylemistir?',opts:['Tedavi tum hastalar icin etkilidir.','Tedavi umit verici ama garantili degildir.','Sonuclar yetersiz kaldi.','Tedavi basariyla tamamlandi.'],ans:1,fb:'"Far from guaranteed" = garantili degil. Gizli olumsuz tuzak!'},
+  {eye:'Hukuk - YDS Metni',sent:'"The statute was <span class="s-trap" data-tip="Gizli olumsuz">far from</span> <span class="s-key">unambiguous</span>, <span class="s-sig" data-tip="Zitlik sinyali">yet</span> the court applied it strictly."',q:'Kanun hakkinda ne soylenebilir?',opts:['Kanun tamamen acik ve kesindir.','Kanun belirsiz olmasina ragmen sıkı uygulandı.','Mahkeme kanunu esnek yorumladi.','Kanun uygulanmadi.'],ans:1,fb:'"Far from unambiguous" = belirsiz + "yet" = zitlik. İki sinyal bir arada!'},
+  {eye:'Saglik - YOKDiL Metni',sent:'"The treatment was <span class="s-trap" data-tip="Gizli olumsuz">far from effective</span> <span class="s-sig" data-tip="Zitlik sinyali">although</span> it had shown <span class="s-key">promising</span> results in trials."',q:'Tedavi hakkinda ne soylenebilir?',opts:['Denemelerde etkili bulundu.','Umit verici sonuclara ragmen etkili olmadi.','Klinik denemelerde basarisiz oldu.','Sonuclar degerlendirilmedi.'],ans:1,fb:'"Far from effective" + "although promising" = umit verici ama etkili degil.'},
+  {eye:'Sosyal - YOKDiL Metni',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Gizli olumsuz">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalasma icin ne soyler?',opts:['Kulturel normlardan tamamen bagimsizdır.','Kulturel normlarla yakindan iliskilidir.','Ekonomik bir olgudur.','Sadece kentsel alanlarda gorulur.'],ans:1,fb:'"Hardly operates independently" = neredeyse hic bagimsiz degil.'},
+  {eye:'Fen - YOKDiL Metni',sent:'"The catalyst <span class="s-trap" data-tip="Basaramadi">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zitlik sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Katalizor icin ne soylenebilir?',opts:['Reaksiyonu basariyla hizlandirdi.','Sicaklik optimum olsa da basarisiz oldu.','Sicaklik cok dusuktu.','Katalizor ve sicaklik birlikte etkili oldu.'],ans:1,fb:'"Failed to" = basaramadi + "even though optimal" = tezat.'},
+  {eye:'Genel - YDS Metni',sent:'"The committee was <span class="s-trap" data-tip="Hic olmadi">by no means</span> <span class="s-key">unanimous</span> in its decision, <span class="s-sig" data-tip="Ekleyici sinyal">nor</span> did it reach a consensus."',q:'Komite karari hakkinda ne dogrudur?',opts:['Komite oybirligi ile karar aldi.','Komite ne oybirligi sagladi ne de uzlasti.','Komite cogunlukla uzlasti.','Karar ertelendi.'],ans:1,fb:'"By no means unanimous" + "nor" = ne ... ne de. Cift olumsuz-zitlik kombinasyonu!'},
+  {eye:'Hukuk - YDS Metni',sent:'"<span class="s-sig" data-tip="Zaman sinyali">Prior to</span> the enactment of the law, companies were <span class="s-trap" data-tip="Gizli olumsuz">rarely</span> held <span class="s-key">liable</span>."',q:'Kanun oncesinde sirketler icin ne gercekti?',opts:['Sirketler her zaman sorumlu tutulurdu.','Sirketler neredeyse hic sorumlu tutulmazdi.','Sorumluluk kanunla azalti.','Sirketler goniullu sorumluluk aldi.'],ans:1,fb:'"Rarely" = gizli olumsuz, neredeyse hic. "Prior to" = oncesinde.'},
+  {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Karsitlik">Whereas</span> early studies suggested a strong correlation, recent findings have <span class="s-trap" data-tip="Gizli olumsuz">failed to</span> <span class="s-key">replicate</span> these results."',q:'Yeni bulgular hakkinda ne soylenebilir?',opts:['Erken bulgulari dogruladi.','Erken bulgularla celisiyor, sonuclari tekrarlayamadi.','Korrelasyonun guclu oldugunu gosterdi.','Sonuclar henuz degerlendirilmedi.'],ans:1,fb:'"Whereas" = karsitlik + "failed to replicate" = tekrarlayamadi.'},
+  {eye:'Saglik - YOKDiL Metni',sent:'"The drug <span class="s-trap" data-tip="Gizli olumsuz">scarcely</span> reduced inflammation <span class="s-sig" data-tip="Zitlik sinyali">despite</span> being administered at the <span class="s-key">maximum</span> dosage."',q:'Ilac hakkinda ne soylenebilir?',opts:['Maksimum dozda cok etkili oldu.','Maksimum doza ragmen neredeyse hic etki etmedi.','Doz artirinca etkinligi artti.','Ilac hicbir doz icin test edilmedi.'],ans:1,fb:'"Scarcely" = neredeyse hic + "despite maximum dosage" = doza ragmen.'},
+  {eye:'Sosyal - YOKDiL Metni',sent:'"The policy was <span class="s-trap" data-tip="Gizli olumsuz">anything but</span> <span class="s-key">neutral</span>; it disproportionately affected <span class="s-sig" data-tip="Vurgu sinyali">marginalized</span> communities."',q:'Politika hakkinda ne dogrudur?',opts:['Tamamen tarafsizdi.','Tarafsiz degildi; dezavantajli topluluklar daha cok etkilendi.','Tum gruplar esit sekilde etkilendi.','Politika uygulanmadi.'],ans:1,fb:'"Anything but neutral" = tarafsiz degil. Guclu gizli olumsuz!'},
+  {eye:'Fen - YOKDiL Metni',sent:'"The experiment <span class="s-trap" data-tip="Gizli olumsuz">by no means</span> confirmed the hypothesis; <span class="s-sig" data-tip="Karsi sinyal">on the contrary</span>, it <span class="s-key">contradicted</span> previous assumptions."',q:'Deney sonuclari ne gosterdi?',opts:['Hipotezi tamamen dogruladi.','Hipotezi dogrulamadi, aksine onceki varsayimlari cururtti.','Hipotezi kismen destekledi.','Sonuclar belirsizdi.'],ans:1,fb:'"By no means confirmed" + "on the contrary" = kesinlikle dogrulamadi, aksine cururdu.'},
+  {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Zaman sinyali">No sooner had</span> the new regulation been implemented <span class="s-trap" data-tip="Dikkat: devrik yapi">than</span> companies began <span class="s-key">lobbying</span> against it."',q:'Bu cumleye gore ne oldu?',opts:['Sirketler yonetmelikten once lobi yapti.','Yonetmelik hayata gecmeden hemen sirketler lobi yapmaya basladi.','Sirketler yonetmeligi destekledi.','Lobi faaliyetleri basarili oldu.'],ans:1,fb:'"No sooner...than" = yapar yapmaz. Devrik yapi + zaman sinyali.'},
+  {eye:'Hukuk - YDS Metni',sent:'"The defendant\'s argument was <span class="s-trap" data-tip="Gizli olumsuz">not without</span> <span class="s-key">merit</span>, <span class="s-sig" data-tip="Zitlik">yet</span> the court ultimately ruled against him."',q:'Savunma argumani hakkinda ne dogrudur?',opts:['Tamamen degersizdi.','Belirli bir degeri vardi ama mahkeme yine de aleyhine karar verdi.','Mahkemeyi ikna etti.','Degerlendirilmedi.'],ans:1,fb:'"Not without merit" = cift olumsuz = degerli. "Yet" = ama. Klasik OSYM tuzagi!'},
+  {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Karsitlik">While</span> proponents argue the reform is <span class="s-key">essential</span>, critics maintain it is <span class="s-trap" data-tip="Gizli olumsuz">far from</span> sufficient."',q:'Elestirenler reform hakkinda ne dusunuyor?',opts:['Reform yeterli ve gereklidir.','Reform gerekli olabilir ama yeterli degildir.','Reform tamamen gereksizdir.','Reform henuz degerlendirilmemistir.'],ans:1,fb:'"Far from sufficient" = yeterli degil. "While" zitlik olusturuyor.'},
+];
+
+let slIdx=0,slAnswered=false;
+
+function slRender(){
+  const soru=SL_HAVUZ[slIdx];
+  const eyebrow=document.getElementById('sl-eyebrow');
+  const sent=document.getElementById('sl-sent');
+  const q=document.getElementById('sl-q');
+  const opts=document.getElementById('dm-opts');
+  const fb=document.getElementById('dm-fb');
+  const nextBtn=document.getElementById('sl-next-btn');
+  if(eyebrow)eyebrow.textContent=soru.eye+' — Soru '+(slIdx+1)+'/'+SL_HAVUZ.length;
+  if(sent)sent.innerHTML=soru.sent;
+  if(q)q.textContent=soru.q;
+  if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})">${o}</button>`).join('');
+  if(fb){fb.textContent='';fb.className='dm-fb';}
+  if(nextBtn)nextBtn.style.display='none';
+  slAnswered=false;
+}
+function slSonraki(){
+  slIdx=(slIdx+1)%SL_HAVUZ.length;
+  slRender();
+}
+// İlk render
+setTimeout(slRender,100);
+
+
 // ============================================================
 const ROZET_LISTESI=[
   {id:'ilk_gun',icon:'🌱',ad:'İlk Adım',desc:'İlk günü tamamladın',kosul:s=>s.streak>=1},
