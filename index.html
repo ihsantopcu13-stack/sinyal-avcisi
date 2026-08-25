@@ -1581,13 +1581,13 @@ function animateCount(el){
 }
 
 document.querySelectorAll('.step,.fc,.yorum,.hedef-card').forEach(el=>{
-  el.classList.add('scroll-hidden');scrollObs.observe(el);
+  el.classList.add('scroll-hidden');scrollObserver.observe
 });
 document.querySelectorAll('.sosyal,.hayir-inner').forEach(el=>{
-  el.classList.add('scroll-hidden');scrollObs.observe(el);
+  el.classList.add('scroll-hidden');scrollObserver(el);
 });
 const hataCard=document.getElementById('hata-card');
-if(hataCard)scrollObs.observe(hataCard);
+if(hataCard)scrollObserver.observe(hataCard);
   if(!pPlaying){playerToggle();}
   // Ses kurs bölümüne scroll et
   document.getElementById('ses').scrollIntoView({behavior:'smooth'});
