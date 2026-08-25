@@ -1647,450 +1647,892 @@ kkData.forEach(k=>{
 
 let kkQueue=[], kkCurrent=null, kkOpen=false;
 
-function kkBuildQueue(){
-  const now=Date.now();
-  const dueNow=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);
-  if(dueNow.length===0){
-    // Bugün tekrar edilecek kart yok — en yakın due olan göster
-    kkQueue=[];
-    return;
-  }
-  kkQueue=[...dueNow];
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sinyal Avcisi - YDS & YOKDiL Hazirlik</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0c0e14;--paper:#f7f6f2;--signal:#2d5be3;--sl:#e8eeff;--trap:#e03c3c;--contrast:#e8d5a3;--muted:#6b7280;--border:#e5e3dc}
+body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,3vw,44px);letter-spacing:-.02em;line-height:1.15}
+nav{position:fixed;inset:0 0 auto;height:56px;z-index:200;background:rgba(247,246,242,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:18px;cursor:pointer}
+.nav-logo b{color:var(--signal);font-weight:400}
+.nav-links{display:flex;gap:24px}
+.nav-links span{font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s}
+.nav-links span:hover{color:var(--ink)}
+.btn-nav{background:var(--ink);color:var(--paper);font-size:13px;font-weight:600;padding:8px 18px;border-radius:6px;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:16px}
+.mmenu{display:none;position:fixed;top:56px;inset:auto 0;background:rgba(247,246,242,.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:199;padding:8px 5vw 16px;flex-direction:column}
+.mmenu.open{display:flex}
+.mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
+.mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
+.hero{min-height:100vh;padding:120px 5vw 80px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;max-width:1200px;margin:0 auto}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--signal)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(34px,4.5vw,56px);line-height:1.1;letter-spacing:-.03em;margin-bottom:22px}
+.hero h1 em{color:var(--signal);font-style:italic}
+.hero-sub{font-size:16px;color:var(--muted);max-width:420px;margin-bottom:32px;line-height:1.7}
+.hero-btns{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.btn-primary{background:var(--signal);color:#fff;font-size:14px;font-weight:600;padding:13px 26px;border-radius:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-ghost{background:none;border:none;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif}
+.hero-badges{margin-top:20px;display:flex;gap:16px;flex-wrap:wrap}
+.hero-badge{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.hero-badge::before{content:'checkmark';color:var(--signal);font-weight:700}
+.demo-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:0 4px 32px rgba(0,0,0,.07)}
+.demo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.demo-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.badge-live{background:var(--sl);color:var(--signal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
+.demo-sent{font-size:15px;font-weight:500;line-height:1.8;margin-bottom:14px;min-height:72px;transition:opacity .25s}
+.s-sig{background:var(--sl);color:var(--signal);padding:1px 5px;border-radius:4px;font-weight:600;position:relative;cursor:help}
+.s-trap{background:#fef2f2;color:var(--trap);padding:1px 5px;border-radius:4px;font-weight:600;text-decoration:underline wavy;text-underline-offset:3px;cursor:help}
+.s-key{background:#fefce8;color:#92400e;padding:1px 5px;border-radius:4px;font-weight:600}
+.s-sig[data-tip]:hover::after,.s-trap[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:11px;padding:6px 10px;border-radius:6px;white-space:nowrap;z-index:50;pointer-events:none}
+.demo-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:3px}
+.demo-quiz{border-top:1px solid var(--border);padding-top:14px}
+.demo-q{font-size:13px;font-weight:600;margin-bottom:10px}
+.demo-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dopt{background:transparent;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;color:var(--ink);transition:all .15s}
+.dopt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
+.dopt.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
+.dopt.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
+.demo-fb{font-size:12px;font-weight:500;margin-top:10px;min-height:16px}
+.demo-fb.ok{color:#16a34a}.demo-fb.err{color:var(--trap)}
+.demo-next-btn{display:none;margin-top:10px;background:none;border:none;font-size:12px;font-weight:600;color:var(--signal);cursor:pointer;font-family:'Inter',sans-serif;padding:0;text-decoration:underline}
+.sosyal{padding:44px 5vw;background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.sosyal-inner{max-width:1100px;margin:0 auto}
+.stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.stat-num{font-family:'DM Serif Display',serif;font-size:36px;color:var(--signal);line-height:1;text-align:center}
+.stat-lbl{font-size:12px;color:var(--muted);text-align:center;margin-top:3px}
+.stat-div{width:1px;height:40px;background:var(--border)}
+.yorumlar{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none}
+.yorum{flex-shrink:0;width:272px;background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:16px}
+.yorum-stars{color:#f59e0b;font-size:12px;margin-bottom:8px}
+.yorum-text{font-size:13px;color:var(--ink);line-height:1.6;font-style:italic;margin-bottom:12px}
+.yorum-kisi{display:flex;align-items:center;gap:8px}
+.yorum-av{width:28px;height:28px;border-radius:50%;background:var(--sl);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--signal);flex-shrink:0}
+.yorum-isim{font-size:12px;font-weight:600}
+.yorum-unvan{font-size:11px;color:var(--muted)}
+.hedef{background:linear-gradient(160deg,#0c0e14,#161b2e);padding:80px 5vw;color:var(--paper)}
+.hedef-inner{max-width:1100px;margin:0 auto}
+.hedef-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.hedef-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px 18px;transition:all .2s;cursor:pointer}
+.hedef-card:hover{background:rgba(45,91,227,.15);border-color:var(--signal)}
+.hedef-name{font-size:14px;font-weight:600;margin-bottom:7px}
+.hedef-desc{font-size:12px;color:rgba(247,246,242,.55);line-height:1.6;margin-bottom:10px}
+.hedef-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--contrast);background:rgba(232,213,163,.1);border:1px solid rgba(232,213,163,.2);border-radius:20px;padding:3px 10px;display:inline-block}
+.alan{background:#111827;color:var(--paper);padding:64px 5vw;text-align:center}
+.alan-sub{font-size:14px;color:rgba(247,246,242,.5);margin:10px 0 36px}
+.alan-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:820px;margin:0 auto}
+.alan-card{flex:1;min-width:130px;max-width:180px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px 12px;cursor:pointer;transition:all .2s;text-align:left}
+.alan-card:hover,.alan-card.active{background:rgba(45,91,227,.25);border-color:var(--signal)}
+.alan-icon{font-size:20px;margin-bottom:8px;display:block;line-height:1.4}
+.alan-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.alan-desc{font-size:11px;color:rgba(247,246,242,.4)}
+.alan-card .alan-preview{display:none;margin-top:10px;font-size:11px;color:rgba(247,246,242,.7);line-height:1.8;border-top:1px solid rgba(255,255,255,.1);padding-top:10px;text-align:left}
+.alan-card.active .alan-preview,.alan-card .alan-preview.show{display:block}
+.nasil{padding:80px 5vw;background:var(--paper)}
+.nasil-inner{max-width:1080px;margin:0 auto}
+.nasil-header{text-align:center;margin-bottom:64px}
+.step{display:grid;grid-template-columns:56px 1fr;gap:28px;align-items:center;padding:44px 0;border-bottom:1px solid var(--border)}
+.step:last-child{border-bottom:none}
+.step-num{font-family:'DM Serif Display',serif;font-size:48px;color:var(--border);font-style:italic;line-height:1}
+.step-title{font-size:19px;font-weight:600;margin-bottom:10px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.step-tags{display:flex;gap:7px;flex-wrap:wrap}
+.stag{font-size:12px;font-weight:600;background:var(--sl);color:var(--signal);padding:5px 12px;border-radius:20px}
+.ekitap{background:var(--signal);padding:72px 5vw;color:#fff}
+.ekitap-inner{max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.ekitap h2{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,38px);line-height:1.2;margin-bottom:14px}
+.ekitap-desc{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:22px}
+.ekitap-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.ekitap-list li{font-size:13px;color:rgba(255,255,255,.85);display:flex;gap:8px}
+.ekitap-list li::before{content:'arrow';color:var(--contrast);flex-shrink:0}
+.ekitap-form{display:flex;gap:8px;flex-wrap:wrap}
+.ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;background:rgba(255,255,255,.15);color:#fff;outline:none}
+.ekitap-submit{background:#fff;color:var(--signal);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
+.ekitap-note{font-size:11px;color:rgba(255,255,255,.5);margin-top:8px}
+.ekitap-mockup{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:32px 24px;text-align:center}
+.ekitap-mockup-title{font-family:'DM Serif Display',serif;font-size:17px;line-height:1.3;margin-bottom:8px}
+.ekitap-mockup-sub{font-size:12px;color:rgba(255,255,255,.6)}
+.ekitap-mockup-pages{font-size:11px;color:var(--contrast);margin-top:8px;font-family:'JetBrains Mono',monospace}
+.klod{padding:80px 5vw;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.klod-desc{font-size:15px;color:var(--muted);line-height:1.7;margin:12px 0 24px}
+.klod-feat{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:10px;transition:all .2s}
+.klod-feat:hover,.klod-feat.open{background:var(--sl);border-color:var(--signal)}
+.klod-feat-icon{width:44px;height:44px;border-radius:10px;background:var(--signal);display:grid;place-items:center;font-size:22px;flex-shrink:0}
+.klod-feat-text b{display:block;font-size:14px;font-weight:600;margin-bottom:3px}
+.klod-feat-text span{font-size:12px;color:var(--muted)}
+.klod-feat-detail{display:none;font-size:12px;color:var(--signal);margin-top:6px;line-height:1.6;font-weight:500}
+.klod-feat.open .klod-feat-detail{display:block}
+.chat-ui{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 4px 32px rgba(0,0,0,.08)}
+.chat-head{background:var(--ink);padding:14px 18px;display:flex;align-items:center;gap:10px}
+.chat-av{width:32px;height:32px;border-radius:50%;background:var(--signal);display:grid;place-items:center;font-size:14px;font-weight:700;color:#fff;font-family:'DM Serif Display',serif}
+.chat-head-name{font-size:13px;font-weight:600;color:#fff}
+.chat-head-sub{font-size:11px;color:rgba(255,255,255,.5)}
+.chat-body{padding:16px;display:flex;flex-direction:column;gap:10px;min-height:220px;max-height:280px;overflow-y:auto}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+.msg.k{background:var(--sl);color:var(--ink);align-self:flex-start}
+.msg.k b{color:var(--signal)}
+.msg.u{background:var(--ink);color:var(--paper);align-self:flex-end}
+.chat-typing{display:flex;gap:4px;align-items:center;padding:2px 0}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--signal);opacity:.3;animation:tdot 1.2s infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{opacity:.3;transform:scale(1)}40%{opacity:1;transform:scale(1.2)}}
+.chat-input-row{border-top:1px solid var(--border);padding:11px 14px;display:flex;gap:8px}
+.chat-in{flex:1;border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-family:'Inter',sans-serif;font-size:13px;background:var(--paper);color:var(--ink);outline:none}
+.chat-in:focus{border-color:var(--signal)}
+.chat-send{background:var(--signal);border:none;color:#fff;width:34px;height:34px;border-radius:7px;cursor:pointer;font-size:16px;display:grid;place-items:center}
+.ses{background:linear-gradient(135deg,#0c0e14,#161b2e);padding:80px 5vw;color:var(--paper)}
+.ses-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.ses-desc{font-size:15px;color:rgba(247,246,242,.6);line-height:1.7;margin:12px 0 28px}
+.ses-modes{display:flex;flex-direction:column;gap:10px}
+.ses-mode{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.ses-mode:hover,.ses-mode.active{background:rgba(45,91,227,.2);border-color:var(--signal)}
+.ses-mode-icon{font-size:26px;flex-shrink:0;width:44px;height:44px;background:rgba(255,255,255,.08);border-radius:10px;display:grid;place-items:center}
+.ses-mode-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.ses-mode-desc{font-size:12px;color:rgba(247,246,242,.5)}
+.player{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px}
+.p-topic{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,246,242,.4);margin-bottom:7px;font-family:'JetBrains Mono',monospace}
+.p-en{font-size:16px;font-weight:600;line-height:1.5;margin-bottom:4px;min-height:48px}
+.p-tr{font-size:13px;font-weight:400;font-style:italic;color:rgba(247,246,242,.55)}
+.p-bar{height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin:16px 0 12px;cursor:pointer}
+.p-fill{height:100%;background:linear-gradient(90deg,var(--signal),#818cf8);border-radius:2px;width:0%;transition:width .4s linear}
+.p-controls{display:flex;align-items:center;justify-content:space-between}
+.p-btn{background:none;border:none;color:rgba(247,246,242,.5);font-size:18px;cursor:pointer;padding:6px}
+.p-play{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:var(--signal);color:#fff;font-size:18px;display:grid;place-items:center}
+.p-speeds{display:flex;gap:4px;justify-content:center;margin-top:12px}
+.p-speed{background:rgba(255,255,255,.07);border:none;color:rgba(247,246,242,.5);font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 10px;border-radius:12px;cursor:pointer}
+.p-speed.active{background:var(--signal);color:#fff}
+.dash{padding:72px 5vw;background:var(--paper)}
+.dash-inner{max-width:1200px;margin:0 auto}
+.dash-header{text-align:center;margin-bottom:36px}
+.dash-ui{display:grid;grid-template-columns:196px 1fr;background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.09);min-height:500px}
+.dash-sb{background:var(--ink);display:flex;flex-direction:column}
+.dash-logo{font-family:'DM Serif Display',serif;font-size:15px;color:var(--paper);padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dash-logo b{color:var(--contrast);font-weight:400}
+.dash-nav{flex:1;padding:8px 0}
+.dn-item{font-size:13px;font-weight:500;color:rgba(247,246,242,.45);padding:10px 16px;cursor:pointer;transition:all .15s;border-left:2px solid transparent;display:flex;align-items:center;gap:8px}
+.dn-item:hover{color:var(--paper);background:rgba(255,255,255,.04)}
+.dn-item.active{color:var(--paper);border-left-color:var(--signal);background:rgba(45,91,227,.12)}
+.dash-alan{padding:13px 16px;border-top:1px solid rgba(255,255,255,.08)}
+.dash-alan-lbl{font-size:10px;color:rgba(247,246,242,.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.dash-alan-val{font-size:13px;font-weight:600;color:var(--contrast)}
+.dash-main{padding:20px;overflow:hidden}
+.dash-welcome{font-size:14px;color:var(--muted);margin-bottom:16px}
+.dash-welcome b{color:var(--ink)}
+.dash-karts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.dk{border-radius:10px;padding:13px;border:1px solid var(--border)}
+.dk.blue{background:var(--sl);border-color:rgba(45,91,227,.2)}
+.dk.purple{background:#f5f3ff;border-color:rgba(124,58,237,.2)}
+.dk.green{background:#f0fdf4;border-color:rgba(34,197,94,.2)}
+.dk.amber{background:#fffbeb;border-color:rgba(245,158,11,.2)}
+.dk-icon{font-size:26px;margin-bottom:6px}
+.dk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.dk-val{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.dk-sub{font-size:11px;color:var(--muted)}
+.dk-bar{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin:5px 0}
+.dk-fill{height:100%;background:var(--signal);border-radius:2px;width:40%}
+.dk-action{font-size:11px;font-weight:600;color:var(--signal);margin-top:5px;cursor:pointer}
+.dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
+.dtab{font-size:12px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent}
+.dtab.active{color:var(--signal);border-bottom-color:var(--signal)}
+.dmod{animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.dm-eye{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.dm-sent{font-size:14px;line-height:1.8;margin-bottom:12px;font-weight:500}
+.dm-q{font-size:13px;font-weight:600;margin-bottom:8px}
+.dm-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.dmo{background:transparent;border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;color:var(--ink)}
+.dmo:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
+.dmo.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
+.dmo.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
+.dm-fb{font-size:12px;font-weight:500;min-height:14px}
+.dm-fb.ok{color:#16a34a}.dm-fb.err{color:var(--trap)}
+.kk{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
+.kk:hover{border-color:var(--signal)}
+.kk-word{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:6px;color:var(--ink)}
+.kk-hint{font-size:12px;color:var(--muted)}
+.kk-ex{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px}
+.kk-actions{display:flex;gap:8px;justify-content:center}
+.kk-btn{border:none;border-radius:8px;padding:9px 18px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
+.kk-hard{background:#fef2f2;color:var(--trap)}.kk-ok{background:var(--sl);color:var(--signal)}.kk-easy{background:#f0fdf4;color:#16a34a}
+.tuzak-q{font-size:13px;font-weight:600;margin-bottom:7px;color:var(--ink)}
+.tuzak-sent{font-size:13px;font-weight:500;color:#0c0e14;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:11px 13px;margin-bottom:10px;line-height:1.7}
+.tuzak-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tuzak-opt{background:transparent;border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink)}
+.tuzak-opt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
+.tuzak-opt.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
+.tuzak-opt.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
+.tuzak-fb{font-size:12px;font-weight:500;min-height:14px}
+.tuzak-fb.ok{color:#16a34a}.tuzak-fb.err{color:var(--trap)}
+.fiyat{padding:80px 5vw;background:var(--paper)}
+.fiyat-inner{max-width:1020px;margin:0 auto}
+.fiyat-header{text-align:center;margin-bottom:52px}
+.fiyat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.fc{background:#fff;border:1px solid var(--border);border-radius:14px;padding:26px;display:flex;flex-direction:column}
+.fc.featured{border-color:var(--signal);box-shadow:0 0 0 1px var(--signal),0 8px 32px rgba(45,91,227,.12)}
+.fc-badge{background:var(--signal);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:14px}
+.fc-name{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.fc-price{font-family:'DM Serif Display',serif;font-size:38px;letter-spacing:-.03em;margin-bottom:3px}
+.fc-price sup{font-size:18px;vertical-align:super}
+.fc-period{font-size:12px;color:var(--muted);margin-bottom:20px}
+.fc-feats{list-style:none;flex:1;margin-bottom:22px;display:flex;flex-direction:column;gap:8px}
+.fc-feats li{font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.fc-feats li::before{content:'check';color:var(--signal);font-weight:700;flex-shrink:0;margin-top:1px}
+.fc-feats li.no{color:var(--muted)}
+.fc-feats li.no::before{content:'dash';color:var(--border)}
+.fc-btn{display:block;width:100%;text-align:center;padding:12px;border-radius:8px;font-size:14px;font-weight:600;border:1px solid var(--border);color:var(--ink);background:transparent;cursor:pointer;font-family:'Inter',sans-serif}
+.fc-btn:hover{border-color:var(--signal);color:var(--signal)}
+.fc.featured .fc-btn{background:var(--signal);color:#fff;border-color:var(--signal)}
+.sss{padding:72px 5vw;background:#fff;border-top:1px solid var(--border)}
+.sss-inner{max-width:700px;margin:0 auto}
+.sss-header{text-align:center;margin-bottom:44px}
+.sss-item{border-bottom:1px solid var(--border)}
+.sss-q{font-size:15px;font-weight:600;padding:17px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none}
+.sss-icon{font-size:18px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.sss-item.open .sss-icon{transform:rotate(45deg);color:var(--signal)}
+.sss-a{display:none;font-size:14px;color:var(--muted);line-height:1.7;padding-bottom:17px}
+.sss-item.open .sss-a{display:block}
+.hayir-section{background:linear-gradient(135deg,#0c0e14,#1a1f35);padding:80px 5vw;text-align:center;color:var(--paper)}
+.hayir-inner{max-width:680px;margin:0 auto}
+.hayir-baslik{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,36px);line-height:1.3;margin-bottom:20px;color:var(--paper)}
+.hayir-metin{font-size:15px;color:rgba(247,246,242,.65);line-height:1.85;margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto}
+.hayir-alinti{font-family:'DM Serif Display',serif;font-style:italic;font-size:17px;color:var(--contrast);margin-bottom:28px;padding:0 20px;line-height:1.6}
+.hayir-etiketler{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hayir-etiket{font-size:12px;font-weight:600;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:7px 16px;color:rgba(247,246,242,.8)}
+footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:20px}
+.footer-logo b{color:var(--contrast);font-weight:400}
+.footer-links{display:flex;gap:22px}
+.footer-links span{font-size:13px;color:rgba(247,246,242,.4);cursor:pointer}
+.footer-copy{font-size:12px;color:rgba(247,246,242,.3);width:100%;border-top:1px solid rgba(255,255,255,.07);padding-top:18px;margin-top:6px}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:38px;max-width:440px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
+.modal-eye{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
+.modal h2{font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.modal-plan{background:var(--sl);border:1px solid rgba(45,91,227,.2);border-radius:10px;padding:12px 15px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.modal-plan-name{font-size:14px;font-weight:700;color:var(--signal)}
+.modal-plan-price{font-family:'DM Serif Display',serif;font-size:22px;color:var(--signal)}
+.modal-form{display:flex;flex-direction:column;gap:11px}
+.modal-input{border:1px solid var(--border);border-radius:8px;padding:12px 13px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:var(--paper);outline:none}
+.modal-input:focus{border-color:var(--signal)}
+.modal-input.invalid{border-color:var(--trap)}
+.modal-submit{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:2px}
+.modal-legal{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+.modal-success{display:none;text-align:center;padding:20px 0}
+.ms-icon{font-size:48px;margin-bottom:14px}
+.ms-h{font-family:'DM Serif Display',serif;font-size:24px;margin-bottom:8px}
+.ms-p{font-size:14px;color:var(--muted);line-height:1.6}
+@media(max-width:900px){
+  .nav-links{display:none}.hamburger{display:block}.btn-nav{display:none}
+  .hero{grid-template-columns:1fr;padding:90px 5vw 56px;gap:36px}
+  .klod,.ses-inner{grid-template-columns:1fr;gap:36px}
+  .fiyat-grid,.hedef-grid{grid-template-columns:1fr}
+  .alan-cards{flex-direction:column;align-items:center}
+  .demo-opts,.dm-opts{grid-template-columns:1fr}
+  .dash-ui{grid-template-columns:1fr}.dash-sb{display:none}
+  .dash-karts{grid-template-columns:1fr 1fr}
+  .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
 }
-
-function kkBuildQueue(){
-  const now=Date.now();
-  const dueNow=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);
-  if(dueNow.length===0){ kkQueue=[]; return; }
-  kkQueue=[...dueNow];
-}
-
-function kkGetNextDueTime(){
- function kkShow(){
-  kkBuildQueue();
-  if(kkQueue.length===0){
-    const sonraki=kkGetNextDueTime();
-    const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-    if(eyebrow) eyebrow.textContent='Spaced Repetition · Bugün tamamlandı ✅';
-    document.getElementById('kk').innerHTML=`
-      <div style="text-align:center;padding:24px 16px">
-        <div style="font-size:40px;margin-bottom:12px">🎉</div>
-        <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Bugünlük bitti!</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7">
-          ${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra tekrar edilecek.':'Tüm kartlar tekrar edildi.'}
-          <br>Yarın devam et 💪
-        </div>
-      </div>`;
-    document.getElementById('kk-actions').style.display='none';
-    return;
-  }
-  kkCurrent=kkQueue.shift();
-  kkOpen=false;
-  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
-  document.getElementById('kk-front').innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tıkla → Türkçe gör</div>';
-  document.getElementById('kk-back').innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
-  document.getElementById('kk-front').style.display='block';
-  document.getElementById('kk-back').style.display='none';
-  document.getElementById('kk-actions').style.display='none';
-  const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-  function kkGetNextDueTime(){
-  const future=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);
-  if(!future.length) return null;
-  const ms=future[0].due-Date.now();
-  const h=Math.floor(ms/3600000);
-  const m=Math.floor((ms%3600000)/60000);
-  return h>0?h+' saat '+m+' dk':m+' dk';
-}
-
-function kkShow(){
-  kkBuildQueue();
-  if(kkQueue.length===0){
-    const sonraki=kkGetNextDueTime();
-    const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-    if(eyebrow) eyebrow.textContent='Spaced Repetition · Bugün tamamlandı ✅';
-    document.getElementById('kk').innerHTML=`
-      <div style="text-align:center;padding:24px 16px">
-        <div style="font-size:40px;margin-bottom:12px">🎉</div>
-        <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Bugünlük bitti!</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7">
-          ${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra tekrar edilecek.':'Tüm kartlar tekrar edildi.'}
-          <br>Yarın devam et 💪
-        </div>
-      </div>`;
-    document.getElementById('kk-actions').style.display='none';
-    return;
-  }
-  kkCurrent=kkQueue.shift();
-  kkOpen=false;
-  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
-  document.getElementById('kk-front').innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tıkla → Türkçe gör</div>';
-  document.getElementById('kk-back').innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
-  document.getElementById('kk-front').style.display='block';
-  document.getElementById('kk-back').style.display='none';
-  document.getElementById('kk-actions').style.display='none';
-  const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-  if(eyebrow) eyebrow.textContent='Spaced Repetition · '+(kkQueue.length+1)+' kart bekliyor';
-}
-
-  
-  kkCurrent=kkQueue.shift();
-  kkOpen=false;
-  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
-  document.getElementById('kk-front').innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tıkla → Türkçe gör</div>';
-  document.getElementById('kk-back').innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
-  document.getElementById('kk-front').style.display='block';
-  document.getElementById('kk-back').style.display='none';
-  document.getElementById('kk-actions').style.display='none';
-  const eyebrow=document.querySelector('#mod-kelime .dm-eye');
-  if(eyebrow) eyebrow.textContent='Spaced Repetition · '+(kkQueue.length+1)+' kart bekliyor';
-}
-
-function kkFlip(){
-  kkOpen=!kkOpen;
-  document.getElementById('kk-front').style.display=kkOpen?'none':'block';
-  document.getElementById('kk-back').style.display=kkOpen?'block':'none';
-  document.getElementById('kk-actions').style.display=kkOpen?'flex':'none';
-  if(kkOpen && window.speechSynthesis){
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(kkCurrent.tr);
-    u.lang='tr-TR'; u.rate=0.9;
-    speechSynthesis.speak(u);
-  }
-}
-function kkAnswer(q){
-  if(!kkCurrent) return;
-  // SM-2 algoritması
-  if(q>=3){
-    if(kkCurrent.rep===0) kkCurrent.interval=1;
-    else if(kkCurrent.rep===1) kkCurrent.interval=6;
-    else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);
-    kkCurrent.rep++;
-    kkCurrent.ef=Math.max(1.3, kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
-  } else {
-    kkCurrent.rep=0; kkCurrent.interval=1;
-  }
-  kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
-  kkSave();kkShow();
-}
-
-function kkNext(){ kkAnswer(3); } // geriye dönük uyumluluk
-
-kkBuildQueue();
-kkShow();
-  const bugun=new Date();const aylar=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];const tarihEl=document.getElementById('tuzak-tarih');if(tarihEl)tarihEl.textContent='Günlük Tuzak · '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
-// ── TUZAK ──
-function tuzakAns(btn,correct){
-  const opts=document.querySelectorAll('#tuzak-opts .tuzak-opt');
-  opts.forEach(o=>o.disabled=true);
-  const fb=document.getElementById('tuzak-fb');
-  if(correct){btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✓ Doğru! 3rd conditional inverted: "if" düştüğünde "had" öne çıkar.'}
-  else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='✗ Yanlış. 3rd conditional devrik: "if" kalktığında yardımcı fiil öne geçer.'}
-}
-
-// ── SSS ──
-function sssToggle(el){el.parentElement.classList.toggle('open')}
-
-// ── KLOD SİMÜLASYON ──
-const KB=[
-  {keys:['must','modal perfect','kesinlik','kanıt'],
-   r:['<b>must have + V3</b> = geçmişe dair kanıta dayalı güçlü çıkarım. "Kesinlikle gitmiş olmalı" — kanıt: "given her absence". Bunu "might have" ile karıştırmak ÖSYM\'nin en sık tuzağı 🎯',
-      'Doğru yoldayısın! <b>Must</b> = neredeyse kesin, kanıt var. <b>Might</b> = sadece ihtimal. Peki "can\'t have left" deseydi ne anlardın? 🤔',
-      '"Given her absence" ifadesi burada sinyal. Kanıt gördüğünde <b>must have</b> kullanılır. <b>Should have</b> değil — o pişmanlık/tavsiye verir. Farkı gördün mü?']},
-  {keys:['despite','although','rağmen','zıtlık','however','nevertheless'],
-   r:['<b>Despite</b> = rağmen, ama arkasına dikkat: despite + <i>isim/V-ing</i>. "Although" ise + <i>cümle</i> ister. "Despite <u>the rain</u>" ✓ — "Despite <u>it rained</u>" ✗. Gördün mü farkı? 🎯',
-      '<b>However</b> ile <b>although</b> yapı farkı kritik. However iki ayrı cümleyi bağlar. Although tek cümle içinde zıtlık kurar. ÖSYM\'de virgül + however tuzağına düşme!',
-      'Zıtlık sinyalleri gördüğünde cümlenin anlamı tersine döner. "Despite promising results, far from effective" — hem despite hem far from var. İkisi üst üste ne anlama gelir sence? 🤔']},
-  {keys:['far from','by no means','hardly','gizli olumsuz'],
-   r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> — hepsi gizli olumsuz! Görünüşte olumlu ama anlam tamamen negatif. "Far from effective" = etkili DEĞİL. ÖSYM bu üçünü çok sever 🎯',
-      '"Far from" gördüğünde zihninde "değil" ekle. "Far from guaranteed" = garantili DEĞİL. Bu tuzağa düşenlerin çoğu "guaranteed" kelimesini görünce olumlu sanıyor. Başka bildiğin gizli olumsuz var mı?',
-      'by no means, far from, hardly, scarcely, barely — bunların hepsi olumsuz anlam taşır ama yüzeyde görünmez. Şimdi "by no means" ile bir cümle kur bakalım 💪']},
-  {keys:['conditional','if','şart','would have','had studied'],
-   r:['<b>Type 2 vs Type 3</b> kritik fark. Type 2 = şimdi/gelecekte hayal (param yok). Type 3 = geçmişte gerçekleşmedi (çalışmadım, pişmanlık). Hangisinde pişmanlık var? 🤔',
-      '"Would have + V3" gördüğünde Type 3 conditional düşün. "If she had left earlier, she would have caught the bus" — Gerçekte ne oldu? Söyle bakalım.',
-      'ÖSYM Type 2 ve 3\'ü karıştırır. "If I were you" = Type 2 (tavsiye). "If I had been you" = Type 3 (geçmiş pişmanlık). "Were" şimdiki, "had been" geçmişe ait. Bu iki cümleyi Türkçeye çevir 🎯']},
-  {keys:['inversion','never','rarely','no sooner','only'],
-   r:['<b>Inversion</b> = yardımcı fiil öznenin önüne geçer. "Never have I seen" — normal sıra "I have never seen" ama never başa gelince devrik zorunlu. Boşluğa ne gelir: "Never _____ such a thing"? 🤔',
-      '"No sooner...than" ve "Hardly...when" en sık inversion tuzakları. "No sooner had she left than it rained." Neden "did she leave" değil de "had she left"? Düşün.',
-      'Olumsuz zarf başa gelince yardımcı fiil öne çıkar. "Rarely does she complain." Dene: "Seldom _____ they agree" — boşluğa ne gelir? 💪']},
-  {keys:['relative','who','which','whose'],
-   r:['Defining vs Non-defining kritik! Defining\'de virgül yok, "that" kullanılabilir. Non-defining\'de virgül var, "that" kullanılamaz. "The man <b>who called</b>" vs "My brother, <b>who called</b>" — farkı gördün mü?',
-      '"Whose" iyelik gösterir. "The student whose notes I borrowed" = notlarını ödünç aldığım öğrenci. ÖSYM "whose" yerine "of whom" da kullanır. Hangisi daha akıcı geldi?',
-      'Reduced relative clause: V-ing (active) veya V3 (passive) ile kısalt. "The woman sitting by the window" — tam hali nedir? 🤔']},
-];
-const KB_GENEL=['İlginç! Biraz daha açar mısın? Cümlenin hangi kısmında takıldın tam olarak? 🤔',
-  'Doğru yönde gidiyorsun. Şimdi sorayım: bu yapıyı sınavda 10 saniyede tanımak için hangi sinyale bakman gerekir?',
-  'Anlıyorum. Peki bu cümledeki sinyal kelimesini buldun mu? Yavaşça bir daha bak 👀',
-  'Güzel düşünüyorsun! ÖSYM\'de bu yapı genellikle nasıl sorulur biliyor musun? Cevap seçeneklerindeki tuzağa bak 🎯',
-  'Seni duyuyorum! Ama şunu sormam lazım: "must have" ile "might have" arasında kanıt açısından ne fark var?'];
-let chatHistory=[];
-async function sendChat(){
-  const inp=document.getElementById('chat-in');
-  const val=inp.value.trim();
-  if(!val)return;
-  const body=document.getElementById('chat-body');
-  // Kullanıcı mesajı
-  const um=document.createElement('div');
-  um.className='msg u';um.textContent=val;body.appendChild(um);
-  inp.value='';body.scrollTop=body.scrollHeight;
-  // Yazıyor
-  const tp=document.createElement('div');
-  tp.className='msg k';
-  tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
-  body.appendChild(tp);body.scrollTop=body.scrollHeight;
-  chatHistory.push({role:'user',content:val});
-  // Cevap bul
-  const m=val.toLowerCase();
-  let cevap='';
-  for(const p of KB){
-    if(p.keys.some(k=>m.includes(k))){
-      const used=chatHistory.filter(h=>h.role==='assistant'&&h.pk===p.keys[0]).length;
-      cevap=p.r[used%p.r.length];
-      chatHistory.push({role:'assistant',content:cevap,pk:p.keys[0]});
-      break;
-    }
-  }
-  if(!cevap){
-    const idx=chatHistory.filter(h=>h.role==='assistant').length%KB_GENEL.length;
-    cevap=KB_GENEL[idx];
-    chatHistory.push({role:'assistant',content:cevap,pk:'genel'});
-  }
-  // Gecikme
-  await new Promise(r=>setTimeout(r,600+Math.random()*700));
-  tp.remove();
-  const km=document.createElement('div');
-  km.className='msg k';km.innerHTML=cevap;
-  body.appendChild(km);body.scrollTop=body.scrollHeight;
-}
-
-// ── PLAYER ──
-const PD=[
-  {t:'KONU 1/19·TENSES',en:'She has been studying for three hours.',tr:'3 saattir ders çalışıyor.'},
-  {t:'KONU 2/19·MODALS',en:'You must have left before the announcement.',tr:'Duyurudan önce ayrılmış olmalısın.'},
-  {t:'KONU 3/19·CONDİTİONALS',en:'If she had studied harder, she would have passed.',tr:'Daha çok çalışsaydı geçmiş olurdu.'},
-  {t:'KONU 4/19·PASSIVE',en:'The report had been submitted before the deadline.',tr:'Rapor son tarihten önce teslim edilmişti.'},
-  {t:'KONU 5/19·RELATIVE',en:'The man whose car was stolen called the police.',tr:'Arabası çalınan adam polisi aradı.'},
-  {t:'KONU 6/19·CONJUNCTIONS',en:'Despite the rain, they continued the experiment.',tr:'Yağmura rağmen deneye devam ettiler.'},
-  {t:'KONU 7/19·INVERSION',en:'Never have I seen such a clear example.',tr:'Bu kadar net bir örnek hiç görmedim.'},
-  {t:'KONU 8/19·REPORTED',en:'She said she had finished the report.',tr:'"Raporu bitirdim" dedi.'},
-  {t:'KONU 9/19·GERUND',en:'She avoided making eye contact.',tr:'Göz temasından kaçındı.'},
-  {t:'KONU 10/19·WISHES',en:'I wish I had studied harder for the exam.',tr:'Keşke sınav için daha çok çalışsaydım.'}
-];
-let pIdx=2,pPlaying=false,pSpeed=1,pFill=0,pTimer=null;
-function pUpdate(){const d=PD[pIdx%PD.length];document.getElementById('p-topic').textContent=d.t;document.getElementById('p-en').textContent=d.en;document.getElementById('p-tr').textContent=d.tr}
-function playerToggle(){
-  pPlaying=!pPlaying;
-  document.getElementById('p-play').textContent=pPlaying?'⏸':'▶';
-  if(pPlaying){pTTS();pStartFill()}else{speechSynthesis.cancel();clearInterval(pTimer)}
-}
-function pTTS(){
-  if(!window.speechSynthesis)return;
-  speechSynthesis.cancel();
-  const d=PD[pIdx%PD.length];
-  const u1=new SpeechSynthesisUtterance(d.en);u1.lang='en-US';u1.rate=pSpeed;
-  const u2=new SpeechSynthesisUtterance(d.tr);u2.lang='tr-TR';u2.rate=pSpeed;
-  u2.onend=()=>{if(pPlaying){pIdx++;pFill=0;pUpdate();pTTS()}};
-  speechSynthesis.speak(u1);speechSynthesis.speak(u2);
-}
-function pStartFill(){
-  clearInterval(pTimer);
-  pTimer=setInterval(()=>{pFill=Math.min(pFill+0.5,100);document.getElementById('p-fill').style.width=pFill+'%';if(pFill>=100)pFill=0},80);
-}
-function playerFwd(){speechSynthesis.cancel();pIdx++;pFill=0;pUpdate();if(pPlaying)pTTS()}
-function playerBack(){speechSynthesis.cancel();pIdx=Math.max(0,pIdx-1);pFill=0;pUpdate();if(pPlaying)pTTS()}
-function playerNext(){speechSynthesis.cancel();pIdx=Math.min(pIdx+1,PD.length-1);pFill=0;pUpdate();if(pPlaying)pTTS()}
-function playerPrev(){speechSynthesis.cancel();pIdx=Math.max(0,pIdx-1);pFill=0;pUpdate();if(pPlaying)pTTS()}
-function seekPlayer(e){const b=e.currentTarget;pFill=(e.offsetX/b.offsetWidth)*100;document.getElementById('p-fill').style.width=pFill+'%'}
-function playerSpeed(s,el){pSpeed=s;document.querySelectorAll('.p-speed').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(pPlaying){speechSynthesis.cancel();pTTS()}}
-function setSesMod(el){
-  document.querySelectorAll('.ses-mode').forEach(m=>m.classList.remove('active'));
-  el.classList.add('active');
-  const mod=el.querySelector('.ses-mode-name').textContent.trim();
-  const en=document.getElementById('p-en');
-  const tr=document.getElementById('p-tr');
-  const topic=document.getElementById('p-topic');
-  const d=PD[pIdx%PD.length];
-  speechSynthesis.cancel();
-  if(pPlaying){pPlaying=false;document.getElementById('p-play').textContent='▶';clearInterval(pTimer);}
-  if(mod.includes('Flashcard')){
-    topic.textContent='⚡ FLASHCARD MODU — Formül + hızlı tekrar';
-    en.textContent=d.en;
-    tr.textContent='▶ basınca Türkçe çeviri duyulacak';
-    tr.style.opacity='0.4';
-  } else if(mod.includes('Quiz')){
-    topic.textContent='🎯 QUIZ SES MODU — Soru sesli okunur';
-    en.textContent='▶ butonuna bas — soru sesli okunacak, cevabı düşün!';
-    tr.textContent='Doğru cevap açıklamayla birlikte duyurulacak.';
-    tr.style.opacity='0.7';
-  } else {
-    topic.textContent=d.t;
-    en.textContent=d.en;
-    tr.textContent=d.tr;
-    tr.style.opacity='1';
-  }
-}
-
-pUpdate();
-
-// ════════════════════════════════════════════
-// 1. SCROLL ANİMASYONLARI
-// ════════════════════════════════════════════
-// scrollObserver global
-const scrollObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      e.target.querySelectorAll('[data-count]').forEach(el => {
-        if (!el.dataset.counted) { el.dataset.counted='1'; animateCount(el); }
-      });
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.step,.fc,.yorum,.hayir-inner').forEach(el => {
-  el.classList.add('scroll-hidden');
-  scrollObserver.observe(el);
-});
-
-function animateCount(el) {
-  const target = parseInt(el.dataset.count);
-  const suffix = el.dataset.suffix || '';
-  const prefix = el.dataset.prefix || '';
-  let cur = 0;
-  const step = Math.max(1, Math.ceil(target / 60));
-  const t = setInterval(() => {
-    cur = Math.min(cur + step, target);
-    el.textContent = prefix + cur.toLocaleString('tr') + suffix;
-    if (cur >= target) clearInterval(t);
-  }, 25);
-}
-
-// Sosyal kanıt sayaçları
-document.querySelectorAll('.stat-num').forEach(el => {
-  const txt = el.textContent.trim();
-  if (txt.includes('2.400'))    { el.dataset.count='2400'; el.dataset.suffix='+'; el.textContent='0'; }
-  else if (txt.includes('19'))  { el.dataset.count='19';   el.textContent='0'; }
-  else if (txt.includes('%87')) { el.dataset.count='87';   el.dataset.prefix='%'; el.textContent='0'; }
-  else if (txt.includes('90'))  { el.dataset.count='90';   el.textContent='0'; }
-  scrollObserver.observe(el.closest('div') || el);
-});
-const sosy = document.querySelector('.sosyal');
-if(sosy){ sosy.classList.add('scroll-hidden'); scrollObserver.observe(sosy); }
-
-// ════════════════════════════════════════════
-// 2. CANLI BİLDİRİMLER
-// ════════════════════════════════════════════
-const bildirimler=[
-  {isim:'Araş. Gör. A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce',alan:'Sosyal'},
-  {isim:'Av. M. Kaya',eylem:'ilk dersini tamamladı',sure:'5 dk önce',alan:'Hukuk'},
-  {isim:'Dr. D. Şahin',eylem:'e-kitabı indirdi',sure:'8 dk önce',alan:'Sağlık'},
-  {isim:'Dr. Öğr. Ü. E. Demir',eylem:'VIP pakete geçti',sure:'12 dk önce',alan:'Fen'},
-  {isim:'Öğr. Gör. S. Arslan',eylem:'günlük tuzağı çözdü',sure:'15 dk önce',alan:'Genel'},
-  {isim:'Prof. Dr. K. Çelik',eylem:'Pro pakete katıldı',sure:'18 dk önce',alan:'Sosyal'},
-  {isim:'Hem. F. Yıldız',eylem:'ses kursuna başladı',sure:'22 dk önce',alan:'Sağlık'},
-];
-const alanIcon={Sosyal:'📊',Hukuk:'⚖️',Sağlık:'🩺',Fen:'🔬',Genel:'🎯'};
-let bIdx=0;
-function bildirimGoster(){
-  const b=bildirimler[bIdx%bildirimler.length]; bIdx++;
-  const div=document.createElement('div');
-  div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';
-  div.innerHTML=`<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">${alanIcon[b.alan]}</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">${b.isim}</div><div style="font-size:11px;color:#6b7280">${b.eylem} · ${b.sure}</div></div>`;
-  document.body.appendChild(div);
-  setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);
-}
-setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
-
-// ════════════════════════════════════════════
-// 3. EXIT-INTENT POPUP
-// ════════════════════════════════════════════
-
-// ════════════════════════════════════════════
-// 4. HAYIR SAYAÇLARI
-// ════════════════════════════════════════════
-const hayirInner=document.querySelector('.hayir-inner');
-if(hayirInner){
-  const sd=document.createElement('div');
-  sd.style.cssText='margin-top:32px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap';
- 
-  hayirInner.appendChild(sd);
-  scrollObserver.observe(hayirInner);
-}
-
-// ════════════════════════════════════════════
-// 5. CANLI KİŞİ SAYACI
-// ════════════════════════════════════════════
-const onlineC=Math.floor(Math.random()*40)+20;
-const onDiv=document.createElement('div');
-onDiv.style.cssText=`display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#0c0e14;font-family:Inter,sans-serif;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:5px 12px`;
-onDiv.innerHTML=`<span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;animation:pulse2 2s infinite;flex-shrink:0"></span><span>${onlineC} kişi şu an sitede</span>`;
-const navLinks=document.querySelector('.nav-links');
-if(navLinks)navLinks.parentNode.insertBefore(onDiv,navLinks.nextSibling);
-// Her 30 sn'de sayıyı güncelle
-setInterval(()=>{
-  const yeni = Math.floor(Math.random()*40)+20;
-  onDiv.querySelector('span:last-child').textContent = yeni+' kişi şu an sitede';
-}, 30000);
-
-// ════════════════════════════════════════════
-// 6. SİNYAL LAB ANİMASYONU
-// ════════════════════════════════════════════
-function sinvalAnim(){
-  const spans=document.querySelectorAll('.vis-text .vis-sig,.vis-text .vis-trap,.vis-text .vis-key');
-  if(!spans.length)return;
-  let i=0;
-  spans.forEach(s=>{s.style.opacity='0.4';s.style.transform='scale(1)';});
-  setInterval(()=>{
-    spans.forEach(s=>{s.style.opacity='0.4';s.style.transform='scale(1)';});
-    spans[i].style.opacity='1';spans[i].style.transform='scale(1.06)';
-    i=(i+1)%spans.length;
-  },1300);
-}
-setTimeout(sinvalAnim,2500);
-
-// ════════════════════════════════════════════
-// 7. KİŞİSEL HOŞGELDİN
-// ════════════════════════════════════════════
-function kisiselSelam(user){
-  const s=new Date().getHours();
-  const selam=s<12?'Günaydın':s<18?'İyi günler':'İyi akşamlar';
-  const w=document.querySelector('.dash-welcome');
-  if(w){const ad=user.user_metadata?.ad||user.email.split('@')[0];w.innerHTML=selam+' <b>'+ad+'</b> 👋 — Bugünün sinyal rotası hazır 🎯';}
-}
-if(currentUser)kisiselSelam(currentUser);
-
-// ════════════════════════════════════════════
-// 8. DİNAMİK CSS
-// ════════════════════════════════════════════
-const xCSS=document.createElement('style');
-xCSS.textContent='.scroll-hidden{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}.scroll-hidden.visible{opacity:1!important;transform:none!important;pointer-events:auto!important}.step.scroll-hidden:nth-child(2){transition-delay:.1s}.step.scroll-hidden:nth-child(3){transition-delay:.2s}.fc.scroll-hidden:nth-child(2){transition-delay:.1s}.fc.scroll-hidden:nth-child(3){transition-delay:.2s}@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}.vis-sig,.vis-trap,.vis-key{transition:opacity .3s,transform .3s}';
-document.head.appendChild(xCSS);
-// EXIT INTENT
-let exitShown=false;
-document.addEventListener('mouseleave',(e)=>{
-  if(!exitShown&&!document.getElementById('modal').classList.contains('open')){
-    exitShown=true;
-    setTimeout(()=>{const p=document.getElementById('exit-popup');if(p)p.style.display='flex';},300);
-  }
-});
-
-function exitKapat(){document.getElementById('exit-popup').style.display='none';}
-window.addEventListener('load',function(){const ep=document.getElementById('exit-popup');if(ep)ep.addEventListener('click',function(e){if(e.target===this)exitKapat();});});
-</script>
-<!-- EXİT INTENT POPUP -->
-<div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
-  <div style="background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
-    <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
-    <div style="font-size:52px;margin-bottom:12px">⏳</div>
-    <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px">Bir saniye dur!</div>
-    <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gün ücretsiz</strong> dene — kredi kartı yok, taahhüt yok.</p>
-    <div style="background:#e8eeff;border-radius:10px;padding:14px;margin:16px 0;display:flex;align-items:center;justify-content:center;gap:10px">
-      <span style="font-size:14px;font-weight:700;color:#2d5be3">Pro paket · 7 gün ücretsiz</span>
-      <span style="background:#2d5be3;color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">BEDAVA</span>
+.scroll-hidden{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.scroll-hidden.visible{opacity:1;transform:none}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
+@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+</style>
+</head>
+<body>
+<form name="ekitap" netlify netlify-honeypot="bot-field" hidden><input type="email" name="email"><input name="bot-field"></form>
+<form name="kayit" netlify netlify-honeypot="bot-field2" hidden><input type="text" name="ad"><input type="email" name="email"><input name="bot-field2"></form>
+<nav>
+  <div class="nav-logo" onclick="goTo('hero')">Sinyal <b>Avcisi</b></div>
+  <div class="nav-links">
+    <span onclick="goTo('nasil')">Nasil Calisir?</span>
+    <span onclick="goTo('klod')">KLOD</span>
+    <span onclick="goTo('ses')">Ses Kurs</span>
+    <span onclick="goTo('ekitap')">E-Kitap</span>
+    <span onclick="goTo('fiyat')">Paketler</span>
+    <span onclick="goTo('sss')">SSS</span>
+  </div>
+  <button class="btn-nav" onclick="openModal('Pro YDS & YOKDiL','399TL')">Ucretsiz Basla</button>
+  <button class="hamburger" onclick="toggleMenu()">menu</button>
+</nav>
+<div class="mmenu" id="mmenu">
+  <a onclick="closeMenuGoTo('nasil')">Nasil Calisir?</a>
+  <a onclick="closeMenuGoTo('klod')">KLOD</a>
+  <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
+  <a onclick="closeMenuGoTo('ekitap')">Ucretsiz E-Kitap</a>
+  <a onclick="closeMenuGoTo('fiyat')">Paketler</a>
+  <a onclick="closeMenuGoTo('sss')">SSS</a>
+  <a onclick="openModal('Pro YDS & YOKDiL','399TL');closeMenu()">Ucretsiz Basla</a>
+</div>
+<section id="hero" class="hero">
+  <div>
+    <div class="hero-eyebrow">YDS & YOKDiL Hazirlik</div>
+    <h1>Metni cevirmiyorsun - <em>sinyali</em> yakaliyorsun</h1>
+    <p class="hero-sub">OSYM sorularini kelime kelime okumak sureyi bitirir. Baglaclar, gizli olumsuzlar ve modal yapilari tanirsan 10 saniyede cozersin.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="goTo('demo')">Canli demoyu dene</button>
+      <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanis</button>
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
-      <button onclick="exitKapat();openModal('Pro YDS &amp; YÖKDİL','₺399')" style="background:#2d5be3;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Evet, ücretsiz başlayım →</button>
-      <button onclick="exitKapat()" style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:Inter,sans-serif;padding:6px;text-decoration:underline">Hayır, hazırlıksız girmek istiyorum</button>
+    <div class="hero-badges">
+      <span class="hero-badge">7 gun ucretsiz</span>
+      <span class="hero-badge">Kredi karti gerekmez</span>
+      <span class="hero-badge">Istediginde iptal</span>
     </div>
   </div>
-</div></body>
+  <div id="demo" class="demo-card">
+    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live">Canli</span></div>
+    <div class="demo-sent" id="dsent">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
+    <div class="demo-legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
+      <div class="leg"><div class="leg-dot" style="background:#fef2f2;border:1px solid var(--trap)"></div>Tuzak</div>
+      <div class="leg"><div class="leg-dot" style="background:#fefce8;border:1px solid #d97706"></div>Kilit kelime</div>
+    </div>
+    <div class="demo-quiz">
+      <div class="demo-q" id="dq">Bu cumleye gore arastirmacilar ne sonucuna vardi?</div>
+      <div class="demo-opts" id="dopts">
+        <button class="dopt" onclick="demoAns(this,false)">Tedavi tum hastalar icin etkilidir.</button>
+        <button class="dopt" onclick="demoAns(this,true)">Tedavi umit verici ama garantili degildir.</button>
+        <button class="dopt" onclick="demoAns(this,false)">Sonuclar yetersiz kaldi.</button>
+        <button class="dopt" onclick="demoAns(this,false)">Tedavi basariyla tamamlandi.</button>
+      </div>
+      <div class="demo-fb" id="dfb"></div>
+      <button class="demo-next-btn" id="dnext" onclick="demoNext()">Sonraki alan</button>
+    </div>
+  </div>
+</section>
+<section style="background:linear-gradient(135deg,#1a1f35,#0c0e14);padding:40px 5vw;border-bottom:1px solid rgba(255,255,255,.08)">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e8d5a3;margin-bottom:8px">Sinava Geri Sayim</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#f7f6f2">Sinav tarihin ne zaman?</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <input type="date" id="sinav-tarih" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:Inter,sans-serif;font-size:14px;outline:none;cursor:pointer">
+      <button onclick="sinavGeriSayim()" style="background:#2d5be3;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Baslat</button>
+    </div>
+    <div id="geri-sayim-display" style="display:none;text-align:center">
+      <div style="display:flex;gap:16px;justify-content:center">
+        <div style="text-align:center"><div id="gs-gun" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Gun</div></div>
+        <div style="font-family:'DM Serif Display',serif;font-size:42px;color:rgba(247,246,242,.2);line-height:1">:</div>
+        <div style="text-align:center"><div id="gs-saat" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Saat</div></div>
+        <div style="font-family:'DM Serif Display',serif;font-size:42px;color:rgba(247,246,242,.2);line-height:1">:</div>
+        <div style="text-align:center"><div id="gs-dak" style="font-family:'DM Serif Display',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:2px">Dakika</div></div>
+      </div>
+      <div id="gs-mesaj" style="font-size:13px;color:rgba(247,246,242,.5);margin-top:10px"></div>
+    </div>
+  </div>
+</section>
+<section class="sosyal">
+  <div class="sosyal-inner">
+    <div class="stats">
+      <div><div class="stat-num" data-count="2400" data-suffix="+">0</div><div class="stat-lbl">E-kitap indirme</div></div>
+      <div class="stat-div"></div>
+      <div><div class="stat-num" data-count="19">0</div><div class="stat-lbl">Gramer konusu</div></div>
+      <div class="stat-div"></div>
+      <div><div class="stat-num" data-count="87" data-prefix="%">0</div><div class="stat-lbl">Net artis orani</div></div>
+      <div class="stat-div"></div>
+      <div><div class="stat-num" data-count="90">0</div><div class="stat-lbl">Gunde sonuc</div></div>
+    </div>
+    <div class="yorumlar">
+      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"Modal perfect'te surekli hata yapiyordum. Sinyal metodolojisini ogrendikten sonra tuzagi ilk bakista goruyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">Aras. Gor. A. Yilmaz</div><div class="yorum-unvan">Sosyoloji - YDS 78</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"Hukuk alanindan metinlerle calismak cok daha verimli. 3 ayda 22 puanlik artis yaparak YDS zorunluluğumu tamamladim."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">Av. M. Kaya</div><div class="yorum-unvan">Hukuk - YDS 82</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">5 yildiz</div><div class="yorum-text">"KLOD gercekten ogretiyor. 'Dogru cevap B' demiyor, neden B oldugunu anlatiyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">Dr. D. Sahin</div><div class="yorum-unvan">Saglik - YOKDiL 91</div></div></div></div>
+    </div>
+  </div>
+</section>
+<section class="hedef">
+  <div class="hedef-inner">
+    <div class="eyebrow" style="color:var(--contrast)">Platformumuz Kimin icin?</div>
+    <div class="section-title" style="color:var(--paper)">YDS veya YOKDiL sinavina hazırlanan herkes</div>
+    <div class="hedef-grid">
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">graduation</div><div class="hedef-name">Akademisyenler</div><div class="hedef-desc">Docentlik ve uluslararasi yayin icin YDS/YOKDiL zorunlulugu olan arastirmacilar.</div><div class="hedef-tag">YDS - YOKDiL Sosyal/Fen/Saglik</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">scale</div><div class="hedef-name">Hukukcular</div><div class="hedef-desc">YDS zorunlulugu olan avukat, hakim ve hukuk akademisyeni.</div><div class="hedef-tag">YDS - Alan: Hukuk</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">stethoscope</div><div class="hedef-name">Saglik Profesyonelleri</div><div class="hedef-desc">YOKDiL Saglik sinavina hazirlanan doktor, hemsire ve saglik akademisyeni.</div><div class="hedef-tag">YOKDiL Saglik</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">chart</div><div class="hedef-name">Sosyal Bilimciler</div><div class="hedef-desc">YOKDiL Sosyal sinavina hazirlanan sosyolog, psikolog ve egitimci.</div><div class="hedef-tag">YOKDiL Sosyal</div></div>
+      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">microscope</div><div class="hedef-name">Fen & Muhendislik</div><div class="hedef-desc">YOKDiL Fen sinavina hazirlanan muhendis, fizikci ve biyolog.</div><div class="hedef-tag">YOKDiL Fen</div></div>
+      <div class="hedef-card" style="background:rgba(45,91,227,.15);border-color:var(--signal)"><div style="font-size:26px;margin-bottom:10px">target</div><div class="hedef-name">Genel YDS/YOKDiL Adayi</div><div class="hedef-desc">OSYM tuzaklarini taniyarak net artisini gerceklestirmek isteyen her aday.</div><div class="hedef-tag">YDS - YOKDiL (tum branşlar)</div></div>
+    </div>
+  </div>
+</section>
+<section class="alan">
+  <div class="eyebrow" style="color:var(--contrast)">Kisiselleştir</div>
+  <div class="section-title">Alanini sec, platform sana gore ayarlansın</div>
+  <p class="alan-sub">Demo cumlesi, kelime bankasi ve metin ornekleri alanina gore degisir.</p>
+  <div class="alan-cards">
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','H')"><div class="alan-icon">H</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','S')"><div class="alan-icon">S</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','F')"><div class="alan-icon">F</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','SG')"><div class="alan-icon">SG</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
+    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','G')"><div class="alan-icon">G</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
+  </div>
+  <div id="alan-kelime-strip" style="margin-top:28px;text-align:center;min-height:28px"><span id="alan-kelime" style="font-family:JetBrains Mono,monospace;font-size:13px;color:var(--contrast);letter-spacing:.08em"></span></div>
+</section>
+<section id="nasil" class="nasil">
+  <div class="nasil-inner">
+    <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasil Calisir?</div><div class="section-title">Gelisin ilk gunundan sinav sabahina</div></div>
+    <div>
+      <div class="step scroll-hidden"><div class="step-num">01</div><div><div class="step-title">Gel, alanini sec</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Saglik - bir tikla seciyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gun ucretsiz</span></div></div></div>
+      <div class="step scroll-hidden"><div class="step-num">02</div><div><div class="step-title">Sinyal Okuma Lab'a gir</div><div class="step-desc">Sana OSYM formatinda bir metin geliyor. Baglaclar mavi, tuzak ifadeler kirmizi, kilit kelimeler sari.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
+      <div class="step scroll-hidden"><div class="step-num">03</div><div><div class="step-title">Takildiysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlis cozduun ya da mantigini anlayamadin. KLOD'a yaziyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
+      <div class="step scroll-hidden"><div class="step-num">04</div><div><div class="step-title">Otobuzte Ses Kurs, yatmadan Gunluk Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. Ingilizce + Turkce. Gece yatmadan 60 saniye Gunluk Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
+      <div class="step scroll-hidden"><div class="step-num">05</div><div><div class="step-title">Haftalik rapor kartin geliyor</div><div class="step-desc">Kac soru cozduun, hangi yapida hata yaptin, tahmini puanin ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
+    </div>
+  </div>
+</section>
+<section id="ekitap" class="ekitap">
+  <div class="ekitap-inner">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ucretsiz E-Kitap</div>
+      <h2>30 Gunluk Metin Fetih Kilavuzu</h2>
+      <p class="ekitap-desc">37 sayfalik PDF rehber. Sinyal metodolojisinin tum adimlari, baglac haritalari, modal perfect rehberi ve gunluk calisma plani.</p>
+      <ul class="ekitap-list">
+        <li>Baglac sinyal haritalari</li>
+        <li>Modal perfect tuzak rehberi</li>
+        <li>30 gunluk calisma plani</li>
+        <li>OSYM en sik tuzak listesi</li>
+      </ul>
+      <form onsubmit="ekitapIndir(event)" class="ekitap-form">
+        <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required>
+        <button class="ekitap-submit" type="submit">Ucretsiz Indir</button>
+      </form>
+      <div class="ekitap-note" id="ekitap-note">2.400+ kisi indirdi - Spam yok - Istediginde cik</div>
+    </div>
+    <div class="ekitap-mockup"><div style="font-size:48px;margin-bottom:12px">book</div><div class="ekitap-mockup-title">30 Gunluk Metin Fetih Kilavuzu</div><div class="ekitap-mockup-sub">YDS & YOKDiL Sinyal Metodolojisi</div><div class="ekitap-mockup-pages">37 sayfa - PDF - Ucretsiz</div></div>
+  </div>
+</section>
+<section id="klod" class="klod">
+  <div>
+    <div class="eyebrow" style="color:var(--signal)">AI Ogretmen</div>
+    <div class="section-title">KLOD cevap vermez - dusundurur</div>
+    <p class="klod-desc">Cogu AI "dogru cevap B'dir" der. KLOD neden yanlis dusundugunu bulur ve oradan ogretir.</p>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">target</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">search</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">TR</div><div class="klod-feat-text"><b>Tamamen Turkce</b><span>Aciklamalar, ipuclari ve geri bildirim hep Turkce</span><div class="klod-feat-detail">Gramer kurallari Turkce aciklanir. OSYM tuzaklari Turkce analiz edilir.</div></div></div>
+  </div>
+  <div class="chat-ui">
+    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni - Cevrimici</div></div></div>
+    <div class="chat-body" id="chat-body">
+      <div class="msg k">Merhaba! Sana bir OSYM cumlesi gostereyim. "must have left" ne anlama geliyor?</div>
+      <div class="msg k">"She must have left before the meeting started."</div>
+    </div>
+    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key==='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">G</button></div>
+  </div>
+</section>
+<section id="ses" class="ses">
+  <div class="ses-inner">
+    <div>
+      <div class="eyebrow" style="color:var(--contrast)">Audio Kurs</div>
+      <div class="section-title" style="color:var(--paper)">Beyin sesten ogrenir</div>
+      <p class="ses-desc">19 YDS/YOKDiL gramer konusu - otobuzte, yuruyuste, yatmadan once.</p>
+      <div class="ses-modes">
+        <div class="ses-mode active" onclick="setSesMod(this)"><div class="ses-mode-icon">grad</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">flash</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">quiz</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
+      </div>
+    </div>
+    <div class="player">
+      <div class="p-topic" id="p-topic">KONU 3 / 19 - CONDITIONALS</div>
+      <div class="p-en" id="p-en">If she had studied harder, she would have passed the exam.</div>
+      <div class="p-tr" id="p-tr">Daha cok calisaydı sinavi gecmis olurdu.</div>
+      <div class="p-bar" onclick="seekPlayer(event)"><div class="p-fill" id="p-fill"></div></div>
+      <div class="p-controls">
+        <button class="p-btn" onclick="playerPrev()">prev</button>
+        <button class="p-btn" onclick="playerBack()">back</button>
+        <button class="p-play" id="p-play" onclick="playerToggle()">play</button>
+        <button class="p-btn" onclick="playerFwd()">fwd</button>
+        <button class="p-btn" onclick="playerNext()">next</button>
+      </div>
+      <div class="p-speeds">
+        <button class="p-speed" onclick="playerSpeed(0.7,this)">0.7x</button>
+        <button class="p-speed active" onclick="playerSpeed(1,this)">1x</button>
+        <button class="p-speed" onclick="playerSpeed(1.2,this)">1.2x</button>
+        <button class="p-speed" onclick="playerSpeed(1.5,this)">1.5x</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="dashboard" class="dash">
+  <div class="dash-inner">
+    <div class="dash-header"><div class="eyebrow" style="color:var(--signal)">Canli Onizleme</div><div class="section-title">Kayit sonrasi seni karsilayan ekran</div></div>
+    <div class="dash-ui">
+      <div class="dash-sb">
+        <div class="dash-logo">Sinyal <b>Avcisi</b></div>
+        <div class="dash-nav">
+          <div class="dn-item active" onclick="dnav(this)">Dashboard</div>
+          <div class="dn-item" onclick="dnav(this)">Sinyal Lab</div>
+          <div class="dn-item" onclick="dnav(this)">KLOD</div>
+          <div class="dn-item" onclick="dnav(this)">Ses Kurs</div>
+          <div class="dn-item" onclick="dnav(this)">Kelime Kartlari</div>
+          <div class="dn-item" onclick="dnav(this)">Gunluk Tuzak</div>
+          <div class="dn-item" onclick="dnav(this)">Raporlar</div>
+        </div>
+        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">Genel</div></div>
+      </div>
+      <div class="dash-main">
+        <div class="dash-welcome">Gunaydın - <b>Bugunun sinyal rotasi hazir</b></div>
+        <div class="dash-karts">
+          <div class="dk blue"><div class="dk-icon">target</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
+          <div class="dk purple"><div class="dk-icon">warn</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis</div></div>
+          <div class="dk green"><div class="dk-icon">chart</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 - +12 puan kaldi</div></div>
+          <div class="dk amber"><div class="dk-icon">card</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yukleniyor...</div></div>
+        </div>
+        <div class="dash-tabs">
+          <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
+          <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
+          <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
+        </div>
+        <div class="dmod" id="mod-sinyal">
+          <div class="dm-eye">Genel - YDS Metni - Soru 13/30</div>
+          <div class="dm-sent">"The appellate court ruled that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the irregularities, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."</div>
+          <div class="dm-q">Bu metne gore mahkeme karari hakkinda ne soylenebilir?</div>
+          <div class="dm-opts" id="dm-opts">
+            <button class="dmo" onclick="dAns(this,false)">Usul hatalari karari gecersiz kildi.</button>
+            <button class="dmo" onclick="dAns(this,true)">Usul hatalarina ragmen karar gecerlilligini korodu.</button>
+            <button class="dmo" onclick="dAns(this,false)">Mahkeme yeniden yargilama istedi.</button>
+            <button class="dmo" onclick="dAns(this,false)">Karar kesinlikle gecersiz bulundu.</button>
+          </div>
+          <div class="dm-fb" id="dm-fb"></div>
+        </div>
+        <div class="dmod" id="mod-kelime" style="display:none">
+          <div class="dm-eye" id="kk-eyebrow">Spaced Repetition - yukleniyor...</div>
+          <div class="kk" id="kk" onclick="kkFlip()">
+            <div id="kk-front"><div class="kk-word"></div><div class="kk-hint">Tikla - Turkce gor</div></div>
+            <div id="kk-back" style="display:none"><div class="kk-word"></div><div class="kk-ex"></div></div>
+          </div>
+          <div class="kk-actions" id="kk-actions" style="display:none">
+            <button class="kk-btn kk-hard" onclick="kkAnswer(1)">Zor</button>
+            <button class="kk-btn kk-ok" onclick="kkAnswer(3)">Tamam</button>
+            <button class="kk-btn kk-easy" onclick="kkAnswer(5)">Kolay</button>
+          </div>
+        </div>
+        <div class="dmod" id="mod-tuzak" style="display:none">
+          <div class="dm-eye" id="tuzak-tarih">Gunluk Tuzak - yukleniyor...</div>
+          <div class="tuzak-q">Hangi seceneek cumleyi dogru tamamlar?</div>
+          <div class="tuzak-sent">"She would have attended the conference _____ she received the invitation in time."</div>
+          <div class="tuzak-opts" id="tuzak-opts">
+            <button class="tuzak-opt" onclick="tuzakAns(this,false)">A) if</button>
+            <button class="tuzak-opt" onclick="tuzakAns(this,true)">B) had</button>
+            <button class="tuzak-opt" onclick="tuzakAns(this,false)">C) unless</button>
+            <button class="tuzak-opt" onclick="tuzakAns(this,false)">D) although</button>
+          </div>
+          <div class="tuzak-fb" id="tuzak-fb"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="fiyat" class="fiyat">
+  <div class="fiyat-inner">
+    <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
+    <div class="fiyat-grid">
+      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Audio Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="openModal('Temel Sinyal','199TL')">Basla</button></div>
+      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gun ucretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Audio Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="openModal('Pro YDS & YOKDiL','399TL')">Ucretsiz Basla</button></div>
+      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="openModal('Sinyal Avcisi VIP','699TL')">VIP'e Gec</button></div>
+    </div>
+  </div>
+</section>
+<section id="sss" class="sss">
+  <div class="sss-inner">
+    <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sik Sorulan Sorular</div><div class="section-title">Aklindaki sorular</div></div>
+    <div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YOKDiL mi - platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi icin de uygundur. Platform, alan secimine gore ornek metinleri kisisellestirir.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gercek bir yapay zeka mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. KLOD, Claude API uzerine kurulu gercek bir yapay zeka ogretmenidir.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>iptal etmek istesem ne yapmaliyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Istedigin zaman, tek tikla iptal edebilirsin. Herhangi bir iptal ucreti yoktur.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses kurs internet baglantisi gerektiriyor mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Ses kurs tarayici tabanli TTS kullandigi icin internet baglantisi gerektirir.</div></div>
+    </div>
+  </div>
+</section>
+<section class="hayir-section">
+  <div class="hayir-inner">
+    <div style="font-size:48px;margin-bottom:20px;animation:pulse 2.5s ease-in-out infinite">heart</div>
+    <div class="hayir-baslik">Her aboneligin bir kismi, bir cocugun gelecegine dokunuyor</div>
+    <p class="hayir-metin">Sinyal Avcisi'ni tercih ettiginde sadece kendi hedefine yatirim yapmiyorsun. Platformdan elde edilen gelirin bir bolumu, yetim ve kimsesiz cocuklarin egitimine bagiSlaniyor.</p>
+    <div class="hayir-alinti">"insanlarin en hayirlisi, insanlara en cok faydali olandir."</div>
+    <div class="hayir-etiketler"><span class="hayir-etiket">Egitime destek</span><span class="hayir-etiket">Yetim cocuklar</span><span class="hayir-etiket">Surdurulebilir iyilik</span></div>
+    <div style="margin-top:36px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="47" data-suffix=" cocuk">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bu ay ulasilan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="312" data-suffix=" kitap">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bagislanan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="8" data-suffix=" okul">0</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Ulasilan</div></div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="footer-logo">Sinyal <b>Avcisi</b></div>
+  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span></div>
+  <div class="footer-copy">2026 Sinyal Avcisi - YDS & YOKDiL hazirlik platformu - Turkiye - Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
+</footer>
+<div id="hedef-modal" onclick="if(event.target===this)closeHedefModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:20px"><div style="background:#fff;border-radius:20px;padding:32px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;position:relative"><button onclick="closeHedefModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">X</button><div id="hedef-modal-icerik"></div></div></div>
+<div class="modal-ov" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">X</button>
+    <div id="modal-body">
+      <div class="modal-eye">7 Gun Ucretsiz Basla</div>
+      <h2>Hesap olustur</h2>
+      <p class="modal-sub">Kredi karti gerekmez. 7 gunluk deneme sonrasi istersen devam et.</p>
+      <div class="modal-plan"><div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Secilen paket</div><div class="modal-plan-name" id="modal-plan-name">Pro YDS & YOKDiL</div></div><div class="modal-plan-price" id="modal-plan-price">399TL/ay</div></div>
+      <form onsubmit="modalSubmit(event)" class="modal-form">
+        <input class="modal-input" type="text" id="m-ad" placeholder="Ad Soyad" required>
+        <input class="modal-input" type="email" id="m-email" placeholder="E-posta adresi" required>
+        <input class="modal-input" type="password" id="m-sifre" placeholder="Sifre (en az 8 karakter)" minlength="8" required>
+        <button class="modal-submit" type="submit">Ucretsiz Basla</button>
+      </form>
+      <div class="modal-legal">Kayit olarak Kullanim Kosullarini kabul etmis olursun.</div>
+    </div>
+    <div class="modal-success" id="modal-success"><div class="ms-icon">tada</div><div class="ms-h">Hos geldin, Avci!</div><p class="ms-p">Hesabin olusturuldu. 7 gunluk ucretsiz denemen basladi.</p></div>
+  </div>
+</div>
+<div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
+    <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">X</button>
+    <div style="font-size:52px;margin-bottom:12px">timer</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px">Bir saniye dur!</div>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gun ucretsiz</strong> dene - kredi karti yok, taahhut yok.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+      <button onclick="exitKapat();openModal('Pro YDS & YOKDiL','399TL')" style="background:#2d5be3;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Evet, ucretsiz baslayim</button>
+      <button onclick="exitKapat()" style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:Inter,sans-serif;padding:6px;text-decoration:underline">Hayir, hazirlıksiz girmek istiyorum</button>
+    </div>
+  </div>
+</div>
+<script>
+// SUPABASE
+const SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
+const SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null;
+sb.auth.onAuthStateChange((event,session)=>{if(session){currentUser=session.user;showUserMenu(session.user);}else{currentUser=null;showGuestMenu();}});
+function showUserMenu(user){const navCta=document.querySelector('.btn-nav');if(navCta){const ad=user.user_metadata?.ad||user.email.split('@')[0];navCta.textContent='Hosgeldin '+ad;navCta.style.background='var(--signal)';}}
+function showGuestMenu(){const navCta=document.querySelector('.btn-nav');if(navCta){navCta.textContent='Ucretsiz Basla';navCta.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');navCta.style.background='var(--ink)';}}
+async function signOut(){await sb.auth.signOut();showGuestMenu();}
+
+// YARDIMCI
+function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
+function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
+function closeMenuGoTo(id){closeMenu();setTimeout(()=>goTo(id),120);}
+
+// MODAL
+function openModal(plan,price){
+  document.getElementById('modal-plan-name').textContent=plan;
+  document.getElementById('modal-plan-price').textContent=price+'/ay';
+  document.getElementById('modal-body').style.display='block';
+  document.getElementById('modal-success').style.display='none';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ALAN
+const alanKelimeler={Hukuk:['jurisdiction','liability','precedent','statute','injunction'],Sosyal:['stratification','hegemony','discourse','paradigm','socialization'],Fen:['hypothesis','catalyst','synthesis','empirical','osmosis'],Saglik:['diagnosis','prognosis','etiology','contraindication','pathogen'],Genel:['despite','however','nevertheless','by no means','far from']};
+let kelimeTimer=null;
+function setAlanVeGoster(el,alan,icon){
+  document.querySelectorAll('.alan-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.alan-preview').forEach(p=>p.classList.remove('show'));
+  const prev=document.getElementById('prev-'+alan);if(prev)prev.classList.add('show');
+  clearInterval(kelimeTimer);
+  const kelimeler=alanKelimeler[alan]||alanKelimeler['Genel'];let ki=0;
+  const strip=document.getElementById('alan-kelime');
+  function showK(){if(!strip)return;strip.style.opacity='0';setTimeout(()=>{strip.textContent=kelimeler[ki%kelimeler.length];strip.style.opacity='1';ki++;},300);}
+  showK();kelimeTimer=setInterval(showK,1800);
+  const dv=document.getElementById('dash-alan');if(dv)dv.textContent=icon+' '+alan;
+  curAlan=alan;
+}
+
+// DEMO
+const ALAN={Genel:{lbl:'Gercek OSYM Cumlesi - Genel',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."',q:'Bu cumleye gore arastirmacilar ne sonucuna vardi?',opts:['Tedavi tum hastalar icin etkilidir.','Tedavi umit verici ama garantili degildir.','Sonuclar yetersiz kaldi.','Tedavi basariyla tamamlandi.'],ans:1,exp:'Dogru! "Despite" zitlik + "far from guaranteed" = garantili degil.'},
+Hukuk:{lbl:'Gercek OSYM Cumlesi - Hukuk',sent:'"The appellate court held that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the procedural errors, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu cumleye gore mahkeme karari icin ne soylenebilir?',opts:['Usul hatalari karari gecersiz kildi.','Usul hatalarina ragmen karar gecerlidir.','Mahkeme yeniden yargilama istedi.','Karar temyize tasindi.'],ans:1,exp:'Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.'},
+Sosyal:{lbl:'Gercek OSYM Cumlesi - Sosyal',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Tuzak: neredeyse hic degil">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalasmayı nasil aciklar?',opts:['Tabakalasma kulturel normlardan bagimsizdır.','Tabakalasma kulturel normlarla yakindan iliskilidir.','Tabakalasma onemsenmeyen bir kavramdir.','Tabakalasma yalnizca ekonomik faktörlere baglidir.'],ans:1,exp:'Dogru! "Hardly operates independently" = neredeyse bagimsiz degil.'},
+Fen:{lbl:'Gercek OSYM Cumlesi - Fen',sent:'"The catalyst <span class="s-trap" data-tip="Tuzak: basaramadi">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zitlik sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Bu cumleye gore katalizor icin ne soylenebilir?',opts:['Katalizor reaksiyonu basariyla hizlandirdi.','Sicaklik optimum olsa da katalizor basarisiz oldu.','Sicaklik cok dusuktu.','Katalizor ve sicaklik birlikte etkili oldu.'],ans:1,exp:'Dogru! "Failed to accelerate" = basaramadi + "even though optimal" = tezat.'},
+Saglik:{lbl:'Gercek OSYM Cumlesi - Saglik',sent:'"The treatment was <span class="s-trap" data-tip="Tuzak: etkili degil">far from effective</span> <span class="s-sig" data-tip="Zitlik sinyali">although</span> it had shown <span class="s-key">promising</span> results."',q:'Bu cumleye gore tedavi hakkinda ne soylenebilir?',opts:['Tedavi denemelerde de etkili bulundu.','Umit verici sonuclara ragmen tedavi etkili olmadi.','Tedavi klinik denemelerde basarisiz oldu.','Sonuclar henuz degerlendirilmedi.'],ans:1,exp:'Dogru! "Far from effective" = etkili degil + "although promising" = tezat.'}};
+let curAlan='Genel',demoAnswered=false;
+const alanOrder=['Hukuk','Sosyal','Fen','Saglik','Genel'];let demoIdx=4;
+function demoAns(btn,correct){
+  if(demoAnswered)return;demoAnswered=true;
+  const opts=document.querySelectorAll('#dopts .dopt');opts.forEach(o=>o.disabled=true);
+  const d=ALAN[curAlan];const fb=document.getElementById('dfb');
+  if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent=d.exp;}
+  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='Yanlis. '+d.exp;}
+  document.getElementById('dnext').style.display='inline';
+}
+function demoNext(){demoIdx=(demoIdx+1)%alanOrder.length;const alan=alanOrder[demoIdx];const d=ALAN[alan];document.getElementById('dlbl').textContent=d.lbl;const s=document.getElementById('dsent');s.style.opacity='0';setTimeout(()=>{s.innerHTML=d.sent;s.style.opacity='1';},200);document.getElementById('dq').textContent=d.q;document.getElementById('dopts').innerHTML=d.opts.map((t,i)=>`<button class="dopt" onclick="demoAns(this,${i===d.ans})">${t}</button>`).join('');document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;}
+
+function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='Harika! E-kitap '+el.value+' adresine gonderildi.';el.value='';}
+
+async function modalSubmit(e){
+  e.preventDefault();const ad=document.getElementById('m-ad'),em=document.getElementById('m-email'),si=document.getElementById('m-sifre');
+  if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
+  const btn=document.querySelector('.modal-submit');btn.textContent='Kaydediliyor...';btn.disabled=true;
+  try{const{data,error}=await sb.auth.signUp({email:em.value,password:si.value,options:{data:{ad:ad.value}}});
+  if(error){const{error:le}=await sb.auth.signInWithPassword({email:em.value,password:si.value});if(le){si.placeholder='Sifre hatali';btn.textContent='Ucretsiz Basla';btn.disabled=false;return;}}}catch(err){}
+  btn.textContent='Ucretsiz Basla';btn.disabled=false;
+  document.getElementById('modal-body').style.display='none';document.getElementById('modal-success').style.display='block';
+  setTimeout(()=>{closeModal();goTo('dashboard');},2000);
+}
+
+// DASHBOARD
+function dtab(el,mod){document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod==='kelime')kkShow();}}
+function dnav(el){
+  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
+  const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
+  document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
+  main.querySelector('.dash-karts').style.display='none';
+  main.querySelector('.dash-tabs').style.display='none';
+  main.querySelector('.dash-welcome').style.display='none';
+  if(txt==='Dashboard'){main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
+  else if(txt==='Sinyal Lab'){main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');}
+  else if(txt==='KLOD'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">KLOD - AI Ogretmen</div><div style="background:var(--sl);border-radius:10px;padding:14px;font-size:13px;margin-bottom:12px">KLOD su an simulasyon modunda calisiyor.</div><div class="chat-body" id="dnav-chat" style="min-height:180px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0"><div class="msg k">Merhaba! Hangi yapida takildın?</div></div><div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px"><input class="chat-in" id="dnav-in" placeholder="Soruyu yaz..." onkeydown="if(event.key==='Enter')dnavChat()" style="flex:1"><button class="chat-send" onclick="dnavChat()">G</button></div>';}
+  else if(txt==='Kelime Kartlari'){document.getElementById('mod-kelime').style.display='block';kkShow();}
+  else if(txt==='Gunluk Tuzak'){document.getElementById('mod-tuzak').style.display='block';}
+  else if(txt==='Ses Kurs'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">SES KURSU - 19 Konu</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between"><span>${p.t}</span><span style="color:var(--signal)">play</span></div>`).join('')+'</div>';}
+  else if(txt==='Raporlar'){const t=document.getElementById('mod-sinyal');t.style.display='block';t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="text-align:center;padding:20px 0"><div style="font-family:DM Serif Display,serif;font-size:56px;color:var(--signal)">73</div><div style="font-size:12px;color:var(--muted);margin-bottom:20px">Tahmini puan - Hedef: 85</div></div>';}
+}
+function dashPlaySes(idx){pIdx=idx;pUpdate();if(!pPlaying){playerToggle();}document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
+function dnavChat(){const inp=document.getElementById('dnav-in');if(!inp||!inp.value.trim())return;const val=inp.value.trim();const body=document.getElementById('dnav-chat');const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;setTimeout(()=>{const km=document.createElement('div');km.className='msg k';km.textContent=KB_GENEL[Math.floor(Math.random()*KB_GENEL.length)];body.appendChild(km);body.scrollTop=body.scrollHeight;},700);}
+function dAns(btn,correct){const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('dm-fb');if(correct){btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.';}else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='dm-fb err';fb.textContent='Yanlis. "by no means invalid" = kesinlikle gecersiz degil!';}}
+
+// KELIME KARTLARI (SM-2 + localStorage + Due Date)
+const kkData=[
+  {en:'liability',tr:'sorumluluk / yukumluluk',ex:'"Strict liability requires no proof of intent."'},
+  {en:'precedent',tr:'emsal / ictihat',ex:'"This ruling sets a precedent for future cases."'},
+  {en:'jurisdiction',tr:'yetki alani / yargi yetkisi',ex:'"The court lacks jurisdiction over the matter."'},
+  {en:'albeit',tr:'her ne kadar / -se de',ex:'"The results were positive, albeit inconclusive."'},
+  {en:'premise',tr:'oncul / temel varsayim',ex:'"The argument rests on a faulty premise."'},
+  {en:'inference',tr:'cıkarim / sonuc',ex:'"The inference drawn from the data was clear."'},
+  {en:'concede',tr:'kabul etmek / teslim olmak',ex:'"The researcher conceded that the sample was small."'},
+  {en:'refute',tr:'curutmek',ex:'"The evidence refutes the original hypothesis."'},
+  {en:'stipulate',tr:'sart kosmak / belirtmek',ex:'"The contract stipulates a 30-day notice period."'},
+  {en:'subsequent',tr:'sonraki / akabindeki',ex:'"Subsequent studies confirmed the initial findings."'},
+];
+kkData.forEach(k=>{k.interval=1;k.rep=0;k.ef=2.5;k.due=0;});
+function kkSave(){localStorage.setItem('kkData',JSON.stringify(kkData.map(k=>({interval:k.interval,rep:k.rep,ef:k.ef,due:k.due}))));}
+function kkLoad(){try{const s=localStorage.getItem('kkData');if(s){const d=JSON.parse(s);d.forEach((v,i)=>{if(kkData[i]){kkData[i].interval=v.interval??1;kkData[i].rep=v.rep??0;kkData[i].ef=v.ef??2.5;kkData[i].due=v.due??0;}});}}catch(e){}}
+kkLoad();
+let kkQueue=[],kkCurrent=null,kkOpen=false;
+function kkBuildQueue(){const now=Date.now();const due=kkData.filter(k=>k.due<=now).sort(()=>Math.random()-0.5);kkQueue=due.length>0?[...due]:[];}
+function kkGetNextDueTime(){const f=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);if(!f.length)return null;const ms=f[0].due-Date.now();const h=Math.floor(ms/3600000);const m=Math.floor((ms%3600000)/60000);return h>0?h+' saat '+m+' dk':m+' dk';}
+function kkUpdateDashCard(){const now=Date.now();const c=kkData.filter(k=>k.due<=now).length;const el=document.getElementById('dk-kelime-bugun');const sub=document.getElementById('dk-kelime-durum');if(el)el.textContent=c>0?c:'OK';if(sub)sub.textContent=c>0?'kart tekrar bekliyor':'Bugün tamamlandi!';}
+function kkShow(){
+  kkBuildQueue();
+  const eyebrow=document.getElementById('kk-eyebrow');
+  if(kkQueue.length===0){
+    const sonraki=kkGetNextDueTime();
+    if(eyebrow)eyebrow.textContent='Spaced Repetition - Bugün tamamlandi';
+    const kkEl=document.getElementById('kk');
+    if(kkEl)kkEl.innerHTML='<div style="text-align:center;padding:24px 16px"><div style="font-size:40px;margin-bottom:12px">tada</div><div style="font-family:DM Serif Display,serif;font-size:20px;margin-bottom:8px">Bugünlük bitti!</div><div style="font-size:13px;color:var(--muted);line-height:1.7">'+(sonraki?'Sonraki kart '+sonraki+' sonra tekrar edilecek.':'Tüm kartlar tekrar edildi.')+'<br>Yarin devam et</div></div>';
+    const act=document.getElementById('kk-actions');if(act)act.style.display='none';
+    return;
+  }
+  kkCurrent=kkQueue.shift();kkOpen=false;
+  if(window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.en);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
+  const front=document.getElementById('kk-front');const back=document.getElementById('kk-back');const act=document.getElementById('kk-actions');
+  if(front)front.innerHTML='<div class="kk-word">'+kkCurrent.en+'</div><div class="kk-hint">Tikla - Turkce gor</div>';
+  if(back)back.innerHTML='<div class="kk-word">'+kkCurrent.tr+'</div><div class="kk-ex">'+kkCurrent.ex+'</div>';
+  if(front)front.style.display='block';
+  if(back)back.style.display='none';
+  if(act)act.style.display='none';
+  if(eyebrow)eyebrow.textContent='Spaced Repetition - '+(kkQueue.length+1)+' kart bekliyor';
+}
+function kkFlip(){kkOpen=!kkOpen;const front=document.getElementById('kk-front');const back=document.getElementById('kk-back');const act=document.getElementById('kk-actions');if(front)front.style.display=kkOpen?'none':'block';if(back)back.style.display=kkOpen?'block':'none';if(act)act.style.display=kkOpen?'flex':'none';if(kkOpen&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(kkCurrent.tr);u.lang='tr-TR';u.rate=0.9;speechSynthesis.speak(u);}}
+function kkAnswer(q){
+  if(!kkCurrent)return;
+  if(q>=3){if(kkCurrent.rep===0)kkCurrent.interval=1;else if(kkCurrent.rep===1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));}
+  else{kkCurrent.rep=0;kkCurrent.interval=1;}
+  kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
+  kkSave();kkUpdateDashCard();kkShow();
+}
+kkUpdateDashCard();
+
+// TUZAK
+const bugun=new Date();const aylar=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
+const tarihEl=document.getElementById('tuzak-tarih');if(tarihEl)tarihEl.textContent='Gunluk Tuzak - '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
+function tuzakAns(btn,correct){const opts=document.querySelectorAll('#tuzak-opts .tuzak-opt');opts.forEach(o=>o.disabled=true);const fb=document.getElementById('tuzak-fb');if(correct){btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='Dogru! 3rd conditional inverted: "if" dustugunde "had" one cikar.';}else{btn.classList.add('err');opts[1].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='Yanlis. 3rd conditional devrik: "if" kalktıgında yardimci fiil one gecer.';}}
+
+// SSS
+function sssToggle(el){el.parentElement.classList.toggle('open');}
+
+// KLOD
+const KB=[
+  {keys:['must','modal perfect'],r:['<b>must have + V3</b> = gecmise dair kanita dayali guclu cıkarim. "might have" ile karıstirmak OSYM tuzagi.','<b>Must</b> = neredeyse kesin, kanit var. <b>Might</b> = sadece ihtimal.']},
+  {keys:['despite','although','zitlik','however'],r:['<b>Despite</b> + isim/V-ing. "Although" ise + cumle ister. "Despite the rain" dogru.','Zitlik sinyalleri cumlenin anlamını tersine cevirir.']},
+  {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.','"Far from" gordugunde zihninde "degil" ekle.']},
+  {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi.','"Would have + V3" gordugunde Type 3 conditional dusun.']},
+];
+const KB_GENEL=['Ilginc! Daha acayabilir misin?','Dogru yonde gidiyorsun. Hangi sinyale bakman gerekir?','Bu cumlede sinyal kelimesini buldun mu?','OSYM bu yapıyı nasil sorar? Dusun.'];
+let chatHistory=[];
+async function sendChat(){
+  const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
+  const body=document.getElementById('chat-body');
+  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;
+  const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
+  const m=val.toLowerCase();let cevap='';
+  for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
+  if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
+  chatHistory.push({role:'user',content:val});
+  await new Promise(r=>setTimeout(r,700));tp.remove();
+  const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
+  chatHistory.push({role:'assistant',content:cevap});
+}
+
+// PLAYER
+const PD=[{t:'KONU 1/19 - TENSES',en:'She has been studying for three hours.',tr:'3 saattir ders calisıyor.'},{t:'KONU 2/19 - MODALS',en:'You must have left before the announcement.',tr:'Duyurudan once ayrilmis olmalisin.'},{t:'KONU 3/19 - CONDITIONALS',en:'If she had studied harder, she would have passed.',tr:'Daha cok calisaydı gecmis olurdu.'},{t:'KONU 4/19 - PASSIVE',en:'The report had been submitted before the deadline.',tr:'Rapor son tarihten once teslim edilmisti.'},{t:'KONU 5/19 - RELATIVE',en:'The man whose car was stolen called the police.',tr:'Arabası calınan adam polisi ardi.'},{t:'KONU 6/19 - CONJUNCTIONS',en:'Despite the rain, they continued the experiment.',tr:'Yagmura ragmen deneye devam ettiler.'},{t:'KONU 7/19 - INVERSION',en:'Never have I seen such a clear example.',tr:'Bu kadar net bir ornek hic gormedim.'},{t:'KONU 8/19 - REPORTED',en:'She said she had finished the report.',tr:'"Raporu bitirdim" dedi.'},{t:'KONU 9/19 - GERUND',en:'She avoided making eye contact.',tr:'Goz temasindan kaçındı.'},{t:'KONU 10/19 - WISHES',en:'I wish I had studied harder.',tr:'Keske daha cok calisaydim.'}];
+let pIdx=2,pPlaying=false,pSpeed=1,pFill=0,pTimer=null;
+function pUpdate(){const d=PD[pIdx%PD.length];document.getElementById('p-topic').textContent=d.t;document.getElementById('p-en').textContent=d.en;document.getElementById('p-tr').textContent=d.tr;}
+function playerToggle(){pPlaying=!pPlaying;document.getElementById('p-play').textContent=pPlaying?'pause':'play';if(pPlaying){pTTS();pStartFill();}else{speechSynthesis.cancel();clearInterval(pTimer);}}
+function pTTS(){if(!window.speechSynthesis)return;speechSynthesis.cancel();const d=PD[pIdx%PD.length];const u1=new SpeechSynthesisUtterance(d.en);u1.lang='en-US';u1.rate=pSpeed;const u2=new SpeechSynthesisUtterance(d.tr);u2.lang='tr-TR';u2.rate=pSpeed;u2.onend=()=>{if(pPlaying){pIdx++;pFill=0;pUpdate();pTTS();}};speechSynthesis.speak(u1);speechSynthesis.speak(u2);}
+function pStartFill(){clearInterval(pTimer);pTimer=setInterval(()=>{pFill=Math.min(pFill+0.5,100);document.getElementById('p-fill').style.width=pFill+'%';if(pFill>=100)pFill=0;},80);}
+function playerFwd(){speechSynthesis.cancel();pIdx++;pFill=0;pUpdate();if(pPlaying)pTTS();}
+function playerBack(){speechSynthesis.cancel();pIdx=Math.max(0,pIdx-1);pFill=0;pUpdate();if(pPlaying)pTTS();}
+function playerNext(){speechSynthesis.cancel();pIdx=Math.min(pIdx+1,PD.length-1);pFill=0;pUpdate();if(pPlaying)pTTS();}
+function playerPrev(){speechSynthesis.cancel();pIdx=Math.max(0,pIdx-1);pFill=0;pUpdate();if(pPlaying)pTTS();}
+function seekPlayer(e){const b=e.currentTarget;pFill=(e.offsetX/b.offsetWidth)*100;document.getElementById('p-fill').style.width=pFill+'%';}
+function playerSpeed(s,el){pSpeed=s;document.querySelectorAll('.p-speed').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(pPlaying){speechSynthesis.cancel();pTTS();}}
+function setSesMod(el){document.querySelectorAll('.ses-mode').forEach(m=>m.classList.remove('active'));el.classList.add('active');}
+pUpdate();
+
+// SINAV GERI SAYIM
+let gsTimer=null;
+function sinavGeriSayim(){
+  const inp=document.getElementById('sinav-tarih');if(!inp||!inp.value){alert('Lutfen bir tarih secin!');return;}
+  const hedef=new Date(inp.value+'T10:15:00').getTime();const display=document.getElementById('geri-sayim-display');display.style.display='block';
+  if(gsTimer)clearInterval(gsTimer);
+  function guncelle(){const fark=hedef-Date.now();if(fark<=0){document.getElementById('gs-gun').textContent='0';document.getElementById('gs-saat').textContent='0';document.getElementById('gs-dak').textContent='0';document.getElementById('gs-mesaj').textContent='Sinav gunu geldi! Basarilar!';clearInterval(gsTimer);return;}document.getElementById('gs-gun').textContent=Math.floor(fark/86400000);document.getElementById('gs-saat').textContent=Math.floor((fark%86400000)/3600000);document.getElementById('gs-dak').textContent=Math.floor((fark%3600000)/60000);const gun=Math.floor(fark/86400000);document.getElementById('gs-mesaj').textContent=gun>60?'Harika! Cok vaktin var.':gun>30?'iyi tempo!':gun>14?'Son sprint!':'Son 2 hafta!';}
+  guncelle();gsTimer=setInterval(guncelle,60000);
+}
+
+// SCROLL ANIMASYONLARI
+const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.15});
+document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>{scrollObserver.observe(el);});
+function animateCount(el){const target=parseInt(el.dataset.count);const suffix=el.dataset.suffix||'';const prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
+
+// CANLI BILDIRIMLER
+const bildirimler=[{isim:'Aras. Gor. A. Yilmaz',eylem:'Pro pakete katildi',sure:'2 dk once'},{isim:'Av. M. Kaya',eylem:'ilk dersini tamamladi',sure:'5 dk once'},{isim:'Dr. D. Sahin',eylem:'e-kitabi indirdi',sure:'8 dk once'}];
+let bIdx=0;
+function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">A</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:11px;color:#6b7280">'+b.eylem+' - '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
+setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
+
+// EXIT INTENT
+let exitShown=false;
+document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
+function exitKapat(){document.getElementById('exit-popup').style.display='none';}
+
+// DINAMIK CSS
+const xCSS=document.createElement('style');xCSS.textContent='.scroll-hidden{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}.scroll-hidden.visible{opacity:1!important;transform:none!important}@keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}@keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.5}}.chat-typing span{animation:tdot 1.2s infinite}';
+document.head.appendChild(xCSS);
+</script>
+</body>
 </html>
