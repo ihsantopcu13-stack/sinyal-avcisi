@@ -1036,15 +1036,37 @@ let chatHistory=[];
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
   const body=document.getElementById('chat-body');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;
-  const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
-  const m=val.toLowerCase();let cevap='';
-  for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-  if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
+  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
+  inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
+  const tp=document.createElement('div');tp.className='msg k';
+  tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
+  body.appendChild(tp);body.scrollTop=body.scrollHeight;
   chatHistory.push({role:'user',content:val});
-  await new Promise(r=>setTimeout(r,700));tp.remove();
-  const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
-  chatHistory.push({role:'assistant',content:cevap});
+  try{
+    const res=await fetch('/api/klod',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        messages:chatHistory.slice(-10),
+        system:'Sen KLOD\'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin. Türkçe konuşuyorsun. Gramer yapılarını Türkçe açıklıyorsun. Öğrenciyi düşündürmek için soru soruyorsun, direkt cevap vermek yerine. despite, although, far from, by no means, hardly, must have gibi sinyal yapılarında uzmanlaşmışsın. Kısa ve net cevaplar ver, max 3-4 cümle.'
+      })
+    });
+    const data=await res.json();
+    tp.remove();
+    const cevap=data.content?.[0]?.text||'Bir hata oluştu.';
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    chatHistory.push({role:'assistant',content:cevap});
+  }catch(err){
+    tp.remove();
+    const m=val.toLowerCase();let cevap='';
+    for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
+    if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
+    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    chatHistory.push({role:'assistant',content:cevap});
+  }
+  inp.disabled=false;inp.focus();
 }
 
 // PLAYER
