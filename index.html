@@ -915,7 +915,13 @@ function kkShow(){
   if(wf)wf.textContent=kkCurrent.en;
   if(wb)wb.textContent=kkCurrent.tr;
   if(eb)eb.textContent=kkCurrent.ex;
-  if(front)front.style.display='block';if(back)back.style.display='none';if(act)act.style.display='none';
+  // Her seferinde front/back/actions'ı sıfırla
+  const frontEl=document.getElementById('kk-front');
+  const backEl=document.getElementById('kk-back');
+  const actEl=document.getElementById('kk-actions');
+  if(frontEl)frontEl.style.display='block';
+  if(backEl)backEl.style.display='none';
+  if(actEl)actEl.style.display='none';
   if(eyebrow)eyebrow.textContent='Spaced Repetition — '+(kkQueue.length+1)+' kart bekliyor';
 }
 function kkFlip(){
