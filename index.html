@@ -903,6 +903,8 @@ function dnav(el){
     document.getElementById('mod-kelime').style.display='block';kkShow();
   } else if(txt.includes('Gunluk')){
     document.getElementById('mod-tuzak').style.display='block';tuzakRender();
+    } else if(txt.includes('SAT')){
+  document.getElementById('mod-sat').style.display='block';satRender();
   } else if(txt.includes('Ses')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between;align-items:center"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
