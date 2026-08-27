@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -334,55 +335,6 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 .pwa-banner-text b{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
 .pwa-install-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
 .pwa-close-btn{background:none;border:none;color:rgba(247,246,242,.4);font-size:20px;cursor:pointer;padding:4px}
-  /* ============ SAT METODU STİLLERİ ============ */
-.sat-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden}
-.sat-hero::before{content:'⚡';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:48px;opacity:.1}
-.sat-hero-title{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:4px}
-.sat-hero-sub{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}
-.sat-steps{display:flex;gap:6px;margin-bottom:14px}
-.sat-step-pill{flex:1;background:rgba(45,91,227,.12);border:1px solid rgba(45,91,227,.25);border-radius:8px;padding:8px 10px;text-align:center;cursor:pointer;transition:all .2s}
-.sat-step-pill.active{background:var(--signal);border-color:var(--signal)}
-.sat-step-pill-icon{font-size:16px;display:block;margin-bottom:3px}
-.sat-step-pill-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.sat-step-pill.active .sat-step-pill-label{color:#fff}
-.sat-signal-card{background:var(--paper);border:2px solid var(--signal);border-radius:10px;padding:12px 14px;margin-bottom:10px}
-.sat-signal-title{font-size:13px;font-weight:700;color:var(--signal);margin-bottom:6px}
-.sat-signal-words{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-.sat-word-tag{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;background:var(--sl);color:var(--signal);padding:3px 9px;border-radius:6px}
-.sat-word-tag.trap{background:#fef2f2;color:var(--trap)}
-.sat-word-tag.time{background:#fefce8;color:#92400e}
-.sat-rule{font-size:12px;color:var(--muted);line-height:1.6;border-left:3px solid var(--signal);padding-left:10px}
-.sat-timer{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px}
-.sat-timer-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
-.sat-timer-fill{height:100%;background:linear-gradient(90deg,#22c55e,var(--signal));border-radius:2px;transition:width .1s linear}
-.sat-timer-count{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--signal);min-width:28px;text-align:right}
-.sat-soru-sent{font-size:13px;font-weight:500;line-height:1.8;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:8px}
-.sat-highlight{background:var(--sl);color:var(--signal);padding:1px 4px;border-radius:3px;font-weight:700;cursor:help;position:relative}
-.sat-highlight.trap{background:#fef2f2;color:var(--trap)}
-.sat-highlight.time{background:#fefce8;color:#92400e}
-.sat-highlight[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100%+6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10px;padding:4px 8px;border-radius:5px;white-space:nowrap;z-index:50}
-.sat-akis{background:linear-gradient(90deg,#f0fdf4,#e8eeff);border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink)}
-.sat-akis-step{background:#fff;border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--signal)}
-.sat-akis-arrow{color:var(--muted)}
-.sat-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
-.sat-opt{background:transparent;border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;color:var(--ink);transition:all .15s;line-height:1.4}
-.sat-opt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
-.sat-opt.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
-.sat-opt.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
-.sat-fb{font-size:12px;font-weight:600;min-height:14px;margin-bottom:8px;line-height:1.5}
-.sat-fb.ok{color:#16a34a}.sat-fb.err{color:var(--trap)}
-.sat-next-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:none}
-.sat-progress{display:flex;gap:4px;margin-bottom:12px}
-.sat-prog-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s}
-.sat-prog-dot.done{background:#22c55e}
-.sat-prog-dot.active{background:var(--signal)}
-.sat-score-card{background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:20px;text-align:center;color:#fff}
-.sat-score-num{font-family:'DM Serif Display',serif;font-size:52px;color:#e8d5a3;line-height:1}
-.sat-score-label{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px}
-.sat-stat-row{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
-.sat-stat{background:rgba(255,255,255,.08);border-radius:8px;padding:10px 16px;text-align:center}
-.sat-stat-val{font-size:20px;font-weight:700;color:#e8d5a3}
-.sat-stat-lbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
 </style>
 </head>
 <body>
@@ -643,7 +595,6 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
           <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
-          <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
         </div>
@@ -886,7 +837,7 @@ async function dnavChat(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         messages:dnavHistory,
-        system:`Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin. Türkçe konuşuyorsun. Gramer yapılarını Türkçe açıklıyorsun. Öğrenciyi düşündürmek için soru soruyorsun. despite, although, far from, by no means, hardly, must have yapılarında uzmanlaşmışsın. ÖNEMLİ: Markdown kullanma. Düz metin yaz. Maksimum 3-4 kısa cümle. Sonunda bir soru sor.`
+        system:`Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin. Türkçe konuşuyorsun. Gramer yapılarını Türkçe açıklıyorsun. Öğrenciyi düşündürmek için soru soruyorsun, direkt cevap vermek yerine. despite, although, far from, by no means, hardly, must have gibi sinyal yapılarında uzmanlaşmışsın. Kısa ve net cevaplar ver, max 3-4 cümle.`
       })
     });
     const data=await res.json();
@@ -1086,37 +1037,15 @@ let chatHistory=[];
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
   const body=document.getElementById('chat-body');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
-  inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
-  const tp=document.createElement('div');tp.className='msg k';
-  tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
-  body.appendChild(tp);body.scrollTop=body.scrollHeight;
+  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;
+  const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
+  const m=val.toLowerCase();let cevap='';
+  for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
+  if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
   chatHistory.push({role:'user',content:val});
-  try{
-    const res=await fetch('/api/klod',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        messages:chatHistory.slice(-10),
-        system:'Sen KLOD\'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin. Türkçe konuşuyorsun. Gramer yapılarını Türkçe açıklıyorsun. Öğrenciyi düşündürmek için soru soruyorsun, direkt cevap vermek yerine. despite, although, far from, by no means, hardly, must have gibi sinyal yapılarında uzmanlaşmışsın. ÖNEMLİ: Markdown kullanma (**, ##, ``` gibi). Düz metin yaz. Maksimum 3-4 kısa cümle. Sonunda bir soru sor.'
-      })
-    });
-    const data=await res.json();
-    tp.remove();
-    const cevap=data.content?.[0]?.text||'Bir hata oluştu.';
-    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
-    body.appendChild(km);body.scrollTop=body.scrollHeight;
-    chatHistory.push({role:'assistant',content:cevap});
-  }catch(err){
-    tp.remove();
-    const m=val.toLowerCase();let cevap='';
-    for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-    if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
-    body.appendChild(km);body.scrollTop=body.scrollHeight;
-    chatHistory.push({role:'assistant',content:cevap});
-  }
-  inp.disabled=false;inp.focus();
+  await new Promise(r=>setTimeout(r,700));tp.remove();
+  const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
+  chatHistory.push({role:'assistant',content:cevap});
 }
 
 // PLAYER
