@@ -1389,7 +1389,8 @@ setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
 setTimeout(hataCountGuncelle, 500);
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
-function exitKapat(){document.getElementById('exit-popup').style.display='none';}
+function exitKapat(){document.getElementById('exit-popup').style.display='none';}function streakSoruEkle(tip){let d=streakLoad();d.toplamSoru=(d.toplamSoru||0)+1;d.buHaftaSoru=(d.buHaftaSoru||0)+1;d.bugunCalistiMi=true;if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;rozetKontrol(d);streakSave(d);streakRender(d);}
+function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 </script>
 </body>
 </html>
