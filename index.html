@@ -869,7 +869,7 @@ function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clear
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
-  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();}
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='sat')satRender();}
 }
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
