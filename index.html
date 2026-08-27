@@ -1092,7 +1092,7 @@ function tuzakRender(){
   const z=adaptifZorlukBadge();
   if(lbl)lbl.innerHTML='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear()+' · Soru '+(tuzakIdx+1)+'/'+TUZAK_HAVUZ.length+` <span class="zorluk-badge ${z.cls}">${z.ikon} ${z.seviye}</span>`;
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
 }
 function tuzakAns(btn,correct,dogru){
   if(tuzakAnswered)return;tuzakAnswered=true;
@@ -1121,7 +1121,7 @@ function tuzakSonraki(){
   tuzakIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;tuzakAnswered=false;
   const soru=TUZAK_HAVUZ[tuzakIdx];
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
 }
 // Tarih etiketini sayfa açılışında set et
 (function(){
