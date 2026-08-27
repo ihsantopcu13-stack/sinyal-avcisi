@@ -1258,6 +1258,7 @@ function streakInit(){
   }
   streakSave(d);streakRender(d);return d;
 }
+let streakData=streakInit();
 function streakRender(d){
   const sayiEl=document.getElementById('streak-sayi');
   const haftaEl=document.getElementById('streak-bu-hafta');
@@ -1480,7 +1481,6 @@ function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;co
 setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
 // Sayfa açılışında hata count badge güncelle
 setTimeout(hataCountGuncelle, 500);
-let streakData=streakInit();
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
