@@ -6,7 +6,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sinyal Avcisi - YDS & YOKDiL Hazirlik</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
+function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
+function xpEkle(miktar,sebep){const d=xpLoad();const bugun=new Date().toDateString();if(d.bugunTarih!==bugun){d.bugunKazanilan=0;d.bugunTarih=bugun;}d.toplam+=miktar;d.bugunKazanilan+=miktar;d.log.unshift({miktar,sebep,tarih:bugun});if(d.log.length>50)d.log=d.log.slice(0,50);xpSave(d);xpToast(miktar,sebep);xpGuncelle();}
+function xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';t.textContent='+'+miktar+' XP — '+sebep;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
+function xpGuncelle(){const d=xpLoad();const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}
+
+function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
+function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
+function xpEkle(miktar,sebep){const d=xpLoad();const bugun=new Date().toDateString();if(d.bugunTarih!==bugun){d.bugunKazanilan=0;d.bugunTarih=bugun;}d.toplam+=miktar;d.bugunKazanilan+=miktar;d.log.unshift({miktar,sebep,tarih:bugun});if(d.log.length>50)d.log=d.log.slice(0,50);xpSave(d);xpToast(miktar,sebep);xpGuncelle();}
+function xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';t.textContent='+'+miktar+' XP — '+sebep;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
+function xpGuncelle(){const d=xpLoad();const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}
+</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#0c0e14;--paper:#f7f6f2;--signal:#2d5be3;--sl:#e8eeff;--trap:#e03c3c;--contrast:#e8d5a3;--muted:#6b7280;--border:#e5e3dc}
@@ -628,8 +640,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
           <div class="dn-item" onclick="dnav(this)">⚡ Gunluk Tuzak</div>
                   <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
-        <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>           
-            <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
+        <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
         <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
       </div>
       <div class="dash-main">
@@ -1290,7 +1301,7 @@ function rozetBildirim(r){
   div.innerHTML=`<div style="font-size:36px;margin-bottom:6px">${r.icon}</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:4px;font-family:'JetBrains Mono',monospace">Rozet Kazandın!</div><div style="font-size:16px;font-weight:700;color:var(--ink)">${r.ad}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${r.desc}</div>`;
   document.body.appendChild(div);
   setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},3500);
-
+}
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 let streakData=streakInit();
 // ============================================================
@@ -1376,7 +1387,6 @@ setTimeout(hataCountGuncelle, 500);
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}function streakSoruEkle(tip){let d=streakLoad();d.toplamSoru=(d.toplamSoru||0)+1;d.buHaftaSoru=(d.buHaftaSoru||0)+1;d.bugunCalistiMi=true;if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;rozetKontrol(d);streakSave(d);streakRender(d);}
-function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 </script>
 </body>
 </html>
