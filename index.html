@@ -925,6 +925,7 @@ function dnav(el){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
    t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><div style="background:var(--sl);border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--signal)" id="xp-toplam">0 XP</div><div style="font-size:11px;color:var(--muted)">Toplam XP</div></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:#16a34a">42</div><div style="font-size:11px;color:var(--muted)">Bu Hafta Soru</div></div></div>';const xd=xpLoad();document.getElementById("xp-toplam").textContent=xd.toplam+" XP";
 }
+}
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
 async function dnavChat(){
