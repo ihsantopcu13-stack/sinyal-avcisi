@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sinyal Avcisi - YDS & YOKDiL Hazirlik</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">arse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
 function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
 function xpEkle(miktar,sebep){const d=xpLoad();const bugun=new Date().toDateString();if(d.bugunTarih!==bugun){d.bugunKazanilan=0;d.bugunTarih=bugun;}d.toplam+=miktar;d.bugunKazanilan+=miktar;d.log.unshift({miktar,sebep,tarih:bugun});if(d.log.length>50)d.log=d.log.slice(0,50);xpSave(d);xpToast(miktar,sebep);xpGuncelle();}
 function xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';t.textContent='+'+miktar+' XP — '+sebep;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
@@ -15,7 +16,7 @@ function xpGuncelle(){const d=xpLoad();const el=document.getElementById('xp-topl
 function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
 function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
 function xpEkle(miktar,sebep){const d=xpLoad();const bugun=new Date().toDateString();if(d.bugunTarih!==bugun){d.bugunKazanilan=0;d.bugunTarih=bugun;}d.toplam+=miktar;d.bugunKazanilan+=miktar;d.log.unshift({miktar,sebep,tarih:bugun});if(d.log.length>50)d.log=d.log.slice(0,50);xpSave(d);xpToast(miktar,sebep);xpGuncelle();}
-function xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';t.textContent='+'+miktar+' XP - '+sebep;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
+function xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3)';t.textContent='+'+miktar+' XP — '+sebep;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
 function xpGuncelle(){const d=xpLoad();const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}
 </script>
 <style>
@@ -640,7 +641,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dn-item" onclick="dnav(this)">⚡ Gunluk Tuzak</div>
                   <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
         <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
-        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div></div></div>
+        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div></div>
       </div>
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
@@ -923,6 +924,7 @@ function dnav(el){
   } else if(txt.includes('Rapor')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
    t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><div style="background:var(--sl);border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--signal)" id="xp-toplam">0 XP</div><div style="font-size:11px;color:var(--muted)">Toplam XP</div></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:#16a34a">42</div><div style="font-size:11px;color:var(--muted)">Bu Hafta Soru</div></div></div>';const xd=xpLoad();document.getElementById("xp-toplam").textContent=xd.toplam+" XP";
+}
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
@@ -1386,13 +1388,6 @@ setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}function streakSoruEkle(tip){let d=streakLoad();d.toplamSoru=(d.toplamSoru||0)+1;d.buHaftaSoru=(d.buHaftaSoru||0)+1;d.bugunCalistiMi=true;if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;rozetKontrol(d);streakSave(d);streakRender(d);}
-
-function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}\nfunction xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}\nfunction xpEkle(miktar,sebep){const d=xpLoad();const bugun=new Date().toDateString();if(d.bugunTarih!==bugun){d.bugunKazanilan=0;d.bugunTarih=bugun;}d.toplam+=miktar;d.bugunKazanilan+=miktar;d.log.unshift({miktar,sebep,tarih:bugun});if(d.log.length>50)d.log=d.log.slice(0,50);xpSave(d);xpToast(miktar,sebep);xpGuncelle();}\nfunction xpToast(miktar,sebep){const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999';t.textContent='+'+miktar+' XP';document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}\nfunction xpGuncelle(){const d=xpLoad();const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}
-
-function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}\nfunction xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}\nfunction xpEkle(m,s){const d=xpLoad();const b=new Date().toDateString();if(d.bugunTarih!==b){d.bugunKazanilan=0;d.bugunTarih=b;}d.toplam+=m;d.bugunKazanilan+=m;d.log.unshift({m,s,tarih:b});if(d.log.length=d.log.slice(0,50);xpSave(d);const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999';t.textContent='+'+m+' XP';document.body.appendChild(t);setTimeout(()=,2200);const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}\n
-function xpLoad(){try{const d=localStorage.getItem('sa_xp');return d?JSON.parse(d):{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}catch(e){return{toplam:0,bugunKazanilan:0,bugunTarih:'',log:[]};}}
-function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
-function xpEkle(m,s){const d=xpLoad();const b=new Date().toDateString();if(d.bugunTarih!==b){d.bugunKazanilan=0;d.bugunTarih=b;}d.toplam+=m;d.bugunKazanilan+=m;xpSave(d);const t=document.createElement('div');t.style.cssText='position:fixed;bottom:80px;right:20px;background:#0c0e14;color:#e8d5a3;font-size:13px;font-weight:700;padding:10px 18px;border-radius:10px;z-index:9999';t.textContent='+'+m+' XP';document.body.appendChild(t);setTimeout(()=>t.remove(),2200);const el=document.getElementById('xp-toplam');if(el)el.textContent=d.toplam+' XP';}
 </script>
 </body>
 </html>
