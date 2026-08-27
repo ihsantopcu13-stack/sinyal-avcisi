@@ -1107,6 +1107,15 @@ function tuzakAns(btn,correct,dogru){
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
   }
   const nb=document.getElementById('tuzak-next-btn');if(nb)nb.style.display='inline-block';
+  // Paylaş butonu göster
+  const pb=document.getElementById('tuzak-paylas-btn');
+  if(pb){pb.style.display='inline-block';pb.onclick=()=>tuzakPaylas(correct,soru);}
+}
+function tuzakPaylas(correct,soru){
+  const sonuc=correct?'✅ Doğru bildim':'❌ Yanıldım';
+  const metin=sonuc+' — Günlük YDS tuzağı\n\n"'+soru.sent.replace(/<[^>]*>/g,'').substring(0,60)+'..."\n\nSen de dene 👇\nsinyal-avcisi-five.vercel.app\n\n#YDS #YOKDİL #SinyalAvcısı #İngilizce';
+  if(navigator.share){navigator.share({title:'Sinyal Avcısı — Günlük Tuzak',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
+  else{navigator.clipboard.writeText(metin).then(()=>alert('Metin kopyalandı! Instagram biyografine veya story\'e yapıştır.'));}
 }
 function tuzakSonraki(){
   tuzakIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;tuzakAnswered=false;
