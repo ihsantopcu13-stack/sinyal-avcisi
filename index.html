@@ -331,6 +331,53 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 /* PWA install banner */
 .pwa-banner{display:none;position:fixed;bottom:0;inset:auto 0;background:var(--ink);color:var(--paper);padding:14px 5vw;z-index:400;flex-direction:row;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.1)}
 .pwa-banner.show{display:flex}
+  /* ============ SAT METODU STİLLERİ ============ */
+.sat-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden}
+.sat-hero-title{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;margin-bottom:4px}
+.sat-hero-sub{font-size:11px;color:rgba(255,255,255,.5);line-height:1.5}
+.sat-steps{display:flex;gap:6px;margin-bottom:14px}
+.sat-step-pill{flex:1;background:rgba(45,91,227,.12);border:1px solid rgba(45,91,227,.25);border-radius:8px;padding:8px 10px;text-align:center;cursor:pointer;transition:all .2s}
+.sat-step-pill.active{background:var(--signal);border-color:var(--signal)}
+.sat-step-pill-icon{font-size:16px;display:block;margin-bottom:3px}
+.sat-step-pill-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sat-step-pill.active .sat-step-pill-label{color:#fff}
+.sat-signal-card{background:var(--paper);border:2px solid var(--signal);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.sat-signal-title{font-size:13px;font-weight:700;color:var(--signal);margin-bottom:6px}
+.sat-signal-words{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.sat-word-tag{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;background:var(--sl);color:var(--signal);padding:3px 9px;border-radius:6px}
+.sat-word-tag.trap{background:#fef2f2;color:var(--trap)}
+.sat-word-tag.time{background:#fefce8;color:#92400e}
+.sat-rule{font-size:12px;color:var(--muted);line-height:1.6;border-left:3px solid var(--signal);padding-left:10px}
+.sat-timer{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:10px}
+.sat-timer-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.sat-timer-fill{height:100%;background:linear-gradient(90deg,#22c55e,var(--signal));border-radius:2px;transition:width .1s linear}
+.sat-timer-count{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--signal);min-width:28px;text-align:right}
+.sat-soru-sent{font-size:13px;font-weight:500;line-height:1.8;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:8px}
+.sat-highlight{background:var(--sl);color:var(--signal);padding:1px 4px;border-radius:3px;font-weight:700;cursor:help;position:relative}
+.sat-highlight.trap{background:#fef2f2;color:var(--trap)}
+.sat-highlight.time{background:#fefce8;color:#92400e}
+.sat-akis{background:linear-gradient(90deg,#f0fdf4,#e8eeff);border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink)}
+.sat-akis-step{background:#fff;border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--signal)}
+.sat-akis-arrow{color:var(--muted)}
+.sat-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.sat-opt{background:transparent;border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-align:left;color:var(--ink);transition:all .15s;line-height:1.4}
+.sat-opt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
+.sat-opt.ok{background:#f0fdf4;border-color:#22c55e;color:#16a34a}
+.sat-opt.err{background:#fef2f2;border-color:var(--trap);color:var(--trap)}
+.sat-fb{font-size:12px;font-weight:600;min-height:14px;margin-bottom:8px;line-height:1.5}
+.sat-fb.ok{color:#16a34a}.sat-fb.err{color:var(--trap)}
+.sat-next-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:none}
+.sat-progress{display:flex;gap:4px;margin-bottom:12px}
+.sat-prog-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s}
+.sat-prog-dot.done{background:#22c55e}
+.sat-prog-dot.active{background:var(--signal)}
+.sat-score-card{background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:20px;text-align:center;color:#fff}
+.sat-score-num{font-family:'DM Serif Display',serif;font-size:52px;color:#e8d5a3;line-height:1}
+.sat-score-label{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:14px}
+.sat-stat-row{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.sat-stat{background:rgba(255,255,255,.08);border-radius:8px;padding:10px 16px;text-align:center}
+.sat-stat-val{font-size:20px;font-weight:700;color:#e8d5a3}
+.sat-stat-lbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
 .pwa-banner-text{flex:1;font-size:13px}
 .pwa-banner-text b{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
 .pwa-install-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
