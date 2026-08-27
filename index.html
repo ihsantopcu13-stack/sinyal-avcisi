@@ -1290,7 +1290,88 @@ function rozetBildirim(r){
   div.innerHTML=`<div style="font-size:36px;margin-bottom:6px">${r.icon}</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:4px;font-family:'JetBrains Mono',monospace">Rozet Kazandın!</div><div style="font-size:16px;font-weight:700;color:var(--ink)">${r.ad}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${r.desc}</div>`;
   document.body.appendChild(div);
   setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},3500);
+// ============================================================
+// XP + LEADERBOARD SİSTEMİ
+// ============================================================
+const XP_TABLOSU={sinyal:10,kelime:8,tuzak:12,sat:15,modal:20};
+const SEVIYE_TABLOSU=[
+  {min:0,max:99,ad:'🌱 Çaylak',renk:'#6b7280'},
+  {min:100,max:299,ad:'🎯 Avcı',renk:'var(--signal)'},
+  {min:300,max:599,ad:'⚡ Usta',renk:'#7c3aed'},
+  {min:600,max:999,ad:'🏆 Şampiyon',renk:'#d97706'},
+  {min:1000,max:99999,ad:'👑 Efsane',renk:'#e03c3c'},
+];
+function xpLoad(){try{return JSON.parse(localStorage.getItem('sa_xp')||'{"toplam":0,"bugun":0,"hafta":0,"son":""}');}catch(e){return{toplam:0,bugun:0,hafta:0,son:""};}}
+function xpSave(d){try{localStorage.setItem('sa_xp',JSON.stringify(d));}catch(e){}}
+function xpKazan(tip,streak){
+  let d=xpLoad();
+  let puan=XP_TABLOSU[tip]||10;
+  if(streak>=7)puan=Math.round(puan*2);
+  else if(streak>=3)puan=Math.round(puan*1.5);
+  d.toplam=(d.toplam||0)+puan;
+  d.bugun=(d.bugun||0)+puan;
+  d.hafta=(d.hafta||0)+puan;
+  xpSave(d);
+  xpBildirim(puan,tip);
+  seviyeKontrol(d.toplam);
+  liderTabloGuncelle(d);
+  return puan;
 }
+function xpBildirim(puan,tip){
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;top:110px;right:20px;z-index:700;background:var(--ink);color:#e8d5a3;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;animation:slideInLeft .3s ease;pointer-events:none';
+  div.textContent='+'+puan+' XP ⚡';
+  document.body.appendChild(div);
+  setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},2000);
+}
+function seviyeAl(toplam){return SEVIYE_TABLOSU.find(s=>toplam>=s.min&&toplam<=s.max)||SEVIYE_TABLOSU[0];}
+function seviyeKontrol(toplam){
+  const s=seviyeAl(toplam);
+  const el=document.getElementById('xp-seviye-badge');
+  if(el){el.textContent=s.ad;el.style.color=s.renk;}
+  const bar=document.getElementById('xp-bar-fill');
+  const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>toplam);
+  if(bar&&sonraki){const yuzde=((toplam-s.min)/(sonraki.min-s.min)*100);bar.style.width=Math.min(yuzde,100)+'%';}
+  const toplamEl=document.getElementById('xp-toplam');
+  if(toplamEl)toplamEl.textContent=toplam+' XP';
+}
+function liderTabloGuncelle(xp){
+  try{
+    const isim=currentUser?.user_metadata?.ad||currentUser?.email?.split('@')[0]||'Misafir';
+    let lb=JSON.parse(localStorage.getItem('sa_lb')||'[]');
+    const idx=lb.findIndex(x=>x.isim===isim);
+    if(idx>=0)lb[idx].xp=xp.hafta;
+    else lb.push({isim,xp:xp.hafta,seviye:seviyeAl(xp.toplam).ad});
+    lb.sort((a,b)=>b.xp-a.xp);
+    lb=lb.slice(0,10);
+    localStorage.setItem('sa_lb',JSON.stringify(lb));
+  }catch(e){}
+}
+function liderTabloGoster(){
+  try{
+    const lb=JSON.parse(localStorage.getItem('sa_lb')||'[]');
+    const xp=xpLoad();
+    const s=seviyeAl(xp.toplam);
+    return`<div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:16px;margin-bottom:12px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px">⚡ XP DURUMUN</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div id="xp-seviye-badge" style="font-size:16px;font-weight:700;color:${s.renk}">${s.ad}</div>
+        <div id="xp-toplam" style="font-family:'DM Serif Display',serif;font-size:24px;color:#e8d5a3">${xp.toplam} XP</div>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:12px">
+        <div id="xp-bar-fill" style="height:100%;background:linear-gradient(90deg,var(--signal),#818cf8);border-radius:3px;width:0%;transition:width .5s"></div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4)">Bugün: <b style="color:#e8d5a3">${xp.bugun} XP</b> · Bu hafta: <b style="color:#e8d5a3">${xp.hafta} XP</b></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">🏆 HAFTALIK LİDERLİK</div>
+    ${lb.length===0?'<div style="text-align:center;padding:20px;font-size:13px;color:var(--muted)">Henüz kimse yok — ilk sen ol! 🚀</div>':
+    lb.map((k,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;margin-bottom:6px;background:${i===0?'rgba(232,213,163,.1)':i===1?'rgba(255,255,255,.05)':'transparent'};border:1px solid ${i===0?'rgba(232,213,163,.2)':'var(--border)'}">
+      <div style="font-family:'DM Serif Display',serif;font-size:18px;color:${i===0?'#e8d5a3':i===1?'#94a3b8':'var(--muted)'};min-width:24px">${i+1}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">${k.isim}</div><div style="font-size:11px;color:var(--muted)">${k.seviye||''}</div></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--signal)">${k.xp} XP</div>
+    </div>`).join('')}`;
+  }catch(e){return '<div style="padding:20px;text-align:center;color:var(--muted)">Yükleniyor...</div>';}
+}}
 function streakSoruEkle(tip){
   let d=streakLoad();
   d.toplamSoru=(d.toplamSoru||0)+1;
