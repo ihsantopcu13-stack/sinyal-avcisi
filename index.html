@@ -912,6 +912,7 @@ function dnav(el){
   } else if(txt.includes('Rapor')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
    t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><div style="background:var(--sl);border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--signal)" id="xp-toplam">0 XP</div><div style="font-size:11px;color:var(--muted)">Toplam XP</div></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:#16a34a">42</div><div style="font-size:11px;color:var(--muted)">Bu Hafta Soru</div></div></div>';const xd=xpLoad();document.getElementById("xp-toplam").textContent=xd.toplam+" XP";
+  }
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
@@ -1369,13 +1370,6 @@ function liderTabloGoster(){
     else{lb.forEach(function(k,i){html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;margin-bottom:6px;background:'+(i===0?'rgba(232,213,163,.1)':'transparent')+';border:1px solid #e5e3dc">';html+='<div style="font-size:18px;min-width:24px;color:'+(i===0?'#e8d5a3':'#6b7280')+'">'+(i+1)+'</div>';html+='<div style="flex:1"><div style="font-size:13px;font-weight:600">'+k.isim+'</div></div>';html+='<div style="font-size:13px;font-weight:700;color:#2d5be3">'+k.xp+' XP</div>';html+='</div>';});}
     return html;
   }catch(e){return '<div style="padding:20px;text-align:center;color:#6b7280">Yükleniyor...</div>';}
-}
-  let d=streakLoad();
-  d.toplamSoru=(d.toplamSoru||0)+1;
-  d.buHaftaSoru=(d.buHaftaSoru||0)+1;
-  d.bugunCalistiMi=true;
-  if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
- rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
 }
 function streakSoruEkle(tip){
   let d=streakLoad();
