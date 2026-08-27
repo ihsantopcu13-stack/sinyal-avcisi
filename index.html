@@ -1378,7 +1378,7 @@ function streakSoruEkle(tip){
   d.buHaftaSoru=(d.buHaftaSoru||0)+1;
   d.bugunCalistiMi=true;
   if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
-  rozetKontrol(d);streakSave(d);streakRender(d);
+ rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 let streakData=streakInit();
