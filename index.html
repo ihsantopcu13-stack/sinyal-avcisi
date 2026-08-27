@@ -1320,7 +1320,7 @@ function xpBildirim(puan,tip){
   const div=document.createElement('div');
   div.style.cssText='position:fixed;top:110px;right:20px;z-index:700;background:var(--ink);color:#e8d5a3;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;animation:slideInLeft .3s ease;pointer-events:none';
   div.textContent='+'+puan+' XP ⚡';
-  document.body.appendChild(div);
+ div.textContent='+'+puan+' XP';
   setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},2000);
 }
 function seviyeAl(toplam){return SEVIYE_TABLOSU.find(s=>toplam>=s.min&&toplam<=s.max)||SEVIYE_TABLOSU[0];}
