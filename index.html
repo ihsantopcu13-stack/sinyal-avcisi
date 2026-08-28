@@ -299,7 +299,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   .dash-karts{grid-template-columns:1fr 1fr}
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
 }
-.scroll-hidden{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.scroll-hidden{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}.scroll-reveal{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
 .scroll-hidden.visible{opacity:1;transform:none}
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
 @keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}
@@ -536,11 +536,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="nasil-inner">
     <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasil Calisir?</div><div class="section-title">Gelisin ilk gunundan sinav sabahina</div></div>
     <div>
-      <div class="step scroll-hidden"><div class="step-num">01</div><div><div class="step-title">Gel, alanini sec</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Saglik - bir tikla seciyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gun ucretsiz</span></div></div></div>
-      <div class="step scroll-hidden"><div class="step-num">02</div><div><div class="step-title">Sinyal Okuma Lab'a gir</div><div class="step-desc">Sana OSYM formatinda bir metin geliyor. Baglaclar mavi, tuzak ifadeler kirmizi, kilit kelimeler sari.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
-      <div class="step scroll-hidden"><div class="step-num">03</div><div><div class="step-title">Takildiysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlis cozduun ya da mantigini anlayamadin. KLOD'a yaziyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
-      <div class="step scroll-hidden"><div class="step-num">04</div><div><div class="step-title">Otobuzte Ses Kurs, yatmadan Gunluk Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. Ingilizce + Turkce. Gece yatmadan 60 saniye Gunluk Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
-      <div class="step scroll-hidden"><div class="step-num">05</div><div><div class="step-title">Haftalik rapor kartin geliyor</div><div class="step-desc">Kac soru cozduun, hangi yapida hata yaptin, tahmini puanin ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanini sec</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Saglik - bir tikla seciyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gun ucretsiz</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Sinyal Okuma Lab'a gir</div><div class="step-desc">Sana OSYM formatinda bir metin geliyor. Baglaclar mavi, tuzak ifadeler kirmizi, kilit kelimeler sari.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takildiysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlis cozduun ya da mantigini anlayamadin. KLOD'a yaziyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobuzte Ses Kurs, yatmadan Gunluk Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. Ingilizce + Turkce. Gece yatmadan 60 saniye Gunluk Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalik rapor kartin geliyor</div><div class="step-desc">Kac soru cozduun, hangi yapida hata yaptin, tahmini puanin ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
     </div>
   </div>
 </section>
@@ -1775,7 +1775,7 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pwaPrompt=e
 function pwaBanner(show){const b=document.getElementById('pwa-banner');if(b){b.classList.toggle('show',show);if(show){document.body.style.paddingBottom='70px';}else{document.body.style.paddingBottom='0';}}}
 async function pwaInstall(){if(pwaPrompt){pwaPrompt.prompt();const r=await pwaPrompt.userChoice;if(r.outcome==='accepted'){pwaBanner(false);pwaPrompt=null;}}}
 
-const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.15});
+const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.05,rootMargin:"0px 0px -50px 0px"});
 document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
 function animateCount(el){const target=parseInt(el.dataset.count),suffix=el.dataset.suffix||'',prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
 
