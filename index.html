@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sinyal Avcisi - YDS & YOKDiL Hazirlik</title>
+<title>Sinyal Avcisi - YDS & YÖKDİL Hazırlık</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -395,7 +395,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <nav>
   <div class="nav-logo" onclick="goTo('hero')">Sinyal <b>Avcisi</b></div>
   <div class="nav-links">
-    <span onclick="goTo('nasil')">Nasil Calisir?</span>
+    <span onclick="goTo('nasil')">Nasıl Çalışır?</span>
     <span onclick="goTo('klod')">KLOD</span>
     <span onclick="goTo('ses')">Ses Kurs</span>
     <span onclick="goTo('ekitap')">E-Kitap</span>
@@ -403,7 +403,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <span onclick="goTo('sss')">SSS</span>
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
   </div>
-  <button class="btn-nav" onclick="iyzicoOdemeBaslat('Pro YDS & YÖKDİL',399)">Ucretsiz Basla</button>
+  <button class="btn-nav" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 <!-- STREAK BAR -->
@@ -421,27 +421,27 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="streak-badges" id="streak-badges"></div>
 </div>
 <div class="mmenu" id="mmenu">
-  <a onclick="closeMenuGoTo('nasil')">Nasil Calisir?</a>
+  <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
   <a onclick="closeMenuGoTo('klod')">KLOD</a>
   <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
-  <a onclick="closeMenuGoTo('ekitap')">Ucretsiz E-Kitap</a>
+  <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
   <a onclick="closeMenuGoTo('fiyat')">Paketler</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
-  <a onclick="openModal('Pro YDS & YOKDiL','399TL');closeMenu()">Ucretsiz Basla</a>
+  <a onclick="openModal('Pro YDS & YOKDiL','399TL');closeMenu()">Ücretsiz Başla</a>
 </div>
 <section id="hero" class="hero">
   <div>
-    <div class="hero-eyebrow">YDS & YOKDiL Hazirlik</div>
-    <h1>Metni cevirmiyorsun - <em>sinyali</em> yakaliyorsun</h1>
-    <p class="hero-sub">OSYM sorularini kelime kelime okumak sureyi bitirir. Baglaclar, gizli olumsuzlar ve modal yapilari tanirsan 10 saniyede cozersin.</p>
+    <div class="hero-eyebrow">YDS & YÖKDİL Hazırlık</div>
+    <h1>Metni çevirmiyorsun — <em>sinyali</em> yakalıyorsun</h1>
+    <p class="hero-sub">ÖSYM sorularını kelime kelime okumak süreyi bitirir. Bağlaçlar, gizli olumsuzlar ve modal yapıları tanırsan 10 saniyede çözersin.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="goTo('demo')">Canli demoyu dene</button>
-      <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanis</button>
+      <button class="btn-primary" onclick="goTo('demo')">Canlı demoyu dene</button>
+      <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanış</button>
     </div>
     <div class="hero-badges">
-      <span class="hero-badge">7 gun ucretsiz</span>
-      <span class="hero-badge">Kredi karti gerekmez</span>
-      <span class="hero-badge">Istediginde iptal</span>
+      <span class="hero-badge">7 gün ücretsiz</span>
+      <span class="hero-badge">Kredi kartı gerekmez</span>
+      <span class="hero-badge">İstediğinde iptal</span>
     </div>
   </div>
   <div id="demo" class="demo-card">
@@ -468,12 +468,12 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <section style="background:linear-gradient(135deg,#1a1f35,#0c0e14);padding:40px 5vw;border-bottom:1px solid rgba(255,255,255,.08)">
   <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px">
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e8d5a3;margin-bottom:8px">Sinava Geri Sayim</div>
-      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#f7f6f2">Sinav tarihin ne zaman?</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#e8d5a3;margin-bottom:8px">Sınava Geri Sayım</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:#f7f6f2">Sınav tarihin ne zaman?</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <input type="date" id="sinav-tarih-input" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:Inter,sans-serif;font-size:14px;outline:none;cursor:pointer">
-      <button onclick="sinavGeriSayim()" style="background:#2d5be3;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Baslat</button>
+      <button onclick="sinavGeriSayim()" style="background:#2d5be3;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">Başlat</button>
     </div>
     <div id="geri-sayim-display" style="display:none;text-align:center">
       <div style="display:flex;gap:16px;justify-content:center">
@@ -507,8 +507,8 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 </section>
 <section class="hedef">
   <div class="hedef-inner">
-    <div class="eyebrow" style="color:var(--contrast)">Platformumuz Kimin icin?</div>
-    <div class="section-title" style="color:var(--paper)">YDS veya YOKDiL sinavina hazirlanan herkes</div>
+    <div class="eyebrow" style="color:var(--contrast)">Platformumuz Kimin İçin?</div>
+    <div class="section-title" style="color:var(--paper)">YDS veya YÖKDİL sınavına hazırlanan herkes</div>
     <div class="hedef-grid">
       <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🎓</div><div class="hedef-name">Akademisyenler</div><div class="hedef-desc">Docentlik ve uluslararasi yayin icin YDS/YOKDiL zorunlulugu olan arastirmacilar.</div><div class="hedef-tag">YDS - YOKDiL Sosyal/Fen/Saglik</div></div>
       <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">⚖️</div><div class="hedef-name">Hukukcular</div><div class="hedef-desc">YDS zorunlulugu olan avukat, hakim ve hukuk akademisyeni.</div><div class="hedef-tag">YDS - Alan: Hukuk</div></div>
@@ -520,9 +520,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   </div>
 </section>
 <section class="alan">
-  <div class="eyebrow" style="color:var(--contrast)">Kisiselleştir</div>
-  <div class="section-title">Alanini sec, platform sana gore ayarlansın</div>
-  <p class="alan-sub">Demo cumlesi, kelime bankasi ve metin ornekleri alanina gore degisir.</p>
+  <div class="eyebrow" style="color:var(--contrast)">Kişiselleştir</div>
+  <div class="section-title">Alanını seç, platform sana göre ayarlansın</div>
+  <p class="alan-sub">Demo cümlesi, kelime bankası ve metin örnekleri alanına göre değişir.</p>
   <div class="alan-cards">
     <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','⚖️')"><div class="alan-icon">⚖️</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
     <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','📊')"><div class="alan-icon">📊</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
@@ -534,20 +534,20 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 </section>
 <section id="nasil" class="nasil">
   <div class="nasil-inner">
-    <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasil Calisir?</div><div class="section-title">Gelisin ilk gunundan sinav sabahina</div></div>
+    <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasıl Çalışır?</div><div class="section-title">Gelişinin ilk gününden sınav sabahına</div></div>
     <div>
-      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanini sec</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Saglik - bir tikla seciyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gun ucretsiz</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Sinyal Okuma Lab'a gir</div><div class="step-desc">Sana OSYM formatinda bir metin geliyor. Baglaclar mavi, tuzak ifadeler kirmizi, kilit kelimeler sari.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takildiysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlis cozduun ya da mantigini anlayamadin. KLOD'a yaziyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobuzte Ses Kurs, yatmadan Gunluk Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. Ingilizce + Turkce. Gece yatmadan 60 saniye Gunluk Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalik rapor kartin geliyor</div><div class="step-desc">Kac soru cozduun, hangi yapida hata yaptin, tahmini puanin ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanını seç</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Sağlık — bir tıkla seçiyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gün ücretsiz</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Sinyal Lab'a gir</div><div class="step-desc">Sana ÖSYM formatında bir metin geliyor. Bağlaçlar mavi, tuzak ifadeler kırmızı, kilit kelimeler sarı.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalık rapor kartın geliyor</div><div class="step-desc">Kaç soru çözdün, hangi yapıda hata yaptın, tahmini puanın ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
     </div>
   </div>
 </section>
 <section id="ekitap" class="ekitap">
   <div class="ekitap-inner">
     <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ucretsiz E-Kitap</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ücretsiz E-Kitap</div>
       <h2>30 Gunluk Metin Fetih Kilavuzu</h2>
       <p class="ekitap-desc">37 sayfalik PDF rehber. Sinyal metodolojisinin tum adimlari, baglac haritalari, modal perfect rehberi ve gunluk calisma plani.</p>
       <ul class="ekitap-list"><li>Baglac sinyal haritalari</li><li>Modal perfect tuzak rehberi</li><li>30 gunluk calisma plani</li><li>OSYM en sik tuzak listesi</li></ul>
@@ -563,11 +563,11 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <section id="klod" class="klod">
   <div>
     <div class="eyebrow" style="color:var(--signal)">AI Ogretmen</div>
-    <div class="section-title">KLOD cevap vermez - dusundurur</div>
-    <p class="klod-desc">Cogu AI "dogru cevap B'dir" der. KLOD neden yanlis dusundugunu bulur ve oradan ogretir.</p>
+    <div class="section-title">KLOD cevap vermez — düşündürür</div>
+    <p class="klod-desc">Çoğu AI "doğru cevap B'dir" der. KLOD neden yanlış düşündüğünü bulur ve oradan öğretir.</p>
     <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
     <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Turkce</b><span>Aciklamalar, ipuclari ve geri bildirim hep Turkce</span><div class="klod-feat-detail">Gramer kurallari Turkce aciklanir. OSYM tuzaklari Turkce analiz edilir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
   </div>
   <div class="chat-ui">
     <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni · Cevrimici</div></div></div>
@@ -581,9 +581,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <section id="ses" class="ses">
   <div class="ses-inner">
     <div>
-      <div class="eyebrow" style="color:var(--contrast)">Audio Kurs</div>
-      <div class="section-title" style="color:var(--paper)">Beyin sesten ogrenir</div>
-      <p class="ses-desc">19 YDS/YOKDiL gramer konusu - otobuzte, yuruyuste, yatmadan once.</p>
+      <div class="eyebrow" style="color:var(--contrast)">Ses Kurs</div>
+      <div class="section-title" style="color:var(--paper)">Beyin sesten öğrenir</div>
+      <p class="ses-desc">19 YDS/YÖKDİL gramer konusu — otobüste, yürüyüşte, yatmadan önce.</p>
       <div class="ses-modes">
         <div class="ses-mode active" onclick="setSesMod(this)"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
         <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
@@ -614,9 +614,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <section id="dashboard" class="dash">
   <div class="dash-inner">
     <div class="dash-header">
-      <div class="eyebrow" style="color:var(--signal)">Canli Onizleme</div>
-      <div class="section-title">Platforma giris yap ve calismaya basla</div>
-      <p style="font-size:14px;color:var(--muted);margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6">Her gun sana ozel soru rotasi, tekrar edilecek kelimeler ve sinyal analizi hazir bekliyor.</p>
+      <div class="eyebrow" style="color:var(--signal)">Canlı Önizleme</div>
+      <div class="section-title">Platforma giriş yap ve çalışmaya başla</div>
+      <p style="font-size:14px;color:var(--muted);margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6">Her gün sana özel soru rotası, tekrar edilecek kelimeler ve sinyal analizi hazır bekliyor.</p>
     </div>
     <div class="dash-ui">
       <div class="dash-sb">
@@ -851,60 +851,60 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="fiyat-inner">
     <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
     <div class="fiyat-grid">
-      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Audio Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Temel Sinyal',199)">Satın Al</button></div>
-      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gun ucretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Audio Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Pro YDS & YÖKDİL',399)">Ucretsiz Basla</button></div>
-      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Sinyal Avcisi VIP',699)">VIP'e Geç</button></div>
+      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Ses Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Temel Sinyal',199)">Satın Al</button></div>
+      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gün ücretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Ses Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button></div>
+      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Sinyal Avcisi VIP',699)">VIP'e Geç</button></div>
     </div>
   </div>
 </section>
 <section id="sss" class="sss">
   <div class="sss-inner">
-    <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sik Sorulan Sorular</div><div class="section-title">Aklindaki sorular</div></div>
+    <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sık Sorulan Sorular</div><div class="section-title">Aklındaki sorular</div></div>
     <div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YOKDiL mi - platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi icin de uygundur. Platform, alan secimine gore ornek metinleri kisisellestirir.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Platform, alan seçimine göre örnek metinleri kişiselleştirir.</div></div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gercek bir yapay zeka mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. KLOD, Claude API uzerine kurulu gercek bir yapay zeka ogretmenidir.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Iptal etmek istesem ne yapmaliyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Istedigin zaman, tek tikla iptal edebilirsin. Herhangi bir iptal ucreti yoktur.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses kurs internet baglantisi gerektiriyor mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Ses kurs tarayici tabanli TTS kullandigi icin internet baglantisi gerektirir.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>İptal etmek istesem ne yapmalıyım?</span><span class="sss-icon">+</span></div><div class="sss-a">İstediğin zaman, tek tıkla iptal edebilirsin. Herhangi bir iptal ücreti yoktur.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses kurs internet bağlantısı gerektiriyor mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Ses kurs tarayıcı tabanlı TTS kullandığı için internet bağlantısı gerektirir.</div></div>
     </div>
   </div>
 </section>
 <section class="hayir-section">
   <div class="hayir-inner">
     <div style="font-size:48px;margin-bottom:20px;animation:pulse 2.5s ease-in-out infinite">❤️</div>
-    <div class="hayir-baslik">Her aboneligin bir kismi, bir cocugun gelecegine dokunuyor</div>
-    <p class="hayir-metin">Sinyal Avcisi'ni tercih ettiginde sadece kendi hedefine yatirim yapmiyorsun. Platformdan elde edilen gelirin bir bolumu, yetim ve kimsesiz cocuklarin egitimine bagiSlaniyor.</p>
-    <div class="hayir-alinti">"insanlarin en hayirlisi, insanlara en cok faydali olandir."</div>
-    <div class="hayir-etiketler"><span class="hayir-etiket">Egitime destek</span><span class="hayir-etiket">Yetim cocuklar</span><span class="hayir-etiket">Surdurulebilir iyilik</span></div>
+    <div class="hayir-baslik">Her aboneliğin bir kısmı, bir çocuğun geleceğine dokunuyor</div>
+    <p class="hayir-metin">Sinyal Avcısı'nı tercih ettiğinde sadece kendi hedefine yatırım yapmıyorsun. Platformdan elde edilen gelirin bir bölümü, yetim ve kimsesiz çocukların eğitimine bağışlanıyor.</p>
+    <div class="hayir-alinti">"İnsanların en hayırlısı, insanlara en çok faydalı olanıdır."</div>
+    <div class="hayir-etiketler"><span class="hayir-etiket">Eğitime destek</span><span class="hayir-etiket">Yetim çocuklar</span><span class="hayir-etiket">Sürdürülebilir iyilik</span></div>
     <div style="margin-top:36px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="47" data-suffix=" cocuk" data-counted="1">47</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bu ay ulasilan</div></div>
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="312" data-suffix=" kitap" data-counted="1">312</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bagislanan</div></div>
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="8" data-suffix=" okul" data-counted="1">8</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Ulasilan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="47" data-suffix=" cocuk" data-counted="1">47</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bu ay ulaşılan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="312" data-suffix=" kitap" data-counted="1">312</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bağışlanan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="8" data-suffix=" okul" data-counted="1">8</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Ulaşılan</div></div>
     </div>
   </div>
 </section>
 <footer>
   <div class="footer-logo">Sinyal <b>Avcisi</b></div>
-  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span>
+  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanış</span><span onclick="goTo('ekitap')">Ücretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span>
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span></div>
-  <div class="footer-copy">2026 Sinyal Avcisi · YDS & YOKDiL hazirlik platformu · Turkiye · Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
+  <div class="footer-copy">2026 Sinyal Avcısı · YDS & YÖKDİL hazırlık platformu · Türkiye · Gelirin bir kısmı yetim çocukların eğitimi için bağışlanmaktadır</div>
 </footer>
 <div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-body">
-      <div class="modal-eye">7 Gun Ucretsiz Basla</div>
-      <h2>Hesap olustur</h2>
-      <p class="modal-sub">Kredi karti gerekmez. 7 gunluk deneme sonrasi istersen devam et.</p>
-      <div class="modal-plan"><div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Secilen paket</div><div class="modal-plan-name" id="modal-plan-name">Pro YDS & YOKDiL</div></div><div class="modal-plan-price" id="modal-plan-price">399TL/ay</div></div>
+      <div class="modal-eye">7 Gun Ücretsiz Başla</div>
+      <h2>Hesap Oluştur</h2>
+      <p class="modal-sub">Kredi kartı gerekmez. 7 gunluk deneme sonrasi istersen devam et.</p>
+      <div class="modal-plan"><div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Seçilen paket</div><div class="modal-plan-name" id="modal-plan-name">Pro YDS & YOKDiL</div></div><div class="modal-plan-price" id="modal-plan-price">399TL/ay</div></div>
       <form onsubmit="modalSubmit(event)" class="modal-form">
         <input class="modal-input" type="text" id="m-ad" placeholder="Ad Soyad" required>
         <input class="modal-input" type="email" id="m-email" placeholder="E-posta adresi" required>
         <input class="modal-input" type="password" id="m-sifre" placeholder="Sifre (en az 8 karakter)" minlength="8" required>
-        <button class="modal-submit" type="submit">Ucretsiz Basla</button>
+        <button class="modal-submit" type="submit">Ücretsiz Başla</button>
       </form>
-      <div class="modal-legal">Kayit olarak Kullanim Kosullarini kabul etmis olursun.</div>
+      <div class="modal-legal">Kayıt olarak Kullanım Koşullarını kabul etmiş olursun.</div>
     </div>
-    <div class="modal-success" id="modal-success"><div class="ms-icon">🎉</div><div class="ms-h">Hos geldin, Avci!</div><p class="ms-p">Hesabin olusturuldu. 7 gunluk ucretsiz denemen basladi.</p></div>
+    <div class="modal-success" id="modal-success"><div class="ms-icon">🎉</div><div class="ms-h">Hoş geldin, Avcı!</div><p class="ms-p">Hesabın oluşturuldu. 7 günlük ücretsiz denemin başladı.</p></div>
   </div>
 </div>
 <div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
@@ -912,10 +912,10 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#6b7280">✕</button>
     <div style="font-size:52px;margin-bottom:12px">⏰</div>
     <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px">Bir saniye dur!</div>
-    <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gun ucretsiz</strong> dene - kredi karti yok, taahhut yok.</p>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:16px;line-height:1.6">Sadece <strong>7 gün ücretsiz</strong> dene - kredi karti yok, taahhut yok.</p>
     <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
-      <button onclick="exitKapat();openModal('Pro YDS & YOKDiL','399TL')" style="background:#2d5be3;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Evet, ucretsiz baslayim</button>
-      <button onclick="exitKapat()" style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:Inter,sans-serif;padding:6px;text-decoration:underline">Hayir, hazirlıksiz girmek istiyorum</button>
+      <button onclick="exitKapat();openModal('Pro YDS & YOKDiL','399TL')" style="background:#2d5be3;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Evet, ücretsiz başlayayım</button>
+      <button onclick="exitKapat()" style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;font-family:Inter,sans-serif;padding:6px;text-decoration:underline">Hayır, hazırlıksız girmek istiyorum</button>
     </div>
   </div>
 </div>
@@ -926,7 +926,7 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null;
 sb.auth.onAuthStateChange((event,session)=>{if(session){currentUser=session.user;showUserMenu(session.user);}else{currentUser=null;showGuestMenu();}});
 function showUserMenu(u){const n=document.querySelector('.btn-nav');if(n){const ad=u.user_metadata?.ad||u.email.split('@')[0];n.textContent='Hosgeldin '+ad;n.style.background='var(--signal)';}}
-function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='Ucretsiz Basla';n.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');n.style.background='var(--ink)';}}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='Ücretsiz Başla';n.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');n.style.background='var(--ink)';}}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
@@ -982,8 +982,8 @@ async function modalSubmit(e){
   if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
   const btn=document.querySelector('.modal-submit');btn.textContent='Kaydediliyor...';btn.disabled=true;
   try{const{error}=await sb.auth.signUp({email:em.value,password:si.value,options:{data:{ad:ad.value}}});
-  if(error){const{error:le}=await sb.auth.signInWithPassword({email:em.value,password:si.value});if(le){si.placeholder='Sifre hatali';btn.textContent='Ucretsiz Basla';btn.disabled=false;return;}}}catch(err){}
-  btn.textContent='Ucretsiz Basla';btn.disabled=false;
+  if(error){const{error:le}=await sb.auth.signInWithPassword({email:em.value,password:si.value});if(le){si.placeholder='Sifre hatali';btn.textContent='Ücretsiz Başla';btn.disabled=false;return;}}}catch(err){}
+  btn.textContent='Ücretsiz Başla';btn.disabled=false;
   document.getElementById('modal-body').style.display='none';document.getElementById('modal-success').style.display='block';
   setTimeout(()=>{closeModal();goTo('dashboard');},2000);
 }
@@ -1986,7 +1986,7 @@ function exitKapat(){document.getElementById('exit-popup').style.display='none';
 // ============================================================
 // İYZİCO ÖDEME ENTEGRASYONU
 // ============================================================
-function iyzicoOdemeBaslat(plan,fiyat){
+function iyzicoOdemeBaşlat(plan,fiyat){
   const overlay=document.createElement('div');
   overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
   overlay.innerHTML=`<div style="background:#fff;border-radius:20px;max-width:440px;width:100%;padding:32px;position:relative">
