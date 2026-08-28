@@ -816,6 +816,36 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     </div>
   </div>
 </section>
+
+<!-- MEDYA MERKEZİ -->
+<section id="medya" style="padding:80px 5vw;background:#0c0e14">
+  <div style="max-width:1020px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="eyebrow" style="color:var(--signal)">Medya Merkezi</div>
+      <div class="section-title" style="color:var(--paper)">60 Saniyede <em style="color:var(--signal);font-style:italic">ÖSYM Avı</em></div>
+      <div style="font-size:15px;color:rgba(247,246,242,.5);margin-top:12px">Metroda, kuyrukta, kahve molasında — bir dakikan varsa bir tuzak öğrenecek vaktin var.</div>
+    </div>
+
+    <!-- Video Kartları -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:48px" id="medya-grid"></div>
+
+    <!-- Avcı Akademisi -->
+    <div style="background:linear-gradient(135deg,#1e1b4b,#0f172a);border-radius:16px;padding:32px;margin-bottom:32px">
+      <div class="eyebrow" style="color:#818cf8;margin-bottom:8px">Avcı Akademisi</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:24px;color:#fff;margin-bottom:8px">ÖSYM Tuzak Videoları</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:20px">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px" id="avci-akademi-grid"></div>
+    </div>
+
+    <!-- Podcast Paneli -->
+    <div style="background:var(--sl);border-radius:16px;padding:28px">
+      <div class="eyebrow" style="color:var(--signal);margin-bottom:8px">Podcast Paneli</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);margin-bottom:16px">Kulak Aşinalığı</div>
+      <div id="podcast-liste" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+</section>
+
 <section id="fiyat" class="fiyat">
   <div class="fiyat-inner">
     <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
@@ -1753,6 +1783,184 @@ function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;co
 setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
 // Sayfa açılışında hata count badge güncelle
 setTimeout(hataCountGuncelle, 500);
+// ============================================================
+// MEDYA MERKEZİ
+// ============================================================
+const MEDYA_KARTLAR=[
+  {ikon:'🔗',baslik:'Bağlaçlar Konu Anlatımı',aciklama:'Zıtlık sinyalini şık okumadan yakala.',renk:'#2d5be3',
+   videoId:'qaLDHT7SIRM',
+   icerik:'KURAL: although/despite/yet/however görünce → zıtlık var. Sağda ne bekliyorsun? FARKLI bir şey. Sol ve sağ TERS anlam taşımalı. ÖSYM tuzağı: aynı yönlü şıklar koyar. Sinyali gör, zıttı bul, vur!'},
+  {ikon:'🎯',baslik:'Modal Perfect Konu Anlatımı',aciklama:'must have V3 = zorunluluk DEĞİL, çıkarım.',renk:'#e03c3c',
+   videoId:'ST7p_se6Qkc',
+   icerik:'must have V3 = geçmişe dair GÜÇLÜ ÇIKARIM. should have V3 = yapmalıydı ama yapmadı. could have V3 = yapabilirdi ama yapmadı. ÖSYM bunları karıştırır. Zaman sinyaline bak!'},
+  {ikon:'📝',baslik:'Relative Clause Konu Anlatımı',aciklama:'who/which/that/whom/whose kullanımı.',renk:'#7c3aed',
+   videoId:'V8BoyN2vq_Y',
+   icerik:'Relative clause = ismi niteleyen yan cümle. WHO: insan, WHICH: nesne, THAT: her ikisi. Virgüllü relative clause = ekstra bilgi, sınavda kritik fark!'},
+  {ikon:'🔬',baslik:'Passive Voice Konu Anlatımı',aciklama:'Fen metinlerinin temel yapısı.',renk:'#059669',
+   videoId:'xAx0obWJ-qI',
+   icerik:'Fen metinlerinde neredeyse her cümle pasif yapıdadır. be + V3 = pasif. By kim yaptı sorusunu cevaplar. ÖSYM pasif-aktif dönüşüm sorar!'},
+  {ikon:'🔀',baslik:'If Clause / Conditionals',aciklama:'3. tip koşul = gerçekleşmemiş geçmiş.',renk:'#0284c7',
+   videoId:'oTWI0C9HjvU',
+   icerik:'Type 1: gerçek olabilir. Type 2: olası değil. Type 3: geçmişte olmadı. YDS tuzağı: mixed conditional! If + Past Perfect → would have done.'},
+  {ikon:'⚖️',baslik:'YDS Bağlaç Soru Çözümü',aciklama:'Gerçek ÖSYM sorularıyla pratik.',renk:'#d97706',
+   videoId:'-jk9HTB-uqs',
+   icerik:'Bağlaç sorularında: 1) Boşluğun solundaki anlam ne? 2) Sağındaki anlam ne? 3) İkisi aynı yönde mi zıt yönde mi? Sinyali gör, yapıyı doğrula, işaretle!'},
+];
+
+const AVCI_AKADEMI=[
+  {no:'01',konu:'Zıtlık Sinyalleri',aciklama:'despite, although, yet, however, nonetheless',sure:'2:30'},
+  {no:'02',konu:'Olumsuz Yapılar',aciklama:'far from, by no means, not until, never',sure:'2:15'},
+  {no:'03',konu:'Modal Perfect',aciklama:'must/should/could/might have V3',sure:'2:45'},
+  {no:'04',konu:'Koşul Yapıları',aciklama:'provided that, as long as, unless, given that',sure:'2:00'},
+  {no:'05',konu:'Referans Zamirleri',aciklama:'this, these, such, the former, the latter',sure:'1:55'},
+  {no:'06',konu:'Paragraf Bütünlüğü',aciklama:'moreover, furthermore, in addition, besides',sure:'2:20'},
+];
+
+const PODCAST_LIST=[
+  {no:'Bölüm 1',baslik:'Aydınlanma Çağı ve Hukuk Metinleri Analizi',sure:'12 Dk',ikon:'⚖️'},
+  {no:'Bölüm 2',baslik:'Sağlık Bilimlerinde Modal Yapılar',sure:'15 Dk',ikon:'🏥'},
+  {no:'Bölüm 3',baslik:'Fen Bilimleri: Pasif Yapı ve Neden-Sonuç',sure:'11 Dk',ikon:'🔬'},
+  {no:'Bölüm 4',baslik:'Sosyal Bilimlerde Karşılaştırma Stratejisi',sure:'13 Dk',ikon:'📊'},
+  {no:'Bölüm 5',baslik:'YDS vs YÖKDİL: Format Farkları',sure:'10 Dk',ikon:'🎯'},
+];
+
+let medyaAktif=null;
+function medyaRender(){
+  const grid=document.getElementById('medya-grid');
+  if(!grid)return;
+  grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
+    <div onclick="medyaOyna(${i})" style="cursor:pointer;background:#1a1f35;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08);transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
+      <div style="position:relative;padding-top:56.25%;background:#000;overflow:hidden">
+        <img src="https://img.youtube.com/vi/${k.videoId}/mqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+          <div style="width:52px;height:52px;background:rgba(255,0,0,.85);border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <div style="width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:18px solid #fff;margin-left:4px"></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:14px">
+        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px">${k.baslik}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.45)">${k.aciklama}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const aGrid=document.getElementById('avci-akademi-grid');
+  if(aGrid)aGrid.innerHTML=AVCI_AKADEMI.map((a,i)=>`
+    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(129,140,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+      <div style="font-family:monospace;font-size:10px;color:#818cf8;margin-bottom:6px">BÖLÜM ${a.no}</div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">${a.konu}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:8px">${a.aciklama}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:#818cf8">▶ ${a.sure}</span>
+        <span style="font-size:10px;background:rgba(129,140,248,.2);color:#818cf8;padding:2px 8px;border-radius:4px">İZLE</span>
+      </div>
+    </div>
+  `).join('');
+
+  const pList=document.getElementById('podcast-liste');
+  if(pList)pList.innerHTML=PODCAST_LIST.map((p,i)=>`
+    <div onclick="podcastOyna(${i})" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;background:#fff;border-radius:10px;border:1px solid var(--border);transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(45,91,227,.1)'" onmouseout="this.style.boxShadow='none'">
+      <div style="width:44px;height:44px;background:var(--sl);border-radius:50%;display:grid;place-items:center;font-size:20px;flex-shrink:0">${p.ikon}</div>
+      <div style="flex:1">
+        <div style="font-size:10px;color:var(--signal);font-weight:700;font-family:monospace;margin-bottom:2px">${p.no}</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink)">${p.baslik}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:11px;color:var(--muted)">${p.sure}</div>
+        <div style="font-size:11px;color:var(--signal);font-weight:700;margin-top:2px">▶ Dinle</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function medyaOyna(i){
+  const k=MEDYA_KARTLAR[i];
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`
+    <div style="background:#1a1f35;border-radius:20px;max-width:560px;width:100%;position:relative;overflow:hidden">
+      <button onclick="this.closest('.medya-overlay').remove()" style="position:absolute;top:12px;right:12px;z-index:10;background:rgba(0,0,0,.6);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+      <div style="position:relative;padding-top:56.25%;background:#000">
+        <iframe src="https://www.youtube.com/embed/${k.videoId}?autoplay=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen allow="autoplay"></iframe>
+      </div>
+      <div style="padding:20px">
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">${k.baslik}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:16px">${k.aciklama}</div>
+        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:14px;font-size:13px;line-height:1.8;color:rgba(255,255,255,.8);margin-bottom:14px">${k.icerik}</div>
+        <button onclick="this.closest('.medya-overlay').remove();avciKomutGonder('SORUYU AVLA')" style="width:100%;background:${k.renk};color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🏹 KLOD ile Pratik Yap</button>
+      </div>
+    </div>
+  `;
+  overlay.className='medya-overlay';
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+  document.body.appendChild(overlay);
+}
+
+function medyaTTS(i){
+  const k=MEDYA_KARTLAR[i];
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(k.baslik+'. '+k.icerik);
+  u.lang='tr-TR';u.rate=0.95;
+  speechSynthesis.speak(u);
+}
+
+function avciAkademiOyna(i){
+  const a=AVCI_AKADEMI[i];
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`
+    <div style="background:linear-gradient(135deg,#1e1b4b,#0f172a);border-radius:20px;max-width:460px;width:100%;padding:28px;position:relative">
+      <button onclick="this.closest('.medya-overlay').remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+      <div style="font-family:monospace;font-size:11px;color:#818cf8;margin-bottom:8px">AVCI AKADEMİSİ · BÖLÜM ${a.no}</div>
+      <div style="font-size:20px;font-weight:700;color:#fff;margin-bottom:6px">${a.konu}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:20px">Kapsam: ${a.aciklama}</div>
+      <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:18px;margin-bottom:20px">
+        <div style="font-size:12px;color:#818cf8;font-weight:700;margin-bottom:8px">🎯 REFLEKS KURALI</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.85);line-height:1.8">Bu konuda sinyal kelimesini gördüğünde 2 saniye dur. Sağa bak: yapı ne bekliyor? Sola bak: bağlam ne söylüyor? Şıkta aynı sinyali taşıyan seçeneği ele al.</div>
+      </div>
+      <button onclick="this.closest('.medya-overlay').remove();avciKomutGonder('BAĞLAÇ AVCISI BAŞLA')" style="width:100%;background:#818cf8;color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🏹 KLOD ile ${a.konu} Pratik Yap</button>
+    </div>
+  `;
+  overlay.className='medya-overlay';
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+  document.body.appendChild(overlay);
+}
+
+function podcastOyna(i){
+  const p=PODCAST_LIST[i];
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const metinler=[
+    'Bölüm 1. Aydınlanma Çağı ve Hukuk Metinleri Analizi. YDS hukuk metinlerinde en sık karşılaşılan yapılar: koşul cümleleri, pasif yapılar ve modal ifadeler. Provided that ve subject to yapılarına özellikle dikkat edin.',
+    'Bölüm 2. Sağlık Bilimlerinde Modal Yapılar. YÖKDİL Sağlık metinlerinde must have, may have ve could have yapıları sıkça kullanılır. Geçmişe dair çıkarım yaparken zaman zarflarına bakın.',
+    'Bölüm 3. Fen Bilimleri: Pasif Yapı ve Neden Sonuç. Fen metinlerinde neredeyse her cümle pasif yapıdadır. Therefore, thus ve consequently neden sonuç ilişkisi kurar.',
+    'Bölüm 4. Sosyal Bilimlerde Karşılaştırma Stratejisi. More, less, greater, higher gibi karşılaştırma sinyallerinde iki unsuru belirleyin. ÖSYM sıklıkla karşılaştırmanın yönünü değiştirir.',
+    'Bölüm 5. YDS ile YÖKDİL Format Farkları. YDS genel akademik, YÖKDİL ise alan odaklıdır. Alan kelime dağarcığı için kkData kartlarını düzenli çalışın.',
+  ];
+  const u=new SpeechSynthesisUtterance(metinler[i]||metinler[0]);
+  u.lang='tr-TR';u.rate=0.9;
+  const bildirim=document.createElement('div');
+  bildirim.style.cssText='position:fixed;bottom:24px;right:24px;z-index:600;background:#0c0e14;color:#fff;border-radius:14px;padding:16px 20px;font-size:13px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3)';
+  bildirim.innerHTML=`<span style="font-size:24px">${p.ikon}</span><div><div style="font-weight:700;margin-bottom:2px">${p.baslik}</div><div style="color:rgba(255,255,255,.4);font-size:11px">▶ Oynatılıyor · ${p.sure}</div></div><button onclick="speechSynthesis.cancel();this.parentElement.remove()" style="background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;margin-left:8px">■</button>`;
+  document.body.appendChild(bildirim);
+  u.onend=()=>bildirim.remove();
+  speechSynthesis.speak(u);
+}
+
+// Nav'a Medya linki ekle
+window.addEventListener('DOMContentLoaded',()=>{
+  medyaRender();
+  const navLinks=document.querySelector('.nav-links');
+  if(navLinks&&!navLinks.querySelector('[data-medya]')){
+    const span=document.createElement('span');
+    span.textContent='Medya';span.setAttribute('data-medya','1');
+    span.onclick=()=>goTo('medya');
+    navLinks.insertBefore(span,navLinks.children[0]);
+  }
+});
+
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
