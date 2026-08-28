@@ -1331,10 +1331,17 @@ function xpKazan(tip,streak){
 }
 function xpBildirim(puan,tip){
   const div=document.createElement('div');
-  div.style.cssText='position:fixed;top:110px;right:20px;z-index:700;background:var(--ink);color:#e8d5a3;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;animation:slideInLeft .3s ease;pointer-events:none';
-  div.textContent='+'+puan+' XP ⚡';
+  div.style.cssText='position:fixed;top:110px;right:20px;z-index:700;background:var(--ink);color:#e8d5a3;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;animation:slideInLeft .3s ease;cursor:pointer;display:flex;align-items:center;gap:10px';
+  div.innerHTML='+'+puan+' XP ⚡ <span style="font-size:11px;opacity:.7">Paylaş</span>';
+  div.onclick=()=>xpPaylas(puan);
   document.body.appendChild(div);
-  setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},2000);
+  setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},4000);
+}
+function xpPaylas(puan){
+  const xd=xpLoad();
+  const metin='🎯 Bu hafta '+xd.hafta+' XP kazandım!\n\n📚 YDS/YÖKDİL çalışıyorum — her gün sinyal metoduyla ÖSYM tuzaklarını çözüyorum.\n\n💙 Üstelik her abonelik, imkânsız öğrencilerin yabancı dil sınavına hazırlanmasına destek oluyor.\n\n👇 Sen de dene — 7 gün ücretsiz\nsinyal-avcisi-five.vercel.app\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek #YabancıDil';
+  if(navigator.share){navigator.share({title:'Sinyal Avcısı — '+puan+' XP Kazandım!',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;font-family:Inter,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function seviyeAl(toplam){return SEVIYE_TABLOSU.find(s=>toplam>=s.min&&toplam<=s.max)||SEVIYE_TABLOSU[0];}
 function seviyeKontrol(toplam){
