@@ -2115,6 +2115,243 @@ function sinavSimulatoruAc(){
   timerInterval=setInterval(()=>{sure--;const dk=Math.floor(sure/60),sn=sure%60;const el=document.getElementById('sim-sure');if(el)el.textContent=dk+':'+(sn<10?'0':'')+sn;if(sure<=0){clearInterval(timerInterval);bitir();}},1000);
 }
 
+
+// ============================================================
+// 1. SAYFA OKUMA PROGRESS BAR
+// ============================================================
+(function(){
+  const bar=document.createElement('div');
+  bar.style.cssText='position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#2d5be3,#818cf8,#e03c3c);z-index:9999;width:0%;transition:width .1s;border-radius:0 2px 2px 0';
+  bar.id='scroll-progress';
+  document.body.appendChild(bar);
+  window.addEventListener('scroll',()=>{
+    const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+    bar.style.width=Math.min(pct,100)+'%';
+  });
+})();
+
+// ============================================================
+// 2. SCROLL TO TOP BUTONU
+// ============================================================
+(function(){
+  const btn=document.createElement('button');
+  btn.innerHTML='↑';
+  btn.style.cssText='position:fixed;bottom:24px;left:24px;z-index:400;width:40px;height:40px;background:var(--ink);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;opacity:0;transition:opacity .3s;font-family:Inter,sans-serif;display:grid;place-items:center';
+  btn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+  document.body.appendChild(btn);
+  window.addEventListener('scroll',()=>{btn.style.opacity=window.scrollY>400?'1':'0';});
+})();
+
+// ============================================================
+// 3. DARK MODE
+// ============================================================
+function darkModeToggle(){
+  const isDark=document.body.classList.toggle('dark-mode');
+  localStorage.setItem('sa_dark',isDark?'1':'0');
+  const btn=document.getElementById('dark-btn');
+  if(btn)btn.textContent=isDark?'☀️':'🌙';
+}
+(function(){
+  const saved=localStorage.getItem('sa_dark');
+  const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(saved==='1'||(saved===null&&prefersDark)){
+    document.body.classList.add('dark-mode');
+  }
+  // Dark mode butonu nav'a ekle
+  window.addEventListener('DOMContentLoaded',()=>{
+    const nav=document.querySelector('nav');
+    if(nav&&!document.getElementById('dark-btn')){
+      const btn=document.createElement('button');
+      btn.id='dark-btn';
+      btn.textContent=document.body.classList.contains('dark-mode')?'☀️':'🌙';
+      btn.style.cssText='background:none;border:none;font-size:18px;cursor:pointer;padding:4px;margin-right:8px';
+      btn.onclick=darkModeToggle;
+      const navBtn=nav.querySelector('.btn-nav');
+      if(navBtn)nav.insertBefore(btn,navBtn);
+    }
+  });
+})();
+
+// ============================================================
+// 4. WHATSAPP DESTEK BUTONU
+// ============================================================
+(function(){
+  const wa=document.createElement('a');
+  wa.href='https://wa.me/905XXXXXXXXX?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
+  wa.target='_blank';
+  wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;font-size:24px;transition:transform .2s';
+  wa.innerHTML='💬';
+  wa.title='WhatsApp Destek';
+  wa.onmouseover=()=>wa.style.transform='scale(1.1)';
+  wa.onmouseout=()=>wa.style.transform='scale(1)';
+  document.body.appendChild(wa);
+})();
+
+// ============================================================
+// 5. KLAVYE KISA YOLLARI
+// ============================================================
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='d'||e.key==='D'){goTo('dashboard');}
+  if(e.key==='k'||e.key==='K'){
+    const klodItem=Array.from(document.querySelectorAll('.dn-item')).find(i=>i.textContent.includes('KLOD'));
+    if(klodItem){klodItem.classList.add('active');dnav(klodItem);}
+  }
+  if(e.key==='s'||e.key==='S'){goTo('ses');}
+  if(e.key==='?'){kısayollarGoster();}
+});
+function kısayollarGoster(){
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:700;display:flex;align-items:center;justify-content:center';
+  div.innerHTML=`<div style="background:#fff;border-radius:16px;padding:28px;max-width:360px;width:100%;font-family:Inter,sans-serif">
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:16px">⌨️ Klavye Kısayolları</div>
+    ${[['D','Dashboard'a git'],['K','KLOD'u aç'],['S','Ses Kurs'a git'],['?','Bu menüyü aç/kapat']].map(([k,a])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0"><span style="font-size:13px;color:#6b7280">${a}</span><kbd style="background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:2px 8px;font-size:12px;font-family:monospace">${k}</kbd></div>`).join('')}
+    <button onclick="this.parentElement.parentElement.remove()" style="margin-top:16px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Tamam</button>
+  </div>`;
+  div.onclick=e=>{if(e.target===div)div.remove();};
+  document.body.appendChild(div);
+}
+
+// ============================================================
+// 6. REFERRAL / ARKADAŞINI DAVET ET
+// ============================================================
+function referralLinkOlustur(){
+  const ref=localStorage.getItem('sa_ref_code')||Math.random().toString(36).substr(2,8).toUpperCase();
+  localStorage.setItem('sa_ref_code',ref);
+  return 'https://sinyal-avcisi-five.vercel.app?ref='+ref;
+}
+function referralPaylasaGoster(){
+  const link=referralLinkOlustur();
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
+  div.innerHTML=`<div style="background:#fff;border-radius:20px;padding:32px;max-width:420px;width:100%;text-align:center;font-family:Inter,sans-serif">
+    <div style="font-size:40px;margin-bottom:12px">🎁</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:8px">Arkadaşını Davet Et</div>
+    <p style="font-size:14px;color:#6b7280;margin-bottom:20px;line-height:1.6">Davet ettiğin her kişi için <b style="color:var(--signal)">1 hafta ücretsiz</b> kazan!</p>
+    <div style="background:var(--sl);border:1px solid rgba(45,91,227,.2);border-radius:10px;padding:12px;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--signal);word-break:break-all">${link}</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="navigator.clipboard.writeText('${link}').then(()=>{this.textContent='✅ Kopyalandı!';setTimeout(()=>this.textContent='📋 Kopyala',2000)})" style="flex:1;background:var(--signal);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📋 Kopyala</button>
+      <button onclick="navigator.share&&navigator.share({title:'Sinyal Avcısı',text:'YDS/YÖKDİL hazırlığında sınıf atlatan platform!',url:'${link}'})" style="flex:1;background:#e1306c;color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📱 Paylaş</button>
+    </div>
+    <button onclick="this.parentElement.parentElement.remove()" style="margin-top:12px;background:none;border:none;color:#6b7280;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">Kapat</button>
+  </div>`;
+  div.onclick=e=>{if(e.target===div)div.remove();};
+  document.body.appendChild(div);
+}
+
+// ============================================================
+// 7. KONFETİ (Doğru cevap / rozet için)
+// ============================================================
+function konfeti(renk){
+  const renkler=renk?[renk]:['#2d5be3','#e03c3c','#e8d5a3','#22c55e','#818cf8'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div');
+    el.style.cssText=`position:fixed;top:-10px;left:${Math.random()*100}vw;width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;background:${renkler[Math.floor(Math.random()*renkler.length)]};border-radius:${Math.random()>0.5?'50%':'2px'};z-index:9999;pointer-events:none;animation:konfetiFall ${1.5+Math.random()*2}s ease-in forwards`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+  }
+}
+const konfStyle=document.createElement('style');
+konfStyle.textContent='@keyframes konfetiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}';
+document.head.appendChild(konfStyle);
+
+// ============================================================
+// 8. ÇALIŞMA SÜRESİ SAYACI (Pomodoro)
+// ============================================================
+let pomodoroTimer=null,pomodoroSure=25*60,pomodoroCalisiyor=false;
+function pomodoroGoster(){
+  if(document.getElementById('pomodoro-widget'))return;
+  const div=document.createElement('div');
+  div.id='pomodoro-widget';
+  div.style.cssText='position:fixed;top:110px;right:20px;z-index:300;background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-family:Inter,sans-serif;min-width:140px;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+  div.innerHTML=`<div style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px;letter-spacing:.1em">🍅 POMODORO</div>
+    <div id="pom-sure" style="font-family:'JetBrains Mono',monospace;font-size:28px;color:#e8d5a3;margin-bottom:8px">25:00</div>
+    <div style="display:flex;gap:6px">
+      <button onclick="pomodoroToggle()" id="pom-btn" style="flex:1;background:var(--signal);color:#fff;border:none;border-radius:6px;padding:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">▶ Başlat</button>
+      <button onclick="pomodoroSifirla()" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer">↺</button>
+      <button onclick="document.getElementById('pomodoro-widget').remove();clearInterval(pomodoroTimer)" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer">✕</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function pomodoroToggle(){
+  pomodoroCalisiyor=!pomodoroCalisiyor;
+  const btn=document.getElementById('pom-btn');
+  if(btn)btn.textContent=pomodoroCalisiyor?'⏸ Durdur':'▶ Devam';
+  if(pomodoroCalisiyor){
+    pomodoroTimer=setInterval(()=>{
+      pomodoroSure--;
+      const dk=Math.floor(pomodoroSure/60),sn=pomodoroSure%60;
+      const el=document.getElementById('pom-sure');
+      if(el)el.textContent=dk+':'+(sn<10?'0':'')+sn;
+      if(pomodoroSure<=0){
+        clearInterval(pomodoroTimer);pomodoroCalisiyor=false;
+        konfeti('#22c55e');
+        if(Notification.permission==='granted')new Notification('🍅 Pomodoro Bitti!',{body:'25 dakika tamamlandı! 5 dk mola ver.'});
+        pomodoroSifirla();
+      }
+    },1000);
+  } else {clearInterval(pomodoroTimer);}
+}
+function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomodoroCalisiyor=false;const el=document.getElementById('pom-sure');if(el)el.textContent='25:00';const btn=document.getElementById('pom-btn');if(btn)btn.textContent='▶ Başlat';}
+
+// ============================================================
+// 9. COOKIE / KVKK BANNER
+// ============================================================
+(function(){
+  if(localStorage.getItem('sa_cookie_ok'))return;
+  setTimeout(()=>{
+    const div=document.createElement('div');
+    div.style.cssText='position:fixed;bottom:0;inset:auto 0;background:#fff;border-top:1px solid #e5e3dc;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:Inter,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
+    div.innerHTML=`<div style="font-size:13px;color:#6b7280;flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="#" style="color:var(--signal)">KVKK Aydınlatma Metni</a></div>
+      <div style="display:flex;gap:8px;flex-shrink:0">
+        <button onclick="localStorage.setItem('sa_cookie_ok','1');this.parentElement.parentElement.remove()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Kabul Et</button>
+        <button onclick="this.parentElement.parentElement.remove()" style="background:#f5f5f5;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">Reddet</button>
+      </div>`;
+    document.body.appendChild(div);
+  },2000);
+})();
+
+// ============================================================
+// 10. AKILLI GERİ BİLDİRİM TOPLAMA
+// ============================================================
+function geriBildirimGoster(){
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:400;background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px 24px;box-shadow:0 8px 32px rgba(0,0,0,.12);font-family:Inter,sans-serif;text-align:center;min-width:280px';
+  div.innerHTML=`<div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px">Platformu nasıl buldunuz?</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px">
+      ${['😍','😊','😐','😕','😤'].map((e,i)=>`<button onclick="geriBildirimGonder(${i+1},'${e}',this.parentElement.parentElement)" style="font-size:28px;background:none;border:2px solid transparent;border-radius:8px;padding:6px;cursor:pointer" onmouseover="this.style.borderColor='var(--signal)'" onmouseout="this.style.borderColor='transparent'">${e}</button>`).join('')}
+    </div>
+    <button onclick="this.parentElement.remove()" style="font-size:12px;color:#6b7280;background:none;border:none;cursor:pointer">Şimdi değil</button>`;
+  document.body.appendChild(div);
+}
+function geriBildirimGonder(puan,emoji,div){
+  div.innerHTML=`<div style="text-align:center;padding:8px"><div style="font-size:32px">${emoji}</div><div style="font-size:14px;font-weight:700;margin-top:8px">Teşekkürler!</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Görüşünüz çok değerli.</div></div>`;
+  localStorage.setItem('sa_feedback',puan);
+  setTimeout(()=>div.remove(),2000);
+}
+
+// 5 dakika sonra geri bildirim iste (henüz vermemişse)
+if(!localStorage.getItem('sa_feedback')){
+  setTimeout(geriBildirimGoster,5*60*1000);
+}
+
+// Referral butonu footer'a ekle
+window.addEventListener('DOMContentLoaded',()=>{
+  const footer=document.querySelector('footer');
+  if(footer){
+    const btn=document.createElement('button');
+    btn.textContent='🎁 Arkadaşını Davet Et';
+    btn.style.cssText='background:rgba(255,255,255,.1);color:rgba(247,246,242,.7);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-family:Inter,sans-serif;margin-top:8px';
+    btn.onclick=referralPaylasaGoster;
+    footer.appendChild(btn);
+  }
+  // Pomodoro klavye kısayolu
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='INPUT')return;
+    if(e.key==='p'||e.key==='P')pomodoroGoster();
+  });
+});
+
 </script>
 </body>
 </html>
