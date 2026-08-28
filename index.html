@@ -1779,7 +1779,23 @@ const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if
 document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
 function animateCount(el){const target=parseInt(el.dataset.count),suffix=el.dataset.suffix||'',prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
 
-const bildirimler=[{isim:'Aras. Gor. A. Yilmaz',eylem:'Pro pakete katildi',sure:'2 dk once'},{isim:'Av. M. Kaya',eylem:'ilk dersini tamamladi',sure:'5 dk once'},{isim:'Dr. D. Sahin',eylem:'e-kitabi indirdi',sure:'8 dk once'}];
+const bildirimler=[
+  {isim:'Arş. Gör. A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce'},
+  {isim:'Av. M. Kaya',eylem:'ilk dersini tamamladı',sure:'5 dk önce'},
+  {isim:'Uzm. Dr. D. Şahin',eylem:'e-kitabı indirdi',sure:'8 dk önce'},
+  {isim:'Öğr. Gör. S. Çelik',eylem:'Sinyal Lab'ı açtı',sure:'3 dk önce'},
+  {isim:'Doç. Dr. H. Arslan',eylem:'YÖKDİL Fen'e kaydoldu',sure:'11 dk önce'},
+  {isim:'Hemş. E. Demir',eylem:'Ses Kursu'nu başlattı',sure:'6 dk önce'},
+  {isim:'Psik. N. Yıldız',eylem:'Kelime Kartları'nı çalıştı',sure:'9 dk önce'},
+  {isim:'Müh. B. Koç',eylem:'SAT Metodunu denedi',sure:'4 dk önce'},
+  {isim:'Öğretmen R. Güneş',eylem:'7 günlük denemeye başladı',sure:'13 dk önce'},
+  {isim:'Eczacı T. Aydın',eylem:'YÖKDİL Sağlık'a kaydoldu',sure:'7 dk önce'},
+  {isim:'Sosyolog K. Polat',eylem:'KLOD ile pratik yaptı',sure:'15 dk önce'},
+  {isim:'Hâkim C. Erdoğan',eylem:'Hukuk metinleri çalıştı',sure:'10 dk önce'},
+  {isim:'Dr. Öğr. Üyesi F. Kurt',eylem:'Doçentlik için kaydoldu',sure:'20 dk önce'},
+  {isim:'Biyolog A. Kara',eylem:'Günlük Tuzak'ı çözdü',sure:'18 dk önce'},
+  {isim:'Arş. Gör. Dr. Z. Yavuz',eylem:'Pro paketi yeniledi',sure:'25 dk önce'},
+];
 let bIdx=0;
 function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">🎓</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:11px;color:#6b7280">'+b.eylem+' · '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
 setTimeout(()=>{bildirimGoster();setInterval(bildirimGoster,12000);},10000);
