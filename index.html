@@ -626,7 +626,8 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dn-item" onclick="dnav(this)">🤖 KLOD</div>
           <div class="dn-item" onclick="dnav(this)">🎧 Ses Kurs</div>
           <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
-          <div class="dn-item" onclick="dnav(this)">⚡ Gunluk Tuzak</div>
+          <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
+          <div class="dn-item" onclick="dnav(this)">🎯 Gunluk Tuzak</div>
           <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
         </div>
         <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
@@ -1015,16 +1016,18 @@ function dnav(el){
     `;
   } else if(txt.includes('Kelime')){
     document.getElementById('mod-kelime').style.display='block';kkShow();
-  } else if(txt.includes('Gunluk')){
-    document.getElementById('mod-tuzak').style.display='block';tuzakRender();
- } else if(txt.includes('SAT')){  
+  } else if(txt.includes('SAT')){
    document.getElementById('mod-sat').style.display='block';satRender();
+  } else if(txt.includes('Gunluk')||txt.includes('Tuzak')){
+    document.getElementById('mod-tuzak').style.display='block';tuzakRender();
   } else if(txt.includes('Ses')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:12px;display:flex;justify-content:space-between;align-items:center"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
   } else if(txt.includes('Rapor')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
-   t.innerHTML='<div class="dm-eye">HAFTALIK RAPOR</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px"><div style="background:var(--sl);border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:var(--signal)" id="xp-toplam">0 XP</div><div style="font-size:11px;color:var(--muted)">Toplam XP</div></div><div style="background:#f0fdf4;border-radius:10px;padding:14px;text-align:center"><div style="font-family:\'DM Serif Display\',serif;font-size:40px;color:#16a34a">42</div><div style="font-size:11px;color:var(--muted)">Bu Hafta Soru</div></div></div>';const xd=xpLoad();document.getElementById("xp-toplam").textContent=xd.toplam+" XP";
+    const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
+    t.innerHTML=`<div class="dm-eye">📈 RAPORLAR — XP & LİDERLİK</div><div style="background:#0f172a;border-radius:12px;padding:16px;margin-bottom:12px;color:#fff"><div style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:8px">XP DURUMUN</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="font-size:18px;font-weight:700;color:${s.renk}">${s.ad}</div><div style="font-size:28px;font-weight:700;color:#e8d5a3">${xd.toplam} XP</div></div><div style="height:8px;background:rgba(255,255,255,.1);border-radius:4px;margin-bottom:10px"><div style="height:100%;background:linear-gradient(90deg,#2d5be3,#818cf8);border-radius:4px;width:${yuzde}%"></div></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center"><div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px"><div style="font-size:20px;font-weight:700;color:#e8d5a3">${xd.bugun}</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Bugün XP</div></div><div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px"><div style="font-size:20px;font-weight:700;color:#818cf8">${xd.hafta}</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Bu Hafta XP</div></div><div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px"><div style="font-size:20px;font-weight:700;color:#34d399">${xd.toplam}</div><div style="font-size:10px;color:rgba(255,255,255,.4)">Toplam XP</div></div></div></div>${liderTabloGoster()}<button onclick="xpPaylas(${xd.toplam})" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#2d5be3,#818cf8);color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🚀 XP Durumunu Paylaş</button>`;
+    seviyeKontrol(xd.toplam);
   }
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
@@ -1532,11 +1535,15 @@ function streakSoruEkle(tip){
   if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
 }
-function avciKlodaGit(){
+function avciKlodaGit(){avciKomutGonder('AVCI MASTER BAŞLA');}
+function avciKomutGonder(komut){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
   const klodItem=Array.from(document.querySelectorAll('.dn-item')).find(i=>i.textContent.includes('KLOD'));
   if(klodItem){klodItem.classList.add('active');dnav(klodItem);}
-  setTimeout(()=>{const inp=document.getElementById('dnav-in');if(inp){inp.value='AVCI MASTER BAŞLA';inp.focus();}},500);
+  setTimeout(()=>{
+    const inp=document.getElementById('dnav-in');
+    if(inp){inp.value=komut;inp.focus();const ev=new KeyboardEvent('keydown',{key:'Enter',bubbles:true});inp.dispatchEvent(ev);}
+  },600);
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
