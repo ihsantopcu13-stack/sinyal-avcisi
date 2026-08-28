@@ -401,8 +401,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <span onclick="goTo('ekitap')">E-Kitap</span>
     <span onclick="goTo('fiyat')">Paketler</span>
     <span onclick="goTo('sss')">SSS</span>
+    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
   </div>
-  <button class="btn-nav" onclick="openModal('Pro YDS & YOKDiL','399TL')">Ucretsiz Basla</button>
+  <button class="btn-nav" onclick="iyzicoOdemeBaslat('Pro YDS & YÖKDİL',399)">Ucretsiz Basla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 <!-- STREAK BAR -->
@@ -850,9 +851,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="fiyat-inner">
     <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
     <div class="fiyat-grid">
-      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Audio Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="openModal('Temel Sinyal','199TL')">Basla</button></div>
-      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gun ucretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Audio Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="openModal('Pro YDS & YOKDiL','399TL')">Ucretsiz Basla</button></div>
-      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="openModal('Sinyal Avcisi VIP','699TL')">VIP'e Gec</button></div>
+      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Audio Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Temel Sinyal',199)">Satın Al</button></div>
+      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gun ucretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Audio Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Pro YDS & YÖKDİL',399)">Ucretsiz Basla</button></div>
+      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaslat('Sinyal Avcisi VIP',699)">VIP'e Geç</button></div>
     </div>
   </div>
 </section>
@@ -883,7 +884,8 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 </section>
 <footer>
   <div class="footer-logo">Sinyal <b>Avcisi</b></div>
-  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span></div>
+  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanis</span><span onclick="goTo('ekitap')">Ucretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span>
+    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span></div>
   <div class="footer-copy">2026 Sinyal Avcisi · YDS & YOKDiL hazirlik platformu · Turkiye · Gelirin bir kismi yetim cocuklarin egitimi icin bagislanmaktadir</div>
 </footer>
 <div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()">
@@ -1964,6 +1966,139 @@ window.addEventListener('DOMContentLoaded',()=>{
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
+
+// ============================================================
+// İYZİCO ÖDEME ENTEGRASYONU
+// ============================================================
+function iyzicoOdemeBaslat(plan,fiyat){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`<div style="background:#fff;border-radius:20px;max-width:440px;width:100%;padding:32px;position:relative">
+    <button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="text-align:center;margin-bottom:24px"><div style="font-size:32px;margin-bottom:8px">💳</div><div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px">${plan}</div><div style="font-size:28px;font-weight:700;color:var(--signal)">${fiyat} TL<span style="font-size:14px;color:#6b7280;font-weight:400">/ay</span></div></div>
+    <div style="background:#f8faff;border:1px solid #e8eeff;border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="font-size:11px;color:var(--signal);font-weight:700;margin-bottom:12px">KART BİLGİLERİ</div>
+      <input id="kart-no" placeholder="Kart Numarası" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box">
+      <div style="display:flex;gap:8px"><input id="kart-son" placeholder="AA/YY" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none"><input id="kart-cvv" placeholder="CVV" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none" type="password"></div>
+      <input id="kart-isim" placeholder="Kart Üzerindeki İsim" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-top:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box">
+    </div>
+    <button onclick="iyzicoOnay(this.parentElement.parentElement)" style="width:100%;background:var(--signal);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🔒 Güvenli Öde — ${fiyat} TL</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:#6b7280">🔐 256-bit SSL · iyzico güvencesiyle</div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+}
+function iyzicoOnay(overlay){
+  const no=document.getElementById('kart-no')?.value;
+  const son=document.getElementById('kart-son')?.value;
+  const cvv=document.getElementById('kart-cvv')?.value;
+  const isim=document.getElementById('kart-isim')?.value;
+  if(!no||!son||!cvv||!isim){alert('Lütfen tüm kart bilgilerini doldurun.');return;}
+  overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:40px;text-align:center"><div style="font-size:64px;margin-bottom:16px">✅</div><div style="font-family:DM Serif Display,serif;font-size:24px;margin-bottom:8px">Ödeme Başarılı!</div><p style="font-size:14px;color:#6b7280;margin-bottom:20px">Hesabın aktifleştirildi!</p><button onclick="this.parentElement.parentElement.remove();goTo(dashboard)" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Git →</button></div>';
+}
+
+// ============================================================
+// GÜNLÜK MİNİ QUIZ
+// ============================================================
+const MINI_QUIZ_DATA=[
+  {q:'"Despite" hangi yapıyı ister?',opts:['S+V tam cümle','Noun/V-ing','Modal yapı','Sıfat'],ans:1,fb:'"Despite" edat, arkasından isim veya V-ing gelir.'},
+  {q:'"Must have V3" ne anlama gelir?',opts:['Gelecek zorunluluk','Geçmişe güçlü çıkarım','İzin','Öneri'],ans:1,fb:'"Must have V3" = geçmişte büyük ihtimalle oldu.'},
+  {q:'"However" nasıl kullanılır?',opts:['Başta virgülsüz','İki cümle arası virgülle','Sadece sorularda','İsmin önünde'],ans:1,fb:'"However" virgülle iki cümleyi bağlar.'},
+  {q:'"Although" ile "Despite" farkı?',opts:['Fark yok','Although S+V Despite noun','Despite S+V Although noun','Aynı yapı'],ans:1,fb:'"Although" + S+V, "Despite" + noun.'},
+  {q:'"By no means" ne demek?',opts:['Kesinlikle','Hiçbir şekilde değil','Belki','Nadiren'],ans:1,fb:'Gizli olumsuz = kesinlikle değil.'},
+  {q:'"Should have V3" neyi ifade eder?',opts:['Gelecekte yapılacak','Yapılmalıydı ama yapılmadı','Yapılabilir','Yapılıyor'],ans:1,fb:'Geçmişte yapılması gerekirdi ama yapılmadı.'},
+];
+function miniQuizGoster(){
+  const bugun=new Date().toDateString();
+  if(localStorage.getItem('sa_mini_quiz_son')===bugun)return;
+  setTimeout(()=>{
+    const sorular=[...MINI_QUIZ_DATA].sort(()=>Math.random()-0.5).slice(0,3);
+    let idx=0,dogru=0;
+    const overlay=document.getElementById('mini-quiz-overlay');
+    if(!overlay)return;
+    function render(){
+      if(idx>=3){bitis();return;}
+      const s=sorular[idx];
+      overlay.style.display='flex';
+      const optsHtml=s.opts.map((o,i)=>'<button data-i="'+i+'" style="text-align:left;padding:10px 14px;border:1px solid #e5e3dc;border-radius:8px;font-size:13px;font-family:Inter,sans-serif;cursor:pointer;background:#fff;color:var(--ink);margin-bottom:4px;width:100%">'+o+'</button>').join('');
+      overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:400px;width:100%;padding:28px"><div style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--signal);margin-bottom:12px">☀️ GÜNLÜK MİNİ QUIZ · '+(idx+1)+'/3</div><div style="height:4px;background:#e5e3dc;border-radius:2px;margin-bottom:20px"><div style="height:100%;background:var(--signal);border-radius:2px;width:'+(idx/3*100)+'%"></div></div><div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px;line-height:1.4">'+s.q+'</div><div id="mq-opts">'+optsHtml+'</div><div id="mq-fb" style="min-height:20px;margin-top:12px;font-size:12px;font-weight:600"></div><button id="mq-next" style="display:none;margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">'+(idx<2?'Sonraki →':'Sonucu Gör →')+'</button></div>';
+      overlay.querySelectorAll('#mq-opts button').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=parseInt(btn.dataset.i);
+          overlay.querySelectorAll('#mq-opts button').forEach(b=>b.style.pointerEvents='none');
+          if(i===s.ans){btn.style.background='#f0fdf4';btn.style.color='#16a34a';dogru++;document.getElementById('mq-fb').innerHTML='<span style=color:#16a34a>✅ Doğru! </span>'+s.fb;}
+          else{btn.style.background='#fef2f2';btn.style.color='var(--trap)';document.getElementById('mq-fb').innerHTML='<span style=color:var(--trap)>❌ </span>'+s.fb;}
+          document.getElementById('mq-next').style.display='block';
+          document.getElementById('mq-next').onclick=()=>{idx++;render();};
+        };
+      });
+    }
+    function bitis(){
+      localStorage.setItem('sa_mini_quiz_son',bugun);
+      overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:360px;width:100%;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:12px">'+(dogru===3?'🏆':dogru===2?'💪':'📚')+'</div><div style="font-family:DM Serif Display,serif;font-size:22px;margin-bottom:8px">'+dogru+'/3 Doğru</div><p style="font-size:13px;color:#6b7280;margin-bottom:20px">Yarın tekrar gel!</p><button onclick="document.getElementById(mini-quiz-overlay).style.display=none" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Harika!</button></div>';
+      if(typeof xpKazan==='function')xpKazan('tuzak',1);
+    }
+    render();
+  },3000);
+}
+
+// ============================================================
+// KELİME GÜNÜ
+// ============================================================
+const KELIME_GUNU=[
+  {en:'Nevertheless',tr:'Buna rağmen',ornek:'"Nevertheless, the study was cited."',ipucu:'= However. Resmi yazımda tercih.'},
+  {en:'Albeit',tr:'Her ne kadar... olsa da',ornek:'"Positive, albeit inconclusive."',ipucu:'Resmi "although" alternatifi.'},
+  {en:'Notwithstanding',tr:'Buna rağmen',ornek:'"Notwithstanding the evidence..."',ipucu:'"Despite" ile aynı işlev.'},
+  {en:'Predominantly',tr:'Büyük ölçüde',ornek:'"Predominantly female sample."',ipucu:'Baskınlık ifadesi.'},
+  {en:'Ostensibly',tr:'Görünürde',ornek:'"Ostensibly aimed to help."',ipucu:'Gerçekte farklı ima.'},
+  {en:'Hitherto',tr:'Şimdiye kadar',ornek:'"Hitherto unknown species."',ipucu:'Zaman zarfı — YDS tuzağı.'},
+  {en:'Purportedly',tr:'İddiaya göre',ornek:'"Purportedly authentic."',ipucu:'Şüpheyle bakılan iddia.'},
+];
+function kelimeGunuGoster(){
+  const k=KELIME_GUNU[Math.floor(Date.now()/(1000*60*60*24))%KELIME_GUNU.length];
+  const div=document.createElement('div');
+  div.style.cssText='position:fixed;bottom:80px;right:24px;z-index:450;background:#fff;border:2px solid var(--signal);border-radius:16px;padding:16px 18px;max-width:280px;box-shadow:0 8px 32px rgba(45,91,227,.2);font-family:Inter,sans-serif;animation:slideInLeft .4s ease';
+  div.innerHTML='<div style="font-size:10px;color:var(--signal);font-weight:700;letter-spacing:.1em;margin-bottom:6px">📚 GÜNÜN KELİMESİ</div><div style="font-family:DM Serif Display,serif;font-size:20px;color:var(--ink);margin-bottom:2px">'+k.en+'</div><div style="font-size:13px;color:var(--signal);font-weight:600;margin-bottom:8px">'+k.tr+'</div><div style="font-size:12px;color:#6b7280;font-style:italic;margin-bottom:6px">'+k.ornek+'</div><div style="font-size:11px;color:var(--muted);background:var(--sl);border-radius:6px;padding:6px 8px;margin-bottom:10px">💡 '+k.ipucu+'</div><div style="display:flex;gap:6px"><button onclick="this.parentElement.parentElement.remove()" style="flex:1;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Tamam!</button><button onclick="this.parentElement.parentElement.remove()" style="background:#f5f5f5;border:none;border-radius:8px;padding:7px 10px;font-size:11px;cursor:pointer">✕</button></div>';
+  document.body.appendChild(div);
+  setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .5s';setTimeout(()=>div.remove(),500);},8000);
+}
+
+// ============================================================
+// SINAV SİMÜLATÖRÜ
+// ============================================================
+function sinavSimulatoruAc(){
+  const havuz=[...TUZAK_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.dogru,fb:s.fb})),...SAT_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.ans,fb:s.fb})),...SL_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.ans,fb:s.fb}))];
+  const sorular=havuz.sort(()=>Math.random()-0.5).slice(0,Math.min(80,havuz.length));
+  let cevaplar=new Array(sorular.length).fill(null);
+  let sure=135*60,timerInterval;
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:var(--paper);z-index:800;overflow-y:auto;font-family:Inter,sans-serif';
+  let soruHtml='';
+  sorular.forEach((s,idx)=>{soruHtml+='<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:11px;color:var(--signal);font-weight:700;margin-bottom:8px">SORU '+(idx+1)+'</div><div style="font-size:14px;line-height:1.8;background:var(--paper);border-radius:8px;padding:10px 12px;margin-bottom:8px">'+s.sent+'</div><div style="font-size:13px;font-weight:600;margin-bottom:10px">'+s.q+'</div><div id="sim-opts-'+idx+'" style="display:flex;flex-direction:column;gap:6px">'+s.opts.map((o,i)=>'<button data-si="'+idx+'" data-oi="'+i+'" style="text-align:left;padding:10px 14px;border:1px solid #e5e3dc;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;font-family:Inter,sans-serif">'+String.fromCharCode(65+i)+') '+o+'</button>').join('')+'</div></div>';});
+  overlay.innerHTML='<div style="background:var(--ink);color:#fff;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10"><div style="font-family:DM Serif Display,serif;font-size:18px">Sinyal Avcısı — <span style=color:var(--contrast)>Deneme Sınavı</span></div><div style="display:flex;align-items:center;gap:16px"><div id="sim-sure" style="font-family:JetBrains Mono,monospace;font-size:20px;color:#e8d5a3">135:00</div><button id="btn-bitir" style="background:var(--trap);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Bitir</button><button id="btn-cik" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer">✕ Çık</button></div></div><div style="max-width:900px;margin:0 auto;padding:32px 5vw"><div style="display:flex;flex-direction:column;gap:20px">'+soruHtml+'</div><div style="margin-top:32px;text-align:center"><button id="btn-bitir2" style="background:var(--signal);color:#fff;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📊 Sınavı Tamamla</button></div></div>';
+  document.body.appendChild(overlay);
+  overlay.querySelectorAll('[data-si]').forEach(btn=>{
+    btn.onclick=()=>{
+      const si=parseInt(btn.dataset.si),oi=parseInt(btn.dataset.oi);
+      cevaplar[si]=oi;
+      document.querySelectorAll('[data-si="'+si+'"]').forEach(b=>{b.style.background='#fff';b.style.borderColor='#e5e3dc';});
+      btn.style.background='var(--sl)';btn.style.borderColor='var(--signal)';
+    };
+  });
+  function bitir(){
+    clearInterval(timerInterval);
+    let d=0,y=0,b=0;
+    sorular.forEach((s,i)=>{if(cevaplar[i]===null)b++;else if(cevaplar[i]===s.dogru)d++;else y++;});
+    const net=d-y*0.25,puan=Math.round((net/sorular.length)*100);
+    overlay.innerHTML='<div style="max-width:600px;margin:60px auto;padding:5vw;text-align:center"><div style="font-size:64px;margin-bottom:20px">'+(puan>=70?'🏆':puan>=50?'💪':'📚')+'</div><div style="font-family:DM Serif Display,serif;font-size:32px;margin-bottom:8px">Sınav Tamamlandı!</div><div style="font-size:48px;font-weight:700;color:var(--signal);margin-bottom:24px">'+puan+' Puan</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px"><div style="background:#f0fdf4;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#16a34a">'+d+'</div><div style="font-size:11px;color:#6b7280">Doğru</div></div><div style="background:#fef2f2;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--trap)">'+y+'</div><div style="font-size:11px;color:#6b7280">Yanlış</div></div><div style="background:#f5f5f5;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#6b7280">'+b+'</div><div style="font-size:11px;color:#6b7280">Boş</div></div><div style="background:var(--sl);border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--signal)">'+net.toFixed(1)+'</div><div style="font-size:11px;color:#6b7280">Net</div></div></div><button onclick="this.parentElement.parentElement.remove()" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Dön</button></div>';
+    if(typeof xpKazan==='function')xpKazan('sat',3);
+  }
+  overlay.querySelector('#btn-bitir').onclick=bitir;
+  overlay.querySelector('#btn-bitir2').onclick=bitir;
+  overlay.querySelector('#btn-cik').onclick=()=>{clearInterval(timerInterval);overlay.remove();};
+  timerInterval=setInterval(()=>{sure--;const dk=Math.floor(sure/60),sn=sure%60;const el=document.getElementById('sim-sure');if(el)el.textContent=dk+':'+(sn<10?'0':'')+sn;if(sure<=0){clearInterval(timerInterval);bitir();}},1000);
+}
+
 </script>
 </body>
 </html>
