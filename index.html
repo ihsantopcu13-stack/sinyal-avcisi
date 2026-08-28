@@ -645,6 +645,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
          <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
+          <div class="dtab" onclick="dtab(this,'avci')">🏹 Avcı Master</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <div class="dm-eye" id="sl-eyebrow">Genel - YDS Metni - Soru 1/15</div>
@@ -671,7 +672,114 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div id="tuzak-container"></div>
         </div>
         <div class="dmod" id="mod-sat" style="display:none"><div id="sat-icerik"></div></div>
-        <div class="dmod" id="mod-hatalar" style="display:none">
+        <div class="dmod" id="mod-avci" style="display:none">
+  <div class="dm-eye">🏹 AVCI MASTER SİSTEMİ — YDS/YÖKDİL Strateji Rehberi</div>
+  <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px">
+    
+    <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:10px;padding:14px;color:#fff;margin-bottom:4px">
+      <div style="font-family:'DM Serif Display',serif;font-size:16px;color:#e8d5a3;margin-bottom:6px">🏹 AVCI MASTER ANA PRENSİBİ</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.8">
+        1️⃣ SORU TÜRÜNÜ TANI → 2️⃣ SİNYALİ BUL → 3️⃣ YAPIYI TANI → 4️⃣ SAĞ/SOL KONTROL → 5️⃣ S+V+O → 6️⃣ ŞIKLARI ELE → 7️⃣ SON İKİDE KRİTİK FARKI BUL → 8️⃣ KANITLA → 🎯 CEVABI AVLA
+      </div>
+    </div>
+
+    <div style="background:var(--sl);border:1px solid rgba(45,91,227,.2);border-radius:10px;padding:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--signal);margin-bottom:6px">🚨 SİNYAL KELİME RADARI</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px">
+        <div><b>although</b> → zıtlık + S+V</div>
+        <div><b>despite</b> → zıtlık + noun</div>
+        <div><b>because</b> → neden + S+V</div>
+        <div><b>however</b> → zıtlık</div>
+        <div><b>therefore</b> → sonuç</div>
+        <div><b>unless</b> → koşul</div>
+        <div><b>by the time</b> → zaman</div>
+        <div><b>since/for</b> → Perfect?</div>
+      </div>
+      <div style="font-size:10px;color:var(--trap);margin-top:6px;font-weight:700">⚡ TRIGGER = İPUCU, CEVAP DEĞİL!</div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px">👉👈 SAĞ/SOL KONTROL MOTORU</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px">
+        <div><b style="color:var(--signal)">👉 SAĞ KONTROL</b><br>S+V mi? noun mu?<br>V-ing mi? V3 mü?<br>to+V1 mi?</div>
+        <div><b style="color:var(--trap)">👈 SOL KONTROL</b><br>modal mi? have/has mi?<br>be fiili mi? preposition mi?<br>zaman sinyali mi?</div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--ink);margin-top:6px;text-align:center">SAĞ + SOL = BOŞLUĞUN KİMLİĞİ</div>
+    </div>
+
+    <div style="background:#fef2f2;border:1px solid rgba(224,60,60,.2);border-radius:10px;padding:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--trap);margin-bottom:6px">🎭 ÖSYM TUZAK RADARI</div>
+      <div style="font-size:11px;line-height:1.8;columns:2">
+        <div>• Aynı kelime yanlış anlam</div>
+        <div>• Yarım doğru şık</div>
+        <div>• Fazla genel şık</div>
+        <div>• Fazla özel şık</div>
+        <div>• Özne değişimi</div>
+        <div>• Zaman değişimi</div>
+        <div>• Neden-sonuç tersliği</div>
+        <div>• Zıtlık yönü hatası</div>
+        <div>• Modal kesinlik farkı</div>
+        <div>• Referans kopukluğu</div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px">🏹 MASTER KOMUTLAR — KLOD'a yaz!</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer" onclick="document.getElementById('dnav-in')||document.getElementById('chat-in')">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">AVCI MASTER BAŞLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ Tüm sistemi otomatik çalıştır</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">CÜMLEYİ AVLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ S+V+O analizi</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">BAĞLAÇ AVCISI BAŞLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ Bağlaç analizi</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">HATA AVCISI BAŞLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ Yanlış analizi</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">PARAGRAFI AVLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ Reading stratejisi</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-family:monospace;font-size:10px;background:var(--ink);color:#e8d5a3;padding:2px 8px;border-radius:4px">AVCI BUGÜNÜ PLANLA</span>
+          <span style="font-size:10px;color:var(--muted)">→ Günlük adaptif plan</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:10px;padding:14px;color:#fff">
+      <div style="font-size:12px;font-weight:700;color:#e8d5a3;margin-bottom:8px">💎 ALTIN KURALLAR</div>
+      <div style="font-size:11px;line-height:2;color:rgba(255,255,255,.8)">
+        1. Her kelimeyi bilmek zorunda değilim.<br>
+        2. Önce soru türünü tanırım.<br>
+        3. Sinyali görürüm.<br>
+        4. Sağ/sol kontrol yaparım.<br>
+        5. Uzun cümleyi S+V+O ile küçültürüm.<br>
+        6. Doğruyu aramadan önce yanlışları öldürürüm.<br>
+        7. Son iki şıkta kritik farkı bulurum.<br>
+        8. Reading'de kanıtı ararım.<br>
+        9. Yanlışlarımı kurala dönüştürürüm.<br>
+        10. Puan getiren şeyi çalışırım.
+      </div>
+    </div>
+
+    <div style="background:var(--sl);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:var(--signal);margin-bottom:8px">🎯 MASTER SON FORMÜLÜ</div>
+      <div style="font-size:11px;color:var(--ink);font-weight:600;letter-spacing:.05em">
+        TANI → SİNYAL → YAPI → SAĞ/SOL → S+V+O → ELE → KRİTİK FARK → KANIT → 🎯 VUR
+      </div>
+      <button onclick="avciKlodaGit()" style="margin-top:10px;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🏹 KLOD ile AVCI MASTER BAŞLA</button>
+    </div>
+
+  </div>
+</div>
+<div class="dmod" id="mod-hatalar" style="display:none">
           <div class="dm-eye">HATA DEFTERİ — Yanliş cevapladıkların</div>
           <div id="hata-liste-container"></div>
         </div>
@@ -875,7 +983,7 @@ function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clear
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
-  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='sat')satRender();}
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();}
 }
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
@@ -1423,6 +1531,12 @@ function streakSoruEkle(tip){
   d.bugunCalistiMi=true;
   if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
+}
+function avciKlodaGit(){
+  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
+  const klodItem=Array.from(document.querySelectorAll('.dn-item')).find(i=>i.textContent.includes('KLOD'));
+  if(klodItem){klodItem.classList.add('active');dnav(klodItem);}
+  setTimeout(()=>{const inp=document.getElementById('dnav-in');if(inp){inp.value='AVCI MASTER BAŞLA';inp.focus();}},500);
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
