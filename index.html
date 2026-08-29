@@ -639,7 +639,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
           <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis →</div></div>
           <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 — +12 puan kaldi</div></div>
-          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yukleniyor...</div></div>
+          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
         </div>
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
@@ -658,7 +658,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
           <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
-          <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yukleniyor...</div>
+          <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yükleniyor...</div>
           <div class="kk" id="kk" onclick="kkFlip()">
             <div id="kk-front"><div class="kk-word" id="kk-word-front"></div><div class="kk-hint">Tikla — Türkçe gör</div></div>
             <div id="kk-back" style="display:none"><div class="kk-word" id="kk-word-back"></div><div class="kk-ex" id="kk-ex-back"></div></div>
@@ -976,7 +976,7 @@ function demoNext(){
   document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';
   document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;
 }
-function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='🎉 E-kitap '+el.value+' adresine gonderildi!';el.value='';}
+function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='🎉 E-kitap '+el.value+' adresine gönderildi!';el.value='';}
 async function modalSubmit(e){
   e.preventDefault();const ad=document.getElementById('m-ad'),em=document.getElementById('m-email'),si=document.getElementById('m-sifre');
   if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
@@ -1294,14 +1294,14 @@ kkLoad();
 let kkQueue=[],kkCurrent=null,kkFlipped=false;
 function kkBuildQueue(){const now=Date.now();kkQueue=[...kkData.filter(k=>k.due<=now)].sort(()=>Math.random()-0.5);}
 function kkNextDue(){const f=kkData.filter(k=>k.due>Date.now()).sort((a,b)=>a.due-b.due);if(!f.length)return null;const ms=f[0].due-Date.now();const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);return h>0?(h+' saat '+m+' dk'):(m+' dk');}
-function kkUpdateDashCard(){const c=kkData.filter(k=>k.due<=Date.now()).length;const el=document.getElementById('dk-kelime-bugun'),sub=document.getElementById('dk-kelime-durum');if(el)el.textContent=c>0?c:'✓';if(sub)sub.textContent=c>0?'kart tekrar bekliyor':'Bugun tamamlandi!';}
+function kkUpdateDashCard(){const c=kkData.filter(k=>k.due<=Date.now()).length;const el=document.getElementById('dk-kelime-bugun'),sub=document.getElementById('dk-kelime-durum');if(el)el.textContent=c>0?c:'✓';if(sub)sub.textContent=c>0?'kart tekrar bekliyor':'Bugün tamamlandı!';}
 function kkShow(){
   kkBuildQueue();
   const eyebrow=document.getElementById('kk-eyebrow'),kkEl=document.getElementById('kk'),front=document.getElementById('kk-front'),back=document.getElementById('kk-back'),act=document.getElementById('kk-actions');
   if(kkQueue.length===0){
     const sonraki=kkNextDue();
-    if(eyebrow)eyebrow.textContent='Spaced Repetition — Bugun tamamlandi ✓';
-    if(kkEl)kkEl.innerHTML=`<div style="text-align:center;padding:20px 0"><div style="font-size:40px;margin-bottom:10px">🎉</div><div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Harika! Bugunluk bitti.</div><div style="font-size:13px;color:var(--muted);line-height:1.7">${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra gelecek.':'Tum kartlar tekrar edildi.'}<br>Yarin devam et 💪</div></div>`;
+    if(eyebrow)eyebrow.textContent='Spaced Repetition — Bugün tamamlandı ✓';
+    if(kkEl)kkEl.innerHTML=`<div style="text-align:center;padding:20px 0"><div style="font-size:40px;margin-bottom:10px">🎉</div><div style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:8px">Harika! Bugunluk bitti.</div><div style="font-size:13px;color:var(--muted);line-height:1.7">${sonraki?'Sonraki kart <b>'+sonraki+'</b> sonra gelecek.':'Tüm kartlar tekrar edildi.'}<br>Yarın devam et 💪</div></div>`;
     if(act)act.style.display='none';return;
   }
   kkCurrent=kkQueue.shift();kkFlipped=false;
@@ -1514,7 +1514,7 @@ const SL_HAVUZ=[
   {eye:'Saglik - YOKDiL Metni',sent:'"The drug <span class="s-trap" data-tip="Gizli olumsuz">scarcely</span> reduced inflammation <span class="s-sig" data-tip="Zitlik sinyali">despite</span> being administered at the <span class="s-key">maximum</span> dosage."',q:'Ilac hakkinda ne soylenebilir?',opts:['Maksimum dozda cok etkili oldu.','Maksimum doza ragmen neredeyse hic etki etmedi.','Doz artirinca etkinligi artti.','Ilac hicbir doz icin test edilmedi.'],ans:1,fb:'"Scarcely" = neredeyse hic + "despite maximum dosage" = doza ragmen.'},
   {eye:'Sosyal - YOKDiL Metni',sent:'"The policy was <span class="s-trap" data-tip="Gizli olumsuz">anything but</span> <span class="s-key">neutral</span>; it disproportionately affected <span class="s-sig" data-tip="Vurgu sinyali">marginalized</span> communities."',q:'Politika hakkinda ne dogrudur?',opts:['Tamamen tarafsizdi.','Tarafsiz degildi; dezavantajli topluluklar daha cok etkilendi.','Tum gruplar esit sekilde etkilendi.','Politika uygulanmadi.'],ans:1,fb:'"Anything but neutral" = tarafsiz degil. Guclu gizli olumsuz!'},
   {eye:'Fen - YOKDiL Metni',sent:'"The experiment <span class="s-trap" data-tip="Gizli olumsuz">by no means</span> confirmed the hypothesis; <span class="s-sig" data-tip="Karsi sinyal">on the contrary</span>, it <span class="s-key">contradicted</span> previous assumptions."',q:'Deney sonuclari ne gosterdi?',opts:['Hipotezi tamamen dogruladi.','Hipotezi dogrulamadi, aksine onceki varsayimlari cururtti.','Hipotezi kismen destekledi.','Sonuclar belirsizdi.'],ans:1,fb:'"By no means confirmed" + "on the contrary" = kesinlikle dogrulamadi, aksine cururdu.'},
-  {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Zaman sinyali">No sooner had</span> the new regulation been implemented <span class="s-trap" data-tip="Dikkat: devrik yapi">than</span> companies began <span class="s-key">lobbying</span> against it."',q:'Bu cumleye gore ne oldu?',opts:['Sirketler yonetmelikten once lobi yapti.','Yonetmelik hayata gecmeden hemen sirketler lobi yapmaya basladi.','Sirketler yonetmeligi destekledi.','Lobi faaliyetleri basarili oldu.'],ans:1,fb:'"No sooner...than" = yapar yapmaz. Devrik yapi + zaman sinyali.'},
+  {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Zaman sinyali">No sooner had</span> the new regulation been implemented <span class="s-trap" data-tip="Dikkat: devrik yapi">than</span> companies began <span class="s-key">lobbying</span> against it."',q:'Bu cumleye gore ne oldu?',opts:['Sirketler yonetmelikten once lobi yapti.','Yonetmelik hayata gecmeden hemen sirketler lobi yapmaya basladi.','Sirketler yonetmeligi destekledi.','Lobi faaliyetleri başarılı oldu.'],ans:1,fb:'"No sooner...than" = yapar yapmaz. Devrik yapi + zaman sinyali.'},
   {eye:'Hukuk - YDS Metni',sent:'"The defendant\'s argument was <span class="s-trap" data-tip="Gizli olumsuz">not without</span> <span class="s-key">merit</span>, <span class="s-sig" data-tip="Zitlik">yet</span> the court ultimately ruled against him."',q:'Savunma argumani hakkinda ne dogrudur?',opts:['Tamamen degersizdi.','Belirli bir degeri vardi ama mahkeme yine de aleyhine karar verdi.','Mahkemeyi ikna etti.','Degerlendirilmedi.'],ans:1,fb:'"Not without merit" = cift olumsuz = degerli. "Yet" = ama. Klasik OSYM tuzagi!'},
   {eye:'Genel - YDS Metni',sent:'"<span class="s-sig" data-tip="Karsitlik">While</span> proponents argue the reform is <span class="s-key">essential</span>, critics maintain it is <span class="s-trap" data-tip="Gizli olumsuz">far from</span> sufficient."',q:'Elestirenler reform hakkinda ne dusunuyor?',opts:['Reform yeterli ve gereklidir.','Reform gerekli olabilir ama yeterli degildir.','Reform tamamen gereksizdir.','Reform henuz degerlendirilmemistir.'],ans:1,fb:'"Far from sufficient" = yeterli degil. "While" zitlik olusturuyor.'},
   {eye:'Hukuk - YDS Metni',sent:'"The defendant, <span class="s-sig" data-tip="Zitlik sinyali">notwithstanding</span> the overwhelming evidence, <span class="s-trap" data-tip="Tuzak: sucsuz degil">pleaded not guilty</span>."',q:'Bu metne gore savunma hakkinda ne dogrudur?',opts:['Deliller savunuyu destekledi.','Guclu delillere ragmen suclu olmadigi iddia edildi.','Mahkeme savunuyu reddetti.','Deliller yetersiz bulundu.'],ans:1,fb:'"Notwithstanding" = -e ragmen. Guçlu delil varken sucsuz dendi.'},
@@ -1886,7 +1886,7 @@ function medyaRender(){
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
     <div onclick="medyaOyna(${i})" style="cursor:pointer;background:#1a1f35;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08);transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='none'">
       <div style="position:relative;padding-top:56.25%;background:#000;overflow:hidden">
-        <img src="https://img.youtube.com/vi/${k.videoId}/mqdefault.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8">
+        <img src="https://img.youtube.com/vi/${k.videoId}/mqdefault.jpg" alt="${k.baslik} - YDS YÖKDİL video dersi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
           <div style="width:52px;height:52px;background:rgba(255,0,0,.85);border-radius:50%;display:flex;align-items:center;justify-content:center">
             <div style="width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:18px solid #fff;margin-left:4px"></div>
@@ -2018,6 +2018,40 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
+
+function iyzicoOdemeBaslat(plan,fiyat){
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML=`<div style="background:#fff;border-radius:20px;max-width:440px;width:100%;padding:32px;position:relative;font-family:Inter,sans-serif">
+    <button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">✕</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:32px;margin-bottom:8px">💳</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px">${plan}</div>
+      <div style="font-size:28px;font-weight:700;color:var(--signal)">${fiyat} TL<span style="font-size:14px;color:#6b7280;font-weight:400">/ay</span></div>
+    </div>
+    <div style="background:#f8faff;border:1px solid #e8eeff;border-radius:12px;padding:16px;margin-bottom:20px">
+      <div style="font-size:11px;color:var(--signal);font-weight:700;margin-bottom:12px;letter-spacing:.08em">KART BİLGİLERİ</div>
+      <input id="kart-no" placeholder="Kart Numarası" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" aria-label="Kart numarası">
+      <div style="display:flex;gap:8px">
+        <input id="kart-son" placeholder="AA/YY" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none" aria-label="Son kullanma tarihi">
+        <input id="kart-cvv" placeholder="CVV" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none" type="password" aria-label="CVV">
+      </div>
+      <input id="kart-isim" placeholder="Kart Üzerindeki İsim" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-top:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" aria-label="Kart sahibi ismi">
+    </div>
+    <button onclick="iyzicoOnay(this.parentElement.parentElement)" style="width:100%;background:var(--signal);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🔒 Güvenli Öde — ${fiyat} TL</button>
+    <div style="text-align:center;margin-top:12px;font-size:11px;color:#6b7280">🔐 256-bit SSL · iyzico güvencesiyle</div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
+}
+function iyzicoOnay(overlay){
+  const no=document.getElementById('kart-no')?.value;
+  const son=document.getElementById('kart-son')?.value;
+  const cvv=document.getElementById('kart-cvv')?.value;
+  const isim=document.getElementById('kart-isim')?.value;
+  if(!no||!son||!cvv||!isim){alert('Lütfen tüm kart bilgilerini doldurun.');return;}
+  overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:40px;text-align:center;font-family:Inter,sans-serif"><div style="font-size:64px;margin-bottom:16px">✅</div><div style="font-family:DM Serif Display,serif;font-size:24px;margin-bottom:8px">Ödeme Başarılı!</div><p style="font-size:14px;color:#6b7280;margin-bottom:20px">Hesabın aktifleştirildi!</p><button onclick="this.parentElement.parentElement.remove();goTo('dashboard')" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Git →</button></div>';
+}
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
 
 // ============================================================
