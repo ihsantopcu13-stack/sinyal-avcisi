@@ -1575,7 +1575,8 @@ function slSonraki(){
   slRender();
 }
 // İlk render
-setTimeout(slRender,500);
+setTimeout(slRender,1000);
+document.addEventListener('DOMContentLoaded',function(){setTimeout(slRender,500);});
 
 
 // ============================================================
