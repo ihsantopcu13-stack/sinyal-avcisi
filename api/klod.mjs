@@ -139,12 +139,33 @@ const TOOLS = [
   }
 ];
 
+// 17. VISION — PDF/Görsel analiz
+async function visionAnaliz(imageBase64, mediaType, soru) {
+  return {
+    role: "user",
+    content: [
+      {
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: mediaType || "image/jpeg",
+          data: imageBase64
+        }
+      },
+      {
+        type: "text",
+        text: soru || "Bu YDS/YÖKDİL soru görselini analiz et, soruları çöz ve açıkla."
+      }
+    ]
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages, system, mode, use_tools } = req.body;
+  const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Geçersiz istek' });
@@ -164,9 +185,16 @@ export default async function handler(req, res) {
   const msgType = detectMessageType(messages);
   const temperature = getTemperature(msgType);
 
+  // 17. VISION — Görsel varsa mesaja ekle
+  let processedMessages = messages;
+  if (image_base64) {
+    const visionMsg = await visionAnaliz(image_base64, image_type, image_soru);
+    processedMessages = [...messages, visionMsg];
+  }
+
   // 13. LONG CONTEXT — Geçmiş mesajları akıllıca kırp
   const maxMessages = estimatedTokens > 50000 ? 6 : 20;
-  const trimmedMessages = messages.slice(-maxMessages);
+  const trimmedMessages = processedMessages.slice(-maxMessages);
 
   // 12. MULTISHOT CALIBRATION — İyi/kötü örnek ekle
   const calibratedMessages = mode === 'soru_uret' 
@@ -189,7 +217,12 @@ export default async function handler(req, res) {
   if (mode === 'json_output') {
     finalMessages = [
       ...calibratedMessages,
-      { role: "assistant", content: '{"' } // Prefill — JSON'a zorla
+      { role: "assistant", content: '{"soru":' } // prefill — JSON garantili
+    ];
+  } else if (mode === 'xml_output') {
+    finalMessages = [
+      ...calibratedMessages,
+      { role: "assistant", content: '<soru>' } // prefill — XML garantili
     ];
   }
 
