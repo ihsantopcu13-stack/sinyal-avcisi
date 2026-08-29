@@ -1251,7 +1251,7 @@ function dAns(btn,correct){
   const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('dm-fb');
   const nextBtn=document.getElementById('sl-next-btn');
-  const soru=SL_HAVUZ[slIdx];
+  const soru=slCurrentSoru||SL_HAVUZ[slIdx];
   if(correct){
     btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('sinyal');
@@ -1549,13 +1549,14 @@ const SL_HAVUZ=[
   {eye:'Sosyal - YOKDiL Metni',sent:'"The study found that social mobility, <span class="s-sig" data-tip="Zitlik">contrary to popular belief</span>, has <span class="s-trap" data-tip="Tuzak: arttı değil azaldı">declined</span> over the past two decades."',q:'Arastirmanin sosyal hareketlilik hakkindaki bulgulari nedir?',opts:['Son yıllarda artmistir.','Yaygin inancanin aksine azalmistir.','Degisim gozlemlenmemistir.','Yalnızca gelismis ulkelerde düsmüstür.'],ans:1,fb:'"Contrary to popular belief" = yaygin inancanin aksine. "Declined" = azaldi.'},
 ];
 
-let slIdx=0,slAnswered=false;
+let slIdx=0,slAnswered=false,slCurrentSoru=null;
 
 function slRender(){
   const alanFiltre=curAlan||'Genel';
   const filtreliSorular=SL_HAVUZ.filter(s=>s.eye.includes(alanFiltre)||s.eye.includes('Genel'));
   const havuz=filtreliSorular.length>0?filtreliSorular:SL_HAVUZ;
   const soru=havuz[slIdx%havuz.length];
+  slCurrentSoru=soru;
   const eyebrow=document.getElementById('sl-eyebrow');
   const sent=document.getElementById('sl-sent');
   const q=document.getElementById('sl-q');
@@ -2103,7 +2104,7 @@ function iyzicoOnay(overlay){
   const cvv=document.getElementById('kart-cvv')?.value;
   const isim=document.getElementById('kart-isim')?.value;
   if(!no||!son||!cvv||!isim){alert('Lütfen tüm kart bilgilerini doldurun.');return;}
-  overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:40px;text-align:center"><div style="font-size:64px;margin-bottom:16px">✅</div><div style="font-family:DM Serif Display,serif;font-size:24px;margin-bottom:8px">Ödeme Başarılı!</div><p style="font-size:14px;color:#6b7280;margin-bottom:20px">Hesabın aktifleştirildi!</p><button onclick="this.parentElement.parentElement.remove();goTo(dashboard)" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Git →</button></div>';
+  overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:40px;text-align:center"><div style="font-size:64px;margin-bottom:16px">✅</div><div style="font-family:DM Serif Display,serif;font-size:24px;margin-bottom:8px">Ödeme Başarılı!</div><p style="font-size:14px;color:#6b7280;margin-bottom:20px">Hesabın aktifleştirildi!</p><button onclick="this.parentElement.parentElement.remove();goTo('dashboard')" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Git →</button></div>';
 }
 
 // ============================================================
