@@ -1123,14 +1123,39 @@ ${liderTabloGoster()}
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
+// 19. BATCH - Soru üretim kuyruğu
+const soruKuyrugu=[];
+async function soruTopluUret(konu,adet=5){
+  const mesaj={role:'user',content:`${konu} konusunda YDS formatında ${adet} soru üret. XML formatı kullan:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>`};
+  const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[mesaj],mode:'structured',use_tools:false})});
+  return await res.json();
+}
+
+// 15. META PROMPTING — Claude'a prompt yazdır
+async function metaPromptUret(){
+  const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'Sinyal Avcısı için en iyi YDS soru üretme system promptunu yaz. Çıktı: sadece prompt metni.'}],mode:'chat'})});
+  const data=await res.json();
+  return data.content?.[0]?.text||'';
+}
+
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
   const val=inp.value.trim();
   const body=document.getElementById('dnav-chat');
-  // Kullanıcı mesajı
   const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
   inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
+  
+  // 20. TOKEN COUNTING — Uyarı
+  const totalChars=dnavHistory.reduce((s,m)=>s+(m.content?.length||0),0);
+  const estTokens=Math.ceil(totalChars/4);
+  if(estTokens>80000){
+    const uyari=document.createElement('div');
+    uyari.className='msg k';
+    uyari.innerHTML='⚠️ Konuşma uzadı. <button onclick="dnavHistory=[];this.parentElement.remove()" style="color:var(--signal);background:none;border:none;cursor:pointer;font-weight:700">Yeni sohbet başlat</button>';
+    body.appendChild(uyari);
+  }
+  
   // Typing göstergesi
   const tp=document.createElement('div');tp.className='msg k';
   tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
@@ -1142,6 +1167,8 @@ async function dnavChat(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         messages:dnavHistory,
+        mode:'chat',
+        use_tools:false,
         system:`Sen KLOD'sun - Sinyal Avcisi platformunun YDS/YOKDiL AI ogretmenisin ve AVCI MASTER SiSTEMiSiN. Turkce konus.
 
 AVCI MASTER ANA PRENSiBi - Her soru icin su sirayi kullan:
@@ -1171,8 +1198,18 @@ MASTER FORMUL: TANI > SiNYAL > YAPI > SAG/SOL > S+V+O > ELE > KRiTiK FARK > KANI
     const data=await res.json();
     tp.remove();
     const cevap=data.content?.[0]?.text||data.error||'Bir hata oluştu.';
-    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    const km=document.createElement('div');km.className='msg k';
+    // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
+    const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
+    km.innerHTML=temizCevap.replace(/\n/g,'<br>');
     body.appendChild(km);body.scrollTop=body.scrollHeight;
+    // Token bilgisi (geliştirici modu)
+    if(data.token_info&&localStorage.getItem('sa_dev')==='1'){
+      const ti=document.createElement('div');
+      ti.style.cssText='font-size:10px;color:rgba(0,0,0,.3);text-align:right;padding:2px 4px';
+      ti.textContent=`🔢 ${data.token_info.input_tokens}↑ ${data.token_info.output_tokens}↓ ${data.token_info.cache_read?'📦cache':''}`; 
+      body.appendChild(ti);
+    }
     dnavHistory.push({role:'assistant',content:cevap});
   } catch(err){
     tp.remove();
