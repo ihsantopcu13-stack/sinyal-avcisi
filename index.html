@@ -1488,7 +1488,15 @@ const KB=[
   {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.']},
   {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi. "Had she known" devrik kullanim.']},
 ];
-const KB_GENEL=['Ilginc! Daha acayabilir misin?','Dogru yonde gidiyorsun. Hangi sinyale bakman gerekir?','Bu cumlede sinyal kelimesini buldun mu?','OSYM bu yapiyi nasil sorar? Duşun.'];
+const KB_GENEL=[
+  'Güzel soru! Bu yapıda ÖSYM genellikle zıtlık sinyalini gizler. "although/despite/yet" görünce sağ tarafı kontrol et — S+V mi, noun mu?',
+  'Doğru yönde gidiyorsun. Modal perfect yapısında "must have V3" geçmişe dair güçlü çıkarım yapar. "might have" ile karıştırma — bu ÖSYM tuzağı!',
+  'Bu cümlede sinyal kelimesini buldun mu? "however/nevertheless/nonetheless" = ZIT sinyal. Solundaki fikir, sağındakinin tersi.',
+  'ÖSYM bu yapıyı nasıl sorar? Genellikle boşluk doldurma veya anlam sorusunda gizli olumsuz kullanır: "by no means / far from / hardly".',
+  'Harika! Şimdi S+V+O haritasını çıkar. Özne kim, fiil ne, nesne ne? Uzun cümlelerde bu harita seni kurtarır.',
+  'Bu bir koşul cümlesi. "If + had V3 → would have V3" — 3. tip koşul, geçmişe dair pişmanlık veya varsayım.',
+  'Kelime tuzağına dikkat! ÖSYM bazen "effective" yerine "efficient" koyar — ikisi farklı anlam. Bağlamdan kontrol et.'
+];
 let chatHistory=[],chatReplied=false;
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
@@ -1497,19 +1505,12 @@ async function sendChat(){
   const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
   const m=val.toLowerCase();let cevap='';
   for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-  if(!cevap)cevap=KB_GENEL[0];
+  if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
   chatHistory.push({role:'user',content:val});
   await new Promise(r=>setTimeout(r,700));tp.remove();
   const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
   chatHistory.push({role:'assistant',content:cevap});
-  // İlk cevaptan sonra input'u kilitle, CTA göster
-  chatReplied=true;
-  inp.disabled=true;inp.placeholder='Devam etmek için giriş yap...';
-  document.querySelector('.chat-send').disabled=true;
-  const cta=document.createElement('div');
-  cta.className='msg k';
-  cta.innerHTML='🎯 <strong>KLOD ile devam etmek ister misin?</strong> Platforma giriş yap.<br><br><button onclick="goTo(\'auth\')" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer">Ücretsiz Başla →</button>';
-  body.appendChild(cta);body.scrollTop=body.scrollHeight;
+
 }
 
 // PLAYER
