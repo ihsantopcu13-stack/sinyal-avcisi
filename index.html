@@ -87,6 +87,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .demo-card{background:#fff;border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
 .demo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--signal),#818cf8,var(--signal));background-size:200% 100%;animation:shimmer 3s linear infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 .demo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .demo-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .badge-live{background:var(--sl);color:var(--signal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
@@ -292,19 +293,19 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .fc:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
 .fc.featured{border-color:var(--signal);box-shadow:0 0 0 2px var(--signal),var(--shadow-xl);background:linear-gradient(160deg,#fff,#f5f8ff)}
 .fc.featured:hover{transform:translateY(-4px)}
-.fc-badge{background:var(--signal);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:14px}
+.fc-badge{background:linear-gradient(135deg,var(--signal),#818cf8);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:.02em;box-shadow:0 2px 8px rgba(26,79,214,.3)}
 .fc-name{font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.fc-price{font-family:'DM Serif Display',serif;font-size:38px;letter-spacing:-.03em;margin-bottom:3px}
+.fc-price{font-family:'DM Serif Display',serif;font-size:44px;letter-spacing:-.03em;margin-bottom:3px}
 .fc-price sup{font-size:18px;vertical-align:super}
 .fc-period{font-size:14px;color:var(--muted);margin-bottom:20px}
 .fc-feats{list-style:none;flex:1;margin-bottom:22px;display:flex;flex-direction:column;gap:8px}
-.fc-feats li{font-size:15px;display:flex;gap:8px;align-items:flex-start}
+.fc-feats li{font-size:16px;display:flex;gap:8px;align-items:flex-start}
 .fc-feats li::before{content:'✓';color:var(--signal);font-weight:700;flex-shrink:0;margin-top:1px}
 .fc-feats li.no{color:var(--muted)}
 .fc-feats li.no::before{content:'–';color:var(--border)}
-.fc-btn{display:block;width:100%;text-align:center;padding:12px;border-radius:8px;font-size:14px;font-weight:600;border:1px solid var(--border);color:var(--ink);background:transparent;cursor:pointer;font-family:'Inter',sans-serif}
+.fc-btn{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;font-size:15px;font-weight:700;border:1px solid var(--border);color:var(--ink);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;letter-spacing:-.01em}
 .fc-btn:hover{border-color:var(--signal);color:var(--signal)}
-.fc.featured .fc-btn{background:var(--signal);color:#fff;border-color:var(--signal)}
+.fc.featured .fc-btn{background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#fff;border-color:var(--signal);box-shadow:0 4px 16px rgba(26,79,214,.35);font-size:16px;padding:14px}
 .sss{padding:72px 5vw;background:#fff;border-top:1px solid var(--border)}
 .sss-inner{max-width:700px;margin:0 auto}
 .sss-header{text-align:center;margin-bottom:44px}
@@ -321,12 +322,12 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .hayir-alinti{font-family:'DM Serif Display',serif;font-style:italic;font-size:17px;color:var(--contrast);margin-bottom:28px;padding:0 20px;line-height:1.6}
 .hayir-etiketler{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .hayir-etiket{font-size:14px;font-weight:600;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:7px 16px;color:rgba(247,246,242,.8)}
-footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:grid;grid-template-columns:1fr auto;gap:32px;flex-wrap:wrap}
 .footer-logo{font-family:'DM Serif Display',serif;font-size:20px}
 .footer-logo b{color:var(--contrast);font-weight:400}
-.footer-links{display:flex;gap:22px}
-.footer-links span{font-size:15px;color:rgba(247,246,242,.4);cursor:pointer}
-.footer-copy{font-size:14px;color:rgba(247,246,242,.3);width:100%;border-top:1px solid rgba(255,255,255,.07);padding-top:18px;margin-top:6px}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.footer-links span{font-size:15px;color:rgba(247,246,242,.5);cursor:pointer;transition:color .2s}.footer-links span:hover{color:rgba(247,246,242,.9)}
+.footer-copy{font-size:14px;color:rgba(247,246,242,.35);grid-column:1/-1;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;line-height:1.7}
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-ov.open{display:flex}
 .modal{background:#fff;border-radius:var(--r-xl);padding:40px;max-width:440px;width:100%;box-shadow:0 32px 96px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.06);position:relative}
@@ -493,7 +494,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <h1>Metni çevirmiyorsun — <em>sinyali</em> yakalıyorsun</h1>
     <p class="hero-sub">ÖSYM sorularını kelime kelime okumak süreyi bitirir. Bağlaçlar, gizli olumsuzlar ve modal yapıları tanırsan 10 saniyede çözersin.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="goTo('demo')">Canlı demoyu dene</button>
+      <button class="btn-primary" onclick="goTo('demo')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Canlı demoyu dene <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanış</button>
     </div>
     <div class="hero-badges">
@@ -557,9 +558,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div><div class="stat-num" data-count="90">90</div><div class="stat-lbl">Gunde sonuc</div></div>
     </div>
     <div class="yorumlar">
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te hep hata yapardım. Sinyal metodunu öğrendikten sonra tuzağı ilk bakışta görüyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">A. Yılmaz</div><div class="yorum-unvan">Yüksek Lisans Öğrencisi - YDS 78</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk metinleriyle çalışmak çok daha verimli oldu. 3 ayda 22 puanlık artışla YDS zorunluluğumu tamamladım."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">M. Kaya</div><div class="yorum-unvan">Avukat - YDS 82</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"KLOD gerçekten öğretiyor. 'Doğru cevap B' demiyor, neden B olduğunu açıklıyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">D. Şahin</div><div class="yorum-unvan">Hemşire - YÖKDİL 91</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te hep takılırdım — 'must have' mi, 'might have' mi bilemedim. Sinyal metodunu öğrendikten sonra tuzağı 5 saniyede görüyorum. YDS'de 14 puan artırdım."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">A. Yılmaz</div><div class="yorum-unvan">Yüksek Lisans Öğrencisi - YDS 78</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk metinleriyle çalışmak daha verimli. KLOD hukuki terimleri bile Türkçe açıklıyor. 3 ayda 22 puan artış — YDS zorunluluğumu tamamladım."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">M. Kaya</div><div class="yorum-unvan">Avukat - YDS 82</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Diğer platformlar 'doğru cevap B' diyordu. KLOD neden B olduğunu sinyal metoduyla gösterdi. 2 ayda YÖKDİL Sağlık'tan 91 aldım."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">D. Şahin</div><div class="yorum-unvan">Hemşire - YÖKDİL 91</div></div></div></div>
     </div>
   </div>
 </section>
@@ -910,7 +911,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
     <div class="fiyat-grid">
       <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Ses Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Temel Sinyal',199)">Satın Al</button></div>
-      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay - 7 gün ücretsiz</div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Ses Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button></div>
+      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay · <span style="color:var(--trap);font-weight:700">⏱ 7 gün ücretsiz</span></div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Ses Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button></div>
       <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Sinyal Avcisi VIP',699)">VIP'e Geç</button></div>
     </div>
   </div>
@@ -945,7 +946,7 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 </section>
 <footer>
   <div class="footer-logo">Sinyal <b>Avcisi</b></div>
-  <div class="footer-links"><span>@sinyalavcisi.yds</span><span onclick="goTo('klod')">KLOD ile tanış</span><span onclick="goTo('ekitap')">Ücretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span>
+  <div class="footer-links"><a href="https://instagram.com/sinyalavcisi.yds" target="_blank" style="color:rgba(247,246,242,.5);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(247,246,242,.5)'">📸 @sinyalavcisi.yds</a><span onclick="goTo('klod')">KLOD ile tanış</span><span onclick="goTo('ekitap')">Ücretsiz E-Kitap</span><span onclick="goTo('sss')">SSS</span>
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span></div>
   <div class="footer-copy">2026 Sinyal Avcısı · YDS & YÖKDİL hazırlık platformu · Türkiye · Gelirin bir kısmı yetim çocukların eğitimi için bağışlanmaktadır</div>
 </footer>
