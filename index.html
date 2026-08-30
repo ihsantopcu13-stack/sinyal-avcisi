@@ -717,6 +717,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
           <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
           <div class="dtab" onclick="dtab(this,'svo')">📐 S+V+O</div>
+          <div class="dtab" onclick="dtab(this,'teknik')">🧠 Öğrenme</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
           <div class="dtab" onclick="dtab(this,'avci')">🏹 Avcı Master</div>
         </div>
@@ -1628,18 +1629,29 @@ const PD=[
 let pIdx=2,pPlaying=false,pSpeed=1,pFill=0,pTimer=null;
 function pUpdate(){const d=PD[pIdx%PD.length];document.getElementById('p-topic').textContent=d.t;document.getElementById('p-en').textContent=d.en;document.getElementById('p-tr').textContent=d.tr;}
 let pAudio=null;
+const ttsCache=new Map(); // Ses cache — aynı metni tekrar API'ye sormaz
+
 async function ttsSpeak(text,lang,onEnd){
+  if(!text||text.trim().length<2)return;
   try{
     const voice=lang==='en-US'?'echo':'onyx';
-    const res=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice,speed:pSpeed})});
-    if(!res.ok)throw new Error('TTS failed');
-    const blob=await res.blob();
-    const url=URL.createObjectURL(blob);
-    if(pAudio){pAudio.pause();URL.revokeObjectURL(pAudio.src);}
+    const cacheKey=text.trim().substring(0,100)+'_'+voice;
+    
+    // Cache'den al
+    let url=ttsCache.get(cacheKey);
+    if(!url){
+      const res=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice,speed:1})});
+      if(!res.ok)throw new Error('TTS failed');
+      const blob=await res.blob();
+      url=URL.createObjectURL(blob);
+      ttsCache.set(cacheKey,url); // Cache'e kaydet
+    }
+    
+    if(pAudio){pAudio.pause();}
     pAudio=new Audio(url);
     pAudio.playbackRate=pSpeed;
     pAudio.onended=onEnd||null;
-    pAudio.play();
+    await pAudio.play();
     return pAudio;
   }catch(e){
     // Fallback to Web Speech API
@@ -1803,6 +1815,126 @@ const SVO_DERSLER=[
     ]
   }
 ];
+
+// ============================================================
+// ÖĞRENME TEKNİKLERİ AKADEMİSİ
+// ============================================================
+const TEKNIKLER=[
+  {
+    id:'spaced',
+    icon:'📅',
+    renk:'#2d5be3',
+    baslik:'Aralıklı Tekrar',
+    ingilizce:'Spaced Repetition',
+    ozet:'Beyin, bilgiyi unutmak üzereyken tekrar ederse en iyi öğrenir.',
+    nasil:'Bugün öğrendiğin bir kelimeyi yarın, 3 gün sonra, 1 hafta sonra tekrar et. Her seferinde hatırlarsan aralığı uzat.',
+    yds:'Kelime Kartları bölümünde SM-2 algoritması tam olarak bunu yapıyor — hatırladıkça aralık uzuyor.',
+    bilim:'Ebbinghaus Unutma Egrisi: Ogrendikten 1 saat sonra yuzde 56sini, 1 gun sonra yuzde 33unu hatirliyoruz. Aralikli tekrar bu egrisi tersine cevirir.',
+    sure:'Günde 10-15 dk',
+    etki:'⭐⭐⭐⭐⭐'
+  },
+  {
+    id:'recall',
+    icon:'🔁',
+    renk:'#e03c3c',
+    baslik:'Aktif Hatırlama',
+    ingilizce:'Active Recall',
+    ozet:'Okumak değil, kendinizi sınamak öğretir.',
+    nasil:'Bir konu okuduktan sonra kitabı kapat. "Şimdi ne öğrendim?" diye kendinize sorun. Zorlanmak normaldir — beyin bu sırada güçlenir.',
+    yds:'Sinyal Lab\'da her soruyu cozduğunde aktif hatirlama yapiyorsun. Şiklari tahmin etmeden once cevabi duşun.',
+    bilim:'2006 Roediger - Karpicke arastirmasi: Aktif hatirlama, pasif okumadan yuzde 50 daha fazla bilgi kaliciligi sagliyor.',
+    sure:'Her çalışma sonrası 5 dk',
+    etki:'⭐⭐⭐⭐⭐'
+  },
+  {
+    id:'pomodoro',
+    icon:'🍅',
+    renk:'#dc2626',
+    baslik:'Pomodoro Tekniği',
+    ingilizce:'Pomodoro Technique',
+    ozet:'25 dakika tam odak, 5 dakika mola. Beyin maratonda değil, sprint\'te calisir.',
+    nasil:'1) Telefonu sessize al 2) 25 dk çalış 3) 5 dk mola 4) 4 pomodoro sonrası 20 dk uzun mola. Başlarken tek bir göreve odaklan.',
+    yds:'Platform icindeki Pomodoro sayacini kullan (sol alt kose). SAT Modunun 45 saniyelik sayaci da ayni mantikla calisiyor.',
+    bilim:'Odak suresi arastirmalari: Insan beyni ortalama 25-50 dk konsantrasyonu surdurebiliyor. Zorunlu molalar performansi yuzde 40 artiriyor.',
+    sure:'25+5 dk döngüleri',
+    etki:'⭐⭐⭐⭐'
+  },
+  {
+    id:'interleaving',
+    icon:'🔀',
+    renk:'#7c3aed',
+    baslik:'Karıştırarak Çalışma',
+    ingilizce:'Interleaving',
+    ozet:'Aynı konuyu blok halinde değil, farklı konularla karıştırarak çalış.',
+    nasil:'Önce bağlaçlar, sonra modal, sonra bağlaçlar tekrar... Bu şekilde her konuyu aktif olarak ayırt etmen gerekiyor.',
+    yds:'Sinyal Lab\'da alan filtresi "Genel" ayarında — farklı konular karışık geliyor. Bu kasıtlı bir tasarım!',
+    bilim:'Kornell - Bjork 2008: Karisik pratik, blok pratikten test aninda yuzde 43 daha iyi performans gosteriyor.',
+    sure:'Her çalışmada 2-3 farklı konu',
+    etki:'⭐⭐⭐⭐'
+  },
+  {
+    id:'feynman',
+    icon:'🎓',
+    renk:'#059669',
+    baslik:'Feynman Tekniği',
+    ingilizce:'Feynman Technique',
+    ozet:'Bir konuyu öğrenmişsen, onu 10 yaşındaki birine anlatabilirsin.',
+    nasil:'1) Konuyu öğren 2) Bir kağıda, sanki birine anlatır gibi yaz 3) Takıldığın yerleri bul 4) O boşlukları doldur.',
+    yds:'KLOD\'a despite ile although arasindaki farki bana basitce anlat diye sor. Sonra sen de KLOD\'a anlat. Anlatamazsan henuz ogrenmemissin.',
+    bilim:'Nobel fizik odullu Richard Feynman\'in kendi ogrenme yontemi. Eger basitce aciklayamiyorsan, yeterince anlamamıssin.',
+    sure:'Konu başına 10-15 dk',
+    etki:'⭐⭐⭐⭐⭐'
+  }
+];
+
+function teknikModulHTML(){
+  return `<div style="max-width:720px">
+    <div style="margin-bottom:24px">
+      <div style="font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px">🧠 Dünyaca Kanıtlanmış Öğrenme Teknikleri</div>
+      <div style="font-size:15px;color:var(--muted);line-height:1.7">Bilişsel psikoloji ve nörobilim araştırmalarıyla desteklenen bu teknikler, YDS/YÖKDİL çalışmana doğrudan uygulanabilir.</div>
+    </div>
+    ${TEKNIKLER.map((t,i)=>`
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .2s;cursor:pointer;border-left:4px solid ${t.renk}" onclick="teknikToggle(this)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:${t.renk}15;display:grid;place-items:center;font-size:22px;flex-shrink:0">${t.icon}</div>
+            <div>
+              <div style="font-size:16px;font-weight:800;color:var(--ink)">${t.baslik} <span style="font-size:13px;font-weight:500;color:var(--muted);font-style:italic">${t.ingilizce}</span></div>
+              <div style="font-size:14px;color:var(--muted);margin-top:2px">${t.ozet}</div>
+            </div>
+          </div>
+          <div style="font-size:20px;transition:transform .2s;flex-shrink:0" class="teknik-arrow">▸</div>
+        </div>
+        <div class="teknik-detay" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:18px">
+          <div style="margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px">NASIL UYGULANIR?</div>
+            <div style="font-size:15px;color:var(--ink);line-height:1.7">${t.nasil}</div>
+          </div>
+          <div style="background:${t.renk}08;border:1px solid ${t.renk}20;border-radius:10px;padding:14px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:${t.renk};letter-spacing:.05em;margin-bottom:6px">🎯 YDS/YÖKDİL'E UYGULAMASI</div>
+            <div style="font-size:14px;color:var(--ink);line-height:1.7">${t.yds}</div>
+          </div>
+          <div style="background:#f8faff;border-radius:10px;padding:14px;margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px">🔬 BİLİMSEL DAYANAK</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.7;font-style:italic">${t.bilim}</div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <span style="font-size:13px;background:var(--sl);color:var(--signal);padding:4px 12px;border-radius:20px;font-weight:600">⏱ ${t.sure}</span>
+            <span style="font-size:13px;background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:20px;font-weight:600">Etki: ${t.etki}</span>
+          </div>
+        </div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function teknikToggle(el){
+  const detay=el.querySelector('.teknik-detay');
+  const arrow=el.querySelector('.teknik-arrow');
+  const open=detay.style.display==='block';
+  detay.style.display=open?'none':'block';
+  arrow.style.transform=open?'rotate(0)':'rotate(90deg)';
+}
 
 let svoDersIdx=0,svoOrnek=0;
 function svoModulHTML(){
