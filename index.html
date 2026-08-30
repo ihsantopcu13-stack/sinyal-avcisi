@@ -1610,13 +1610,29 @@ const KB_GENEL=[
 ];
 let chatHistory=[],chatReplied=false;
 function renderMD(text){
-  return text
-    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
-    .replace(/\*(.+?)\*/g,'<i>$1</i>')
-    .replace(/`(.+?)`/g,'<code style="background:#f0f4ff;padding:1px 5px;border-radius:4px;font-size:15px;color:var(--signal)">$1</code>')
-    .replace(/---+/g,'<hr style="border:none;border-top:1px solid var(--border);margin:8px 0">')
-    .replace(/\n\n/g,'<br><br>')
-    .replace(/\n/g,'<br>');
+  let t=text;
+  // Başlıklar — sade sol çizgi
+  t=t.replace(/^### (.+)$/gm,'<div style="font-size:14px;font-weight:700;color:var(--signal);margin:10px 0 4px;letter-spacing:.02em;text-transform:uppercase">$1</div>');
+  t=t.replace(/^## (.+)$/gm,'<div style="font-size:15px;font-weight:700;color:var(--ink);margin:12px 0 6px;padding-left:10px;border-left:3px solid var(--signal)">$1</div>');
+  t=t.replace(/^# (.+)$/gm,'<div style="font-size:16px;font-weight:800;color:var(--signal);margin:12px 0 8px">$1</div>');
+  // Tablo
+  const tableRegex=/\|(.+)\|\r?\n\|[-| :]+\|\r?\n((?:\|.+\|\r?\n?)+)/g;
+  t=t.replace(tableRegex,function(m,header,rows){
+    const ths=header.split('|').filter(c=>c.trim()).map(c=>'<th style="padding:8px 12px;text-align:left;font-size:14px;font-weight:700;color:var(--ink);border-bottom:2px solid var(--signal);background:#f8faff">'+c.trim()+'</th>').join('');
+    const trs=rows.trim().split(/\r?\n/).map(function(row){const tds=row.split('|').filter(c=>c.trim()).map(c=>'<td style="padding:8px 12px;font-size:14px;border-bottom:1px solid var(--border)">'+c.trim()+'</td>').join('');return '<tr>'+tds+'</tr>';}).join('');
+    return '<div style="overflow-x:auto;margin:12px 0"><table style="width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:8px;overflow:hidden"><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table></div>';
+  });
+  // Bold, italic, code
+  t=t.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  t=t.replace(/\*(.+?)\*/g,'<i>$1</i>');
+  t=t.replace(/`(.+?)`/g,'<code style="background:#f0f4ff;padding:1px 6px;border-radius:4px;font-size:14px;color:var(--signal);font-family:monospace">$1</code>');
+  // Liste
+  t=t.replace(/^- (.+)$/gm,'<div style="display:flex;gap:8px;margin:3px 0"><span style="color:var(--signal);font-weight:700">•</span><span>$1</span></div>');
+  // Yatay çizgi ve satır sonları
+  t=t.replace(/^---+$/gm,'<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">');
+  t=t.replace(/\n\n/g,'<br><br>');
+  t=t.replace(/\n/g,'<br>');
+  return t;
 }
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
