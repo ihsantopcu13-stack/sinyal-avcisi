@@ -1168,7 +1168,7 @@ function satPratikRender(){
   const el=document.getElementById('sat-mod-icerik');if(!el)return;
   if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}
   const soru=SAT_HAVUZ[satSoruIdx];satAnswered=false;satSure=45;clearInterval(satTimer);
-  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered){const c=this.textContent.replace(/['\"]/g,'');ttsSpeak(c,'en-US',null)}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})" >${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
+  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered){const c=this.textContent.replace(/['\"]/g,'');ttsSpeak(c,'en-US',null)}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})"  onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
   satTimer=setInterval(()=>{satSure--;const cnt=document.getElementById('sat-tcnt'),fill=document.getElementById('sat-tfill');if(cnt)cnt.textContent=satSure;if(fill)fill.style.width=(satSure/45*100)+'%';if(satSure<=0){clearInterval(satTimer);satSureDoIdi();}},1000);
   // TTS: Önce İngilizce cümle, sonra Türkçe soru
   const temizCumle=soru.sent.replace(/<[^>]*>/g,'');
@@ -1545,13 +1545,14 @@ function tuzakRender(){
   const z=adaptifZorlukBadge();
   if(lbl)lbl.innerHTML='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear()+' · Soru '+(tuzakIdx+1)+'/'+TUZAK_HAVUZ.length+` <span class="zorluk-badge ${z.cls}">${z.ikon} ${z.seviye}</span>`;
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" >${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})"  onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
   // TTS: İngilizce cümle sonra Türkçe soru
   const tuzakCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
   setTimeout(()=>{
     ttsSpeak(tuzakCumle,'en-US',()=>{
       });
   },400);
+  setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),2500);
 }
 function tuzakAns(btn,correct,dogru){
   if(tuzakAnswered)return;tuzakAnswered=true;
@@ -1581,7 +1582,7 @@ function tuzakSonraki(){
   tuzakIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;tuzakAnswered=false;
   const soru=TUZAK_HAVUZ[tuzakIdx];
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
 }
 // Tarih etiketini sayfa açılışında set et
 (function(){
@@ -1649,7 +1650,7 @@ async function sendChat(){
     chatHistory.push({role:'assistant',content:cevap});
     // TTS — KLOD cevabını sesli oku
     const sesMetin=cevap.replace(/\*\*?|`|---+/g,'').replace(/\n/g,' ').trim();
-
+    ttsSpeak(sesMetin,'tr-TR',null);
   }catch(e){
     tp.remove();
     const km=document.createElement('div');km.className='msg k';km.textContent='Bağlantı hatası, tekrar dene.';body.appendChild(km);
@@ -1829,6 +1830,8 @@ function slRender(){
     ttsSpeak(slTemizCumle,'en-US',()=>{
     });
   },600);
+  // Türkçe soru sesli oku
+  setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),2500);
 }
 // ============================================================
 // S+V+O AKADEMİ
