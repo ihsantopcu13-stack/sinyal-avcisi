@@ -1229,7 +1229,7 @@ function dnav(el){
         🤖 KLOD aktif — YDS/YOKDiL sorularını Türkçe açıklar
       </div>
       <div class="chat-body" id="dnav-chat" style="min-height:200px;max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0">
-        <div class="msg k">Merhaba! Takıldığın bir yapı ya da soru var mı? "despite", "far from", "must have" gibi yapıları veya çözemediğin bir cümleyi yazabilirsin.</div>
+        <div class="msg k">Merhaba! 👋 Takıldığın bir yapı, kelime veya çözemediğin bir cümle varsa yaz — KLOD analiz eder.</div>
       </div>
       <div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px">
         <input class="chat-in" id="dnav-in" placeholder="Soruyu yaz... (örn: 'must have ne demek?')" onkeydown="if(event.key==='Enter')dnavChat()" style="flex:1">
@@ -1358,7 +1358,7 @@ MASTER FORMUL: TANI > SiNYAL > YAPI > SAG/SOL > S+V+O > ELE > KRiTiK FARK > KANI
     const km=document.createElement('div');km.className='msg k';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
-    km.innerHTML=temizCevap.replace(/\n/g,'<br>');
+    km.innerHTML=renderMD(temizCevap);
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     // Token bilgisi (geliştirici modu)
     if(data.token_info&&localStorage.getItem('sa_dev')==='1'){
