@@ -715,7 +715,8 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
           <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
           <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
-         <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
+          <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
+          <div class="dtab" onclick="dtab(this,'svo')">📐 S+V+O</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
           <div class="dtab" onclick="dtab(this,'avci')">🏹 Avcı Master</div>
         </div>
@@ -1729,13 +1730,129 @@ function slRender(){
   const fb=document.getElementById('dm-fb');
   const nextBtn=document.getElementById('sl-next-btn');
   if(eyebrow)eyebrow.textContent=soru.eye+' — Soru '+(slIdx%havuz.length+1)+'/'+havuz.length;
-  if(sent)sent.innerHTML=soru.sent;
+  if(sent){
+    sent.innerHTML=soru.sent;
+    // Sinyal Radar — highlight'ları sırayla pulse et
+    setTimeout(()=>{
+      const sigs=sent.querySelectorAll('.s-sig,.s-trap,.s-key');
+      sigs.forEach((el,i)=>{
+        setTimeout(()=>{
+          el.style.transition='all .3s';
+          el.style.transform='scale(1.1)';
+          el.style.boxShadow=el.classList.contains('s-trap')?'0 0 12px rgba(212,43,43,.6)':el.classList.contains('s-sig')?'0 0 12px rgba(26,79,214,.6)':'0 0 12px rgba(146,64,14,.4)';
+          setTimeout(()=>{el.style.transform='scale(1)';el.style.boxShadow='none';},600);
+        },i*500);
+      });
+    },300);
+  }
   if(q)q.textContent=soru.q;
   if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})">${o}</button>`).join('');
   if(fb){fb.textContent='';fb.className='dm-fb';}
   if(nextBtn)nextBtn.style.display='none';
   slAnswered=false;
 }
+// ============================================================
+// S+V+O AKADEMİ
+// ============================================================
+const SVO_DERSLER=[
+  {
+    baslik:'Özne (Subject) Nedir?',
+    renk:'#2d5be3',
+    icon:'👤',
+    aciklama:'Cümlede eylemi yapan kişi veya şeydir. "Kim?" veya "Ne?" sorusunun cevabıdır.',
+    kural:'<b>İpucu:</b> Özne genellikle cümlenin başında gelir ve fiilden önce yer alır.',
+    ornekler:[
+      {cumle:'<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;font-weight:700">The researchers</span> concluded that the results were significant.',tr:'Araştırmacılar sonuçların önemli olduğunu sonucuna vardı.',ozne:'The researchers'},
+      {cumle:'<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;font-weight:700">Despite the challenges, the team</span> succeeded.',tr:'Zorluklara rağmen ekip başardı.',ozne:'the team'},
+      {cumle:'<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;font-weight:700">It</span> was far from guaranteed.',tr:'Garanti değildi.',ozne:'It'},
+    ]
+  },
+  {
+    baslik:'Fiil (Verb) Nedir?',
+    renk:'#e03c3c',
+    icon:'⚡',
+    aciklama:'Cümlede yapılan eylemi veya durumu ifade eder. "Ne yapıyor?" sorusunun cevabıdır.',
+    kural:'<b>İpucu:</b> Modal + fiil yapılarına dikkat: must/should/can + V1, must have + V3.',
+    ornekler:[
+      {cumle:'The treatment <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-weight:700">was far from guaranteed</span>.',tr:'Tedavi garanti değildi.',fiil:'was'},
+      {cumle:'Researchers <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-weight:700">concluded</span> that results were significant.',tr:'Araştırmacılar sonuçların önemli olduğunu sonucuna vardı.',fiil:'concluded'},
+      {cumle:'She <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-weight:700">must have left</span> before the meeting.',tr:'Toplantıdan önce gitmiş olmalı.',fiil:'must have left'},
+    ]
+  },
+  {
+    baslik:'Nesne (Object) Nedir?',
+    renk:'#92400e',
+    icon:'🎯',
+    aciklama:'Eylemin üzerine yapıldığı kişi veya şeydir. "Kimi?" veya "Neyi?" sorusunun cevabıdır.',
+    kural:'<b>İpucu:</b> Uzun cümlelerde önce S+V+O haritasını çıkar, sonra bağlaçları oku.',
+    ornekler:[
+      {cumle:'Researchers concluded that <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:700">the results</span> were significant.',tr:'Araştırmacılar sonuçların önemli olduğunu sonucuna vardı.',nesne:'the results'},
+      {cumle:'The court overturned <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:700">the previous decision</span>.',tr:'Mahkeme önceki kararı bozdu.',nesne:'the previous decision'},
+      {cumle:'ÖSYM tests <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:700">your reading speed</span>.',tr:'ÖSYM okuma hızını test eder.',nesne:'your reading speed'},
+    ]
+  },
+  {
+    baslik:'S+V+O Haritası — Tümünü Bir Arada',
+    renk:'#059669',
+    icon:'🗺️',
+    aciklama:'Uzun ÖSYM cümlelerinde S+V+O haritasını çıkarmak seni tuzaklardan korur.',
+    kural:'<b>Adım adım:</b> 1) Fiili bul ⚡ 2) Kimin/Neyin yaptığını bul 👤 3) Ne üzerine yapıldığını bul 🎯',
+    ornekler:[
+      {cumle:'<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;font-weight:700">The committee</span> <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-weight:700">approved</span> <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:700">the proposal</span>, despite the objections.',tr:'Komite, itirazlara rağmen öneriyi onayladı.',ozne:'The committee',fiil:'approved',nesne:'the proposal'},
+      {cumle:'<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:6px;font-weight:700">Researchers</span> <span style="background:#fee2e2;color:#991b1b;padding:2px 8px;border-radius:6px;font-weight:700">have concluded</span> that <span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:6px;font-weight:700">the treatment</span> was ineffective.',tr:'Araştırmacılar tedavinin etkisiz olduğu sonucuna vardı.',ozne:'Researchers',fiil:'have concluded',nesne:'the treatment'},
+    ]
+  }
+];
+
+let svoDersIdx=0,svoOrnek=0;
+function svoModulHTML(){
+  return `<div id="svo-icerik" style="max-width:680px">
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="svo-tabs">
+      ${SVO_DERSLER.map((d,i)=>`<button onclick="svoDers(${i})" id="svotab-${i}" style="padding:8px 16px;border-radius:8px;border:2px solid ${i===0?d.renk:'var(--border)'};background:${i===0?d.renk+'15':'transparent'};color:${i===0?d.renk:'var(--muted)'};font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">${d.icon} ${d.baslik.split(' ')[0]}</button>`).join('')}
+    </div>
+    <div id="svo-ders-alan"></div>
+  </div>`;
+}
+
+function svoBaslat(){svoDers(0);}
+
+function svoDers(i){
+  svoDersIdx=i;svoOrnek=0;
+  const d=SVO_DERSLER[i];
+  // Tab aktif güncelle
+  SVO_DERSLER.forEach((_,j)=>{
+    const t=document.getElementById('svotab-'+j);
+    if(t){t.style.borderColor=j===i?SVO_DERSLER[j].renk:'var(--border)';t.style.background=j===i?SVO_DERSLER[j].renk+'15':'transparent';t.style.color=j===i?SVO_DERSLER[j].renk:'var(--muted)';}
+  });
+  const alan=document.getElementById('svo-ders-alan');
+  if(!alan)return;
+  alan.innerHTML=`
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:12px;background:${d.renk}15;display:grid;place-items:center;font-size:24px">${d.icon}</div>
+        <div>
+          <div style="font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.01em">${d.baslik}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:2px">${d.aciklama}</div>
+        </div>
+      </div>
+      <div style="background:${d.renk}08;border:1px solid ${d.renk}25;border-radius:10px;padding:14px;font-size:14px;line-height:1.7;margin-bottom:20px">${d.kural}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px;letter-spacing:.05em">ÖRNEKLER</div>
+      <div id="svo-ornekler">${svoOrneklerHTML(d)}</div>
+    </div>
+    ${i<SVO_DERSLER.length-1?`<button onclick="svoDers(${i+1})" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;width:100%;box-shadow:0 4px 16px rgba(26,79,214,.3)">Sonraki Ders: ${SVO_DERSLER[i+1].icon} ${SVO_DERSLER[i+1].baslik} →</button>`:`<div style="background:linear-gradient(135deg,#059669,#047857);border-radius:12px;padding:20px;text-align:center;color:#fff"><div style="font-size:24px;margin-bottom:8px">🎉</div><div style="font-size:18px;font-weight:800;margin-bottom:8px">S+V+O Akademisini Tamamladın!</div><div style="font-size:14px;opacity:.85">Artık Sinyal Lab'da bu bilgiyle tuzakları çok daha kolay göreceksin.</div></div>`}
+  `;
+}
+
+function svoOrneklerHTML(d){
+  return d.ornekler.map((o,i)=>`
+    <div style="background:var(--paper);border-radius:10px;padding:16px;margin-bottom:10px;border-left:3px solid ${d.renk}">
+      <div style="font-size:15px;line-height:1.8;margin-bottom:8px">${o.cumle}</div>
+      <div style="font-size:13px;color:var(--muted);font-style:italic">${o.tr}</div>
+      ${o.ozne?`<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:12px;background:#dbeafe;color:#1e40af;padding:2px 10px;border-radius:20px;font-weight:600">👤 Özne: ${o.ozne}</span>${o.fiil?`<span style="font-size:12px;background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:20px;font-weight:600">⚡ Fiil: ${o.fiil}</span>`:''}${o.nesne?`<span style="font-size:12px;background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:20px;font-weight:600">🎯 Nesne: ${o.nesne}</span>`:''}</div>`:''}
+    </div>
+  `).join('');
+}
+
 function slSonraki(){
   slIdx=(slIdx+1)%SL_HAVUZ.length;
   slRender();
