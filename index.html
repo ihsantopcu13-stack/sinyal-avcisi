@@ -888,7 +888,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
 </section>
 
 <!-- MEDYA MERKEZİ -->
-<section id="medya" style="padding:80px 5vw;background:#0c0e14">
+<section id="medya" style="padding:80px 5vw;background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 50%,#0f172a 100%);position:relative;overflow:hidden"><div style="position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);pointer-events:none"></div><div style="position:absolute;bottom:-200px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,.1),transparent 70%);pointer-events:none"></div>
   <div style="max-width:1020px;margin:0 auto">
     <div style="text-align:center;margin-bottom:48px">
       <div class="eyebrow" style="color:var(--signal)">Medya Merkezi</div>
@@ -2086,7 +2086,7 @@ function medyaRender(){
   const grid=document.getElementById('medya-grid');
   if(!grid)return;
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
-    <div onclick="medyaOyna(${i})" style="cursor:pointer;background:#111827;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:all .25s;box-shadow:0 4px 24px rgba(0,0,0,.3)" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 12px 40px rgba(0,0,0,.5)';this.style.borderColor='rgba(255,255,255,.15)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(0,0,0,.3)';this.style.borderColor='rgba(255,255,255,.06)'">
+    <div onclick="medyaOyna(${i})" style="cursor:pointer;background:linear-gradient(145deg,#1e1b4b,#1a1f3d);border-radius:16px;overflow:hidden;border:1px solid rgba(129,140,248,.15);transition:all .25s;box-shadow:0 4px 24px rgba(79,70,229,.2)" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 16px 48px rgba(79,70,229,.35)';this.style.borderColor='rgba(129,140,248,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.2)';this.style.borderColor='rgba(129,140,248,.15)'">
       <div style="position:relative;padding-top:56.25%;background:#000;overflow:hidden">
         <img src="https://img.youtube.com/vi/${k.videoId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${k.videoId}/mqdefault.jpg'" alt="${k.baslik}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%)"></div>
@@ -2098,8 +2098,8 @@ function medyaRender(){
         <div style="position:absolute;top:10px;left:10px;background:${k.renk||'#2d5be3'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">${k.etiket||'Video'}</div>
       </div>
       <div style="padding:16px">
-        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:6px;line-height:1.4">${k.baslik}</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.5">${k.aciklama}</div>
+        <div style="font-size:15px;font-weight:700;color:#f0f4ff;margin-bottom:6px;line-height:1.4">${k.baslik}</div>
+        <div style="font-size:13px;color:rgba(199,210,254,.6);line-height:1.5">${k.aciklama}</div>
       </div>
     </div>
   `).join('');
