@@ -91,9 +91,15 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .demo-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .badge-live{background:var(--sl);color:var(--signal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
 .demo-sent{font-size:15px;font-weight:500;line-height:1.8;margin-bottom:14px;min-height:72px;transition:opacity .25s}
-.s-sig{background:var(--sl);color:var(--signal);padding:1px 5px;border-radius:4px;font-weight:600;position:relative;cursor:help}
-.s-trap{background:#fef2f2;color:var(--trap);padding:1px 5px;border-radius:4px;font-weight:600;text-decoration:underline wavy;text-underline-offset:3px;cursor:help}
-.s-key{background:#fefce8;color:#92400e;padding:1px 5px;border-radius:4px;font-weight:600}
+.s-sig{background:var(--sl);color:var(--signal);padding:2px 7px;border-radius:6px;font-weight:700;position:relative;cursor:help;transition:all .3s;display:inline-block}
+.s-sig.pulse{animation:sigPulse 1s ease}
+@keyframes sigPulse{0%{background:var(--sl);box-shadow:none}50%{background:rgba(26,79,214,.25);box-shadow:0 0 0 4px rgba(26,79,214,.2)}100%{background:var(--sl);box-shadow:none}}
+.s-trap{background:#fef2f2;color:var(--trap);padding:2px 7px;border-radius:6px;font-weight:700;text-decoration:underline wavy;text-underline-offset:3px;cursor:help;transition:all .3s;display:inline-block}
+.s-trap.pulse{animation:trapPulse 1s ease}
+@keyframes trapPulse{0%{background:#fef2f2;box-shadow:none}50%{background:rgba(212,43,43,.2);box-shadow:0 0 0 4px rgba(212,43,43,.15)}100%{background:#fef2f2;box-shadow:none}}
+.s-key{background:#fefce8;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:700;display:inline-block}
+.s-key.pulse{animation:keyPulse 1s ease}
+@keyframes keyPulse{0%{background:#fefce8;box-shadow:none}50%{background:rgba(146,64,14,.2);box-shadow:0 0 0 4px rgba(146,64,14,.1)}100%{background:#fefce8;box-shadow:none}}
 .s-sig[data-tip]:hover::after,.s-trap[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:15px;padding:6px 10px;border-radius:6px;white-space:nowrap;z-index:50;pointer-events:none}
 .demo-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .leg{display:flex;align-items:center;gap:5px;font-size:15px;color:var(--muted)}
