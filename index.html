@@ -94,6 +94,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .badge-live{background:var(--sl);color:var(--signal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
 .demo-sent{font-size:15px;font-weight:500;line-height:1.8;margin-bottom:14px;min-height:72px;transition:opacity .25s}
 .s-sig{background:var(--sl);color:var(--signal);padding:2px 7px;border-radius:6px;font-weight:700;position:relative;cursor:help;transition:all .3s;display:inline-block}
+.s-sig:hover,.s-trap:hover,.s-key:hover{transform:scale(1.1);filter:brightness(1.1)}
 .s-sig.pulse{animation:sigPulse 1s ease}
 @keyframes sigPulse{0%{background:var(--sl);box-shadow:none}50%{background:rgba(26,79,214,.25);box-shadow:0 0 0 4px rgba(26,79,214,.2)}100%{background:var(--sl);box-shadow:none}}
 .s-trap{background:#fef2f2;color:var(--trap);padding:2px 7px;border-radius:6px;font-weight:700;text-decoration:underline wavy;text-underline-offset:3px;cursor:help;transition:all .3s;display:inline-block}
@@ -413,7 +414,8 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
 .sat-timer-fill{height:100%;background:linear-gradient(90deg,#22c55e,var(--signal));border-radius:2px;transition:width .1s linear}
 .sat-timer-count{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--signal);min-width:28px;text-align:right}
 .sat-soru-sent{font-size:15px;font-weight:500;line-height:1.8;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:8px}
-.sat-highlight{background:var(--sl);color:var(--signal);padding:1px 4px;border-radius:3px;font-weight:700;cursor:help;position:relative}
+.sat-highlight{background:var(--sl);color:var(--signal);padding:1px 4px;border-radius:3px;font-weight:700;cursor:help;position:relative;transition:all .2s}
+.sat-highlight:hover{transform:scale(1.08);box-shadow:0 2px 8px rgba(26,79,214,.3)}
 .sat-highlight.trap{background:#fef2f2;color:var(--trap)}
 .sat-highlight.time{background:#fefce8;color:#92400e}
 .sat-akis{background:linear-gradient(90deg,#f0fdf4,#e8eeff);border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:var(--ink)}
@@ -1161,7 +1163,7 @@ function satPratikRender(){
   const el=document.getElementById('sat-mod-icerik');if(!el)return;
   if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}
   const soru=SAT_HAVUZ[satSoruIdx];satAnswered=false;satSure=45;clearInterval(satTimer);
-  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent">${soru.sent}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
+  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered){const c=this.textContent.replace(/['\"]/g,'');ttsSpeak(c,'en-US',null)}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
   satTimer=setInterval(()=>{satSure--;const cnt=document.getElementById('sat-tcnt'),fill=document.getElementById('sat-tfill');if(cnt)cnt.textContent=satSure;if(fill)fill.style.width=(satSure/45*100)+'%';if(satSure<=0){clearInterval(satTimer);satSureDoIdi();}},1000);
   // TTS: Önce İngilizce cümle, sonra Türkçe soru
   const temizCumle=soru.sent.replace(/<[^>]*>/g,'');
@@ -1771,6 +1773,16 @@ function slRender(){
   if(eyebrow)eyebrow.textContent=soru.eye+' — Soru '+(slIdx%havuz.length+1)+'/'+havuz.length;
   if(sent){
     sent.innerHTML=soru.sent;
+    sent.onmouseenter=function(){const c=this.textContent.replace(/['"]/g,'');ttsSpeak(c,'en-US',null);};
+    // Highlight kelimelere hover ses ekle
+    setTimeout(()=>{
+      sent.querySelectorAll('.s-sig,.s-trap,.s-key').forEach(el=>{
+        el.addEventListener('mouseenter',function(e){
+          e.stopPropagation();
+          ttsSpeak(this.textContent,'en-US',null);
+        });
+      });
+    },100);
     // Sinyal Radar — highlight'ları sırayla pulse et
     setTimeout(()=>{
       const sigs=sent.querySelectorAll('.s-sig,.s-trap,.s-key');
