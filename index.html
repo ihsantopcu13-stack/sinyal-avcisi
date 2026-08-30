@@ -309,10 +309,10 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .sss-inner{max-width:700px;margin:0 auto}
 .sss-header{text-align:center;margin-bottom:44px}
 .sss-item{border-bottom:1px solid var(--border)}
-.sss-q{font-size:15px;font-weight:600;padding:19px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none;letter-spacing:-.01em}
+.sss-q{font-size:17px;font-weight:700;padding:21px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;user-select:none;letter-spacing:-.01em}
 .sss-icon{font-size:18px;color:var(--muted);transition:transform .2s;flex-shrink:0}
 .sss-item.open .sss-icon{transform:rotate(45deg);color:var(--signal)}
-.sss-a{display:none;font-size:14px;color:var(--muted);line-height:1.7;padding-bottom:17px}
+.sss-a{display:none;font-size:16px;color:var(--muted);line-height:1.8;padding-bottom:20px}
 .sss-item.open .sss-a{display:block}
 .hayir-section{background:linear-gradient(135deg,#0c0e14,#1a1f35);padding:80px 5vw;text-align:center;color:var(--paper)}
 .hayir-inner{max-width:680px;margin:0 auto}
@@ -919,10 +919,13 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
   <div class="sss-inner">
     <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sık Sorulan Sorular</div><div class="section-title">Aklındaki sorular</div></div>
     <div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Platform, alan seçimine göre örnek metinleri kişiselleştirir.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gercek bir yapay zeka mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. KLOD, Claude API uzerine kurulu gercek bir yapay zeka ogretmenidir.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>İptal etmek istesem ne yapmalıyım?</span><span class="sss-icon">+</span></div><div class="sss-a">İstediğin zaman, tek tıkla iptal edebilirsin. Herhangi bir iptal ücreti yoktur.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses kurs internet bağlantısı gerektiriyor mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Ses kurs tarayıcı tabanlı TTS kullandığı için internet bağlantısı gerektirir.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Kayıt sırasında alanını seçiyorsun — Sosyal, Fen, Sağlık veya Hukuk — ve platform sana özel metinler, sorular ve kelime bankasıyla çalışmaya başlıyor. İstediğin zaman alan değiştirebilirsin.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gerçek bir yapay zeka mı, yoksa hazır cevaplar mı veriyor?</span><span class="sss-icon">+</span></div><div class="sss-a">KLOD, gerçek bir yapay zeka — Claude API üzerine kurulu. Sana verdiği her cevap, yazdığın soruya göre anlık üretiliyor. Hazır şablon yok, her açıklama sana özel.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>7 günlük ücretsiz deneme sonrası ne oluyor?</span><span class="sss-icon">+</span></div><div class="sss-a">7 gün sonra seçtiğin paket otomatik olarak başlar. Dilersen deneme süresinin herhangi bir gününde iptal edebilirsin — hiçbir ücret alınmaz. İptal etmezsen, abonelik devam eder ve istediğin zaman durdurabilirsin.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Sınavıma ne kadar kaldıysa o kadar vaktim var — yetişir mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Sinyal metodunun güzelliği hız. Gramer kural kitabı ezberlemek yerine 7 sinyal tipini tanımak yeterli. Kullanıcılarımız ortalama 3 ayda 15-25 puan artış yaşıyor. 1 ayın bile farkı var — hemen başla.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>İngilizce seviyem çok düşük, kullanabilir miyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. Tüm açıklamalar Türkçe, KLOD Türkçe anlatıyor. YDS/YÖKDİL sınavı gramer bilgisi değil, sinyal okuma becerisi ölçüyor. B2 seviyesi olmasan da bu sinyalleri öğrenebilirsin.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses Kurs ve E-Kitap ayrı mı satılıyor?</span><span class="sss-icon">+</span></div><div class="sss-a">E-Kitap tamamen ücretsiz — e-posta adresinle indirebilirsin. Ses Kurs ise Pro ve VIP paketlere dahil. Temel pakette 3 konu, Pro'da tüm 19 konu açık.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ödeme güvenli mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Tüm ödemeler İyzico altyapısıyla işleniyor — Türkiye'nin en güvenilir ödeme sistemi. Kart bilgilerin bizde saklanmıyor, 3D Secure ile korumalı.</div></div>
     </div>
   </div>
 </section>
