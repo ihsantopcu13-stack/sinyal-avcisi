@@ -1778,10 +1778,17 @@ function slRender(){
     },300);
   }
   if(q)q.textContent=soru.q;
-  if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})">${o}</button>`).join('');
+  if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${o}</button>`).join('');
   if(fb){fb.textContent='';fb.className='dm-fb';}
   if(nextBtn)nextBtn.style.display='none';
   slAnswered=false;
+  // TTS: İngilizce cümle, sonra Türkçe soru
+  const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
+  setTimeout(()=>{
+    ttsSpeak(slTemizCumle,'en-US',()=>{
+      setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),400);
+    });
+  },600);
 }
 // ============================================================
 // S+V+O AKADEMİ
