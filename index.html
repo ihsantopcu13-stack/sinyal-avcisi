@@ -1175,6 +1175,18 @@ function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clear
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
+  if(mod==='svo'){
+    let svoEl=document.getElementById('mod-svo');
+    if(!svoEl){svoEl=document.createElement('div');svoEl.id='mod-svo';svoEl.style.cssText='padding:20px 0';svoEl.innerHTML=svoModulHTML();document.getElementById('dash-mod').appendChild(svoEl);svoBaslat();}
+    else{svoEl.style.display='block';}
+    return;
+  }
+  if(mod==='teknik'){
+    let teknikEl=document.getElementById('mod-teknik');
+    if(!teknikEl){teknikEl=document.createElement('div');teknikEl.id='mod-teknik';teknikEl.style.cssText='padding:20px 0';teknikEl.innerHTML=teknikModulHTML();document.getElementById('dash-mod').appendChild(teknikEl);}
+    else{teknikEl.style.display='block';}
+    return;
+  }
   const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();}
 }
 function dnav(el){
