@@ -465,6 +465,16 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
   <button class="btn-nav" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+<!-- TRUST BAR -->
+<div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:8px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap">
+  <span style="font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🔒 SSL Güvenli</span>
+  <span style="color:rgba(255,255,255,.2)">|</span>
+  <span style="font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">💳 İyzico Güvenceli Ödeme</span>
+  <span style="color:rgba(255,255,255,.2)">|</span>
+  <span style="font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">↩️ 7 Gün İade Garantisi</span>
+  <span style="color:rgba(255,255,255,.2)">|</span>
+  <span style="font-size:13px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🇹🇷 Türkiye'den Hizmet</span>
+</div>
 <!-- STREAK BAR -->
 <div class="streak-bar" id="streak-bar">
   <span class="streak-fire">🔥</span>
@@ -903,6 +913,57 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
       <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);margin-bottom:16px">Kulak Aşinalığı</div>
       <div id="podcast-liste" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
+  </div>
+</section>
+
+<!-- KARŞILAŞTIRMA -->
+<section style="padding:60px 5vw;background:var(--paper);max-width:900px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="eyebrow" style="color:var(--signal)">Neden Sinyal Avcısı?</div>
+    <div class="section-title">Diğer platformlarla fark</div>
+  </div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-family:Inter,sans-serif">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding:14px 16px;font-size:14px;color:var(--muted);font-weight:600;border-bottom:2px solid var(--border)">Özellik</th>
+          <th style="padding:14px 16px;font-size:15px;font-weight:700;color:var(--signal);border-bottom:2px solid var(--signal);background:#f0f4ff;border-radius:8px 8px 0 0">Sinyal Avcısı</th>
+          <th style="padding:14px 16px;font-size:14px;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border)">Diğer Platformlar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:14px 16px;font-size:15px">Sinyal metodolojisi</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:18px">❌</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:14px 16px;font-size:15px">Türkçe AI öğretmen</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:18px">❌</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:14px 16px;font-size:15px">Alan bazlı metinler</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:15px;color:var(--muted)">Kısmen</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:14px 16px;font-size:15px">Sesli kurs (TTS)</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:18px">❌</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:14px 16px;font-size:15px">Hata defteri & analiz</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:15px;color:var(--muted)">Kısmen</td>
+        </tr>
+        <tr>
+          <td style="padding:14px 16px;font-size:15px">Eğitime bağış</td>
+          <td style="padding:14px 16px;text-align:center;background:#f8faff;font-size:18px">✅</td>
+          <td style="padding:14px 16px;text-align:center;font-size:18px">❌</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
@@ -2158,7 +2219,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 
 let exitShown=false;
-document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown){exitShown=true;const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
+document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown&&!localStorage.getItem('exitSeen')){exitShown=true;localStorage.setItem('exitSeen','1');const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 
 function iyzicoOdemeBaslat(plan,fiyat){
   const overlay=document.createElement('div');
@@ -2566,5 +2627,16 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
 </script>
+<!-- EXIT INTENT POPUP -->
+<div id="exit-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;backdrop-filter:blur(4px);align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:24px;padding:48px 40px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 32px 96px rgba(0,0,0,.25)">
+    <button onclick="document.getElementById('exit-popup').style.display='none'" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)">×</button>
+    <div style="font-size:56px;margin-bottom:16px">🎁</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:26px;margin-bottom:10px;letter-spacing:-.02em">Gitmeden önce!</div>
+    <p style="font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:24px">37 sayfalık <strong>ücretsiz e-kitabı</strong> al — bağlaç haritaları, modal perfect rehberi ve 30 günlük çalışma planı.</p>
+    <button onclick="goTo('ekitap');document.getElementById('exit-popup').style.display='none'" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;width:100%;box-shadow:0 4px 16px rgba(26,79,214,.35)">Ücretsiz E-Kitabı Al →</button>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px">Spam yok · İstediğinde çık</p>
+  </div>
+</div>
 </body>
 </html>
