@@ -1501,18 +1501,23 @@ let chatHistory=[],chatReplied=false;
 async function sendChat(){
   const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
   const body=document.getElementById('chat-body');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';body.scrollTop=body.scrollHeight;
+  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
   const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
-  const m=val.toLowerCase();let cevap='';
-  for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-  if(!cevap)cevap=KB_GENEL[chatHistory.length%KB_GENEL.length];
   chatHistory.push({role:'user',content:val});
-  await new Promise(r=>setTimeout(r,700));tp.remove();
-  const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
-  chatHistory.push({role:'assistant',content:cevap});
-  // TTS — KLOD cevabını sesli oku
-  const temizMetin=cevap.replace(/<[^>]*>/g,'').replace(/[🎯🔍🇹🇷✅❌⚡]/g,'');
-  ttsSpeak(temizMetin,'tr-TR',null);
+  try{
+    const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory})});
+    const data=await res.json();
+    const cevap=data.content?.find(b=>b.type==='text')?.text||'Bir hata oluştu, tekrar dene.';
+    tp.remove();
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
+    chatHistory.push({role:'assistant',content:cevap});
+    // TTS — KLOD cevabını sesli oku
+    ttsSpeak(cevap.replace(/[🎯🔍🇹🇷✅❌⚡]/g,''),'tr-TR',null);
+  }catch(e){
+    tp.remove();
+    const km=document.createElement('div');km.className='msg k';km.textContent='Bağlantı hatası, tekrar dene.';body.appendChild(km);
+  }
+  inp.disabled=false;inp.focus();
 }
 
 // PLAYER
