@@ -753,8 +753,8 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
           <div id="tuzak-container"></div>
         </div>
         <div class="dmod" id="mod-sat" style="display:none"><div id="sat-icerik"></div></div>
-        <div class="dmod" id="mod-svo" style="display:none"><div id="svo-icerik-container"></div></div>
-        <div class="dmod" id="mod-teknik" style="display:none"><div id="teknik-icerik-container"></div></div>
+        <div class="dmod" id="mod-svo" style="display:none;background:linear-gradient(135deg,#f0f9ff,#f0fdf4);border-radius:16px;padding:4px"><div id="svo-icerik-container"></div></div>
+        <div class="dmod" id="mod-teknik" style="display:none;background:linear-gradient(135deg,#f0f4ff,#fdf4ff);border-radius:16px;padding:4px"><div id="teknik-icerik-container"></div></div>
         <div class="dmod" id="mod-avci" style="display:none">
   <div class="dm-eye">🏹 AVCI MASTER SİSTEMİ — YDS/YÖKDİL Strateji Rehberi</div>
   <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px">
@@ -1193,11 +1193,15 @@ function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
   if(mod==='svo'){
+    const svoEl=document.getElementById('mod-svo');
+    if(svoEl){svoEl.style.display='block';}
     const svoContainer=document.getElementById('svo-icerik-container');
     if(svoContainer&&!svoContainer.innerHTML){svoContainer.innerHTML=svoModulHTML();svoBaslat();}
     return;
   }
   if(mod==='teknik'){
+    const teknikEl=document.getElementById('mod-teknik');
+    if(teknikEl){teknikEl.style.display='block';}
     const teknikContainer=document.getElementById('teknik-icerik-container');
     if(teknikContainer&&!teknikContainer.innerHTML){teknikContainer.innerHTML=teknikModulHTML();}
     return;
@@ -1939,13 +1943,16 @@ const TEKNIKLER=[
 ];
 
 function teknikModulHTML(){
-  return `<div style="max-width:720px">
-    <div style="margin-bottom:24px">
-      <div style="font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px">🧠 Dünyaca Kanıtlanmış Öğrenme Teknikleri</div>
-      <div style="font-size:15px;color:var(--muted);line-height:1.7">Bilişsel psikoloji ve nörobilim araştırmalarıyla desteklenen bu teknikler, YDS/YÖKDİL çalışmana doğrudan uygulanabilir.</div>
+  return `<div style="max-width:720px;padding:8px">
+    <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed,#db2777);border-radius:20px;padding:28px;margin-bottom:24px;color:#fff;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%"></div>
+      <div style="position:absolute;bottom:-30px;left:20px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%"></div>
+      <div style="font-size:13px;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:10px">🧠 BİLİMSEL ÖĞRENME</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px">Dünyaca Kanıtlanmış Teknikler</div>
+      <div style="font-size:15px;opacity:.85;line-height:1.7">Nobel ödüllü araştırmalar ve bilişsel psikoloji — YDS/YÖKDİL çalışmana direkt uygula.</div>
     </div>
     ${TEKNIKLER.map((t,i)=>`
-      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .2s;cursor:pointer;border-left:4px solid ${t.renk}" onclick="teknikToggle(this)">
+      <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .25s;cursor:pointer;border-left:4px solid ${t.renk};box-shadow:0 2px 12px rgba(0,0,0,.05)" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,.05)';this.style.transform='none'" onclick="teknikToggle(this)">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div style="display:flex;align-items:center;gap:12px">
             <div style="width:44px;height:44px;border-radius:12px;background:${t.renk}15;display:grid;place-items:center;font-size:22px;flex-shrink:0">${t.icon}</div>
