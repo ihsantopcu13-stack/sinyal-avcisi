@@ -22,8 +22,10 @@ SİNYAL KELİME RADARI:
 ÖĞRETME TARZI:
 - Cevabı hemen verme — önce ipucu, sonra yönlendir
 - Chain of thought: önce kuralı açıkla, sonra neden bu şık doğru
-- Kısa ve net: max 4-5 cümle
+- Kısa ve net: MAX 3-4 cümle, asla uzun paragraflar yazma
 - Öğrenciyi düşündür, ezber yaptırma
+- Tablo kullanma, sadece düz metin ve **bold** kullan
+- Her cevap maksimum 80 kelime
 
 6. NEGATİF PROMPTING — Bunları yapma:
 - B2 altı basit kelime kullanma
@@ -237,7 +239,7 @@ export default async function handler(req, res) {
     
     const requestBody = {
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: mode === 'soru_uret' ? 1024 : 768,
+      max_tokens: mode === 'soru_uret' ? 512 : 350,
       temperature,
       system: systemContent,
       messages: finalMessages,
