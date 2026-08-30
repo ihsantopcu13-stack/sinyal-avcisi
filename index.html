@@ -542,13 +542,13 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
 <section class="sosyal">
   <div class="sosyal-inner">
     <div class="stats">
-      <div><div class="stat-num" data-count="2400" data-suffix="+" data-counted="1">2.400+</div><div class="stat-lbl">E-kitap indirme</div></div>
+      <div><div class="stat-num" data-count="2400" data-suffix="+">2.400+</div><div class="stat-lbl">E-kitap indirme</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num" data-count="19" data-counted="1">19</div><div class="stat-lbl">Gramer konusu</div></div>
+      <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Gramer konusu</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num" data-count="87" data-prefix="%" data-counted="1">%87</div><div class="stat-lbl">Net artis orani</div></div>
+      <div><div class="stat-num" data-count="87" data-prefix="%">%87</div><div class="stat-lbl">Net artis orani</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num" data-count="90" data-counted="1">90</div><div class="stat-lbl">Gunde sonuc</div></div>
+      <div><div class="stat-num" data-count="90">90</div><div class="stat-lbl">Gunde sonuc</div></div>
     </div>
     <div class="yorumlar">
       <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te hep hata yapardım. Sinyal metodunu öğrendikten sonra tuzağı ilk bakışta görüyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">A. Yılmaz</div><div class="yorum-unvan">Yüksek Lisans Öğrencisi - YDS 78</div></div></div></div>
@@ -928,9 +928,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
     <div class="hayir-alinti">"İnsanların en hayırlısı, insanlara en çok faydalı olanıdır."</div>
     <div class="hayir-etiketler"><span class="hayir-etiket">Eğitime destek</span><span class="hayir-etiket">Yetim çocuklar</span><span class="hayir-etiket">Sürdürülebilir iyilik</span></div>
     <div style="margin-top:36px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="47" data-suffix=" cocuk" data-counted="1">47</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bu ay ulaşılan</div></div>
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="312" data-suffix=" kitap" data-counted="1">312</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bağışlanan</div></div>
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="8" data-suffix=" okul" data-counted="1">8</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Ulaşılan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="47" data-suffix=" cocuk">47</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bu ay ulaşılan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="312" data-suffix=" kitap">312</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Bağışlanan</div></div>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px 24px;text-align:center"><div style="font-family:'DM Serif Display',serif;font-size:32px;color:#e8d5a3" data-count="8" data-suffix=" okul">8</div><div style="font-size:11px;color:rgba(247,246,242,.4);margin-top:4px">Ulaşılan</div></div>
     </div>
   </div>
 </section>
@@ -1930,7 +1930,22 @@ async function pwaInstall(){if(pwaPrompt){pwaPrompt.prompt();const r=await pwaPr
 
 const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.05,rootMargin:"0px 0px -50px 0px"});
 document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
-function animateCount(el){const target=parseInt(el.dataset.count),suffix=el.dataset.suffix||'',prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
+function animateCount(el){
+  const target=parseInt(el.dataset.count);
+  const suffix=el.dataset.suffix||'';
+  const prefix=el.dataset.prefix||'';
+  const duration=1800;
+  const start=performance.now();
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+  function tick(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/duration,1);
+    const cur=Math.round(easeOut(progress)*target);
+    el.textContent=prefix+cur.toLocaleString('tr-TR')+suffix;
+    if(progress<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 const bildirimler=[
   {isim:'A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce'},
