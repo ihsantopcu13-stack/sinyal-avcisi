@@ -551,9 +551,9 @@ footer{background:var(--ink);color:var(--paper);padding:44px 5vw 28px;display:fl
       <div><div class="stat-num" data-count="90" data-counted="1">90</div><div class="stat-lbl">Gunde sonuc</div></div>
     </div>
     <div class="yorumlar">
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te surekli hata yapiyordum. Sinyal metodolojisini ogrendikten sonra tuzagi ilk bakista goruyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">Aras. Gor. A. Yilmaz</div><div class="yorum-unvan">Sosyoloji - YDS 78</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk alanindan metinlerle calismak cok daha verimli. 3 ayda 22 puanlik artis yaparak YDS zorunluluğumu tamamladim."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">Av. M. Kaya</div><div class="yorum-unvan">Hukuk - YDS 82</div></div></div></div>
-      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"KLOD gercekten ogretiyor. 'Dogru cevap B' demiyor, neden B oldugunu anlatiyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">Dr. D. Sahin</div><div class="yorum-unvan">Saglik - YOKDiL 91</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te hep hata yapardım. Sinyal metodunu öğrendikten sonra tuzağı ilk bakışta görüyorum."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">A. Yılmaz</div><div class="yorum-unvan">Yüksek Lisans Öğrencisi - YDS 78</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk metinleriyle çalışmak çok daha verimli oldu. 3 ayda 22 puanlık artışla YDS zorunluluğumu tamamladım."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">M. Kaya</div><div class="yorum-unvan">Avukat - YDS 82</div></div></div></div>
+      <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"KLOD gerçekten öğretiyor. 'Doğru cevap B' demiyor, neden B olduğunu açıklıyor."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">D. Şahin</div><div class="yorum-unvan">Hemşire - YÖKDİL 91</div></div></div></div>
     </div>
   </div>
 </section>
@@ -1918,21 +1918,21 @@ document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver
 function animateCount(el){const target=parseInt(el.dataset.count),suffix=el.dataset.suffix||'',prefix=el.dataset.prefix||'';let cur=0;const step=Math.max(1,Math.ceil(target/60));const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=prefix+cur.toLocaleString('tr')+suffix;if(cur>=target)clearInterval(t);},25);}
 
 const bildirimler=[
-  {isim:'Arş. Gör. A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce'},
-  {isim:'Av. M. Kaya',eylem:'İlk dersini tamamladı',sure:'5 dk önce'},
-  {isim:'Uzm. Dr. D. Şahin',eylem:'E-kitabı indirdi',sure:'8 dk önce'},
-  {isim:'Öğr. Gör. S. Çelik',eylem:'Sinyal Lab açtı',sure:'3 dk önce'},
-  {isim:'Doç. Dr. H. Arslan',eylem:'YÖKDİL Fen\'e kaydoldu',sure:'11 dk önce'},
-  {isim:'Hemş. E. Demir',eylem:'Ses Kursu başlattı',sure:'6 dk önce'},
-  {isim:'Psik. N. Yıldız',eylem:'Kelime Kartları çalıştı',sure:'9 dk önce'},
-  {isim:'Müh. B. Koç',eylem:'SAT Metodunu denedi',sure:'4 dk önce'},
-  {isim:'Öğretmen R. Güneş',eylem:'7 günlük denemeye başladı',sure:'13 dk önce'},
-  {isim:'Eczacı T. Aydın',eylem:'YÖKDİL Sağlık\'a katıldı',sure:'7 dk önce'},
-  {isim:'Sosyolog K. Polat',eylem:'KLOD ile pratik yaptı',sure:'15 dk önce'},
-  {isim:'Hâkim C. Erdoğan',eylem:'Hukuk metinleri çalıştı',sure:'10 dk önce'},
-  {isim:'Dr. Öğr. Üyesi F. Kurt',eylem:'Doçentlik için kaydoldu',sure:'20 dk önce'},
-  {isim:'Biyolog A. Kara',eylem:'Günlük Tuzak çözdü',sure:'18 dk önce'},
-  {isim:'Arş. Gör. Dr. Z. Yavuz',eylem:'Pro paketi yeniledi',sure:'25 dk önce'},
+  {isim:'A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce'},
+  {isim:'M. Kaya',eylem:'İlk dersini tamamladı',sure:'5 dk önce'},
+  {isim:'D. Şahin',eylem:'E-kitabı indirdi',sure:'8 dk önce'},
+  {isim:'S. Çelik',eylem:'Sinyal Lab açtı',sure:'3 dk önce'},
+  {isim:'H. Arslan',eylem:'YÖKDİL Fen paketini aldı',sure:'11 dk önce'},
+  {isim:'E. Demir',eylem:'Ses Kursu başlattı',sure:'6 dk önce'},
+  {isim:'N. Yıldız',eylem:'Kelime Kartları çalıştı',sure:'9 dk önce'},
+  {isim:'B. Koç',eylem:'SAT Metodunu denedi',sure:'4 dk önce'},
+  {isim:'R. Güneş',eylem:'7 günlük denemeye başladı',sure:'13 dk önce'},
+  {isim:'T. Aydın',eylem:'YÖKDİL Sağlık paketini aldı',sure:'7 dk önce'},
+  {isim:'K. Polat',eylem:'KLOD ile pratik yaptı',sure:'15 dk önce'},
+  {isim:'C. Erdoğan',eylem:'Hukuk metinleri çalıştı',sure:'10 dk önce'},
+  {isim:'F. Kurt',eylem:'Ücretsiz denemeye başladı',sure:'20 dk önce'},
+  {isim:'A. Kara',eylem:'Günlük Tuzak çözdü',sure:'18 dk önce'},
+  {isim:'Z. Yavuz',eylem:'Pro paketi yeniledi',sure:'25 dk önce'},
 ];
 let bIdx=0;
 function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">🎓</div><div><div style="font-size:12px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:11px;color:#6b7280">'+b.eylem+' · '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
