@@ -1510,7 +1510,9 @@ async function sendChat(){
   await new Promise(r=>setTimeout(r,700));tp.remove();
   const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;body.appendChild(km);body.scrollTop=body.scrollHeight;
   chatHistory.push({role:'assistant',content:cevap});
-
+  // TTS — KLOD cevabını sesli oku
+  const temizMetin=cevap.replace(/<[^>]*>/g,'').replace(/[🎯🔍🇹🇷✅❌⚡]/g,'');
+  ttsSpeak(temizMetin,'tr-TR',null);
 }
 
 // PLAYER
