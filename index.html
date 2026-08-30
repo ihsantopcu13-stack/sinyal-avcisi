@@ -735,7 +735,12 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
           <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yükleniyor...</div>
           <div class="kk" id="kk" onclick="kkFlip()">
             <div id="kk-front"><div class="kk-word" id="kk-word-front"></div><div class="kk-hint">Tikla — Türkçe gör</div></div>
-            <div id="kk-back" style="display:none"><div class="kk-word" id="kk-word-back"></div><div class="kk-ex" id="kk-ex-back"></div></div>
+            <div id="kk-back" style="display:none">
+              <div class="kk-word" id="kk-word-back" style="color:var(--signal)"></div>
+              <div style="font-size:13px;color:var(--muted);margin:8px 0 4px;font-weight:600;letter-spacing:.05em">ÖRNEK CÜMLE</div>
+              <div class="kk-ex" id="kk-ex-back" style="font-style:italic;line-height:1.7;cursor:pointer" onclick="if(window.kkCurrent)ttsSpeak(kkCurrent.ex.replace(/['\"]/g,''),'en-US',null)" title="Tıkla — sesli dinle 🔊"></div>
+              <div style="font-size:12px;color:var(--muted);margin-top:6px">🔊 Cümleye tıkla — sesli dinle</div>
+            </div>
           </div>
           <div class="kk-actions" id="kk-actions" style="display:none">
             <button class="kk-btn kk-hard" onclick="kkAnswer(1)">😰 Zor</button>
