@@ -1168,7 +1168,7 @@ function satPratikRender(){
   const el=document.getElementById('sat-mod-icerik');if(!el)return;
   if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}
   const soru=SAT_HAVUZ[satSoruIdx];satAnswered=false;satSure=45;clearInterval(satTimer);
-  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered){const c=this.textContent.replace(/['\"]/g,'');ttsSpeak(c,'en-US',null)}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
+  el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered){const c=this.textContent.replace(/['\"]/g,'');ttsSpeak(c,'en-US',null)}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})" >${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
   satTimer=setInterval(()=>{satSure--;const cnt=document.getElementById('sat-tcnt'),fill=document.getElementById('sat-tfill');if(cnt)cnt.textContent=satSure;if(fill)fill.style.width=(satSure/45*100)+'%';if(satSure<=0){clearInterval(satTimer);satSureDoIdi();}},1000);
   // TTS: Önce İngilizce cümle, sonra Türkçe soru
   const temizCumle=soru.sent.replace(/<[^>]*>/g,'');
@@ -1482,7 +1482,7 @@ function kkFlip(){
   if(front)front.style.display=kkFlipped?'none':'block';
   if(back)back.style.display=kkFlipped?'block':'none';
   if(act)act.style.display=kkFlipped?'flex':'none';
-  if(kkFlipped&&kkCurrent)ttsSpeak(kkCurrent.tr.split('/')[0].trim(),'tr-TR',null);
+
 }
 function kkAnswer(q){
   if(!kkCurrent)return;
@@ -1545,13 +1545,12 @@ function tuzakRender(){
   const z=adaptifZorlukBadge();
   if(lbl)lbl.innerHTML='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear()+' · Soru '+(tuzakIdx+1)+'/'+TUZAK_HAVUZ.length+` <span class="zorluk-badge ${z.cls}">${z.ikon} ${z.seviye}</span>`;
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" >${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
   // TTS: İngilizce cümle sonra Türkçe soru
   const tuzakCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
   setTimeout(()=>{
     ttsSpeak(tuzakCumle,'en-US',()=>{
-      setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),400);
-    });
+      });
   },400);
 }
 function tuzakAns(btn,correct,dogru){
@@ -1634,7 +1633,7 @@ async function sendChat(){
     chatHistory.push({role:'assistant',content:cevap});
     // TTS — KLOD cevabını sesli oku
     const sesMetin=cevap.replace(/\*\*?|`|---+/g,'').replace(/\n/g,' ').trim();
-    ttsSpeak(sesMetin,'tr-TR',null);
+
   }catch(e){
     tp.remove();
     const km=document.createElement('div');km.className='msg k';km.textContent='Bağlantı hatası, tekrar dene.';body.appendChild(km);
@@ -1709,9 +1708,7 @@ async function pTTS(){
   await ttsSpeak(d.en,'en-US',null);
   if(pAudio){
     pAudio.onended=async()=>{
-      await ttsSpeak(d.tr,'tr-TR',()=>{
-        if(pPlaying){pIdx++;pFill=0;pUpdate();pTTS();}
-      });
+      if(pPlaying){pIdx++;pFill=0;pUpdate();pTTS();}
     };
   }
 }
@@ -1806,7 +1803,7 @@ function slRender(){
     },300);
   }
   if(q)q.textContent=soru.q;
-  if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})" onmouseenter="ttsSpeak('${o.replace(/'/g,"\\'")}','tr-TR',null)">${o}</button>`).join('');
+  if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})" >${o}</button>`).join('');
   if(fb){fb.textContent='';fb.className='dm-fb';}
   if(nextBtn)nextBtn.style.display='none';
   slAnswered=false;
@@ -1814,7 +1811,6 @@ function slRender(){
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
   setTimeout(()=>{
     ttsSpeak(slTemizCumle,'en-US',()=>{
-      setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),400);
     });
   },600);
 }
@@ -2469,7 +2465,7 @@ function medyaTTS(i){
   if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(k.baslik+'. '+k.icerik);
-  u.lang='tr-TR';u.rate=0.95;
+  u.lang='en-US';u.rate=0.95;
   speechSynthesis.speak(u);
 }
 
@@ -2507,7 +2503,7 @@ function podcastOyna(i){
     'Bölüm 5. YDS ile YÖKDİL Format Farkları. YDS genel akademik, YÖKDİL ise alan odaklıdır. Alan kelime dağarcığı için kkData kartlarını düzenli çalışın.',
   ];
   const u=new SpeechSynthesisUtterance(metinler[i]||metinler[0]);
-  u.lang='tr-TR';u.rate=0.9;
+  u.lang='en-US';u.rate=0.9;
   const bildirim=document.createElement('div');
   bildirim.style.cssText='position:fixed;bottom:24px;right:24px;z-index:600;background:#0c0e14;color:#fff;border-radius:14px;padding:16px 20px;font-size:15px;font-family:Inter,sans-serif;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3)';
   bildirim.innerHTML=`<span style="font-size:24px">${p.ikon}</span><div><div style="font-weight:700;margin-bottom:2px">${p.baslik}</div><div style="color:rgba(255,255,255,.4);font-size:14px">▶ Oynatılıyor · ${p.sure}</div></div><button onclick="speechSynthesis.cancel();this.parentElement.remove()" style="background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;margin-left:8px">■</button>`;
