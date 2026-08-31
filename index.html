@@ -662,9 +662,9 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 <div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:10px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;border-bottom:1px solid rgba(26,79,214,.3)">
   <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🔒 SSL Güvenli</span>
   <span style="color:rgba(255,255,255,.2)">|</span>
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">💳 İyzico Güvenceli Ödeme</span>
+  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🆓 Tamamen Ücretsiz</span>
   <span style="color:rgba(255,255,255,.2)">|</span>
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">↩️ 7 Gün İade Garantisi</span>
+  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🚫 Kredi Kartı İstenmez</span>
   <span style="color:rgba(255,255,255,.2)">|</span>
   <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🇹🇷 Türkiye'den Hizmet</span>
 </div>
@@ -1328,9 +1328,9 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 <section style="padding:80px 5vw;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
   <div style="max-width:900px;margin:0 auto">
     <div style="text-align:center;margin-bottom:48px">
-      <div class="eyebrow" style="color:#059669">🤝 REFERANS PROGRAMI</div>
-      <div class="section-title">Arkadaşını getir, ikisi de kazan</div>
-      <p style="font-size:17px;color:var(--muted);margin-top:12px;line-height:1.7">Her başarılı davet için <strong style="color:#059669">1 ay ücretsiz</strong> Pro abonelik kazanırsın. Arkadaşın da ilk ay %20 indirimle başlar.</p>
+      <div class="eyebrow" style="color:#059669">🤝 ARKADAŞINI DAVET ET</div>
+      <div class="section-title">Arkadaşını getir, ikiniz de kazanın</div>
+      <p style="font-size:17px;color:var(--muted);margin-top:12px;line-height:1.7">Her başarılı davet için <strong style="color:#059669">özel rozet ve bonus XP</strong> kazanırsın. Arkadaşın da platforma <strong style="color:#059669">tamamen ücretsiz</strong> katılır.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px">
       <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
@@ -1340,13 +1340,13 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
       </div>
       <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
         <div style="font-size:48px;margin-bottom:16px">👤</div>
-        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">Arkadaşın kaydolur</div>
-        <div style="font-size:15px;color:var(--muted);line-height:1.6">Linkten giren arkadaşın Pro pakete başlarsa sistem otomatik takip eder</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">Arkadaşın katılır</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.6">Linkten giren arkadaşın ücretsiz hesap açar, sistem otomatik takip eder</div>
       </div>
       <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
         <div style="font-size:48px;margin-bottom:16px">🎁</div>
-        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">İkisi de kazanır</div>
-        <div style="font-size:15px;color:var(--muted);line-height:1.6">Sen 1 ay ücretsiz, arkadaşın %20 indirim — anında hesabına yansır</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">İkiniz de kazanırsınız</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.6">Sen özel rozet + bonus XP, arkadaşın tüm platforma ücretsiz erişim</div>
       </div>
     </div>
     <div style="background:#fff;border-radius:24px;padding:36px;box-shadow:0 8px 32px rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.2);text-align:center">
@@ -1646,7 +1646,7 @@ function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;clearI
 function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}satPratikRender();}
 function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(45,91,227,.1);color:var(--signal);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
-  const metin='⚡ SAT Metodunda %'+yuzde+' doğruluk oranı yakaladım!\n\n🎯 ÖSYM tuzaklarını 2 saniyede çözmeyi öğreniyorum.\ndespite, far from, must have... Artık bunlar beni kandıramaz!\n\n💙 Her abonelik, imkânı olmayan öğrencilerin yabancı dil sınavına hazırlanmasına destek oluyor.\n\n👇 Sen de dene — 7 gün ücretsiz\nsinyal-avcisi-five.vercel.app\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek';
+  const metin='⚡ SAT Metodunda %'+yuzde+' doğruluk oranı yakaladım!\n\n🎯 ÖSYM tuzaklarını 2 saniyede çözmeyi öğreniyorum.\ndespite, far from, must have... Artık bunlar beni kandıramaz!\n\n💙 Bu platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — SAT Metodu %'+yuzde+' Doğruluk!',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:Inter,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
@@ -2807,7 +2807,7 @@ function xpBildirim(puan,tip){
 }
 function xpPaylas(puan){
   const xd=xpLoad();
-  const metin='🎯 Bu hafta '+xd.hafta+' XP kazandım!\n\n📚 YDS/YÖKDİL çalışıyorum — her gün sinyal metoduyla ÖSYM tuzaklarını çözüyorum.\n\n💙 Üstelik her abonelik, imkânsız öğrencilerin yabancı dil sınavına hazırlanmasına destek oluyor.\n\n👇 Sen de dene — 7 gün ücretsiz\nsinyal-avcisi-five.vercel.app\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek #YabancıDil';
+  const metin='🎯 Bu hafta '+xd.hafta+' XP kazandım!\n\n📚 YDS/YÖKDİL çalışıyorum — her gün sinyal metoduyla ÖSYM tuzaklarını çözüyorum.\n\n💙 Platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek #YabancıDil';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — '+puan+' XP Kazandım!',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:Inter,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
@@ -3169,21 +3169,21 @@ function animateCount(el){
 }
 
 const bildirimler=[
-  {isim:'A. Yılmaz',eylem:'Pro pakete katıldı',sure:'2 dk önce'},
+  {isim:'A. Yılmaz',eylem:'Ücretsiz hesap açtı',sure:'2 dk önce'},
   {isim:'M. Kaya',eylem:'İlk dersini tamamladı',sure:'5 dk önce'},
   {isim:'D. Şahin',eylem:'E-kitabı indirdi',sure:'8 dk önce'},
   {isim:'S. Çelik',eylem:'Sinyal Lab açtı',sure:'3 dk önce'},
-  {isim:'H. Arslan',eylem:'YÖKDİL Fen paketini aldı',sure:'11 dk önce'},
+  {isim:'H. Arslan',eylem:'YÖKDİL Fen çalıştı',sure:'11 dk önce'},
   {isim:'E. Demir',eylem:'Ses Kursu başlattı',sure:'6 dk önce'},
   {isim:'N. Yıldız',eylem:'Kelime Kartları çalıştı',sure:'9 dk önce'},
   {isim:'B. Koç',eylem:'SAT Metodunu denedi',sure:'4 dk önce'},
-  {isim:'R. Güneş',eylem:'7 günlük denemeye başladı',sure:'13 dk önce'},
-  {isim:'T. Aydın',eylem:'YÖKDİL Sağlık paketini aldı',sure:'7 dk önce'},
+  {isim:'R. Güneş',eylem:'Platforma katıldı',sure:'13 dk önce'},
+  {isim:'T. Aydın',eylem:'YÖKDİL Sağlık çalıştı',sure:'7 dk önce'},
   {isim:'K. Polat',eylem:'KLOD ile pratik yaptı',sure:'15 dk önce'},
   {isim:'C. Erdoğan',eylem:'Hukuk metinleri çalıştı',sure:'10 dk önce'},
-  {isim:'F. Kurt',eylem:'Ücretsiz denemeye başladı',sure:'20 dk önce'},
+  {isim:'F. Kurt',eylem:'Ücretsiz hesap açtı',sure:'20 dk önce'},
   {isim:'A. Kara',eylem:'Günlük Tuzak çözdü',sure:'18 dk önce'},
-  {isim:'Z. Yavuz',eylem:'Pro paketi yeniledi',sure:'25 dk önce'},
+  {isim:'Z. Yavuz',eylem:'İngilizce Kursuna başladı',sure:'25 dk önce'},
 ];
 let bIdx=0;
 function bildirimGoster(){const b=bildirimler[bIdx%bildirimler.length];bIdx++;const div=document.createElement('div');div.style.cssText='position:fixed;bottom:24px;left:24px;z-index:500;background:#fff;border:1px solid #e5e3dc;border-radius:12px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;max-width:280px;animation:slideInLeft .4s ease;font-family:Inter,sans-serif';div.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:#e8eeff;display:grid;place-items:center;font-size:16px;flex-shrink:0">🎓</div><div><div style="font-size:15px;font-weight:600;color:#0c0e14">'+b.isim+'</div><div style="font-size:14px;color:#6b7280">'+b.eylem+' · '+b.sure+'</div></div>';document.body.appendChild(div);setTimeout(()=>{div.style.animation='slideOutLeft .4s ease';setTimeout(()=>div.remove(),400);},4500);}
@@ -3373,46 +3373,13 @@ window.addEventListener('DOMContentLoaded',()=>{
 let exitShown=false;
 document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown&&!localStorage.getItem('exitSeen')){exitShown=true;localStorage.setItem('exitSeen','1');const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
 
-function iyzicoOdemeBaslat(plan,fiyat){
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
-  overlay.innerHTML=`<div style="background:#fff;border-radius:20px;max-width:440px;width:100%;padding:32px;position:relative;font-family:Inter,sans-serif">
-    <button onclick="this.parentElement.parentElement.remove()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280">✕</button>
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:32px;margin-bottom:8px">💳</div>
-      <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:4px">${plan}</div>
-      <div style="font-size:28px;font-weight:700;color:var(--signal)">${fiyat} TL<span style="font-size:14px;color:#6b7280;font-weight:400">/ay</span></div>
-    </div>
-    <div style="background:#f8faff;border:1px solid #e8eeff;border-radius:12px;padding:16px;margin-bottom:20px">
-      <div style="font-size:14px;color:var(--signal);font-weight:700;margin-bottom:12px;letter-spacing:.08em">KART BİLGİLERİ</div>
-      <input id="kart-no" placeholder="Kart Numarası" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-bottom:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" aria-label="Kart numarası">
-      <div style="display:flex;gap:8px">
-        <input id="kart-son" placeholder="AA/YY" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none" aria-label="Son kullanma tarihi">
-        <input id="kart-cvv" placeholder="CVV" style="flex:1;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;font-family:Inter,sans-serif;outline:none" type="password" aria-label="CVV">
-      </div>
-      <input id="kart-isim" placeholder="Kart Üzerindeki İsim" style="width:100%;border:1px solid #e5e3dc;border-radius:8px;padding:10px 12px;font-size:14px;margin-top:8px;font-family:Inter,sans-serif;outline:none;box-sizing:border-box" aria-label="Kart sahibi ismi">
-    </div>
-    <button onclick="iyzicoOnay(this.parentElement.parentElement)" style="width:100%;background:var(--signal);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🔒 Güvenli Öde — ${fiyat} TL</button>
-    <div style="text-align:center;margin-top:12px;font-size:14px;color:#6b7280">🔐 256-bit SSL · iyzico güvencesiyle</div>
-  </div>`;
-  document.body.appendChild(overlay);
-  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
-}
-function iyzicoOnay(overlay){
-  const no=document.getElementById('kart-no')?.value;
-  const son=document.getElementById('kart-son')?.value;
-  const cvv=document.getElementById('kart-cvv')?.value;
-  const isim=document.getElementById('kart-isim')?.value;
-  if(!no||!son||!cvv||!isim){alert('Lütfen tüm kart bilgilerini doldurun.');return;}
-  overlay.innerHTML='<div style="background:#fff;border-radius:20px;max-width:380px;width:100%;padding:40px;text-align:center;font-family:Inter,sans-serif"><div style="font-size:64px;margin-bottom:16px">✅</div><div style="font-family:DM Serif Display,serif;font-size:24px;margin-bottom:8px">Ödeme Başarılı!</div><p style="font-size:14px;color:#6b7280;margin-bottom:20px">Hesabın aktifleştirildi!</p><button onclick="this.parentElement.parentElement.remove();goTo(\"dashboard\")" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Platforma Git →</button></div>';
-}
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
 
 // ============================================================
-// İYZİCO ÖDEME ENTEGRASYONU
+// WHATSAPP DESTEK HATTI (admin panelinden kullanıcıyla iletişim için)
 // ============================================================
-// ── WHATSAPP ÖDEMESİ ──────────────────────────────────────────────────────────
-const WA_NUMARA = '905324720860'; // ← buraya kendi numaranı yaz
+// ── WHATSAPP ──────────────────────────────────────────────────────────
+const WA_NUMARA = '905324720860';
 
 function iyzicoOdemeBaşlat(plan, fiyat) {
   const overlay = document.createElement('div');
