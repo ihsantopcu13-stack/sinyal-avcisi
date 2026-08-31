@@ -104,7 +104,34 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .s-key{background:#fefce8;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:700;display:inline-block}
 .s-key.pulse{animation:keyPulse 1s ease}
 @keyframes keyPulse{0%{background:#fefce8;box-shadow:none}50%{background:rgba(146,64,14,.2);box-shadow:0 0 0 4px rgba(146,64,14,.1)}100%{background:#fefce8;box-shadow:none}}
-.s-sig[data-tip]:hover::after,.s-trap[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:15px;padding:6px 10px;border-radius:6px;white-space:nowrap;z-index:50;pointer-events:none}
+.s-sig[data-tip]:hover::after,.s-trap[data-tip]:hover::after,.s-key[data-tip]:hover::after{
+  content:attr(data-tip);
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#0c0e14;
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:8px;
+  white-space:nowrap;
+  z-index:100;
+  pointer-events:none;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+  letter-spacing:.01em;
+}
+.s-sig[data-tip]:hover::before,.s-trap[data-tip]:hover::before,.s-key[data-tip]:hover::before{
+  content:'';
+  position:absolute;
+  bottom:calc(100% + 4px);
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:#0c0e14;
+  z-index:100;
+}
 .demo-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .leg{display:flex;align-items:center;gap:5px;font-size:15px;color:var(--muted)}
 .leg-dot{width:10px;height:10px;border-radius:3px}
@@ -573,14 +600,14 @@ body.dark-mode th{background:#141620;color:var(--ink)}
   </div>
   <div id="demo" class="demo-card">
     <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
-    <div class="demo-sent" id="dsent">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
+    <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsSpeak){const c=this.textContent.replace(/[\x22]/g,'');ttsSpeak(c,'en-US',null)}">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
     <div class="demo-legend">
       <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
       <div class="leg"><div class="leg-dot" style="background:#fef2f2;border:1px solid var(--trap)"></div>Tuzak</div>
       <div class="leg"><div class="leg-dot" style="background:#fefce8;border:1px solid #d97706"></div>Kilit kelime</div>
     </div>
     <div class="demo-quiz">
-      <div class="demo-q" id="dq">Bu cumleye gore arastirmacilar ne sonucuna vardi?</div>
+      <div class="demo-q" id="dq" onmouseenter="if(window.ttsSpeak)ttsSpeak(this.textContent,'tr-TR',null)">Bu cumleye gore arastirmacilar ne sonucuna vardi?</div>
       <div class="demo-opts" id="dopts">
         <button class="dopt" onclick="demoAns(this,false)">Tedavi tum hastalar icin etkilidir.</button>
         <button class="dopt" onclick="demoAns(this,true)">Tedavi umit verici ama garantili degildir.</button>
@@ -1939,7 +1966,7 @@ function slRender(){
   if(eyebrow)eyebrow.textContent=soru.eye+' — Soru '+(slIdx%havuz.length+1)+'/'+havuz.length;
   if(sent){
     sent.innerHTML=soru.sent;
-    sent.onmouseenter=function(){const c=this.textContent.replace(/['"]/g,'');ttsSpeak(c,'en-US',null);};
+    sent.onmouseenter=function(e){if(e.target===sent){const c=this.textContent.replace(/['"]/g,'');ttsSpeak(c,'en-US',null);}};
     // Highlight kelimelere hover ses ekle
     setTimeout(()=>{
       sent.querySelectorAll('.s-sig,.s-trap,.s-key').forEach(el=>{
