@@ -693,11 +693,17 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 </div>
 <section id="hero" class="hero">
   <div>
-    <div style="margin-bottom:24px;text-align:center">
-      <span style="background:#fef3c7;color:#92400e;font-size:15px;font-weight:800;padding:10px 24px;border-radius:30px;letter-spacing:.08em;display:inline-block;box-shadow:0 4px 16px rgba(180,120,0,.2)">🇹🇷 TEK KURUŞ ÖDEMEDEN — SONSUZA KADAR</span>
+    <div style="margin-bottom:24px">
+      <span style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;font-size:14px;font-weight:800;padding:8px 20px;border-radius:30px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(180,120,0,.25);animation:badgePulse 2.5s ease-in-out infinite">
+        <span style="width:8px;height:8px;background:#e97316;border-radius:50%;animation:pulse 1.5s ease infinite;flex-shrink:0"></span>
+        🇹🇷 TEK KURUŞ ÖDEMEDEN — SONSUZA KADAR
+      </span>
     </div>
+    <style>
+    @keyframes badgePulse{0%,100%{box-shadow:0 4px 20px rgba(180,120,0,.25)}50%{box-shadow:0 6px 28px rgba(180,120,0,.5),0 0 0 6px rgba(253,230,138,.2)}}
+    </style>
     <h1 style="font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 20px">Büyük paralara<br><em style="color:var(--signal)">gerek yok.</em></h1>
-    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">YDS ve YÖKDİL için aylarca para ödemek zorunda değilsin. <strong>Tek kuruş ödemeden</strong> sinyal metoduyla ÖSYM tuzaklarını 10 saniyede görmeyi öğreniyorsun.</p>
+    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">YDS ve YÖKDİL için aylarca para ödemek zorunda değilsin. <strong>Tek kuruş ödemeden</strong> — 15.000 soru, AI mentor, ses kursu — hepsi senin. <em style="color:var(--signal)">Sonsuza kadar.</em></p>
     <div class="hero-btns">
       <button class="btn-primary" onclick="goTo('dashboard')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Hemen Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="openModal('Ücretsiz Hesap','0')" style="font-size:14px;color:rgba(248,247,243,.5)">📊 Kaydol — ilerlemeni kaydet</button>
