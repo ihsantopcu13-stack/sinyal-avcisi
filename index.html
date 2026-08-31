@@ -800,6 +800,7 @@ body.dark-mode th{background:#141620;color:var(--ink)}
           <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
           <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
           <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
+          <div class="dtab" onclick="dtab(this,'paragraf')">📖 Paragraf</div>
           <div class="dtab" onclick="dtab(this,'svo')">📐 S+V+O</div>
           <div class="dtab" onclick="dtab(this,'teknik')">🧠 Öğrenme</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
@@ -835,6 +836,7 @@ body.dark-mode th{background:#141620;color:var(--ink)}
           <div id="tuzak-container"></div>
         </div>
         <div class="dmod" id="mod-sat" style="display:none"><div id="sat-icerik"></div></div>
+        <div class="dmod" id="mod-paragraf" style="display:none"><div id="paragraf-icerik-container"></div></div>
         <div class="dmod" id="mod-svo" style="display:none;background:linear-gradient(135deg,#f0f9ff,#f0fdf4);border-radius:16px;padding:4px"><div id="svo-icerik-container"></div></div>
         <div class="dmod" id="mod-teknik" style="display:none;background:linear-gradient(135deg,#f0f4ff,#fdf4ff);border-radius:16px;padding:4px"><div id="teknik-icerik-container"></div></div>
         <div class="dmod" id="mod-avci" style="display:none">
@@ -1337,6 +1339,13 @@ function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clear
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
+  if(mod==='paragraf'){
+    const paragrafEl=document.getElementById('mod-paragraf');
+    if(paragrafEl){paragrafEl.style.display='block';}
+    const paragrafContainer=document.getElementById('paragraf-icerik-container');
+    if(paragrafContainer&&!paragrafContainer.innerHTML){paragrafContainer.innerHTML=paragrafModulHTML();}
+    return;
+  }
   if(mod==='svo'){
     const svoEl=document.getElementById('mod-svo');
     if(svoEl){svoEl.style.display='block';}
@@ -2202,6 +2211,132 @@ function teknikToggle(el){
 }
 
 let svoDersIdx=0,svoOrnek=0;
+
+// ============================================================
+// PARAGRAF OKUMA MODÜLÜ
+// ============================================================
+const PARAGRAFLAR=[
+  {
+    id:'p1',
+    baslik:'Bilim ve Teknoloji',
+    seviye:'Orta',
+    metin:`The development of artificial intelligence has raised profound questions about the nature of human cognition. <span class="s-sig" data-tip="Zıtlık sinyali">While</span> early AI systems were designed to mimic specific human tasks, modern neural networks have demonstrated an <span class="s-key">unprecedented</span> ability to learn from vast datasets. <span class="s-trap" data-tip="Dikkat: olumsuz">Far from replacing</span> human creativity, however, these systems appear to augment it in ways that researchers <span class="s-key">scarcely</span> anticipated. The implications for fields ranging from medicine to artistic creation remain <span class="s-trap" data-tip="Gizli olumsuz">anything but</span> clear, suggesting that the relationship between human and artificial intelligence will continue to evolve in complex and unpredictable ways.`,
+    sorular:[
+      {q:'Paragrafa göre modern yapay zeka sistemleri için ne söylenebilir?',opts:['İnsan yaratıcılığını tamamen ortadan kaldırmaktadır.','Büyük veri setlerinden öğrenme konusunda eşi görülmemiş bir yetenek sergilemektedir.','Yalnızca belirli insan görevlerini taklit etmek için tasarlanmıştır.','Tıp ve sanat alanlarında net sonuçlar ortaya koymuştur.'],ans:1,fb:'Paragrafta "unprecedented ability to learn from vast datasets" ifadesi bu seçeneği destekler.'},
+      {q:'"Far from replacing" ifadesinin paragraftaki anlamı nedir?',opts:['İnsan yaratıcılığının yerini almaktadır.','İnsan yaratıcılığını artırmaktadır.','İnsan yaratıcılığını hiç etkilememektedir.','İnsan yaratıcılığının yerini almaktan uzaktır.'],ans:3,fb:'"Far from replacing" = yerini almaktan uzak. Gizli olumsuz tuzak!'},
+      {q:'Paragrafın ana fikri nedir?',opts:['YZ insan zekasından üstündür.','YZ ve insan zekasının ilişkisi karmaşık ve gelişmeye devam eden bir süreçtir.','YZ yalnızca bilim alanında yararlıdır.','YZ etkileri ongorebilelir ve nettir.'],ans:1,fb:'Paragraf boyunca YZ ile insan zekasinin iliskisi vurgulanir.'},
+    ]
+  },
+  {
+    id:'p2',
+    baslik:'Çevre ve Ekoloji',
+    seviye:'Zor',
+    metin:`Climate change represents <span class="s-trap" data-tip="Gizli olumsuz">one of the most formidable challenges</span> facing contemporary societies. <span class="s-sig" data-tip="Zıtlık sinyali">Although</span> international agreements have been reached, the gap between commitments and actual emissions reductions remains <span class="s-key">substantial</span>. Developing nations argue, <span class="s-sig" data-tip="Zıtlık sinyali">however</span>, that they should <span class="s-trap" data-tip="Modal tuzak">not be expected to</span> bear the same burden as industrialized countries that have historically contributed more to the problem. This tension between equity and efficiency has proven <span class="s-trap" data-tip="Dikkat: olumsuz">far from</span> easy to resolve, leaving climate negotiations in a perpetual state of compromise.`,
+    sorular:[
+      {q:'Gelişmekte olan ülkelerin iklim değişikliğine ilişkin argümanı nedir?',opts:['Gelişmiş ülkelerle aynı yükü taşımayı gönüllü olarak kabul etmektedirler.','Tarihsel olarak daha fazla katkıda bulunan sanayileşmiş ülkelerle aynı yükü taşımamalıdırlar.','İklim anlaşmalarından çekilmek istemektedirler.','Emisyon azaltımında dünyanın en başarılı ülkeleridir.'],ans:1,fb:'"Not be expected to bear the same burden" — gelişmiş ülkelerin tarihsel sorumluluğuna vurgu.'},
+      {q:'"Far from easy to resolve" ifadesi ne anlama gelmektedir?',opts:['Çözmek son derece kolaydır.','Çözmek neredeyse imkansızdır.','Çözmek kolaydan çok uzaktır.','Çözüm yakın zamanda bulunacaktır.'],ans:2,fb:'"Far from easy" = kolaydan uzak = zor. Gizli olumsuz yapı.'},
+      {q:'İklim müzakerelerinin mevcut durumu nedir?',opts:['Tüm taraflar tam mutabakat sağlamıştır.','Müzakereler sürekli bir uzlaşı durumunda kalmaktadır.','Anlaşmalar tamamen uygulamaya konulmuştur.','Emisyon azaltımı hedeflerin çok üzerindedir.'],ans:1,fb:'"Leaving climate negotiations in a perpetual state of compromise" — sürekli uzlaşı durumu.'},
+    ]
+  },
+  {
+    id:'p3',
+    baslik:'Psikoloji ve Davranış',
+    seviye:'Orta',
+    metin:`Research in behavioral economics has demonstrated that human decision-making is <span class="s-trap" data-tip="Gizli olumsuz">far from</span> the rational process that classical economic theory assumed. <span class="s-sig" data-tip="Zıtlık sinyali">Despite</span> believing themselves to be logical actors, individuals consistently exhibit predictable patterns of <span class="s-key">irrationality</span>. These cognitive biases, <span class="s-sig" data-tip="Zıtlık sinyali">while</span> often unconscious, can lead to decisions that are <span class="s-trap" data-tip="Gizli olumsuz">anything but</span> optimal. Understanding these biases has become increasingly valuable for policymakers who seek to design environments — or "nudges" — that guide people toward <span class="s-key">beneficial</span> choices without restricting their freedom.`,
+    sorular:[
+      {q:'Davranışsal ekonomi araştırmaları insan karar alma süreci hakkında ne ortaya koymaktadır?',opts:['İnsanlar her zaman rasyonel kararlar verir.','İnsan karar alma süreci klasik teorinin varsaydığı kadar rasyonel değildir.','Ekonomik kararlar tamamen duygusaldır.','Bilişsel önyargılar yalnızca belirli gruplarda görülür.'],ans:1,fb:'"Far from the rational process" = rasyonel süreçten uzak. Gizli olumsuz tuzak!'},
+      {q:'"Nudge" kavramı paragrafta nasıl tanımlanmaktadır?',opts:['İnsanları belirli seçimleri yapmaya zorlayan kurallar.','İnsanları özgürlüklerini kısıtlamadan yararlı seçimlere yönlendiren ortam tasarımları.','Bilişsel önyargıların tamamen ortadan kaldırılması için kullanılan yöntemler.','Ekonomistlerin karar alma süreçlerine müdahale etmesi.'],ans:1,fb:'"Guide people toward beneficial choices without restricting freedom" — özgürlük kısıtlanmadan yönlendirme.'},
+      {q:'Bilişsel önyargıların özelliği nedir?',opts:['Genellikle bilinçli olarak uygulanır.','Optimal kararlar almayı sağlar.','Çoğunlukla bilinçsiz olarak ortaya çıkar ve optimal olmayan kararlara yol açar.','Yalnızca ekonomik kararları etkiler.'],ans:2,fb:'"While often unconscious" ve "anything but optimal" — bilinçsiz ve optimal değil.'},
+    ]
+  }
+];
+
+let aktifParagraf=0,paragrafCevaplar={};
+
+function paragrafModulHTML(){
+  return `<div style="max-width:780px">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:6px">📖 Paragraf Okuma Modülü</div>
+      <div style="font-size:15px;color:var(--muted)">Gerçek YDS/YÖKDİL formatında paragraf soruları — sinyalleri tespit et, soruları çöz</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      ${PARAGRAFLAR.map((p,i)=>`<button onclick="paragrafSec(${i})" id="ptab-${i}" style="padding:8px 18px;border-radius:8px;border:2px solid ${i===0?'var(--signal)':'var(--border)'};background:${i===0?'var(--sl)':'transparent'};color:${i===0?'var(--signal)':'var(--muted)'};font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .2s">${p.baslik}</button>`).join('')}
+    </div>
+    <div id="paragraf-alan"></div>
+  </div>`;
+}
+
+function paragrafSec(idx){
+  aktifParagraf=idx;
+  PARAGRAFLAR.forEach((_,i)=>{
+    const t=document.getElementById('ptab-'+i);
+    if(t){t.style.borderColor=i===idx?'var(--signal)':'var(--border)';t.style.background=i===idx?'var(--sl)':'transparent';t.style.color=i===idx?'var(--signal)':'var(--muted)';}
+  });
+  const p=PARAGRAFLAR[idx];
+  const alan=document.getElementById('paragraf-alan');
+  if(!alan)return;
+  alan.innerHTML=`
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <span style="background:var(--sl);color:var(--signal);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em">${p.baslik.toUpperCase()}</span>
+        <span style="background:${p.seviye==='Zor'?'#fef2f2':'#fffbeb'};color:${p.seviye==='Zor'?'var(--trap)':'#d97706'};font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px">${p.seviye}</span>
+      </div>
+      <div style="font-size:16px;line-height:1.9;color:var(--ink);border-left:3px solid var(--signal);padding-left:16px;cursor:pointer" onmouseenter="if(window.ttsSpeak)ttsSpeak(this.innerText,'en-US',null)">${p.metin}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:12px">🔊 Paragrafa hover et — sesli dinle</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      ${p.sorular.map((s,si)=>`
+        <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px" id="psoru-${idx}-${si}">
+          <div style="font-size:14px;font-weight:700;color:var(--signal);margin-bottom:8px">SORU ${si+1}</div>
+          <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:14px">${s.q}</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            ${s.opts.map((o,oi)=>`<button onclick="paragrafCevapla(${idx},${si},${oi},${s.ans})" id="popt-${idx}-${si}-${oi}" style="text-align:left;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;background:#fff;font-family:Inter,sans-serif;transition:all .2s">${String.fromCharCode(65+oi)}) ${o}</button>`).join('')}
+          </div>
+          <div id="pfb-${idx}-${si}" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:14px;line-height:1.6"></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function paragrafCevapla(pidx,sidx,oidx,dogru){
+  // Daha önce cevaplanmışsa engelle
+  if(paragrafCevaplar[pidx+'-'+sidx]!==undefined)return;
+  paragrafCevaplar[pidx+'-'+sidx]=oidx;
+  
+  const p=PARAGRAFLAR[pidx];
+  const s=p.sorular[sidx];
+  const dogru_=s.ans;
+  const dogru_mu=oidx===dogru_;
+  
+  // Tüm şıkları renklendir
+  for(let i=0;i<s.opts.length;i++){
+    const btn=document.getElementById('popt-'+pidx+'-'+sidx+'-'+i);
+    if(!btn)continue;
+    btn.disabled=true;
+    if(i===dogru_){btn.style.background='#f0fdf4';btn.style.borderColor='#16a34a';btn.style.color='#15803d';}
+    else if(i===oidx&&!dogru_mu){btn.style.background='#fef2f2';btn.style.borderColor='var(--trap)';btn.style.color='var(--trap)';}
+  }
+  
+  // Feedback göster
+  const fb=document.getElementById('pfb-'+pidx+'-'+sidx);
+  if(fb){
+    fb.style.display='block';
+    fb.style.background=dogru_mu?'#f0fdf4':'#fef2f2';
+    fb.style.borderLeft='3px solid '+(dogru_mu?'#16a34a':'var(--trap)');
+    fb.innerHTML=(dogru_mu?'✅ <b>Doğru!</b> ':'❌ <b>Yanlış.</b> ')+s.fb;
+  }
+  
+  if(dogru_mu)streakSoruEkle('sinyal');
+  else hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
+}
+
+// Paragraf modülü ilk yüklemede seçim yap
+setTimeout(()=>{
+  const container=document.getElementById('paragraf-icerik-container');
+  if(container&&container.innerHTML)paragrafSec(0);
+},100);
+
 function svoModulHTML(){
   return `<div id="svo-icerik" style="max-width:680px">
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap" id="svo-tabs">
@@ -2952,12 +3087,12 @@ function sinavSimulatoruAc(){
   const havuz=[...TUZAK_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.dogru,fb:s.fb})),...SAT_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.ans,fb:s.fb})),...SL_HAVUZ.map(s=>({q:s.q,sent:s.sent,opts:s.opts,dogru:s.ans,fb:s.fb}))];
   const sorular=havuz.sort(()=>Math.random()-0.5).slice(0,Math.min(80,havuz.length));
   let cevaplar=new Array(sorular.length).fill(null);
-  let sure=135*60,timerInterval;
+  let sure=180*60,timerInterval;
   const overlay=document.createElement('div');
   overlay.style.cssText='position:fixed;inset:0;background:var(--paper);z-index:800;overflow-y:auto;font-family:Inter,sans-serif';
   let soruHtml='';
   sorular.forEach((s,idx)=>{soruHtml+='<div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:14px;color:var(--signal);font-weight:700;margin-bottom:8px">SORU '+(idx+1)+'</div><div style="font-size:14px;line-height:1.8;background:var(--paper);border-radius:8px;padding:10px 12px;margin-bottom:8px">'+s.sent+'</div><div style="font-size:15px;font-weight:600;margin-bottom:10px">'+s.q+'</div><div id="sim-opts-'+idx+'" style="display:flex;flex-direction:column;gap:6px">'+s.opts.map((o,i)=>'<button data-si="'+idx+'" data-oi="'+i+'" style="text-align:left;padding:10px 14px;border:1px solid #e5e3dc;border-radius:8px;font-size:15px;cursor:pointer;background:#fff;font-family:Inter,sans-serif">'+String.fromCharCode(65+i)+') '+o+'</button>').join('')+'</div></div>';});
-  overlay.innerHTML='<div style="background:var(--ink);color:#fff;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10"><div style="font-family:DM Serif Display,serif;font-size:18px">Sinyal Avcısı — <span style=color:var(--contrast)>Deneme Sınavı</span></div><div style="display:flex;align-items:center;gap:16px"><div id="sim-sure" style="font-family:JetBrains Mono,monospace;font-size:20px;color:#e8d5a3">135:00</div><button id="btn-bitir" style="background:var(--trap);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Bitir</button><button id="btn-cik" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer">✕ Çık</button></div></div><div style="max-width:900px;margin:0 auto;padding:32px 5vw"><div style="display:flex;flex-direction:column;gap:20px">'+soruHtml+'</div><div style="margin-top:32px;text-align:center"><button id="btn-bitir2" style="background:var(--signal);color:#fff;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📊 Sınavı Tamamla</button></div></div>';
+  overlay.innerHTML='<div style="background:var(--ink);color:#fff;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10"><div style="font-family:DM Serif Display,serif;font-size:18px">Sinyal Avcısı — <span style=color:var(--contrast)>Deneme Sınavı</span></div><div style="display:flex;align-items:center;gap:16px"><div id="sim-sure" style="font-family:JetBrains Mono,monospace;font-size:20px;color:#e8d5a3">180:00</div><button id="btn-bitir" style="background:var(--trap);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Bitir</button><button id="btn-cik" style="background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer">✕ Çık</button></div></div><div style="max-width:900px;margin:0 auto;padding:32px 5vw"><div style="display:flex;flex-direction:column;gap:20px">'+soruHtml+'</div><div style="margin-top:32px;text-align:center"><button id="btn-bitir2" style="background:var(--signal);color:#fff;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📊 Sınavı Tamamla</button></div></div>';
   document.body.appendChild(overlay);
   overlay.querySelectorAll('[data-si]').forEach(btn=>{
     btn.onclick=()=>{
