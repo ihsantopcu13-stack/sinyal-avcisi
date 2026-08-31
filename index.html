@@ -1187,7 +1187,19 @@ const SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let currentUser=null;
 sb.auth.onAuthStateChange((event,session)=>{if(session){currentUser=session.user;showUserMenu(session.user);}else{currentUser=null;showGuestMenu();}});
-function showUserMenu(u){const n=document.querySelector('.btn-nav');if(n){const ad=u.user_metadata?.ad||u.email.split('@')[0];n.textContent='Hosgeldin '+ad;n.style.background='var(--signal)';}}
+function showUserMenu(u){
+  const n=document.querySelector('.btn-nav');
+  if(n){
+    const ad=u.user_metadata?.ad||u.email.split('@')[0];
+    n.textContent='👤 '+ad;
+    n.style.background='var(--signal)';
+    n.onclick=()=>{
+      if(confirm('Çıkış yapmak istiyor musun?'))cikisYap();
+    };
+  }
+  // Dashboard'a otomatik scroll
+  setTimeout(()=>goTo('dashboard'),300);
+}
 function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='Ücretsiz Başla';n.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');n.style.background='var(--ink)';}}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
@@ -1259,6 +1271,35 @@ async function ekitapIndir(e){
     note.innerHTML='❌ Bağlantı hatası, tekrar dene.';
   }
 }
+async function googleGiris(){
+  try{
+    const{error}=await sb.auth.signInWithOAuth({
+      provider:'google',
+      options:{redirectTo:window.location.origin}
+    });
+    if(error)console.error('Google giriş hatası:',error);
+  }catch(e){console.error(e);}
+}
+
+async function sifremiUnuttum(){
+  const em=document.getElementById('m-email');
+  if(!em.value.includes('@')){em.style.borderColor='red';em.focus();return;}
+  try{
+    const{error}=await sb.auth.resetPasswordForEmail(em.value,{
+      redirectTo:window.location.origin+'/reset-password'
+    });
+    if(!error){
+      alert('Şifre sıfırlama maili gönderildi! Spam kutusunu da kontrol et.');
+    }
+  }catch(e){console.error(e);}
+}
+
+async function cikisYap(){
+  await sb.auth.signOut();
+  showGuestMenu();
+  goTo('hero');
+}
+
 async function modalSubmit(e){
   e.preventDefault();const ad=document.getElementById('m-ad'),em=document.getElementById('m-email'),si=document.getElementById('m-sifre');
   if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
