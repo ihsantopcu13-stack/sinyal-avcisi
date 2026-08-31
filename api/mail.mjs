@@ -1,0 +1,80 @@
+// ============================================================
+// MAIL API — Resend ile e-kitap gönderimi
+// Sinyal Avcısı
+// ============================================================
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { email, tip = 'ekitap' } = req.body;
+
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Geçersiz e-posta' });
+  }
+
+  const konular = {
+    ekitap: '📖 30 Günlük Metin Fetih Kılavuzu — Sinyal Avcısı',
+    hosgeldin: '🎯 Sinyal Avcısı\'na Hoş Geldin!',
+  };
+
+  const icerikler = {
+    ekitap: `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f8f7f3">
+        <div style="background:#fff;border-radius:20px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+          <div style="font-family:'Georgia',serif;font-size:28px;color:#1a4fd6;margin-bottom:8px">Sinyal <span style="color:#0c0e14">Avcısı</span></div>
+          <hr style="border:none;border-top:2px solid #1a4fd6;margin:16px 0 24px">
+          <h2 style="font-size:22px;color:#0c0e14;margin-bottom:12px">E-kitabın hazır! 🎉</h2>
+          <p style="font-size:16px;color:#6b7280;line-height:1.7;margin-bottom:24px">
+            <strong>30 Günlük Metin Fetih Kılavuzu</strong>'nu indirmek için aşağıdaki butona tıkla.
+          </p>
+          <div style="background:#eef2ff;border-radius:12px;padding:20px;margin-bottom:24px">
+            <p style="font-size:14px;color:#1a4fd6;font-weight:700;margin-bottom:8px">📖 E-kitapta neler var?</p>
+            <ul style="font-size:14px;color:#374151;line-height:2;margin:0;padding-left:20px">
+              <li>Bağlaç sinyal haritaları</li>
+              <li>Modal perfect tuzak rehberi</li>
+              <li>30 günlük çalışma planı</li>
+              <li>ÖSYM en sık tuzak listesi</li>
+            </ul>
+          </div>
+          <a href="https://sinyal-avcisi.com" style="display:inline-block;background:#1a4fd6;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;margin-bottom:24px">
+            📥 E-Kitabı İndir →
+          </a>
+          <p style="font-size:13px;color:#9ca3af;line-height:1.6">
+            Sinyal Avcısı · YDS & YÖKDİL Hazırlık Platformu<br>
+            Gelirin bir kısmı yetim çocukların eğitimi için bağışlanmaktadır ❤️
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Sinyal Avcısı <onboarding@resend.dev>',
+        to: [email],
+        subject: konular[tip] || konular.ekitap,
+        html: icerikler[tip] || icerikler.ekitap,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data });
+    }
+
+    return res.status(200).json({ success: true, id: data.id });
+
+  } catch (error) {
+    console.error('Mail error:', error);
+    return res.status(500).json({ error: 'Mail gönderilemedi' });
+  }
+}

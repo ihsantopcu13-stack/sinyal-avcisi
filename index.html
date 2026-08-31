@@ -1165,7 +1165,27 @@ function demoNext(){
   document.getElementById('dfb').textContent='';document.getElementById('dfb').className='demo-fb';
   document.getElementById('dnext').style.display='none';demoAnswered=false;curAlan=alan;
 }
-function ekitapIndir(e){e.preventDefault();const el=document.getElementById('ekitap-email');if(!el.value.includes('@')){el.style.borderColor='red';return;}document.getElementById('ekitap-note').innerHTML='🎉 E-kitap '+el.value+' adresine gönderildi!';el.value='';}
+async function ekitapIndir(e){
+  e.preventDefault();
+  const el=document.getElementById('ekitap-email');
+  const note=document.getElementById('ekitap-note');
+  if(!el.value.includes('@')){el.style.borderColor='red';return;}
+  const email=el.value.trim();
+  note.innerHTML='⏳ Gönderiliyor...';
+  try{
+    const res=await fetch('/api/mail',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,tip:'ekitap'})});
+    const data=await res.json();
+    if(data.success){
+      note.innerHTML='🎉 E-kitap <strong>'+email+'</strong> adresine gönderildi! Spam kutusunu da kontrol et.';
+      el.value='';
+      el.style.borderColor='';
+    } else {
+      note.innerHTML='❌ Bir hata oluştu, tekrar dene.';
+    }
+  }catch(err){
+    note.innerHTML='❌ Bağlantı hatası, tekrar dene.';
+  }
+}
 async function modalSubmit(e){
   e.preventDefault();const ad=document.getElementById('m-ad'),em=document.getElementById('m-email'),si=document.getElementById('m-sifre');
   if(!ad.value.trim()||!em.value.includes('@')||si.value.length<8)return;
