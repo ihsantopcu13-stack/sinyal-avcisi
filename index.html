@@ -444,6 +444,57 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
 .pwa-banner-text b{display:block;font-size:16px;font-weight:600;margin-bottom:2px}
 .pwa-install-btn{background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
 .pwa-close-btn{background:none;border:none;color:rgba(247,246,242,.4);font-size:20px;cursor:pointer;padding:4px}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+body.dark-mode{
+  --ink:#f0f4ff;
+  --paper:#0f1117;
+  --border:#2a2d3a;
+  --muted:#8892a4;
+  --sl:#1a2040;
+  --signal:#6b9fff;
+  --signal-dark:#4a7de8;
+  --surface:#1a1d27;
+  background:var(--paper);
+  color:var(--ink);
+}
+body.dark-mode nav{background:rgba(15,17,23,.97);border-bottom-color:#2a2d3a}
+body.dark-mode .demo-card{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .demo-card::before{opacity:.5}
+body.dark-mode .fc{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .fc.featured{background:linear-gradient(160deg,#1a1d27,#1a2040)}
+body.dark-mode .chat-ui{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .chat-input-row{background:#141620}
+body.dark-mode .chat-in{background:#1a1d27;border-color:#2a2d3a;color:var(--ink)}
+body.dark-mode .msg.k{background:#1a2040;border-color:#2a2d3a}
+body.dark-mode .msg.u{background:linear-gradient(135deg,#1a2040,#2a1f4a)}
+body.dark-mode .dash-ui{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .dk{background:#141620;border-color:#2a2d3a}
+body.dark-mode .dk.blue{background:linear-gradient(135deg,#1a2040,#141e40)}
+body.dark-mode .dk.green{background:linear-gradient(135deg,#0f2a1f,#0f3020)}
+body.dark-mode .dk.amber{background:linear-gradient(135deg,#2a1f00,#2a2000)}
+body.dark-mode .dk.purple{background:linear-gradient(135deg,#1a0f2a,#1f0f30)}
+body.dark-mode .sss-item{border-bottom-color:#2a2d3a}
+body.dark-mode .yorum{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .modal{background:#1a1d27}
+body.dark-mode .nav-links span{color:rgba(240,244,255,.6)}
+body.dark-mode .nav-links span:hover{color:var(--ink)}
+body.dark-mode .hero-badge{background:#1a2040;color:var(--muted);border-color:#2a2d3a}
+body.dark-mode .step{background:#1a1d27}
+body.dark-mode .tuzak-opt,body.dark-mode .sat-opt,body.dark-mode .dmo{background:#1a1d27;border-color:#2a2d3a;color:var(--ink)}
+body.dark-mode .klod-feat-item{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .dash-main{background:#0f1117}
+body.dark-mode .dtab{color:var(--muted)}
+body.dark-mode .dtab.active{color:var(--signal);border-bottom-color:var(--signal)}
+body.dark-mode input,body.dark-mode textarea{background:#1a1d27;border-color:#2a2d3a;color:var(--ink)}
+body.dark-mode .sss-q{color:var(--ink)}
+body.dark-mode .fc-btn{background:#1a1d27;border-color:#2a2d3a;color:var(--ink)}
+body.dark-mode table{background:#1a1d27}
+body.dark-mode td{border-bottom-color:#2a2d3a;color:var(--ink)}
+body.dark-mode th{background:#141620;color:var(--ink)}
+
 </style>
 </head>
 <body>
@@ -465,9 +516,12 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
     <span onclick="goTo('sss')">SSS</span>
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
   </div>
-  <button class="btn-nav" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button>
+  <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px">📱 Yükle</button>
+<button onclick="darkModeToggle()" id="dark-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:16px;cursor:pointer;margin-right:6px" title="Karanlık mod">🌙</button>
+<button class="btn-nav" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+
 <!-- TRUST BAR -->
 <div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:8px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap">
   <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🔒 SSL Güvenli</span>
@@ -2745,6 +2799,8 @@ function sinavSimulatoruAc(){
 // ============================================================
 function darkModeToggle(){
   const isDark=document.body.classList.toggle('dark-mode');
+  const darkBtn=document.getElementById('dark-btn');
+  if(darkBtn)darkBtn.textContent=isDark?'☀️':'🌙';
   localStorage.setItem('sa_dark',isDark?'1':'0');
   const btn=document.getElementById('dark-btn');
   if(btn)btn.textContent=isDark?'☀️':'🌙';
