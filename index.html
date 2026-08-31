@@ -523,6 +523,93 @@ body.dark-mode table{background:#1a1d27}
 body.dark-mode td{border-bottom-color:#2a2d3a;color:var(--ink)}
 body.dark-mode th{background:#141620;color:var(--ink)}
 
+/* ===== YENİ ÖZELLİKLER CSS ===== */
+
+/* RADAR CHART */
+.radar-section{padding:28px;background:var(--surface);border-radius:16px;border:1px solid var(--border)}
+.radar-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.radar-canvas-wrap{display:flex;justify-content:center}
+.radar-legend{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:16px}
+.radar-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.radar-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ADAPTIF MOTOR BADGE */
+.adaptif-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+.adaptif-kolay{background:#dcfce7;color:#16a34a}
+.adaptif-orta{background:#fef9c3;color:#ca8a04}
+.adaptif-zor{background:#fee2e2;color:#dc2626}
+.adaptif-uzman{background:#ede9fe;color:#7c3aed}
+
+/* KİŞİSEL ÇALIŞMA PLANI */
+.plan-section{padding:20px;background:linear-gradient(135deg,#f0f4ff,#f5f0ff);border-radius:14px;border:1px solid #c7d2fe;margin-top:16px}
+.plan-gun{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #e0e7ff}
+.plan-gun:last-child{border-bottom:none}
+.plan-gun-no{width:28px;height:28px;border-radius:50%;background:var(--signal);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.plan-gun-icerik{flex:1}
+.plan-gun-baslik{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.plan-gun-detay{font-size:12px;color:var(--muted);line-height:1.5}
+.plan-gun-sure{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--signal);margin-top:3px}
+
+/* SOSYAL LİDERLİK TABLOSU */
+.lb-section{padding:20px;background:linear-gradient(135deg,#fef9c3,#fef3c7);border-radius:14px;border:1px solid #fde68a}
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.lb-row:last-child{border-bottom:none}
+.lb-rank{width:24px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--muted);text-align:center}
+.lb-rank.gold{color:#ca8a04;font-size:16px}
+.lb-rank.silver{color:#94a3b8;font-size:15px}
+.lb-rank.bronze{color:#b45309;font-size:14px}
+.lb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--signal),#818cf8);display:grid;place-items:center;font-size:14px;flex-shrink:0}
+.lb-isim{flex:1;font-size:13px;font-weight:600;color:var(--ink)}
+.lb-xp{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--signal);font-weight:700}
+.lb-sen{background:rgba(26,79,214,.08);border-radius:6px;padding:4px 8px}
+
+/* NEDEN YANLIŞ ANALİZ */
+.hata-analiz{background:#fff7f7;border:1px solid #fecaca;border-radius:12px;padding:14px;margin-top:10px}
+.hata-analiz-baslik{font-size:12px;font-weight:700;color:#dc2626;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.hata-kategori{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:700;margin-bottom:6px}
+.hk-sinyal{background:#dbeafe;color:#1d4ed8}
+.hk-kelime{background:#f3e8ff;color:#7c3aed}
+.hk-yapisal{background:#dcfce7;color:#15803d}
+.hk-dikkat{background:#fff7ed;color:#c2410c}
+.hata-aciklama{font-size:13px;color:var(--muted);line-height:1.6}
+.hata-ipucu{font-size:12px;color:var(--signal);margin-top:6px;font-weight:600}
+
+/* MİCRO-LESSON VIDEO */
+.micro-lesson-card{background:var(--ink);border-radius:16px;overflow:hidden;margin-bottom:12px;cursor:pointer;transition:transform .2s}
+.micro-lesson-card:hover{transform:translateY(-2px)}
+.micro-thumb{background:linear-gradient(135deg,#1e1b4b,#312e81);height:100px;display:flex;align-items:center;justify-content:center;position:relative}
+.micro-play{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:grid;place-items:center;font-size:18px;backdrop-filter:blur(8px)}
+.micro-sure{position:absolute;bottom:8px;right:10px;font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);padding:2px 6px;border-radius:4px}
+.micro-info{padding:12px 14px}
+.micro-baslik{font-size:13px;font-weight:700;color:#f8f7f3;margin-bottom:3px}
+.micro-alt{font-size:11px;color:rgba(248,247,243,.5)}
+.micro-progress{height:3px;background:rgba(255,255,255,.1);margin-top:10px;border-radius:2px}
+.micro-progress-fill{height:100%;background:linear-gradient(90deg,var(--signal),#818cf8);border-radius:2px;transition:width .3s}
+
+/* MODAL - Ders Oynatıcı */
+.ders-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.ders-modal.open{display:flex}
+.ders-modal-ic{background:var(--ink);border-radius:20px;width:min(640px,95vw);max-height:90vh;overflow-y:auto}
+.ders-modal-header{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:center}
+.ders-modal-baslik{font-family:'DM Serif Display',serif;font-size:20px;color:#f8f7f3}
+.ders-kapat{background:rgba(255,255,255,.1);border:none;color:#f8f7f3;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:grid;place-items:center}
+.ders-video-alan{margin:16px 24px;background:linear-gradient(135deg,#1e1b4b,#0f172a);border-radius:12px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.ders-video-ic{text-align:center}
+.ders-video-ic .emoji{font-size:48px;margin-bottom:12px}
+.ders-video-ic p{color:rgba(255,255,255,.6);font-size:14px}
+.ders-transkript{padding:0 24px 24px}
+.ders-transkript h4{font-size:13px;font-weight:700;color:rgba(248,247,243,.6);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em}
+.ders-transkript-metin{font-size:14px;color:rgba(248,247,243,.8);line-height:1.8}
+.ders-transkript-metin .vurgu{color:#818cf8;font-weight:700}
+.ders-quiz-btn{margin:0 24px 24px;width:calc(100% - 48px);background:linear-gradient(135deg,var(--signal),#818cf8);color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* dark mode uyumu */
+body.dark-mode .radar-section{background:#1a1d27;border-color:#2a2d3a}
+body.dark-mode .plan-section{background:linear-gradient(135deg,#1a1d27,#1e1b4b);border-color:#312e81}
+body.dark-mode .lb-section{background:linear-gradient(135deg,#1a1a1a,#1f1a00);border-color:#4a3800}
+body.dark-mode .hata-analiz{background:#1a0a0a;border-color:#7f1d1d}
+body.dark-mode .micro-lesson-card{background:#1a1d27}
+
 </style>
 </head>
 <body>
@@ -784,6 +871,10 @@ body.dark-mode th{background:#141620;color:var(--ink)}
           <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
           <div class="dn-item" onclick="dnav(this)">🎯 Gunluk Tuzak</div>
           <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')">🎯 Zayıf Alan Radarı</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
         </div>
         <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
       </div>
@@ -805,9 +896,16 @@ body.dark-mode th{background:#141620;color:var(--ink)}
           <div class="dtab" onclick="dtab(this,'teknik')">🧠 Öğrenme</div>
           <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
           <div class="dtab" onclick="dtab(this,'avci')">🏹 Avcı Master</div>
+          <div class="dtab" onclick="dtab(this,'radar')">🎯 Zayıf Alan Radarı</div>
+          <div class="dtab" onclick="dtab(this,'plan')">📅 Çalışma Planım</div>
+          <div class="dtab" onclick="dtab(this,'lider')">🏆 Liderlik</div>
+          <div class="dtab" onclick="dtab(this,'mikro')">🎬 Mini Dersler</div>
         </div>
         <div class="dmod" id="mod-sinyal">
-          <div class="dm-eye" id="sl-eyebrow">Genel - YDS Metni - Soru 1/15</div>
+          <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+            <span id="sl-eyebrow-text">Genel - YDS Metni - Soru 1/15</span>
+            <span class="adaptif-badge adaptif-orta" id="adaptif-seviye-badge">⚡ ORTA</span>
+          </div>
           <div class="dm-sent" id="sl-sent"></div>
           <div class="dm-q" id="sl-q"></div>
           <div class="dm-opts" id="dm-opts"></div>
@@ -977,6 +1075,51 @@ body.dark-mode th{background:#141620;color:var(--ink)}
 <div class="dmod" id="mod-hatalar" style="display:none">
           <div class="dm-eye">HATA DEFTERİ — Yanliş cevapladıkların</div>
           <div id="hata-liste-container"></div>
+        </div>
+
+        <!-- RADAR: ZAYIF ALAN ANALİZİ -->
+        <div class="dmod" id="mod-radar" style="display:none">
+          <div class="dm-eye">🎯 ZAYIF ALAN RADARI — Performans haritanız</div>
+          <div class="radar-section" style="margin-top:14px">
+            <div class="radar-title">📊 Konu Bazlı Performans <span style="font-size:11px;color:var(--muted);font-weight:400">Son 7 gün</span></div>
+            <div class="radar-canvas-wrap">
+              <canvas id="radarCanvas" width="260" height="260"></canvas>
+            </div>
+            <div class="radar-legend" id="radar-legend"></div>
+          </div>
+          <div id="radar-zayif-liste" style="margin-top:16px"></div>
+          <button onclick="radarCiz()" style="margin-top:14px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🔄 Güncelle</button>
+        </div>
+
+        <!-- ÇALIŞMA PLANI -->
+        <div class="dmod" id="mod-plan" style="display:none">
+          <div class="dm-eye">📅 KİŞİSEL ÇALIŞMA PLANIN — Sınava Geri Sayım</div>
+          <div style="margin-top:14px;padding:14px;background:var(--sl);border-radius:10px;border:1px solid #c7d2fe">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Sınav tarihini seç:</div>
+            <input type="date" id="plan-tarih" style="border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:Inter,sans-serif;font-size:14px;outline:none;color:var(--ink);background:var(--surface);width:100%">
+            <button onclick="planOlustur()" style="margin-top:10px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📅 7 Günlük Plan Oluştur →</button>
+          </div>
+          <div id="plan-icerik" style="margin-top:14px"></div>
+        </div>
+
+        <!-- LİDERLİK TABLOSU -->
+        <div class="dmod" id="mod-lider" style="display:none">
+          <div class="dm-eye">🏆 HAFTALIK LİDERLİK TABLOSU</div>
+          <div class="lb-section" style="margin-top:14px">
+            <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:12px;display:flex;align-items:center;gap:6px">🔥 Bu Hafta En Çok XP Kazananlar</div>
+            <div id="lb-liste"></div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:var(--sl);border-radius:10px;border:1px solid #c7d2fe;text-align:center">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Senin bu haftaki puanın</div>
+            <div id="lb-benim-xp" style="font-size:28px;font-weight:700;color:var(--signal);font-family:'JetBrains Mono',monospace">0 XP</div>
+            <button onclick="xpPaylas(xpLoad().hafta)" style="margin-top:10px;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📤 Arkadaşlarınla Paylaş</button>
+          </div>
+        </div>
+
+        <!-- MİKRO DERSLER -->
+        <div class="dmod" id="mod-mikro" style="display:none">
+          <div class="dm-eye">🎬 MİNİ DERSLER — Her biri 2-3 dakika</div>
+          <div id="mikro-liste" style="margin-top:14px;display:grid;gap:10px"></div>
         </div>
       </div>
     </div>
@@ -1474,7 +1617,6 @@ function dnav(el){
     </div>
   </div>
 </div>
-${liderTabloGoster()}
 <button onclick="xpPaylas(${xd.toplam})" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#2d5be3,#818cf8);color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🚀 XP Durumunu Paylaş</button>`;
     seviyeKontrol(xd.toplam);
   }
@@ -2784,6 +2926,14 @@ function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;
 // ============================================================
 function hataLoad(){try{return JSON.parse(localStorage.getItem('sa_hatalar')||'[]');}catch(e){return[];}}
 function hataSave(d){try{localStorage.setItem('sa_hatalar',JSON.stringify(d));}catch(e){}}
+function hataKategoriSinifla(soru,tip){
+  const metin=(soru||'').toLowerCase();
+  if(tip==='kelime'||metin.includes('kelime')||metin.includes('vocabulary'))return{kod:'hk-kelime',etiket:'Kelime Bilgisi',aciklama:'Bu soruyu akademik kelime hazinenizdeki eksiklik etkiledi. Vurgulanmış kelimeyi kartlara ekleyin.',ipucu:'💡 Bu kelimeyi Kelime Kartlarına ekle ve yarın tekrar et'};
+  if(metin.includes('despite')||metin.includes('although')||metin.includes('however')||metin.includes('whereas')||tip==='sinyal')return{kod:'hk-sinyal',etiket:'Sinyal Kelimesi',aciklama:'Zıtlık/bağlaç sinyalini kaçırdınız. Bu tür sinyaller metnin yönünü belirler.',ipucu:'💡 Zıtlık sinyalleri: despite, although, however, whereas, yet, still'};
+  if(metin.includes('have')||metin.includes('would')||metin.includes('modal')||metin.includes('perfect'))return{kod:'hk-yapisal',etiket:'Yapısal Tuzak',aciklama:'Modal perfect yapısını kaçırdınız. Bu yapı geçmişe yönelik tahmini ifade eder.',ipucu:'💡 Modal Perfect: must/should/could/can\'t + have + V3 = geçmişe yönelik çıkarım'};
+  return{kod:'hk-dikkat',etiket:'Dikkat Hatası',aciklama:'Metni çok hızlı okuyarak kritik bir detayı atladınız. Yavaşlayın ve anahtar kelimeleri işaretleyin.',ipucu:'💡 Cümleyi baştan oku — genellikle ilk veya son cümlede cevap gizlidir'};
+}
+
 function hataEkle(soru,verilenCevap,dogruCevap,tip){
   let d=hataLoad();
   const kayit={id:Date.now(),soru,verilenCevap,dogruCevap,tip,tarih:new Date().toLocaleDateString('tr-TR'),tekrarSayisi:0};
@@ -2809,17 +2959,24 @@ function hataDefteriniGoster(){
     return;
   }
   cont.innerHTML=`<div style="font-size:15px;color:var(--muted);margin-bottom:10px">${d.length} hatalı konu kayıtlı — Tekrar et ve sil</div>`+
-  d.map(h=>`
-    <div class="hata-item" id="hata-${h.id}">
+  d.map(h=>{
+    const kat=hataKategoriSinifla(h.soru,h.tip||'');
+    return`<div class="hata-item" id="hata-${h.id}">
       <div class="hata-item-word">${h.soru.length>60?h.soru.substring(0,60)+'...':h.soru}</div>
       <div class="hata-item-tip">Senin cevabın: <b style="color:var(--trap)">${h.verilenCevap}</b> → Doğrusu: <b style="color:#16a34a">${h.dogruCevap}</b></div>
       <div style="font-size:10px;color:var(--muted);margin-bottom:6px">${h.tarih} · ${h.tekrarSayisi>0?h.tekrarSayisi+' kez tekrar edildi':'İlk hata'}</div>
+      <div class="hata-analiz">
+        <div class="hata-analiz-baslik">🔍 Neden Yanlış?</div>
+        <span class="hata-kategori ${kat.kod}">${kat.etiket}</span>
+        <div class="hata-aciklama">${kat.aciklama}</div>
+        <div class="hata-ipucu">${kat.ipucu}</div>
+      </div>
       <div class="hata-item-actions">
         <button class="hata-tekrar-btn" onclick="hataTekrar('${h.id}')">🔁 Tekrar et</button>
         <button class="hata-sil-btn" onclick="hataSil('${h.id}')">✕ Sil</button>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 function hataSil(id){
   let d=hataLoad();d=d.filter(h=>String(h.id)!==String(id));hataSave(d);hataDefteriniGoster();hataCountGuncelle();}
@@ -3493,6 +3650,360 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 
 if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+
+// ===== YENİ ÖZELLİKLER JS =====
+
+// ─── 1. RADAR: ZAYIF ALAN ANALİZİ ───────────────────────────────────────────
+const RADAR_KONULAR=['Sinyal Kel.','Modal Perf.','Paragraf','Kelime','Tuzak','Çeviri'];
+const RADAR_RENKLER=['#1a4fd6','#7c3aed','#0891b2','#059669','#dc2626','#d97706'];
+
+function radarVerisiAl(){
+  // Gerçek hata verisinden hesapla
+  const hatalar=hataLoad();
+  const xp=xpLoad();
+  const streak=streakLoad();
+  // Soru istatistikleri localStorage'dan
+  let dogruSay=parseInt(localStorage.getItem('sa_dogru_toplam')||'0');
+  let yanlisSay=parseInt(localStorage.getItem('sa_yanlis_toplam')||'0');
+  let toplam=dogruSay+yanlisSay;
+  let basariOrani=toplam>0?Math.round((dogruSay/toplam)*100):50;
+  // Hata kategorilerine göre puanlar
+  const sinyalHata=hatalar.filter(h=>hataKategoriSinifla(h.soru,h.tip||'').kod==='hk-sinyal').length;
+  const kelimeHata=hatalar.filter(h=>hataKategoriSinifla(h.soru,h.tip||'').kod==='hk-kelime').length;
+  const yapiHata=hatalar.filter(h=>hataKategoriSinifla(h.soru,h.tip||'').kod==='hk-yapisal').length;
+  // Puanlar: max hata 10 kabul et, ters çevir
+  function hataPuan(hata){return Math.max(20,100-Math.min(hata*15,80));}
+  return[
+    hataPuan(sinyalHata),       // Sinyal Kel.
+    hataPuan(yapiHata),          // Modal Perf.
+    Math.min(100,basariOrani+10),// Paragraf
+    hataPuan(kelimeHata),        // Kelime
+    Math.min(100,streak.gun*10+40), // Tuzak
+    Math.min(100,xp.toplam>0?(xp.toplam/10):50) // Çeviri
+  ].map(v=>Math.min(100,Math.max(10,v)));
+}
+
+function radarCiz(){
+  const canvas=document.getElementById('radarCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H/2,r=90;
+  const degerler=radarVerisiAl();
+  const n=RADAR_KONULAR.length;
+  ctx.clearRect(0,0,W,H);
+  // Arka plan ağı
+  for(let level=1;level<=4;level++){
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const aci=(Math.PI*2*i/n)-Math.PI/2;
+      const x=cx+r*(level/4)*Math.cos(aci);
+      const y=cy+r*(level/4)*Math.sin(aci);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle='rgba(100,116,139,0.2)';
+    ctx.lineWidth=1;
+    ctx.stroke();
+    ctx.fillStyle='rgba(100,116,139,0.03)';
+    ctx.fill();
+  }
+  // Eksenler
+  for(let i=0;i<n;i++){
+    const aci=(Math.PI*2*i/n)-Math.PI/2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+r*Math.cos(aci),cy+r*Math.sin(aci));
+    ctx.strokeStyle='rgba(100,116,139,0.3)';
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+  // Veri alanı
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const aci=(Math.PI*2*i/n)-Math.PI/2;
+    const val=degerler[i]/100;
+    const x=cx+r*val*Math.cos(aci);
+    const y=cy+r*val*Math.sin(aci);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(26,79,214,0.15)';
+  ctx.fill();
+  ctx.strokeStyle='#1a4fd6';
+  ctx.lineWidth=2;
+  ctx.stroke();
+  // Noktalar
+  for(let i=0;i<n;i++){
+    const aci=(Math.PI*2*i/n)-Math.PI/2;
+    const val=degerler[i]/100;
+    const x=cx+r*val*Math.cos(aci);
+    const y=cy+r*val*Math.sin(aci);
+    ctx.beginPath();
+    ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle=RADAR_RENKLER[i];
+    ctx.fill();
+  }
+  // Etiketler
+  ctx.font='bold 11px Inter';
+  ctx.textAlign='center';
+  for(let i=0;i<n;i++){
+    const aci=(Math.PI*2*i/n)-Math.PI/2;
+    const x=cx+(r+20)*Math.cos(aci);
+    const y=cy+(r+20)*Math.sin(aci);
+    ctx.fillStyle='#64748b';
+    ctx.fillText(RADAR_KONULAR[i],x,y+4);
+  }
+  // Legend
+  const legend=document.getElementById('radar-legend');
+  if(legend){
+    legend.innerHTML=RADAR_KONULAR.map((k,i)=>
+      `<div class="radar-leg-item"><div class="radar-leg-dot" style="background:${RADAR_RENKLER[i]}"></div>${k}: <b style="color:${RADAR_RENKLER[i]}">${degerler[i]}%</b></div>`
+    ).join('');
+  }
+  // Zayıf alan listesi
+  const zayifListe=document.getElementById('radar-zayif-liste');
+  if(zayifListe){
+    const sirali=[...degerler.map((v,i)=>({konu:RADAR_KONULAR[i],puan:v,renk:RADAR_RENKLER[i]}))].sort((a,b)=>a.puan-b.puan);
+    zayifListe.innerHTML=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">⚠️ Öncelikli Çalışma Alanları</div>`+
+    sirali.slice(0,3).map(s=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border-radius:10px;border:1px solid var(--border);margin-bottom:8px">
+        <div style="width:36px;height:36px;border-radius:50%;background:${s.renk}22;border:2px solid ${s.renk};display:grid;place-items:center;font-size:14px;color:${s.renk};font-weight:900">${s.puan}</div>
+        <div><div style="font-size:13px;font-weight:700;color:var(--ink)">${s.konu}</div><div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px;width:120px"><div style="height:100%;background:${s.renk};border-radius:2px;width:${s.puan}%"></div></div></div>
+        <div style="margin-left:auto;font-size:11px;color:${s.puan<50?'var(--trap)':s.puan<75?'#ca8a04':'#16a34a'};font-weight:700">${s.puan<50?'🔴 Kritik':s.puan<75?'🟡 Gelişiyor':'🟢 İyi'}</div>
+      </div>
+    `).join('');
+  }
+}
+
+// ─── 2. KİŞİSEL ÇALIŞMA PLANI ───────────────────────────────────────────────
+const PLAN_AKTIVITE_HAVUZU=[
+  {simge:'🔬',baslik:'Sinyal Lab',detay:'15 adaptif soru çöz, sinyallere odaklan',sure:'35 dk'},
+  {simge:'🃏',baslik:'Kelime Kartları',detay:'Bekleyen kartları tekrar et (spaced repetition)',sure:'15 dk'},
+  {simge:'⚡',baslik:'SAT Metodu',detay:'Paragraf yapısını S+V+O ile analiz et',sure:'20 dk'},
+  {simge:'🎧',baslik:'Ses Kursu',detay:'2 podcast bölümü dinle, aktif not al',sure:'20 dk'},
+  {simge:'🎯',baslik:'Günlük Tuzak',detay:'Tuzak sorusunu çöz, açıklamasını oku',sure:'10 dk'},
+  {simge:'📖',baslik:'Paragraf Analizi',detay:'1 akademik metin oku, sinyalleri işaretle',sure:'25 dk'},
+  {simge:'🤖',baslik:'KLOD Sohbeti',detay:'En zor konuyu KLOD\'a sor, tartış',sure:'15 dk'},
+  {simge:'📝',baslik:'Hata Defteri',detay:'Geçmiş hatalarını gözden geçir, tekrar et',sure:'20 dk'},
+  {simge:'🧠',baslik:'Modal Perfect',detay:'must/should/can\'t+have kalıplarını pekiştir',sure:'25 dk'},
+  {simge:'🔁',baslik:'Mini Test',detay:'10 soruluk hızlı test yap, zamanla kendin',sure:'15 dk'},
+];
+
+function planOlustur(){
+  const tarihEl=document.getElementById('plan-tarih');
+  const icerikEl=document.getElementById('plan-icerik');
+  if(!icerikEl)return;
+  const hedefTarih=tarihEl?.value?new Date(tarihEl.value):new Date(Date.now()+30*24*3600*1000);
+  const kalanGun=Math.max(1,Math.ceil((hedefTarih-Date.now())/(1000*60*60*24)));
+  const radarVeri=radarVerisiAl();
+  const enZayif=RADAR_KONULAR[radarVeri.indexOf(Math.min(...radarVeri))];
+  // 7 günlük plan oluştur
+  const planGunler=[];
+  for(let i=0;i<Math.min(7,kalanGun);i++){
+    const aktivite1=PLAN_AKTIVITE_HAVUZU[i%PLAN_AKTIVITE_HAVUZU.length];
+    const aktivite2=PLAN_AKTIVITE_HAVUZU[(i+3)%PLAN_AKTIVITE_HAVUZU.length];
+    const tarih=new Date(Date.now()+(i+1)*24*3600*1000);
+    const gunAd=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'][tarih.getDay()];
+    planGunler.push({no:i+1,gun:gunAd,a1:aktivite1,a2:aktivite2,kalan:kalanGun-i});
+  }
+  icerikEl.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink)">📅 7 Günlük Çalışma Planın</div>
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--signal)">Sınava ${kalanGun} gün kaldı · En zayıf: ${enZayif}</div>
+    </div>
+    <div class="plan-section">
+      ${planGunler.map(g=>`
+        <div class="plan-gun">
+          <div class="plan-gun-no">${g.no}</div>
+          <div class="plan-gun-icerik">
+            <div class="plan-gun-baslik">${g.gun}</div>
+            <div class="plan-gun-detay">${g.a1.simge} ${g.a1.baslik} · ${g.a2.simge} ${g.a2.baslik}</div>
+            <div class="plan-gun-detay" style="margin-top:2px">${g.a1.detay}</div>
+            <div class="plan-gun-sure">⏱ ${g.a1.sure} + ${g.a2.sure}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <button onclick="planIndir()" style="margin-top:10px;width:100%;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📲 Planı Paylaş</button>
+  `;
+}
+
+function planIndir(){
+  const xp=xpLoad();
+  const metin='📅 7 GÜNLÜK YDS/YÖKDİL ÇALIŞMA PLANIM\n\nSinyal Avcısı platformuyla hazırlanıyorum!\n\n✅ Günlük hedef: 35+ dakika\n📊 Bu hafta: '+xp.hafta+' XP\n\n👇 Sen de ücretsiz başla:\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı';
+  if(navigator.share){navigator.share({title:'Çalışma Planım',text:metin});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:Inter,sans-serif';d.textContent='✅ Kopyalandı!';document.body.appendChild(d);setTimeout(()=>d.remove(),2500);});}
+}
+
+// ─── 3. LİDERLİK TABLOSU ────────────────────────────────────────────────────
+const SAHTE_LB_KULLANICILAR=[
+  {isim:'Ayşe K.',emoji:'👩‍🎓',xp:2840,seviye:'🔥 Usta'},
+  {isim:'Mehmet D.',emoji:'👨‍💼',xp:2210,seviye:'⚡ İleri'},
+  {isim:'Zeynep A.',emoji:'👩‍💻',xp:1890,seviye:'⚡ İleri'},
+  {isim:'Burak Y.',emoji:'🧑‍🔬',xp:1540,seviye:'📈 Gelişen'},
+  {isim:'Selin T.',emoji:'👩‍🏫',xp:1120,seviye:'📈 Gelişen'},
+];
+
+function liderTabloGoster(){
+  const lb_el=document.getElementById('lb-liste');
+  const benim_el=document.getElementById('lb-benim-xp');
+  if(!lb_el)return;
+  const xp=xpLoad();
+  const kullaniciAdi=currentUser?.user_metadata?.ad||currentUser?.email?.split('@')[0]||'Sen';
+  // Sahte kullanıcılarla gerçek xp'yi birleştir
+  const tumListe=[...SAHTE_LB_KULLANICILAR,{isim:kullaniciAdi,emoji:'🎯',xp:xp.hafta||0,seviye:seviyeAl(xp.toplam||0).ad,benim:true}];
+  tumListe.sort((a,b)=>b.xp-a.xp);
+  const RANK_EMOJILER=['🥇','🥈','🥉'];
+  lb_el.innerHTML=tumListe.map((u,i)=>`
+    <div class="lb-row ${u.benim?'lb-sen':''}">
+      <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i<3?RANK_EMOJILER[i]:i+1}</div>
+      <div class="lb-avatar">${u.emoji}</div>
+      <div class="lb-isim">${u.isim}${u.benim?' <b style="color:var(--signal);font-size:11px">(Sen)</b>':''}</div>
+      <div class="lb-xp">${u.xp.toLocaleString('tr-TR')} XP</div>
+    </div>
+  `).join('');
+  if(benim_el)benim_el.textContent=(xp.hafta||0).toLocaleString('tr-TR')+' XP';
+}
+
+// ─── 4. MİKRO DERSLER ────────────────────────────────────────────────────────
+const MIKRO_DERSLER=[
+  {id:1,baslik:'Modal Perfect: must have done',sure:'2:34',konu:'Gramer · Tuzak',emoji:'⚡',renk:'#4f46e5',ilerleme:0,transkript:'<b>Modal Perfect</b> yapısı ÖSYM\'nin en sevdiği tuzaklardan biridir.<br><br>Formül: <span class="vurgu">must / should / could / can\'t + have + V3</span><br><br>Bu yapı her zaman <span class="vurgu">geçmişe yönelik bir çıkarım</span> veya pişmanlık ifade eder.<br><br>Örnek: <em>"She must have left early"</em> → Erken gitmiş olmalı (ben yokken).<br><br>Tuzak: Geniş zaman anlamı gibi görünür, ama değildir!'},
+  {id:2,baslik:'Despite vs Although: Zıtlık Sinyali',sure:'3:12',konu:'Sinyal · Bağlaç',emoji:'🎯',renk:'#dc2626',ilerleme:30,transkript:'<b>Zıtlık sinyalleri</b>, bir cümlenin ikinci yarısının ilk yarısıyla çelişeceğini söyler.<br><br><span class="vurgu">Despite / In spite of</span> → isim grubu alır (despite THE FACT THAT)<br><span class="vurgu">Although / Even though</span> → cümle alır (although SHE TRIED)<br><br>ÖSYM tuzağı: İkisini birbirinin yerine koyar. Sadece sentaksı kontrol et!'},
+  {id:3,baslik:'Far from: Gizli Olumsuz',sure:'1:58',konu:'Tuzak · Sinyal',emoji:'🔍',renk:'#ca8a04',ilerleme:0,transkript:'<b>Far from</b> görünürde masum, aslında güçlü bir olumsuz sinyaldir.<br><br>"far from perfect" = hiç mükemmel değil<br>"far from over" = bitmekten çok uzak<br><br><span class="vurgu">İpucu:</span> "far from" gördüğünde hemen ardından gelen sıfat veya fiili olumsuzla — metnin tonu tersine döner.'},
+  {id:4,baslik:'Paragraf Yapısı: Topic Sentence',sure:'2:45',konu:'Paragraf · Strateji',emoji:'📖',renk:'#0891b2',ilerleme:60,transkript:'Her akademik paragrafın <b>Topic Sentence</b>\'ı vardır — genellikle <span class="vurgu">ilk veya son cümlede</span>.<br><br>ÖSYM\'nin "paragrafın ana fikri" soruları bu cümleyi bulduruntur.<br><br>Hızlı yöntem:<br>1. İlk cümleyi oku<br>2. Son cümleyi oku<br>3. İkisi arasında bağlantı var mı? → Cevap orada.'},
+  {id:5,baslik:'S+V+O Kırılımı: Uzun Cümleler',sure:'3:28',konu:'Yapı · Analiz',emoji:'📐',renk:'#7c3aed',ilerleme:0,transkript:'Uzun ve karmaşık ÖSYM cümleleri sizi korkutmasın.<br><br><b>S+V+O kırılım yöntemi:</b><br>1. Virgülleri ve bağlaçları bul<br>2. Ana özneyi işaretle (kim/ne)<br>3. Ana fiili bul (ne yapıyor)<br>4. Nesneyi belirle (kime/neye)<br><br><span class="vurgu">Parantez içleri, ara cümleler ve past participle\'lar ana yapıyı gizler — onları geç!</span>'},
+  {id:6,baslik:'Vocabulary: Academic Word List',sure:'2:15',konu:'Kelime · Akademik',emoji:'📚',renk:'#059669',ilerleme:80,transkript:'ÖSYM\'de tekrar eden <b>60 temel akademik kelime</b> vardır.<br><br>En kritik 10\'u:<br><span class="vurgu">albeit, notwithstanding, insofar, hitherto, purported, ostensibly, predicated, stipulate, corollary, denote</span><br><br>Bu kelimeleri bağlamla öğren — kartlara ekle, cümle içinde gör.'},
+];
+
+function mikroDersleriRender(){
+  const el=document.getElementById('mikro-liste');
+  if(!el)return;
+  el.innerHTML=MIKRO_DERSLER.map(d=>`
+    <div class="micro-lesson-card" onclick="mikroDersAc(${d.id})">
+      <div class="micro-thumb" style="background:linear-gradient(135deg,${d.renk}22,${d.renk}44)">
+        <div class="micro-play"><span style="margin-left:3px">▶</span></div>
+        <div class="micro-sure">${d.sure}</div>
+        <div style="position:absolute;top:10px;left:12px;font-size:24px">${d.emoji}</div>
+      </div>
+      <div class="micro-info">
+        <div class="micro-baslik" style="color:var(--ink)">${d.baslik}</div>
+        <div class="micro-alt" style="color:var(--muted)">${d.konu}</div>
+        <div class="micro-progress"><div class="micro-progress-fill" style="width:${d.ilerleme}%"></div></div>
+        ${d.ilerleme>0?`<div style="font-size:11px;color:var(--muted);margin-top:4px">${d.ilerleme}% tamamlandı</div>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function mikroDersAc(id){
+  const d=MIKRO_DERSLER.find(x=>x.id===id);
+  if(!d)return;
+  let modal=document.getElementById('ders-modal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='ders-modal';
+    modal.className='ders-modal';
+    modal.onclick=(e)=>{if(e.target===modal)modal.classList.remove('open');};
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML=`
+    <div class="ders-modal-ic">
+      <div class="ders-modal-header">
+        <div class="ders-modal-baslik">${d.emoji} ${d.baslik}</div>
+        <button class="ders-kapat" onclick="document.getElementById('ders-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="ders-video-alan">
+        <div class="ders-video-ic">
+          <div class="emoji">${d.emoji}</div>
+          <p>${d.konu}</p>
+          <div style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,.5)">${d.sure} · TTS Aktif</div>
+        </div>
+      </div>
+      <div class="ders-transkript">
+        <h4>Ders Notları</h4>
+        <div class="ders-transkript-metin">${d.transkript}</div>
+      </div>
+      <button class="ders-quiz-btn" onclick="mikroDersQuizBas(${d.id})">✅ Anladım — Mini Quiz Yap</button>
+    </div>
+  `;
+  modal.classList.add('open');
+  // İlerlemeyi kaydet
+  const idx=MIKRO_DERSLER.findIndex(x=>x.id===id);
+  if(idx>=0){MIKRO_DERSLER[idx].ilerleme=Math.min(100,MIKRO_DERSLER[idx].ilerleme+25);}
+  // XP ver
+  xpKazan('sinyal',streakLoad().gun||1);
+}
+
+function mikroDersQuizBas(id){
+  document.getElementById('ders-modal').classList.remove('open');
+  // Günlük tuzak sekmesine yönlendir
+  const tuzakTab=document.querySelector('.dtab[onclick*="tuzak"]');
+  if(tuzakTab)dtab(tuzakTab,'tuzak');
+  const fb=document.createElement('div');
+  fb.style.cssText='background:#e0f2fe;border:1px solid #38bdf8;border-radius:8px;padding:10px 14px;font-size:14px;margin-bottom:10px;color:#0c4a6e;font-weight:600';
+  fb.textContent='🎬 Mini dersi tamamladın! Şimdi konuyla ilgili bir soru çöz 👇';
+  const cont=document.getElementById('tuzak-container');
+  if(cont)cont.insertAdjacentElement('afterbegin',fb);
+}
+
+// ─── 5. ADAPTİF MOTOR ─────────────────────────────────────────────────────────
+let adaptifState={
+  dogruSay:0,yanlisSay:0,
+  seviye:1, // 1=kolay,2=orta,3=zor,4=uzman
+  sonSorular:[]
+};
+
+function adaptifSeviyeGuncelle(dogru){
+  if(dogru){
+    adaptifState.dogruSay++;
+    localStorage.setItem('sa_dogru_toplam',parseInt(localStorage.getItem('sa_dogru_toplam')||'0')+1);
+  } else {
+    adaptifState.yanlisSay++;
+    localStorage.setItem('sa_yanlis_toplam',parseInt(localStorage.getItem('sa_yanlis_toplam')||'0')+1);
+  }
+  adaptifState.sonSorular.push(dogru?1:0);
+  if(adaptifState.sonSorular.length>5)adaptifState.sonSorular.shift();
+  const sonBas=adaptifState.sonSorular.reduce((a,b)=>a+b,0)/adaptifState.sonSorular.length;
+  if(adaptifState.sonSorular.length>=3){
+    if(sonBas>=0.8&&adaptifState.seviye<4)adaptifState.seviye++;
+    else if(sonBas<=0.4&&adaptifState.seviye>1)adaptifState.seviye--;
+  }
+  adaptifBadgeGuncelle();
+}
+
+function adaptifBadgeGuncelle(){
+  const badge=document.getElementById('adaptif-seviye-badge');
+  if(!badge)return;
+  const seviyeler=[
+    {cls:'adaptif-kolay',ikon:'🟢',ad:'KOLAY'},
+    {cls:'adaptif-orta',ikon:'⚡',ad:'ORTA'},
+    {cls:'adaptif-zor',ikon:'🔥',ad:'ZOR'},
+    {cls:'adaptif-uzman',ikon:'👑',ad:'UZMAN'},
+  ];
+  const s=seviyeler[(adaptifState.seviye-1)%4];
+  badge.className='adaptif-badge '+s.cls;
+  badge.textContent=s.ikon+' '+s.ad;
+}
+
+// Mevcut dAns fonksiyonuna adaptif hook ekle
+const _orijinalDAns=window.dAns;
+
+// Dtab hook: radar/lider/plan/mikro sekmesi açıldığında içeriği yükle
+const _orijinalDtab=window.dtab;
+document.addEventListener('DOMContentLoaded',()=>{
+  // Yeni dtab hookları
+  const asılDtab=window.dtab;
+  window.dtab=function(el,mod){
+    asılDtab&&asılDtab(el,mod);
+    if(mod==='radar'){setTimeout(radarCiz,100);}
+    if(mod==='lider'){setTimeout(liderTabloGoster,100);}
+    if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
+    if(mod==='mikro'){setTimeout(mikroDersleriRender,100);}
+  };
+  // Adaptif badge başlangıç
+  adaptifBadgeGuncelle();
+});
 </script>
 <!-- EXIT INTENT POPUP -->
 <div id="exit-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;backdrop-filter:blur(4px);align-items:center;justify-content:center">
