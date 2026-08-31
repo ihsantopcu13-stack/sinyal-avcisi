@@ -89,6 +89,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 @keyframes floatGlow{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-20px) scale(1.1)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .demo-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .demo-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .badge-live{background:var(--sl);color:var(--signal);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px}
@@ -523,7 +524,7 @@ body.dark-mode th{background:#141620;color:var(--ink)}
 </nav>
 
 <!-- TRUST BAR -->
-<div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:8px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap">
+<div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:10px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;border-bottom:1px solid rgba(26,79,214,.3)">
   <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🔒 SSL Güvenli</span>
   <span style="color:rgba(255,255,255,.2)">|</span>
   <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">💳 İyzico Güvenceli Ödeme</span>
@@ -557,21 +558,21 @@ body.dark-mode th{background:#141620;color:var(--ink)}
 </div>
 <section id="hero" class="hero">
   <div>
-    <div class="hero-eyebrow">YDS & YÖKDİL Hazırlık</div>
-    <h1>Metni çevirmiyorsun — <em>sinyali</em> yakalıyorsun</h1>
-    <p class="hero-sub">ÖSYM sorularını kelime kelime okumak süreyi bitirir. Bağlaçlar, gizli olumsuzlar ve modal yapıları tanırsan 10 saniyede çözersin.</p>
+    <div class="hero-eyebrow" style="display:flex;align-items:center;gap:8px"><span style="background:#fef3c7;color:#92400e;font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.05em">🇹🇷 TÜRKİYE'NİN YDS/YÖKDİL PLATFORMU</span></div>
+    <h1 style="font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 20px">Metni çevirmiyorsun —<br><em style="color:var(--signal)">sinyali</em> yakalıyorsun</h1>
+    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">ÖSYM sorularını kelime kelime okumak süreyi bitirir. Bağlaçlar, gizli olumsuzlar ve modal yapıları tanırsan <strong>10 saniyede</strong> çözersin.</p>
     <div class="hero-btns">
       <button class="btn-primary" onclick="goTo('demo')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Canlı demoyu dene <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanış</button>
     </div>
     <div class="hero-badges">
-      <span class="hero-badge">7 gün ücretsiz</span>
-      <span class="hero-badge">Kredi kartı gerekmez</span>
-      <span class="hero-badge">İstediğinde iptal</span>
+      <span class="hero-badge">✅ 7 gün ücretsiz</span>
+      <span class="hero-badge">✅ Kredi kartı gerekmez</span>
+      <span class="hero-badge">✅ İstediğinde iptal</span>
     </div>
   </div>
   <div id="demo" class="demo-card">
-    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live">Canli</span></div>
+    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
     <div class="demo-sent" id="dsent">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
     <div class="demo-legend">
       <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
