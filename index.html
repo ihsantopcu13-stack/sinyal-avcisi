@@ -1372,6 +1372,7 @@ function dnav(el){
   if(txt.includes('Dashboard')){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
+    setTimeout(takvimOlustur,300);
   } else if(txt.includes('Raporlar')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     main.querySelector('.dash-tabs').style.display='none';
@@ -2544,6 +2545,60 @@ function liderTabloGoster(){
 // ============================================================
 // HAFTALIK RAPOR
 // ============================================================
+// ============================================================
+// GÜNLÜK ÇALIŞMA TAKVİMİ
+// ============================================================
+function takvimOlustur(){
+  const streak=streakLoad();
+  const hatalar=hataLoad();
+  const buHaftaSoru=streak.buHaftaSoru||0;
+  const puan=puanHesapla();
+  
+  const rotalar=[];
+  
+  // Sınav geri sayımı
+  const sinavTarih=localStorage.getItem('sa_sinav_tarih');
+  if(sinavTarih){
+    const kalan=Math.ceil((new Date(sinavTarih)-new Date())/(1000*60*60*24));
+    if(kalan>0){
+      rotalar.push({ikon:'📅',metin:`Sınavına <b>${kalan} gün</b> kaldı`,renk:'#7c3aed',bg:'#f5f3ff'});
+    }
+  }
+  
+  // Puana göre öneri
+  if(puan<60){
+    rotalar.push({ikon:'🎯',metin:'Önce <b>Sinyal Lab</b> — temel yapıları pekiştir (20 soru)',renk:'var(--signal)',bg:'var(--sl)',onclick:"dtab(document.querySelectorAll('.dtab')[0],'sinyal')"});
+    rotalar.push({ikon:'📖',metin:'<b>S+V+O Akademisi</b> — cümle yapısını öğren',renk:'#059669',bg:'#f0fdf4',onclick:"dtab(document.querySelectorAll('.dtab')[4],'svo')"});
+  } else if(puan<75){
+    rotalar.push({ikon:'⚡',metin:'<b>SAT Metodu</b> — hız geliştir (45 saniye/soru)',renk:'#d97706',bg:'#fffbeb',onclick:"dtab(document.querySelectorAll('.dtab')[3],'sat')"});
+    rotalar.push({ikon:'📖',metin:'<b>Paragraf Okuma</b> — uzun metin pratiği',renk:'#7c3aed',bg:'#f5f3ff',onclick:"dtab(document.querySelectorAll('.dtab')[5],'paragraf')"});
+  } else {
+    rotalar.push({ikon:'📝',metin:'<b>Deneme Sınavı</b> — tam 80 soruluk pratik',renk:'var(--trap)',bg:'#fef2f2',onclick:"sinavSimulatoruAc()"});
+    rotalar.push({ikon:'🃏',metin:'<b>Kelime Kartları</b> — 10 yeni kelime ezberle',renk:'#059669',bg:'#f0fdf4',onclick:"dtab(document.querySelectorAll('.dtab')[1],'kelime')"});
+  }
+  
+  // Hata varsa tekrar öner
+  if(hatalar.length>0){
+    rotalar.push({ikon:'📝',metin:`<b>Hata Defteri</b> — ${hatalar.length} hatanı tekrar çöz`,renk:'#dc2626',bg:'#fef2f2',onclick:"dtab(document.querySelectorAll('.dtab')[6],'hatalar')"});
+  }
+  
+  // Günlük tuzak
+  rotalar.push({ikon:'🎯',metin:'<b>Günlük Tuzak</b> — 60 saniyede 1 ÖSYM sorusu',renk:'#0891b2',bg:'#f0f9ff',onclick:"dtab(document.querySelectorAll('.dtab')[2],'tuzak')"});
+  
+  const takvimEl=document.getElementById('takvim-icerik');
+  const takvimDiv=document.getElementById('gunluk-takvim');
+  if(takvimEl&&takvimDiv){
+    takvimDiv.style.display='block';
+    takvimEl.innerHTML=rotalar.map(r=>`
+      <div onclick="${r.onclick||''}" style="display:flex;align-items:center;gap:10px;background:${r.bg};border-radius:10px;padding:10px 14px;cursor:${r.onclick?'pointer':'default'};transition:all .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <span style="font-size:20px;flex-shrink:0">${r.ikon}</span>
+        <span style="font-size:14px;color:${r.renk};line-height:1.5">${r.metin}</span>
+        ${r.onclick?'<span style="margin-left:auto;color:'+r.renk+';font-size:18px">→</span>':''}
+      </div>
+    `).join('');
+  }
+}
+
 function raporlarHTML(){
   const streak=streakLoad();
   const hatalar=hataLoad();
@@ -2617,6 +2672,45 @@ function raporlarHTML(){
   </div>`;
 }
 
+function puanHesapla(){
+  const d=streakLoad();
+  const hatalar=hataLoad();
+  const toplamSoru=d.toplamSoru||0;
+  const toplamHata=hatalar.length||0;
+  
+  // Temel puan: 50 (başlangıç)
+  // Doğru soru başına: +0.4 puan (max 25)
+  // Hata başına: -0.5 puan
+  // Streak bonusu: streak * 0.3 (max 5)
+  // Haftalık aktivite: buHaftaSoru * 0.2 (max 5)
+  
+  const dogruSoru=Math.max(0,toplamSoru-toplamHata);
+  const dogruBonus=Math.min(25,dogruSoru*0.4);
+  const hataCezasi=Math.min(15,toplamHata*0.5);
+  const streakBonus=Math.min(5,(d.streak||0)*0.3);
+  const aktiviteBonus=Math.min(5,(d.buHaftaSoru||0)*0.2);
+  
+  const puan=Math.round(50+dogruBonus-hataCezasi+streakBonus+aktiviteBonus);
+  const sonPuan=Math.max(40,Math.min(100,puan));
+  
+  // Kaydet
+  d.tahminPuan=sonPuan;
+  streakSave(d);
+  return sonPuan;
+}
+
+function puanGuncelle(){
+  const puan=puanHesapla();
+  const hedef=85;
+  const dk=document.querySelector('.dk.green .dk-val');
+  const dkSub=document.querySelector('.dk.green .dk-sub');
+  if(dk)dk.textContent=puan;
+  if(dkSub){
+    const fark=hedef-puan;
+    dkSub.textContent=fark>0?`Hedef: ${hedef} — +${fark} puan kaldı`:`🎉 Hedef aşıldı! Harika!`;
+  }
+}
+
 function streakSoruEkle(tip){
   let d=streakLoad();
   d.toplamSoru=(d.toplamSoru||0)+1;
@@ -2624,6 +2718,7 @@ function streakSoruEkle(tip){
   d.bugunCalistiMi=true;
   if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
+  setTimeout(puanGuncelle,100);
 }
 function avciKlodaGit(){avciKomutGonder('AVCI MASTER BAŞLA');}
 function avciKomutGonder(komut){
