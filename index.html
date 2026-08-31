@@ -633,7 +633,7 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   </div>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="darkModeToggle()" id="dark-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:16px;cursor:pointer;margin-right:6px" title="Karanlık mod">🌙</button>
-<button class="btn-nav" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button>
+<button class="btn-nav" onclick="openModal('Ücretsiz Hesap','0')">Ücretsiz Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 
@@ -672,17 +672,17 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 </div>
 <section id="hero" class="hero">
   <div>
-    <div class="hero-eyebrow" style="display:flex;align-items:center;gap:8px"><span style="background:#fef3c7;color:#92400e;font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.05em">🇹🇷 TÜRKİYE'NİN YDS/YÖKDİL PLATFORMU</span></div>
-    <h1 style="font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 20px">Metni çevirmiyorsun —<br><em style="color:var(--signal)">sinyali</em> yakalıyorsun</h1>
-    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">ÖSYM sorularını kelime kelime okumak süreyi bitirir. Bağlaçlar, gizli olumsuzlar ve modal yapıları tanırsan <strong>10 saniyede</strong> çözersin.</p>
+    <div class="hero-eyebrow" style="display:flex;align-items:center;gap:8px"><span style="background:#fef3c7;color:#92400e;font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.05em">🇹🇷 TAMAMEN ÜCRETSİZ — SONSUZA KADAR</span></div>
+    <h1 style="font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1.08;margin:16px 0 20px">Büyük paralara<br><em style="color:var(--signal)">gerek yok.</em></h1>
+    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">YDS ve YÖKDİL için aylarca para ödemek zorunda değilsin. Sinyal metoduyla ÖSYM tuzaklarını <strong>10 saniyede</strong> görmeyi burada, ücretsiz öğreniyorsun.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="goTo('demo')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Canlı demoyu dene <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
+      <button class="btn-primary" onclick="openModal('Ücretsiz Hesap','0')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Ücretsiz Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="goTo('klod')">KLOD ile tanış</button>
     </div>
     <div class="hero-badges">
-      <span class="hero-badge">✅ 7 gün ücretsiz</span>
-      <span class="hero-badge">✅ Kredi kartı gerekmez</span>
-      <span class="hero-badge">✅ İstediğinde iptal</span>
+      <span class="hero-badge">Tamamen ücretsiz</span>
+      <span class="hero-badge">Kredi kartı yok</span>
+      <span class="hero-badge">Kayıt yok — direkt gir</span>
     </div>
   </div>
   <div id="demo" class="demo-card">
@@ -777,7 +777,7 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   <div class="nasil-inner">
     <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasıl Çalışır?</div><div class="section-title">Gelişinin ilk gününden sınav sabahına</div></div>
     <div>
-      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanını seç</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Sağlık — bir tıkla seçiyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kredi karti yok</span><span class="stag">7 gün ücretsiz</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanını seç</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Sağlık — bir tıkla seçiyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Tamamen ücretsiz</span><span class="stag">Sonsuza kadar</span></div></div></div>
       <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Sinyal Lab'a gir</div><div class="step-desc">Sana ÖSYM formatında bir metin geliyor. Bağlaçlar mavi, tuzak ifadeler kırmızı, kilit kelimeler sarı.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
       <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
       <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
@@ -1206,14 +1206,56 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   </div>
 </section>
 
-<section id="fiyat" class="fiyat">
-  <div class="fiyat-inner">
-    <div class="fiyat-header"><div class="eyebrow" style="color:var(--signal)">Paketler</div><div class="section-title">Sinava kadar ne kadar vaktin var?</div></div>
-    <div class="fiyat-grid">
-      <div class="fc scroll-hidden"><div class="fc-name">Temel Sinyal</div><div class="fc-price"><sup>TL</sup>199</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>5.000 OSYM formatli soru</li><li>Sinyal Okuma Laboratuvari</li><li>Haftalik AI yapi raporu</li><li>Ses Kurs (3 konu)</li><li class="no">KLOD canli sohbet</li><li class="no">Spaced Repetition motoru</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Temel Sinyal',199)">Satın Al</button></div>
-      <div class="fc featured scroll-hidden"><div class="fc-badge">EN COK TERCIH</div><div class="fc-name">Pro YDS & YOKDiL</div><div class="fc-price"><sup>TL</sup>399</div><div class="fc-period">/ ay · <span style="color:var(--trap);font-weight:700">⏱ 7 gün ücretsiz</span></div><ul class="fc-feats"><li>15.000 soru + deneme sinavlari</li><li>KLOD AI Mentor</li><li>Spaced Repetition (500 kelime)</li><li>Ses Kurs - tum 19 konu</li><li>Gunluk Tuzak oyunu</li><li class="no">Birebir strateji seansi</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Pro YDS & YÖKDİL',399)">Ücretsiz Başla</button></div>
-      <div class="fc scroll-hidden"><div class="fc-name">Sinyal Avcisi VIP</div><div class="fc-price"><sup>TL</sup>699</div><div class="fc-period">/ ay</div><ul class="fc-feats"><li>30.000+ soru + sinirsiz simulasyon</li><li>7/24 KLOD - sinirsiz sohbet</li><li>Tam Spaced Repetition motoru</li><li>OSYM format sinav simulasyonu</li><li>Aylik 1-on-1 strateji seansi</li><li>Oncelikli destek</li></ul><button class="fc-btn" onclick="iyzicoOdemeBaşlat('Sinyal Avcisi VIP',699)">VIP'e Geç</button></div>
+<section id="fiyat" style="padding:80px 5vw;background:linear-gradient(135deg,#0a0c14,#1a1f35);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-80px;right:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(26,79,214,.2),transparent 65%);pointer-events:none"></div>
+  <div style="max-width:900px;margin:0 auto;text-align:center;position:relative">
+
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#4f8ef7;margin-bottom:20px">— Manifesto —</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(32px,4vw,54px);color:#f8f7f3;line-height:1.1;letter-spacing:-.03em;margin-bottom:32px">
+      Arkadaş, büyük paralara<br>
+      <em style="color:#4f8ef7">gerek yok.</em>
+    </h2>
+
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;margin-bottom:40px;text-align:left">
+      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9;margin-bottom:20px">
+        Yıllarca YDS ve YÖKDİL için platformlara, kurslara, hocalara <strong style="color:#e8d5a3">binlerce lira</strong> harcandı. Aylık abonelikler, paket paket materyaller, "özel" erişimler...
+      </p>
+      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9;margin-bottom:20px">
+        Halbuki ÖSYM soruları bir sır değil. <strong style="color:#4f8ef7">Sinyal metodunu</strong> öğrenirsen — bağlaçları, gizli olumsuzları, modal yapıları tanırsan — her soruyu 10 saniyede çözersin.
+      </p>
+      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9">
+        Bu yüzden Sinyal Avcısı <strong style="color:#34d399">tamamen ücretsiz.</strong> İmkânı olan da olmayan da aynı kalitede hazırlansın diye.
+      </p>
     </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:10px">🎯</div>
+        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">15.000+ Soru</div>
+        <div style="font-size:13px;color:rgba(248,247,243,.45)">ÖSYM formatında, ücretsiz</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:10px">🤖</div>
+        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">KLOD AI Mentor</div>
+        <div style="font-size:13px;color:rgba(248,247,243,.45)">Sana özel açıklama, ücretsiz</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:10px">🃏</div>
+        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">Spaced Repetition</div>
+        <div style="font-size:13px;color:rgba(248,247,243,.45)">500 akademik kelime, ücretsiz</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
+        <div style="font-size:36px;margin-bottom:10px">🎧</div>
+        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">19 Konu Ses Kursu</div>
+        <div style="font-size:13px;color:rgba(248,247,243,.45)">Bilingual TTS, ücretsiz</div>
+      </div>
+    </div>
+
+    <button onclick="openModal('Ücretsiz Hesap','0')" style="background:linear-gradient(135deg,#1a4fd6,#7c3aed);color:#fff;border:none;border-radius:14px;padding:18px 48px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 8px 32px rgba(26,79,214,.4);letter-spacing:-.01em">
+      🎯 Hemen Başla — Ücretsiz
+    </button>
+    <div style="margin-top:16px;font-size:13px;color:rgba(248,247,243,.35)">Kredi kartı yok · Abonelik yok · Sonsuza kadar ücretsiz</div>
+
   </div>
 </section>
 <!-- REFERANS PROGRAMI -->
