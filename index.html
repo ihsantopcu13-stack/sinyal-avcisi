@@ -1043,6 +1043,49 @@ body.dark-mode th{background:#141620;color:var(--ink)}
     </div>
   </div>
 </section>
+<!-- REFERANS PROGRAMI -->
+<section style="padding:80px 5vw;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+  <div style="max-width:900px;margin:0 auto">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="eyebrow" style="color:#059669">🤝 REFERANS PROGRAMI</div>
+      <div class="section-title">Arkadaşını getir, ikisi de kazan</div>
+      <p style="font-size:17px;color:var(--muted);margin-top:12px;line-height:1.7">Her başarılı davet için <strong style="color:#059669">1 ay ücretsiz</strong> Pro abonelik kazanırsın. Arkadaşın da ilk ay %20 indirimle başlar.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px">
+      <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
+        <div style="font-size:48px;margin-bottom:16px">🔗</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">Linkini paylaş</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.6">Sana özel davet linkini WhatsApp, Instagram veya e-posta ile paylaş</div>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
+        <div style="font-size:48px;margin-bottom:16px">👤</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">Arkadaşın kaydolur</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.6">Linkten giren arkadaşın Pro pakete başlarsa sistem otomatik takip eder</div>
+      </div>
+      <div style="background:#fff;border-radius:20px;padding:28px;text-align:center;box-shadow:0 4px 20px rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.15)">
+        <div style="font-size:48px;margin-bottom:16px">🎁</div>
+        <div style="font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px">İkisi de kazanır</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.6">Sen 1 ay ücretsiz, arkadaşın %20 indirim — anında hesabına yansır</div>
+      </div>
+    </div>
+    <div style="background:#fff;border-radius:24px;padding:36px;box-shadow:0 8px 32px rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.2);text-align:center">
+      <div style="font-size:17px;font-weight:700;color:var(--ink);margin-bottom:16px">Davet linkin</div>
+      <div style="display:flex;gap:12px;max-width:520px;margin:0 auto">
+        <div id="ref-link-box" style="flex:1;background:#f0fdf4;border:1px solid rgba(5,150,105,.3);border-radius:10px;padding:12px 16px;font-size:15px;color:#059669;font-family:monospace;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          sinyal-avcisi.com?ref=SA00001
+        </div>
+        <button onclick="refKopyala()" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;box-shadow:0 4px 12px rgba(5,150,105,.3)">📋 Kopyala</button>
+      </div>
+      <div id="ref-copy-msg" style="font-size:14px;color:#059669;margin-top:10px;min-height:20px"></div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <button onclick="refPaylas('whatsapp')" style="background:#25d366;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">📱 WhatsApp</button>
+        <button onclick="refPaylas('instagram')" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">📸 Instagram</button>
+        <button onclick="refPaylas('email')" style="background:#1a4fd6;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif">📧 E-posta</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="sss" class="sss">
   <div class="sss-inner">
     <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sık Sorulan Sorular</div><div class="section-title">Aklındaki sorular</div></div>
@@ -1664,6 +1707,27 @@ function tuzakSonraki(){
   const lbl=document.getElementById('tuzak-tarih-lbl');
   if(lbl)lbl.textContent='Gunluk Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
 })();
+
+function refKopyala(){
+  const link=document.getElementById('ref-link-box').textContent.trim();
+  navigator.clipboard.writeText(link).then(()=>{
+    const msg=document.getElementById('ref-copy-msg');
+    msg.textContent='✅ Link kopyalandı!';
+    setTimeout(()=>msg.textContent='',2000);
+  });
+}
+
+function refPaylas(platform){
+  const link='https://sinyal-avcisi.com?ref=SA00001';
+  const mesaj='YDS/YOKDiL hazırlığı için Sinyal Avcısı\'nı dene - bağlaçları ve tuzakları çok daha hızlı görüyorum! İlk ay %20 indirimle başla: '+link;
+  if(platform==='whatsapp'){
+    window.open('https://wa.me/?text='+encodeURIComponent(mesaj),'_blank');
+  } else if(platform==='instagram'){
+    navigator.clipboard.writeText(mesaj).then(()=>alert('Mesaj kopyalandı! Instagram\'a yapistir.'));
+  } else if(platform==='email'){
+    window.open('mailto:?subject=YDS/YÖKDİL için harika bir platform&body='+encodeURIComponent(mesaj));
+  }
+}
 
 function sssToggle(el){el.parentElement.classList.toggle('open');}
 
