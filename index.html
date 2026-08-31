@@ -689,7 +689,7 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
   <a onclick="closeMenuGoTo('fiyat')">Paketler</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
-  <a onclick="openModal('Pro YDS & YOKDiL','399TL');closeMenu()">Ücretsiz Başla</a>
+  <a onclick="goTo('dashboard');closeMenu()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
   <div>
@@ -1448,7 +1448,7 @@ function showUserMenu(u){
   // Dashboard'a otomatik scroll
   setTimeout(()=>goTo('dashboard'),300);
 }
-function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='Ücretsiz Başla';n.onclick=()=>openModal('Pro YDS & YOKDiL','399TL');n.style.background='var(--ink)';}}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
