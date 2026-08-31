@@ -3290,10 +3290,10 @@ function iyzicoOdemeBaşlat(plan, fiyat) {
   const kullanici = currentUser?.email || 'Misafir';
   const waMetin = encodeURIComponent(
     `Merhaba! "${plan}" paketine abone olmak istiyorum.\n\n` +
-    `📦 Paket: ${plan}\n` +
-    `💰 Tutar: ${fiyat} TL/ay\n` +
-    `📧 E-posta: ${kullanici}\n\n` +
-    `Ödeme bilgilerini paylaşır mısınız?`
+    `Paket: ${plan}\n` +
+    `Tutar: ${fiyat} TL/ay\n` +
+    `E-posta: ${kullanici}\n\n` +
+    `Odeme bilgilerini paylasir misiniz?`
   );
   const waLink = `https://wa.me/${WA_NUMARA}?text=${waMetin}`;
 
