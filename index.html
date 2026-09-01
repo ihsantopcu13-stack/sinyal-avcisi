@@ -631,6 +631,15 @@ body.dark-mode .lb-section{background:linear-gradient(135deg,#1a1a1a,#1f1a00);bo
 body.dark-mode .hata-analiz{background:#1a0a0a;border-color:#7f1d1d}
 body.dark-mode .micro-lesson-card{background:#1a1d27}
 
+/* DİL AVCISI — SKILL TREE */
+.yol-node{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;cursor:pointer;transition:transform .15s;position:relative}
+.yol-node:hover{transform:translateX(4px)}
+.yol-node.tamamlandi{background:linear-gradient(90deg,#a78bfa15,transparent)}
+.yol-node.aktif{background:linear-gradient(90deg,#a78bfa25,transparent);border:1px solid #a78bfa50}
+.yol-node.kilitli{opacity:.4;cursor:not-allowed}
+.yol-node.kilitli:hover{transform:none}
+.yol-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative}
+
 </style>
 </head>
 <body>
@@ -1152,12 +1161,23 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
         <div class="dmod" id="mod-dilavcisi" style="display:none">
 
           <!-- HERO BANNER -->
-          <div style="background:linear-gradient(135deg,#1a0a2e,#2e0a3e,#0a0c14);border-radius:20px;padding:36px 28px;margin-bottom:20px;position:relative;overflow:hidden">
+          <div style="background:linear-gradient(135deg,#1a0a2e,#2e0a3e,#0a0c14);border-radius:20px;padding:32px 26px;margin-bottom:18px;position:relative;overflow:hidden">
             <div style="position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(167,139,250,.35),transparent 65%)"></div>
-            <div style="position:relative">
-              <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:800;color:#c084fc;letter-spacing:.08em;margin-bottom:16px">🌍 DİL AVCISI · A1'den C1'e</div>
-              <div style="font-family:'DM Serif Display',serif;font-size:28px;color:#f8f7f3;margin-bottom:10px;line-height:1.2">İngilizceyi<br><em style="color:#c084fc">görerek, duyarak</em> öğren</div>
-              <div style="font-size:14px;color:rgba(248,247,243,.6);line-height:1.6;max-width:400px">Video dersler, sesli örnekler, görsel kartlar — hepsi tek yerde. Tamamen ücretsiz.</div>
+            <div style="position:relative;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px">
+              <div>
+                <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:800;color:#c084fc;letter-spacing:.08em;margin-bottom:14px">🌍 DİL AVCISI</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:26px;color:#f8f7f3;margin-bottom:8px;line-height:1.2">Günlük hedefin<br><em style="color:#c084fc" id="dilavcisi-gunluk-hedef-metin">3 ders tamamla</em></div>
+              </div>
+              <div style="text-align:center;flex-shrink:0">
+                <div style="width:76px;height:76px;border-radius:50%;background:conic-gradient(#a78bfa var(--pct,30%),rgba(255,255,255,.08) 0);display:flex;align-items:center;justify-content:center" id="dilavcisi-gunluk-ring">
+                  <div style="width:58px;height:58px;border-radius:50%;background:#1a0a2e;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#f8f7f3" id="dilavcisi-gunluk-yuzde">0%</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:20px;margin-top:20px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:6px"><span style="font-size:18px">🔥</span><span style="font-size:14px;font-weight:700;color:#f8f7f3" id="dilavcisi-streak">0</span><span style="font-size:12px;color:rgba(248,247,243,.5)">gün seri</span></div>
+              <div style="display:flex;align-items:center;gap:6px"><span style="font-size:18px">⭐</span><span style="font-size:14px;font-weight:700;color:#f8f7f3" id="dilavcisi-xp">0</span><span style="font-size:12px;color:rgba(248,247,243,.5)">XP</span></div>
+              <div style="display:flex;align-items:center;gap:6px"><span style="font-size:18px">📚</span><span style="font-size:14px;font-weight:700;color:#f8f7f3" id="dilavcisi-tamamlanan">0</span><span style="font-size:12px;color:rgba(248,247,243,.5)">ders tamamlandı</span></div>
             </div>
           </div>
 
@@ -1168,6 +1188,29 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
             <button onclick="ingSeviyeSec(this,'B1')" class="ing-stab" style="padding:9px 18px;border-radius:20px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📗 B1 Orta</button>
             <button onclick="ingSeviyeSec(this,'B2')" class="ing-stab" style="padding:9px 18px;border-radius:20px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">📘 B2 İleri Orta</button>
             <button onclick="ingSeviyeSec(this,'C1')" class="ing-stab" style="padding:9px 18px;border-radius:20px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🏆 C1 İleri</button>
+          </div>
+
+          <!-- ÖĞRENME YOLU (SKILL TREE) -->
+          <div style="margin-bottom:22px">
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px">🗺️ Öğrenme Yolun</div>
+            <div id="dilavcisi-yol-harita" style="display:flex;flex-direction:column;gap:4px"></div>
+          </div>
+
+          <!-- KONUŞMA SİMÜLATÖRÜ -->
+          <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <span style="font-size:20px">🎙️</span>
+              <div style="font-size:14px;font-weight:700;color:#22d3ee">Konuşma Simülatörü</div>
+              <span style="background:#22d3ee20;color:#22d3ee;font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px">YENİ</span>
+            </div>
+            <div style="font-size:12px;color:rgba(248,247,243,.6);margin-bottom:14px">DILA ile gerçek bir diyalog kur — hata yaparsan anında düzeltir</div>
+            <div id="konusma-alani" style="background:#0a0c1480;border-radius:12px;padding:14px;margin-bottom:12px;min-height:60px;font-size:13px;color:rgba(248,247,243,.85);line-height:1.7">
+              <span style="color:#22d3ee">DILA:</span> Hi! Let's practice. Tell me about your day — what did you do this morning? 😊
+            </div>
+            <div style="display:flex;gap:8px">
+              <input id="konusma-input" placeholder="İngilizce cevap yaz..." style="flex:1;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:13px;font-family:Inter,sans-serif;outline:none;background:#0a0c1480;color:#f8f7f3">
+              <button onclick="konusmaGonder()" style="background:#22d3ee;color:#0a1428;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif">Gönder</button>
+            </div>
           </div>
 
           <!-- VİDEO DERS VİTRİNİ -->
@@ -4211,7 +4254,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(mod==='lider'){setTimeout(liderTabloGoster,100);}
     if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
     if(mod==='mikro'){setTimeout(mikroDersleriRender,100);}
-    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');},100);}
+    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();},100);}
   };
   // Adaptif badge başlangıç
   adaptifBadgeGuncelle();
@@ -4222,7 +4265,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ─── İNGİLİZCE KURSU ────────────────────────────────────────────────────────
 const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'}]};
 
-function ingSeviyeSec(el,seviye){document.querySelectorAll('.ing-stab').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='transparent';b.style.color='var(--muted)';});el.style.borderColor='#a78bfa';el.style.background='#a78bfa20';el.style.color='#7c3aed';ingDerslerRender(seviye);dilavcisiVideoRender(seviye);}
+function ingSeviyeSec(el,seviye){document.querySelectorAll('.ing-stab').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='transparent';b.style.color='var(--muted)';});el.style.borderColor='#a78bfa';el.style.background='#a78bfa20';el.style.color='#7c3aed';ingDerslerRender(seviye);dilavcisiVideoRender(seviye);dilavcisiYolHaritaRender(seviye);}
 
 // Video vitrin verisi — her seviye için görsel/video kartları
 const DILAVCISI_VIDEOLAR = {
@@ -4291,6 +4334,147 @@ function dilavcisiVideoAc(baslik, emoji) {
     </div>
   `;
 }
+
+// ─── DİL AVCISI: GÜNLÜK HEDEF & İLERLEME ────────────────────────────────────
+function dilavcisiVeriYukle() {
+  const veri = JSON.parse(localStorage.getItem('sa_dilavcisi') || '{}');
+  return {
+    streak: veri.streak || 0,
+    xp: veri.xp || 0,
+    tamamlanan: veri.tamamlanan || [],
+    sonGiris: veri.sonGiris || null,
+    gunlukIlerleme: veri.gunlukIlerleme || 0,
+  };
+}
+
+function dilavcisiVeriKaydet(veri) {
+  localStorage.setItem('sa_dilavcisi', JSON.stringify(veri));
+}
+
+function dilavcisiGunlukHedefGuncelle() {
+  const veri = dilavcisiVeriYukle();
+  const bugun = new Date().toISOString().split('T')[0];
+  // Streak kontrolü
+  if (veri.sonGiris !== bugun) {
+    const dun = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    if (veri.sonGiris === dun) veri.streak += 1;
+    else if (veri.sonGiris !== bugun) veri.streak = veri.streak || 1;
+    veri.gunlukIlerleme = 0;
+    veri.sonGiris = bugun;
+    dilavcisiVeriKaydet(veri);
+  }
+  const hedef = 3;
+  const pct = Math.min(100, Math.round((veri.gunlukIlerleme / hedef) * 100));
+  const ring = document.getElementById('dilavcisi-gunluk-ring');
+  const yuzdeEl = document.getElementById('dilavcisi-gunluk-yuzde');
+  const streakEl = document.getElementById('dilavcisi-streak');
+  const xpEl = document.getElementById('dilavcisi-xp');
+  const tamEl = document.getElementById('dilavcisi-tamamlanan');
+  const hedefMetin = document.getElementById('dilavcisi-gunluk-hedef-metin');
+  if (ring) ring.style.setProperty('--pct', pct + '%');
+  if (yuzdeEl) yuzdeEl.textContent = pct + '%';
+  if (streakEl) streakEl.textContent = veri.streak;
+  if (xpEl) xpEl.textContent = veri.xp;
+  if (tamEl) tamEl.textContent = veri.tamamlanan.length;
+  if (hedefMetin) hedefMetin.innerHTML = veri.gunlukIlerleme >= hedef ? '<span style="color:#34d399">Bugünkü hedef tamam! 🎉</span>' : `${veri.gunlukIlerleme}/${hedef} ders tamamla`;
+}
+
+function dilavcisiDersTamamlandi(dersId) {
+  const veri = dilavcisiVeriYukle();
+  if (!veri.tamamlanan.includes(dersId)) {
+    veri.tamamlanan.push(dersId);
+    veri.xp += 15;
+    veri.gunlukIlerleme += 1;
+    dilavcisiVeriKaydet(veri);
+    dilavcisiGunlukHedefGuncelle();
+    dilavcisiYolHaritaRender(document.querySelector('.ing-stab.active')?.textContent?.match(/A1|A2|B1|B2|C1/)?.[0] || 'A1');
+  }
+}
+
+// ─── DİL AVCISI: ÖĞRENME YOLU (SKILL TREE) ──────────────────────────────────
+function dilavcisiYolHaritaRender(seviye) {
+  const harita = document.getElementById('dilavcisi-yol-harita');
+  if (!harita) return;
+  const dersler = ING_DERSLER[seviye] || [];
+  const veri = dilavcisiVeriYukle();
+  harita.innerHTML = dersler.map((d, i) => {
+    const dersId = seviye + '-' + i;
+    const tamamlandi = veri.tamamlanan.includes(dersId);
+    const oncekiTamam = i === 0 || veri.tamamlanan.includes(seviye + '-' + (i - 1));
+    const durum = tamamlandi ? 'tamamlandi' : (oncekiTamam ? 'aktif' : 'kilitli');
+    const renk = tamamlandi ? '#a78bfa' : (oncekiTamam ? '#818cf8' : '#4b5563');
+    return `
+      <div class="yol-node ${durum}" onclick="${durum !== 'kilitli' ? `dilavcisiYolDersAc(${i},'${seviye}')` : ''}">
+        <div class="yol-circle" style="background:${tamamlandi ? renk + '30' : durum === 'aktif' ? renk + '20' : 'rgba(255,255,255,.05)'};border:2px solid ${renk}">
+          ${tamamlandi ? '✓' : d.ikon}
+        </div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:${durum === 'kilitli' ? 'var(--muted)' : 'var(--ink)'}">${d.baslik}</div>
+          <div style="font-size:11px;color:var(--muted)">${tamamlandi ? '✓ Tamamlandı · +15 XP' : durum === 'aktif' ? 'Devam et →' : '🔒 Önce öncekini bitir'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function dilavcisiYolDersAc(idx, seviye) {
+  // Ders detayını aç (mevcut ingDersAc mantığıyla)
+  const alan = document.getElementById('ing-ders-alan');
+  if (alan) {
+    alan.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const kartlar = alan.querySelectorAll('.yol-node, [onclick*="ingDersAc"]');
+  }
+  // Kart listesinde ilgili dersi aç
+  const dersKartlari = document.querySelectorAll('#ing-ders-alan > div > div');
+  const hedefKart = dersKartlari[idx];
+  if (hedefKart) {
+    hedefKart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => hedefKart.click(), 300);
+  }
+  dilavcisiDersTamamlandi(seviye + '-' + idx);
+}
+
+// ─── DİL AVCISI: KONUŞMA SİMÜLATÖRÜ ──────────────────────────────────────────
+let konusmaGecmisi = [];
+
+async function konusmaGonder() {
+  const input = document.getElementById('konusma-input');
+  const alan = document.getElementById('konusma-alani');
+  if (!input?.value.trim()) return;
+  const mesaj = input.value;
+  input.value = '';
+  konusmaGecmisi.push({rol: 'user', icerik: mesaj});
+  alan.innerHTML += `<div style="margin-top:10px"><span style="color:#a78bfa">Sen:</span> ${mesaj}</div>`;
+  alan.innerHTML += `<div id="konusma-yukleniyor" style="margin-top:10px;color:#22d3ee">DILA yazıyor...</div>`;
+  alan.scrollTop = alan.scrollHeight;
+  try {
+    const res = await fetch('/api/klod', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{
+          role: 'user',
+          content: `Sen DILA'sın, bir İngilizce konuşma partneri. Türk bir öğrenciyle basit İngilizce sohbet ediyorsun. Öğrencinin mesajı: "${mesaj}". Cevabında: 1) Doğal bir İngilizce cevap ver ve sohbeti devam ettir 2) Eğer öğrencinin cümlesinde gramer hatası varsa, kısaca ve nazikçe Türkçe düzelt. Kısa tut (max 60 kelime).`
+        }]
+      })
+    });
+    const data = await res.json();
+    const cevap = data?.content?.[0]?.text || data?.message || 'Bağlantı hatası, tekrar dene.';
+    document.getElementById('konusma-yukleniyor')?.remove();
+    alan.innerHTML += `<div style="margin-top:10px"><span style="color:#22d3ee">DILA:</span> ${cevap.replace(/\n/g, '<br>')}</div>`;
+    alan.scrollTop = alan.scrollHeight;
+    konusmaGecmisi.push({rol: 'dila', icerik: cevap});
+    // XP ver
+    const veri = dilavcisiVeriYukle();
+    veri.xp += 5;
+    dilavcisiVeriKaydet(veri);
+    dilavcisiGunlukHedefGuncelle();
+  } catch(e) {
+    document.getElementById('konusma-yukleniyor')?.remove();
+    alan.innerHTML += `<div style="margin-top:10px;color:#f87171">Bağlantı hatası. Tekrar dene.</div>`;
+  }
+}
+
 
 
 function ingDerslerRender(seviye='A1'){const alan=document.getElementById('ing-ders-alan');if(!alan)return;const dersler=ING_DERSLER[seviye]||[];alan.innerHTML=`<div style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">${seviye} Seviyesi — ${dersler.length} Konu</div><div style="height:4px;background:var(--border);border-radius:2px"><div style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px;width:20%"></div></div></div><div style="display:flex;flex-direction:column;gap:10px">${dersler.map((d,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer" onclick="ingDersAc(this)"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="width:40px;height:40px;background:linear-gradient(135deg,#a78bfa30,#7c3aed20);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0">${d.ikon}</div><div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)">${d.baslik}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d.aciklama}</div></div><div style="font-size:16px;color:var(--muted);transition:transform .2s" class="ing-chevron">▶</div></div><div style="display:none;padding:0 16px 16px" class="ing-ders-detay"><div style="background:#a78bfa15;border-radius:10px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:8px">📝 Örnekler — tıkla dinle 🔊</div>${d.ornekler.map(o=>`<div style="font-size:14px;color:var(--ink);padding:6px 0;border-bottom:1px solid #a78bfa30;cursor:pointer" onclick="if(window.ttsSpeak)ttsSpeak(this.textContent.replace('🔊 ',''),'en-US',null)">🔊 ${o}</div>`).join('')}</div><div style="background:#fbbf2415;border-radius:10px;padding:12px"><div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:6px">🎯 Pratik Görev</div><div style="font-size:13px;color:var(--ink)">${d.pratik}</div><button onclick="ingPratikKlod('${d.baslik}','${d.pratik}')" style="margin-top:8px;background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🤖 DILA ile Pratik Yap</button></div></div></div>`).join('')}</div>`;}
