@@ -3441,27 +3441,43 @@ function exitKapat(){document.getElementById('exit-popup').style.display='none';
 // WhatsApp destek hattı (admin panelinden kullanıcıyla iletişim için)
 const WA_NUMARA = '905324720860';
 
-// ── ADMİN PANELİ — Gizli URL: /?admin=sinyal2024 ─────────────────────────────
+// ── ADMİN PANELİ — /?admin=1 ile açılır, yetki sunucu tarafında kontrol edilir ──
+// Panel içeriği artık client'tan Supabase'e direkt sorgu atmıyor; giriş yapmış
+// kullanıcının oturum token'ı /api/admin-users'a gönderiliyor, orada Supabase Auth
+// ile doğrulanıp ADMIN_EMAILS allowlist'ine göre yetkilendiriliyor.
 async function adminPanelKontrol() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('admin') !== 'sinyal2024') return;
-  // Admin şifresi doğru — paneli aç
-  await new Promise(r => setTimeout(r, 800));
-  adminPanelAc();
+  if (params.get('admin') !== '1') return;
+  adminPanelAcGiris();
 }
 
-async function adminPanelAc() {
-  // Supabase'den tüm kullanıcıları çek
+async function adminPanelAcGiris() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    alert('Admin paneline erişmek için önce giriş yapmalısın.');
+    openModal('Giriş Yap', '');
+    return;
+  }
+
   let kullanicilar = [];
   try {
-    const { data, error } = await sb
-      .from('profiles')
-      .select('id, email, ad, created_at')
-      .order('created_at', { ascending: false })
-      .limit(100);
-    if (!error && data) kullanicilar = data;
-  } catch(e) {}
+    const res = await fetch('/api/admin-users', {
+      headers: { 'Authorization': 'Bearer ' + session.access_token }
+    });
+    if (res.status === 401) { alert('Oturum geçersiz, tekrar giriş yap.'); return; }
+    if (res.status === 403) { alert('Bu hesabın admin yetkisi yok.'); return; }
+    if (!res.ok) { alert('Panel yüklenemedi.'); return; }
+    const data = await res.json();
+    kullanicilar = data.users || [];
+  } catch (e) {
+    alert('Bağlantı hatası, tekrar dene.');
+    return;
+  }
 
+  adminPanelAc(kullanicilar);
+}
+
+function adminPanelAc(kullanicilar) {
   const overlay = document.createElement('div');
   overlay.id = 'admin-panel';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,12,20,.96);z-index:9999;overflow-y:auto;padding:24px;font-family:Inter,sans-serif';
