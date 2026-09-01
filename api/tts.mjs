@@ -3,14 +3,22 @@
 // Sinyal Avcısı — Ses Kurs
 // ============================================================
 
+import { rateLimit } from './_rateLimit.mjs';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const rl = rateLimit(req, { key: 'tts', limit: 30, windowMs: 60_000 });
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
+    return res.status(429).json({ error: 'Çok fazla ses isteği gönderdiniz. Biraz sonra tekrar deneyin.' });
+  }
+
   const { text, voice = 'onyx', speed = 1.0 } = req.body;
 
-  if (!text || text.length > 4096) {
+  if (!text || typeof text !== 'string' || text.length > 4096) {
     return res.status(400).json({ error: 'Invalid text' });
   }
 

@@ -3,16 +3,27 @@
 // Sinyal Avcısı
 // ============================================================
 
+import { rateLimit } from './_rateLimit.mjs';
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, tip = 'ekitap' } = req.body;
+  const rl = rateLimit(req, { key: 'mail', limit: 3, windowMs: 10 * 60_000 });
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
+    return res.status(429).json({ error: 'Çok fazla e-posta isteği gönderdiniz. Biraz sonra tekrar deneyin.' });
+  }
 
-  if (!email || !email.includes('@')) {
+  let { email, tip = 'ekitap' } = req.body;
+
+  if (!email || typeof email !== 'string' || !EMAIL_RE.test(email.trim())) {
     return res.status(400).json({ error: 'Geçersiz e-posta' });
   }
+  email = email.trim();
 
   const konular = {
     ekitap: '📖 30 Günlük Metin Fetih Kılavuzu — Sinyal Avcısı',

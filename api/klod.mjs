@@ -3,6 +3,8 @@
 // 20 Pro Prompt Engineering Tekniği Uygulandı
 // ============================================================
 
+import { rateLimit } from './_rateLimit.mjs';
+
 // 1. SYSTEM PROMPT — Tutarlı karakter tanımı
 const KLOD_SYSTEM_PROMPT = `Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin.
 
@@ -165,6 +167,12 @@ async function visionAnaliz(imageBase64, mediaType, soru) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const rl = rateLimit(req, { key: 'klod', limit: 15, windowMs: 60_000 });
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
+    return res.status(429).json({ error: 'Çok fazla istek gönderdiniz. Biraz sonra tekrar deneyin.' });
   }
 
   const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
