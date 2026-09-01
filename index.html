@@ -320,27 +320,6 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .tuzak-fb{font-size:16px;font-weight:500;min-height:14px;margin-bottom:6px}
 .tuzak-fb.ok{color:#16a34a}.tuzak-fb.err{color:var(--trap)}
 .tuzak-next-btn{display:none;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:16px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
-.fiyat{padding:80px 5vw;background:var(--paper)}
-.fiyat-inner{max-width:1020px;margin:0 auto}
-.fiyat-header{text-align:center;margin-bottom:52px}
-.fiyat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.fc{background:#fff;border:1px solid var(--border);border-radius:var(--r-xl);padding:30px;display:flex;flex-direction:column;transition:all var(--t-med);box-shadow:var(--shadow-sm)}
-.fc:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.fc.featured{border-color:var(--signal);box-shadow:0 0 0 2px var(--signal),var(--shadow-xl);background:linear-gradient(160deg,#fff,#f5f8ff)}
-.fc.featured:hover{transform:translateY(-4px)}
-.fc-badge{background:linear-gradient(135deg,var(--signal),#818cf8);color:#fff;font-size:15px;font-weight:700;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:14px;letter-spacing:.02em;box-shadow:0 2px 8px rgba(26,79,214,.3)}
-.fc-name{font-size:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.fc-price{font-family:'DM Serif Display',serif;font-size:44px;letter-spacing:-.03em;margin-bottom:3px}
-.fc-price sup{font-size:18px;vertical-align:super}
-.fc-period{font-size:16px;color:var(--muted);margin-bottom:20px}
-.fc-feats{list-style:none;flex:1;margin-bottom:22px;display:flex;flex-direction:column;gap:8px}
-.fc-feats li{font-size:16px;display:flex;gap:8px;align-items:flex-start}
-.fc-feats li::before{content:'✓';color:var(--signal);font-weight:700;flex-shrink:0;margin-top:1px}
-.fc-feats li.no{color:var(--muted)}
-.fc-feats li.no::before{content:'–';color:var(--border)}
-.fc-btn{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;font-size:15px;font-weight:700;border:1px solid var(--border);color:var(--ink);background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;letter-spacing:-.01em}
-.fc-btn:hover{border-color:var(--signal);color:var(--signal)}
-.fc.featured .fc-btn{background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#fff;border-color:var(--signal);box-shadow:0 4px 16px rgba(26,79,214,.35);font-size:16px;padding:14px}
 .sss{padding:72px 5vw;background:#f8f7f3;border-top:1px solid var(--border);color:#0a0c14}
 .sss-inner{max-width:700px;margin:0 auto}
 .sss-header{text-align:center;margin-bottom:44px}
@@ -386,7 +365,7 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
   .nav-links{display:none}.hamburger{display:block}.btn-nav{display:none}
   .hero{grid-template-columns:1fr;padding:90px 5vw 56px;gap:36px}
   .klod,.ses-inner{grid-template-columns:1fr;gap:36px}
-  .fiyat-grid,.hedef-grid{grid-template-columns:1fr}
+  .hedef-grid{grid-template-columns:1fr}
   .alan-cards{flex-direction:column;align-items:center}
   .demo-opts,.dm-opts{grid-template-columns:1fr}
   .dash-ui{grid-template-columns:1fr}.dash-sb{display:none}
@@ -729,7 +708,7 @@ body.dark-mode .hero-float-word{background:#3a1414;color:#f87171}
 
 /* Dark/Light mode geçişini yumuşat */
 body{transition:background-color .35s ease,color .35s ease}
-nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yorum,.modal,.nav-links span,.step,.klod-feat-item,.dash-main,.dtab,input,textarea,.sss-q,.sss-a,.sss,.section-title,.fc-btn,table,td,th,#podcast-liste div,#podcast-liste .dinle-btn,.hata-item,.hata-item-word,.tool-chip,.micro-lesson-card,.radar-section,.plan-section,.lb-section,.hata-analiz,.hero-badge{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yorum,.modal,.nav-links span,.step,.klod-feat-item,.dash-main,.dtab,input,textarea,.sss-q,.sss-a,.sss,.section-title,table,td,th,#podcast-liste div,#podcast-liste .dinle-btn,.hata-item,.hata-item-word,.tool-chip,.micro-lesson-card,.radar-section,.plan-section,.lb-section,.hata-analiz,.hero-badge{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
 #dark-btn{transition:transform .25s ease}
 #dark-btn:hover{transform:scale(1.15) rotate(-8deg)}
 #dark-btn.dark-btn-spin{animation:darkBtnSpin .45s ease}
@@ -1540,61 +1519,6 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
   </div>
 </section>
 
-<section id="fiyat" style="padding:80px 5vw;background:linear-gradient(135deg,#0a0c14,#1a1f35);position:relative;overflow:hidden">
-  <div style="position:absolute;top:-80px;right:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(26,79,214,.2),transparent 65%);pointer-events:none"></div>
-  <div style="max-width:900px;margin:0 auto;text-align:center;position:relative">
-
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#4f8ef7;margin-bottom:20px">— Manifesto —</div>
-    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(32px,4vw,54px);color:#f8f7f3;line-height:1.1;letter-spacing:-.03em;margin-bottom:32px">
-      Arkadaş, büyük paralara<br>
-      <em style="color:#4f8ef7">gerek yok.</em>
-    </h2>
-
-    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:40px;margin-bottom:40px;text-align:left">
-      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9;margin-bottom:20px">
-        Yıllarca YDS ve YÖKDİL için platformlara, kurslara, hocalara <strong style="color:#e8d5a3">binlerce lira</strong> harcandı. Aylık abonelikler, paket paket materyaller, "özel" erişimler...
-      </p>
-      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9;margin-bottom:20px">
-        Halbuki ÖSYM soruları bir sır değil. <strong style="color:#4f8ef7">Sinyal metodunu</strong> öğrenirsen — bağlaçları, gizli olumsuzları, modal yapıları tanırsan — her soruyu 10 saniyede çözersin.
-      </p>
-      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9;margin-bottom:20px">
-        Bu yüzden Sinyal Avcısı <strong style="color:#34d399">tamamen ücretsiz.</strong> <strong style="color:#e8d5a3">1 TL bile ödemeden</strong> — sürekli büyüyen soru bankası, AI mentor, ses kursu, kelime sistemi — hepsi senin.
-      </p>
-      <p style="font-size:18px;color:rgba(248,247,243,.85);line-height:1.9">
-        Çünkü bilgi, parasıyla satılacak bir şey değil.
-      </p>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:48px">
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
-        <div style="font-size:36px;margin-bottom:10px">🎯</div>
-        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">Sürekli Büyüyen Soru Bankası</div>
-        <div style="font-size:13px;color:rgba(248,247,243,.45)">ÖSYM formatında, ücretsiz</div>
-      </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
-        <div style="font-size:36px;margin-bottom:10px">🤖</div>
-        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">KLOD AI Mentor</div>
-        <div style="font-size:13px;color:rgba(248,247,243,.45)">Sana özel açıklama, ücretsiz</div>
-      </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
-        <div style="font-size:36px;margin-bottom:10px">🃏</div>
-        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">Spaced Repetition</div>
-        <div style="font-size:13px;color:rgba(248,247,243,.45)">500 akademik kelime, ücretsiz</div>
-      </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:24px;text-align:center">
-        <div style="font-size:36px;margin-bottom:10px">🎧</div>
-        <div style="font-size:15px;font-weight:700;color:#f8f7f3;margin-bottom:6px">19 Konu Ses Kursu</div>
-        <div style="font-size:13px;color:rgba(248,247,243,.45)">Bilingual TTS, ücretsiz</div>
-      </div>
-    </div>
-
-    <button onclick="goTo('dashboard')" style="background:linear-gradient(135deg,#1a4fd6,#7c3aed);color:#fff;border:none;border-radius:14px;padding:18px 48px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 8px 32px rgba(26,79,214,.4);letter-spacing:-.01em">
-      🎯 Hemen Başla — Kayıt Bile İstemez
-    </button>
-    <div style="margin-top:16px;font-size:13px;color:rgba(248,247,243,.35)">İstersen kaydol — ilerlemen kaybolmasın diye</div>
-
-  </div>
-</section>
 <!-- REFERANS PROGRAMI -->
 <section style="padding:80px 5vw;background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
   <div style="max-width:900px;margin:0 auto">
@@ -4070,7 +3994,7 @@ function gunlukHedefGuncelle(){
 }
 
 const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.05,rootMargin:"0px 0px -50px 0px"});
-document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
+document.querySelectorAll('.step,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
 function animateCount(el){
   const target=parseInt(el.dataset.count);
   const suffix=el.dataset.suffix||'';
