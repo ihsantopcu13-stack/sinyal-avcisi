@@ -3548,23 +3548,52 @@ function adminPanelAc(kullanicilar) {
 
 let _admKullanicilar = [];
 function adminTabloRender(liste) {
+  // NOT: k.ad ve k.email kullanıcıların kayıt sırasında girdiği, doğrulanmamış
+  // veridir. Stored XSS'i önlemek için innerHTML yerine DOM API + textContent
+  // kullanılıyor — asla bu alanları string interpolasyonuyla HTML'e gömme.
   _admKullanicilar = liste;
   const tbody = document.getElementById('adm-tbody');
   if (!tbody) return;
+  tbody.innerHTML = '';
   if (liste.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="4" style="padding:24px;text-align:center;color:#6b7280;font-size:14px">Henüz kullanıcı yok</td></tr>`;
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.style.cssText = 'padding:24px;text-align:center;color:#6b7280;font-size:14px';
+    td.textContent = 'Henüz kullanıcı yok';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
     return;
   }
-  tbody.innerHTML = liste.map(k => `
-    <tr style="border-top:1px solid #232836;transition:background .15s" onmouseover="this.style.background='#111318'" onmouseout="this.style.background=''">
-      <td style="padding:12px 16px;font-size:13px;color:#e8eaf0">${k.email || '-'}</td>
-      <td style="padding:12px 16px;font-size:13px;color:#6b7280">${k.ad || '-'}</td>
-      <td style="padding:12px 16px;font-size:12px;color:#6b7280;font-family:'JetBrains Mono',monospace">${k.created_at ? k.created_at.split('T')[0] : '-'}</td>
-      <td style="padding:12px 16px">
-        <button onclick="adminWaAc('${k.email}')" style="background:#25d366;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">📱 İletişim</button>
-      </td>
-    </tr>
-  `).join('');
+  liste.forEach(k => {
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-top:1px solid #232836;transition:background .15s';
+    tr.onmouseover = () => tr.style.background = '#111318';
+    tr.onmouseout = () => tr.style.background = '';
+
+    const tdEmail = document.createElement('td');
+    tdEmail.style.cssText = 'padding:12px 16px;font-size:13px;color:#e8eaf0';
+    tdEmail.textContent = k.email || '-';
+
+    const tdAd = document.createElement('td');
+    tdAd.style.cssText = 'padding:12px 16px;font-size:13px;color:#6b7280';
+    tdAd.textContent = k.ad || '-';
+
+    const tdTarih = document.createElement('td');
+    tdTarih.style.cssText = "padding:12px 16px;font-size:12px;color:#6b7280;font-family:'JetBrains Mono',monospace";
+    tdTarih.textContent = k.created_at ? k.created_at.split('T')[0] : '-';
+
+    const tdIslem = document.createElement('td');
+    tdIslem.style.cssText = 'padding:12px 16px';
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:#25d366;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif';
+    btn.textContent = '📱 İletişim';
+    btn.addEventListener('click', () => adminWaAc(k.email));
+    tdIslem.appendChild(btn);
+
+    tr.append(tdEmail, tdAd, tdTarih, tdIslem);
+    tbody.appendChild(tr);
+  });
 }
 
 function adminAra() {
@@ -4124,14 +4153,38 @@ function liderTabloGoster(){
   const tumListe=[...SAHTE_LB_KULLANICILAR,{isim:kullaniciAdi,emoji:'🎯',xp:xp.hafta||0,seviye:seviyeAl(xp.toplam||0).ad,benim:true}];
   tumListe.sort((a,b)=>b.xp-a.xp);
   const RANK_EMOJILER=['🥇','🥈','🥉'];
-  lb_el.innerHTML=tumListe.map((u,i)=>`
-    <div class="lb-row ${u.benim?'lb-sen':''}">
-      <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i<3?RANK_EMOJILER[i]:i+1}</div>
-      <div class="lb-avatar">${u.emoji}</div>
-      <div class="lb-isim">${u.isim}${u.benim?' <b style="color:var(--signal);font-size:11px">(Sen)</b>':''}</div>
-      <div class="lb-xp">${u.xp.toLocaleString('tr-TR')} XP</div>
-    </div>
-  `).join('');
+  // u.isim kullanıcının kendi profil adından geliyor (doğrulanmamış); XSS'i
+  // önlemek için innerHTML yerine DOM API + textContent kullanılıyor.
+  lb_el.innerHTML='';
+  tumListe.forEach((u,i)=>{
+    const row=document.createElement('div');
+    row.className='lb-row'+(u.benim?' lb-sen':'');
+
+    const rank=document.createElement('div');
+    rank.className='lb-rank'+(i===0?' gold':i===1?' silver':i===2?' bronze':'');
+    rank.textContent=i<3?RANK_EMOJILER[i]:String(i+1);
+
+    const avatar=document.createElement('div');
+    avatar.className='lb-avatar';
+    avatar.textContent=u.emoji;
+
+    const isim=document.createElement('div');
+    isim.className='lb-isim';
+    isim.textContent=u.isim;
+    if(u.benim){
+      const b=document.createElement('b');
+      b.style.cssText='color:var(--signal);font-size:11px';
+      b.textContent=' (Sen)';
+      isim.appendChild(b);
+    }
+
+    const xpEl=document.createElement('div');
+    xpEl.className='lb-xp';
+    xpEl.textContent=u.xp.toLocaleString('tr-TR')+' XP';
+
+    row.append(rank,avatar,isim,xpEl);
+    lb_el.appendChild(row);
+  });
   if(benim_el)benim_el.textContent=(xp.hafta||0).toLocaleString('tr-TR')+' XP';
 }
 
