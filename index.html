@@ -1112,6 +1112,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       </div>
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
+        <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()"></div>
         <div class="dash-karts">
           <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
           <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis →</div></div>
@@ -2094,8 +2095,10 @@ function dnav(el){
   main.querySelector('.dash-karts').style.display='none';
   main.querySelector('.dash-tabs').style.display='none';
   main.querySelector('.dash-welcome').style.display='none';
+  const skKartEl=document.getElementById('sk-kart');if(skKartEl)skKartEl.style.display='none';
   if(txt.includes('Dashboard')){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
+    if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
     if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
@@ -5124,20 +5127,170 @@ function sinavPlanimVarsayilanTarih(){
   const gun=String(hedef.getDate()).padStart(2,'0');
   return hedef.getFullYear()+'-'+ay+'-'+gun;
 }
+function spVarsayilanAyar(){
+  return{dogru:17,yanlis:63,hedefPuan:65,tarih:sinavPlanimVarsayilanTarih()};
+}
+function spAyarYukle(){
+  try{
+    const v=JSON.parse(localStorage.getItem('sa_sp_ayar'));
+    if(v&&v.dogru!=null&&v.yanlis!=null&&v.hedefPuan!=null&&v.tarih)return v;
+  }catch(e){}
+  return spVarsayilanAyar();
+}
+function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
+  const hedefTarih=new Date(tarihStr+'T23:59:59');
+  const toplamSoru=(dogru+yanlis)||80;
+  const mevcutPuan=Math.round((dogru/toplamSoru)*10000)/100;
+  const simdi=new Date();
+  const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
+  const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
+  const puanBasiDogru=100/toplamSoru;
+  const gerekliNetArtis=puanFarki>0?Math.ceil(puanFarki/puanBasiDogru):0;
+  const gunlukSoruHedefi=puanFarki<=0?15:Math.min(80,Math.max(15,Math.ceil((gerekliNetArtis*3.5)/kalanGun)));
+  const gerekliDogruBosStrateji=Math.min(toplamSoru,Math.max(0,Math.ceil((hedefPuan/100)*toplamSoru)));
+  const puanKaybiYanlis=Math.round(yanlis*0.25*100)/100;
+  const aciliyetRenk=kalanGun<14?'#dc2626':kalanGun<30?'#d97706':'#059669';
+  const aciliyetMetin=kalanGun<14?'🔴 Kritik':kalanGun<30?'🟡 Yoğun':'🟢 Rahat';
+  return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,puanKaybiYanlis,aciliyetRenk,aciliyetMetin};
+}
+
+// Haftalık müfredat fazları — "kişisel çalışma programı"
+const SP_MUFREDAT_FAZLARI=[
+  {baslik:'Temel Kelime + Kolay Bağlaçlar',detay:'despite / although / however kalıpları — YDS\'de en hızlı puan getiren, en kolay öğrenilen yapılar.',mod:'kelime'},
+  {baslik:'Modal Perfect + İleri Bağlaçlar',detay:'must have / should have / far from / provided that gibi ileri yapılar. Sinyal Lab\'da modal perfect sorularına odaklan.',mod:'sinyal'},
+  {baslik:'Paragraf Soruları + Cümle Tamamlama',detay:'Uzun metinlerde sinyal avcılığı ve S+V+O ile cümle analizi.',mod:'paragraf'},
+  {baslik:'Tam Deneme Sınavları + Hata Analizi',detay:'Gerçek sınav temposunda tam denemeler çöz, her denemeden sonra Hata Defteri\'ni gözden geçir.',mod:'hatalar'}
+];
+
+// Zayıf alan → günlük mini görev eşlemesi
+const SP_ZAYIF_GOREV={
+  'hk-sinyal':{etiket:'Bağlaçlar (despite/although/however)',gorev:'🔗 10 bağlaç cümlesi çöz + Canlı Ders\'te tekrar izle',mod:'canliders'},
+  'hk-yapisal':{etiket:'Modal Yapılar (must have/should have)',gorev:'🧠 5 modal perfect sorusu çöz',mod:'sinyal'},
+  'hk-kelime':{etiket:'Kelime Bilgisi',gorev:'🃏 20 kelime kartını tekrar et',mod:'kelime'},
+  'hk-dikkat':{etiket:'Dikkat Hataları',gorev:'🐢 1 metni satır satır oku, anahtar kelimeleri işaretle',mod:'paragraf'},
+  'paragraf':{etiket:'Paragraf Soruları',gorev:'📖 2 paragraf sorusu çöz (SAT metodu)',mod:'paragraf'}
+};
+function sinavZayifAlanAnalizi(){
+  const hatalar=hataLoad();
+  if(hatalar.length>=3){
+    const sayac={};
+    hatalar.forEach(h=>{const kod=hataKategoriSinifla(h.soru,h.tip||'').kod;sayac[kod]=(sayac[kod]||0)+1;});
+    const sirali=Object.entries(sayac).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    return{kaynak:'gercek',liste:sirali.map(([kod,adet])=>({...(SP_ZAYIF_GOREV[kod]||SP_ZAYIF_GOREV['hk-dikkat']),adet}))};
+  }
+  // Yeterli pratik verisi yok — yüksek yanlış sayısında YDS'de en sık görülen zayıf alan varsayımı
+  return{kaynak:'tahmini',liste:[SP_ZAYIF_GOREV['hk-sinyal'],SP_ZAYIF_GOREV['hk-yapisal'],SP_ZAYIF_GOREV['paragraf']]};
+}
+
+// Günlük kontrol listesi
+const SP_CHECKLIST_ITEMS=[
+  {key:'kelime',etiket:'20 kelime kartı',mod:'kelime'},
+  {key:'tuzak',etiket:'10 tuzak sorusu',mod:'tuzak'},
+  {key:'sinyallab',etiket:'5 sinyal lab sorusu',mod:'sinyal'},
+  {key:'paragraf',etiket:'2 paragraf sorusu',mod:'paragraf'},
+  {key:'klod',etiket:'1 KLOD sohbeti',mod:'sinyal'}
+];
+function sinavChecklistBugunAnahtari(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function sinavChecklistYukle(){
+  const bugun=sinavChecklistBugunAnahtari();
+  let veri;
+  try{veri=JSON.parse(localStorage.getItem('sa_gunluk_checklist'));}catch(e){veri=null;}
+  if(!veri||veri.tarih!==bugun){
+    veri={tarih:bugun,items:{}};
+    SP_CHECKLIST_ITEMS.forEach(i=>veri.items[i.key]=false);
+    localStorage.setItem('sa_gunluk_checklist',JSON.stringify(veri));
+  }
+  return veri;
+}
+function sinavGunlukTamamlaKaydet(){
+  const bugun=sinavChecklistBugunAnahtari();
+  let log;
+  try{log=JSON.parse(localStorage.getItem('sa_checklist_tamamlanan'))||[];}catch(e){log=[];}
+  if(!log.includes(bugun)){
+    log.push(bugun);
+    if(log.length>60)log=log.slice(-60);
+    localStorage.setItem('sa_checklist_tamamlanan',JSON.stringify(log));
+  }
+}
+function sinavHaftalikRapor(){
+  let log;
+  try{log=JSON.parse(localStorage.getItem('sa_checklist_tamamlanan'))||[];}catch(e){log=[];}
+  const simdi=new Date();
+  const haftaBasi=new Date(simdi);
+  const gun=haftaBasi.getDay()||7; // Pazartesi=1 kabul
+  haftaBasi.setDate(haftaBasi.getDate()-(gun-1));
+  haftaBasi.setHours(0,0,0,0);
+  const tamamlananGun=log.filter(d=>new Date(d+'T00:00:00')>=haftaBasi).length;
+  return{tamamlananGun,toplamGun:7};
+}
+function sinavChecklistToggle(key){
+  const veri=sinavChecklistYukle();
+  veri.items[key]=!veri.items[key];
+  localStorage.setItem('sa_gunluk_checklist',JSON.stringify(veri));
+  const tumuTamam=SP_CHECKLIST_ITEMS.every(i=>veri.items[i.key]);
+  if(tumuTamam){
+    sinavGunlukTamamlaKaydet();
+    konfetiPatlat();
+    sinavKutlamaGoster();
+  }
+  sinavPlanimOlustur();
+  sinavKurtarmaKartRender();
+}
+
+// Konfeti + kutlama
+function konfetiPatlat(){
+  const renkler=['#1a4fd6','#7c3aed','#059669','#d97706','#dc2626','#e8d5a3'];
+  const kapsayici=document.createElement('div');
+  kapsayici.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:99998;overflow:hidden';
+  document.body.appendChild(kapsayici);
+  for(let i=0;i<70;i++){
+    const p=document.createElement('div');
+    const renk=renkler[Math.floor(Math.random()*renkler.length)];
+    const sol=Math.random()*100;
+    const gecikme=(Math.random()*0.5).toFixed(2);
+    const sure=(2.2+Math.random()*1.6).toFixed(2);
+    const genislik=(6+Math.random()*6).toFixed(1);
+    p.style.cssText=`position:absolute;top:-24px;left:${sol}%;width:${genislik}px;height:${genislik*0.4}px;background:${renk};opacity:.9;border-radius:2px;animation:konfetiDus ${sure}s ${gecikme}s ease-in forwards;transform:rotate(${Math.floor(Math.random()*360)}deg)`;
+    kapsayici.appendChild(p);
+  }
+  setTimeout(()=>kapsayici.remove(),4200);
+}
+function sinavKutlamaGoster(){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99999;background:linear-gradient(135deg,#059669,#047857);color:#fff;padding:16px 28px;border-radius:14px;font-size:16px;font-weight:700;font-family:Inter,sans-serif;box-shadow:0 8px 24px rgba(5,150,105,.4);text-align:center;max-width:90vw';
+  d.textContent='🎉 Bugünün checklist\'i tamam! Harika iş çıkardın.';
+  document.body.appendChild(d);
+  setTimeout(()=>{d.style.transition='opacity .5s';d.style.opacity='0';setTimeout(()=>d.remove(),500);},3200);
+}
+
+// Günlük giriş mesajı — günde 1 kez
+function sinavGunlukMesajGoster(){
+  const bugun=sinavChecklistBugunAnahtari();
+  if(localStorage.getItem('sa_sp_son_mesaj')===bugun)return;
+  localStorage.setItem('sa_sp_son_mesaj',bugun);
+  const ayar=spAyarYukle();
+  const v=spHesaplaVerileri(ayar.dogru,ayar.yanlis,ayar.hedefPuan,ayar.tarih);
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99997;background:linear-gradient(135deg,#1a4fd6,#7c3aed);color:#fff;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:700;font-family:Inter,sans-serif;box-shadow:0 8px 24px rgba(26,79,214,.35);text-align:center;max-width:90vw;cursor:pointer';
+  d.textContent=`📅 Hedefine ${v.kalanGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz! 🚀`;
+  d.onclick=()=>{
+    d.remove();
+    const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Sınav Planım'));
+    if(item)item.click();
+    document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+  };
+  document.body.appendChild(d);
+  setTimeout(()=>{if(d.parentNode){d.style.transition='opacity .5s';d.style.opacity='0';setTimeout(()=>d.remove(),500);}},6500);
+}
+
 function sinavPlanimRender(){
   const dEl=document.getElementById('sp-dogru'),yEl=document.getElementById('sp-yanlis'),hEl=document.getElementById('sp-hedefpuan'),tEl=document.getElementById('sp-tarih');
   if(!dEl)return;
-  const kayitli=localStorage.getItem('sa_sp_ayar');
-  if(kayitli){
-    try{
-      const v=JSON.parse(kayitli);
-      if(v.dogru!=null)dEl.value=v.dogru;
-      if(v.yanlis!=null)yEl.value=v.yanlis;
-      if(v.hedefPuan!=null)hEl.value=v.hedefPuan;
-      if(v.tarih)tEl.value=v.tarih;
-    }catch(e){}
-  }
-  if(!tEl.value)tEl.value=sinavPlanimVarsayilanTarih();
+  const ayar=spAyarYukle();
+  dEl.value=ayar.dogru;yEl.value=ayar.yanlis;hEl.value=ayar.hedefPuan;tEl.value=ayar.tarih;
   sinavPlanimOlustur();
 }
 function sinavPlanimOlustur(){
@@ -5148,77 +5301,91 @@ function sinavPlanimOlustur(){
   const hedefPuan=Math.min(100,Math.max(0,parseFloat(document.getElementById('sp-hedefpuan').value)||65));
   const tarihEl=document.getElementById('sp-tarih');
   const tarihStr=tarihEl.value||sinavPlanimVarsayilanTarih();
-  const hedefTarih=new Date(tarihStr+'T23:59:59');
-
   localStorage.setItem('sa_sp_ayar',JSON.stringify({dogru,yanlis,hedefPuan,tarih:tarihStr}));
 
-  const toplamSoru=(dogru+yanlis)||80;
-  const mevcutPuan=Math.round((dogru/toplamSoru)*10000)/100;
-  const simdi=new Date();
-  const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
-  const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
-  const puanBasiDogru=100/toplamSoru;
-  const gerekliNetArtis=puanFarki>0?Math.ceil(puanFarki/puanBasiDogru):0;
-  const gunlukSoruHedefi=puanFarki<=0?15:Math.min(80,Math.max(15,Math.ceil((gerekliNetArtis*3.5)/kalanGun)));
+  const v=spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr);
+  const zayif=sinavZayifAlanAnalizi();
+  const checklistVeri=sinavChecklistYukle();
+  const checklistTamamlanan=SP_CHECKLIST_ITEMS.filter(i=>checklistVeri.items[i.key]).length;
+  const rapor=sinavHaftalikRapor();
 
-  // Zayıf alan tespiti — mevcut radar sisteminden (yalnızca gerçekten düşük puanlılar "zayıf" sayılır)
-  const ZAYIF_ESIK=70;
-  const radarVeri=radarVerisiAl();
-  const tumKonular=RADAR_KONULAR.map((k,i)=>({konu:k,puan:radarVeri[i]})).sort((a,b)=>a.puan-b.puan);
-  const zayifAlanlar=tumKonular.filter(z=>z.puan<ZAYIF_ESIK).slice(0,3);
-  const odakHavuzu=zayifAlanlar.length?zayifAlanlar:tumKonular.slice(0,1);
-
-  // Haftalık milestone'lar
-  const haftaSayisi=Math.max(1,Math.ceil(kalanGun/7));
+  // Haftalık milestone'lar — her hafta bir müfredat fazına denk gelir
+  const haftaSayisi=Math.max(1,Math.ceil(v.kalanGun/7));
+  const haftaBasiFaz=Math.max(1,Math.ceil(haftaSayisi/4));
   const milestones=[];
   for(let w=1;w<=haftaSayisi;w++){
-    const gunSonu=Math.min(w*7,kalanGun);
+    const gunSonu=Math.min(w*7,v.kalanGun);
     const oncekiGunSonu=(w-1)*7;
-    const oran=gunSonu/kalanGun;
-    const buHaftaPuan=Math.round((mevcutPuan+(hedefPuan-mevcutPuan)*oran)*100)/100;
+    const oran=gunSonu/v.kalanGun;
+    const buHaftaPuan=Math.round((v.mevcutPuan+(hedefPuan-v.mevcutPuan)*oran)*100)/100;
     const gunSayisiBuHafta=gunSonu-oncekiGunSonu;
-    const kumulatifSoru=gunlukSoruHedefi*gunSonu;
-    const odakZayif=odakHavuzu[(w-1)%odakHavuzu.length];
-    const aktivite=PLAN_AKTIVITE_HAVUZU[(w-1)%PLAN_AKTIVITE_HAVUZU.length];
-    milestones.push({hafta:w,hedefPuan:buHaftaPuan,soru:kumulatifSoru,gunSayisi:gunSayisiBuHafta,odak:odakZayif.konu,aktivite});
+    const haftalikSoru=v.gunlukSoruHedefi*gunSayisiBuHafta;
+    const fazIdx=Math.min(3,Math.floor((w-1)/haftaBasiFaz));
+    const faz=SP_MUFREDAT_FAZLARI[fazIdx];
+    const odakZayif=zayif.liste[(w-1)%zayif.liste.length];
+    milestones.push({hafta:w,fazNo:fazIdx+1,faz,hedefPuan:buHaftaPuan,soru:haftalikSoru,gunSayisi:gunSayisiBuHafta,odak:odakZayif});
   }
 
   // Motivasyon mesajı
   let motiv;
-  if(puanFarki<=0){
+  if(v.puanFarki<=0){
     motiv='🎉 Tebrikler, hedef puanını zaten yakalamış durumdasın! Şimdi bu seviyeyi sağlamlaştırma ve hız kazanma zamanı.';
-  }else if(kalanGun<14&&puanFarki>15){
-    motiv=`⚠️ Vakit daralıyor — ${kalanGun} günde ${puanFarki} puan fark büyük ama imkansız değil. Günlük ${gunlukSoruHedefi} soruyu aksatmadan çöz, en zayıf konuna öncelik ver.`;
+  }else if(v.kalanGun<14&&v.puanFarki>15){
+    motiv=`⚠️ Vakit daralıyor — ${v.kalanGun} günde ${v.puanFarki} puan fark büyük ama imkansız değil. Günlük ${v.gunlukSoruHedefi} soruyu aksatmadan çöz, en zayıf konuna öncelik ver.`;
   }else{
     motiv=SP_MOTIVASYON[Math.floor(Math.random()*SP_MOTIVASYON.length)];
   }
 
-  const aciliyetRenk=kalanGun<14?'#dc2626':kalanGun<30?'#d97706':'#059669';
-  const aciliyetMetin=kalanGun<14?'🔴 Kritik':kalanGun<30?'🟡 Yoğun':'🟢 Rahat';
-
   icerikEl.innerHTML=`
-    <div class="sp-grid">
-      <div class="sp-stat"><div class="sp-stat-val">${mevcutPuan}</div><div class="sp-stat-lbl">Mevcut Puan</div></div>
+    <div class="sp-strateji">
+      <div class="sp-strateji-baslik">🚨 Acil Strateji Notu</div>
+      <div class="sp-strateji-metin">
+        YDS'de yanlış cevap <b>−0.25 puan</b> götürür. <b>${dogru+yanlis>0?yanlis:63} yanlış</b> = <b>−${v.puanKaybiYanlis} puan</b> kayıp.<br>
+        Strateji: <b>Emin olmadığın soruyu boş bırak!</b><br>
+        <span style="color:#34d399;font-weight:800">${v.gerekliDogruBosStrateji} doğru + 0 yanlış = ${hedefPuan} puan</span>
+      </div>
+    </div>
+    <div class="sp-grid" style="margin-top:16px">
+      <div class="sp-stat"><div class="sp-stat-val">${v.mevcutPuan}</div><div class="sp-stat-lbl">Mevcut Puan</div></div>
       <div class="sp-stat vurgu"><div class="sp-stat-val">${hedefPuan}</div><div class="sp-stat-lbl">Hedef Puan</div></div>
-      <div class="sp-stat${kalanGun<14?' uyari':''}"><div class="sp-stat-val">${kalanGun}</div><div class="sp-stat-lbl">Kalan Gün</div></div>
-      <div class="sp-stat vurgu"><div class="sp-stat-val">${gunlukSoruHedefi}</div><div class="sp-stat-lbl">Günlük Soru Hedefi</div></div>
+      <div class="sp-stat${v.kalanGun<14?' uyari':''}"><div class="sp-stat-val">${v.kalanGun}</div><div class="sp-stat-lbl">Kalan Gün</div></div>
+      <div class="sp-stat vurgu"><div class="sp-stat-val">${v.gunlukSoruHedefi}</div><div class="sp-stat-lbl">Günlük Soru Hedefi</div></div>
     </div>
     <div style="margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span class="adaptif-badge" style="background:${aciliyetRenk}20;color:${aciliyetRenk}">${aciliyetMetin} · ${kalanGun} gün kaldı</span>
-      <span style="font-size:12px;color:var(--muted)">Hedefe ulaşman için toplam ~${gerekliNetArtis} net artışı gerekiyor</span>
+      <span class="adaptif-badge" style="background:${v.aciliyetRenk}20;color:${v.aciliyetRenk}">${v.aciliyetMetin} · ${v.kalanGun} gün kaldı</span>
+      <span style="font-size:12px;color:var(--muted)">${hedefPuan} puana ulaşmak için ~${v.gerekliDogruBosStrateji} doğru gerekiyor (yaklaşık ${v.gerekliNetArtis} net artışı)</span>
     </div>
     <div style="margin-top:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">🎯 Zayıf Alanların</div>
-      <div>${zayifAlanlar.length?zayifAlanlar.map(z=>`<span class="sp-zayif-chip">⚠️ ${z.konu} · ${z.puan}/100</span>`).join(''):'<span style="font-size:12px;color:var(--muted)">Henüz belirgin bir zayıf alan tespit edilmedi — pratik yaptıkça bu liste güncellenecek. Şimdilik genel tekrar önerilir.</span>'}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">🎯 Zayıf Alanların ${zayif.kaynak==='tahmini'?'<span style=\'font-size:10px;font-weight:600;color:var(--muted);text-transform:none\'>(tahmini — henüz pratik verisi yok)</span>':''}</div>
+      <div>${zayif.liste.map(z=>`<span class="sp-zayif-chip">⚠️ ${z.etiket}</span>`).join('')}</div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+        ${zayif.liste.map(z=>`<div style="font-size:12px;color:var(--muted)">${z.gorev}</div>`).join('')}
+      </div>
+    </div>
+    <div class="sp-checklist">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-size:13px;font-weight:700;color:var(--ink)">✅ Günlük Kontrol Listesi</div>
+        <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--signal)">${checklistTamamlanan}/${SP_CHECKLIST_ITEMS.length}</div>
+      </div>
+      ${SP_CHECKLIST_ITEMS.map(i=>`
+        <label class="sp-check-item${checklistVeri.items[i.key]?' done':''}">
+          <input type="checkbox" ${checklistVeri.items[i.key]?'checked':''} onchange="sinavChecklistToggle('${i.key}')">
+          <span>${i.etiket}</span>
+        </label>
+      `).join('')}
+      <div class="sp-rapor">📊 Bu hafta ${rapor.tamamlananGun}/7 gün checklist'i tamamladın · Bu haftaki hedef: ~${v.gunlukSoruHedefi*7} soru</div>
     </div>
     <div class="plan-section">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">📅 Haftalık Milestone'ların</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">📅 Kişisel Çalışma Programı — Haftalık Milestone'ların</div>
       ${milestones.map(m=>`
         <div class="sp-hafta">
           <div class="sp-hafta-no">H${m.hafta}</div>
           <div class="sp-hafta-icerik">
+            <div class="sp-hafta-faz">Faz ${m.fazNo} · ${m.faz.baslik}</div>
             <div class="sp-hafta-baslik">Hafta ${m.hafta} hedefi: ${m.hedefPuan} puan</div>
-            <div class="sp-hafta-detay">${m.aktivite.simge} Odak: <b>${m.odak}</b> · ${m.gunSayisi} günde ~${m.soru} soru (kümülatif) · ${m.aktivite.baslik}</div>
+            <div class="sp-hafta-detay">${m.faz.detay}</div>
+            <div class="sp-hafta-detay" style="margin-top:2px">Odak: <b>${m.odak.etiket}</b> · ${m.gunSayisi} günde ${m.soru} soru</div>
+            <div class="sp-hafta-deneme">📝 Cumartesi: Tam Deneme Sınavı Günü</div>
           </div>
         </div>
       `).join('')}
@@ -5226,7 +5393,42 @@ function sinavPlanimOlustur(){
     <div class="sp-motiv">${motiv}</div>
     <button onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" style="margin-top:12px;width:100%;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🚀 Bugünün Çalışmasına Başla</button>
   `;
+  if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();
 }
+
+// ─── DASHBOARD KARTI — 🚨 Acil Kurtarma Planı ──────────────────────────────
+function sinavKurtarmaKartRender(){
+  const kartEl=document.getElementById('sk-kart');
+  if(!kartEl)return;
+  const ayar=spAyarYukle();
+  const v=spHesaplaVerileri(ayar.dogru,ayar.yanlis,ayar.hedefPuan,ayar.tarih);
+  const checklistVeri=sinavChecklistYukle();
+  const checklistTamamlanan=SP_CHECKLIST_ITEMS.filter(i=>checklistVeri.items[i.key]).length;
+  const yuzde=Math.round((checklistTamamlanan/SP_CHECKLIST_ITEMS.length)*100);
+  kartEl.innerHTML=`
+    <div class="sk-kart-baslik">🚨 Acil Kurtarma Planı</div>
+    <div class="sk-kart-alt">${v.mevcutPuan} → ${v.hedefPuan} puan · ${v.tarihStr.split('-').reverse().join('.')}'a kadar</div>
+    <div class="sk-grid">
+      <div class="sk-stat"><div class="sk-stat-val">${v.kalanGun}</div><div class="sk-stat-lbl">Gün Kaldı</div></div>
+      <div class="sk-stat"><div class="sk-stat-val">${v.gerekliDogruBosStrateji}</div><div class="sk-stat-lbl">Gerekli Doğru</div></div>
+      <div class="sk-stat"><div class="sk-stat-val">${v.gunlukSoruHedefi}</div><div class="sk-stat-lbl">Günlük Soru</div></div>
+    </div>
+    <div class="sk-check-mini">
+      <span>Bugün: ${checklistTamamlanan}/${SP_CHECKLIST_ITEMS.length}</span>
+      <div class="sk-check-bar"><div class="sk-check-fill" style="width:${yuzde}%"></div></div>
+      <span>Devam Et →</span>
+    </div>
+  `;
+}
+function sinavKurtarmaKartaGit(){
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Sınav Planım'));
+  if(item)item.click();
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+}
+setTimeout(()=>{
+  sinavKurtarmaKartRender();
+  sinavGunlukMesajGoster();
+},2000);
 
 // ─── 3. LİDERLİK TABLOSU ────────────────────────────────────────────────────
 const SAHTE_LB_KULLANICILAR=[
