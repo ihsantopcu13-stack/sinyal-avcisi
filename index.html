@@ -3392,7 +3392,7 @@ async function adminPanelAc() {
   // Supabase'den tüm kullanıcıları çek
   let kullanicilar = [];
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('profiles')
       .select('id, email, ad, created_at')
       .order('created_at', { ascending: false })
