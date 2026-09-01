@@ -678,6 +678,35 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
 #dark-btn.dark-btn-spin{animation:darkBtnSpin .45s ease}
 @keyframes darkBtnSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.35)}100%{transform:rotate(360deg) scale(1)}}
 
+/* ============================================================
+   İSTATİSTİKLERİM SAYFASI
+   ============================================================ */
+.ist-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 20px}
+.ist-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 14px;text-align:center;transition:transform .18s ease,box-shadow .18s ease,background-color .35s ease,border-color .35s ease}
+.ist-kpi:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.ist-kpi-ikon{font-size:22px;margin-bottom:6px}
+.ist-kpi-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--ink)}
+.ist-kpi-lbl{font-size:12px;color:var(--muted);margin-top:4px}
+.ist-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-bottom:16px;transition:background-color .35s ease,border-color .35s ease}
+.ist-panel-baslik{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ist-panel-sub{font-size:11px;font-weight:400;color:var(--muted)}
+.ist-kat-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.ist-kat-row:last-child{margin-bottom:0}
+.ist-kat-lbl{width:120px;flex-shrink:0;font-size:13px;font-weight:600;color:var(--ink)}
+.ist-kat-bar-track{flex:1;height:10px;background:var(--border);border-radius:6px;overflow:hidden}
+.ist-kat-bar-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.ist-kat-val{width:110px;flex-shrink:0;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.ist-takvim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16px,1fr));gap:4px;max-width:360px}
+.ist-takvim-cell{aspect-ratio:1;border-radius:3px;background:var(--border);transition:background-color .35s ease}
+.ist-takvim-legend{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px;color:var(--muted)}
+.ist-legend-dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ist-hafta-ozet{font-size:14px;color:var(--ink);margin-bottom:14px}
+.ist-hafta-bar{display:flex;align-items:flex-end;gap:8px;height:110px}
+.ist-hafta-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+.ist-hafta-fill{width:100%;background:var(--signal);border-radius:4px 4px 0 0;min-height:3px;transition:height .5s ease}
+.ist-hafta-gun-lbl{font-size:10px;color:var(--muted)}
+@media (max-width:700px){.ist-kpi-grid{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 </head>
 <body>
@@ -961,6 +990,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')">📊 İstatistiklerim</div>
           <div style="height:1px;background:linear-gradient(90deg,transparent,#a78bfa55,transparent);margin:10px 14px"></div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
         </div>
@@ -989,6 +1019,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
           <div class="dtab" onclick="dtab(this,'lider')">🏆 Liderlik</div>
           <div class="dtab" onclick="dtab(this,'mikro')">🎬 Mini Dersler</div>
           <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800">🌍 Dil Avcısı</div>
+          <div class="dtab" onclick="dtab(this,'istatistik')">📊 İstatistiklerim</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
@@ -1286,6 +1317,42 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
         <div class="dmod" id="mod-mikro" style="display:none">
           <div class="dm-eye">🎬 MİNİ DERSLER — Her biri 2-3 dakika</div>
           <div id="mikro-liste" style="margin-top:14px;display:grid;gap:10px"></div>
+        </div>
+
+        <!-- İSTATİSTİKLERİM -->
+        <div class="dmod" id="mod-istatistik" style="display:none">
+          <div class="dm-eye">📊 İSTATİSTİKLERİM — Performans özetin</div>
+
+          <div class="ist-kpi-grid">
+            <div class="ist-kpi"><div class="ist-kpi-ikon">📝</div><div class="ist-kpi-val" id="ist-toplam">0</div><div class="ist-kpi-lbl">Toplam Çözülen Soru</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon">🎯</div><div class="ist-kpi-val" id="ist-dogruluk">0%</div><div class="ist-kpi-lbl">Doğruluk Oranı</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon">🔥</div><div class="ist-kpi-val" id="ist-streak">0</div><div class="ist-kpi-lbl">Güncel Seri (gün)</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon">⚡</div><div class="ist-kpi-val" id="ist-xp">0</div><div class="ist-kpi-lbl">Toplam XP</div></div>
+          </div>
+
+          <div class="ist-panel">
+            <div class="ist-panel-baslik">📚 Kategori Bazlı Performans</div>
+            <div id="ist-kategori-liste"></div>
+          </div>
+
+          <div class="ist-panel">
+            <div class="ist-panel-baslik">🔥 Streak Takvimi <span class="ist-panel-sub">Son 35 gün</span></div>
+            <div id="ist-takvim-grid" class="ist-takvim-grid"></div>
+            <div class="ist-takvim-legend">
+              <span>Az</span>
+              <span class="ist-legend-dot" style="background:rgba(26,79,214,.15)"></span>
+              <span class="ist-legend-dot" style="background:rgba(26,79,214,.45)"></span>
+              <span class="ist-legend-dot" style="background:rgba(26,79,214,.75)"></span>
+              <span class="ist-legend-dot" style="background:rgba(26,79,214,1)"></span>
+              <span>Çok</span>
+            </div>
+          </div>
+
+          <div class="ist-panel">
+            <div class="ist-panel-baslik">📅 Bu Haftaki İlerleme</div>
+            <div class="ist-hafta-ozet">Bu hafta <b id="ist-hafta-soru">0</b> soru çözdün, <b id="ist-hafta-xp">0</b> XP kazandın.</div>
+            <div id="ist-hafta-bar" class="ist-hafta-bar"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -3216,6 +3283,12 @@ function streakSoruEkle(tip){
   d.buHaftaSoru=(d.buHaftaSoru||0)+1;
   d.bugunCalistiMi=true;
   if(tip==='modal')d.modalDogru=(d.modalDogru||0)+1;
+  // İstatistiklerim sayfası için: kategori bazlı doğru sayacı + günlük aktivite günlüğü
+  d.tipDogru=d.tipDogru||{};
+  d.tipDogru[tip]=(d.tipDogru[tip]||0)+1;
+  const gunAnahtari=new Date().toISOString().split('T')[0];
+  d.gunler=d.gunler||{};
+  d.gunler[gunAnahtari]=(d.gunler[gunAnahtari]||0)+1;
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
   setTimeout(puanGuncelle,100);
 }
@@ -3258,6 +3331,12 @@ function hataEkle(soru,verilenCevap,dogruCevap,tip){
   else{d.unshift(kayit);}
   if(d.length>30)d=d.slice(0,30); // max 30 kayıt
   hataSave(d);hataCountGuncelle();
+  // İstatistiklerim sayfası için: hata defteri limitinden bağımsız gerçek toplam yanlış sayacı
+  let sd=streakLoad();
+  sd.toplamYanlis=(sd.toplamYanlis||0)+1;
+  sd.tipYanlis=sd.tipYanlis||{};
+  sd.tipYanlis[tip]=(sd.tipYanlis[tip]||0)+1;
+  streakSave(sd);
 }
 function hataCountGuncelle(){
   const d=hataLoad();
@@ -4456,6 +4535,104 @@ function adaptifBadgeGuncelle(){
 // Mevcut dAns fonksiyonuna adaptif hook ekle
 const _orijinalDAns=window.dAns;
 
+// ============================================================
+// İSTATİSTİKLERİM — Toplam soru, doğruluk oranı, kategori
+// performansı, streak takvimi, haftalık ilerleme
+// ============================================================
+const IST_KATEGORILER=[
+  {tip:'sinyal',ad:'Sinyal Lab',renk:'#1a4fd6'},
+  {tip:'kelime',ad:'Kelime Kartları',renk:'#059669'},
+  {tip:'tuzak',ad:'Günlük Tuzak',renk:'#dc2626'},
+];
+function istatistikRender(){
+  const streak=streakLoad();
+  const xp=xpLoad();
+  const dogru=streak.toplamSoru||0;
+  const yanlis=streak.toplamYanlis||0;
+  const toplam=dogru+yanlis;
+  const oran=toplam>0?Math.round((dogru/toplam)*100):0;
+
+  const toplamEl=document.getElementById('ist-toplam');
+  const dogrulukEl=document.getElementById('ist-dogruluk');
+  const streakEl=document.getElementById('ist-streak');
+  const xpEl=document.getElementById('ist-xp');
+  if(toplamEl)toplamEl.textContent=toplam;
+  if(dogrulukEl)dogrulukEl.textContent=oran+'%';
+  if(streakEl)streakEl.textContent=streak.streak||0;
+  if(xpEl)xpEl.textContent=(xp.toplam||0).toLocaleString('tr-TR');
+
+  // Kategori bazlı performans
+  const katEl=document.getElementById('ist-kategori-liste');
+  if(katEl){
+    const satirlar=IST_KATEGORILER.map(k=>{
+      const d=(streak.tipDogru&&streak.tipDogru[k.tip])||0;
+      const y=(streak.tipYanlis&&streak.tipYanlis[k.tip])||0;
+      const t=d+y;
+      const o=t>0?Math.round((d/t)*100):null;
+      return Object.assign({},k,{dogru:d,yanlis:y,toplam:t,oran:o});
+    });
+    if(satirlar.every(s=>s.toplam===0)){
+      katEl.innerHTML='<div style="text-align:center;padding:20px 0;color:var(--muted);font-size:14px">Henüz kategori verisi yok — Sinyal Lab, Kelime Kartları veya Günlük Tuzak\'ta soru çözmeye başla!</div>';
+    } else {
+      katEl.innerHTML=satirlar.map(s=>`
+        <div class="ist-kat-row">
+          <div class="ist-kat-lbl">${s.ad}</div>
+          <div class="ist-kat-bar-track"><div class="ist-kat-bar-fill" style="width:${s.oran===null?0:s.oran}%;background:${s.renk}"></div></div>
+          <div class="ist-kat-val">${s.oran===null?'— veri yok':s.oran+'% · '+s.toplam+' soru'}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // Streak takvimi — son 35 gün
+  const takvimEl=document.getElementById('ist-takvim-grid');
+  if(takvimEl){
+    const gunler=streak.gunler||{};
+    const hucreler=[];
+    for(let i=34;i>=0;i--){
+      const tarih=new Date(Date.now()-i*24*3600*1000);
+      const anahtar=tarih.toISOString().split('T')[0];
+      hucreler.push({anahtar,sayi:gunler[anahtar]||0});
+    }
+    const maxSayi=Math.max(1,...hucreler.map(h=>h.sayi));
+    takvimEl.innerHTML=hucreler.map(h=>{
+      const yogunluk=h.sayi===0?0:Math.min(1,0.2+0.8*(h.sayi/maxSayi));
+      const bg=h.sayi===0?'var(--border)':`rgba(26,79,214,${yogunluk.toFixed(2)})`;
+      return `<div class="ist-takvim-cell" style="background:${bg}" title="${h.anahtar}: ${h.sayi} soru"></div>`;
+    }).join('');
+  }
+
+  // Haftalık ilerleme
+  const haftaSoruEl=document.getElementById('ist-hafta-soru');
+  const haftaXpEl=document.getElementById('ist-hafta-xp');
+  if(haftaSoruEl)haftaSoruEl.textContent=streak.buHaftaSoru||0;
+  if(haftaXpEl)haftaXpEl.textContent=(xp.hafta||0).toLocaleString('tr-TR');
+
+  const haftaBarEl=document.getElementById('ist-hafta-bar');
+  if(haftaBarEl){
+    const gunler=streak.gunler||{};
+    const gunAdlari=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+    const bugun=new Date();
+    const bugunAnahtari=bugun.toISOString().split('T')[0];
+    const haftaBasiOfset=(bugun.getDay()+6)%7; // Pazartesi=0 tabanlı
+    const pztTarih=new Date(bugun);pztTarih.setDate(bugun.getDate()-haftaBasiOfset);
+    const gunlukVeri=[];
+    for(let i=0;i<7;i++){
+      const t=new Date(pztTarih);t.setDate(pztTarih.getDate()+i);
+      const anahtar=t.toISOString().split('T')[0];
+      gunlukVeri.push({lbl:gunAdlari[i],sayi:gunler[anahtar]||0,bugunMu:anahtar===bugunAnahtari});
+    }
+    const maxG=Math.max(1,...gunlukVeri.map(g=>g.sayi));
+    haftaBarEl.innerHTML=gunlukVeri.map(g=>`
+      <div class="ist-hafta-col">
+        <div style="font-size:10px;color:var(--ink);font-weight:700">${g.sayi||''}</div>
+        <div class="ist-hafta-fill" style="height:${g.sayi===0?'3px':Math.max(6,Math.round((g.sayi/maxG)*80))+'px'};${g.bugunMu?'background:#7c3aed':''}"></div>
+        <div class="ist-hafta-gun-lbl" style="${g.bugunMu?'color:#7c3aed;font-weight:700':''}">${g.lbl}</div>
+      </div>
+    `).join('');
+  }
+}
+
 // Dtab hook: radar/lider/plan/mikro sekmesi açıldığında içeriği yükle
 const _orijinalDtab=window.dtab;
 document.addEventListener('DOMContentLoaded',()=>{
@@ -4466,6 +4643,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     asılDtab&&asılDtab(el,mod);
     if(mod==='radar'){setTimeout(radarCiz,100);}
     if(mod==='lider'){setTimeout(liderTabloGoster,100);}
+    if(mod==='istatistik'){setTimeout(istatistikRender,100);}
     if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
     if(mod==='mikro'){setTimeout(mikroDersleriRender,100);}
     if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();},100);}
