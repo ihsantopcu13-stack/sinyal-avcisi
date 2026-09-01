@@ -726,7 +726,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
   <span style="font-size:24px">📱</span>
   <div class="pwa-banner-text"><b>Uygulamaya ekle</b>Sinyal Avcısı'nı ana ekranına ekle, uygulama gibi kullan</div>
   <button class="pwa-install-btn" onclick="pwaInstall()">Ekle</button>
-  <button class="pwa-close-btn" onclick="pwaBanner(false)">✕</button>
+  <button class="pwa-close-btn" onclick="pwaBannerKapat()">✕</button>
 </div>
 <nav>
   <div class="nav-logo" onclick="goTo('hero')">Sinyal <b>Avcisi</b></div>
@@ -3554,10 +3554,80 @@ function adaptifSoruHavuzu(){
 // ============================================================
 // PWA
 // ============================================================
-let pwaPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();pwaPrompt=e;setTimeout(()=>pwaBanner(true),8000);});
-function pwaBanner(show){const b=document.getElementById('pwa-banner');if(b){b.classList.toggle('show',show);if(show){document.body.style.paddingBottom='70px';}else{document.body.style.paddingBottom='0';}}}
-async function pwaInstall(){if(pwaPrompt){pwaPrompt.prompt();const r=await pwaPrompt.userChoice;if(r.outcome==='accepted'){pwaBanner(false);pwaPrompt=null;}}}
+let pwaPrompt=null,pwaPromptUsed=false;
+
+function pwaAlreadyInstalled(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+}
+function pwaIsIOS(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+}
+function pwaBanner(show){
+  const b=document.getElementById('pwa-banner');
+  if(!b)return;
+  b.classList.toggle('show',show);
+  document.body.style.paddingBottom=show?'70px':'0';
+}
+function pwaBannerKapat(){
+  // Kullanıcı banner'ı bilinçli kapattı — bir daha rahatsız etme (nav'daki
+  // küçük "Yükle" butonu yine de kalıcı olarak erişilebilir kalır).
+  pwaBanner(false);
+  try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+}
+
+// Chromium tabanlı tarayıcılar (Chrome/Edge/Samsung Internet vb.)
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  if(pwaAlreadyInstalled())return;
+  pwaPrompt=e;
+  pwaPromptUsed=false;
+  const btn=document.getElementById('pwa-btn');
+  if(btn)btn.style.display='flex'; // nav'daki buton her zaman erişilebilir olsun
+  let dismissed=false;
+  try{dismissed=localStorage.getItem('sa_pwa_dismissed')==='1';}catch(err){}
+  if(!dismissed){
+    setTimeout(()=>{if(pwaPrompt&&!pwaPromptUsed)pwaBanner(true);},8000);
+  }
+});
+
+// Kurulum tamamlandığında — banner/butonu kalıcı olarak gizle
+window.addEventListener('appinstalled',()=>{
+  pwaBanner(false);
+  pwaPrompt=null;
+  const btn=document.getElementById('pwa-btn');
+  if(btn)btn.style.display='none';
+  try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+});
+
+// iOS Safari `beforeinstallprompt` desteklemez — kendi akışımızı kuruyoruz
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!pwaIsIOS()||pwaAlreadyInstalled())return;
+  const btn=document.getElementById('pwa-btn');
+  if(btn)btn.style.display='flex';
+  let dismissed=false;
+  try{dismissed=localStorage.getItem('sa_pwa_dismissed')==='1';}catch(err){}
+  if(!dismissed)setTimeout(()=>pwaBanner(true),8000);
+});
+
+async function pwaInstall(){
+  if(pwaIsIOS()){
+    alert('Ana ekrana eklemek için:\n1) Alttaki paylaş simgesine (⬆️) dokun\n2) "Ana Ekrana Ekle"yi seç');
+    pwaBanner(false);
+    return;
+  }
+  if(!pwaPrompt||pwaPromptUsed)return;
+  pwaPromptUsed=true;
+  pwaPrompt.prompt();
+  const r=await pwaPrompt.userChoice;
+  if(r.outcome==='accepted'){
+    pwaBanner(false);
+  } else {
+    // Kullanıcı native diyalogda reddetti — tekrar sıkıştırmayalım
+    try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+    pwaBanner(false);
+  }
+  pwaPrompt=null;
+}
 
 const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.05,rootMargin:"0px 0px -50px 0px"});
 document.querySelectorAll('.step,.fc,.scroll-hidden').forEach(el=>scrollObserver.observe(el));
