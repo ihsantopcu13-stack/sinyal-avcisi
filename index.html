@@ -474,6 +474,12 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
 .pwa-close-btn{background:none;border:none;color:rgba(247,246,242,.4);font-size:20px;cursor:pointer;padding:4px}
 
 /* ============================================================
+   ERİŞİLEBİLİRLİK — Büyük Yazı Modu
+   ============================================================ */
+html.a11y-buyuk-yazi{zoom:1.2}
+#a11y-btn[aria-pressed="true"]{background:var(--sl);border-color:var(--signal);color:var(--signal)}
+
+/* ============================================================
    DARK MODE
    ============================================================ */
 body.dark-mode{
@@ -729,6 +735,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
   </div>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px">📱 Yükle</button>
+<button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="darkModeToggle()" id="dark-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:16px;cursor:pointer;margin-right:6px" title="Karanlık mod">🌙</button>
 <button class="btn-nav" onclick="goTo('dashboard')" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
@@ -3969,6 +3976,25 @@ function darkModeToggle(){
       if(navBtn)nav.insertBefore(btn,navBtn);
     }
   });
+})();
+
+// ============================================================
+// 3b. ERİŞİLEBİLİRLİK — Büyük Yazı Modu (A+)
+// ============================================================
+function erisilebilirlikToggle(){
+  const aktif=document.documentElement.classList.toggle('a11y-buyuk-yazi');
+  localStorage.setItem('sa_buyuk_yazi',aktif?'1':'0');
+  const btn=document.getElementById('a11y-btn');
+  if(btn)btn.setAttribute('aria-pressed',aktif?'true':'false');
+}
+(function(){
+  if(localStorage.getItem('sa_buyuk_yazi')==='1'){
+    document.documentElement.classList.add('a11y-buyuk-yazi');
+    window.addEventListener('DOMContentLoaded',()=>{
+      const btn=document.getElementById('a11y-btn');
+      if(btn)btn.setAttribute('aria-pressed','true');
+    });
+  }
 })();
 
 // ============================================================
