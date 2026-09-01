@@ -1706,13 +1706,18 @@ var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 var sb,currentUser=null;
 function _sbInit(){
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-  sb.auth.onAuthStateChange((event,session)=>{if(session){currentUser=session.user;showUserMenu(session.user);}else{currentUser=null;showGuestMenu();}});
+  console.log('[bildirim-debug] _sbInit çalıştı, onAuthStateChange kaydediliyor');
+  sb.auth.onAuthStateChange((event,session)=>{
+    console.log('[bildirim-debug] onAuthStateChange tetiklendi. event=',event,'session var mı=',!!session);
+    if(session){currentUser=session.user;console.log('[bildirim-debug] currentUser ayarlandı:',currentUser?.email);showUserMenu(session.user);}else{currentUser=null;console.log('[bildirim-debug] currentUser null yapıldı (oturum yok)');showGuestMenu();}
+  });
 }
 // Supabase SDK script'i artık `defer` ile yükleniyor (render-blocking'i azaltmak
 // için) — bu yüzden `supabase` global'i bu satır çalıştığında henüz hazır
 // olmayabilir. Hazırsa hemen başlat, değilse `load` olayını bekle.
 if(typeof supabase!=='undefined'){_sbInit();}else{document.addEventListener('DOMContentLoaded',_sbInit);}
 function showUserMenu(u){
+  console.log('[bildirim-debug] showUserMenu çağrıldı, kullanıcı:',u?.email);
   const n=document.querySelector('.btn-nav');
   if(n){
     const ad=u.user_metadata?.ad||u.email.split('@')[0];
@@ -1724,6 +1729,7 @@ function showUserMenu(u){
   }
   // Dashboard'a otomatik scroll
   setTimeout(()=>goTo('dashboard'),300);
+  console.log('[bildirim-debug] showUserMenu: bildirimBtnGuncelle tipi=',typeof bildirimBtnGuncelle);
   if(typeof bildirimBtnGuncelle==='function')bildirimBtnGuncelle();
 }
 function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
@@ -3634,7 +3640,9 @@ async function pwaInstall(){
 const VAPID_PUBLIC_KEY='BC6wN7gXcGQrsxdc1dezT58gFia5jeBkzrTnhwwntkac5aQq67IEPwbW7g5MGw_MSpDQAfxUL5o3r5W17ZcVbuA';
 
 function bildirimDesteklerVarMi(){
-  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  const sw='serviceWorker' in navigator, pm='PushManager' in window, no='Notification' in window;
+  console.log('[bildirim-debug] bildirimDesteklerVarMi kontrolü — serviceWorker:',sw,'PushManager:',pm,'Notification:',no);
+  return sw&&pm&&no;
 }
 function urlBase64ToUint8Array(base64String){
   const padding='='.repeat((4-base64String.length%4)%4);
@@ -3643,16 +3651,18 @@ function urlBase64ToUint8Array(base64String){
   return Uint8Array.from([...rawData].map(c=>c.charCodeAt(0)));
 }
 function bildirimBtnGuncelle(){
+  console.log('[bildirim-debug] bildirimBtnGuncelle çağrıldı. currentUser=',currentUser?.email,'btn bulundu mu=',!!document.getElementById('notif-btn'));
   const btn=document.getElementById('notif-btn');
-  if(!btn)return;
-  if(!currentUser){btn.style.display='none';return;}
+  if(!btn){console.warn('[bildirim-debug] #notif-btn DOM\'da bulunamadı!');return;}
+  if(!currentUser){console.log('[bildirim-debug] currentUser yok, buton gizleniyor');btn.style.display='none';return;}
   // Görünürlük SADECE giriş durumuna bağlı — tarayıcı desteği kontrolü
   // (bildirimDesteklerVarMi) butonun ikon durumunu belirler ama onu
   // gizlemez. Eskiden ikisi tek if'te birleşikti: destek kontrolü
   // beklenmedik şekilde false dönerse (SW henüz hazır değil, farklı
   // tarayıcı/ortam vb.) buton sessizce kayboluyordu.
   btn.style.display='inline-flex';
-  if(!bildirimDesteklerVarMi())return;
+  console.log('[bildirim-debug] btn.style.display = inline-flex ayarlandı. Güncel display değeri:',btn.style.display,'computed:',getComputedStyle(btn).display);
+  if(!bildirimDesteklerVarMi()){console.log('[bildirim-debug] bildirimDesteklerVarMi=false, ikon güncellenmiyor ama buton görünür kalmalı');return;}
   (async()=>{
     try{
       const reg=await navigator.serviceWorker.ready;
@@ -3661,7 +3671,8 @@ function bildirimBtnGuncelle(){
       btn.textContent=acik?'🔔':'🔕';
       btn.setAttribute('aria-pressed',acik?'true':'false');
       btn.title=acik?'Bildirimler açık — kapatmak için tıkla':'Bildirimleri aç';
-    }catch(e){console.error('bildirimBtnGuncelle hata:',e);}
+      console.log('[bildirim-debug] ikon durumu güncellendi. abone mi=',!!sub,'izin=',Notification.permission);
+    }catch(e){console.error('[bildirim-debug] bildirimBtnGuncelle async hata:',e);}
   })();
 }
 async function bildirimToggle(){
