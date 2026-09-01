@@ -580,6 +580,33 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .sp-hafta-icerik{flex:1}
 .sp-hafta-baslik{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .sp-hafta-detay{font-size:12px;color:var(--muted);line-height:1.5}
+.sp-hafta-faz{display:inline-block;font-size:10px;font-weight:700;color:#7c3aed;background:#7c3aed15;border-radius:10px;padding:1px 8px;margin-bottom:4px;letter-spacing:.02em}
+.sp-hafta-deneme{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#d97706;font-weight:700;margin-top:4px}
+.sp-strateji{margin-top:16px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#7f1d1d,#450a0a);border:1px solid #dc2626;color:#fecaca}
+.sp-strateji-baslik{font-size:13px;font-weight:800;color:#fff;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sp-strateji-metin{font-size:13px;line-height:1.8}
+.sp-checklist{margin-top:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.sp-check-item{display:flex;align-items:center;gap:10px;padding:8px 4px;font-size:14px;color:var(--ink);cursor:pointer;border-radius:8px;transition:background-color .15s}
+.sp-check-item:hover{background:rgba(100,116,139,.08)}
+.sp-check-item input{width:18px;height:18px;accent-color:var(--signal);cursor:pointer;flex-shrink:0}
+.sp-check-item span{transition:color .15s,text-decoration .15s}
+.sp-check-item.done span{color:var(--muted);text-decoration:line-through}
+.sp-rapor{margin-top:10px;font-size:12px;color:var(--muted)}
+
+/* ACİL KURTARMA KARTI — Dashboard */
+.sk-kart{background:linear-gradient(135deg,#7f1d1d,#1e1b4b);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(127,29,29,.25)}
+.sk-kart:hover{transform:translateY(-1px)}
+.sk-kart-baslik{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.sk-kart-alt{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px}
+.sk-stat{background:rgba(255,255,255,.08);border-radius:10px;padding:10px;text-align:center}
+.sk-stat-val{font-family:'DM Serif Display',serif;font-size:20px;line-height:1}
+.sk-stat-lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
+.sk-check-mini{margin-top:12px;font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sk-check-bar{flex:1;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+.sk-check-fill{height:100%;background:#34d399;border-radius:3px;transition:width .3s}
+@media(max-width:600px){.sk-kart{padding:16px}}
+@keyframes konfetiDus{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
 
 /* SOSYAL LİDERLİK TABLOSU */
 .lb-section{padding:20px;background:linear-gradient(135deg,#fef9c3,#fef3c7);border-radius:14px;border:1px solid #fde68a}
@@ -2700,6 +2727,36 @@ const CL_KONULAR=[
     secenekler:["Provided that","Unless","As long as","In case"],
     cevap:1,
     cevapAciklama:"Cümlenin anlamı «hava düzelMEZse konser iptal edilecek» şeklindedir; yani olumsuz bir şart var. Bu anlamı «if...not» ile eşdeğer olan «unless» verir. «Provided that» ve «as long as» olumlu şart bildirdiği için buraya uymaz."
+  },
+  {
+    baslik:'Relative Clause (who/which/that)',
+    aciklama:"«who» insan, «which» nesne/hayvan, «that» ise her ikisi için kullanılabilir — ANCAK virgüllü (non-defining) relative clause'larda «that» KULLANILAMAZ, sadece «who/which» kullanılır. Virgülsüz (defining) relative clause kişiyi/nesneyi tanımlamak için ZORUNLU bilgi taşır; virgüllü (non-defining) ise çıkarılabilir EK bilgi taşır — YDS'de bu virgül farkı doğru şıkkı belirler.",
+    ornekEn:"The scientist who discovered the vaccine won a Nobel Prize. My brother, who lives in Berlin, is a doctor.",
+    ornekTr:"Aşıyı keşfeden bilim insanı Nobel Ödülü kazandı. Berlin'de yaşayan kardeşim doktor.",
+    soru:"The report, ______ was published last week, revealed alarming statistics.",
+    secenekler:["that","which","who","whom"],
+    cevap:1,
+    cevapAciklama:"Boşluktan önce VİRGÜL var, yani bu bir non-defining (virgüllü) relative clause. Virgüllü yapılarda «that» kullanılamaz. Özne «the report» (nesne) olduğu için «which» doğru cevaptır."
+  },
+  {
+    baslik:'Passive Voice (Edilgen Çatı)',
+    aciklama:"Edilgen çatı «be + V3» kalıbıyla kurulur ve eylemi YAPANDAN çok eylemin KENDİSİNE odaklanır. Fen ve akademik metinlerde özne belirsiz veya önemsiz olduğunda kullanılır. YDS'de zaman uyumuna dikkat: cümlenin zamanı (present/past/future/perfect) «be» fiiline yansır, «V3» hep aynı kalır.",
+    ornekEn:"The results were analyzed by an independent team before publication.",
+    ornekTr:"Sonuçlar, yayınlanmadan önce bağımsız bir ekip tarafından analiz edildi.",
+    soru:"The new regulations ______ next month, according to the official statement.",
+    secenekler:["will implement","will be implemented","are implementing","have implemented"],
+    cevap:1,
+    cevapAciklama:"«Regulations» (yönetmelikler) bir eylemi kendisi yapamaz, birileri tarafından «uygulanır» — yani edilgen çatı gerekir: will + be + V3 = «will be implemented». Aktif «will implement» burada özne-fiil mantığına aykırıdır."
+  },
+  {
+    baslik:'If Clause (Koşul Cümleleri)',
+    aciklama:"Type 1 (gerçek/olası): If + Present, will + V1. Type 2 (hayali/şimdiki): If + Past, would + V1 — şu an gerçek olmayan durum. Type 3 (geçmişe pişmanlık): If + Past Perfect, would have + V3 — geçmişte gerçekleşmemiş durum. YDS'nin favori tuzağı MIXED CONDITIONAL'dır: «If + Past Perfect, would + V1» — geçmişteki bir durumun ŞİMDİKİ sonucunu anlatır.",
+    ornekEn:"If she had studied medicine, she would be a doctor now.",
+    ornekTr:"Eğer tıp okusaydı, şimdi doktor olurdu.",
+    soru:"If the committee ______ the proposal earlier, the project would already be underway.",
+    secenekler:["approved","had approved","approves","would approve"],
+    cevap:1,
+    cevapAciklama:"Ana cümlede «would already be underway» (şimdiki zaman sonucu) var; if cümlesinde ise geçmişte gerçekleşmemiş bir eylem («daha erken onaylanmadı») anlatılıyor. Bu bir MIXED CONDITIONAL: If + Past Perfect (had approved) → sonuç + would + V1. Doğru cevap «had approved»dır."
   }
 ];
 let clIdx=0,clTypeTimer=null;
@@ -4075,24 +4132,12 @@ setTimeout(hataCountGuncelle, 500);
 // MEDYA MERKEZİ
 // ============================================================
 const MEDYA_KARTLAR=[
-  {ikon:'🔗',baslik:'Bağlaçlar Konu Anlatımı',aciklama:'Zıtlık sinyalini şık okumadan yakala.',renk:'#2d5be3',
-   videoId:'qaLDHT7SIRM',
-   icerik:'KURAL: although/despite/yet/however görünce → zıtlık var. Sağda ne bekliyorsun? FARKLI bir şey. Sol ve sağ TERS anlam taşımalı. ÖSYM tuzağı: aynı yönlü şıklar koyar. Sinyali gör, zıttı bul, vur!'},
-  {ikon:'🎯',baslik:'Modal Perfect Konu Anlatımı',aciklama:'must have V3 = zorunluluk DEĞİL, çıkarım.',renk:'#e03c3c',
-   videoId:'ST7p_se6Qkc',
-   icerik:'must have V3 = geçmişe dair GÜÇLÜ ÇIKARIM. should have V3 = yapmalıydı ama yapmadı. could have V3 = yapabilirdi ama yapmadı. ÖSYM bunları karıştırır. Zaman sinyaline bak!'},
-  {ikon:'📝',baslik:'Relative Clause Konu Anlatımı',aciklama:'who/which/that/whom/whose kullanımı.',renk:'#7c3aed',
-   videoId:'V8BoyN2vq_Y',
-   icerik:'Relative clause = ismi niteleyen yan cümle. WHO: insan, WHICH: nesne, THAT: her ikisi. Virgüllü relative clause = ekstra bilgi, sınavda kritik fark!'},
-  {ikon:'🔬',baslik:'Passive Voice Konu Anlatımı',aciklama:'Fen metinlerinin temel yapısı.',renk:'#059669',
-   videoId:'xAx0obWJ-qI',
-   icerik:'Fen metinlerinde neredeyse her cümle pasif yapıdadır. be + V3 = pasif. By kim yaptı sorusunu cevaplar. ÖSYM pasif-aktif dönüşüm sorar!'},
-  {ikon:'🔀',baslik:'If Clause / Conditionals',aciklama:'3. tip koşul = gerçekleşmemiş geçmiş.',renk:'#0284c7',
-   videoId:'oTWI0C9HjvU',
-   icerik:'Type 1: gerçek olabilir. Type 2: olası değil. Type 3: geçmişte olmadı. YDS tuzağı: mixed conditional! If + Past Perfect → would have done.'},
-  {ikon:'⚖️',baslik:'YDS Bağlaç Soru Çözümü',aciklama:'Gerçek ÖSYM sorularıyla pratik.',renk:'#d97706',
-   videoId:'-jk9HTB-uqs',
-   icerik:'Bağlaç sorularında: 1) Boşluğun solundaki anlam ne? 2) Sağındaki anlam ne? 3) İkisi aynı yönde mi zıt yönde mi? Sinyali gör, yapıyı doğrula, işaretle!'},
+  {ikon:'🔗',baslik:'Bağlaçlar Konu Anlatımı',aciklama:'Zıtlık sinyalini şık okumadan yakala.',renk:'#2d5be3',konuIndex:0},
+  {ikon:'🎯',baslik:'Modal Perfect Konu Anlatımı',aciklama:'must have V3 = zorunluluk DEĞİL, çıkarım.',renk:'#e03c3c',konuIndex:2},
+  {ikon:'📝',baslik:'Relative Clause Konu Anlatımı',aciklama:'who/which/that/whom kullanımı.',renk:'#7c3aed',konuIndex:5},
+  {ikon:'🔬',baslik:'Passive Voice Konu Anlatımı',aciklama:'Fen metinlerinin temel yapısı.',renk:'#059669',konuIndex:6},
+  {ikon:'🔀',baslik:'If Clause / Conditionals',aciklama:'3. tip koşul = gerçekleşmemiş geçmiş.',renk:'#0284c7',konuIndex:7},
+  {ikon:'⚖️',baslik:'YDS Bağlaç Soru Çözümü',aciklama:'Gerçek ÖSYM sorularıyla pratik.',renk:'#d97706',konuIndex:1},
 ];
 
 const AVCI_AKADEMI=[
@@ -4117,20 +4162,15 @@ function medyaRender(){
   const grid=document.getElementById('medya-grid');
   if(!grid)return;
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
-    <div onclick="medyaOyna(${i})" style="cursor:pointer;background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:20px;overflow:hidden;border:1px solid rgba(129,140,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(99,102,241,.5),0 0 30px rgba(99,102,241,.2)';this.style.borderColor='rgba(129,140,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(129,140,248,.25)'">
-      <div style="position:relative;padding-top:56.25%;background:#000;overflow:hidden">
-        <img src="https://img.youtube.com/vi/${k.videoId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${k.videoId}/mqdefault.jpg'" alt="${k.baslik}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%)"></div>
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
-          <div style="width:64px;height:64px;background:rgba(255,0,0,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,0,0,.5);transition:transform .2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-            <div style="width:0;height:0;border-top:13px solid transparent;border-bottom:13px solid transparent;border-left:22px solid #fff;margin-left:5px"></div>
-          </div>
-        </div>
-        <div style="position:absolute;top:10px;left:10px;background:${k.renk||'#2d5be3'};color:#fff;font-size:14px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">${k.etiket||'Video'}</div>
+    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:20px;overflow:hidden;border:1px solid rgba(129,140,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(99,102,241,.5),0 0 30px rgba(99,102,241,.2)';this.style.borderColor='rgba(129,140,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(129,140,248,.25)'">
+      <div style="position:relative;padding:28px 20px;background:linear-gradient(135deg,${k.renk}22,transparent);display:flex;align-items:center;justify-content:center;overflow:hidden">
+        <div style="position:absolute;top:10px;left:14px;background:${k.renk||'#2d5be3'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">🎓 CANLI DERS</div>
+        <div style="font-size:44px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))">${k.ikon}</div>
       </div>
       <div style="padding:16px">
         <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.4;letter-spacing:-.01em">${k.baslik}</div>
-        <div style="font-size:15px;color:rgba(165,180,252,.7);line-height:1.5">${k.aciklama}</div>
+        <div style="font-size:15px;color:rgba(165,180,252,.7);line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:${k.renk}">▶ Canlı Derste İzle</div>
       </div>
     </div>
   `).join('');
@@ -4164,36 +4204,11 @@ function medyaRender(){
   `).join('');
 }
 
-function medyaOyna(i){
-  const k=MEDYA_KARTLAR[i];
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px';
-  overlay.innerHTML=`
-    <div style="background:#1a1f35;border-radius:20px;max-width:560px;width:100%;position:relative;overflow:hidden">
-      <button onclick="this.closest('.medya-overlay').remove()" style="position:absolute;top:12px;right:12px;z-index:10;background:rgba(0,0,0,.6);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
-      <div style="position:relative;padding-top:56.25%;background:#000">
-        <iframe src="https://www.youtube.com/embed/${k.videoId}?autoplay=1&rel=0" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen allow="autoplay"></iframe>
-      </div>
-      <div style="padding:20px">
-        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">${k.baslik}</div>
-        <div style="font-size:15px;color:rgba(255,255,255,.5);margin-bottom:16px">${k.aciklama}</div>
-        <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:14px;font-size:15px;line-height:1.8;color:rgba(255,255,255,.8);margin-bottom:14px">${k.icerik}</div>
-        <button onclick="this.closest('.medya-overlay').remove();avciKomutGonder('SORUYU AVLA')" style="width:100%;background:${k.renk};color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🏹 KLOD ile Pratik Yap</button>
-      </div>
-    </div>
-  `;
-  overlay.className='medya-overlay';
-  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
-  document.body.appendChild(overlay);
-}
-
-function medyaTTS(i){
-  const k=MEDYA_KARTLAR[i];
-  if(!window.speechSynthesis)return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(k.baslik+'. '+k.icerik);
-  u.lang='en-US';u.rate=0.95;
-  speechSynthesis.speak(u);
+function medyaCanliDersGit(konuIndex){
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Canlı Ders'));
+  if(item)item.click();
+  if(typeof clOynatKonu==='function')clOynatKonu(konuIndex);
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
 
 function avciAkademiOyna(i){
