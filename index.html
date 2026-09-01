@@ -866,10 +866,13 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
       <div class="stat-div"></div>
       <div><div class="stat-num" data-count="90">90</div><div class="stat-lbl">Gunde sonuc</div></div>
     </div>
-    <div class="yorumlar">
+    <div class="yorumlar" id="yorumlar-track">
       <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Modal perfect'te hep takılırdım — 'must have' mi, 'might have' mi bilemedim. Sinyal metodunu öğrendikten sonra tuzağı 5 saniyede görüyorum. YDS'de 14 puan artırdım."</div><div class="yorum-kisi"><div class="yorum-av">A</div><div><div class="yorum-isim">A. Yılmaz</div><div class="yorum-unvan">Yüksek Lisans Öğrencisi - YDS 78</div></div></div></div>
       <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Hukuk metinleriyle çalışmak daha verimli. KLOD hukuki terimleri bile Türkçe açıklıyor. 3 ayda 22 puan artış — YDS zorunluluğumu tamamladım."</div><div class="yorum-kisi"><div class="yorum-av">M</div><div><div class="yorum-isim">M. Kaya</div><div class="yorum-unvan">Avukat - YDS 82</div></div></div></div>
       <div class="yorum"><div class="yorum-stars">★★★★★</div><div class="yorum-text">"Diğer platformlar 'doğru cevap B' diyordu. KLOD neden B olduğunu sinyal metoduyla gösterdi. 2 ayda YÖKDİL Sağlık'tan 91 aldım."</div><div class="yorum-kisi"><div class="yorum-av">D</div><div><div class="yorum-isim">D. Şahin</div><div class="yorum-unvan">Hemşire - YÖKDİL 91</div></div></div></div>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:Inter,sans-serif">✍️ Deneyimini Paylaş</button>
     </div>
   </div>
 </section>
@@ -1644,6 +1647,32 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
     </div>
   </div>
 </div>
+<div id="testimonial-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--surface);border-radius:20px;padding:32px;max-width:440px;width:100%;position:relative">
+    <button onclick="testimonialModalKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
+    <div style="font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:6px;color:var(--ink)">Deneyimini Paylaş</div>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6">Yorumun, ekibimiz kontrol ettikten sonra ana sayfada yayınlanır.</p>
+    <div id="testimonial-login-gerekli" style="display:none;text-align:center;padding:16px 0">
+      <p style="font-size:15px;color:var(--ink);margin-bottom:14px">Yorum bırakmak için önce giriş yapmalısın.</p>
+      <button onclick="testimonialModalKapat();openModal('Ücretsiz Hesap','0')" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Giriş yap / Kaydol</button>
+    </div>
+    <form id="testimonial-form" onsubmit="testimonialGonder(event)">
+      <input id="tm-isim" placeholder="Adın (örn: Ahmet Y.)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)">
+      <input id="tm-unvan" placeholder="Unvanın (örn: YDS Adayı, Öğretmen)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)">
+      <textarea id="tm-yorum" placeholder="Sinyal Avcısı deneyimini anlat..." required maxlength="400" rows="4" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;margin-bottom:10px;outline:none;resize:vertical;background:var(--paper);color:var(--ink)"></textarea>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px" id="tm-yildizlar">
+        <span style="font-size:13px;color:var(--muted);margin-right:6px">Puan:</span>
+        <span class="tm-star" data-v="1" onclick="tmYildizSec(1)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+        <span class="tm-star" data-v="2" onclick="tmYildizSec(2)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+        <span class="tm-star" data-v="3" onclick="tmYildizSec(3)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+        <span class="tm-star" data-v="4" onclick="tmYildizSec(4)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+        <span class="tm-star" data-v="5" onclick="tmYildizSec(5)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+      </div>
+      <button type="submit" style="width:100%;background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Gönder</button>
+      <div id="tm-msg" style="font-size:13px;text-align:center;margin-top:10px;min-height:16px"></div>
+    </form>
+  </div>
+</div>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
@@ -1676,6 +1705,105 @@ function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
 function closeMenuGoTo(id){closeMenu();setTimeout(()=>goTo(id),120);}
 function openModal(plan,price){const pn=document.getElementById('modal-plan-name');if(pn)pn.textContent=plan;const pp=document.getElementById('modal-plan-price');if(pp)pp.textContent=price+'/ay';document.getElementById('modal-body').style.display='block';document.getElementById('modal-success').style.display='none';document.getElementById('modal').classList.add('open');}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ============================================================
+// TESTIMONIAL (YORUM) GÖNDERİMİ — gerçek kullanıcı yorumları,
+// admin onayından sonra ana sayfada yayınlanır
+// ============================================================
+var _tmYildiz=5;
+function tmYildizSec(v){
+  _tmYildiz=v;
+  document.querySelectorAll('.tm-star').forEach(s=>{
+    s.style.color=parseInt(s.dataset.v)<=v?'#f59e0b':'var(--border)';
+  });
+}
+function testimonialModalAc(){
+  const overlay=document.getElementById('testimonial-modal');
+  const loginGerekli=document.getElementById('testimonial-login-gerekli');
+  const form=document.getElementById('testimonial-form');
+  if(!overlay)return;
+  overlay.style.display='flex';
+  if(currentUser){
+    loginGerekli.style.display='none';form.style.display='block';
+    const isimEl=document.getElementById('tm-isim');
+    if(isimEl&&!isimEl.value)isimEl.value=currentUser.user_metadata?.ad||'';
+    tmYildizSec(5);
+    document.getElementById('tm-msg').textContent='';
+  } else {
+    loginGerekli.style.display='block';form.style.display='none';
+  }
+}
+function testimonialModalKapat(){
+  const overlay=document.getElementById('testimonial-modal');
+  if(overlay)overlay.style.display='none';
+}
+async function testimonialGonder(e){
+  e.preventDefault();
+  if(!currentUser){testimonialModalAc();return;}
+  const isim=document.getElementById('tm-isim').value.trim();
+  const unvan=document.getElementById('tm-unvan').value.trim();
+  const yorum=document.getElementById('tm-yorum').value.trim();
+  const msg=document.getElementById('tm-msg');
+  const btn=e.target.querySelector('button[type="submit"]');
+  if(!isim||!unvan||!yorum){msg.style.color='var(--trap)';msg.textContent='Lütfen tüm alanları doldur.';return;}
+  btn.disabled=true;btn.textContent='Gönderiliyor...';
+  try{
+    const{error}=await sb.from('testimonials').insert({
+      user_id:currentUser.id,isim,unvan,yorum,yildiz:_tmYildiz
+    });
+    if(error){
+      msg.style.color='var(--trap)';
+      msg.textContent='Gönderilemedi, tekrar dene.';
+      btn.disabled=false;btn.textContent='Gönder';
+      return;
+    }
+    msg.style.color='#16a34a';
+    msg.textContent='✅ Teşekkürler! Yorumun onaylandıktan sonra yayınlanacak.';
+    setTimeout(()=>{testimonialModalKapat();document.getElementById('testimonial-form').reset();tmYildizSec(5);btn.disabled=false;btn.textContent='Gönder';msg.textContent='';},2000);
+  }catch(err){
+    msg.style.color='var(--trap)';msg.textContent='Bağlantı hatası, tekrar dene.';
+    btn.disabled=false;btn.textContent='Gönder';
+  }
+}
+async function testimonialleriYukle(){
+  const track=document.getElementById('yorumlar-track');
+  if(!track||typeof sb==='undefined')return;
+  try{
+    const{data,error}=await sb.from('testimonials')
+      .select('isim,unvan,yorum,yildiz')
+      .eq('onaylandi',true)
+      .order('created_at',{ascending:false})
+      .limit(12);
+    if(error||!data||data.length===0)return;
+    data.forEach(t=>{
+      const div=document.createElement('div');
+      div.className='yorum';
+      const stars=document.createElement('div');
+      stars.className='yorum-stars';
+      stars.textContent='★'.repeat(Math.max(1,Math.min(5,t.yildiz||5)));
+      const text=document.createElement('div');
+      text.className='yorum-text';
+      text.textContent='"'+t.yorum+'"';
+      const kisi=document.createElement('div');
+      kisi.className='yorum-kisi';
+      const av=document.createElement('div');
+      av.className='yorum-av';
+      av.textContent=(t.isim||'?').trim().charAt(0).toUpperCase();
+      const kisiSag=document.createElement('div');
+      const isimEl=document.createElement('div');
+      isimEl.className='yorum-isim';
+      isimEl.textContent=t.isim;
+      const unvanEl=document.createElement('div');
+      unvanEl.className='yorum-unvan';
+      unvanEl.textContent=t.unvan;
+      kisiSag.append(isimEl,unvanEl);
+      kisi.append(av,kisiSag);
+      div.append(stars,text,kisi);
+      track.appendChild(div);
+    });
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(testimonialleriYukle,600);});
 
 const alanKelimeler={Hukuk:['jurisdiction','liability','precedent','statute','injunction'],Sosyal:['stratification','hegemony','discourse','paradigm','socialization'],Fen:['hypothesis','catalyst','synthesis','empirical','osmosis'],Saglik:['diagnosis','prognosis','etiology','contraindication','pathogen'],Genel:['despite','however','nevertheless','by no means','far from']};
 let kelimeTimer=null,curAlan='Genel';
@@ -3671,6 +3799,7 @@ async function adminPanelKontrol() {
   adminPanelAcGiris();
 }
 
+var _admToken = null;
 async function adminPanelAcGiris() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
@@ -3694,6 +3823,7 @@ async function adminPanelAcGiris() {
     return;
   }
 
+  _admToken = session.access_token;
   adminPanelAc(kullanicilar);
 }
 
@@ -3748,6 +3878,14 @@ function adminPanelAc(kullanicilar) {
           </table>
         </div>
       </div>
+
+      <!-- BEKLEYEN YORUMLAR -->
+      <div style="background:#1a1d27;border-radius:16px;overflow:hidden;border:1px solid #232836;margin-top:20px">
+        <div style="padding:16px 20px;border-bottom:1px solid #232836">
+          <div style="font-size:14px;font-weight:700;color:#f8f7f3">✍️ Onay Bekleyen Yorumlar</div>
+        </div>
+        <div id="adm-yorumlar" style="padding:16px 20px;color:#6b7280;font-size:13px">Yükleniyor...</div>
+      </div>
     </div>
   `;
 
@@ -3764,6 +3902,77 @@ function adminPanelAc(kullanicilar) {
   document.getElementById('adm-hafta').textContent = haftaKayit.length;
 
   adminTabloRender(kullanicilar);
+  adminYorumlariYukle();
+}
+
+async function adminYorumlariYukle() {
+  const cont = document.getElementById('adm-yorumlar');
+  if (!cont || !_admToken) return;
+  try {
+    const res = await fetch('/api/admin-testimonials', {
+      headers: { 'Authorization': 'Bearer ' + _admToken }
+    });
+    if (!res.ok) { cont.textContent = 'Yorumlar alınamadı.'; return; }
+    const data = await res.json();
+    adminYorumRender(data.testimonials || []);
+  } catch (e) {
+    cont.textContent = 'Bağlantı hatası.';
+  }
+}
+
+function adminYorumRender(liste) {
+  const cont = document.getElementById('adm-yorumlar');
+  if (!cont) return;
+  cont.innerHTML = '';
+  if (liste.length === 0) {
+    cont.textContent = 'Onay bekleyen yorum yok.';
+    return;
+  }
+  liste.forEach(t => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:#111318;border:1px solid #232836;border-radius:10px;padding:14px;margin-bottom:10px';
+
+    const top = document.createElement('div');
+    top.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:8px';
+    const kisi = document.createElement('div');
+    kisi.style.cssText = 'font-size:13px;color:#f8f7f3;font-weight:700';
+    kisi.textContent = t.isim + ' — ' + t.unvan;
+    const yildiz = document.createElement('div');
+    yildiz.style.cssText = 'color:#f59e0b;font-size:13px';
+    yildiz.textContent = '★'.repeat(Math.max(1, Math.min(5, t.yildiz || 5)));
+    top.append(kisi, yildiz);
+
+    const yorumEl = document.createElement('div');
+    yorumEl.style.cssText = 'font-size:13px;color:#e8eaf0;line-height:1.6;margin-bottom:10px';
+    yorumEl.textContent = t.yorum;
+
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:8px';
+    const onayBtn = document.createElement('button');
+    onayBtn.textContent = '✅ Onayla';
+    onayBtn.style.cssText = 'background:#16a34a;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif';
+    onayBtn.onclick = () => adminYorumIslem(t.id, 'approve', card);
+    const redBtn = document.createElement('button');
+    redBtn.textContent = '✕ Reddet';
+    redBtn.style.cssText = 'background:rgba(220,38,38,.15);color:#f87171;border:1px solid rgba(220,38,38,.3);border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif';
+    redBtn.onclick = () => adminYorumIslem(t.id, 'reject', card);
+    btnRow.append(onayBtn, redBtn);
+
+    card.append(top, yorumEl, btnRow);
+    cont.appendChild(card);
+  });
+}
+
+async function adminYorumIslem(id, action, cardEl) {
+  if (!_admToken) return;
+  try {
+    const res = await fetch('/api/admin-testimonials', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _admToken },
+      body: JSON.stringify({ id, action })
+    });
+    if (res.ok && cardEl) cardEl.remove();
+  } catch (e) {}
 }
 
 let _admKullanicilar = [];
