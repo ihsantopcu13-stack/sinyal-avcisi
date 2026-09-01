@@ -1,0 +1,8 @@
+{
+  "name": "sinyal-avcisi",
+  "private": true,
+  "description": "Sinyal Avcısı — YDS & YÖKDİL hazırlık platformu (Vercel serverless API fonksiyonları için bağımlılıklar)",
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}

@@ -767,6 +767,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
   </div>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:Inter,sans-serif;margin-right:6px" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
+<button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
 <button onclick="darkModeToggle()" id="dark-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:16px;cursor:pointer;margin-right:6px" title="Karanlık mod">🌙</button>
 <button class="btn-nav" onclick="goTo('dashboard')" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
@@ -1723,8 +1724,9 @@ function showUserMenu(u){
   }
   // Dashboard'a otomatik scroll
   setTimeout(()=>goTo('dashboard'),300);
+  if(typeof bildirimBtnGuncelle==='function')bildirimBtnGuncelle();
 }
-function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
@@ -2037,6 +2039,7 @@ function dnav(el){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
+    if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
   } else if(txt.includes('Raporlar')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     main.querySelector('.dash-tabs').style.display='none';
@@ -3428,6 +3431,8 @@ function streakSoruEkle(tip){
   d.gunler[gunAnahtari]=(d.gunler[gunAnahtari]||0)+1;
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
   setTimeout(puanGuncelle,100);
+  if(typeof gunlukHedefGuncelle==='function')gunlukHedefGuncelle();
+  if(typeof aktiviteSenkronla==='function')aktiviteSenkronla(d.streak||0);
 }
 function avciKlodaGit(){avciKomutGonder('AVCI MASTER BAŞLA');}
 function avciKomutGonder(komut){
@@ -3618,6 +3623,121 @@ async function pwaInstall(){
     pwaBanner(false);
   }
   pwaPrompt=null;
+}
+
+// ============================================================
+// PUSH BİLDİRİMLERİ
+// ============================================================
+// Bu, VAPID public key'i — publishable/anon key gibi PUBLIC bilgi,
+// gizli değil (sadece eşleşen private key sunucuda, Vercel env var
+// olarak tutuluyor).
+const VAPID_PUBLIC_KEY='BC6wN7gXcGQrsxdc1dezT58gFia5jeBkzrTnhwwntkac5aQq67IEPwbW7g5MGw_MSpDQAfxUL5o3r5W17ZcVbuA';
+
+function bildirimDesteklerVarMi(){
+  return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+}
+function urlBase64ToUint8Array(base64String){
+  const padding='='.repeat((4-base64String.length%4)%4);
+  const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+  const rawData=atob(base64);
+  return Uint8Array.from([...rawData].map(c=>c.charCodeAt(0)));
+}
+async function bildirimBtnGuncelle(){
+  const btn=document.getElementById('notif-btn');
+  if(!btn||!bildirimDesteklerVarMi()||!currentUser){if(btn)btn.style.display='none';return;}
+  btn.style.display='inline-flex';
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.getSubscription();
+    const acik=!!sub&&Notification.permission==='granted';
+    btn.textContent=acik?'🔔':'🔕';
+    btn.setAttribute('aria-pressed',acik?'true':'false');
+    btn.title=acik?'Bildirimler açık — kapatmak için tıkla':'Bildirimleri aç';
+  }catch(e){}
+}
+async function bildirimToggle(){
+  const btn=document.getElementById('notif-btn');
+  if(!currentUser){alert('Bildirim açmak için önce giriş yapmalısın.');openModal('Ücretsiz Hesap','0');return;}
+  if(!bildirimDesteklerVarMi()){alert('Tarayıcın push bildirimlerini desteklemiyor.');return;}
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    const mevcut=await reg.pushManager.getSubscription();
+    if(mevcut){
+      // Kapat: hem tarayıcı aboneliğini hem Supabase kaydını sil
+      await mevcut.unsubscribe();
+      await sb.from('push_subscriptions').delete().eq('endpoint',mevcut.endpoint);
+      bildirimBtnGuncelle();
+      return;
+    }
+    const izin=await Notification.requestPermission();
+    if(izin!=='granted'){
+      if(izin==='denied')alert('Bildirim izni reddedildi. Açmak için tarayıcı site ayarlarından izin vermen gerekir.');
+      return;
+    }
+    const sub=await reg.pushManager.subscribe({
+      userVisibleOnly:true,
+      applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    });
+    const j=sub.toJSON();
+    const{error}=await sb.from('push_subscriptions').insert({
+      user_id:currentUser.id,
+      endpoint:j.endpoint,
+      p256dh:j.keys.p256dh,
+      auth:j.keys.auth
+    });
+    if(error&&error.code!=='23505'){ // 23505 = zaten kayıtlı (unique constraint), sorun değil
+      console.error('push subscribe kaydı hatası:',error);
+    }
+    bildirimBtnGuncelle();
+  }catch(e){
+    console.error('bildirimToggle hata:',e);
+    alert('Bildirim açılamadı, tekrar dene.');
+  }
+}
+// Sayfa açıkken tetiklenen YEREL bildirim (örn. günlük hedef tamamlandı) —
+// service worker üzerinden gösterilir, push aboneliği gerekmez.
+async function yerelBildirimGoster(title,body,tag){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    reg.active?.postMessage({type:'LOCAL_NOTIFY',title,body,tag});
+  }catch(e){}
+}
+
+// ── Aktivite senkronizasyonu (streak riski cron'u için) ────────────────────
+async function aktiviteSenkronla(streak){
+  if(!currentUser)return;
+  try{
+    await sb.from('user_activity').upsert({
+      user_id:currentUser.id,
+      last_active_date:new Date().toISOString().split('T')[0],
+      current_streak:streak||0,
+      updated_at:new Date().toISOString()
+    },{onConflict:'user_id'});
+  }catch(e){}
+}
+
+// ── Günlük hedef takibi ve tamamlanma bildirimi ─────────────────────────────
+const GUNLUK_HEDEF_SORU=30;
+function gunlukHedefGuncelle(){
+  const streak=streakLoad();
+  const bugunKey=new Date().toISOString().split('T')[0];
+  const bugunSoru=(streak.gunler&&streak.gunler[bugunKey])||0;
+  const yuzde=Math.min(100,Math.round((bugunSoru/GUNLUK_HEDEF_SORU)*100));
+
+  const val=document.querySelector('.dk.blue .dk-val');
+  const fill=document.querySelector('.dk.blue .dk-fill');
+  const sub=document.querySelector('.dk.blue .dk-sub');
+  if(val)val.textContent=GUNLUK_HEDEF_SORU+' soru';
+  if(fill)fill.style.width=yuzde+'%';
+  if(sub)sub.textContent=bugunSoru+' / '+GUNLUK_HEDEF_SORU+' tamamlandi';
+
+  // Hedef bugün ilk kez tamamlandıysa bildirim gönder (günde 1 kez)
+  if(bugunSoru>=GUNLUK_HEDEF_SORU&&streak.hedefBildirimGunu!==bugunKey){
+    streak.hedefBildirimGunu=bugunKey;
+    streakSave(streak);
+    yerelBildirimGoster('🎯 Günlük hedefini tamamladın!',GUNLUK_HEDEF_SORU+' soru çözdün — harika gidiyorsun, yarın da bekleriz.','sinyal-avcisi-hedef');
+  }
 }
 
 const scrollObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('[data-count]').forEach(el=>{if(!el.dataset.counted){el.dataset.counted='1';animateCount(el);}});}});},{threshold:0.05,rootMargin:"0px 0px -50px 0px"});
@@ -3947,6 +4067,20 @@ function adminPanelAc(kullanicilar) {
         </div>
         <div id="adm-yorumlar" style="padding:16px 20px;color:#6b7280;font-size:13px">Yükleniyor...</div>
       </div>
+
+      <!-- PUSH DUYURU GÖNDER -->
+      <div style="background:#1a1d27;border-radius:16px;overflow:hidden;border:1px solid #232836;margin-top:20px">
+        <div style="padding:16px 20px;border-bottom:1px solid #232836">
+          <div style="font-size:14px;font-weight:700;color:#f8f7f3">📢 Tüm Kullanıcılara Duyuru Gönder</div>
+          <div style="font-size:11px;color:#6b7280;margin-top:4px">Örn. yeni soru paketi eklendiğinde — bildirime izin veren tüm kullanıcılara push gönderilir</div>
+        </div>
+        <div style="padding:16px 20px">
+          <input id="adm-duyuru-baslik" placeholder="Başlık (örn: 🎯 50 yeni soru eklendi!)" maxlength="100" style="width:100%;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:9px 12px;font-size:13px;color:#f8f7f3;outline:none;margin-bottom:8px;font-family:Inter,sans-serif">
+          <textarea id="adm-duyuru-mesaj" placeholder="Mesaj (örn: Günlük Tuzak'a yeni sorular eklendi, hemen çöz!)" maxlength="300" rows="2" style="width:100%;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:9px 12px;font-size:13px;color:#f8f7f3;outline:none;margin-bottom:10px;font-family:Inter,sans-serif;resize:vertical"></textarea>
+          <button onclick="adminDuyuruGonder()" style="background:#4f8ef7;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">Gönder</button>
+          <span id="adm-duyuru-sonuc" style="font-size:12px;margin-left:10px;color:#6b7280"></span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -4034,6 +4168,32 @@ async function adminYorumIslem(id, action, cardEl) {
     });
     if (res.ok && cardEl) cardEl.remove();
   } catch (e) {}
+}
+
+async function adminDuyuruGonder() {
+  const baslikEl = document.getElementById('adm-duyuru-baslik');
+  const mesajEl = document.getElementById('adm-duyuru-mesaj');
+  const sonucEl = document.getElementById('adm-duyuru-sonuc');
+  const title = baslikEl.value.trim();
+  const body = mesajEl.value.trim();
+  if (!title || !body) { sonucEl.textContent = 'Başlık ve mesaj gerekli.'; sonucEl.style.color = '#f87171'; return; }
+  if (!_admToken) return;
+  if (!confirm('Bu duyuru, bildirim izni veren TÜM kullanıcılara gönderilecek. Emin misin?')) return;
+  sonucEl.textContent = 'Gönderiliyor...'; sonucEl.style.color = '#6b7280';
+  try {
+    const res = await fetch('/api/admin-broadcast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _admToken },
+      body: JSON.stringify({ title, body })
+    });
+    const data = await res.json();
+    if (!res.ok) { sonucEl.textContent = '❌ ' + (data.error || 'Gönderilemedi'); sonucEl.style.color = '#f87171'; return; }
+    sonucEl.textContent = `✅ ${data.sent}/${data.total} kullanıcıya gönderildi`;
+    sonucEl.style.color = '#16a34a';
+    baslikEl.value = ''; mesajEl.value = '';
+  } catch (e) {
+    sonucEl.textContent = 'Bağlantı hatası.'; sonucEl.style.color = '#f87171';
+  }
 }
 
 let _admKullanicilar = [];
