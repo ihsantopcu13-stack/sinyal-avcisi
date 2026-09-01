@@ -3394,7 +3394,7 @@ async function adminPanelAc() {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, email, ad, is_premium, premium_plan, premium_bitis, created_at')
+      .select('id, email, ad, created_at')
       .order('created_at', { ascending: false })
       .limit(100);
     if (!error && data) kullanicilar = data;
@@ -3415,22 +3415,18 @@ async function adminPanelAc() {
       </div>
 
       <!-- İSTATİSTİKLER -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
         <div style="background:#1a1d27;border-radius:12px;padding:16px;text-align:center">
           <div style="font-size:28px;font-weight:700;color:#4f8ef7" id="adm-toplam">-</div>
           <div style="font-size:12px;color:#6b7280;margin-top:4px">Toplam Kullanıcı</div>
         </div>
         <div style="background:#1a1d27;border-radius:12px;padding:16px;text-align:center">
-          <div style="font-size:28px;font-weight:700;color:#34d399" id="adm-premium">-</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:4px">Premium Üye</div>
+          <div style="font-size:28px;font-weight:700;color:#34d399" id="adm-bugun">-</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px">Bugün Katılan</div>
         </div>
         <div style="background:#1a1d27;border-radius:12px;padding:16px;text-align:center">
-          <div style="font-size:28px;font-weight:700;color:#fb923c" id="adm-bugun">-</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:4px">Bugün Kayıt</div>
-        </div>
-        <div style="background:#1a1d27;border-radius:12px;padding:16px;text-align:center">
-          <div style="font-size:28px;font-weight:700;color:#a78bfa" id="adm-gelir">-</div>
-          <div style="font-size:12px;color:#6b7280;margin-top:4px">Aylık Gelir (TL)</div>
+          <div style="font-size:28px;font-weight:700;color:#fb923c" id="adm-hafta">-</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px">Bu Hafta Katılan</div>
         </div>
       </div>
 
@@ -3445,36 +3441,14 @@ async function adminPanelAc() {
             <thead>
               <tr style="background:#111318">
                 <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">E-POSTA</th>
-                <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">DURUM</th>
-                <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">PAKET</th>
-                <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">BİTİŞ</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">AD</th>
+                <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">KATILDI</th>
                 <th style="padding:12px 16px;text-align:left;font-size:11px;color:#6b7280;font-family:'JetBrains Mono',monospace;letter-spacing:.08em;font-weight:400">İŞLEM</th>
               </tr>
             </thead>
             <tbody id="adm-tbody"></tbody>
           </table>
         </div>
-      </div>
-
-      <!-- MANUEL PREMIUM AKTİF -->
-      <div style="background:#1a1d27;border-radius:16px;padding:20px;margin-top:16px;border:1px solid #232836">
-        <div style="font-size:14px;font-weight:700;color:#f8f7f3;margin-bottom:14px">⚡ Manuel Premium Aktifleştir</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <input id="adm-email-input" placeholder="kullanici@email.com" style="flex:1;min-width:200px;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:10px 14px;font-size:14px;color:#f8f7f3;outline:none">
-          <select id="adm-plan-select" style="background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:10px 14px;font-size:14px;color:#f8f7f3;outline:none">
-            <option value="Temel Sinyal">Temel Sinyal — 199 TL</option>
-            <option value="Pro YDS & YÖKDİL" selected>Pro YDS & YÖKDİL — 399 TL</option>
-            <option value="Sinyal Avcısı VIP">Sinyal Avcısı VIP — 699 TL</option>
-          </select>
-          <select id="adm-sure-select" style="background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:10px 14px;font-size:14px;color:#f8f7f3;outline:none">
-            <option value="30">1 Ay</option>
-            <option value="90">3 Ay</option>
-            <option value="180">6 Ay</option>
-            <option value="365">1 Yıl</option>
-          </select>
-          <button onclick="adminPremiumAktif()" style="background:#34d399;color:#0a0c10;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">✅ Aktifleştir</button>
-        </div>
-        <div id="adm-sonuc" style="margin-top:10px;font-size:13px;min-height:20px"></div>
       </div>
     </div>
   `;
@@ -3483,17 +3457,13 @@ async function adminPanelAc() {
 
   // İstatistikleri doldur
   const bugun = new Date().toISOString().split('T')[0];
-  const premiumlar = kullanicilar.filter(k => k.is_premium);
+  const haftaBasi = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
   const bugunKayit = kullanicilar.filter(k => k.created_at?.startsWith(bugun));
-  const gelir = premiumlar.reduce((t, k) => {
-    const fiyatlar = {'Temel Sinyal': 199, 'Pro YDS & YÖKDİL': 399, 'Sinyal Avcısı VIP': 699};
-    return t + (fiyatlar[k.premium_plan] || 0);
-  }, 0);
+  const haftaKayit = kullanicilar.filter(k => k.created_at >= haftaBasi);
 
   document.getElementById('adm-toplam').textContent = kullanicilar.length;
-  document.getElementById('adm-premium').textContent = premiumlar.length;
   document.getElementById('adm-bugun').textContent = bugunKayit.length;
-  document.getElementById('adm-gelir').textContent = gelir.toLocaleString('tr-TR');
+  document.getElementById('adm-hafta').textContent = haftaKayit.length;
 
   adminTabloRender(kullanicilar);
 }
@@ -3504,22 +3474,16 @@ function adminTabloRender(liste) {
   const tbody = document.getElementById('adm-tbody');
   if (!tbody) return;
   if (liste.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="padding:24px;text-align:center;color:#6b7280;font-size:14px">Henüz kullanıcı yok</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" style="padding:24px;text-align:center;color:#6b7280;font-size:14px">Henüz kullanıcı yok</td></tr>`;
     return;
   }
   tbody.innerHTML = liste.map(k => `
     <tr style="border-top:1px solid #232836;transition:background .15s" onmouseover="this.style.background='#111318'" onmouseout="this.style.background=''">
       <td style="padding:12px 16px;font-size:13px;color:#e8eaf0">${k.email || '-'}</td>
+      <td style="padding:12px 16px;font-size:13px;color:#6b7280">${k.ad || '-'}</td>
+      <td style="padding:12px 16px;font-size:12px;color:#6b7280;font-family:'JetBrains Mono',monospace">${k.created_at ? k.created_at.split('T')[0] : '-'}</td>
       <td style="padding:12px 16px">
-        <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${k.is_premium ? 'background:#dcfce7;color:#15803d' : 'background:#f1f5f9;color:#64748b'}">
-          ${k.is_premium ? '⭐ Premium' : 'Ücretsiz'}
-        </span>
-      </td>
-      <td style="padding:12px 16px;font-size:13px;color:#6b7280">${k.premium_plan || '-'}</td>
-      <td style="padding:12px 16px;font-size:12px;color:#6b7280;font-family:'JetBrains Mono',monospace">${k.premium_bitis ? k.premium_bitis.split('T')[0] : '-'}</td>
-      <td style="padding:12px 16px;display:flex;gap:6px">
-        ${!k.is_premium ? `<button onclick="adminHizliPremium('${k.email}')" style="background:#4f8ef7;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">⚡ Premium Yap</button>` : `<button onclick="adminPremiumKaldir('${k.email}')" style="background:#374151;color:#9ca3af;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">İptal</button>`}
-        <button onclick="adminWaAc('${k.email}')" style="background:#25d366;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">📱</button>
+        <button onclick="adminWaAc('${k.email}')" style="background:#25d366;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:Inter,sans-serif">📱 İletişim</button>
       </td>
     </tr>
   `).join('');
@@ -3528,50 +3492,6 @@ function adminTabloRender(liste) {
 function adminAra() {
   const q = document.getElementById('adm-ara')?.value?.toLowerCase() || '';
   adminTabloRender(_admKullanicilar.filter(k => (k.email || '').toLowerCase().includes(q)));
-}
-
-async function adminPremiumAktif() {
-  const email = document.getElementById('adm-email-input')?.value?.trim();
-  const plan = document.getElementById('adm-plan-select')?.value;
-  const sure = parseInt(document.getElementById('adm-sure-select')?.value || '30');
-  const sonuc = document.getElementById('adm-sonuc');
-  if (!email) { sonuc.innerHTML = '<span style="color:#f87171">❌ E-posta girin</span>'; return; }
-  sonuc.innerHTML = '<span style="color:#fbbf24">⏳ İşleniyor...</span>';
-  const bitis = new Date(Date.now() + sure * 24 * 3600 * 1000).toISOString();
-  try {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ is_premium: true, premium_plan: plan, premium_bitis: bitis })
-      .eq('email', email);
-    if (error) throw error;
-    sonuc.innerHTML = `<span style="color:#34d399">✅ ${email} — ${plan} — ${sure} gün aktif edildi!</span>`;
-    document.getElementById('adm-email-input').value = '';
-  } catch(e) {
-    sonuc.innerHTML = `<span style="color:#f87171">❌ Hata: ${e.message}</span>`;
-  }
-}
-
-async function adminHizliPremium(email) {
-  const bitis = new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString();
-  try {
-    await supabase.from('profiles').update({ is_premium: true, premium_plan: 'Pro YDS & YÖKDİL', premium_bitis: bitis }).eq('email', email);
-    const d = document.createElement('div');
-    d.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:99999;background:#34d399;color:#0a0c10;padding:10px 24px;border-radius:10px;font-size:14px;font-weight:700;font-family:Inter,sans-serif';
-    d.textContent = '✅ ' + email + ' Premium yapıldı!';
-    document.body.appendChild(d);
-    setTimeout(() => d.remove(), 3000);
-    adminPanelAc(); // Yenile
-    document.getElementById('admin-panel')?.remove();
-  } catch(e) { alert('Hata: ' + e.message); }
-}
-
-async function adminPremiumKaldir(email) {
-  if (!confirm(email + ' kullanıcısının premiumunu kaldır?')) return;
-  try {
-    await supabase.from('profiles').update({ is_premium: false, premium_plan: null, premium_bitis: null }).eq('email', email);
-    adminPanelAc();
-    document.getElementById('admin-panel')?.remove();
-  } catch(e) { alert('Hata: ' + e.message); }
 }
 
 function adminWaAc(email) {
