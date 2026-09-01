@@ -3642,18 +3642,27 @@ function urlBase64ToUint8Array(base64String){
   const rawData=atob(base64);
   return Uint8Array.from([...rawData].map(c=>c.charCodeAt(0)));
 }
-async function bildirimBtnGuncelle(){
+function bildirimBtnGuncelle(){
   const btn=document.getElementById('notif-btn');
-  if(!btn||!bildirimDesteklerVarMi()||!currentUser){if(btn)btn.style.display='none';return;}
+  if(!btn)return;
+  if(!currentUser){btn.style.display='none';return;}
+  // Görünürlük SADECE giriş durumuna bağlı — tarayıcı desteği kontrolü
+  // (bildirimDesteklerVarMi) butonun ikon durumunu belirler ama onu
+  // gizlemez. Eskiden ikisi tek if'te birleşikti: destek kontrolü
+  // beklenmedik şekilde false dönerse (SW henüz hazır değil, farklı
+  // tarayıcı/ortam vb.) buton sessizce kayboluyordu.
   btn.style.display='inline-flex';
-  try{
-    const reg=await navigator.serviceWorker.ready;
-    const sub=await reg.pushManager.getSubscription();
-    const acik=!!sub&&Notification.permission==='granted';
-    btn.textContent=acik?'🔔':'🔕';
-    btn.setAttribute('aria-pressed',acik?'true':'false');
-    btn.title=acik?'Bildirimler açık — kapatmak için tıkla':'Bildirimleri aç';
-  }catch(e){}
+  if(!bildirimDesteklerVarMi())return;
+  (async()=>{
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      const sub=await reg.pushManager.getSubscription();
+      const acik=!!sub&&Notification.permission==='granted';
+      btn.textContent=acik?'🔔':'🔕';
+      btn.setAttribute('aria-pressed',acik?'true':'false');
+      btn.title=acik?'Bildirimler açık — kapatmak için tıkla':'Bildirimleri aç';
+    }catch(e){console.error('bildirimBtnGuncelle hata:',e);}
+  })();
 }
 async function bildirimToggle(){
   const btn=document.getElementById('notif-btn');
