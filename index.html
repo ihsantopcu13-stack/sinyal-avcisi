@@ -599,8 +599,9 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 
 /* CANLI DERS — Yeşil Tahta */
 .cl-progress{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.cl-sahne{display:flex;align-items:flex-end;gap:14px}
-.cl-ogretmen{flex:0 0 128px;width:128px;align-self:flex-end;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+.tahta-wrap{background:#0b3d2e;background-image:radial-gradient(circle at 18% 15%,rgba(255,255,255,.035),transparent 55%),radial-gradient(circle at 82% 75%,rgba(255,255,255,.03),transparent 55%);border-radius:14px;padding:26px 24px 30px;border:12px solid #5c4030;box-shadow:inset 0 0 50px rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.28);position:relative;min-height:340px;overflow:hidden}
+.tahta-wrap::after{content:'';position:absolute;left:16px;right:16px;bottom:8px;height:9px;background:linear-gradient(180deg,#7a5638,#5c4030);border-radius:0 0 6px 6px;box-shadow:0 2px 4px rgba(0,0,0,.3);z-index:1}
+.cl-ogretmen{position:absolute;left:-6px;bottom:10px;width:200px;z-index:2;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4));pointer-events:none}
 .cl-ogretmen svg{width:100%;height:auto;display:block}
 #cl-kol{transform-origin:128px 172px}
 #cl-el{transform-origin:160px 90px}
@@ -612,8 +613,7 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 #cl-goz-kapak-sag{animation-delay:.05s}
 @keyframes clKirpma{0%,92%,100%{opacity:0}94%,97%{opacity:1}}
 #cl-agiz{transition:ry .06s linear}
-.tahta-wrap{flex:1;min-width:0;background:#0b3d2e;background-image:radial-gradient(circle at 18% 15%,rgba(255,255,255,.035),transparent 55%),radial-gradient(circle at 82% 75%,rgba(255,255,255,.03),transparent 55%);border-radius:14px;padding:26px 24px 30px;border:12px solid #5c4030;box-shadow:inset 0 0 50px rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.28);position:relative;min-height:180px}
-.tahta-wrap::after{content:'';position:absolute;left:16px;right:16px;bottom:8px;height:9px;background:linear-gradient(180deg,#7a5638,#5c4030);border-radius:0 0 6px 6px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.tahta-icerik{position:relative;z-index:1;padding-left:210px}
 .tahta-blok{margin-bottom:18px}
 .tahta-blok:last-child{margin-bottom:0}
 .tahta-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8fd9b6;margin-bottom:6px;opacity:.85}
@@ -633,14 +633,19 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 .cl-btn-ghost{background:transparent;border:1px solid var(--border);color:var(--ink)}
 .cl-btn-ghost:hover{background:rgba(100,116,139,.1)}
 @media(max-width:600px){
-  .cl-sahne{flex-direction:column;align-items:center}
-  .cl-ogretmen{flex:none;width:84px;align-self:center;margin-bottom:-6px}
-  .tahta-wrap{padding:20px 16px 24px;border-width:8px}
-  .tahta-metin{font-size:21px}
-  .tahta-metin-tr{font-size:17px}
+  .tahta-wrap{padding:20px 16px 24px;border-width:8px;min-height:280px}
+  .cl-ogretmen{width:150px;left:-6px;bottom:8px}
+  .tahta-icerik{padding-left:158px}
+  .tahta-metin{font-size:19px}
+  .tahta-metin-tr{font-size:16px}
   .cl-secenekler{grid-template-columns:1fr}
   .cl-kontrol{flex-direction:column}
   .cl-btn{width:100%}
+}
+@media(max-width:380px){
+  .tahta-wrap{min-height:250px}
+  .cl-ogretmen{width:112px}
+  .tahta-icerik{padding-left:118px}
 }
 
 /* MODAL - Ders Oynatıcı */
@@ -2664,7 +2669,7 @@ let clIdx=0,clTypeTimer=null;
 function clModulHTML(){
   return `
     <div class="cl-progress" id="cl-progress"></div>
-    <div class="cl-sahne">
+    <div class="tahta-wrap">
       <div class="cl-ogretmen" id="cl-ogretmen">
         <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
           <ellipse cx="100" cy="292" rx="52" ry="7" fill="#000" opacity=".18"/>
@@ -2709,7 +2714,7 @@ function clModulHTML(){
           <ellipse id="cl-agiz" cx="100" cy="94" rx="9" ry="2" fill="#a94a5e"/>
         </svg>
       </div>
-      <div class="tahta-wrap">
+      <div class="tahta-icerik">
         <div class="tahta-blok" id="cl-blok-aciklama">
           <div class="tahta-lbl">📖 AÇIKLAMA</div>
           <div class="tahta-metin" id="cl-metin-aciklama"></div>
