@@ -306,7 +306,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .kk-btn{border:none;border-radius:8px;padding:9px 18px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
 .kk-hard{background:#fef2f2;color:var(--trap)}.kk-ok{background:var(--sl);color:var(--signal)}.kk-easy{background:#f0fdf4;color:#16a34a}
 .tuzak-q{font-size:15px;font-weight:600;margin-bottom:7px;color:var(--ink)}
-.tuzak-sent{font-size:15px;font-weight:500;color:#0c0e14;background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:11px 13px;margin-bottom:10px;line-height:1.7}
+.tuzak-sent{font-size:15px;font-weight:500;color:var(--ink);background:var(--paper);border:1px solid var(--border);border-radius:8px;padding:11px 13px;margin-bottom:10px;line-height:1.7;transition:background-color .35s ease,color .35s ease,border-color .35s ease}
 .tuzak-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .tuzak-opt{background:transparent;border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;cursor:pointer;color:var(--ink)}
 .tuzak-opt:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
@@ -640,6 +640,44 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 .yol-node.kilitli:hover{transform:none}
 .yol-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative}
 
+/* ============================================================
+   YENİ ANİMASYONLAR — Hero uçuşan sorular, konfeti/coin/streak,
+   soru kartı hover efektleri, dark/light mode geçişi
+   ============================================================ */
+.hero{position:relative}
+.hero>div:not(.hero-floaters){position:relative;z-index:1}
+.hero-floaters{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.hero-float-q{position:absolute;font-family:'DM Serif Display',serif;color:var(--signal);opacity:.1;font-weight:700;user-select:none;animation-name:heroFloat;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+.hero-float-word{position:absolute;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--trap);background:#fef2f2;padding:4px 10px;border-radius:20px;opacity:.4;user-select:none;animation-name:heroFloat;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+body.dark-mode .hero-float-word{background:#3a1414;color:#f87171}
+@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(6deg)}}
+
+/* Streak ateşi */
+.streak-fire{display:inline-block;animation:fireFlicker 1.6s ease-in-out infinite;transform-origin:center bottom}
+@keyframes fireFlicker{0%,100%{transform:scale(1) rotate(-3deg)}25%{transform:scale(1.08) rotate(2deg)}50%{transform:scale(.94) rotate(-2deg)}75%{transform:scale(1.05) rotate(3deg)}}
+
+/* Soru kartlarına hover efekti */
+.tuzak-opt,.dmo,.sat-opt{transition:all .18s cubic-bezier(.4,0,.2,1)}
+.tuzak-opt:hover:not(:disabled),.dmo:hover:not(:disabled),.sat-opt:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.kk{transition:all .18s cubic-bezier(.4,0,.2,1)}
+.kk:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.popt-btn:hover:not(:disabled){border-color:var(--signal)!important;background:var(--sl)!important;transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+
+/* Yanlış cevapta sallanma efekti */
+.sa-shake{animation:saShake .4s ease}
+@keyframes saShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* XP kazanınca coin uçuşu */
+@keyframes coinFlyUp{0%{transform:translate(0,0) rotate(0deg) scale(1);opacity:1}100%{transform:translate(var(--coin-x,0),-140px) rotate(360deg) scale(.6);opacity:0}}
+
+/* Dark/Light mode geçişini yumuşat */
+body{transition:background-color .35s ease,color .35s ease}
+nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yorum,.modal,.nav-links span,.step,.klod-feat-item,.dash-main,.dtab,input,textarea,.sss-q,.sss-a,.sss,.section-title,.fc-btn,table,td,th,#podcast-liste div,#podcast-liste .dinle-btn,.hata-item,.hata-item-word,.tool-chip,.micro-lesson-card,.radar-section,.plan-section,.lb-section,.hata-analiz,.hero-badge{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+#dark-btn{transition:transform .25s ease}
+#dark-btn:hover{transform:scale(1.15) rotate(-8deg)}
+#dark-btn.dark-btn-spin{animation:darkBtnSpin .45s ease}
+@keyframes darkBtnSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.35)}100%{transform:rotate(360deg) scale(1)}}
+
 </style>
 </head>
 <body>
@@ -701,6 +739,16 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   <a onclick="goTo('dashboard');closeMenu()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
+  <div class="hero-floaters" aria-hidden="true">
+    <span class="hero-float-q" style="left:2%;top:3%;font-size:40px;animation-delay:0s;animation-duration:7s">?</span>
+    <span class="hero-float-q" style="left:93%;top:5%;font-size:46px;animation-delay:1.2s;animation-duration:9s">?</span>
+    <span class="hero-float-q" style="left:6%;top:13%;font-size:28px;animation-delay:.6s;animation-duration:8s">?</span>
+    <span class="hero-float-q" style="left:90%;top:91%;font-size:36px;animation-delay:2s;animation-duration:10s">?</span>
+    <span class="hero-float-q" style="left:47%;top:2%;font-size:22px;animation-delay:1.6s;animation-duration:7.5s">?</span>
+    <span class="hero-float-word" style="left:2%;top:8%;animation-delay:.4s;animation-duration:9s">despite</span>
+    <span class="hero-float-word" style="left:76%;top:93%;animation-delay:1.8s;animation-duration:8.5s">however</span>
+    <span class="hero-float-word" style="left:38%;top:94%;animation-delay:1s;animation-duration:9.5s">must have</span>
+  </div>
   <div>
     <div style="margin-bottom:24px">
       <span style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;font-size:14px;font-weight:800;padding:8px 20px;border-radius:30px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(180,120,0,.25);animation:badgePulse 2.5s ease-in-out infinite">
@@ -1572,8 +1620,8 @@ function demoAns(btn,correct){
   if(demoAnswered)return;demoAnswered=true;
   const opts=document.querySelectorAll('#dopts .dopt');opts.forEach(o=>o.disabled=true);
   const d=ALAN[curAlan];const fb=document.getElementById('dfb');
-  if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent='✅ '+d.exp;}
-  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='❌ Yanlis. '+d.exp;}
+  if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent='✅ '+d.exp;if(typeof konfeti==='function')konfeti();}
+  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='❌ Yanlis. '+d.exp;if(typeof saShakeBtn==='function')saShakeBtn(btn);}
   document.getElementById('dnext').style.display='inline';
 }
 function demoNext(){
@@ -1925,8 +1973,10 @@ function dAns(btn,correct){
   if(correct){
     btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('sinyal');
+    if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
   }
   if(nextBtn)nextBtn.style.display='inline-block';
@@ -2121,8 +2171,10 @@ function tuzakAns(btn,correct,dogru){
   if(correct){
     btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('tuzak');
+    if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    if(typeof saShakeBtn==='function')saShakeBtn(btn);
     // Hata defterine ekle
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
   }
@@ -2732,7 +2784,7 @@ function paragrafSec(idx){
           <div style="font-size:14px;font-weight:700;color:var(--signal);margin-bottom:8px">SORU ${si+1}</div>
           <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:14px">${s.q}</div>
           <div style="display:flex;flex-direction:column;gap:8px">
-            ${s.opts.map((o,oi)=>`<button onclick="paragrafCevapla(${idx},${si},${oi},${s.ans})" id="popt-${idx}-${si}-${oi}" style="text-align:left;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;background:#fff;font-family:Inter,sans-serif;transition:all .2s">${String.fromCharCode(65+oi)}) ${o}</button>`).join('')}
+            ${s.opts.map((o,oi)=>`<button class="popt-btn" onclick="paragrafCevapla(${idx},${si},${oi},${s.ans})" id="popt-${idx}-${si}-${oi}" style="text-align:left;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;background:#fff;font-family:Inter,sans-serif;transition:all .2s">${String.fromCharCode(65+oi)}) ${o}</button>`).join('')}
           </div>
           <div id="pfb-${idx}-${si}" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:14px;line-height:1.6"></div>
         </div>
@@ -2769,8 +2821,13 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
     fb.innerHTML=(dogru_mu?'✅ <b>Doğru!</b> ':'❌ <b>Yanlış.</b> ')+s.fb;
   }
   
-  if(dogru_mu)streakSoruEkle('sinyal');
-  else hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
+  if(dogru_mu){
+    streakSoruEkle('sinyal');
+    if(typeof konfeti==='function')konfeti();
+  } else {
+    hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
+    if(typeof saShakeBtn==='function')saShakeBtn(document.getElementById('popt-'+pidx+'-'+sidx+'-'+oidx));
+  }
 }
 
 // Paragraf modülü ilk yüklemede seçim yap
@@ -2920,6 +2977,7 @@ function xpKazan(tip,streak){
   d.hafta=(d.hafta||0)+puan;
   xpSave(d);
   xpBildirim(puan,tip);
+  if(typeof coinFly==='function')coinFly();
   seviyeKontrol(d.toplam);
   liderTabloGuncelle(d);
   return puan;
@@ -3700,8 +3758,8 @@ function miniQuizGoster(){
         btn.onclick=()=>{
           const i=parseInt(btn.dataset.i);
           overlay.querySelectorAll('#mq-opts button').forEach(b=>b.style.pointerEvents='none');
-          if(i===s.ans){btn.style.background='#f0fdf4';btn.style.color='#16a34a';dogru++;document.getElementById('mq-fb').innerHTML='<span style=color:#16a34a>✅ Doğru! </span>'+s.fb;}
-          else{btn.style.background='#fef2f2';btn.style.color='var(--trap)';document.getElementById('mq-fb').innerHTML='<span style=color:var(--trap)>❌ </span>'+s.fb;}
+          if(i===s.ans){btn.style.background='#f0fdf4';btn.style.color='#16a34a';dogru++;document.getElementById('mq-fb').innerHTML='<span style=color:#16a34a>✅ Doğru! </span>'+s.fb;if(typeof konfeti==='function')konfeti();}
+          else{btn.style.background='#fef2f2';btn.style.color='var(--trap)';document.getElementById('mq-fb').innerHTML='<span style=color:var(--trap)>❌ </span>'+s.fb;if(typeof saShakeBtn==='function')saShakeBtn(btn);}
           document.getElementById('mq-next').style.display='block';
           document.getElementById('mq-next').onclick=()=>{idx++;render();};
         };
@@ -3806,10 +3864,12 @@ function sinavSimulatoruAc(){
 function darkModeToggle(){
   const isDark=document.body.classList.toggle('dark-mode');
   const darkBtn=document.getElementById('dark-btn');
-  if(darkBtn)darkBtn.textContent=isDark?'☀️':'🌙';
+  if(darkBtn){
+    darkBtn.textContent=isDark?'☀️':'🌙';
+    darkBtn.classList.add('dark-btn-spin');
+    setTimeout(()=>darkBtn.classList.remove('dark-btn-spin'),450);
+  }
   localStorage.setItem('sa_dark',isDark?'1':'0');
-  const btn=document.getElementById('dark-btn');
-  if(btn)btn.textContent=isDark?'☀️':'🌙';
 }
 (function(){
   const saved=localStorage.getItem('sa_dark');
@@ -3914,6 +3974,26 @@ function konfeti(renk){
 const konfStyle=document.createElement('style');
 konfStyle.textContent='@keyframes konfetiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}';
 document.head.appendChild(konfStyle);
+
+// Yanlış cevapta sallanma efekti
+function saShakeBtn(btn){
+  if(!btn)return;
+  btn.classList.add('sa-shake');
+  setTimeout(()=>btn.classList.remove('sa-shake'),450);
+}
+
+// XP kazanınca coin uçuşu (xpKazan içinden çağrılır)
+function coinFly(){
+  const count=6+Math.floor(Math.random()*3);
+  for(let i=0;i<count;i++){
+    const el=document.createElement('div');
+    const drift=Math.round(Math.random()*160-80)+'px';
+    el.textContent='🪙';
+    el.style.cssText=`position:fixed;top:118px;right:${40+Math.random()*40}px;font-size:${16+Math.random()*10}px;z-index:9998;pointer-events:none;--coin-x:${drift};animation:coinFlyUp ${.8+Math.random()*.6}s ease-out forwards;animation-delay:${(i*0.05).toFixed(2)}s`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1800);
+  }
+}
 
 // ============================================================
 // 8. ÇALIŞMA SÜRESİ SAYACI (Pomodoro)
