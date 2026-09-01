@@ -31,7 +31,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -618,6 +618,37 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 .micro-progress{height:3px;background:rgba(255,255,255,.1);margin-top:10px;border-radius:2px}
 .micro-progress-fill{height:100%;background:linear-gradient(90deg,var(--signal),#818cf8);border-radius:2px;transition:width .3s}
 
+/* CANLI DERS — Yeşil Tahta */
+.cl-progress{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tahta-wrap{background:#0b3d2e;background-image:radial-gradient(circle at 18% 15%,rgba(255,255,255,.035),transparent 55%),radial-gradient(circle at 82% 75%,rgba(255,255,255,.03),transparent 55%);border-radius:14px;padding:26px 24px 30px;border:12px solid #5c4030;box-shadow:inset 0 0 50px rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.28);position:relative;min-height:180px}
+.tahta-wrap::after{content:'';position:absolute;left:16px;right:16px;bottom:8px;height:9px;background:linear-gradient(180deg,#7a5638,#5c4030);border-radius:0 0 6px 6px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.tahta-blok{margin-bottom:18px}
+.tahta-blok:last-child{margin-bottom:0}
+.tahta-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8fd9b6;margin-bottom:6px;opacity:.85}
+.tahta-metin{font-family:'Caveat',cursive;font-weight:600;color:#f4f1e8;font-size:26px;line-height:1.55;white-space:pre-wrap;word-break:break-word;min-height:1.55em}
+.tahta-metin-tr{font-family:'Caveat',cursive;font-weight:500;color:#c9e8d8;font-size:20px;line-height:1.5;margin-top:2px;opacity:.9;white-space:pre-wrap}
+.tahta-metin.cl-cursor::after{content:'';display:inline-block;width:3px;height:1em;background:#f4f1e8;margin-left:2px;vertical-align:text-bottom;animation:clBlink .85s steps(1) infinite}
+@keyframes clBlink{50%{opacity:0}}
+.cl-secenekler{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.cl-secenek{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);color:#f4f1e8;border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .15s}
+.cl-secenek:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32)}
+.cl-secenek:disabled{cursor:default}
+.cl-secenek.cl-dogru{background:rgba(16,185,129,.22);border-color:#10b981;color:#a7f3d0}
+.cl-secenek.cl-yanlis{background:rgba(220,38,38,.22);border-color:#dc2626;color:#fecaca}
+.cl-kontrol{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.cl-btn{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:11px 20px;border-radius:9px;cursor:pointer;border:none;transition:all .15s}
+.cl-btn-primary{background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#fff}
+.cl-btn-ghost{background:transparent;border:1px solid var(--border);color:var(--ink)}
+.cl-btn-ghost:hover{background:rgba(100,116,139,.1)}
+@media(max-width:600px){
+  .tahta-wrap{padding:20px 16px 24px;border-width:8px}
+  .tahta-metin{font-size:21px}
+  .tahta-metin-tr{font-size:17px}
+  .cl-secenekler{grid-template-columns:1fr}
+  .cl-kontrol{flex-direction:column}
+  .cl-btn{width:100%}
+}
+
 /* MODAL - Ders Oynatıcı */
 .ders-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 .ders-modal.open{display:flex}
@@ -1033,6 +1064,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')">📊 İstatistiklerim</div>
+          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')">🎓 Canlı Ders</div>
           <div style="height:1px;background:linear-gradient(90deg,transparent,#a78bfa55,transparent);margin:10px 14px"></div>
           <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
         </div>
@@ -1062,6 +1094,7 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
           <div class="dtab" onclick="dtab(this,'mikro')">🎬 Mini Dersler</div>
           <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800">🌍 Dil Avcısı</div>
           <div class="dtab" onclick="dtab(this,'istatistik')">📊 İstatistiklerim</div>
+          <div class="dtab" onclick="dtab(this,'canliders')">🎓 Canlı Ders</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
@@ -1359,6 +1392,12 @@ nav,.demo-card,.fc,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item
         <div class="dmod" id="mod-mikro" style="display:none">
           <div class="dm-eye">🎬 MİNİ DERSLER — Her biri 2-3 dakika</div>
           <div id="mikro-liste" style="margin-top:14px;display:grid;gap:10px"></div>
+        </div>
+
+        <!-- CANLI DERS (yeşil tahta — sesli + yazarak anlatım) -->
+        <div class="dmod" id="mod-canliders" style="display:none">
+          <div class="dm-eye">🎓 CANLI DERS — Yeşil tahtada sesli konu anlatımı</div>
+          <div id="canliders-container"></div>
         </div>
 
         <!-- İSTATİSTİKLERİM -->
@@ -2010,7 +2049,20 @@ function satPaylas(yuzde){
 function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clearInterval(satTimer);satPratikRender();}
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
+  const clAcikKen=document.getElementById('mod-canliders');
+  if(mod!=='canliders'&&clAcikKen&&clAcikKen.style.display==='block'&&typeof clDurdur==='function')clDurdur();
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
+  if(mod==='canliders'){
+    const clEl=document.getElementById('mod-canliders');
+    if(clEl)clEl.style.display='block';
+    const clContainer=document.getElementById('canliders-container');
+    if(clContainer&&!clContainer.dataset.loaded){
+      clContainer.innerHTML=clModulHTML();
+      clContainer.dataset.loaded='1';
+      clOynatKonu(0);
+    }
+    return;
+  }
   if(mod==='paragraf'){
     const paragrafEl=document.getElementById('mod-paragraf');
     if(paragrafEl){paragrafEl.style.display='block';}
@@ -2620,6 +2672,149 @@ function seekPlayer(e){const b=e.currentTarget;pFill=(e.offsetX/b.offsetWidth)*1
 function playerSpeed(s,el){pSpeed=s;document.querySelectorAll('.p-speed').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(pPlaying){playerStop();pTTS();}}
 function setSesMod(el){document.querySelectorAll('.ses-mode').forEach(m=>m.classList.remove('active'));el.classList.add('active');}
 pUpdate();
+
+// ==== CANLI DERS — Yeşil Tahta Modülü ====
+const CL_KONULAR=[
+  {
+    baslik:'despite / although',
+    aciklama:"«despite» ve «in spite of» kendinden sonra bir İSİM ya da İSİM-FİİL (gerund) alır, asla özne+fiil içeren bir CÜMLE alamaz. «although», «even though» ve «though» ise tam tersine kendinden sonra mutlaka özne+fiil içeren bir CÜMLE alır. YDS'de bu ikisi sürekli karıştırılır: boşluktan hemen sonra gelen ifade sade bir isim tamlaması mı, yoksa özne+fiil mi — buna bakarak karar verirsin.",
+    ornekEn:"Despite his lack of experience, he managed to complete the project successfully.",
+    ornekTr:"Deneyim eksikliğine rağmen, projeyi başarıyla tamamlamayı başardı.",
+    soru:"______ the traffic was terrible, we arrived at the airport right on time.",
+    secenekler:["Despite","Although","In spite of","Because of"],
+    cevap:1,
+    cevapAciklama:"Boşluktan sonra «the traffic was terrible» yani ÖZNE + FİİL içeren tam bir cümle geliyor. İsim alan «despite» ve «in spite of» burada kullanılamaz — cümle alan «although» doğru cevaptır."
+  },
+  {
+    baslik:'however / yet',
+    aciklama:"«however» bir bağlaç DEĞİL, bir zarftır (transition adverb); bu yüzden iki bağımsız cümleyi tek başına VİRGÜLLE bağlayamaz, aralarına nokta ya da noktalı virgül ister. «yet» ise hem «ama, fakat» anlamında gerçek bir bağlaçtır — virgülle iki cümleyi bağlayabilir — hem de «henüz» anlamında zaman zarfı olarak kullanılır. YDS'de «however» ile başlayan cümlenin öncesinde nokta/noktalı virgül olup olmadığına dikkat et.",
+    ornekEn:"The results were promising; however, further research is needed.",
+    ornekTr:"Sonuçlar umut vericiydi; ancak, daha fazla araştırma gerekmektedir.",
+    soru:"The company faced serious financial problems, ______ it managed to survive the crisis.",
+    secenekler:["however","yet","despite","moreover"],
+    cevap:1,
+    cevapAciklama:"«however» bir zarftır ve virgülle iki cümleyi birbirine bağlayamaz — bu kullanım «comma splice» hatasıdır. Gerçek bir bağlaç olan «yet» ise virgülle bağlanabilir, bu yüzden doğru cevap «yet»tir."
+  },
+  {
+    baslik:'must have / should have',
+    aciklama:"«must have + V3» geçmişte olmuş bir olay hakkında GÜÇLÜ BİR ÇIKARIM/TAHMİN ifade eder — «...olmuş olmalı» anlamına gelir, kanıta dayalı bir tahmindir. «should have + V3» ise geçmişte yapılması GEREKİP DE YAPILMAYAN bir eylemi anlatır — pişmanlık ya da eleştiri taşır, «...yapmalıydı ama yapmadı» anlamına gelir.",
+    ornekEn:"She must have missed the bus; that's why she is late. You should have called me before coming.",
+    ornekTr:"Otobüsü kaçırmış olmalı; bu yüzden geç kaldı. Gelmeden önce beni aramalıydın (ama aramadın).",
+    soru:"He failed the exam even though he studied hard. He ______ a better strategy.",
+    secenekler:["must have used","should have used","can have used","will have used"],
+    cevap:1,
+    cevapAciklama:"Cümlede geçmişte yapılması gerekip de yapılmamış bir davranışa dair PİŞMANLIK/ELEŞTİRİ anlamı var — «daha iyi bir strateji kullanmalıydı ama kullanmadı». Bu anlamı «should have used» verir; «must have used» ise bir tahmin/çıkarım ifade eder, buraya uymaz."
+  },
+  {
+    baslik:'far from / anything but',
+    aciklama:"«far from» ve «anything but» ikisi de kendinden sonra gelen sıfat ya da isme GÜÇLÜ BİR OLUMSUZLUK katar; «hiç ... değil, tam tersine» anlamı taşırlar. Yani «far from happy» = «hiç mutlu değil», «anything but easy» = «hiç kolay değil, her şey olabilir ama kolay değil» demektir.",
+    ornekEn:"Despite the positive reports, the negotiations were far from successful.",
+    ornekTr:"Olumlu raporlara rağmen, müzakereler hiç başarılı değildi.",
+    soru:"Despite the positive reports, the economic situation is ______ stable.",
+    secenekler:["far from","as well as","similar to","due to"],
+    cevap:0,
+    cevapAciklama:"Cümlenin başındaki «despite the positive reports» bir ZITLIK sinyali veriyor, yani devamında olumsuz bir anlam bekleriz. «far from stable» = «hiç istikrarlı değil» anlamı verir ve bu zıtlığa uyar; doğru cevap «far from»dur."
+  },
+  {
+    baslik:'provided that / unless',
+    aciklama:"«provided that» (= «on condition that») «...şartıyla, eğer ...ise» anlamında OLUMLU bir şart bildirir. «unless» ise «eğer ... olmazsa/değilse» anlamında OLUMSUZ bir şart bildirir ve «if...not» ile eşdeğerdir. Dikkat: «unless»ten sonraki fiil OLUMLU çekimlenir, çünkü olumsuzluk zaten «unless» kelimesinin içindedir.",
+    ornekEn:"You can borrow my car, provided that you bring it back by evening. I won't go to the party unless you come with me.",
+    ornekTr:"Akşama kadar geri getirmen şartıyla arabamı ödünç alabilirsin. Sen de benimle gelmezsen partiye gitmeyeceğim.",
+    soru:"______ the weather improves, the outdoor concert will be cancelled.",
+    secenekler:["Provided that","Unless","As long as","In case"],
+    cevap:1,
+    cevapAciklama:"Cümlenin anlamı «hava düzelMEZse konser iptal edilecek» şeklindedir; yani olumsuz bir şart var. Bu anlamı «if...not» ile eşdeğer olan «unless» verir. «Provided that» ve «as long as» olumlu şart bildirdiği için buraya uymaz."
+  }
+];
+let clIdx=0,clTypeTimer=null;
+function clModulHTML(){
+  return `
+    <div class="cl-progress" id="cl-progress"></div>
+    <div class="tahta-wrap">
+      <div class="tahta-blok" id="cl-blok-aciklama">
+        <div class="tahta-lbl">📖 AÇIKLAMA</div>
+        <div class="tahta-metin" id="cl-metin-aciklama"></div>
+      </div>
+      <div class="tahta-blok" id="cl-blok-ornek" style="display:none">
+        <div class="tahta-lbl">✏️ ÖRNEK CÜMLE</div>
+        <div class="tahta-metin" id="cl-metin-ornek"></div>
+        <div class="tahta-metin-tr" id="cl-metin-ornek-tr"></div>
+      </div>
+      <div class="tahta-blok" id="cl-blok-soru" style="display:none">
+        <div class="tahta-lbl">❓ YDS SORUSU</div>
+        <div class="tahta-metin" id="cl-metin-soru"></div>
+        <div class="cl-secenekler" id="cl-secenekler"></div>
+      </div>
+      <div class="tahta-blok" id="cl-blok-cevap" style="display:none">
+        <div class="tahta-lbl">✅ CEVAP VE AÇIKLAMA</div>
+        <div class="tahta-metin" id="cl-metin-cevap"></div>
+      </div>
+    </div>
+    <div class="cl-kontrol">
+      <button class="cl-btn cl-btn-ghost" onclick="clTekrarAnlat()">🔁 Tekrar Anlat</button>
+      <button class="cl-btn cl-btn-primary" onclick="clSonrakiKonu()">Sonraki Konu →</button>
+    </div>
+  `;
+}
+function clDurdur(){
+  clearInterval(clTypeTimer);
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  if(pAudio)pAudio.pause();
+}
+function clYaz(elId,text,hiz,callback){
+  const el=document.getElementById(elId);
+  if(!el)return;
+  clearInterval(clTypeTimer);
+  el.textContent='';el.classList.add('cl-cursor');
+  let i=0;
+  clTypeTimer=setInterval(()=>{
+    el.textContent+=text[i];i++;
+    if(i>=text.length){clearInterval(clTypeTimer);el.classList.remove('cl-cursor');if(callback)callback();}
+  },hiz);
+}
+function clOynatKonu(idx){
+  clDurdur();
+  clIdx=idx;
+  const k=CL_KONULAR[idx];
+  const prog=document.getElementById('cl-progress');if(prog)prog.textContent=`Konu ${idx+1}/${CL_KONULAR.length} · ${k.baslik}`;
+  ['aciklama','ornek','soru','cevap'].forEach(s=>{const b=document.getElementById('cl-blok-'+s);if(b)b.style.display='none';});
+  ['cl-metin-aciklama','cl-metin-ornek','cl-metin-ornek-tr','cl-metin-soru','cl-metin-cevap'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='';});
+  const sec=document.getElementById('cl-secenekler');if(sec)sec.innerHTML='';
+  clAsamaAciklama(k);
+}
+function clAsamaAciklama(k){
+  document.getElementById('cl-blok-aciklama').style.display='block';
+  clYaz('cl-metin-aciklama',k.aciklama,20);
+  ttsSpeak(k.aciklama,'tr-TR',()=>clAsamaOrnek(k));
+}
+function clAsamaOrnek(k){
+  document.getElementById('cl-blok-ornek').style.display='block';
+  clYaz('cl-metin-ornek',k.ornekEn,26,()=>{clYaz('cl-metin-ornek-tr',k.ornekTr,18);});
+  ttsSpeak(k.ornekEn,'en-US',()=>clAsamaSoru(k));
+}
+function clAsamaSoru(k){
+  document.getElementById('cl-blok-soru').style.display='block';
+  clYaz('cl-metin-soru',k.soru,22,()=>{
+    const wrap=document.getElementById('cl-secenekler');
+    wrap.innerHTML=k.secenekler.map((s,i)=>`<button class="cl-secenek" onclick="clCevapSec(${i})">${String.fromCharCode(65+i)}) ${s}</button>`).join('');
+  });
+  ttsSpeak(k.soru,'en-US',null);
+}
+function clCevapSec(i){
+  const k=CL_KONULAR[clIdx];
+  document.querySelectorAll('#cl-secenekler .cl-secenek').forEach((b,bi)=>{
+    b.disabled=true;
+    if(bi===k.cevap)b.classList.add('cl-dogru');
+    else if(bi===i)b.classList.add('cl-yanlis');
+  });
+  document.getElementById('cl-blok-cevap').style.display='block';
+  const on=i===k.cevap?'Doğru! ':`Yanlış, doğru cevap: ${String.fromCharCode(65+k.cevap)}) ${k.secenekler[k.cevap]}. `;
+  const tamMetin=on+k.cevapAciklama;
+  clYaz('cl-metin-cevap',tamMetin,18);
+  ttsSpeak(tamMetin,'tr-TR',null);
+}
+function clTekrarAnlat(){clOynatKonu(clIdx);}
+function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
 
 let gsTimer=null;
 function sinavGeriSayim(){
