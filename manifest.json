@@ -4,13 +4,13 @@
   "description": "YDS & YÖKDİL hazırlık platformu — sinyal metodu ile ÖSYM sorularını çöz",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f6f2",
-  "theme_color": "#2d5be3",
+  "background_color": "#0a0d13",
+  "theme_color": "#f5a623",
   "orientation": "portrait",
   "lang": "tr",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%232d5be3'/><text x='96' y='130' font-size='100' text-anchor='middle' fill='white'>🎯</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%23f5a623'/><text x='96' y='130' font-size='100' text-anchor='middle' fill='white'>🎯</text></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml"
     }
