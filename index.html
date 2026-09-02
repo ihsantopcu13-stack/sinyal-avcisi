@@ -31,7 +31,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Caveat:wght@500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -728,6 +728,40 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
 .yol-node.kilitli:hover{transform:none}
 .yol-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative}
 
+/* OKUMA KURALLARI — Phonics / Consonant Digraphs */
+.ok-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ok-kart{--ok-renk:#a78bfa;background:linear-gradient(160deg,var(--ok-renk)18,transparent);border:2px solid var(--ok-renk);border-radius:16px;padding:16px 10px;text-align:center;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;position:relative}
+.ok-kart:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 20px var(--ok-renk)40}
+.ok-kart.aktif{box-shadow:0 0 0 3px var(--ok-renk)50}
+.ok-kart-harf{font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;color:var(--ok-renk);letter-spacing:.02em}
+.ok-kart-ses{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px}
+.ok-kart-check{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#10b981;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(16,185,129,.5)}
+.ok-detay-kart{--ok-renk:#a78bfa;margin-top:14px;background:linear-gradient(160deg,var(--ok-renk)12,transparent);border:2px solid var(--ok-renk);border-radius:20px;padding:22px;animation:okPop .3s ease}
+@keyframes okPop{0%{opacity:0;transform:scale(.94) translateY(6px)}100%{opacity:1;transform:none}}
+.ok-detay-baslik{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
+.ok-detay-harf{font-family:'Fredoka',sans-serif;font-weight:700;font-size:42px;color:var(--ok-renk)}
+.ok-detay-ses{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--muted)}
+.ok-detay-ipucu{font-size:14px;color:var(--ink);line-height:1.7;background:var(--surface);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.ok-kelime-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.ok-kelime-chip{background:var(--surface);border:1px solid var(--ok-renk);border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:transform .15s;opacity:0;animation:okKelimeGir .4s ease forwards}
+.ok-kelime-chip:hover{transform:translateY(-2px) scale(1.04)}
+@keyframes okKelimeGir{0%{opacity:0;transform:translateY(10px) scale(.9)}100%{opacity:1;transform:none}}
+.ok-kelime-en{display:block;font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--ink)}
+.ok-kelime-tr{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.ok-quiz{background:var(--surface);border-radius:14px;padding:16px;border:1px dashed var(--ok-renk)}
+.ok-quiz-soru{font-family:'Fredoka',sans-serif;font-weight:600;font-size:15px;color:var(--ink);margin-bottom:12px}
+.ok-quiz-secenekler{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ok-quiz-btn{font-family:'Fredoka',sans-serif;font-weight:600;font-size:14px;background:var(--paper);border:2px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;color:var(--ink);transition:all .15s}
+.ok-quiz-btn:hover:not(:disabled){border-color:var(--ok-renk);background:var(--ok-renk)10}
+.ok-quiz-btn:disabled{cursor:default}
+.ok-quiz-btn.ok-dogru{background:#10b98122;border-color:#10b981;color:#059669}
+.ok-quiz-btn.ok-yanlis{background:#ef444422;border-color:#ef4444;color:#dc2626}
+.ok-quiz-sonuc{margin-top:10px;font-size:13px;font-weight:700}
+@media(max-width:640px){
+  .ok-grid{grid-template-columns:repeat(2,1fr)}
+  .ok-quiz-secenekler{grid-template-columns:1fr}
+}
+
 /* ============================================================
    YENİ ANİMASYONLAR — Hero uçuşan sorular, konfeti/coin/streak,
    soru kartı hover efektleri, dark/light mode geçişi
@@ -1405,6 +1439,14 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div style="margin-bottom:22px">
             <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:6px">🗺️ Öğrenme Yolun</div>
             <div id="dilavcisi-yol-harita" style="display:flex;flex-direction:column;gap:4px"></div>
+          </div>
+
+          <!-- OKUMA KURALLARI (PHONICS — Consonant Digraphs) -->
+          <div style="margin-bottom:22px">
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;gap:6px">📖 Okuma Kuralları <span style="background:#a78bfa20;color:#7c3aed;font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px">A1 · PHONICS</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Harf çiftlerini (consonant digraphs) öğren, sesli telaffuz et, mini quiz çöz!</div>
+            <div class="ok-grid" id="ok-grid"></div>
+            <div id="ok-detay"></div>
           </div>
 
           <!-- KONUŞMA SİMÜLATÖRÜ -->
@@ -3585,7 +3627,7 @@ function rozetBildirim(r){
 }
 // XP + LEADERBOARD SİSTEMİ
 // ============================================================
-const XP_TABLOSU={sinyal:10,kelime:8,tuzak:12,sat:15,modal:20};
+const XP_TABLOSU={sinyal:10,kelime:8,tuzak:12,sat:15,modal:20,okuma:8};
 const SEVIYE_TABLOSU=[
   {min:0,max:99,ad:'🌱 Çaylak',renk:'#6b7280'},
   {min:100,max:299,ad:'🎯 Avcı',renk:'var(--signal)'},
@@ -5768,13 +5810,120 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(mod==='istatistik'){setTimeout(istatistikRender,100);}
     if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
     if(mod==='mikro'){setTimeout(mikroDersleriRender,100);}
-    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();},100);}
+    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();okumaKurallariRender();},100);}
   };
   // Adaptif badge başlangıç
   adaptifBadgeGuncelle();
   // Admin panel kontrolü
   adminPanelKontrol();
 });
+
+// ─── OKUMA KURALLARI — Phonics / Consonant Digraphs (A1) ───────────────────
+const OKUMA_DIGRAPHS=[
+  {harfler:'sh',ses:'/ʃ/',renk:'#ef4444',
+   ipucu:'«sh» iki harf tek ses üretir — Türkçedeki «ş» sesine çok yakındır.',
+   kelimeler:[{kelime:'ship',anlam:'gemi'},{kelime:'fish',anlam:'balık'},{kelime:'shop',anlam:'dükkan'},{kelime:'wish',anlam:'dilek'}],
+   quiz:{soru:'Hangi kelimede "sh" (ş) sesi vardır?',secenekler:['fish','cat','dog','pen'],cevap:0}},
+  {harfler:'ph',ses:'/f/',renk:'#3b82f6',
+   ipucu:'«ph» harf çifti tek başına «f» sesi verir — genellikle Yunanca kökenli kelimelerde görülür.',
+   kelimeler:[{kelime:'phone',anlam:'telefon'},{kelime:'photo',anlam:'fotoğraf'},{kelime:'elephant',anlam:'fil'},{kelime:'dolphin',anlam:'yunus'}],
+   quiz:{soru:'Hangi kelimede "ph" harfleri "f" sesi verir?',secenekler:['phone','chair','think','ring'],cevap:0}},
+  {harfler:'wh',ses:'/w/',renk:'#8b5cf6',
+   ipucu:'«wh» çoğunlukla soru kelimelerinin başında bulunur; «v» ile «u» arası bir ses verir.',
+   kelimeler:[{kelime:'what',anlam:'ne'},{kelime:'when',anlam:'ne zaman'},{kelime:'white',anlam:'beyaz'},{kelime:'wheel',anlam:'tekerlek'}],
+   quiz:{soru:'Hangi kelime "wh" sesiyle başlar?',secenekler:['what','cat','song','chair'],cevap:0}},
+  {harfler:'ch',ses:'/tʃ/',renk:'#f59e0b',
+   ipucu:'«ch» Türkçedeki «ç» sesine çok yakın bir ses üretir.',
+   kelimeler:[{kelime:'chair',anlam:'sandalye'},{kelime:'cheese',anlam:'peynir'},{kelime:'lunch',anlam:'öğle yemeği'},{kelime:'teacher',anlam:'öğretmen'}],
+   quiz:{soru:'Hangi kelimede "ch" (ç) sesi vardır?',secenekler:['chair','sheep','phone','night'],cevap:0}},
+  {harfler:'th',ses:'/θ,ð/',renk:'#10b981',
+   ipucu:'«th» Türkçede karşılığı olmayan özel bir sestir — dil, üst dişlerin arasına hafifçe değdirilerek çıkarılır.',
+   kelimeler:[{kelime:'think',anlam:'düşünmek'},{kelime:'this',anlam:'bu'},{kelime:'mother',anlam:'anne'},{kelime:'three',anlam:'üç'}],
+   quiz:{soru:'Hangi kelimede "th" sesi vardır?',secenekler:['think','king','ship','laugh'],cevap:0}},
+  {harfler:'ng',ses:'/ŋ/',renk:'#ec4899',
+   ipucu:'«ng» genizden gelen bir «n» sesidir — genellikle kelime sonunda bulunur.',
+   kelimeler:[{kelime:'king',anlam:'kral'},{kelime:'song',anlam:'şarkı'},{kelime:'ring',anlam:'yüzük'},{kelime:'morning',anlam:'sabah'}],
+   quiz:{soru:'Hangi kelime "ng" sesiyle biter?',secenekler:['king','chair','knife','phone'],cevap:0}},
+  {harfler:'kn',ses:'/n/',renk:'#06b6d4',
+   ipucu:'«kn» ile başlayan kelimelerde «k» SESSİZDİR, sadece «n» okunur.',
+   kelimeler:[{kelime:'knee',anlam:'diz'},{kelime:'know',anlam:'bilmek'},{kelime:'knife',anlam:'bıçak'},{kelime:'knock',anlam:'kapıyı çalmak'}],
+   quiz:{soru:'Hangi kelimede "k" harfi OKUNMAZ (sessizdir)?',secenekler:['knee','king','chair','think'],cevap:0}},
+  {harfler:'gh',ses:'/f/ ya da sessiz',renk:'#84cc16',
+   ipucu:'«gh» bazen «f» sesi verir (laugh), bazen ise tamamen SESSİZDİR (night).',
+   kelimeler:[{kelime:'laugh',anlam:'gülmek'},{kelime:'enough',anlam:'yeterli'},{kelime:'night',anlam:'gece'},{kelime:'light',anlam:'ışık'}],
+   quiz:{soru:'Hangi kelimede "gh" harfleri hiçbir ses vermez (sessizdir)?',secenekler:['night','laugh','enough','cough'],cevap:0}}
+];
+function okumaVeriYukle(){try{return JSON.parse(localStorage.getItem('sa_okuma_kurallari'))||{tamamlanan:[]};}catch(e){return{tamamlanan:[]};}}
+function okumaVeriKaydet(v){try{localStorage.setItem('sa_okuma_kurallari',JSON.stringify(v));}catch(e){}}
+function okumaKurallariRender(){
+  const grid=document.getElementById('ok-grid');
+  if(!grid)return;
+  const veri=okumaVeriYukle();
+  grid.innerHTML=OKUMA_DIGRAPHS.map((d,i)=>{
+    const tamam=veri.tamamlanan.includes(d.harfler);
+    const aktif=okumaAktifIdx===i;
+    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${d.renk}" onclick="okumaDigraphAc(${i})">
+      <div class="ok-kart-harf">${d.harfler}</div>
+      <div class="ok-kart-ses">${d.ses}</div>
+      ${tamam?'<div class="ok-kart-check">✓</div>':''}
+    </div>`;
+  }).join('');
+}
+let okumaAktifIdx=null;
+function okumaDigraphAc(i){
+  okumaAktifIdx=i;
+  okumaKurallariRender();
+  const d=OKUMA_DIGRAPHS[i];
+  const detay=document.getElementById('ok-detay');
+  if(!detay)return;
+  detay.innerHTML=`
+    <div class="ok-detay-kart" style="--ok-renk:${d.renk}">
+      <div class="ok-detay-baslik"><span class="ok-detay-harf">${d.harfler}</span><span class="ok-detay-ses">${d.ses}</span></div>
+      <div class="ok-detay-ipucu">${d.ipucu}</div>
+      <div class="ok-kelime-grid">
+        ${d.kelimeler.map((k,ki)=>`
+          <div class="ok-kelime-chip" style="animation-delay:${(ki*0.12).toFixed(2)}s" onclick="ttsSpeak('${k.kelime}','en-US',null)">
+            <span class="ok-kelime-en">🔊 ${k.kelime}</span>
+            <span class="ok-kelime-tr">${k.anlam}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="ok-quiz">
+        <div class="ok-quiz-soru">🧠 Mini Quiz: ${d.quiz.soru}</div>
+        <div class="ok-quiz-secenekler">
+          ${d.quiz.secenekler.map((s,si)=>`<button class="ok-quiz-btn" onclick="okumaQuizCevap(${i},${si},this)">${s}</button>`).join('')}
+        </div>
+        <div class="ok-quiz-sonuc" id="ok-quiz-sonuc"></div>
+      </div>
+    </div>
+  `;
+  detay.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function okumaQuizCevap(di,si,btn){
+  const d=OKUMA_DIGRAPHS[di];
+  const dogruMu=si===d.quiz.cevap;
+  const wrap=btn.parentElement;
+  [...wrap.children].forEach((b,i)=>{
+    b.disabled=true;
+    if(i===d.quiz.cevap)b.classList.add('ok-dogru');
+    else if(i===si)b.classList.add('ok-yanlis');
+  });
+  const sonuc=document.getElementById('ok-quiz-sonuc');
+  if(dogruMu){
+    sonuc.innerHTML='✅ Harika! Doğru cevap.';
+    sonuc.style.color='#059669';
+    const veri=okumaVeriYukle();
+    if(!veri.tamamlanan.includes(d.harfler)){
+      veri.tamamlanan.push(d.harfler);
+      okumaVeriKaydet(veri);
+      xpKazan('okuma',0);
+      okumaKurallariRender();
+    }
+  }else{
+    sonuc.innerHTML='❌ Tekrar dene — doğru cevap: <b>'+d.quiz.secenekler[d.quiz.cevap]+'</b>';
+    sonuc.style.color='#dc2626';
+  }
+}
 
 // ─── İNGİLİZCE KURSU ────────────────────────────────────────────────────────
 const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'}]};
