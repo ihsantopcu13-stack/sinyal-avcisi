@@ -2667,7 +2667,7 @@ const ttsCache=new Map(); // Ses cache — aynı metni tekrar API'ye sormaz
 async function ttsSpeak(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
   try{
-    const voice=lang==='en-US'?'echo':'onyx';
+    const voice='nova';
     const cacheKey=text.trim().substring(0,100)+'_'+voice;
 
     // Cache'den al
@@ -2697,6 +2697,31 @@ async function ttsSpeak(text,lang,onEnd,onAudioReady){
       if(onAudioReady)onAudioReady(u);
       speechSynthesis.speak(u);
     }
+  }
+}
+
+// ElevenLabs TTS — sadece Dil Avcısı modülü için (Rachel — doğal İngilizce ses)
+const ttsElevenCache=new Map();
+async function ttsSpeakEleven(text,onEnd){
+  if(!text||text.trim().length<2)return;
+  try{
+    const cacheKey='eleven_'+text.trim().substring(0,100);
+    let url=ttsElevenCache.get(cacheKey);
+    if(!url){
+      const res=await fetch('/api/tts-eleven',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+      if(!res.ok)throw new Error('ElevenLabs TTS failed');
+      const blob=await res.blob();
+      url=URL.createObjectURL(blob);
+      ttsElevenCache.set(cacheKey,url);
+    }
+    if(pAudio){pAudio.pause();}
+    pAudio=new Audio(url);
+    pAudio.onended=onEnd||null;
+    await pAudio.play();
+    return pAudio;
+  }catch(e){
+    // ElevenLabs başarısız olursa mevcut OpenAI TTS'e düş
+    return ttsSpeak(text,'en-US',onEnd);
   }
 }
 function playerToggle(){pPlaying=!pPlaying;document.getElementById('p-play').textContent=pPlaying?'⏸':'▶';if(pPlaying){pTTS();pStartFill();}else{if(pAudio)pAudio.pause();if(window.speechSynthesis)speechSynthesis.cancel();clearInterval(pTimer);}}
@@ -5882,7 +5907,7 @@ function okumaDigraphAc(i){
       <div class="ok-detay-ipucu">${d.ipucu}</div>
       <div class="ok-kelime-grid">
         ${d.kelimeler.map((k,ki)=>`
-          <div class="ok-kelime-chip" style="animation-delay:${(ki*0.12).toFixed(2)}s" onclick="ttsSpeak('${k.kelime}','en-US',null)">
+          <div class="ok-kelime-chip" style="animation-delay:${(ki*0.12).toFixed(2)}s" onclick="ttsSpeakEleven('${k.kelime}')">
             <span class="ok-kelime-en">🔊 ${k.kelime}</span>
             <span class="ok-kelime-tr">${k.anlam}</span>
           </div>
@@ -6140,7 +6165,7 @@ async function konusmaGonder() {
 
 
 
-function ingDerslerRender(seviye='A1'){const alan=document.getElementById('ing-ders-alan');if(!alan)return;const dersler=ING_DERSLER[seviye]||[];alan.innerHTML=`<div style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">${seviye} Seviyesi — ${dersler.length} Konu</div><div style="height:4px;background:var(--border);border-radius:2px"><div style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px;width:20%"></div></div></div><div style="display:flex;flex-direction:column;gap:10px">${dersler.map((d,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer" onclick="ingDersAc(this)"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="width:40px;height:40px;background:linear-gradient(135deg,#a78bfa30,#7c3aed20);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0">${d.ikon}</div><div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)">${d.baslik}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d.aciklama}</div></div><div style="font-size:16px;color:var(--muted);transition:transform .2s" class="ing-chevron">▶</div></div><div style="display:none;padding:0 16px 16px" class="ing-ders-detay"><div style="background:#a78bfa15;border-radius:10px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:8px">📝 Örnekler — tıkla dinle 🔊</div>${d.ornekler.map(o=>`<div style="font-size:14px;color:var(--ink);padding:6px 0;border-bottom:1px solid #a78bfa30;cursor:pointer" onclick="if(window.ttsSpeak)ttsSpeak(this.textContent.replace('🔊 ',''),'en-US',null)">🔊 ${o}</div>`).join('')}</div><div style="background:#fbbf2415;border-radius:10px;padding:12px"><div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:6px">🎯 Pratik Görev</div><div style="font-size:13px;color:var(--ink)">${d.pratik}</div><button onclick="ingPratikKlod('${d.baslik}','${d.pratik}')" style="margin-top:8px;background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🤖 DILA ile Pratik Yap</button></div></div></div>`).join('')}</div>`;}
+function ingDerslerRender(seviye='A1'){const alan=document.getElementById('ing-ders-alan');if(!alan)return;const dersler=ING_DERSLER[seviye]||[];alan.innerHTML=`<div style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">${seviye} Seviyesi — ${dersler.length} Konu</div><div style="height:4px;background:var(--border);border-radius:2px"><div style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px;width:20%"></div></div></div><div style="display:flex;flex-direction:column;gap:10px">${dersler.map((d,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer" onclick="ingDersAc(this)"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="width:40px;height:40px;background:linear-gradient(135deg,#a78bfa30,#7c3aed20);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0">${d.ikon}</div><div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)">${d.baslik}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d.aciklama}</div></div><div style="font-size:16px;color:var(--muted);transition:transform .2s" class="ing-chevron">▶</div></div><div style="display:none;padding:0 16px 16px" class="ing-ders-detay"><div style="background:#a78bfa15;border-radius:10px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:8px">📝 Örnekler — tıkla dinle 🔊</div>${d.ornekler.map(o=>`<div style="font-size:14px;color:var(--ink);padding:6px 0;border-bottom:1px solid #a78bfa30;cursor:pointer" onclick="if(window.ttsSpeakEleven)ttsSpeakEleven(this.textContent.replace('🔊 ',''))">🔊 ${o}</div>`).join('')}</div><div style="background:#fbbf2415;border-radius:10px;padding:12px"><div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:6px">🎯 Pratik Görev</div><div style="font-size:13px;color:var(--ink)">${d.pratik}</div><button onclick="ingPratikKlod('${d.baslik}','${d.pratik}')" style="margin-top:8px;background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🤖 DILA ile Pratik Yap</button></div></div></div>`).join('')}</div>`;}
 
 function ingDersAc(el){const detay=el.querySelector('.ing-ders-detay');const chevron=el.querySelector('.ing-chevron');const acik=detay.style.display!=='none';detay.style.display=acik?'none':'block';chevron.style.transform=acik?'':'rotate(90deg)';chevron.style.color=acik?'var(--muted)':'#34d399';}
 

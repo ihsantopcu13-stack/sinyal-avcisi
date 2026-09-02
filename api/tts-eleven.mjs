@@ -1,45 +1,54 @@
 // ============================================================
-// TTS API — OpenAI Text-to-Speech Proxy
-// Sinyal Avcısı — Ses Kurs
+// TTS API — ElevenLabs Text-to-Speech Proxy
+// Sinyal Avcısı — Dil Avcısı modülü (doğal İngilizce seslendirme)
 // ============================================================
 
 import { rateLimit } from './_rateLimit.mjs';
+
+// Rachel — ElevenLabs'in hazır, doğal İngilizce kadın sesi
+const RACHEL_VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const rl = rateLimit(req, { key: 'tts', limit: 30, windowMs: 60_000 });
+  const rl = rateLimit(req, { key: 'tts-eleven', limit: 30, windowMs: 60_000 });
   if (!rl.allowed) {
     res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
     return res.status(429).json({ error: 'Çok fazla ses isteği gönderdiniz. Biraz sonra tekrar deneyin.' });
   }
 
-  const { text, voice = 'nova', speed = 1.0 } = req.body;
+  const { text, voiceId = RACHEL_VOICE_ID } = req.body;
 
-  if (!text || typeof text !== 'string' || text.length > 4096) {
+  if (!text || typeof text !== 'string' || text.length > 2000) {
     return res.status(400).json({ error: 'Invalid text' });
   }
 
+  if (!process.env.ELEVENLABS_API_KEY) {
+    return res.status(500).json({ error: 'ELEVENLABS_API_KEY not configured' });
+  }
+
   try {
-    const response = await fetch('https://api.openai.com/v1/audio/speech', {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'xi-api-key': process.env.ELEVENLABS_API_KEY,
         'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg',
       },
       body: JSON.stringify({
-        model: 'tts-1',
-        input: text,
-        voice: voice, // onyx (erkek, derin), nova (kadın, doğal), shimmer (kadın, yumuşak)
-        speed: speed,
-        response_format: 'mp3',
+        text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: 0.5,
+          similarity_boost: 0.75,
+        },
       }),
     });
 
     if (!response.ok) {
-      const err = await response.json();
+      const err = await response.text();
       return res.status(response.status).json({ error: err });
     }
 
@@ -50,7 +59,7 @@ export default async function handler(req, res) {
     res.status(200).send(Buffer.from(audioBuffer));
 
   } catch (error) {
-    console.error('TTS error:', error);
+    console.error('ElevenLabs TTS error:', error);
     res.status(500).json({ error: 'TTS failed' });
   }
 }
