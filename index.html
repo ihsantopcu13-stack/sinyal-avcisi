@@ -637,6 +637,49 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .sp-check-item.done span{color:var(--muted);text-decoration:line-through}
 .sp-rapor{margin-top:10px;font-size:12px;color:var(--muted)}
 
+/* BUGÜN KARTI — Dashboard'un en üstü, günün tek görevi */
+.bugun-kart{
+  background:linear-gradient(150deg,#12161f,#1a1408 130%);
+  border:1px solid rgba(245,166,35,.32);
+  border-left:3px solid #f5a623;
+  border-radius:16px;
+  padding:20px 22px;
+  margin-bottom:14px;
+  color:#ece7da;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.22);
+}
+.bugun-kart::before{
+  content:'';position:absolute;top:-40%;right:-10%;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(245,166,35,.14),transparent 65%);
+  pointer-events:none;
+}
+.bugun-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:#f5a623;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;position:relative;
+}
+.bugun-baslik{font-size:19px;font-weight:700;line-height:1.4;margin-bottom:6px;color:#f8f7f3;position:relative}
+.bugun-baslik b{color:#f5a623}
+.bugun-alt{font-size:12.5px;color:rgba(236,231,218,.6);margin-bottom:16px;position:relative}
+.bugun-cta{
+  display:inline-flex;align-items:center;gap:8px;background:#f5a623;color:#1a0e02;
+  border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:800;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:transform .15s ease,box-shadow .15s ease;
+  position:relative;
+}
+.bugun-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(245,166,35,.35)}
+.bugun-dots{display:flex;gap:6px;margin-top:16px;position:relative}
+.bugun-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:background-color .2s ease}
+.bugun-dot.tamam{background:#f5a623}
+.bugun-kart.tamamlandi{border-color:rgba(52,211,153,.35);border-left-color:#34d399}
+.bugun-kart.tamamlandi .bugun-eyebrow{color:#34d399}
+.bugun-kart.tamamlandi .bugun-baslik{color:#34d399}
+.bugun-kart.tamamlandi .bugun-cta{background:rgba(52,211,153,.16);color:#34d399;border:1px solid rgba(52,211,153,.4)}
+.bugun-kart.tamamlandi .bugun-dot.tamam{background:#34d399}
+@media(max-width:600px){.bugun-kart{padding:16px}}
+
 /* ACİL KURTARMA KARTI — Dashboard */
 .sk-kart{background:linear-gradient(135deg,#7f1d1d,#1e1b4b);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(127,29,29,.25)}
 .sk-kart:hover{transform:translateY(-1px)}
@@ -1293,6 +1336,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       </div>
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
+        <div class="bugun-kart" id="bugun-kart"></div>
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()"></div>
         <div class="dash-karts">
           <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
@@ -2285,9 +2329,11 @@ function dnav(el){
   main.querySelector('.dash-tabs').style.display='none';
   main.querySelector('.dash-welcome').style.display='none';
   const skKartEl=document.getElementById('sk-kart');if(skKartEl)skKartEl.style.display='none';
+  const bugunKartEl=document.getElementById('bugun-kart');if(bugunKartEl)bugunKartEl.style.display='none';
   if(txt.includes('Dashboard')){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
+    if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
     if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
@@ -5632,11 +5678,11 @@ function sinavZayifAlanAnalizi(){
 
 // Günlük kontrol listesi
 const SP_CHECKLIST_ITEMS=[
-  {key:'kelime',etiket:'20 kelime kartı',mod:'kelime'},
-  {key:'tuzak',etiket:'10 tuzak sorusu',mod:'tuzak'},
-  {key:'sinyallab',etiket:'5 sinyal lab sorusu',mod:'sinyal'},
-  {key:'paragraf',etiket:'2 paragraf sorusu',mod:'paragraf'},
-  {key:'klod',etiket:'1 KLOD sohbeti',mod:'sinyal'}
+  {key:'kelime',etiket:'20 kelime kartı',mod:'kelime',dnAra:'Kelime Kartlari'},
+  {key:'tuzak',etiket:'10 tuzak sorusu',mod:'tuzak',dnAra:'Gunluk Tuzak'},
+  {key:'sinyallab',etiket:'5 sinyal lab sorusu',mod:'sinyal',dnAra:'Sinyal Lab'},
+  {key:'paragraf',etiket:'2 paragraf sorusu',mod:'paragraf',dnAra:'Paragraf'},
+  {key:'klod',etiket:'1 KLOD sohbeti',mod:'sinyal',dnAra:'KLOD'}
 ];
 function sinavChecklistBugunAnahtari(){
   const d=new Date();
@@ -5686,6 +5732,7 @@ function sinavChecklistToggle(key){
   }
   sinavPlanimOlustur();
   sinavKurtarmaKartRender();
+  if(typeof bugunKartiRender==='function')bugunKartiRender();
 }
 
 // Konfeti + kutlama
@@ -5842,6 +5889,7 @@ function sinavPlanimOlustur(){
     <button onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" style="margin-top:12px;width:100%;background:var(--ink);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">🚀 Bugünün Çalışmasına Başla</button>
   `;
   if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();
+  if(typeof bugunKartiRender==='function')bugunKartiRender();
 }
 
 // ─── DASHBOARD KARTI — 🚨 Acil Kurtarma Planı ──────────────────────────────
@@ -5873,8 +5921,45 @@ function sinavKurtarmaKartaGit(){
   if(item)item.click();
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
+
+// ─── DASHBOARD KARTI — 📡 Bugün (günün tek görevi) ─────────────────────────
+function bugunKartiRender(){
+  const kartEl=document.getElementById('bugun-kart');
+  if(!kartEl)return;
+  const checklistVeri=sinavChecklistYukle();
+  const tamamlanan=SP_CHECKLIST_ITEMS.filter(i=>checklistVeri.items[i.key]);
+  const kalan=SP_CHECKLIST_ITEMS.filter(i=>!checklistVeri.items[i.key]);
+  const dotsHTML=SP_CHECKLIST_ITEMS.map(i=>`<span class="bugun-dot${checklistVeri.items[i.key]?' tamam':''}"></span>`).join('');
+  if(kalan.length===0){
+    kartEl.classList.add('tamamlandi');
+    kartEl.innerHTML=`
+      <div class="bugun-eyebrow">🎉 BUGÜN — TAMAMLANDI</div>
+      <div class="bugun-baslik">Bugünün hedefini tamamladın!</div>
+      <div class="bugun-alt">${SP_CHECKLIST_ITEMS.length}/${SP_CHECKLIST_ITEMS.length} görev bitti. Yarın yeni bir sinyal taraması seni bekliyor.</div>
+      <button class="bugun-cta" onclick="bugunGorevGit('Canlı Ders')">🎓 Bonus: Canlı Ders'e Göz At →</button>
+      <div class="bugun-dots">${dotsHTML}</div>
+    `;
+    return;
+  }
+  kartEl.classList.remove('tamamlandi');
+  const gorev=kalan[0];
+  kartEl.innerHTML=`
+    <div class="bugun-eyebrow">📡 BUGÜN</div>
+    <div class="bugun-baslik">Bugün şunu yap: <b>${gorev.etiket} çöz</b></div>
+    <div class="bugun-alt">${tamamlanan.length}/${SP_CHECKLIST_ITEMS.length} görev tamamlandı — sırada bu var.</div>
+    <button class="bugun-cta" onclick="bugunGorevGit('${gorev.dnAra}')">🚀 Hemen Başla →</button>
+    <div class="bugun-dots">${dotsHTML}</div>
+  `;
+}
+function bugunGorevGit(dnAra){
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes(dnAra));
+  if(item)item.click();
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+}
+
 setTimeout(()=>{
   sinavKurtarmaKartRender();
+  bugunKartiRender();
   sinavGunlukMesajGoster();
 },2000);
 
