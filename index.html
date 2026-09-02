@@ -588,6 +588,23 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 .radar-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
 .radar-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
+/* KONU RADARI — YDS gramer konuları blip haritası */
+.kr-svg{width:100%;max-width:300px;height:auto;display:block;margin:0 auto}
+.kr-blip{cursor:pointer;outline:none}
+.kr-blip-halo{transition:opacity .3s ease}
+.kr-blip-tam .kr-blip-halo{animation:krPulse 1.8s ease-in-out infinite}
+@keyframes krPulse{0%,100%{opacity:.45}50%{opacity:.95}}
+.kr-blip:focus-visible circle:nth-of-type(2){stroke:#fff;stroke-width:1.5}
+.kr-zayif-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.kr-zayif-item:last-child{border-bottom:none}
+.kr-zayif-metin{flex:1;min-width:0}
+.kr-zayif-baslik{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.kr-zayif-bar-wrap{width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.kr-zayif-bar{height:100%;background:#f5a623;border-radius:2px;transition:width .4s ease}
+.kr-zayif-yuzde{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:5px}
+.kr-zayif-btn{flex-shrink:0;background:rgba(245,166,35,.14);color:#f5a623;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;transition:background-color .15s}
+.kr-zayif-btn:hover{background:rgba(245,166,35,.24)}
+
 /* ADAPTIF MOTOR BADGE */
 .adaptif-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'IBM Plex Mono',monospace}
 .adaptif-kolay{background:#0f2418;color:#16a34a}
@@ -1543,14 +1560,11 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         <div class="dmod" id="mod-radar" style="display:none">
           <div class="dm-eye">🎯 ZAYIF ALAN RADARI — Performans haritanız</div>
           <div class="radar-section" style="margin-top:14px">
-            <div class="radar-title">📊 Konu Bazlı Performans <span style="font-size:11px;color:var(--muted);font-weight:400">Son 7 gün</span></div>
-            <div class="radar-canvas-wrap">
-              <canvas id="radarCanvas" width="260" height="260"></canvas>
-            </div>
-            <div class="radar-legend" id="radar-legend"></div>
+            <div class="radar-title">📡 Konu Radarı <span style="font-size:11px;color:var(--muted);font-weight:400" id="konu-radar-ozet"></span></div>
+            <div class="radar-canvas-wrap" id="konu-radar-svg-wrap"></div>
           </div>
           <div id="radar-zayif-liste" style="margin-top:16px"></div>
-          <button onclick="radarCiz()" style="margin-top:14px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🔄 Güncelle</button>
+          <button onclick="konuRadariCiz()" style="margin-top:14px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🔄 Güncelle</button>
         </div>
 
         <!-- ÇALIŞMA PLANI -->
@@ -3429,6 +3443,8 @@ function clCevapSec(i){
   const tamMetin=on+k.cevapAciklama;
   clYaz('cl-metin-cevap',tamMetin,18,()=>sinyalPingVurgula(document.getElementById('cl-metin-cevap')));
   ttsSpeak(tamMetin,'tr-TR',null,clHookMouth);
+  if(typeof konuUstalikGuncelle==='function')konuUstalikGuncelle(k.baslik,i===k.cevap);
+  if(typeof konuRadariCiz==='function')konuRadariCiz();
 }
 function clTekrarAnlat(){clOynatKonu(clIdx);}
 function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
@@ -5451,6 +5467,111 @@ function radarVerisiAl(){
   ].map(v=>Math.min(100,Math.max(10,v)));
 }
 
+// ─── KONU RADARI — YDS gramer konuları, ustalık haritası ───────────────────
+function konuUstalikYukle(){
+  try{return JSON.parse(localStorage.getItem('sa_konu_ustalik'))||{};}catch(e){return{};}
+}
+function konuUstalikKaydet(v){
+  try{localStorage.setItem('sa_konu_ustalik',JSON.stringify(v));}catch(e){}
+}
+function konuUstalikGuncelle(baslik,dogruMu){
+  const v=konuUstalikYukle();
+  const kayit=v[baslik]||{denendi:0,dogru:0};
+  kayit.denendi=(kayit.denendi||0)+1;
+  if(dogruMu)kayit.dogru=(kayit.dogru||0)+1;
+  v[baslik]=kayit;
+  konuUstalikKaydet(v);
+}
+function konuUstalikSeviye(baslik){
+  const kayit=konuUstalikYukle()[baslik];
+  if(!kayit||!kayit.denendi)return 0;
+  if(!kayit.dogru)return 0.15;
+  return Math.min(1,kayit.dogru/2);
+}
+function konuRadariCiz(){
+  const wrap=document.getElementById('konu-radar-svg-wrap');
+  if(!wrap||typeof CL_KONULAR==='undefined')return;
+  const n=CL_KONULAR.length;
+  const cx=150,cy=150,minR=26,maxR=118;
+  const acili=i=>(Math.PI*2*i/n)-Math.PI/2;
+  const blipler=CL_KONULAR.map((k,i)=>{
+    const seviye=konuUstalikSeviye(k.baslik);
+    const aci=acili(i);
+    const r=minR+(maxR-minR)*(1-seviye);
+    return{x:+(cx+r*Math.cos(aci)).toFixed(1),y:+(cy+r*Math.sin(aci)).toFixed(1),seviye,baslik:k.baslik,idx:i};
+  });
+  const halkalar=[1,2,3,4].map(lvl=>`<circle cx="${cx}" cy="${cy}" r="${(maxR*lvl/4).toFixed(1)}" fill="none" stroke="rgba(245,166,35,.12)" stroke-width="1"/>`).join('');
+  const spoklar=CL_KONULAR.map((k,i)=>{
+    const aci=acili(i);
+    return `<line x1="${cx}" y1="${cy}" x2="${(cx+maxR*Math.cos(aci)).toFixed(1)}" y2="${(cy+maxR*Math.sin(aci)).toFixed(1)}" stroke="rgba(245,166,35,.07)" stroke-width="1"/>`;
+  }).join('');
+  const azaltilmisHareket=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const supurgeAci=(-90+30).toFixed(1);
+  const supurgeUcX=(cx+maxR*Math.cos((supurgeAci)*Math.PI/180)).toFixed(1);
+  const supurgeUcY=(cy+maxR*Math.sin((supurgeAci)*Math.PI/180)).toFixed(1);
+  const supurge=`<g>
+      <path d="M ${cx} ${cy} L ${cx} ${cy-maxR} A ${maxR} ${maxR} 0 0 1 ${supurgeUcX} ${supurgeUcY} Z" fill="url(#kr-sweep-grad)"/>
+      ${azaltilmisHareket?'':`<animateTransform attributeName="transform" type="rotate" from="0 ${cx} ${cy}" to="360 ${cx} ${cy}" dur="6s" repeatCount="indefinite"/>`}
+    </g>`;
+  const blipSvg=blipler.map(b=>{
+    const opaklik=(0.22+b.seviye*0.78).toFixed(2);
+    const yaricap=(4+b.seviye*4).toFixed(1);
+    const haloOpaklik=(b.seviye*0.22).toFixed(2);
+    const sinif=b.seviye>=1?'kr-blip-tam':b.seviye>0?'kr-blip-kismi':'kr-blip-bos';
+    return `<g class="kr-blip ${sinif}" data-idx="${b.idx}" tabindex="0" role="button" aria-label="${b.baslik} — %${Math.round(b.seviye*100)} ustalık">
+      <circle class="kr-blip-halo" cx="${b.x}" cy="${b.y}" r="${(+yaricap+7).toFixed(1)}" fill="rgba(245,166,35,${haloOpaklik})"/>
+      <circle cx="${b.x}" cy="${b.y}" r="${yaricap}" fill="#f5a623" opacity="${opaklik}"/>
+      <title>${b.baslik} — %${Math.round(b.seviye*100)} ustalık</title>
+    </g>`;
+  }).join('');
+  wrap.innerHTML=`
+    <svg viewBox="0 0 300 300" class="kr-svg">
+      <defs>
+        <radialGradient id="kr-sweep-grad"><stop offset="0%" stop-color="#f5a623" stop-opacity=".32"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient>
+      </defs>
+      <circle cx="${cx}" cy="${cy}" r="${maxR}" fill="rgba(245,166,35,.03)"/>
+      ${halkalar}
+      ${spoklar}
+      ${supurge}
+      <circle cx="${cx}" cy="${cy}" r="3" fill="#f5a623"/>
+      ${blipSvg}
+    </svg>
+  `;
+  wrap.querySelectorAll('.kr-blip').forEach(el=>{
+    const git=()=>konuRadarindenGit(parseInt(el.dataset.idx,10));
+    el.addEventListener('click',git);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();git();}});
+  });
+
+  const ustalasilan=blipler.filter(b=>b.seviye>=1).length;
+  const ozetEl=document.getElementById('konu-radar-ozet');
+  if(ozetEl)ozetEl.textContent=`${ustalasilan}/${n} konu ustalaşıldı`;
+
+  const zayifEl=document.getElementById('radar-zayif-liste');
+  if(zayifEl){
+    const zayif=[...blipler].sort((a,b)=>a.seviye-b.seviye).slice(0,3);
+    zayifEl.innerHTML=`
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">📡 En Zayıf Sinyallerin</div>
+      ${zayif.map(z=>`
+        <div class="kr-zayif-item">
+          <div class="kr-zayif-metin">
+            <div class="kr-zayif-baslik">${z.baslik}</div>
+            <div class="kr-zayif-bar-wrap"><div class="kr-zayif-bar" style="width:${Math.round(z.seviye*100)}%"></div></div>
+            <div class="kr-zayif-yuzde">%${Math.round(z.seviye*100)} ustalık</div>
+          </div>
+          <button class="kr-zayif-btn" onclick="konuRadarindenGit(${z.idx})">Şimdi Çalış →</button>
+        </div>
+      `).join('')}
+    `;
+  }
+}
+function konuRadarindenGit(idx){
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Canlı Ders'));
+  if(item)item.click();
+  if(typeof clOynatKonu==='function')clOynatKonu(idx);
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+}
+
 function radarCiz(){
   const canvas=document.getElementById('radarCanvas');
   if(!canvas)return;
@@ -6246,7 +6367,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const asılDtab=window.dtab;
   window.dtab=function(el,mod){
     asılDtab&&asılDtab(el,mod);
-    if(mod==='radar'){setTimeout(radarCiz,100);}
+    if(mod==='radar'){setTimeout(konuRadariCiz,100);}
     if(mod==='lider'){setTimeout(liderTabloGoster,100);}
     if(mod==='istatistik'){setTimeout(istatistikRender,100);}
     if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
