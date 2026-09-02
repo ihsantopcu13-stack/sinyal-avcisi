@@ -1,11 +1,14 @@
 // ============================================================
 // TTS API — ElevenLabs Text-to-Speech Proxy
-// Sinyal Avcısı — Dil Avcısı modülü (doğal İngilizce seslendirme)
+// Sinyal Avcısı — sitedeki TÜRKÇE metinler için kullanılır.
+// (İngilizce metinler için api/tts.mjs / OpenAI nova kullanılıyor;
+// yönlendirme istemci tarafında ttsSpeak() içinde dil tespitiyle yapılır.)
 // ============================================================
 
 import { rateLimit } from './_rateLimit.mjs';
 
-// Rachel — ElevenLabs'in hazır, doğal İngilizce kadın sesi
+// Rachel — ElevenLabs'in hazır sesi, eleven_multilingual_v2 modeliyle Türkçe dahil
+// çoklu dili destekler
 const RACHEL_VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
 
 export default async function handler(req, res) {

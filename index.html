@@ -2981,23 +2981,27 @@ let pIdx=2,pPlaying=false,pSpeed=1,pFill=0,pTimer=null;
 function pUpdate(){const d=PD[pIdx%PD.length];document.getElementById('p-topic').textContent=d.t;document.getElementById('p-en').textContent=d.en;document.getElementById('p-tr').textContent=d.tr;}
 let pAudio=null;
 const ttsCache=new Map(); // Ses cache — aynı metni tekrar API'ye sormaz
+const ttsElevenCache=new Map();
 
-async function ttsSpeak(text,lang,onEnd,onAudioReady){
+// Dil tespiti — Türkçeye özgü harf varsa Türkçe kabul edilir
+function ttsTurkceMi(text){
+  return /[çğıöşüÇĞİÖŞÜ]/.test(text||'');
+}
+
+// OpenAI (nova) — İngilizce metinler için
+async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
   try{
     const voice='nova';
-    const cacheKey=text.trim().substring(0,100)+'_'+voice;
-
-    // Cache'den al
+    const cacheKey='openai_'+text.trim().substring(0,100)+'_'+voice;
     let url=ttsCache.get(cacheKey);
     if(!url){
       const res=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice,speed:1})});
       if(!res.ok)throw new Error('TTS failed');
       const blob=await res.blob();
       url=URL.createObjectURL(blob);
-      ttsCache.set(cacheKey,url); // Cache'e kaydet
+      ttsCache.set(cacheKey,url);
     }
-
     if(pAudio){pAudio.pause();}
     pAudio=new Audio(url);
     pAudio.playbackRate=pSpeed;
@@ -3010,7 +3014,7 @@ async function ttsSpeak(text,lang,onEnd,onAudioReady){
     if(window.speechSynthesis){
       speechSynthesis.cancel();
       const u=new SpeechSynthesisUtterance(text);
-      u.lang=lang;u.rate=pSpeed;
+      u.lang=lang||'en-US';u.rate=pSpeed;
       if(onEnd)u.onend=onEnd;
       if(onAudioReady)onAudioReady(u);
       speechSynthesis.speak(u);
@@ -3018,9 +3022,8 @@ async function ttsSpeak(text,lang,onEnd,onAudioReady){
   }
 }
 
-// ElevenLabs TTS — sadece Dil Avcısı modülü için (Rachel — doğal İngilizce ses)
-const ttsElevenCache=new Map();
-async function ttsSpeakEleven(text,onEnd){
+// ElevenLabs — Türkçe metinler için
+async function ttsEleven(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
   try{
     const cacheKey='eleven_'+text.trim().substring(0,100);
@@ -3035,12 +3038,25 @@ async function ttsSpeakEleven(text,onEnd){
     if(pAudio){pAudio.pause();}
     pAudio=new Audio(url);
     pAudio.onended=onEnd||null;
+    if(onAudioReady)onAudioReady(pAudio);
     await pAudio.play();
     return pAudio;
   }catch(e){
-    // ElevenLabs başarısız olursa mevcut OpenAI TTS'e düş
-    return ttsSpeak(text,'en-US',onEnd);
+    // ElevenLabs başarısız olursa OpenAI'ye düş (router'a değil — sonsuz döngü olmasın)
+    return ttsOpenAINova(text,lang,onEnd,onAudioReady);
   }
+}
+
+// Ana giriş noktası — tüm site bunu kullanır. Metindeki dile göre otomatik
+// olarak ElevenLabs (Türkçe) veya OpenAI nova (İngilizce) seçer.
+async function ttsSpeak(text,lang,onEnd,onAudioReady){
+  if(!text||text.trim().length<2)return;
+  if(ttsTurkceMi(text))return ttsEleven(text,lang,onEnd,onAudioReady);
+  return ttsOpenAINova(text,lang,onEnd,onAudioReady);
+}
+// Geriye dönük uyumluluk — artık o da aynı dil yönlendirmesinden geçer
+function ttsSpeakEleven(text,onEnd,onAudioReady){
+  return ttsSpeak(text,'en-US',onEnd,onAudioReady);
 }
 
 // ─── SİNYAL PİNG SİSTEMİ — radar ping + ses + kontak günlüğü ───────────────
