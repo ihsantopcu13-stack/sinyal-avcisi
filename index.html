@@ -377,6 +377,21 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
   body{padding-bottom:64px}
 }
 
+/* HOŞ GELDİN KARŞILAMA ANİMASYONU */
+.hg-overlay{position:fixed;inset:0;z-index:99995;background:#0a0d13;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .6s ease;cursor:pointer}
+.hg-overlay.acik{opacity:1;pointer-events:auto}
+.hg-radar-katman{position:absolute;top:50%;left:50%;width:0;height:0;pointer-events:none}
+.hg-ping-ring{position:absolute;top:0;left:0;width:20px;height:20px;margin:-10px 0 0 -10px;border:2px solid #f5a623;border-radius:50%;box-shadow:0 0 30px 0 rgba(245,166,35,.4);animation:hgPingOut 2.4s cubic-bezier(.16,.84,.44,1) infinite}
+@keyframes hgPingOut{0%{width:20px;height:20px;margin:-10px 0 0 -10px;opacity:.9}100%{width:900px;height:900px;margin:-450px 0 0 -450px;opacity:0}}
+.hg-icerik{position:relative;text-align:center;padding:0 24px;z-index:1;max-width:90vw}
+.hg-baslik{font-family:'IBM Plex Serif',serif;font-size:clamp(24px,5vw,42px);color:#ece7da;letter-spacing:-.01em;min-height:1.3em;text-wrap:balance}
+.hg-baslik::after{content:'';display:inline-block;width:3px;height:.9em;background:#f5a623;margin-left:3px;vertical-align:middle;animation:hgCursorBlink .85s steps(1) infinite}
+.hg-baslik.hg-yazim-bitti::after{display:none}
+@keyframes hgCursorBlink{50%{opacity:0}}
+.hg-alt{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#f5a623;opacity:0;transition:opacity .5s ease}
+@media(max-width:600px){.hg-baslik{font-size:22px}.hg-alt{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.hg-ping-ring{animation:none;opacity:0}}
+
 /* MOBİL ALT NAVİGASYON — 4 grup + Dashboard */
 .mobile-bottom-nav{
   display:none;position:fixed;left:0;right:0;bottom:0;z-index:850;
@@ -1997,7 +2012,15 @@ function _sbInit(){
   console.log('[bildirim-debug] _sbInit çalıştı, onAuthStateChange kaydediliyor');
   sb.auth.onAuthStateChange((event,session)=>{
     console.log('[bildirim-debug] onAuthStateChange tetiklendi. event=',event,'session var mı=',!!session);
-    if(session){currentUser=session.user;console.log('[bildirim-debug] currentUser ayarlandı:',currentUser?.email);showUserMenu(session.user);}else{currentUser=null;console.log('[bildirim-debug] currentUser null yapıldı (oturum yok)');showGuestMenu();}
+    if(session){
+      currentUser=session.user;
+      console.log('[bildirim-debug] currentUser ayarlandı:',currentUser?.email);
+      showUserMenu(session.user);
+      if(event==='SIGNED_IN'&&typeof hosgeldinAnimasyonuGoster==='function'){
+        const ad=session.user.user_metadata?.ad||session.user.email.split('@')[0];
+        hosgeldinAnimasyonuGoster(ad);
+      }
+    }else{currentUser=null;console.log('[bildirim-debug] currentUser null yapıldı (oturum yok)');showGuestMenu();}
   });
 }
 // Supabase SDK script'i artık `defer` ile yükleniyor (render-blocking'i azaltmak
@@ -2021,6 +2044,57 @@ function showUserMenu(u){
   if(typeof bildirimBtnGuncelle==='function')bildirimBtnGuncelle();
 }
 function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
+
+// ─── HOŞ GELDİN KARŞILAMA ANİMASYONU — girişte tetiklenir ──────────────────
+let _hgKapatTimer=null,_hgYaziTimer=null;
+function _hgEscape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function hosgeldinAnimasyonuGoster(isim){
+  const overlay=document.getElementById('hosgeldin-overlay');
+  const baslikEl=document.getElementById('hg-baslik');
+  const altEl=document.getElementById('hg-alt');
+  const katman=overlay?.querySelector('.hg-radar-katman');
+  if(!overlay||!baslikEl||!altEl||!katman)return;
+
+  clearInterval(_hgYaziTimer);clearTimeout(_hgKapatTimer);
+  baslikEl.textContent='';baslikEl.classList.remove('hg-yazim-bitti');
+  altEl.textContent='';altEl.style.opacity='0';
+  katman.innerHTML='';
+  for(let i=0;i<3;i++){
+    const ring=document.createElement('span');
+    ring.className='hg-ping-ring';
+    ring.style.animationDelay=(i*0.65)+'s';
+    katman.appendChild(ring);
+  }
+  overlay.classList.add('acik');
+
+  const isimGuvenli=_hgEscape(isim);
+  const tamMetin=`Hoş geldiniz, ${isim}`;
+  let i=0;
+  _hgYaziTimer=setInterval(()=>{
+    baslikEl.textContent+=tamMetin[i];
+    i++;
+    if(i>=tamMetin.length){
+      clearInterval(_hgYaziTimer);
+      baslikEl.classList.add('hg-yazim-bitti');
+      baslikEl.innerHTML=`Hoş geldiniz, <span style="color:#f5a623">${isimGuvenli}</span>`;
+      setTimeout(()=>{altEl.textContent='📡 Sinyal Avcısı sizi bekliyor';altEl.style.opacity='1';},250);
+    }
+  },45);
+
+  if(typeof ttsSpeak==='function'){
+    setTimeout(()=>ttsSpeak(`Hoş geldiniz ${isim}. Sinyal Avcısı sizi bekliyor.`,'tr-TR',null),300);
+  }
+
+  _hgKapatTimer=setTimeout(hosgeldinKapat,2800);
+}
+function hosgeldinKapat(){
+  const overlay=document.getElementById('hosgeldin-overlay');
+  if(!overlay||!overlay.classList.contains('acik'))return;
+  clearInterval(_hgYaziTimer);clearTimeout(_hgKapatTimer);
+  overlay.classList.remove('acik');
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  goTo('dashboard');
+}
 function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
@@ -6710,6 +6784,15 @@ function ingPratikKlod(konu,gorev){const chatIn=document.getElementById('chat-in
 
 async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#15803d">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=metin.replace(/\n/g,'<br>');xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
 </script>
+<!-- HOŞ GELDİN KARŞILAMA ANİMASYONU -->
+<div id="hosgeldin-overlay" class="hg-overlay" onclick="hosgeldinKapat()">
+  <div class="hg-radar-katman" aria-hidden="true"></div>
+  <div class="hg-icerik">
+    <div class="hg-baslik" id="hg-baslik"></div>
+    <div class="hg-alt" id="hg-alt"></div>
+  </div>
+</div>
+
 <!-- MOBİL ALT NAVİGASYON -->
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
   <button class="mbn-item active" data-group="dashboard" onclick="mobilNavGrupAc('dashboard',this)">
