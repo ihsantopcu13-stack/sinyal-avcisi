@@ -695,6 +695,89 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
   .tahta-icerik{padding-left:118px}
 }
 
+/* SİNYAL PİNG — radar ping + kontak günlüğü (Sinyal Lab + Canlı Ders) */
+#sinyal-ping-layer{position:fixed;inset:0;pointer-events:none;z-index:99990}
+.sinyal-ping-ring{
+  position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;
+  border:1.5px solid #f5a623;border-radius:50%;
+  box-shadow:0 0 14px 0 rgba(245,166,35,.4);
+  animation:sinyalPingOut .95s cubic-bezier(.16,.84,.44,1) forwards;
+}
+@keyframes sinyalPingOut{
+  0%{width:14px;height:14px;margin:-7px 0 0 -7px;opacity:.9}
+  100%{width:130px;height:130px;margin:-65px 0 0 -65px;opacity:0}
+}
+.sinyal-ping-cross{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;animation:sinyalCrossFlash .5s ease-out forwards}
+.sinyal-ping-cross::before,.sinyal-ping-cross::after{content:'';position:absolute;background:#f5a623}
+.sinyal-ping-cross::before{left:10px;top:0;width:2px;height:22px}
+.sinyal-ping-cross::after{top:10px;left:0;width:22px;height:2px}
+@keyframes sinyalCrossFlash{
+  0%{opacity:1;transform:scale(.35) rotate(0deg)}
+  55%{opacity:1}
+  100%{opacity:0;transform:scale(1.35) rotate(45deg)}
+}
+.sig-pingable{cursor:pointer!important}
+.sig-pingable:hover{filter:brightness(1.25);box-shadow:0 0 0 2px rgba(245,166,35,.5)!important}
+.sinyal-ping-flash{animation:sinyalFlashPulse .45s ease}
+@keyframes sinyalFlashPulse{
+  0%{text-shadow:0 0 0 rgba(245,166,35,0)}
+  35%{text-shadow:0 0 14px rgba(245,166,35,.9)}
+  100%{text-shadow:0 0 0 rgba(245,166,35,0)}
+}
+.cl-sig-ping{
+  cursor:pointer;color:#ffd27a;text-decoration:none;
+  text-shadow:0 0 6px rgba(245,166,35,.35);
+  transition:text-shadow .2s,color .2s;
+}
+.cl-sig-ping:hover{color:#ffe4ab;text-shadow:0 0 12px rgba(245,166,35,.6)}
+
+#kontak-gunlugu{
+  position:fixed;top:50%;right:-300px;transform:translateY(-50%);
+  width:270px;max-height:min(60vh,440px);
+  background:#12161f;border:1px solid rgba(245,166,35,.28);border-left:2px solid #f5a623;
+  border-radius:14px 0 0 14px;
+  box-shadow:-8px 0 28px rgba(0,0,0,.45);
+  z-index:99991;
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:right .35s cubic-bezier(.2,.7,.3,1);
+  font-family:'JetBrains Mono',monospace;
+}
+#kontak-gunlugu.acik{right:0}
+.kg-header{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 14px;border-bottom:1px solid rgba(245,166,35,.18);
+  color:#ece7da;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+}
+.kg-baslik{flex:1;font-weight:600}
+.kg-count{
+  background:rgba(245,166,35,.16);color:#f5a623;border-radius:10px;
+  padding:2px 8px;font-size:11px;font-weight:700;
+}
+.kg-close{background:none;border:none;color:#8b93a3;cursor:pointer;font-size:13px;padding:2px 4px;line-height:1}
+.kg-close:hover{color:#f5a623}
+.kg-entries{overflow-y:auto;padding:6px 8px}
+.kg-empty{font-size:11.5px;color:#8b93a3;padding:14px 10px;line-height:1.6}
+.kg-row{
+  display:grid;grid-template-columns:22px 1fr;gap:8px;
+  padding:8px 6px;border-bottom:1px solid rgba(255,255,255,.05);
+  animation:kgRowIn .3s ease;
+}
+.kg-row:last-child{border-bottom:none}
+@keyframes kgRowIn{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:none}}
+.kg-idx{font-size:11px;color:#f5a623;padding-top:1px}
+.kg-row-metin{display:flex;flex-direction:column;gap:2px}
+.kg-word{font-size:12.5px;font-weight:600;color:#ece7da}
+.kg-cat{font-size:10px;color:#8b93a3;letter-spacing:.03em;text-transform:uppercase}
+@media(max-width:640px){
+  #kontak-gunlugu{top:auto;bottom:-100%;right:12px;left:12px;transform:none;width:auto;max-height:46vh;border-radius:14px;border-left:1px solid rgba(245,166,35,.28);border-bottom:2px solid #f5a623;transition:bottom .35s cubic-bezier(.2,.7,.3,1)}
+  #kontak-gunlugu.acik{bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  .sinyal-ping-ring{animation:sinyalPingOutReduced .4s ease-out forwards}
+  .sinyal-ping-cross{animation:none;display:none}
+}
+@keyframes sinyalPingOutReduced{from{opacity:.9}to{opacity:0}}
+
 /* MODAL - Ders Oynatıcı */
 .ders-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 .ders-modal.open{display:flex}
@@ -2724,6 +2807,137 @@ async function ttsSpeakEleven(text,onEnd){
     return ttsSpeak(text,'en-US',onEnd);
   }
 }
+
+// ─── SİNYAL PİNG SİSTEMİ — radar ping + ses + kontak günlüğü ───────────────
+// Sinyal Lab ve Canlı Ders'teki sinyal kelimelerine tıklayınca tetiklenir.
+const SINYAL_PING_KELIMELER=['provided that','must have','far from','despite','however','although','unless','yet'];
+const SINYAL_PING_KATEGORI={
+  'despite':'Zıtlık Sinyali','however':'Zıtlık Sinyali','although':'Zıtlık Sinyali','yet':'Zıtlık Sinyali',
+  'must have':'Çıkarım Sinyali','far from':'Gizli Olumsuz','unless':'Koşul Sinyali','provided that':'Koşul Sinyali'
+};
+function sinyalPingKelimeBul(text){
+  const t=(text||'').toLowerCase();
+  return SINYAL_PING_KELIMELER.find(k=>t.includes(k))||null;
+}
+let _pingAudioCtx=null;
+function sinyalPingSesi(){
+  try{
+    if(!_pingAudioCtx)_pingAudioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const ctx=_pingAudioCtx;
+    if(ctx.state==='suspended')ctx.resume();
+    const now=ctx.currentTime;
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='sine';
+    osc.frequency.setValueAtTime(1400,now);
+    osc.frequency.exponentialRampToValueAtTime(700,now+0.18);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(0.22,now+0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+0.26);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(now);osc.stop(now+0.28);
+  }catch(e){}
+}
+function sinyalPingHalka(clientX,clientY){
+  let layer=document.getElementById('sinyal-ping-layer');
+  if(!layer){
+    layer=document.createElement('div');
+    layer.id='sinyal-ping-layer';
+    document.body.appendChild(layer);
+  }
+  for(let i=0;i<3;i++){
+    const ring=document.createElement('span');
+    ring.className='sinyal-ping-ring';
+    ring.style.left=clientX+'px';ring.style.top=clientY+'px';
+    ring.style.animationDelay=(i*0.16)+'s';
+    layer.appendChild(ring);
+    ring.addEventListener('animationend',()=>ring.remove());
+  }
+  const cross=document.createElement('span');
+  cross.className='sinyal-ping-cross';
+  cross.style.left=clientX+'px';cross.style.top=clientY+'px';
+  layer.appendChild(cross);
+  cross.addEventListener('animationend',()=>cross.remove());
+}
+function kontakGunluguYukle(){
+  try{return JSON.parse(localStorage.getItem('sa_kontak_gunlugu'))||[];}catch(e){return[];}
+}
+function kontakGunluguKaydet(liste){
+  try{localStorage.setItem('sa_kontak_gunlugu',JSON.stringify(liste.slice(0,50)));}catch(e){}
+}
+function kontakGunluguPanelOlustur(){
+  let panel=document.getElementById('kontak-gunlugu');
+  if(panel)return panel;
+  panel=document.createElement('div');
+  panel.id='kontak-gunlugu';
+  panel.innerHTML=`
+    <div class="kg-header">
+      <span class="kg-baslik">📡 Kontak Günlüğü</span>
+      <span class="kg-count" id="kg-count">0</span>
+      <button class="kg-close" onclick="kontakGunluguKapat()" aria-label="Kontak günlüğünü kapat">✕</button>
+    </div>
+    <div class="kg-entries" id="kg-entries"></div>
+  `;
+  document.body.appendChild(panel);
+  return panel;
+}
+function kontakGunluguKapat(){
+  const panel=document.getElementById('kontak-gunlugu');
+  if(panel)panel.classList.remove('acik');
+}
+function kontakGunluguGoster(){
+  const panel=kontakGunluguPanelOlustur();
+  setTimeout(()=>panel.classList.add('acik'),10);
+  kontakGunluguRender();
+}
+function kontakGunluguRender(){
+  const entriesEl=document.getElementById('kg-entries');
+  const countEl=document.getElementById('kg-count');
+  if(!entriesEl)return;
+  const liste=kontakGunluguYukle();
+  if(countEl)countEl.textContent=liste.length;
+  entriesEl.innerHTML=liste.length?liste.map((e,i)=>`
+    <div class="kg-row">
+      <span class="kg-idx">${String(liste.length-i).padStart(2,'0')}</span>
+      <div class="kg-row-metin">
+        <span class="kg-word">${e.kelime}</span>
+        <span class="kg-cat">${e.kategori}</span>
+      </div>
+    </div>
+  `).join(''):'<div class="kg-empty">Henüz sinyal yok — taramaya başla.</div>';
+}
+function sinyalPingTetikle(el,kelime){
+  const rect=el.getBoundingClientRect();
+  const x=rect.left+rect.width/2;
+  const y=rect.top+rect.height/2;
+  sinyalPingHalka(x,y);
+  sinyalPingSesi();
+  el.classList.add('sinyal-ping-flash');
+  setTimeout(()=>el.classList.remove('sinyal-ping-flash'),450);
+  const kategori=SINYAL_PING_KATEGORI[kelime]||'Sinyal';
+  const liste=kontakGunluguYukle();
+  liste.unshift({kelime,kategori,ts:Date.now()});
+  kontakGunluguKaydet(liste);
+  kontakGunluguGoster();
+}
+function sinyalPingVurgula(el){
+  if(!el)return;
+  const text=el.textContent;
+  if(!text)return;
+  const kelimelerUzunSirali=SINYAL_PING_KELIMELER.slice().sort((a,b)=>b.length-a.length);
+  const kacis=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const pattern=new RegExp('\\b('+kelimelerUzunSirali.map(kacis).join('|')+')\\b','gi');
+  const yeni=text.replace(pattern,(m)=>`<span class="cl-sig-ping" data-kelime="${m.toLowerCase()}">${m}</span>`);
+  if(yeni===text)return;
+  el.innerHTML=yeni;
+  el.querySelectorAll('.cl-sig-ping').forEach(span=>{
+    span.addEventListener('click',function(e){
+      e.stopPropagation();
+      sinyalPingTetikle(this,this.dataset.kelime);
+    });
+  });
+}
+
 function playerToggle(){pPlaying=!pPlaying;document.getElementById('p-play').textContent=pPlaying?'⏸':'▶';if(pPlaying){pTTS();pStartFill();}else{if(pAudio)pAudio.pause();if(window.speechSynthesis)speechSynthesis.cancel();clearInterval(pTimer);}}
 async function pTTS(){
   const d=PD[pIdx%PD.length];
@@ -3036,17 +3250,21 @@ function clOynatKonu(idx){
 }
 function clAsamaAciklama(k){
   document.getElementById('cl-blok-aciklama').style.display='block';
-  clYaz('cl-metin-aciklama',k.aciklama,20);
+  clYaz('cl-metin-aciklama',k.aciklama,20,()=>sinyalPingVurgula(document.getElementById('cl-metin-aciklama')));
   ttsSpeak(k.aciklama,'tr-TR',()=>clAsamaOrnek(k),clHookMouth);
 }
 function clAsamaOrnek(k){
   document.getElementById('cl-blok-ornek').style.display='block';
-  clYaz('cl-metin-ornek',k.ornekEn,26,()=>{clYaz('cl-metin-ornek-tr',k.ornekTr,18);});
+  clYaz('cl-metin-ornek',k.ornekEn,26,()=>{
+    sinyalPingVurgula(document.getElementById('cl-metin-ornek'));
+    clYaz('cl-metin-ornek-tr',k.ornekTr,18);
+  });
   ttsSpeak(k.ornekEn,'en-US',()=>clAsamaSoru(k),clHookMouth);
 }
 function clAsamaSoru(k){
   document.getElementById('cl-blok-soru').style.display='block';
   clYaz('cl-metin-soru',k.soru,22,()=>{
+    sinyalPingVurgula(document.getElementById('cl-metin-soru'));
     const wrap=document.getElementById('cl-secenekler');
     wrap.innerHTML=k.secenekler.map((s,i)=>`<button class="cl-secenek" onclick="clCevapSec(${i})">${String.fromCharCode(65+i)}) ${s}</button>`).join('');
   });
@@ -3062,7 +3280,7 @@ function clCevapSec(i){
   document.getElementById('cl-blok-cevap').style.display='block';
   const on=i===k.cevap?'Doğru! ':`Yanlış, doğru cevap: ${String.fromCharCode(65+k.cevap)}) ${k.secenekler[k.cevap]}. `;
   const tamMetin=on+k.cevapAciklama;
-  clYaz('cl-metin-cevap',tamMetin,18);
+  clYaz('cl-metin-cevap',tamMetin,18,()=>sinyalPingVurgula(document.getElementById('cl-metin-cevap')));
   ttsSpeak(tamMetin,'tr-TR',null,clHookMouth);
 }
 function clTekrarAnlat(){clOynatKonu(clIdx);}
@@ -3168,6 +3386,18 @@ function slRender(){
           e.stopPropagation();
           ttsSpeak(this.textContent,'en-US',null);
         });
+      });
+      // Sinyal Ping — despite/however/must have/far from/although/yet/unless/provided that
+      sent.querySelectorAll('.s-sig,.s-trap').forEach(el=>{
+        const kelime=sinyalPingKelimeBul(el.textContent);
+        if(kelime){
+          el.classList.add('sig-pingable');
+          el.title='Sinyali kilitlemek için tıkla';
+          el.addEventListener('click',function(e){
+            e.stopPropagation();
+            sinyalPingTetikle(this,kelime);
+          });
+        }
       });
     },100);
     // Sinyal Radar — highlight'ları sırayla pulse et
