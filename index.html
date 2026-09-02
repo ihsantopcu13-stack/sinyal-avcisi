@@ -268,6 +268,9 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(248,24
 .dn-item{font-size:15px;font-weight:500;color:rgba(247,246,242,.45);padding:10px 16px;cursor:pointer;transition:all .15s;border-left:2px solid transparent}
 .dn-item:hover{color:var(--paper);background:rgba(255,255,255,.04)}
 .dn-item.active{color:var(--paper);border-left-color:var(--signal);background:rgba(45,91,227,.12)}
+.dn-group{margin-top:4px;padding-top:8px;border-top:1px solid rgba(255,255,255,.07)}
+.dn-group:first-of-type{border-top:none}
+.dn-group-baslik{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.38);padding:6px 16px 6px}
 .dash-alan{padding:13px 16px;border-top:1px solid rgba(255,255,255,.08)}
 .dash-alan-lbl{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
 .dash-alan-val{font-size:15px;font-weight:600;color:#6ee7b7}
@@ -371,7 +374,48 @@ footer{background:var(--ink);color:var(--paper);padding:56px 5vw 32px;display:gr
   .dash-ui{grid-template-columns:1fr}.dash-sb{display:none}
   .dash-karts{grid-template-columns:1fr 1fr}
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
+  body{padding-bottom:64px}
 }
+
+/* MOBİL ALT NAVİGASYON — 4 grup + Dashboard */
+.mobile-bottom-nav{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:850;
+  background:rgba(6,31,24,.94);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+.mbn-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:none;border:none;padding:6px 2px;cursor:pointer;
+  color:rgba(247,246,242,.5);font-family:'Inter',sans-serif;transition:color .15s;
+}
+.mbn-ikon{font-size:19px;line-height:1;transition:transform .15s}
+.mbn-lbl{font-size:10px;font-weight:600}
+.mbn-item.active{color:#6ee7b7}
+.mbn-item.active .mbn-ikon{transform:scale(1.1)}
+
+.mbn-sheet-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:860;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.mbn-sheet-backdrop.acik{opacity:1;pointer-events:auto}
+.mbn-sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:861;
+  background:linear-gradient(165deg,#064e3b,#065f46);
+  border-radius:20px 20px 0 0;
+  padding:10px 8px calc(18px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .32s cubic-bezier(.2,.7,.3,1);
+  max-height:70vh;overflow-y:auto;
+  box-shadow:0 -14px 40px rgba(0,0,0,.4);
+}
+.mbn-sheet.acik{transform:translateY(0)}
+.mbn-sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);margin:2px auto 12px}
+.mbn-sheet-baslik{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:0 10px 10px}
+.mbn-sheet-liste{display:flex;flex-direction:column;gap:2px}
+.mbn-sheet-item{
+  display:block;width:100%;text-align:left;background:none;border:none;color:#f8f7f3;
+  font-size:15px;font-weight:500;padding:13px 12px;border-radius:10px;
+  cursor:pointer;font-family:'Inter',sans-serif;
+}
+.mbn-sheet-item:active{background:rgba(255,255,255,.1)}
+@media(max-width:900px){.mobile-bottom-nav{display:flex}body{padding-bottom:64px}}
 .scroll-hidden{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}.scroll-reveal{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
 .scroll-hidden.visible{opacity:1;transform:none}
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
@@ -1208,22 +1252,42 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         <div class="dash-logo">Sinyal <b>Avcisi</b></div>
         <div class="dash-nav">
           <div class="dn-item active" onclick="dnav(this)">📊 Dashboard</div>
-          <div class="dn-item" onclick="dnav(this)">🔬 Sinyal Lab</div>
-          <div class="dn-item" onclick="dnav(this)">🤖 KLOD</div>
-          <div class="dn-item" onclick="dnav(this)">🎧 Ses Kurs</div>
-          <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
-          <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
-          <div class="dn-item" onclick="dnav(this)">🎯 Gunluk Tuzak</div>
-          <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')">🎯 Zayıf Alan Radarı</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')">📊 İstatistiklerim</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')">🎓 Canlı Ders</div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')">📅 Sınav Planım</div>
-          <div style="height:1px;background:linear-gradient(90deg,transparent,#a78bfa55,transparent);margin:10px 14px"></div>
-          <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+
+          <div class="dn-group" data-grup="pratik">
+            <div class="dn-group-baslik">🎯 Pratik</div>
+            <div class="dn-item" onclick="dnav(this)">🔬 Sinyal Lab</div>
+            <div class="dn-item" onclick="dnav(this)">🎯 Gunluk Tuzak</div>
+            <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[4],'paragraf')">📖 Paragraf</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')">📐 S+V+O</div>
+            <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')">🏹 Avcı Master</div>
+          </div>
+
+          <div class="dn-group" data-grup="analiz">
+            <div class="dn-group-baslik">📊 Analiz Et</div>
+            <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[7],'hatalar')">📝 Hata Defteri</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')">🎯 Zayıf Alan Radarı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')">📊 İstatistiklerim</div>
+          </div>
+
+          <div class="dn-group" data-grup="planla">
+            <div class="dn-group-baslik">📅 Planla</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')">🚨 Acil Kurtarma Planı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
+          </div>
+
+          <div class="dn-group" data-grup="ogren">
+            <div class="dn-group-baslik">📖 Öğren</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')">🎓 Canlı Ders</div>
+            <div class="dn-item" onclick="dnav(this)">🤖 KLOD</div>
+            <div class="dn-item" onclick="dnav(this)">🎧 Ses Kurs</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[6],'teknik')">🧠 Öğrenme</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+          </div>
         </div>
         <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
       </div>
@@ -1253,7 +1317,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800">🌍 Dil Avcısı</div>
           <div class="dtab" onclick="dtab(this,'istatistik')">📊 İstatistiklerim</div>
           <div class="dtab" onclick="dtab(this,'canliders')">🎓 Canlı Ders</div>
-          <div class="dtab" onclick="dtab(this,'sinavplanim')">📅 Sınav Planım</div>
+          <div class="dtab" onclick="dtab(this,'sinavplanim')">🚨 Acil Kurtarma Planı</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
@@ -1458,7 +1522,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
 
         <!-- SINAV PLANIM — Kişiselleştirilmiş hedef planı -->
         <div class="dmod" id="mod-sinavplanim" style="display:none">
-          <div class="dm-eye">📅 SINAV PLANIM — Puanına özel hedef planı</div>
+          <div class="dm-eye">🚨 ACİL KURTARMA PLANI — Puanına özel hedef planı</div>
           <div style="margin-top:14px;padding:16px;background:var(--sl);border-radius:10px;border:1px solid #c7d2fe">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="sp-dogru" min="0" value="17"></div>
@@ -2298,6 +2362,43 @@ async function soruTopluUret(konu,adet=5){
   const mesaj={role:'user',content:`${konu} konusunda YDS formatında ${adet} soru üret. XML formatı kullan:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>`};
   const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[mesaj],mode:'structured',use_tools:false})});
   return await res.json();
+}
+
+// ─── MOBİL ALT NAVİGASYON — sidebar gruplarını mobilde açılır liste olarak gösterir ───
+const MBN_GRUP_BASLIK={pratik:'🎯 Pratik',analiz:'📊 Analiz Et',planla:'📅 Planla',ogren:'📖 Öğren'};
+function mobilNavGrupAc(grupKey,btn){
+  document.querySelectorAll('.mbn-item').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(grupKey==='dashboard'){
+    const dashItem=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Dashboard'));
+    if(dashItem)dashItem.click();
+    document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+    mobilNavKapat();
+    return;
+  }
+  const kaynakGrup=document.querySelector('.dn-group[data-grup="'+grupKey+'"]');
+  const baslikEl=document.getElementById('mbnSheetBaslik');
+  const listeEl=document.getElementById('mbnSheetListe');
+  if(!kaynakGrup||!baslikEl||!listeEl)return;
+  baslikEl.textContent=MBN_GRUP_BASLIK[grupKey]||'';
+  listeEl.innerHTML='';
+  kaynakGrup.querySelectorAll('.dn-item').forEach(orig=>{
+    const sheetBtn=document.createElement('button');
+    sheetBtn.className='mbn-sheet-item';
+    sheetBtn.innerHTML=orig.innerHTML;
+    sheetBtn.addEventListener('click',()=>{
+      orig.click();
+      document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+      mobilNavKapat();
+    });
+    listeEl.appendChild(sheetBtn);
+  });
+  document.getElementById('mbnBackdrop').classList.add('acik');
+  document.getElementById('mbnSheet').classList.add('acik');
+}
+function mobilNavKapat(){
+  document.getElementById('mbnBackdrop')?.classList.remove('acik');
+  document.getElementById('mbnSheet')?.classList.remove('acik');
 }
 
 // 15. META PROMPTING — Claude'a prompt yazdır
@@ -5625,7 +5726,7 @@ function sinavGunlukMesajGoster(){
   d.textContent=`📅 Hedefine ${v.kalanGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz! 🚀`;
   d.onclick=()=>{
     d.remove();
-    const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Sınav Planım'));
+    const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Acil Kurtarma Planı'));
     if(item)item.click();
     document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
   };
@@ -5768,7 +5869,7 @@ function sinavKurtarmaKartRender(){
   `;
 }
 function sinavKurtarmaKartaGit(){
-  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Sınav Planım'));
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Acil Kurtarma Planı'));
   if(item)item.click();
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
@@ -6403,6 +6504,31 @@ function ingPratikKlod(konu,gorev){const chatIn=document.getElementById('chat-in
 
 async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#15803d">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=metin.replace(/\n/g,'<br>');xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
 </script>
+<!-- MOBİL ALT NAVİGASYON -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <button class="mbn-item active" data-group="dashboard" onclick="mobilNavGrupAc('dashboard',this)">
+    <span class="mbn-ikon">📊</span><span class="mbn-lbl">Ana Sayfa</span>
+  </button>
+  <button class="mbn-item" data-group="pratik" onclick="mobilNavGrupAc('pratik',this)">
+    <span class="mbn-ikon">🎯</span><span class="mbn-lbl">Pratik</span>
+  </button>
+  <button class="mbn-item" data-group="analiz" onclick="mobilNavGrupAc('analiz',this)">
+    <span class="mbn-ikon">📊</span><span class="mbn-lbl">Analiz</span>
+  </button>
+  <button class="mbn-item" data-group="planla" onclick="mobilNavGrupAc('planla',this)">
+    <span class="mbn-ikon">📅</span><span class="mbn-lbl">Planla</span>
+  </button>
+  <button class="mbn-item" data-group="ogren" onclick="mobilNavGrupAc('ogren',this)">
+    <span class="mbn-ikon">📖</span><span class="mbn-lbl">Öğren</span>
+  </button>
+</nav>
+<div class="mbn-sheet-backdrop" id="mbnBackdrop" onclick="mobilNavKapat()"></div>
+<div class="mbn-sheet" id="mbnSheet">
+  <div class="mbn-sheet-handle"></div>
+  <div class="mbn-sheet-baslik" id="mbnSheetBaslik"></div>
+  <div class="mbn-sheet-liste" id="mbnSheetListe"></div>
+</div>
+
 <!-- EXIT INTENT POPUP -->
 <div id="exit-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;backdrop-filter:blur(4px);align-items:center;justify-content:center">
   <div style="background:#fff;border-radius:24px;padding:48px 40px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 32px 96px rgba(0,0,0,.25)">
