@@ -2006,6 +2006,104 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="am-grid" id="am-grid"></div>
           </section>
 
+          <!-- KELİME HAFIZA MODÜLÜ — Aralıklı Tekrar Sistemi (#kelime-hafiza-modul scope) -->
+          <section id="kelime-hafiza-modul">
+          <style>
+            #kelime-hafiza-modul{
+              --kh-bg:#0a0d13;
+              --kh-surface:#12161f;
+              --kh-border:rgba(245,166,35,.16);
+              --kh-text:#ece7da;
+              --kh-muted:#8b93a3;
+              --kh-accent:#f5a623;
+              --kh-yeni:#38BDF8;
+              --kh-tekrar:#F97316;
+              --kh-ogrenildi:#34D399;
+              box-sizing:border-box;
+              background:var(--kh-bg);
+              color:var(--kh-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #kelime-hafiza-modul *{box-sizing:border-box}
+            #kelime-hafiza-modul .kh-header{margin-bottom:18px}
+            #kelime-hafiza-modul .kh-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--kh-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #kelime-hafiza-modul .kh-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #kelime-hafiza-modul .kh-header h2 span{color:var(--kh-accent)}
+            #kelime-hafiza-modul .kh-header p{color:var(--kh-muted);font-size:13px;line-height:1.6;max-width:520px;margin:0}
+
+            #kelime-hafiza-modul .kh-ust-bar{display:flex;align-items:center;gap:16px;background:var(--kh-surface);border:1px solid var(--kh-border);border-radius:16px;padding:16px 20px;margin-bottom:14px;flex-wrap:wrap}
+            #kelime-hafiza-modul .kh-hedef-alan{flex:1;min-width:180px}
+            #kelime-hafiza-modul .kh-hedef-baslik{font-size:12px;font-weight:600;color:var(--kh-text);margin-bottom:8px}
+            #kelime-hafiza-modul .kh-hedef-cubuk{height:8px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+            #kelime-hafiza-modul .kh-hedef-dolgu{height:100%;background:linear-gradient(90deg,var(--kh-accent),#ffcf7a);border-radius:6px;transition:width .4s ease;width:0%}
+            #kelime-hafiza-modul .kh-hedef-sayi{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--kh-muted);margin-top:6px}
+            #kelime-hafiza-modul .kh-streak{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;padding:0 8px}
+            #kelime-hafiza-modul .kh-streak-alev{font-size:22px;line-height:1}
+            #kelime-hafiza-modul .kh-streak-sayi{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--kh-text)}
+            #kelime-hafiza-modul .kh-streak-etiket{font-size:10px;color:var(--kh-muted)}
+
+            #kelime-hafiza-modul .kh-istatistik{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+            #kelime-hafiza-modul .kh-ist-chip{display:flex;align-items:center;gap:6px;background:var(--kh-surface);border:1px solid var(--kh-border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--kh-muted)}
+            #kelime-hafiza-modul .kh-ist-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+            #kelime-hafiza-modul .kh-ist-sayi{font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--kh-text)}
+
+            #kelime-hafiza-modul .kh-kart{background:var(--kh-surface);border:1px solid var(--kh-border);border-radius:16px;padding:28px 24px;text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+            #kelime-hafiza-modul .kh-kart-etiket-ust{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--kart-renk,var(--kh-muted))}
+            #kelime-hafiza-modul .kh-kelime-en{font-family:'IBM Plex Serif',serif;font-size:34px;font-weight:700;color:var(--kh-text);word-break:break-word}
+            #kelime-hafiza-modul .kh-goster-btn{background:var(--kh-accent);color:#0a0d13;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:6px}
+            #kelime-hafiza-modul .kh-goster-btn:hover{opacity:.88}
+
+            #kelime-hafiza-modul .kh-kelime-en-kucuk{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:700;color:var(--kh-text)}
+            #kelime-hafiza-modul .kh-anlam{font-size:17px;font-weight:600;color:var(--kh-accent)}
+            #kelime-hafiza-modul .kh-detay-satir{width:100%;text-align:left;margin-top:4px}
+            #kelime-hafiza-modul .kh-detay-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--kh-muted);margin-bottom:4px}
+            #kelime-hafiza-modul .kh-kok{font-size:12.5px;color:var(--kh-text);line-height:1.6;background:rgba(255,255,255,.03);border:1px solid var(--kh-border);border-radius:8px;padding:8px 12px;margin-bottom:10px}
+            #kelime-hafiza-modul .kh-ornek{font-size:13px;color:var(--kh-muted);line-height:1.6;font-style:italic;border-left:3px solid var(--kh-accent);padding-left:12px}
+
+            #kelime-hafiza-modul .kh-btn-satir{display:flex;gap:10px;margin-top:14px;width:100%}
+            #kelime-hafiza-modul .kh-btn{flex:1;border-radius:10px;padding:12px 10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;border:2px solid transparent;transition:transform .15s}
+            #kelime-hafiza-modul .kh-btn:hover{transform:translateY(-2px)}
+            #kelime-hafiza-modul .kh-btn-bilmedim{background:rgba(249,115,22,.12);border-color:var(--kh-tekrar);color:var(--kh-tekrar)}
+            #kelime-hafiza-modul .kh-btn-bildim{background:rgba(52,211,153,.12);border-color:var(--kh-ogrenildi);color:var(--kh-ogrenildi)}
+
+            #kelime-hafiza-modul .kh-tamam-kart{background:linear-gradient(135deg,rgba(245,166,35,.12),var(--kh-surface));border:1px solid var(--kh-border);border-radius:16px;padding:32px 24px;text-align:center}
+            #kelime-hafiza-modul .kh-tamam-emoji{font-size:40px;margin-bottom:10px}
+            #kelime-hafiza-modul .kh-tamam-baslik{font-family:'IBM Plex Serif',serif;font-size:19px;font-weight:600;color:var(--kh-text);margin-bottom:6px}
+            #kelime-hafiza-modul .kh-tamam-alt{font-size:13px;color:var(--kh-muted)}
+
+            @media (max-width:480px){
+              #kelime-hafiza-modul .kh-kelime-en{font-size:26px}
+              #kelime-hafiza-modul .kh-btn-satir{flex-direction:column}
+            }
+          </style>
+
+          <div class="kh-header">
+            <div class="kh-header-badge">🧠 KELİME HAFIZASI</div>
+            <h2>YDS <span>Kelime Hafızası</span></h2>
+            <p>Aralıklı tekrar (spaced repetition) sistemiyle YDS/YÖKDİL'de sık çıkan kelimeleri kalıcı hafızana kaydet.</p>
+          </div>
+
+          <div class="kh-ust-bar">
+            <div class="kh-hedef-alan">
+              <div class="kh-hedef-baslik">Bugünkü Hedef</div>
+              <div class="kh-hedef-cubuk"><div class="kh-hedef-dolgu" id="kh-hedef-dolgu"></div></div>
+              <div class="kh-hedef-sayi" id="kh-hedef-sayi">0/10 kelime</div>
+            </div>
+            <div class="kh-streak">
+              <div class="kh-streak-alev">🔥</div>
+              <div class="kh-streak-sayi" id="kh-streak-sayi">0</div>
+              <div class="kh-streak-etiket">gün seri</div>
+            </div>
+          </div>
+
+          <div class="kh-istatistik" id="kh-istatistik"></div>
+
+          <div id="kh-kart-alan"></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -7674,6 +7772,241 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
 
   window.amKartAc = amKartAc;
   amModulRender();
+})();
+</script>
+
+<!-- KELİME HAFIZA MODÜLÜ — #kelime-hafiza-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const KH_GUNLUK_HEDEF = 10;
+  const KH_KELIMELER = [
+    {kelime:'ambiguous', anlam:'belirsiz, çift anlamlı', kok:'Latin "ambi-" (iki taraflı, bkz. ambidextrous) + "agere" (sürmek) → iki yöne çekilebilen anlam.', ornek:"The professor's instructions were so ambiguous that half the class misunderstood the assignment."},
+    {kelime:'albeit', anlam:'gerçi, her ne kadar ... olsa da', kok:'Orta İngilizce "al be it" (although it be) birleşiminden gelir.', ornek:'The new policy, albeit controversial, was approved by the board.'},
+    {kelime:'compelling', anlam:'ikna edici, çok etkileyici', kok:'Latin "compellere" = "com-" (birlikte) + "pellere" (itmek) → zorlayıcı biçimde ikna eden.', ornek:'The lawyer presented compelling evidence that convinced the jury.'},
+    {kelime:'consequently', anlam:'sonuç olarak, bu nedenle', kok:'"con-" (birlikte) + "sequi" (izlemek) → bir şeyi izleyen sonuç.', ornek:'The company failed to innovate; consequently, it lost its market share.'},
+    {kelime:'controversial', anlam:'tartışmalı, ihtilaflı', kok:'Latin "controversia" = "contra" (karşı) + "versus" (dönmüş) → karşıt görüşler.', ornek:'Genetic engineering remains a controversial topic among scientists and ethicists.'},
+    {kelime:'crucial', anlam:'çok önemli, kritik', kok:'Latin "crux" (haç, kesişme noktası) → kararın döndüğü nokta.', ornek:'Early diagnosis is crucial for the successful treatment of the disease.'},
+    {kelime:'despite', anlam:'-e rağmen', kok:'Latin "despicere" (aşağı bakmak, hor görmek) zamanla "rağmen" anlamına evrildi.', ornek:'Despite the heavy rain, the construction work continued as scheduled.'},
+    {kelime:'diminish', anlam:'azaltmak, azalmak', kok:'Latin "minuere" (küçültmek) + "de-" (aşağı) → "mini-" ile aynı kök.', ornek:'Regular exercise has been shown to diminish the risk of heart disease.'},
+    {kelime:'elaborate', anlam:'ayrıntılı açıklamak / ayrıntılı, karmaşık', kok:'Latin "e-" (dışarı) + "laborare" (çalışmak, emek) → emek vererek detaylandırmak.', ornek:'Could you elaborate on the methodology used in this experiment?'},
+    {kelime:'emerging', anlam:'ortaya çıkan, gelişmekte olan', kok:'Latin "emergere" = "e-" (dışarı) + "mergere" (dalmak) → sudan yüzeye çıkmak.', ornek:'Emerging technologies like artificial intelligence are transforming the job market.'},
+    {kelime:'emphasis', anlam:'vurgu, önem verme', kok:'Yunanca "emphainein" (göstermek, açığa vurmak).', ornek:'The new curriculum places greater emphasis on critical thinking skills.'},
+    {kelime:'endeavor', anlam:'çaba, gayret / çabalamak', kok:'Eski Fransızca "en devoir" (görevde olmak) → görev bilinciyle çabalama.', ornek:'Scientists continue their endeavor to find a cure for the disease.'},
+    {kelime:'enhance', anlam:'geliştirmek, artırmak', kok:'Latin "altus" (yüksek) + "in-" → yükseltmek.', ornek:'The new software update is designed to enhance user experience.'},
+    {kelime:'evident', anlam:'açık, belli, aşikâr', kok:'Latin "e-" (dışarı) + "videre" (görmek) → görünür olan (bkz. video).', ornek:'It became evident that the experiment had failed to produce reliable results.'},
+    {kelime:'facilitate', anlam:'kolaylaştırmak', kok:'Latin "facilis" (kolay) → "facile" ile aynı kök.', ornek:"The mediator's role is to facilitate communication between the two parties."},
+    {kelime:'furthermore', anlam:'üstelik, ayrıca', kok:'"further" (daha ileri) + "more" (daha fazla) birleşimi.', ornek:'The plan is costly; furthermore, it fails to address the root cause of the problem.'},
+    {kelime:'hence', anlam:'bu nedenle, dolayısıyla', kok:'Eski İngilizce "heonan" (buradan) → mekansal anlamdan mantıksal sonuca evrildi.', ornek:'The evidence was insufficient; hence, the case was dismissed.'},
+    {kelime:'however', anlam:'ancak, fakat, bununla birlikte', kok:'"how" + "ever" birleşimi → zıtlık bağlacına evrilmiştir.', ornek:'The theory seemed promising; however, later experiments disproved it.'},
+    {kelime:'imply', anlam:'ima etmek, dolaylı olarak anlatmak', kok:'Latin "implicare" (içine katlamak) → "implicate" ile aynı kök.', ornek:'Her silence seemed to imply that she disagreed with the decision.'},
+    {kelime:'inevitable', anlam:'kaçınılmaz', kok:'Latin "in-" (olumsuzluk) + "evitare" (kaçınmak) → kaçınılamaz olan.', ornek:'Given the current trends, an economic downturn seems inevitable.'},
+    {kelime:'infrastructure', anlam:'altyapı', kok:'Latin "infra" (alt) + "structura" (yapı) → temeldeki yapı.', ornek:"The government invested heavily in the country's transportation infrastructure."},
+    {kelime:'inherent', anlam:'doğuştan gelen, özünde var olan', kok:'Latin "in-" (içinde) + "haerere" (yapışmak) → bir şeye yapışık olan.', ornek:'There is an inherent risk in any surgical procedure, however minor.'},
+    {kelime:'innovative', anlam:'yenilikçi', kok:'Latin "in-" (içine) + "novare" (yenilemek, "novus"=yeni).', ornek:"The startup is known for its innovative approach to renewable energy."},
+    {kelime:'insight', anlam:'kavrayış, iç görü', kok:'"in" (içeri) + "sight" (görüş) → içe/derinliğe bakış.', ornek:'The study provides valuable insight into consumer behavior patterns.'},
+    {kelime:'integration', anlam:'bütünleşme, entegrasyon', kok:'Latin "integer" (bütün, tam) → parçaların bütün hale gelmesi.', ornek:'The integration of renewable energy sources into the national grid remains a challenge.'},
+    {kelime:'interpret', anlam:'yorumlamak', kok:'Latin "interpres" (aracı, tercüman) → "inter-" (arasında) + anlam aktaran kişi.', ornek:'Different scholars interpret the ancient text in strikingly different ways.'},
+    {kelime:'likewise', anlam:'aynı şekilde, benzer şekilde', kok:'"like" (benzer) + "wise" (şekilde/tarz) birleşimi.', ornek:'The first experiment succeeded; the second, likewise, produced positive results.'},
+    {kelime:'maintain', anlam:'sürdürmek, korumak', kok:'Latin "manu tenere" (elde tutmak) → "manus" (el, bkz. manual) + "tenere" (tutmak).', ornek:'It is essential to maintain a balanced diet for long-term health.'},
+    {kelime:'manifest', anlam:'açıkça göstermek, ortaya çıkmak', kok:'Latin "manifestus" (el ile yakalanmış, açık) → "manus" (el) + "festus".', ornek:'Symptoms of the disease usually manifest within two weeks of infection.'},
+    {kelime:'moreover', anlam:'ayrıca, dahası', kok:'"more" (daha fazla) + "over" (ötesinde) birleşimi.', ornek:'The proposal is too expensive; moreover, it lacks a clear implementation plan.'},
+    {kelime:'nevertheless', anlam:'yine de, bununla birlikte', kok:'"never" + "the" + "less" birleşimi — "daha az olmasına rağmen değil".', ornek:'The odds were against them; nevertheless, the team achieved a remarkable victory.'},
+    {kelime:'notion', anlam:'fikir, kavram, düşünce', kok:'Latin "notio" (bilgi, kavram) ← "noscere" (bilmek, bkz. note).', ornek:'The notion that intelligence is fixed at birth has been challenged by recent research.'},
+    {kelime:'objective', anlam:'hedef, amaç / tarafsız, nesnel', kok:'Latin "ob-" (karşı/yöne) + "jacere" (atmak) → önüne konan hedef.', ornek:"The main objective of the study was to determine the drug's long-term effects."},
+    {kelime:'obtain', anlam:'elde etmek, edinmek', kok:'Latin "ob-" (yönünde) + "tenere" (tutmak) → tutarak elde etmek.', ornek:'Researchers were unable to obtain sufficient funding to continue the project.'},
+    {kelime:'overlook', anlam:'gözden kaçırmak / göz yummak', kok:'"over" (üzerinden) + "look" (bakmak) → üstünkörü bakıp fark etmemek.', ornek:'The committee seems to have overlooked several important details in the report.'},
+    {kelime:'paradigm', anlam:'model, örnek çerçeve, paradigma', kok:'Yunanca "paradeigma" = "para-" (yanında) + "deiknynai" (göstermek) → örnek gösterme.', ornek:'The discovery caused a paradigm shift in how scientists understand the universe.'},
+    {kelime:'perceive', anlam:'algılamak, sezmek', kok:'Latin "per-" (tamamen) + "capere" (yakalamak) → zihinsel olarak kavramak.', ornek:'Consumers tend to perceive expensive products as being of higher quality.'},
+    {kelime:'persist', anlam:'ısrar etmek, devam etmek/sürmek', kok:'Latin "per-" (boyunca) + "sistere" (durmak, ayakta kalmak) → sonuna kadar ayakta durmak.', ornek:'Despite repeated failures, the researchers persisted in their efforts to isolate the virus.'},
+    {kelime:'phenomenon', anlam:'olgu, fenomen', kok:'Yunanca "phainomenon" (görünen şey) ← "phainein" (göstermek).', ornek:'Climate change is a global phenomenon that affects every country differently.'},
+    {kelime:'predominant', anlam:'baskın, hâkim, üstün', kok:'Latin "prae-" (önde) + "dominari" (hükmetmek, bkz. dominant).', ornek:'English has become the predominant language of international business.'},
+    {kelime:'preliminary', anlam:'ön, hazırlık niteliğinde', kok:'Latin "prae-" (önce) + "limen" (eşik) → eşiği geçmeden önceki aşama.', ornek:'The preliminary results of the study suggest a strong correlation between the two variables.'},
+    {kelime:'profound', anlam:'derin, köklü (etki/anlam)', kok:'Latin "pro-" (ileri) + "fundus" (dip, taban) → dibe kadar derin.', ornek:'The invention of the internet had a profound impact on global communication.'},
+    {kelime:'prominent', anlam:'önde gelen, göze çarpan', kok:'Latin "pro-" (öne) + "minere" (çıkıntı yapmak) → öne çıkan.', ornek:'Several prominent scientists have raised concerns about the ethical implications of the research.'},
+    {kelime:'propose', anlam:'önermek, teklif etmek', kok:'Latin "pro-" (öne) + "ponere" (koymak) → öne koymak, sunmak.', ornek:'The committee proposed several changes to improve workplace safety.'},
+    {kelime:'pursue', anlam:'peşinden gitmek, sürdürmek (bir hedefi)', kok:'Latin "pro-" (ileri) + "sequi" (izlemek) → hedefin peşinden gitmek.', ornek:'After graduation, she decided to pursue a career in environmental science.'},
+    {kelime:'rational', anlam:'akılcı, mantıklı', kok:'Latin "ratio" (akıl, hesap) → "reason" ile aynı kök.', ornek:'A rational approach to decision-making requires weighing all available evidence.'},
+    {kelime:'reinforce', anlam:'güçlendirmek, pekiştirmek', kok:'"re-" (tekrar) + "in-" + "force" (güç) → tekrar güç katmak.', ornek:'The findings of the second study reinforce the conclusions of the first.'},
+    {kelime:'relevant', anlam:'ilgili, alakalı', kok:'Latin "re-" (geri) + "levare" (kaldırmak) → konuyla bağlantılı olarak öne çıkan.', ornek:'Only include information that is directly relevant to your research question.'},
+    {kelime:'reluctant', anlam:'isteksiz, gönülsüz', kok:'Latin "re-" (karşı) + "luctari" (mücadele etmek, bkz. struggle).', ornek:'Many employees were reluctant to adopt the new software system.'},
+    {kelime:'reveal', anlam:'ortaya çıkarmak, ifşa etmek', kok:'Latin "re-" (tersine) + "velare" (örtmek, bkz. veil) → örtüyü kaldırmak.', ornek:'The survey revealed that most students prefer online learning over traditional classes.'},
+    {kelime:'significant', anlam:'önemli, anlamlı', kok:'Latin "signum" (işaret) + "facere" (yapmak) → işaret taşıyan, anlam ifade eden.', ornek:'There was a significant increase in sales following the marketing campaign.'},
+    {kelime:'subsequent', anlam:'sonraki, ardından gelen', kok:'Latin "sub-" (altında) + "sequi" (izlemek) → hemen ardından gelen.', ornek:'The initial trial failed, but subsequent experiments yielded promising results.'},
+    {kelime:'substantial', anlam:'hatırı sayılır, önemli miktarda', kok:'Latin "substantia" (töz, esas) ← "sub-" (altında) + "stare" (durmak).', ornek:'The company reported a substantial increase in profits this quarter.'},
+    {kelime:'sufficient', anlam:'yeterli', kok:'Latin "sub-" (altından) + "facere" (yapmak) → ihtiyacı karşılayacak kadar yapılmış.', ornek:"The evidence was not sufficient to support the researchers' initial hypothesis."},
+    {kelime:'suggest', anlam:'önermek, ima etmek', kok:'Latin "sub-" (altına) + "gerere" (taşımak) → aklına fikir taşımak.', ornek:'The data suggest that the new treatment is more effective than the old one.'},
+    {kelime:'sustain', anlam:'sürdürmek, desteklemek/dayanmak', kok:'Latin "sub-" (altından) + "tenere" (tutmak) → altından tutup ayakta kalmasını sağlamak.', ornek:'The economy needs new industries to sustain long-term growth.'},
+    {kelime:'therefore', anlam:'bu nedenle, dolayısıyla', kok:'"there" + "for" birleşimi ("o sebeple").', ornek:'The bridge was found to be structurally unsafe; therefore, it was closed to traffic.'},
+    {kelime:'thus', anlam:'böylece, bu şekilde', kok:'Eski İngilizce "thus" (bu şekilde) — doğrudan sonuç bildiren zarf.', ornek:'The two companies merged, thus creating the largest firm in the industry.'},
+    {kelime:'ultimately', anlam:'sonunda, nihayetinde', kok:'Latin "ultimus" (son, en uzak) → "ultimate" ile aynı kök.', ornek:'Despite initial setbacks, the project was ultimately completed successfully.'},
+    {kelime:'undermine', anlam:'baltalamak, zayıflatmak', kok:'"under" (alt) + "mine" (maden kazmak) → altını oyarak çökertmek.', ornek:"Constant criticism can undermine an employee's confidence over time."},
+    {kelime:'whereas', anlam:'oysa, hâlbuki (karşılaştırma bağlacı)', kok:'"where" + "as" birleşimi, karşılaştırma bildiren bağlaç.', ornek:'Some students prefer visual learning, whereas others learn better through listening.'},
+  ];
+
+  function khBugun(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function khGunFarki(t1, t2){
+    return Math.round((new Date(t1) - new Date(t2)) / 86400000);
+  }
+  function khTarihEkle(tarih, gun){
+    const d = new Date(tarih);
+    d.setDate(d.getDate() + gun);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function khVeriYukle(){
+    let v;
+    try { v = JSON.parse(localStorage.getItem('sa_kelime_hafiza')); } catch(e) { v = null; }
+    if (!v) v = { kelimeler:{}, gunluk:{tarih:null,tamamlanan:[]}, streak:0, sonTamamlananTarih:null };
+    const bugun = khBugun();
+    if (v.gunluk.tarih !== bugun) v.gunluk = { tarih:bugun, tamamlanan:[] };
+    if (v.sonTamamlananTarih && khGunFarki(bugun, v.sonTamamlananTarih) > 1) v.streak = 0;
+    return v;
+  }
+  function khVeriKaydet(v){ try{ localStorage.setItem('sa_kelime_hafiza', JSON.stringify(v)); }catch(e){} }
+
+  function khKuyrukOlustur(v){
+    const bugun = khBugun();
+    const kalan = Math.max(0, KH_GUNLUK_HEDEF - v.gunluk.tamamlanan.length);
+    if (kalan === 0) return [];
+    const tekrar = KH_KELIMELER.filter(k => {
+      const kv = v.kelimeler[k.kelime];
+      return kv && kv.sonrakiTarih <= bugun && !v.gunluk.tamamlanan.includes(k.kelime);
+    });
+    const yeni = KH_KELIMELER.filter(k => !v.kelimeler[k.kelime] && !v.gunluk.tamamlanan.includes(k.kelime));
+    return [...tekrar, ...yeni].slice(0, kalan);
+  }
+
+  let khMevcutKelime = null;
+  let khAcikMi = false;
+
+  function khUstBarGuncelle(v){
+    const n = v.gunluk.tamamlanan.length;
+    const pct = Math.round((n / KH_GUNLUK_HEDEF) * 100);
+    document.getElementById('kh-hedef-dolgu').style.width = Math.min(pct,100) + '%';
+    document.getElementById('kh-hedef-sayi').textContent = n + '/' + KH_GUNLUK_HEDEF + ' kelime';
+    document.getElementById('kh-streak-sayi').textContent = v.streak;
+  }
+
+  function khIstatistikGuncelle(v){
+    let yeniSayi = 0, tekrarSayi = 0, ogrenildiSayi = 0;
+    KH_KELIMELER.forEach(k => {
+      const kv = v.kelimeler[k.kelime];
+      if (!kv) yeniSayi++;
+      else if (kv.kutu === 'ogrenildi') ogrenildiSayi++;
+      else tekrarSayi++;
+    });
+    document.getElementById('kh-istatistik').innerHTML = `
+      <div class="kh-ist-chip"><div class="kh-ist-dot" style="background:var(--kh-yeni)"></div>Yeni <span class="kh-ist-sayi">${yeniSayi}</span></div>
+      <div class="kh-ist-chip"><div class="kh-ist-dot" style="background:var(--kh-tekrar)"></div>Tekrarda <span class="kh-ist-sayi">${tekrarSayi}</span></div>
+      <div class="kh-ist-chip"><div class="kh-ist-dot" style="background:var(--kh-ogrenildi)"></div>Öğrenildi <span class="kh-ist-sayi">${ogrenildiSayi}</span></div>
+    `;
+  }
+
+  function khModulRender(){
+    const v = khVeriYukle();
+    khVeriKaydet(v);
+    khUstBarGuncelle(v);
+    khIstatistikGuncelle(v);
+
+    const kartAlan = document.getElementById('kh-kart-alan');
+    const kuyruk = khKuyrukOlustur(v);
+
+    if (v.gunluk.tamamlanan.length >= KH_GUNLUK_HEDEF) {
+      kartAlan.innerHTML = `<div class="kh-tamam-kart">
+        <div class="kh-tamam-emoji">🎉</div>
+        <div class="kh-tamam-baslik">Bugünkü hedefin tamamlandı!</div>
+        <div class="kh-tamam-alt">${v.streak} gün üst üste geldin — yarın tekrar gel, seriyi bozma! 🔥</div>
+      </div>`;
+      khMevcutKelime = null;
+      return;
+    }
+
+    if (kuyruk.length === 0) {
+      kartAlan.innerHTML = `<div class="kh-tamam-kart">
+        <div class="kh-tamam-emoji">📭</div>
+        <div class="kh-tamam-baslik">Şu an tekrar edilecek kelime yok</div>
+        <div class="kh-tamam-alt">Bekleyen kelimelerin zamanı henüz gelmedi. Yarın tekrar kontrol et!</div>
+      </div>`;
+      khMevcutKelime = null;
+      return;
+    }
+
+    khMevcutKelime = kuyruk[0];
+    khAcikMi = false;
+    khKartCiz();
+  }
+
+  function khKartCiz(){
+    const kartAlan = document.getElementById('kh-kart-alan');
+    const k = khMevcutKelime;
+    if (!k) return;
+    const v = khVeriYukle();
+    const kv = v.kelimeler[k.kelime];
+    const etiket = !kv ? 'YENİ KELİME' : (kv.kutu === 'ogrenildi' ? 'TEKRAR — ÖĞRENİLMİŞ' : 'TEKRAR — ZORLANDIĞIN');
+
+    if (!khAcikMi) {
+      kartAlan.innerHTML = `<div class="kh-kart">
+        <div class="kh-kart-etiket-ust">${etiket}</div>
+        <div class="kh-kelime-en">${k.kelime.toUpperCase()}</div>
+        <div style="color:var(--kh-muted);font-size:12px">Anlamını hatırlıyor musun?</div>
+        <button class="kh-goster-btn" onclick="khCevabiGoster()">Cevabı Göster →</button>
+      </div>`;
+    } else {
+      kartAlan.innerHTML = `<div class="kh-kart" style="align-items:stretch;text-align:left">
+        <div style="text-align:center">
+          <div class="kh-kart-etiket-ust">${etiket}</div>
+          <div class="kh-kelime-en-kucuk">${k.kelime.toUpperCase()}</div>
+          <div class="kh-anlam">${k.anlam}</div>
+        </div>
+        <div class="kh-detay-satir">
+          <div class="kh-detay-baslik">Kelime Kökü / İpucu</div>
+          <div class="kh-kok">${k.kok}</div>
+          <div class="kh-detay-baslik">YDS / YÖKDİL Örneği</div>
+          <div class="kh-ornek">${k.ornek}</div>
+        </div>
+        <div class="kh-btn-satir">
+          <button class="kh-btn kh-btn-bilmedim" onclick="khCevapla(false)">✗ Bilmedim</button>
+          <button class="kh-btn kh-btn-bildim" onclick="khCevapla(true)">✓ Bildim</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  function khCevabiGoster(){
+    khAcikMi = true;
+    khKartCiz();
+  }
+
+  function khCevapla(bildiMi){
+    const k = khMevcutKelime;
+    if (!k) return;
+    const v = khVeriYukle();
+    const bugun = khBugun();
+    const mevcut = v.kelimeler[k.kelime] || { gorulmeSayisi:0, bilmeSayisi:0 };
+    mevcut.gorulmeSayisi++;
+    if (bildiMi) mevcut.bilmeSayisi++;
+    mevcut.kutu = bildiMi ? 'ogrenildi' : 'tekrar';
+    mevcut.sonrakiTarih = khTarihEkle(bugun, bildiMi ? 3 : 1);
+    v.kelimeler[k.kelime] = mevcut;
+
+    v.gunluk.tamamlanan.push(k.kelime);
+
+    if (v.gunluk.tamamlanan.length >= KH_GUNLUK_HEDEF) {
+      if (v.sonTamamlananTarih === khTarihEkle(bugun, -1)) v.streak++;
+      else if (v.sonTamamlananTarih !== bugun) v.streak = 1;
+      v.sonTamamlananTarih = bugun;
+    }
+
+    khVeriKaydet(v);
+    khModulRender();
+  }
+
+  window.khCevabiGoster = khCevabiGoster;
+  window.khCevapla = khCevapla;
+  khModulRender();
 })();
 </script>
 </body>
