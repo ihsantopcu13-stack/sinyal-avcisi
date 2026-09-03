@@ -1937,6 +1937,75 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
           </section>
 
+          <!-- ANLAMA MODÜLÜ — Okuduğunu Anlama Teknikleri (#anlama-modul scope) -->
+          <section id="anlama-modul">
+          <style>
+            #anlama-modul{
+              --am-bg:#0a0d13;
+              --am-surface:#12161f;
+              --am-border:rgba(245,166,35,.16);
+              --am-text:#ece7da;
+              --am-muted:#8b93a3;
+              --am-accent:#f5a623;
+              box-sizing:border-box;
+              background:var(--am-bg);
+              color:var(--am-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #anlama-modul *{box-sizing:border-box}
+            #anlama-modul .am-header{margin-bottom:20px}
+            #anlama-modul .am-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--am-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #anlama-modul .am-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #anlama-modul .am-header h2 span{color:var(--am-accent)}
+            #anlama-modul .am-header p{color:var(--am-muted);font-size:13px;line-height:1.6;max-width:520px;margin:0}
+            #anlama-modul .am-counter{display:flex;align-items:center;gap:16px;background:var(--am-surface);border:1px solid var(--am-border);border-radius:16px;padding:16px 20px;margin-bottom:20px;flex-wrap:wrap}
+            #anlama-modul .am-counter-ring{width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--am-accent) var(--pct,0%),rgba(255,255,255,.08) 0);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .4s}
+            #anlama-modul .am-counter-num{width:46px;height:46px;border-radius:50%;background:var(--am-bg);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;color:var(--am-text)}
+            #anlama-modul .am-counter-label{font-size:13px;font-weight:600;color:var(--am-text)}
+            #anlama-modul .am-counter-sub{font-size:12px;color:var(--am-muted);margin-top:2px}
+            #anlama-modul .am-grid{display:flex;flex-direction:column;gap:10px}
+            #anlama-modul .am-kart{background:var(--am-surface);border:1px solid var(--am-border);border-left:3px solid var(--kart-renk,var(--am-accent));border-radius:12px;overflow:hidden}
+            #anlama-modul .am-kart-baslik{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+            #anlama-modul .am-kart-no{width:26px;height:26px;border-radius:50%;background:var(--kart-renk-t,rgba(245,166,35,.18));color:var(--kart-renk,var(--am-accent));font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+            #anlama-modul .am-kart-ikon{font-size:18px;flex-shrink:0}
+            #anlama-modul .am-kart-info{flex:1;min-width:0}
+            #anlama-modul .am-kart-baslik-metin{font-size:14px;font-weight:600;color:var(--am-text)}
+            #anlama-modul .am-kart-etiket{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--kart-renk,var(--am-accent));margin-top:2px;text-transform:uppercase}
+            #anlama-modul .am-kart-check{width:20px;height:20px;border-radius:50%;background:var(--kart-renk,var(--am-accent));color:#0a0d13;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+            #anlama-modul .am-kart-ok{color:var(--am-muted);transition:transform .25s;flex-shrink:0;font-size:11px}
+            #anlama-modul .am-kart.am-acik .am-kart-ok{transform:rotate(180deg)}
+            #anlama-modul .am-kart-govde{max-height:0;overflow:hidden;transition:max-height .35s ease}
+            #anlama-modul .am-kart.am-acik .am-kart-govde{max-height:900px}
+            #anlama-modul .am-kart-govde-ic{padding:2px 16px 18px;border-top:1px solid var(--am-border)}
+            #anlama-modul .am-bolum-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--kart-renk,var(--am-accent));margin:14px 0 6px}
+            #anlama-modul .am-nezaman{font-size:13px;color:var(--am-text);line-height:1.6;margin:0}
+            #anlama-modul .am-adimlar{margin:0;padding-left:18px;font-size:13px;color:var(--am-text);line-height:1.8}
+            #anlama-modul .am-adimlar li{margin-bottom:2px}
+            #anlama-modul .am-ornek{background:rgba(255,255,255,.03);border:1px solid var(--am-border);border-left:3px solid var(--kart-renk,var(--am-accent));border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--am-muted);line-height:1.6}
+          </style>
+
+          <div class="am-header">
+            <div class="am-header-badge">🧠 ANLAMA TEKNİKLERİ</div>
+            <h2>Okuduğunu Anlama <span>Cephaneliği</span></h2>
+            <p>YDS/YÖKDİL paragraf sorularını çözmek için 10 kanıtlanmış teknik. Her kartı aç, adım adım uygula, ustalaş.</p>
+          </div>
+
+          <div class="am-counter">
+            <div class="am-counter-ring" id="am-counter-ring" style="--pct:0%">
+              <div class="am-counter-num" id="am-counter-num">0</div>
+            </div>
+            <div>
+              <div class="am-counter-label">Öğrenilen Teknik</div>
+              <div class="am-counter-sub"><span id="am-counter-fraction">0/10</span> teknik açıldı</div>
+            </div>
+          </div>
+
+          <div class="am-grid" id="am-grid"></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -7419,6 +7488,192 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
   const fdWordInput = document.getElementById('fd-customWord');
   if (fdAnalyzeBtn) fdAnalyzeBtn.addEventListener('click', fdAnalyzeCustom);
   if (fdWordInput) fdWordInput.addEventListener('keydown', e => { if (e.key === 'Enter') fdAnalyzeCustom(); });
+})();
+</script>
+
+<!-- ANLAMA MODÜLÜ — #anlama-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const AM_TEKNIKLER = [
+    { no:1, ikon:'🏃', baslik:'SKIMMING', etiket:'Genel Tarama', renk:'#00D4FF',
+      neZaman:'Uzun bir okuma parçasına ilk baktığında, ana konuyu hızlıca kavraman gerektiğinde.',
+      adimlar:[
+        'Metne 30 saniye ayır — kelime kelime okumaya çalışma.',
+        'Her paragrafın SADECE ilk cümlesini oku.',
+        'Varsa başlığı ve son paragrafın son cümlesini de tara.',
+        'Kafanda tek cümlelik bir özet oluştur: "Bu metin ... hakkında."'
+      ],
+      ornek:'YDS/YÖKDİL\'de "What is the main idea of the passage?" tipi sorularda önce skimming yap, sonra seçeneklere bak.'
+    },
+    { no:2, ikon:'🎯', baslik:'SCANNING', etiket:'Hedefli Arama', renk:'#4ECDC4',
+      neZaman:'Sorudaki anahtar kelimeyi (isim, tarih, rakam) metinde bulman gerektiğinde.',
+      adimlar:[
+        'Soruda geçen özel isim, rakam veya benzersiz kelimeyi belirle.',
+        'Gözünü satır satır değil, o kelimenin ŞEKLİNE göre metinde gezdir.',
+        'Büyük harfle başlayan kelimeler, rakamlar, tırnak içindeki ifadeler senin işaret fişeğindir.',
+        'Kelimeyi bulunca SADECE o cümlenin ve bir öncekinin/sonrakinin anlamını çöz.'
+      ],
+      ornek:'"According to the passage, in which year did X happen?" sorusunda rakamı taramak skimming değil scanning gerektirir.'
+    },
+    { no:3, ikon:'🔑', baslik:'TOPIC SENTENCE', etiket:'Ana Fikir Cümlesi', renk:'#F5A623',
+      neZaman:'Paragrafın ana fikrini bulman gereken her soruda.',
+      adimlar:[
+        'Paragrafın ilk cümlesini oku — bu genellikle tez cümlesidir.',
+        'Sonraki cümleler bu tezi örnekler, kanıtlar veya detaylandırır — destek cümleleridir.',
+        'İlk cümle genel bir iddia gibi geliyorsa, o paragrafın ana fikri odur.',
+        'Bazı paragraflarda ana fikir son cümlede de olabilir — ilk ve son cümleyi karşılaştır.'
+      ],
+      ornek:'"What is the topic sentence of paragraph 2?" sorusunda direkt paragrafın ilk cümlesini kontrol et.'
+    },
+    { no:4, ikon:'🚦', baslik:'SIGNAL WORDS', etiket:'Sinyal Kelimeler', renk:'#A855F7',
+      neZaman:'Cümleler arası mantıksal ilişkiyi (zıtlık, sebep-sonuç, ekleme, vurgu) çözmen gerektiğinde.',
+      adimlar:[
+        'ZITLIK: however, although, despite, yet, on the other hand → fikir yön değiştirecek.',
+        'SEBEP-SONUÇ: therefore, thus, consequently, as a result → önceki bilgi bu cümlenin nedenidir.',
+        'EKLEME: moreover, furthermore, in addition, additionally → aynı yönde devam ediyor.',
+        'VURGU: in fact, indeed, above all, notably → yazar önemli bir noktayı öne çıkarıyor.'
+      ],
+      ornek:'"The experiment failed. ___, the team decided to try a new method." boşluğuna sebep-sonuç sinyali (Therefore/As a result) gelir.'
+    },
+    { no:5, ikon:'🔗', baslik:'REFERANS TAKİBİ', etiket:'Zamir Çözümü', renk:'#FF6B9D',
+      neZaman:'it, they, this, which, such gibi bir zamirin neyi işaret ettiğini bulman gerektiğinde.',
+      adimlar:[
+        'Zamiri gördüğün yerde dur, hemen bir önceki cümleye geri git.',
+        'Zamirin tekil mi çoğul mu olduğuna bak (it=tekil, they=çoğul) — adayı buna göre daralt.',
+        'Bulduğun adayı zamirin yerine koyup cümleyi tekrar oku — anlam bozulmuyorsa doğrudur.',
+        '"Such" ve "this" genelde bir önceki CÜMLENİN TAMAMINA ya da FİKRİNE atıfta bulunur, tek kelimeye değil.'
+      ],
+      ornek:'"...the new law increased taxes. This caused public outrage." → "This" = verginin artması (önceki fikrin tamamı).'
+    },
+    { no:6, ikon:'🧩', baslik:'BAĞLAMDAN KELİME', etiket:'Anlam Tahmini', renk:'#34D399',
+      neZaman:'Bilmediğin bir kelimenin anlamını tahmin etmen gerektiğinde.',
+      adimlar:[
+        'Kelimenin öncesinde/sonrasında bir zıtlık bağlacı (but, however, although) var mı bak.',
+        'Varsa, cümledeki bilinen kısmın TERSİ bir anlam ara.',
+        'Ekleme bağlacı (and, moreover) varsa, bilinen kısımla AYNI yönde bir anlam ara.',
+        'Noktalama işaretleri (virgül, tire, parantez) genelde kelimenin tanımını veya örneğini verir.'
+      ],
+      ornek:'"She was very frugal, unlike her brother who spent money carelessly." → "frugal" zıtlıktan dolayı "tutumlu/cimri" anlamına gelir.'
+    },
+    { no:7, ikon:'⚠️', baslik:'TUZAK SEÇENEK', etiket:'Eleme Taktiği', renk:'#EF4444',
+      neZaman:'Doğru cevabı seçerken kararsız kaldığında, elemeye başlarken.',
+      adimlar:[
+        'TOO BROAD (çok genel): Metindeki tek bir detayı tüm metnin konusu gibi gösteren seçenek.',
+        'TOO NARROW (çok dar): Metnin sadece küçük bir kısmını kapsayan seçenek.',
+        'TRUE BUT NOT STATED: Doğru bilgi ama metinde YAZMIYOR — dış bilgiyle doğru olsa da elenir.',
+        'OPPOSITE: Metindekinin tam tersini söyleyen seçenek.',
+        'EXTREME WORDS: always, never, only, all, none gibi kesinlik bildiren kelimeler genelde tuzaktır.'
+      ],
+      ornek:'Metin "bazı öğrenciler" derken seçenek "all students" diyorsa (extreme word) bu tuzaktır.'
+    },
+    { no:8, ikon:'🏛️', baslik:'PARAGRAF YAPISI', etiket:'Metin Mimarisi', renk:'#6366F1',
+      neZaman:'Uzun bir metnin genel mantığını çözüp soru sırasını tahmin etmen gerektiğinde.',
+      adimlar:[
+        'GİRİŞ: Tez/ana iddia + konunun tanıtımı.',
+        'GELİŞME: Tezi destekleyen kanıtlar, örnekler, karşıt görüşler.',
+        'SONUÇ: Özet veya yazarın son değerlendirmesi/önerisi.',
+        'YDS/YÖKDİL\'de sorular genelde METİN SIRASINI takip eder — ilk soru genelde ilk paragrafla, son soru son paragrafla ilgilidir.'
+      ],
+      ornek:'5 soruluk bir parçada 4. soru muhtemelen metnin son bölümüyle ilgilidir — cevabı ararken doğru yeri bilmek zaman kazandırır.'
+    },
+    { no:9, ikon:'🚫', baslik:'NEGATİF SORU', etiket:'NOT / EXCEPT', renk:'#F97316',
+      neZaman:'"Which of the following is NOT mentioned/stated/true" tipi sorularda.',
+      adimlar:[
+        'Bu soru tipinde 4 seçenekten 3\'ü metinde DOĞRU olarak geçer, 1\'i geçmez ya da yanlıştır.',
+        'Metni tekrar tekrar okumak yerine, her seçeneği tek tek metinde ara.',
+        'Metinde bulduğun (doğrulanan) seçenekleri ele — kalan tek seçenek cevabındır.',
+        '3 doğruyu bulmak, 1 yanlışı direkt aramaktan çoğu zaman daha hızlıdır.'
+      ],
+      ornek:'"According to the passage, all of the following are true EXCEPT..." — 3 seçeneği metinde bulup çarpı koy, kalan cevaptır.'
+    },
+    { no:10, ikon:'⏱️', baslik:'ZAMAN YÖNETİMİ', etiket:'Sınav Stratejisi', renk:'#EAB308',
+      neZaman:'Sınavda zaman baskısı hissettiğinde, bir soruya takılıp kaldığında.',
+      adimlar:[
+        'Bir okuma parçasına ortalama 2 dakika ayır (skimming + genel anlam).',
+        'Soru başına ortalama 1 dakika hedefle.',
+        'Bir soruda 4 dakikayı geçtiysen, en mantıklı gördüğün seçeneği işaretle ve GEÇ.',
+        'Sınav sonunda vaktin kalırsa işaretlediğin sorulara geri dön — YDS\'de yanlış -0.25 götürür ama tamamen boş bırakmak yerine, elemeden sonra kalan tek seçeneği işaretlemek daha mantıklıdır.'
+      ],
+      ornek:'80 soruluk sınavda soru başına ortalama 1 dakikadan az düşer — bir soruya 4 dakikadan fazla harcamak diğer 3-4 soruyu feda etmek demektir.'
+    },
+  ];
+
+  function amVeriYukle(){ try{ return JSON.parse(localStorage.getItem('sa_anlama_teknikleri')) || {acilanlar:[]}; }catch(e){ return {acilanlar:[]}; } }
+  function amVeriKaydet(v){ try{ localStorage.setItem('sa_anlama_teknikleri', JSON.stringify(v)); }catch(e){} }
+
+  function amSayacGuncelle(){
+    const veri = amVeriYukle();
+    const n = veri.acilanlar.length;
+    const toplam = AM_TEKNIKLER.length;
+    const pct = Math.round((n/toplam)*100);
+    const ring = document.getElementById('am-counter-ring');
+    const num = document.getElementById('am-counter-num');
+    const frac = document.getElementById('am-counter-fraction');
+    if (ring) ring.style.setProperty('--pct', pct + '%');
+    if (num) num.textContent = n;
+    if (frac) frac.textContent = n + '/' + toplam;
+  }
+
+  function amKartAc(no){
+    const kart = document.getElementById('am-kart-' + no);
+    if (!kart) return;
+    kart.classList.toggle('am-acik');
+    if (kart.classList.contains('am-acik')) {
+      const veri = amVeriYukle();
+      if (!veri.acilanlar.includes(no)) {
+        veri.acilanlar.push(no);
+        amVeriKaydet(veri);
+        amSayacGuncelle();
+        amRenderCheck(no);
+      }
+    }
+  }
+
+  function amRenderCheck(no){
+    const kart = document.getElementById('am-kart-' + no);
+    if (!kart) return;
+    const noEl = kart.querySelector('.am-kart-no');
+    if (noEl && !kart.querySelector('.am-kart-check')) {
+      const check = document.createElement('div');
+      check.className = 'am-kart-check';
+      check.textContent = '✓';
+      noEl.replaceWith(check);
+    }
+  }
+
+  function amModulRender(){
+    const grid = document.getElementById('am-grid');
+    if (!grid) return;
+    const veri = amVeriYukle();
+    grid.innerHTML = AM_TEKNIKLER.map(t => {
+      const ogrenildi = veri.acilanlar.includes(t.no);
+      return `<div class="am-kart" id="am-kart-${t.no}" style="--kart-renk:${t.renk};--kart-renk-t:${t.renk}22">
+        <div class="am-kart-baslik" onclick="amKartAc(${t.no})">
+          ${ogrenildi ? `<div class="am-kart-check">✓</div>` : `<div class="am-kart-no">${t.no}</div>`}
+          <div class="am-kart-ikon">${t.ikon}</div>
+          <div class="am-kart-info">
+            <div class="am-kart-baslik-metin">${t.baslik}</div>
+            <div class="am-kart-etiket">${t.etiket}</div>
+          </div>
+          <div class="am-kart-ok">▾</div>
+        </div>
+        <div class="am-kart-govde">
+          <div class="am-kart-govde-ic">
+            <div class="am-bolum-baslik">Ne Zaman Kullanılır</div>
+            <p class="am-nezaman">${t.neZaman}</p>
+            <div class="am-bolum-baslik">Adım Adım Uygulama</div>
+            <ol class="am-adimlar">${t.adimlar.map(a => `<li>${a}</li>`).join('')}</ol>
+            <div class="am-bolum-baslik">YDS / YÖKDİL Örneği</div>
+            <div class="am-ornek">${t.ornek}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    amSayacGuncelle();
+  }
+
+  window.amKartAc = amKartAc;
+  amModulRender();
 })();
 </script>
 </body>
