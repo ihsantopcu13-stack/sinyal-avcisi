@@ -2104,6 +2104,96 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="kh-kart-alan"></div>
           </section>
 
+          <!-- PARAGRAF DİSEKSİYON MODÜLÜ — Sinyal Kelime Analizi (#paragraf-diseksiyon-modul scope) -->
+          <section id="paragraf-diseksiyon-modul">
+          <style>
+            #paragraf-diseksiyon-modul{
+              --pd-bg:#0a0d13;
+              --pd-surface:#12161f;
+              --pd-border:rgba(245,166,35,.16);
+              --pd-text:#ece7da;
+              --pd-muted:#8b93a3;
+              --pd-accent:#f5a623;
+              box-sizing:border-box;
+              background:var(--pd-bg);
+              color:var(--pd-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #paragraf-diseksiyon-modul *{box-sizing:border-box}
+            #paragraf-diseksiyon-modul .pd-header{margin-bottom:18px}
+            #paragraf-diseksiyon-modul .pd-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--pd-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #paragraf-diseksiyon-modul .pd-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #paragraf-diseksiyon-modul .pd-header h2 span{color:var(--pd-accent)}
+            #paragraf-diseksiyon-modul .pd-header p{color:var(--pd-muted);font-size:13px;line-height:1.6;max-width:560px;margin:0}
+
+            #paragraf-diseksiyon-modul .pd-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+            #paragraf-diseksiyon-modul .pd-legend-item{display:flex;align-items:center;gap:6px;background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--pd-muted)}
+            #paragraf-diseksiyon-modul .pd-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+
+            #paragraf-diseksiyon-modul .pd-textarea{width:100%;min-height:140px;background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:12px;padding:14px 16px;color:var(--pd-text);font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.6;resize:vertical;outline:none}
+            #paragraf-diseksiyon-modul .pd-textarea:focus{border-color:var(--pd-accent)}
+            #paragraf-diseksiyon-modul .pd-textarea::placeholder{color:var(--pd-muted)}
+
+            #paragraf-diseksiyon-modul .pd-btn-satir{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+            #paragraf-diseksiyon-modul .pd-analiz-btn{background:var(--pd-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #paragraf-diseksiyon-modul .pd-analiz-btn:hover{opacity:.88}
+            #paragraf-diseksiyon-modul .pd-ornek-btn{background:transparent;color:var(--pd-muted);border:1px solid var(--pd-border);border-radius:10px;padding:11px 18px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #paragraf-diseksiyon-modul .pd-ornek-btn:hover{color:var(--pd-text);border-color:var(--pd-accent)}
+
+            #paragraf-diseksiyon-modul .pd-bos{color:var(--pd-muted);font-size:12.5px;padding:18px 2px}
+
+            #paragraf-diseksiyon-modul .pd-sonuc-kutu{margin-top:18px}
+            #paragraf-diseksiyon-modul .pd-metin{background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.9;white-space:pre-wrap;word-break:break-word;margin-bottom:16px}
+            #paragraf-diseksiyon-modul .pd-hl{border-radius:4px;padding:1px 3px;font-weight:600;cursor:help}
+            #paragraf-diseksiyon-modul .pd-topic{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;font-weight:700}
+
+            #paragraf-diseksiyon-modul .pd-ozet{background:var(--pd-surface);border:1px solid var(--pd-border);border-radius:14px;padding:18px 20px}
+            #paragraf-diseksiyon-modul .pd-ozet-ust{display:flex;align-items:baseline;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+            #paragraf-diseksiyon-modul .pd-ozet-toplam-sayi{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;color:var(--pd-accent)}
+            #paragraf-diseksiyon-modul .pd-ozet-toplam-etiket{font-size:12.5px;color:var(--pd-muted)}
+            #paragraf-diseksiyon-modul .pd-ozet-liste{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+            #paragraf-diseksiyon-modul .pd-ozet-satir{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--pd-text)}
+            #paragraf-diseksiyon-modul .pd-ozet-satir-etiket{flex:1}
+            #paragraf-diseksiyon-modul .pd-ozet-satir-sayi{font-family:'IBM Plex Mono',monospace;font-weight:700}
+            #paragraf-diseksiyon-modul .pd-yapi-kutu{border-top:1px solid var(--pd-border);padding-top:14px}
+            #paragraf-diseksiyon-modul .pd-yapi-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--pd-accent);margin-bottom:6px}
+            #paragraf-diseksiyon-modul .pd-yapi-etiket{font-size:15px;font-weight:700;color:var(--pd-text);margin-bottom:4px}
+            #paragraf-diseksiyon-modul .pd-yapi-aciklama{font-size:12.5px;color:var(--pd-muted);line-height:1.6}
+
+            @media (max-width:520px){
+              #paragraf-diseksiyon-modul .pd-btn-satir{flex-direction:column}
+              #paragraf-diseksiyon-modul .pd-analiz-btn,#paragraf-diseksiyon-modul .pd-ornek-btn{width:100%}
+            }
+          </style>
+
+          <div class="pd-header">
+            <div class="pd-header-badge">🔬 PARAGRAF DİSEKSİYONU</div>
+            <h2>Paragrafı <span>Parçala</span></h2>
+            <p>İngilizce bir paragraf yapıştır — sinyal kelimeleri, referans zamirleri, negatif ifadeler ve ana fikir cümlesi otomatik olarak renklendirilip etiketlensin.</p>
+          </div>
+
+          <div class="pd-legend">
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#A855F7"></span>Zıtlık</div>
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#F97316"></span>Sebep-Sonuç</div>
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#34D399"></span>Ekleme</div>
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#EAB308"></span>Vurgu</div>
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#38BDF8"></span>Referans</div>
+            <div class="pd-legend-item"><span class="pd-dot" style="background:#EF4444"></span>Negatif</div>
+            <div class="pd-legend-item"><u><strong>Ana Fikir</strong></u>&nbsp;Cümlesi</div>
+          </div>
+
+          <textarea class="pd-textarea" id="pd-giris" placeholder="İngilizce paragrafı buraya yapıştır..."></textarea>
+          <div class="pd-btn-satir">
+            <button class="pd-analiz-btn" id="pd-analiz-btn">🔍 Analiz Et</button>
+            <button class="pd-ornek-btn" id="pd-ornek-btn">Örnek Paragraf Kullan</button>
+          </div>
+
+          <div id="pd-sonuc-alan"><div class="pd-bos">Analiz sonucu burada görünecek.</div></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -8007,6 +8097,151 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
   window.khCevabiGoster = khCevabiGoster;
   window.khCevapla = khCevapla;
   khModulRender();
+})();
+</script>
+
+<!-- PARAGRAF DİSEKSİYON MODÜLÜ — #paragraf-diseksiyon-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const PD_KATEGORILER = [
+    { id:'zitlik',     etiket:'Zıtlık',        renk:'#A855F7', kelimeler:['however','although','despite','yet','but','while','whereas'] },
+    { id:'sebepsonuc', etiket:'Sebep-Sonuç',   renk:'#F97316', kelimeler:['therefore','thus','consequently','hence','as a result'] },
+    { id:'ekleme',     etiket:'Ekleme',        renk:'#34D399', kelimeler:['moreover','furthermore','in addition','besides','also'] },
+    { id:'vurgu',      etiket:'Vurgu',         renk:'#EAB308', kelimeler:['in fact','indeed','above all','especially','particularly'] },
+    { id:'referans',   etiket:'Referans',      renk:'#38BDF8', kelimeler:['it','they','this','that','these','those','which','such','the former','the latter'] },
+    { id:'negatif',    etiket:'Negatif',       renk:'#EF4444', kelimeler:['not','never','neither','nor','no','hardly','rarely','seldom'] },
+  ];
+
+  const PD_ORNEK_METIN = "Social media has transformed the way people communicate. However, this shift is not without drawbacks. Many researchers argue that excessive screen time is linked to anxiety and poor sleep. Consequently, several countries have begun to regulate platforms aimed at children. Moreover, schools have introduced digital literacy programs to teach students how to use these tools responsibly. In fact, some experts believe that such measures are long overdue. Whereas earlier generations had no exposure to these technologies, today's children are never entirely offline. Despite these concerns, it would be inaccurate to say that social media offers no benefits at all.";
+
+  function pdEscRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function pdEscHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  const PD_KATEGORI_MAP = {};
+  const PD_TUM_KELIMELER = [];
+  PD_KATEGORILER.forEach(cat => {
+    cat.kelimeler.forEach(k => {
+      PD_KATEGORI_MAP[k.toLowerCase()] = cat;
+      PD_TUM_KELIMELER.push(k);
+    });
+  });
+  PD_TUM_KELIMELER.sort((a,b) => b.length - a.length);
+  const PD_PATTERN = new RegExp('\\b(' + PD_TUM_KELIMELER.map(pdEscRe).join('|') + ')\\b', 'gi');
+
+  function pdTokenize(text){
+    const segments = [];
+    let lastIndex = 0;
+    let m;
+    PD_PATTERN.lastIndex = 0;
+    while ((m = PD_PATTERN.exec(text)) !== null) {
+      if (m.index > lastIndex) segments.push({ start:lastIndex, end:m.index, text:text.slice(lastIndex, m.index), match:false });
+      segments.push({ start:m.index, end:m.index + m[0].length, text:m[0], match:true, kategori: PD_KATEGORI_MAP[m[0].toLowerCase()] });
+      lastIndex = m.index + m[0].length;
+    }
+    if (lastIndex < text.length) segments.push({ start:lastIndex, end:text.length, text:text.slice(lastIndex), match:false });
+    return segments;
+  }
+
+  function pdIlkCumleSonu(text){
+    const m = text.match(/^[\s\S]*?[.!?](?=\s|$)/);
+    return m ? m[0].length : text.length;
+  }
+
+  function pdSegmentHtml(seg){
+    if (!seg.match) return pdEscHtml(seg.text);
+    const k = seg.kategori;
+    return `<span class="pd-hl" style="color:${k.renk};background:${k.renk}22;border-bottom:2px solid ${k.renk}" title="${k.etiket}">${pdEscHtml(seg.text)}</span>`;
+  }
+
+  function pdMetinHtmlOlustur(text){
+    const segments = pdTokenize(text);
+    const topicEnd = pdIlkCumleSonu(text);
+    let html = '';
+    let topicHtml = '';
+    let sonrasiHtml = '';
+    segments.forEach(seg => {
+      if (seg.end <= topicEnd) {
+        topicHtml += pdSegmentHtml(seg);
+      } else if (seg.start >= topicEnd) {
+        sonrasiHtml += pdSegmentHtml(seg);
+      } else {
+        // segment straddles the topic-sentence boundary (only plain-text segments can, since
+        // sentence-ending punctuation is never part of a highlighted phrase)
+        const onKisim = { start:seg.start, end:topicEnd, text:text.slice(seg.start, topicEnd), match:false };
+        const sonKisim = { start:topicEnd, end:seg.end, text:text.slice(topicEnd, seg.end), match:false };
+        topicHtml += pdSegmentHtml(onKisim);
+        sonrasiHtml += pdSegmentHtml(sonKisim);
+      }
+    });
+    html = `<span class="pd-topic">${topicHtml}</span>${sonrasiHtml}`;
+
+    const sayac = { zitlik:0, sebepsonuc:0, ekleme:0, vurgu:0, referans:0, negatif:0 };
+    segments.forEach(seg => { if (seg.match) sayac[seg.kategori.id]++; });
+
+    return { html, sayac };
+  }
+
+  function pdYapiTahmini(sayac){
+    const z = sayac.zitlik, s = sayac.sebepsonuc, e = sayac.ekleme, v = sayac.vurgu;
+    const toplamSinyal = z + s + e + v;
+    if (toplamSinyal === 0) {
+      return { etiket:'Tanım / Betimleme', aciklama:'Belirgin bir zıtlık, sebep-sonuç, ekleme ya da vurgu sinyali bulunamadı — metin muhtemelen bir kavramı tanımlıyor veya betimliyor.' };
+    }
+    const ekVurgu = e + v;
+    const maks = Math.max(z, s, ekVurgu);
+    if (maks === z) return { etiket:'Karşılaştırma / Zıtlık', aciklama:'Metinde zıtlık sinyalleri baskın — muhtemelen iki görüş, durum ya da dönem karşılaştırılıyor.' };
+    if (maks === s) return { etiket:'Sebep-Sonuç', aciklama:'Metinde sebep-sonuç sinyalleri baskın — bir olayın nedenleri veya sonuçları anlatılıyor.' };
+    return { etiket:'Argüman / Destekleyici Anlatım', aciklama:'Metinde ekleme ve vurgu sinyalleri baskın — bir tez, art arda sıralanan kanıtlarla destekleniyor.' };
+  }
+
+  function pdAnalizEt(){
+    const giris = document.getElementById('pd-giris');
+    const sonucAlan = document.getElementById('pd-sonuc-alan');
+    const text = giris.value.trim();
+    if (!text) {
+      sonucAlan.innerHTML = '<div class="pd-bos">Önce analiz edilecek bir paragraf yapıştır.</div>';
+      return;
+    }
+
+    const { html, sayac } = pdMetinHtmlOlustur(text);
+    const toplam = Object.values(sayac).reduce((a,b) => a+b, 0);
+    const yapi = pdYapiTahmini(sayac);
+
+    sonucAlan.innerHTML = `
+      <div class="pd-sonuc-kutu">
+        <div class="pd-metin">${html}</div>
+        <div class="pd-ozet">
+          <div class="pd-ozet-ust">
+            <div class="pd-ozet-toplam-sayi">${toplam}</div>
+            <div class="pd-ozet-toplam-etiket">işaretli kelime/ifade bulundu</div>
+          </div>
+          <div class="pd-ozet-liste">
+            ${PD_KATEGORILER.map(cat => `
+              <div class="pd-ozet-satir">
+                <span class="pd-dot" style="background:${cat.renk}"></span>
+                <span class="pd-ozet-satir-etiket">${cat.etiket}</span>
+                <span class="pd-ozet-satir-sayi" style="color:${cat.renk}">${sayac[cat.id]}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="pd-yapi-kutu">
+            <div class="pd-yapi-baslik">Genel Metin Yapısı Tahmini</div>
+            <div class="pd-yapi-etiket">${yapi.etiket}</div>
+            <div class="pd-yapi-aciklama">${yapi.aciklama}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function pdOrnekYukle(){
+    document.getElementById('pd-giris').value = PD_ORNEK_METIN;
+  }
+
+  const pdAnalizBtn = document.getElementById('pd-analiz-btn');
+  const pdOrnekBtn = document.getElementById('pd-ornek-btn');
+  if (pdAnalizBtn) pdAnalizBtn.addEventListener('click', pdAnalizEt);
+  if (pdOrnekBtn) pdOrnekBtn.addEventListener('click', pdOrnekYukle);
 })();
 </script>
 </body>
