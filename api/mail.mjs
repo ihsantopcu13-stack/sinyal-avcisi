@@ -103,8 +103,8 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Sinyal Avcısı <onboarding@resend.dev>',
-        to: ['ihsantopcu13@gmail.com'],
+        from: 'Sinyal Avcısı <info@sinyal-avcisi.com>',
+        to: [email],
         subject: konular[tip] || konular.ekitap,
         html: icerikler[tip] || icerikler.ekitap,
       }),
