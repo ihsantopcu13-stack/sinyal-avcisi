@@ -2194,6 +2194,75 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="pd-sonuc-alan"><div class="pd-bos">Analiz sonucu burada görünecek.</div></div>
           </section>
 
+          <!-- SORU TİPİ TESPİT MODÜLÜ — Soru Kalıbı Tanıma (#soru-tipi-modul scope) -->
+          <section id="soru-tipi-modul">
+          <style>
+            #soru-tipi-modul{
+              --st-bg:#0a0d13;
+              --st-surface:#12161f;
+              --st-border:rgba(245,166,35,.16);
+              --st-text:#ece7da;
+              --st-muted:#8b93a3;
+              --st-accent:#f5a623;
+              box-sizing:border-box;
+              background:var(--st-bg);
+              color:var(--st-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #soru-tipi-modul *{box-sizing:border-box}
+            #soru-tipi-modul .st-header{margin-bottom:18px}
+            #soru-tipi-modul .st-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--st-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #soru-tipi-modul .st-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #soru-tipi-modul .st-header h2 span{color:var(--st-accent)}
+            #soru-tipi-modul .st-header p{color:var(--st-muted);font-size:13px;line-height:1.6;max-width:560px;margin:0}
+
+            #soru-tipi-modul .st-textarea{width:100%;min-height:120px;background:var(--st-surface);border:1px solid var(--st-border);border-radius:12px;padding:14px 16px;color:var(--st-text);font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;line-height:1.6;resize:vertical;outline:none}
+            #soru-tipi-modul .st-textarea:focus{border-color:var(--st-accent)}
+            #soru-tipi-modul .st-textarea::placeholder{color:var(--st-muted)}
+
+            #soru-tipi-modul .st-btn-satir{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+            #soru-tipi-modul .st-analiz-btn{background:var(--st-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #soru-tipi-modul .st-analiz-btn:hover{opacity:.88}
+            #soru-tipi-modul .st-ornek-btn{background:transparent;color:var(--st-muted);border:1px solid var(--st-border);border-radius:10px;padding:11px 18px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #soru-tipi-modul .st-ornek-btn:hover{color:var(--st-text);border-color:var(--st-accent)}
+
+            #soru-tipi-modul .st-bos{color:var(--st-muted);font-size:12.5px;padding:18px 2px}
+
+            #soru-tipi-modul .st-sonuc{margin-top:18px;background:var(--st-surface);border:1px solid var(--st-border);border-left:4px solid var(--tip-renk,var(--st-accent));border-radius:14px;padding:20px}
+            #soru-tipi-modul .st-rozet{display:inline-flex;align-items:center;gap:6px;background:var(--tip-renk-t,rgba(245,166,35,.15));color:var(--tip-renk,var(--st-accent));font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:14px}
+            #soru-tipi-modul .st-teknik-adi{font-family:'IBM Plex Serif',serif;font-size:19px;font-weight:600;color:var(--st-text);margin-bottom:14px}
+            #soru-tipi-modul .st-bolum-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--tip-renk,var(--st-accent));margin:14px 0 6px}
+            #soru-tipi-modul .st-adimlar{margin:0;padding-left:18px;font-size:13px;color:var(--st-text);line-height:1.8}
+            #soru-tipi-modul .st-adimlar li{margin-bottom:3px}
+            #soru-tipi-modul .st-tuzaklar{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+            #soru-tipi-modul .st-tuzaklar li{font-size:12.5px;color:var(--st-muted);line-height:1.6;padding-left:20px;position:relative}
+            #soru-tipi-modul .st-tuzaklar li::before{content:'⚠';position:absolute;left:0;top:0}
+            #soru-tipi-modul .st-ornek{background:rgba(255,255,255,.03);border:1px solid var(--st-border);border-left:3px solid var(--tip-renk,var(--st-accent));border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--st-muted);line-height:1.6}
+
+            @media (max-width:520px){
+              #soru-tipi-modul .st-btn-satir{flex-direction:column}
+              #soru-tipi-modul .st-analiz-btn,#soru-tipi-modul .st-ornek-btn{width:100%}
+            }
+          </style>
+
+          <div class="st-header">
+            <div class="st-header-badge">🧭 SORU TİPİ TESPİTİ</div>
+            <h2>Soruyu <span>Çöz</span>meden Önce Tanı</h2>
+            <p>YDS/YÖKDİL sorusunu yapıştır — sistem soru tipini tespit edip hangi tekniği kullanman gerektiğini, adım adım uygulamayı ve dikkat edilecek tuzakları göstersin.</p>
+          </div>
+
+          <textarea class="st-textarea" id="st-giris" placeholder="YDS/YÖKDİL sorusunu (soru kökünü ve varsa seçenekleri) buraya yapıştır..."></textarea>
+          <div class="st-btn-satir">
+            <button class="st-analiz-btn" id="st-analiz-btn">🧭 Soru Tipini Tespit Et</button>
+            <button class="st-ornek-btn" id="st-ornek-btn">Örnek Soru Kullan</button>
+          </div>
+
+          <div id="st-sonuc-alan"><div class="st-bos">Tespit sonucu burada görünecek.</div></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -8242,6 +8311,197 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
   const pdOrnekBtn = document.getElementById('pd-ornek-btn');
   if (pdAnalizBtn) pdAnalizBtn.addEventListener('click', pdAnalizEt);
   if (pdOrnekBtn) pdOrnekBtn.addEventListener('click', pdOrnekYukle);
+})();
+</script>
+
+<!-- SORU TİPİ TESPİT MODÜLÜ — #soru-tipi-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  // Öncelik sırasına göre kontrol edilir — daha ayırt edici kalıplar önce gelir
+  // (örn. "infer" içeren bir soru aynı zamanda "according to" da içerebilir;
+  // "infer" niyeti daha kesin belirttiği için çıkarım, detaydan önce kontrol edilir).
+  const ST_TIPLER = [
+    { id:'negatif', etiket:'Negatif Soru (NOT / EXCEPT)', renk:'#EF4444',
+      tetikleyiciler:['not mentioned','not stated','not true','not discussed','except'],
+      teknikAdi:'Negatif Soru (NOT / EXCEPT) Tekniği',
+      adimlar:[
+        '4 seçenekten 3\'ü metinde DOĞRU olarak geçer, sadece 1\'i geçmez ya da yanlıştır.',
+        'Her seçeneği tek tek metinde ara ve doğrulananları ele.',
+        'Doğrulayamadığın veya metinle çelişen TEK seçenek cevabındır.',
+        'Metni baştan sona tekrar okumak yerine, seçenek seçenek metinde arama yap — bu çok daha hızlıdır.'
+      ],
+      tuzaklar:[
+        'Sorunun NOT/EXCEPT kelimesini gözden kaçırıp normal soru gibi "doğru olanı" arama.',
+        'Zaman kaybetmek: 3 doğruyu tek tek bulmak yerine tahminle yanlış seçme.',
+        'Metinde dolaylı olarak ima edilen ama birebir yazmayan bir seçeneği yanlışlıkla "yok" sayma.'
+      ],
+      ornekYaklasim:'"Which of the following is NOT mentioned in the passage?" sorusunda seçenekleri sırayla metinde ara, 3\'ünü bulup çarpı koy, kalan cevaptır.'
+    },
+    { id:'kelimeanlam', etiket:'Kelime Anlam Sorusu', renk:'#34D399',
+      tetikleyiciler:['closest in meaning','as used in','most nearly means','nearest in meaning'],
+      teknikAdi:'Bağlamdan Kelime Tekniği',
+      adimlar:[
+        'Kelimenin öncesinde/sonrasında bir zıtlık bağlacı (but, however, although) var mı kontrol et.',
+        'Zıtlık varsa cümledeki bilinen kısmın TERSİ bir anlam ara.',
+        'Ekleme bağlacı (and, moreover) varsa bilinen kısımla AYNI yönde bir anlam ara.',
+        'Kelimeyi seçeneklerle tek tek değiştirip cümleyi tekrar oku — anlamı bozmayan doğru cevaptır.'
+      ],
+      tuzaklar:[
+        'Kelimenin GÜNLÜK/en yaygın anlamını seçmek — YDS\'de kelimeler genelde metne özel ikinci bir anlamda kullanılır.',
+        'Doğru kelimeye çok benzeyen ama cümlede anlam bozan bir eş anlamlıyı seçme.',
+        'Bağlamı görmeden sözlük anlamına güvenme.'
+      ],
+      ornekYaklasim:'"The word \'X\' as used in line 5 is closest in meaning to..." sorusunda kelimeyi tek başına değil, cümledeki bağlaçlarla birlikte yorumla.'
+    },
+    { id:'referans', etiket:'Referans Sorusu', renk:'#38BDF8',
+      tetikleyiciler:['refers to','refer to'],
+      teknikAdi:'Referans Takibi Tekniği',
+      adimlar:[
+        'Sorudaki zamiri (it, this, they, such vb.) metindeki yerinde bul.',
+        'Zamirin hemen ÖNCESİNDEKİ cümleye/isim öbeğine bak.',
+        'Zamirin tekil mi çoğul mu olduğuna göre adayı daralt (it=tekil, they=çoğul).',
+        'Bulduğun adayı zamirin yerine koyup cümleyi tekrar oku — anlam bozulmuyorsa doğrudur.'
+      ],
+      tuzaklar:[
+        'Zamire en yakın kelimeyi otomatik doğru sanmak — bazen birkaç kelime öncesine gitmek gerekir.',
+        '"This/such" gibi zamirlerin tek bir kelimeye değil, ÖNCEKİ CÜMLENİN TAMAMINA atıfta bulunabileceğini unutmak.',
+        'Tekil-çoğul uyumunu kontrol etmeden ilk aday ismi seçmek.'
+      ],
+      ornekYaklasim:'"In line 4, the word \'it\' refers to..." sorusunda zamirden hemen önceki cümleye dön, tekil bir isim ara ve yerine koyup test et.'
+    },
+    { id:'tuzak', etiket:'Tuzak Seçenek Sorusu', renk:'#F97316',
+      tetikleyiciler:['which best completes','most appropriate','which of the following best completes'],
+      teknikAdi:'Tuzak Seçenek Eleme Tekniği',
+      adimlar:[
+        'Seçeneklerde always, never, only, all, none gibi KESİNLİK bildiren kelimeleri işaretle — genelde tuzaktır.',
+        'Metindeki bilgiyle TAM TERSİ anlam taşıyan (opposite) seçeneği ele.',
+        'Metnin sadece küçük bir kısmını kapsayan (too narrow) veya metnin çok ötesine geçen (too broad) seçenekleri ele.',
+        'Doğru bilgi ama METİNDE YAZMAYAN, dış bilgiden gelen (true but not stated) seçenekleri ele.',
+        'Kalan seçeneği cümleye/soruya yerleştirip anlam ve dilbilgisi uyumunu kontrol et.'
+      ],
+      tuzaklar:[
+        '"Kulağa doğru gelen" ama metinde hiç geçmeyen seçenekleri seçmek.',
+        'Extreme words (always/never/only) içeren seçenekleri fark etmeden geçmek.',
+        'Gramer olarak uyan ama anlam olarak metinle çelişen seçeneği seçmek.'
+      ],
+      ornekYaklasim:'"Which of the following best completes the sentence?" sorusunda önce extreme word\'leri, sonra opposite ve too broad/narrow seçenekleri eleyerek son seçeneğe ulaş.'
+    },
+    { id:'organizasyon', etiket:'Paragraf Organizasyon Sorusu', renk:'#A855F7',
+      tetikleyiciler:['purpose of the paragraph',"author's purpose",'why does the author','main purpose'],
+      teknikAdi:'Paragraf Yapısı Tekniği',
+      adimlar:[
+        'Paragrafın metindeki İŞLEVİNİ düşün: örnek mi veriyor, karşı görüş mü sunuyor, sonuç mu çıkarıyor?',
+        'Paragrafın başındaki sinyal kelimeye bak (Ekleme mi? Zıtlık mı? Sebep-sonuç mu?) — işlevini ele verir.',
+        'Bir önceki paragrafla ilişkisini kur: destekliyor mu, karşı çıkıyor mu, genişletiyor mu?',
+        'Yazarın bu paragrafı NEDEN yazdığını tek cümleyle özetle — cevap o özete en yakın seçenektir.'
+      ],
+      tuzaklar:[
+        'Paragrafın İÇERİĞİNİ (ne anlattığını) sorunun cevabı sanmak — soru İŞLEVİ (neden yazıldığını) soruyor.',
+        'Paragrafın sadece bir cümlesine bakıp genel işlevini atlamak.',
+        'Önceki/sonraki paragrafla bağlantıyı görmezden gelmek.'
+      ],
+      ornekYaklasim:'"Why does the author mention X in paragraph 2?" sorusunda paragrafın anlattığı ŞEYİ değil, o paragrafın metindeki İŞLEVİNİ (örneklemek, karşılaştırmak, kanıtlamak vb.) ara.'
+    },
+    { id:'cikarim', etiket:'Çıkarım Sorusu', renk:'#EAB308',
+      tetikleyiciler:['infer','imply','implies','suggest','suggests','conclude','most likely'],
+      teknikAdi:'Bağlam Analizi ve Yazar Tonu Tekniği',
+      adimlar:[
+        'Metinde AÇIKÇA YAZMAYAN ama mantıksal olarak çıkarılabilecek bir sonuç arıyorsun.',
+        'Yazarın kullandığı sinyal kelimelere (however, although, in fact) dikkat et — tutum değişimini gösterirler.',
+        'Yazarın olumlu/olumsuz/nötr tonunu belirle; çıkarım bu tonla çelişmemeli.',
+        'Doğru cevap metinde yazılanların mantıksal bir uzantısı olmalı, metinde yazmayan yeni bir bilgi getirmemeli.'
+      ],
+      tuzaklar:[
+        'Metinde birebir yazan bir cümleyi "çıkarım" sanıp seçmek (o zaten detay sorusu olurdu).',
+        'Aşırı yorum: Metnin verdiğinden çok daha ileri giden, spekülatif seçenek.',
+        'Yazarın tonuyla çelişen seçenek — örneğin yazar eleştirelken pozitif bir çıkarım sunan seçenek.'
+      ],
+      ornekYaklasim:'"It can be inferred from the passage that..." sorusunda metinde yazmayan ama sinyal kelimelerin işaret ettiği mantıksal sonucu seç, metinde birebir yazanı değil.'
+    },
+    { id:'detay', etiket:'Detay Sorusu', renk:'#4ECDC4',
+      tetikleyiciler:['according to','states that','mentioned that','indicated','indicates'],
+      teknikAdi:'Scanning (Hedefli Tarama) Tekniği',
+      adimlar:[
+        'Sorudaki özel isim, tarih, rakam ya da benzersiz kelimeyi belirle.',
+        'Metni satır satır okumadan, o kelimenin GEÇTİĞİ yeri gözünle tara.',
+        'Kelimeyi bulduğunda sadece o cümle ve bir öncesi/sonrasını dikkatle oku.',
+        'Seçeneği metindeki cümleyle BİREBİR karşılaştır — parafraz (eş anlamlı ifade) olabilir, dikkatli ol.'
+      ],
+      tuzaklar:[
+        'Metinde geçen ama soruyla ilgisiz bir cümledeki bilgiyle karıştırma.',
+        'Sayı/tarih sorularında yakın ama yanlış bir rakamı seçme tuzağına dikkat.',
+        'Seçenek metindeki cümlenin birebir aynısı değil, EŞ ANLAMLI halidir — kelime kelime eşleşme arama.'
+      ],
+      ornekYaklasim:'"According to the passage, when was the treaty signed?" sorusunda tarihi tara, bulduğun cümledeki tarihi seçenekle birebir karşılaştır.'
+    },
+    { id:'anafikir', etiket:'Ana Fikir Sorusu', renk:'#F5A623',
+      tetikleyiciler:['main idea','best title','mainly about','primarily concerned','best summarizes'],
+      teknikAdi:'Topic Sentence Tekniği',
+      adimlar:[
+        'Paragrafın (veya metnin) İLK cümlesine odaklan — ana fikir genelde orada verilir.',
+        'İlk cümle metnin geri kalanıyla örtüşüyor mu kontrol et.',
+        'Seçeneklerden metnin SADECE bir detayını konu gibi gösterenleri (çok dar) ele.',
+        'Metinde hiç geçmeyen ya da metnin kapsamını aşan (çok geniş) seçenekleri ele.',
+        'Kalan seçenek metnin TAMAMINI özetleyen ifadedir — doğru cevap odur.'
+      ],
+      tuzaklar:[
+        'Too narrow: Sadece bir örneği/detayı ana fikir gibi gösteren seçenek.',
+        'Too broad: Metnin kapsamının çok ötesine geçen, aşırı genel seçenek.',
+        'Metinde geçen bir kelimeyi içerdiği için doğru gibi görünen ama konuyla ilgisiz seçenek.'
+      ],
+      ornekYaklasim:'"What is the passage mainly about?" sorusunda önce ilk cümleyi oku, sonra 4 seçeneği "çok dar mı, çok geniş mi, metni tam mı özetliyor mu" diye sırayla eleyerek çöz.'
+    },
+  ];
+
+  const ST_ORNEK_SORU = "It can be inferred from the passage that traditional publishing houses are likely to face increasing competition from self-publishing platforms in the coming decade.\n\nA) They will merge with digital platforms\nB) They may lose market share to independent authors\nC) They have already gone out of business\nD) They will ban self-published books";
+
+  function stTipTespitEt(soru){
+    const lower = soru.toLowerCase();
+    for (const tip of ST_TIPLER) {
+      if (tip.tetikleyiciler.some(t => lower.includes(t))) return tip;
+    }
+    return null;
+  }
+
+  function stEscHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function stAnalizEt(){
+    const giris = document.getElementById('st-giris');
+    const sonucAlan = document.getElementById('st-sonuc-alan');
+    const soru = giris.value.trim();
+    if (!soru) {
+      sonucAlan.innerHTML = '<div class="st-bos">Önce analiz edilecek bir soru yapıştır.</div>';
+      return;
+    }
+
+    const tip = stTipTespitEt(soru);
+    if (!tip) {
+      sonucAlan.innerHTML = `<div class="st-bos">Soru tipi otomatik olarak tanınamadı. Sorunun tam olarak ne istediğini kendin belirle (ana fikir mi, detay mı, çıkarım mı?) ve "Anlama Modülü" bölümündeki ilgili tekniği uygula.</div>`;
+      return;
+    }
+
+    sonucAlan.innerHTML = `
+      <div class="st-sonuc" style="--tip-renk:${tip.renk};--tip-renk-t:${tip.renk}22">
+        <div class="st-rozet">${tip.etiket}</div>
+        <div class="st-teknik-adi">${tip.teknikAdi}</div>
+        <div class="st-bolum-baslik">Adım Adım Uygulama</div>
+        <ol class="st-adimlar">${tip.adimlar.map(a => `<li>${stEscHtml(a)}</li>`).join('')}</ol>
+        <div class="st-bolum-baslik">Dikkat Edilecek Tuzaklar</div>
+        <ul class="st-tuzaklar">${tip.tuzaklar.map(t => `<li>${stEscHtml(t)}</li>`).join('')}</ul>
+        <div class="st-bolum-baslik">Örnek Doğru Yaklaşım</div>
+        <div class="st-ornek">${stEscHtml(tip.ornekYaklasim)}</div>
+      </div>
+    `;
+  }
+
+  function stOrnekYukle(){
+    document.getElementById('st-giris').value = ST_ORNEK_SORU;
+  }
+
+  const stAnalizBtn = document.getElementById('st-analiz-btn');
+  const stOrnekBtn = document.getElementById('st-ornek-btn');
+  if (stAnalizBtn) stAnalizBtn.addEventListener('click', stAnalizEt);
+  if (stOrnekBtn) stOrnekBtn.addEventListener('click', stOrnekYukle);
 })();
 </script>
 </body>
