@@ -3752,9 +3752,18 @@ function ttsTurkceMi(text){
   return /[çğıöşüÇĞİÖŞÜ]/.test(text||'');
 }
 
+// Yarış durumu koruması: her yeni TTS çağrısı bir öncekini geçersiz kılar.
+// fetch() beklerken (özellikle önbellekte olmayan metinlerde) kullanıcı hızlıca
+// bir sonraki konuya geçerse, ESKİ çağrının cevabı SONRA gelip pAudio'yu ele
+// geçirip yeni konunun sesinin üzerine binebiliyordu — nesil kontrolüyle bu
+// önleniyor.
+let ttsNesil=0;
+
 // OpenAI (nova) — İngilizce metinler için
 async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
+  const benimNesil=++ttsNesil;
+  if(pAudio){pAudio.pause();}
   try{
     const voice='nova';
     const cacheKey='openai_'+text.trim().substring(0,100)+'_'+voice;
@@ -3766,7 +3775,7 @@ async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
       url=URL.createObjectURL(blob);
       ttsCache.set(cacheKey,url);
     }
-    if(pAudio){pAudio.pause();}
+    if(benimNesil!==ttsNesil)return; // bu sirada daha yeni bir istek baslatildi, bu artik gecersiz
     pAudio=new Audio(url);
     pAudio.playbackRate=pSpeed;
     pAudio.onended=onEnd||null;
@@ -3774,6 +3783,7 @@ async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
     await pAudio.play();
     return pAudio;
   }catch(e){
+    if(benimNesil!==ttsNesil)return;
     // Fallback to Web Speech API
     if(window.speechSynthesis){
       speechSynthesis.cancel();
@@ -3789,6 +3799,8 @@ async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
 // ElevenLabs — Türkçe metinler için
 async function ttsEleven(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
+  const benimNesil=++ttsNesil;
+  if(pAudio){pAudio.pause();}
   try{
     const cacheKey='eleven_'+text.trim().substring(0,100);
     let url=ttsElevenCache.get(cacheKey);
@@ -3799,13 +3811,14 @@ async function ttsEleven(text,lang,onEnd,onAudioReady){
       url=URL.createObjectURL(blob);
       ttsElevenCache.set(cacheKey,url);
     }
-    if(pAudio){pAudio.pause();}
+    if(benimNesil!==ttsNesil)return; // bu sirada daha yeni bir istek baslatildi, bu artik gecersiz
     pAudio=new Audio(url);
     pAudio.onended=onEnd||null;
     if(onAudioReady)onAudioReady(pAudio);
     await pAudio.play();
     return pAudio;
   }catch(e){
+    if(benimNesil!==ttsNesil)return;
     // ElevenLabs başarısız olursa OpenAI'ye düş (router'a değil — sonsuz döngü olmasın)
     return ttsOpenAINova(text,lang,onEnd,onAudioReady);
   }
@@ -4248,8 +4261,10 @@ function clHookMouth(source){
 }
 function clDurdur(){
   clearInterval(clTypeTimer);
+  ttsNesil++; // devam eden (henüz cözülmemis) TTS fetch'lerini gecersiz kil — eski ses yeni konunun uzerine binmesin
   if(window.speechSynthesis)speechSynthesis.cancel();
   if(pAudio)pAudio.pause();
+  document.querySelectorAll('audio').forEach(a=>{ if(a!==pAudio && !a.paused)a.pause(); }); // arka planda calan baska bir ses/muzik varsa (podcast, arka plan muzigi vb.) onu da durdur
   clStopMouth();
 }
 function clYaz(elId,text,hiz,callback){
