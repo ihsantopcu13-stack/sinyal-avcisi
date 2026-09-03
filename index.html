@@ -293,8 +293,12 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
 .dtab{font-size:16px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent}
 .dtab.active{color:#047857;border-bottom-color:#047857}
-.dmod{animation:fadein .2s ease}
+.dmod{animation:fadein .2s ease;position:relative}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tam-ekran-btn{position:absolute;top:0;right:0;z-index:50;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:36px;height:36px;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,color .15s}
+.tam-ekran-btn:hover{border-color:var(--signal);color:var(--signal)}
+.dmod:fullscreen{zoom:1.3;background:var(--paper);padding:44px 5vw 24px;overflow-y:auto}
+.dmod:fullscreen .tam-ekran-btn{top:12px;right:5vw}
 .dm-eye{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
 .dm-sent{font-size:16px;line-height:1.8;margin-bottom:12px;font-weight:500}
 .dm-q{font-size:15px;font-weight:600;margin-bottom:8px}
@@ -1463,6 +1467,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dtab" onclick="dtab(this,'sinavplanim')">🚨 Acil Kurtarma Planı</div>
         </div>
         <div class="dmod" id="mod-sinyal">
+          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-sinyal')" title="Tam ekran">⛶</button>
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
             <span id="sl-eyebrow-text">Genel - YDS Metni - Soru 1/15</span>
             <span class="adaptif-badge adaptif-orta" id="adaptif-seviye-badge">⚡ ORTA</span>
@@ -1474,6 +1479,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
+          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-kelime')" title="Tam ekran">⛶</button>
           <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yükleniyor...</div>
           <div class="kk" id="kk" onclick="kkFlip()">
             <div id="kk-front"><div class="kk-word" id="kk-word-front" onmouseenter="if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.en,'en-US',null)" title="Üzerine gel — sesli dinle 🔊"></div><div class="kk-hint">Tikla — Türkçe gör · Kelimenin üzerine gel — sesli dinle 🔊</div></div>
@@ -1491,11 +1497,15 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
         </div>
         <div class="dmod" id="mod-tuzak" style="display:none">
+          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-tuzak')" title="Tam ekran">⛶</button>
           <div class="dm-eye" id="tuzak-tarih-lbl">Gunluk Tuzak — yukleniyor...</div>
           <div id="tuzak-container"></div>
         </div>
         <div class="dmod" id="mod-sat" style="display:none"><div id="sat-icerik"></div></div>
-        <div class="dmod" id="mod-paragraf" style="display:none"><div id="paragraf-icerik-container"></div></div>
+        <div class="dmod" id="mod-paragraf" style="display:none">
+          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-paragraf')" title="Tam ekran">⛶</button>
+          <div id="paragraf-icerik-container"></div>
+        </div>
         <div class="dmod" id="mod-svo" style="display:none;background:linear-gradient(135deg,#111a2e,#0f2418);border-radius:16px;padding:4px"><div id="svo-icerik-container"></div></div>
         <div class="dmod" id="mod-teknik" style="display:none;background:linear-gradient(135deg,#1a2030,#241a30);border-radius:16px;padding:4px"><div id="teknik-icerik-container"></div></div>
         <div class="dmod" id="mod-avci" style="display:none">
@@ -2540,6 +2550,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
 
         <!-- CANLI DERS (yeşil tahta — sesli + yazarak anlatım) -->
         <div class="dmod" id="mod-canliders" style="display:none">
+          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-canliders')" title="Tam ekran">⛶</button>
           <div class="dm-eye">🎓 CANLI DERS — Yeşil tahtada sesli konu anlatımı</div>
           <div id="canliders-container"></div>
         </div>
@@ -3162,6 +3173,18 @@ function satPaylas(yuzde){
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clearInterval(satTimer);satPratikRender();}
+// Ders modüllerini tam ekran yapma/çıkma — Canlı Ders, Sinyal Lab, Günlük Tuzak,
+// Kelime Kartları, Paragraf modülü butonlarından çağrılır. ESC ile çıkış tarayıcının
+// kendi varsayılan davranışı, ekstra kod gerekmiyor.
+function tamEkranAcKapat(modId){
+  const el=document.getElementById(modId);
+  if(!el)return;
+  if(document.fullscreenElement){
+    document.exitFullscreen();
+  } else if(el.requestFullscreen){
+    el.requestFullscreen().catch(()=>{});
+  }
+}
 function dtab(el,mod){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   const clAcikKen=document.getElementById('mod-canliders');
