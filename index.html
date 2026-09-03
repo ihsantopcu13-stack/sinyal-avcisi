@@ -964,6 +964,29 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
   .ok-quiz-secenekler{grid-template-columns:1fr}
 }
 
+/* FONETİK OKUMA KURALLARI — kısa/uzun sesli harf karşılaştırması */
+.fon-grid{grid-template-columns:repeat(5,1fr)}
+@media(max-width:640px){.fon-grid{grid-template-columns:repeat(3,1fr)}}
+.fon-karsilastirma{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:520px){.fon-karsilastirma{grid-template-columns:1fr}}
+.fon-sutun{border-radius:16px;padding:14px;text-align:center}
+.fon-kisa{background:rgba(59,130,246,.08);border:2px solid #3b82f6}
+.fon-uzun{background:var(--ok-renk-t,rgba(245,166,35,.1));border:2px solid var(--ok-renk)}
+.fon-etiket{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.fon-kelime-chip{cursor:pointer;opacity:0;animation:okKelimeGir .45s ease forwards}
+.fon-en{display:block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;color:var(--ink)}
+.fon-fonetik{
+  display:inline-block;margin-top:8px;
+  font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;letter-spacing:.03em;
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 14px;
+  color:var(--signal);
+  opacity:0;transform:scale(.7);
+  animation:fonPop .45s ease forwards;
+  animation-delay:.35s;
+}
+@keyframes fonPop{0%{opacity:0;transform:scale(.7)}60%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+.fon-tr{display:block;font-size:12px;color:var(--muted);margin-top:8px}
+
 /* ============================================================
    YENİ ANİMASYONLAR — Hero uçuşan sorular, konfeti/coin/streak,
    soru kartı hover efektleri, dark/light mode geçişi
@@ -1667,6 +1690,14 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Harf çiftlerini (consonant digraphs) öğren, sesli telaffuz et, mini quiz çöz!</div>
             <div class="ok-grid" id="ok-grid"></div>
             <div id="ok-detay"></div>
+          </div>
+
+          <!-- FONETİK OKUMA KURALLARI (A1 seslileri — kısa/uzun ses) -->
+          <div style="margin-bottom:22px">
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;display:flex;align-items:center;gap:6px">🔤 Fonetik Okuma Kuralları <span style="background:#a78bfa20;color:#7c3aed;font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px">A1 · SESLİLER</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px">İngilizcede hangi harf hangi harfin yanında nasıl okunur? SECRET → SİKRİT, PAPER → PEİPER — kuralı öğren!</div>
+            <div class="ok-grid fon-grid" id="fon-grid"></div>
+            <div id="fon-detay"></div>
           </div>
 
           <!-- KONUŞMA SİMÜLATÖRÜ -->
@@ -6362,7 +6393,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(mod==='istatistik'){setTimeout(istatistikRender,100);}
     if(mod==='plan'){const d=new Date();d.setMonth(d.getMonth()+1);const tarihEl=document.getElementById('plan-tarih');if(tarihEl&&!tarihEl.value)tarihEl.value=d.toISOString().split('T')[0];}
     if(mod==='mikro'){setTimeout(mikroDersleriRender,100);}
-    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();okumaKurallariRender();},100);}
+    if(mod==='dilavcisi'){setTimeout(()=>{ingDerslerRender('A1');dilavcisiVideoRender('A1');dilavcisiYolHaritaRender('A1');dilavcisiGunlukHedefGuncelle();okumaKurallariRender();fonetikKurallariRender();},100);}
   };
   // Adaptif badge başlangıç
   adaptifBadgeGuncelle();
@@ -6473,6 +6504,119 @@ function okumaQuizCevap(di,si,btn){
     }
   }else{
     sonuc.innerHTML='❌ Tekrar dene — doğru cevap: <b>'+d.quiz.secenekler[d.quiz.cevap]+'</b>';
+    sonuc.style.color='#dc2626';
+  }
+}
+
+// ─── FONETİK OKUMA KURALLARI — A1 seslileri, kısa/uzun ses kuralı ──────────
+// Kural: hece SESLİ+TEK SESSİZ ile bitip yeni bir sesliye açılıyorsa (açık
+// hece), sesli harf kendi ADINI söyler (uzun ses). Hece bir sessizle
+// kapanıyorsa (kapalı hece), sesli harf KISA okunur.
+const FONETIK_SESLILER=[
+  {harf:'A',renk:'#ef4444',
+   aciklama:'Kapalı hecede «a» Türkçedeki kısa «e»ye yakın bir ses (/æ/) verir. Açık hecede ise «EY» diftonguna yakın uzun bir ses (/eɪ/) verir — harf sanki kendi adını söylüyormuş gibi okunur.',
+   kisa:{kelime:'cat',anlam:'kedi',fonetik:'KET'},
+   uzun:{kelime:'paper',anlam:'kağıt',fonetik:'PEİPER'},
+   quiz:{soru:'Hangi kelimede "a" harfi UZUN (kendi adını söyleyerek) okunur?',secenekler:['paper','cat','map','bag'],cevap:0}},
+  {harf:'E',renk:'#3b82f6',
+   aciklama:'Kapalı hecede «e» Türkçedeki «e» sesine yakın kısa okunur (/ɛ/). Açık hecede ise «İ» harfine yakın uzun bir ses (/iː/) verir.',
+   kisa:{kelime:'bed',anlam:'yatak',fonetik:'BED'},
+   uzun:{kelime:'secret',anlam:'sır',fonetik:'SİKRİT'},
+   quiz:{soru:'Hangi kelimede "e" harfi UZUN (İ sesine yakın) okunur?',secenekler:['secret','bed','pen','ten'],cevap:0}},
+  {harf:'I',renk:'#f59e0b',
+   aciklama:'Kapalı hecede «i» Türkçedeki kısa «i»ye yakın sert bir ses (/ɪ/) verir. Açık hecede ise «AY» diftonguna yakın uzun bir ses (/aɪ/) verir.',
+   kisa:{kelime:'finger',anlam:'parmak',fonetik:'FİNGER'},
+   uzun:{kelime:'spider',anlam:'örümcek',fonetik:'SPAYDIR'},
+   quiz:{soru:'Hangi kelimede "i" harfi UZUN (AY sesiyle) okunur?',secenekler:['spider','finger','sit','pin'],cevap:0}},
+  {harf:'O',renk:'#059669',
+   aciklama:'Kapalı hecede «o» Türkçedeki «a»ya yakın kısa bir ses (/ɒ/) verir. Açık hecede ise «OU» diftonguna yakın uzun bir ses (/oʊ/) verir.',
+   kisa:{kelime:'dog',anlam:'köpek',fonetik:'DAG'},
+   uzun:{kelime:'open',anlam:'açık',fonetik:'OUPIN'},
+   quiz:{soru:'Hangi kelimede "o" harfi UZUN okunur?',secenekler:['open','dog','hot','box'],cevap:0}},
+  {harf:'U',renk:'#7c3aed',
+   aciklama:'Kapalı hecede «u» Türkçedeki «a»ya yakın kısa bir ses (/ʌ/) verir. Açık hecede ise «YU» sesine yakın uzun bir ses (/juː/) verir.',
+   kisa:{kelime:'cup',anlam:'fincan',fonetik:'KAP'},
+   uzun:{kelime:'music',anlam:'müzik',fonetik:'MYUZİK'},
+   quiz:{soru:'Hangi kelimede "u" harfi UZUN okunur?',secenekler:['music','cup','bus','sun'],cevap:0}}
+];
+function fonetikVeriYukle(){try{return JSON.parse(localStorage.getItem('sa_fonetik_kurallari'))||{tamamlanan:[]};}catch(e){return{tamamlanan:[]};}}
+function fonetikVeriKaydet(v){try{localStorage.setItem('sa_fonetik_kurallari',JSON.stringify(v));}catch(e){}}
+function fonetikKurallariRender(){
+  const grid=document.getElementById('fon-grid');
+  if(!grid)return;
+  const veri=fonetikVeriYukle();
+  grid.innerHTML=FONETIK_SESLILER.map((s,i)=>{
+    const tamam=veri.tamamlanan.includes(s.harf);
+    const aktif=fonetikAktifIdx===i;
+    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${s.renk}" onclick="fonetikSesliAc(${i})">
+      <div class="ok-kart-harf">${s.harf}</div>
+      <div class="ok-kart-ses">kısa/uzun</div>
+      ${tamam?'<div class="ok-kart-check">✓</div>':''}
+    </div>`;
+  }).join('');
+}
+let fonetikAktifIdx=null;
+function fonetikSesliAc(i){
+  fonetikAktifIdx=i;
+  fonetikKurallariRender();
+  const s=FONETIK_SESLILER[i];
+  const detay=document.getElementById('fon-detay');
+  if(!detay)return;
+  detay.innerHTML=`
+    <div class="ok-detay-kart" style="--ok-renk:${s.renk}">
+      <div class="ok-detay-baslik"><span class="ok-detay-harf">${s.harf}</span><span class="ok-detay-ses">Kısa & Uzun Ses</span></div>
+      <div class="ok-detay-ipucu">${s.aciklama}</div>
+      <div class="fon-karsilastirma">
+        <div class="fon-sutun fon-kisa">
+          <div class="fon-etiket">🔒 Kapalı Hece — kısa ses</div>
+          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.kisa.kelime}')">
+            <span class="fon-en">🔊 ${s.kisa.kelime}</span>
+            <span class="fon-fonetik">${s.kisa.fonetik}</span>
+            <span class="fon-tr">${s.kisa.anlam}</span>
+          </div>
+        </div>
+        <div class="fon-sutun fon-uzun">
+          <div class="fon-etiket">🔓 Açık Hece — uzun ses</div>
+          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.uzun.kelime}')">
+            <span class="fon-en">🔊 ${s.uzun.kelime}</span>
+            <span class="fon-fonetik">${s.uzun.fonetik}</span>
+            <span class="fon-tr">${s.uzun.anlam}</span>
+          </div>
+        </div>
+      </div>
+      <div class="ok-quiz">
+        <div class="ok-quiz-soru">🧠 Mini Quiz: ${s.quiz.soru}</div>
+        <div class="ok-quiz-secenekler">
+          ${s.quiz.secenekler.map((sec,si)=>`<button class="ok-quiz-btn" onclick="fonetikQuizCevap(${i},${si},this)">${sec}</button>`).join('')}
+        </div>
+        <div class="ok-quiz-sonuc" id="fon-quiz-sonuc"></div>
+      </div>
+    </div>
+  `;
+  detay.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function fonetikQuizCevap(si_harf,si,btn){
+  const s=FONETIK_SESLILER[si_harf];
+  const dogruMu=si===s.quiz.cevap;
+  const wrap=btn.parentElement;
+  [...wrap.children].forEach((b,i)=>{
+    b.disabled=true;
+    if(i===s.quiz.cevap)b.classList.add('ok-dogru');
+    else if(i===si)b.classList.add('ok-yanlis');
+  });
+  const sonuc=document.getElementById('fon-quiz-sonuc');
+  if(dogruMu){
+    sonuc.innerHTML='✅ Harika! Doğru cevap.';
+    sonuc.style.color='#059669';
+    const veri=fonetikVeriYukle();
+    if(!veri.tamamlanan.includes(s.harf)){
+      veri.tamamlanan.push(s.harf);
+      fonetikVeriKaydet(veri);
+      xpKazan('okuma',0);
+      fonetikKurallariRender();
+    }
+  }else{
+    sonuc.innerHTML='❌ Tekrar dene — doğru cevap: <b>'+s.quiz.secenekler[s.quiz.cevap]+'</b>';
     sonuc.style.color='#dc2626';
   }
 }
