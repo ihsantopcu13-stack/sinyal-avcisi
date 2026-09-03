@@ -2,10 +2,19 @@
 // MAIL API — Resend ile e-kitap gönderimi
 // Sinyal Avcısı
 // ============================================================
+//
+// NOT: Resend hesabı domain doğrulaması tamamlanana kadar SADECE
+// hesap sahibinin doğrulanmış test e-postasına gönderim yapabiliyor
+// (gerçek kullanıcı e-postalarına gönderim 422 "Invalid `to` field"
+// hatasıyla reddediliyor). Bu, e-posta kaybolmasın diye önce
+// Supabase'deki public.emails tablosuna kaydedip, ardından Resend
+// ile göndermeyi best-effort deniyoruz — Resend başarısız olsa da
+// adres kayıt altına alınmış oluyor (bkz. supabase/emails-schema.sql).
 
 import { rateLimit } from './_rateLimit.mjs';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const SUPABASE_URL = 'https://scqczkyiyshmczzmlshl.supabase.co';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -24,6 +33,29 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Geçersiz e-posta' });
   }
   email = email.trim();
+
+  let supabaseOk = false;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (serviceRoleKey) {
+    try {
+      const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/emails`, {
+        method: 'POST',
+        headers: {
+          apikey: serviceRoleKey,
+          Authorization: `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({ email, tip }),
+      });
+      supabaseOk = dbRes.ok;
+      if (!dbRes.ok) console.error('Supabase emails insert hatasi:', await dbRes.text());
+    } catch (dbError) {
+      console.error('Supabase emails insert exception:', dbError);
+    }
+  } else {
+    console.error('mail.mjs: SUPABASE_SERVICE_ROLE_KEY tanimli degil, e-posta Supabase\'e kaydedilemedi');
+  }
 
   const konular = {
     ekitap: '📖 30 Günlük Metin Fetih Kılavuzu — Sinyal Avcısı',
@@ -61,6 +93,8 @@ export default async function handler(req, res) {
     `,
   };
 
+  let mailSent = false;
+  let mailId = null;
   try {
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -78,14 +112,21 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data });
+    if (response.ok) {
+      mailSent = true;
+      mailId = data.id;
+    } else {
+      console.error('Resend gonderim hatasi:', data);
     }
-
-    return res.status(200).json({ success: true, id: data.id });
-
   } catch (error) {
     console.error('Mail error:', error);
-    return res.status(500).json({ error: 'Mail gönderilemedi' });
   }
+
+  // E-posta ne Supabase'e kaydedilebildi ne de Resend ile gönderilebildiyse
+  // gerçekten bir şey başaramadık — kullanıcıyı bilgilendirip tekrar denetelim.
+  if (!supabaseOk && !mailSent) {
+    return res.status(502).json({ error: 'E-posta kaydedilemedi, lütfen tekrar dene.' });
+  }
+
+  return res.status(200).json({ success: true, mailSent, id: mailId });
 }
