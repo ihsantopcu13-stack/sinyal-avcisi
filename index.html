@@ -1700,6 +1700,243 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <div id="fon-detay"></div>
           </div>
 
+          <!-- FONETİK DEDEKTİF — bağımsız CSS scope'unda (#fd-modul), site stilleriyle çakışmaz -->
+          <section id="fd-modul">
+          <style>
+            #fd-modul{
+              --fd-bg:        #0D1B2A;
+              --fd-surface:   #122236;
+              --fd-border:    #1E3A52;
+              --fd-text:      #E8F4FD;
+              --fd-muted:     #6B8FA8;
+              --fd-c-vowel:   #F5A623;
+              --fd-c-cons:    #4ECDC4;
+              --fd-c-digraph: #A855F7;
+              --fd-c-silent:  #475569;
+              --fd-c-stress:  #F5A623;
+              --fd-accent:    #00D4FF;
+              box-sizing:border-box;
+              background:var(--fd-bg);
+              color:var(--fd-text);
+              font-family:'Space Grotesk',sans-serif;
+              display:flex;
+              flex-direction:column;
+              align-items:center;
+              padding:28px 20px 34px;
+              border-radius:20px;
+              margin-bottom:22px;
+            }
+            #fd-modul *{box-sizing:border-box}
+            #fd-modul .fd-header{text-align:center;margin-bottom:2.5rem}
+            #fd-modul .fd-header-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--fd-accent);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;padding:.3rem .8rem;border-radius:2rem;margin-bottom:1rem}
+            #fd-modul .fd-header h1{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:700;line-height:1.2;margin:0}
+            #fd-modul .fd-header h1 span{color:var(--fd-accent)}
+            #fd-modul .fd-header p{color:var(--fd-muted);margin-top:.5rem;font-size:.95rem;max-width:420px;margin-inline:auto}
+            #fd-modul .fd-legend{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2rem}
+            #fd-modul .fd-legend-item{display:flex;align-items:center;gap:.4rem;background:var(--fd-surface);border:1px solid var(--fd-border);border-radius:.4rem;padding:.25rem .65rem;font-size:.75rem;color:var(--fd-muted)}
+            #fd-modul .fd-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+            #fd-modul .fd-tabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem}
+            #fd-modul .fd-tab-btn{background:var(--fd-surface);border:1px solid var(--fd-border);color:var(--fd-muted);padding:.45rem 1rem;border-radius:.5rem;cursor:pointer;font-family:inherit;font-size:.82rem;transition:all .2s}
+            #fd-modul .fd-tab-btn:hover{color:var(--fd-text);border-color:var(--fd-accent)}
+            #fd-modul .fd-tab-btn.fd-active{background:rgba(0,212,255,.12);border-color:var(--fd-accent);color:var(--fd-accent);font-weight:500}
+            #fd-modul .fd-rule-section{display:none;width:100%;max-width:820px;flex-direction:column;gap:1.25rem}
+            #fd-modul .fd-rule-section.fd-visible{display:flex}
+            #fd-modul .fd-rule-card{background:var(--fd-surface);border:1px solid var(--fd-border);border-radius:.85rem;padding:1.4rem 1.5rem;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+            #fd-modul .fd-rule-card:hover{border-color:rgba(0,212,255,.4);box-shadow:0 0 0 1px rgba(0,212,255,.1)}
+            #fd-modul .fd-rule-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.75rem}
+            #fd-modul .fd-rule-title{font-size:1rem;font-weight:600;line-height:1.3}
+            #fd-modul .fd-rule-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;padding:.2rem .55rem;border-radius:.3rem;flex-shrink:0;border:1px solid}
+            #fd-modul .fd-rule-desc{color:var(--fd-muted);font-size:.85rem;line-height:1.6;margin-bottom:1rem}
+            #fd-modul .fd-examples{display:flex;flex-wrap:wrap;gap:.75rem}
+            #fd-modul .fd-example-card{background:var(--fd-bg);border:1px solid var(--fd-border);border-radius:.65rem;padding:.75rem 1rem;min-width:140px;flex:1}
+            #fd-modul .fd-word-display{display:flex;gap:1px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:700;letter-spacing:.05em;margin-bottom:.3rem}
+            #fd-modul .fd-letter{display:inline-flex;align-items:center;justify-content:center;min-width:1.1ch;border-radius:3px;padding:0 1px;transition:transform .15s,opacity .15s}
+            #fd-modul .fd-letter.fd-vowel{color:var(--fd-c-vowel)}
+            #fd-modul .fd-letter.fd-cons{color:var(--fd-c-cons)}
+            #fd-modul .fd-letter.fd-digraph{color:var(--fd-c-digraph)}
+            #fd-modul .fd-letter.fd-silent{color:var(--fd-c-silent);text-decoration:line-through;text-decoration-color:var(--fd-c-silent)}
+            #fd-modul .fd-letter.fd-stress{color:var(--fd-c-stress)}
+            #fd-modul .fd-arrow-row{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--fd-muted);margin-bottom:.15rem}
+            #fd-modul .fd-arrow-row svg{flex-shrink:0}
+            #fd-modul .fd-phonetic-display{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;letter-spacing:.08em;display:flex;gap:1px;flex-wrap:wrap}
+            #fd-modul .fd-ph-letter{transition:opacity .15s}
+            #fd-modul .fd-tts-btn{display:flex;align-items:center;gap:.3rem;background:none;border:1px solid var(--fd-border);color:var(--fd-muted);border-radius:.4rem;padding:.25rem .6rem;font-size:.72rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;margin-top:.6rem;transition:all .2s}
+            #fd-modul .fd-tts-btn:hover{color:var(--fd-accent);border-color:var(--fd-accent)}
+            #fd-modul .fd-tts-btn.fd-playing{color:var(--fd-accent);border-color:var(--fd-accent)}
+            @keyframes fdPopIn{0%{transform:translateY(-6px) scale(.85);opacity:0}60%{transform:translateY(2px) scale(1.05)}100%{transform:translateY(0) scale(1);opacity:1}}
+            #fd-modul .fd-letter.fd-animate{animation:fdPopIn .35s ease forwards}
+            #fd-modul .fd-custom-section{width:100%;max-width:820px;background:var(--fd-surface);border:1px solid var(--fd-border);border-radius:.85rem;padding:1.4rem 1.5rem;margin-top:.5rem}
+            #fd-modul .fd-custom-section h3{font-size:.95rem;margin-bottom:.75rem}
+            #fd-modul .fd-custom-section h3 span{color:var(--fd-accent)}
+            #fd-modul .fd-input-row{display:flex;gap:.5rem;flex-wrap:wrap}
+            #fd-modul .fd-word-input{flex:1;background:var(--fd-bg);border:1px solid var(--fd-border);border-radius:.5rem;color:var(--fd-text);font-family:'JetBrains Mono',monospace;font-size:1rem;padding:.55rem .9rem;outline:none;min-width:160px;transition:border-color .2s}
+            #fd-modul .fd-word-input:focus{border-color:var(--fd-accent)}
+            #fd-modul .fd-analyze-btn{background:var(--fd-accent);color:var(--fd-bg);border:none;border-radius:.5rem;font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:600;padding:.55rem 1.2rem;cursor:pointer;transition:opacity .2s}
+            #fd-modul .fd-analyze-btn:hover{opacity:.85}
+            #fd-modul .fd-custom-result{margin-top:1rem}
+            @media (max-width:500px){
+              #fd-modul .fd-word-display{font-size:1.1rem}
+              #fd-modul .fd-phonetic-display{font-size:.9rem}
+              #fd-modul .fd-example-card{min-width:100%}
+            }
+          </style>
+
+          <div class="fd-header">
+            <div class="fd-header-badge">
+              <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor" opacity=".6"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
+              FONETİK DEDEKTİF
+            </div>
+            <h1>Harflerin <span>Gizli Sesi</span></h1>
+            <p>Her harf neden farklı okunur? Renk kodlu analiz ve sesli örneklerle öğren.</p>
+          </div>
+
+          <div class="fd-legend">
+            <div class="fd-legend-item"><div class="fd-dot" style="background:var(--fd-c-vowel)"></div> Ünlü / Uzun ses</div>
+            <div class="fd-legend-item"><div class="fd-dot" style="background:var(--fd-c-cons)"></div> Sessiz harf</div>
+            <div class="fd-legend-item"><div class="fd-dot" style="background:var(--fd-c-digraph)"></div> Çift harf (1 ses)</div>
+            <div class="fd-legend-item"><div class="fd-dot" style="background:var(--fd-c-silent)"></div> Sessiz / Okunmaz</div>
+          </div>
+
+          <div class="fd-tabs">
+            <button class="fd-tab-btn fd-active" data-tab="vowels">Ünlüler &amp; Uzun Ses</button>
+            <button class="fd-tab-btn" data-tab="digraphs">Çift Harf Kuralları</button>
+            <button class="fd-tab-btn" data-tab="silent">Sessiz Harfler</button>
+            <button class="fd-tab-btn" data-tab="endings">Son Ekler</button>
+          </div>
+
+          <div class="fd-rule-section fd-visible" id="fd-tab-vowels">
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">Magic E — Sessiz ünlüyü uzatır</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-vowel);border-color:var(--fd-c-vowel)">VCE</div>
+              </div>
+              <div class="fd-rule-desc">
+                Kelime sonundaki <strong style="color:var(--fd-c-silent)">-e</strong> kendisi okunmaz ama öncesindeki ünlüyü alfabe sesiyle (uzun) okuttur.
+                <br>CAP → <em>kısa A</em> · CAPE → <em>uzun A /keɪp/</em>
+              </div>
+              <div class="fd-examples" id="fd-ex-vce"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">İki ünlü yan yana — birincisi uzun okunur</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-vowel);border-color:var(--fd-c-vowel)">CVVC</div>
+              </div>
+              <div class="fd-rule-desc">
+                "When two vowels go walking, the first one does the talking." AI, OA, EE, EA grupları genellikle ilk ünlünün uzun sesini verir.
+              </div>
+              <div class="fd-examples" id="fd-ex-cvvc"></div>
+            </div>
+          </div>
+
+          <div class="fd-rule-section" id="fd-tab-digraphs">
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">GH — sessiz kalır ya da /f/ olur</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-digraph);border-color:var(--fd-c-digraph)">GH</div>
+              </div>
+              <div class="fd-rule-desc">
+                Kelime içinde sessiz, kelime sonunda bazen <strong style="color:var(--fd-c-digraph)">/f/</strong> sesi verir.
+              </div>
+              <div class="fd-examples" id="fd-ex-gh"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">PH → /f/ sesi</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-digraph);border-color:var(--fd-c-digraph)">PH</div>
+              </div>
+              <div class="fd-rule-desc">
+                Yunanca kökenli kelimelerde <strong style="color:var(--fd-c-digraph)">PH</strong> her zaman /f/ sesiyle okunur.
+              </div>
+              <div class="fd-examples" id="fd-ex-ph"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">NG — boğazdan gelen tek ses /ŋ/</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-digraph);border-color:var(--fd-c-digraph)">NG</div>
+              </div>
+              <div class="fd-rule-desc">
+                Kelime içinde veya sonunda <strong style="color:var(--fd-c-digraph)">NG</strong>, Türkçe'deki "ŋ" sesidir. G ayrıca okunmaz.
+              </div>
+              <div class="fd-examples" id="fd-ex-ng"></div>
+            </div>
+          </div>
+
+          <div class="fd-rule-section" id="fd-tab-silent">
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">Sessiz K — KN başlangıcında K okunmaz</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-silent);border-color:var(--fd-c-silent)">KN</div>
+              </div>
+              <div class="fd-rule-desc">
+                Kelime <strong style="color:var(--fd-c-silent)">KN</strong> ile başlıyorsa K tamamen sessizdir; sadece N sesi duyulur.
+              </div>
+              <div class="fd-examples" id="fd-ex-kn"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">Sessiz W — WR başlangıcında W okunmaz</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-silent);border-color:var(--fd-c-silent)">WR</div>
+              </div>
+              <div class="fd-rule-desc">
+                <strong style="color:var(--fd-c-silent)">WR</strong> ile başlayan kelimelerde W hiç duyulmaz.
+              </div>
+              <div class="fd-examples" id="fd-ex-wr"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">Sessiz B — MB ve BT sonunda B okunmaz</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-silent);border-color:var(--fd-c-silent)">MB / BT</div>
+              </div>
+              <div class="fd-rule-desc">
+                Kelime sonunda <strong style="color:var(--fd-c-silent)">MB</strong> gelirse B sessizdir. <strong style="color:var(--fd-c-silent)">BT</strong> kombinasyonunda da B okunmaz.
+              </div>
+              <div class="fd-examples" id="fd-ex-mb"></div>
+            </div>
+          </div>
+
+          <div class="fd-rule-section" id="fd-tab-endings">
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">-TION → /şın/ sesi</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-digraph);border-color:var(--fd-c-digraph)">-TION</div>
+              </div>
+              <div class="fd-rule-desc">
+                İngilizcenin en yaygın eki. Her zaman <strong style="color:var(--fd-c-digraph)">/şın/</strong> okunur, hiç istisna yoktur.
+              </div>
+              <div class="fd-examples" id="fd-ex-tion"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">-TURE → /çır/ sesi</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-digraph);border-color:var(--fd-c-digraph)">-TURE</div>
+              </div>
+              <div class="fd-rule-desc">
+                Son ek <strong style="color:var(--fd-c-digraph)">-TURE</strong> daima /çır/ (bazen /çur/) okunur.
+              </div>
+              <div class="fd-examples" id="fd-ex-ture"></div>
+            </div>
+            <div class="fd-rule-card">
+              <div class="fd-rule-header">
+                <div class="fd-rule-title">-ER / -AR / -OR → belirsiz /ır/ ünlüsü</div>
+                <div class="fd-rule-tag" style="color:var(--fd-c-vowel);border-color:var(--fd-c-vowel)">schwa-R</div>
+              </div>
+              <div class="fd-rule-desc">
+                Vurgusuz son hecede -er, -ar, -or hepsi aynı <strong style="color:var(--fd-c-vowel)">schwa-R /ır/</strong> sesine dönüşür.
+              </div>
+              <div class="fd-examples" id="fd-ex-er"></div>
+            </div>
+          </div>
+
+          <div class="fd-custom-section">
+            <h3>Kelimeni <span>Analiz Et</span></h3>
+            <div class="fd-input-row">
+              <input class="fd-word-input" type="text" id="fd-customWord" placeholder="örn: FINGER, NATION, PHONE…" maxlength="20">
+              <button class="fd-analyze-btn" id="fd-analyzeBtn">Analiz Et</button>
+            </div>
+            <div class="fd-custom-result" id="fd-customResult"></div>
+          </div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -6889,6 +7126,301 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
     <p style="font-size:15px;color:var(--muted);margin-top:12px">Spam yok · İstediğinde çık</p>
   </div>
 </div>
+
+<!-- FONETİK DEDEKTİF — #fd-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const EXAMPLES = {
+    "fd-ex-vce": [
+      { word:"PAPER", segments:[
+        {chars:[0],type:"cons",ph:"P"},{chars:[1],type:"vowel",ph:"Eİ"},{chars:[2],type:"cons",ph:"P"},{chars:[3],type:"vowel",ph:"ı"},{chars:[4],type:"cons",ph:"R"},
+      ]},
+      { word:"SECRET", segments:[
+        {chars:[0],type:"cons",ph:"S"},{chars:[1],type:"vowel",ph:"İ"},{chars:[2],type:"cons",ph:"K"},{chars:[3],type:"cons",ph:"R"},{chars:[4],type:"vowel",ph:"İ"},{chars:[5],type:"cons",ph:"T"},
+      ]},
+      { word:"CAPE", segments:[
+        {chars:[0],type:"cons",ph:"K"},{chars:[1],type:"vowel",ph:"Eİ"},{chars:[2],type:"cons",ph:"P"},{chars:[3],type:"silent",ph:"—"},
+      ]},
+    ],
+    "fd-ex-cvvc": [
+      { word:"RAIN", segments:[
+        {chars:[0],type:"cons",ph:"R"},{chars:[1,2],type:"vowel",ph:"Eİ"},{chars:[3],type:"cons",ph:"N"},
+      ]},
+      { word:"BOAT", segments:[
+        {chars:[0],type:"cons",ph:"B"},{chars:[1,2],type:"vowel",ph:"OU"},{chars:[3],type:"cons",ph:"T"},
+      ]},
+      { word:"TEAM", segments:[
+        {chars:[0],type:"cons",ph:"T"},{chars:[1,2],type:"vowel",ph:"İİ"},{chars:[3],type:"cons",ph:"M"},
+      ]},
+    ],
+    "fd-ex-gh": [
+      { word:"NIGHT", segments:[
+        {chars:[0],type:"cons",ph:"N"},{chars:[1],type:"vowel",ph:"AY"},{chars:[2,3],type:"silent",ph:"—"},{chars:[4],type:"cons",ph:"T"},
+      ]},
+      { word:"ENOUGH", segments:[
+        {chars:[0],type:"vowel",ph:"İ"},{chars:[1],type:"cons",ph:"N"},{chars:[2],type:"vowel",ph:"A"},{chars:[3,4],type:"digraph",ph:"F"},
+      ]},
+      { word:"THROUGH", segments:[
+        {chars:[0,1],type:"digraph",ph:"TH"},{chars:[2],type:"cons",ph:"R"},{chars:[3,4],type:"vowel",ph:"UU"},{chars:[5],type:"silent",ph:"—"},
+      ]},
+    ],
+    "fd-ex-ph": [
+      { word:"PHONE", segments:[
+        {chars:[0,1],type:"digraph",ph:"F"},{chars:[2],type:"vowel",ph:"OU"},{chars:[3],type:"cons",ph:"N"},{chars:[4],type:"silent",ph:"—"},
+      ]},
+      { word:"PHRASE", segments:[
+        {chars:[0,1],type:"digraph",ph:"F"},{chars:[2],type:"cons",ph:"R"},{chars:[3],type:"vowel",ph:"Eİ"},{chars:[4],type:"cons",ph:"Z"},{chars:[5],type:"silent",ph:"—"},
+      ]},
+    ],
+    "fd-ex-ng": [
+      { word:"FINGER", segments:[
+        {chars:[0],type:"cons",ph:"F"},{chars:[1],type:"vowel",ph:"İ"},{chars:[2,3],type:"digraph",ph:"NG"},{chars:[4],type:"cons",ph:"G"},{chars:[5],type:"cons",ph:"R"},
+      ]},
+      { word:"SING", segments:[
+        {chars:[0],type:"cons",ph:"S"},{chars:[1],type:"vowel",ph:"İ"},{chars:[2,3],type:"digraph",ph:"NG"},
+      ]},
+      { word:"STRONG", segments:[
+        {chars:[0],type:"cons",ph:"S"},{chars:[1],type:"cons",ph:"T"},{chars:[2],type:"cons",ph:"R"},{chars:[3],type:"vowel",ph:"O"},{chars:[4,5],type:"digraph",ph:"NG"},
+      ]},
+    ],
+    "fd-ex-kn": [
+      { word:"KNIFE", segments:[
+        {chars:[0],type:"silent",ph:"—"},{chars:[1],type:"cons",ph:"N"},{chars:[2],type:"vowel",ph:"AY"},{chars:[3],type:"cons",ph:"F"},{chars:[4],type:"silent",ph:"—"},
+      ]},
+      { word:"KNOW", segments:[
+        {chars:[0],type:"silent",ph:"—"},{chars:[1],type:"cons",ph:"N"},{chars:[2,3],type:"vowel",ph:"OU"},
+      ]},
+      { word:"KNIGHT", segments:[
+        {chars:[0],type:"silent",ph:"—"},{chars:[1],type:"cons",ph:"N"},{chars:[2],type:"vowel",ph:"AY"},{chars:[3,4],type:"silent",ph:"—"},{chars:[5],type:"cons",ph:"T"},
+      ]},
+    ],
+    "fd-ex-wr": [
+      { word:"WRITE", segments:[
+        {chars:[0],type:"silent",ph:"—"},{chars:[1],type:"cons",ph:"R"},{chars:[2],type:"vowel",ph:"AY"},{chars:[3],type:"cons",ph:"T"},{chars:[4],type:"silent",ph:"—"},
+      ]},
+      { word:"WRONG", segments:[
+        {chars:[0],type:"silent",ph:"—"},{chars:[1],type:"cons",ph:"R"},{chars:[2],type:"vowel",ph:"O"},{chars:[3,4],type:"digraph",ph:"NG"},
+      ]},
+    ],
+    "fd-ex-mb": [
+      { word:"THUMB", segments:[
+        {chars:[0,1],type:"digraph",ph:"TH"},{chars:[2],type:"vowel",ph:"A"},{chars:[3],type:"cons",ph:"M"},{chars:[4],type:"silent",ph:"—"},
+      ]},
+      { word:"CLIMB", segments:[
+        {chars:[0],type:"cons",ph:"K"},{chars:[1],type:"cons",ph:"L"},{chars:[2],type:"vowel",ph:"AY"},{chars:[3],type:"cons",ph:"M"},{chars:[4],type:"silent",ph:"—"},
+      ]},
+      { word:"DOUBT", segments:[
+        {chars:[0],type:"cons",ph:"D"},{chars:[1],type:"silent",ph:"—"},{chars:[2],type:"vowel",ph:"AV"},{chars:[3],type:"cons",ph:"T"},
+      ]},
+    ],
+    "fd-ex-tion": [
+      { word:"NATION", segments:[
+        {chars:[0],type:"cons",ph:"N"},{chars:[1],type:"vowel",ph:"EY"},{chars:[2,3,4,5],type:"digraph",ph:"ŞIN"},
+      ]},
+      { word:"STATION", segments:[
+        {chars:[0],type:"cons",ph:"S"},{chars:[1],type:"cons",ph:"T"},{chars:[2],type:"vowel",ph:"EY"},{chars:[3,4,5,6],type:"digraph",ph:"ŞIN"},
+      ]},
+      { word:"QUESTION", segments:[
+        {chars:[0],type:"digraph",ph:"KW"},{chars:[1],type:"cons",ph:"E"},{chars:[2],type:"cons",ph:"S"},{chars:[3],type:"cons",ph:"Ç"},{chars:[4,5,6,7],type:"digraph",ph:"İYN"},
+      ]},
+    ],
+    "fd-ex-ture": [
+      { word:"NATURE", segments:[
+        {chars:[0],type:"cons",ph:"N"},{chars:[1],type:"vowel",ph:"EY"},{chars:[2,3,4,5],type:"digraph",ph:"ÇIR"},
+      ]},
+      { word:"PICTURE", segments:[
+        {chars:[0],type:"cons",ph:"P"},{chars:[1],type:"vowel",ph:"İ"},{chars:[2],type:"cons",ph:"K"},{chars:[3,4,5,6],type:"digraph",ph:"ÇIR"},
+      ]},
+    ],
+    "fd-ex-er": [
+      { word:"PAPER", segments:[
+        {chars:[0],type:"cons",ph:"P"},{chars:[1],type:"vowel",ph:"Eİ"},{chars:[2],type:"cons",ph:"P"},{chars:[3,4],type:"vowel",ph:"IR"},
+      ]},
+      { word:"DOCTOR", segments:[
+        {chars:[0],type:"cons",ph:"D"},{chars:[1],type:"vowel",ph:"O"},{chars:[2],type:"cons",ph:"K"},{chars:[3],type:"cons",ph:"T"},{chars:[4,5],type:"vowel",ph:"IR"},
+      ]},
+      { word:"DOLLAR", segments:[
+        {chars:[0],type:"cons",ph:"D"},{chars:[1],type:"vowel",ph:"O"},{chars:[2],type:"cons",ph:"L"},{chars:[3,4],type:"vowel",ph:"IR"},
+      ]},
+    ],
+  };
+
+  function fdBuildExampleCard(data) {
+    const card = document.createElement('div');
+    card.className = 'fd-example-card';
+
+    const wordDiv = document.createElement('div');
+    wordDiv.className = 'fd-word-display';
+
+    const charSpans = Array.from(data.word).map((ch) => {
+      const sp = document.createElement('span');
+      sp.className = 'fd-letter';
+      sp.textContent = ch;
+      wordDiv.appendChild(sp);
+      return sp;
+    });
+
+    data.segments.forEach(seg => {
+      seg.chars.forEach(ci => charSpans[ci].classList.add('fd-' + seg.type));
+    });
+
+    const arrowRow = document.createElement('div');
+    arrowRow.className = 'fd-arrow-row';
+    arrowRow.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 1v10M3 8l3 3 3-3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Türkçe okunuşu';
+
+    const phDiv = document.createElement('div');
+    phDiv.className = 'fd-phonetic-display';
+    data.segments.forEach((seg, si) => {
+      const sp = document.createElement('span');
+      sp.textContent = seg.ph;
+      sp.style.color = 'var(--fd-c-' + seg.type + ')';
+      phDiv.appendChild(sp);
+      if (si < data.segments.length - 1) {
+        const sep = document.createElement('span');
+        sep.textContent = '·';
+        sep.style.color = 'var(--fd-muted)';
+        sep.style.margin = '0 1px';
+        phDiv.appendChild(sep);
+      }
+    });
+
+    const ttsBtn = document.createElement('button');
+    ttsBtn.className = 'fd-tts-btn';
+    ttsBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Dinle';
+    ttsBtn.addEventListener('click', () => fdSpeakWord(data.word, ttsBtn));
+
+    card.appendChild(wordDiv);
+    card.appendChild(arrowRow);
+    card.appendChild(phDiv);
+    card.appendChild(ttsBtn);
+
+    card.addEventListener('mouseenter', () => fdAnimateLetters(charSpans));
+
+    return card;
+  }
+
+  function fdAnimateLetters(spans) {
+    spans.forEach((sp, i) => {
+      sp.classList.remove('fd-animate');
+      setTimeout(() => sp.classList.add('fd-animate'), i * 60);
+    });
+  }
+
+  function fdSpeakWord(word, btn) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(word.toLowerCase());
+    utt.lang = 'en-US';
+    utt.rate = 0.8;
+    btn.classList.add('fd-playing');
+    utt.onend = () => btn.classList.remove('fd-playing');
+    utt.onerror = () => btn.classList.remove('fd-playing');
+    window.speechSynthesis.speak(utt);
+  }
+
+  Object.entries(EXAMPLES).forEach(([id, examples]) => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    examples.forEach(ex => container.appendChild(fdBuildExampleCard(ex)));
+  });
+
+  document.querySelectorAll('#fd-modul .fd-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#fd-modul .fd-tab-btn').forEach(b => b.classList.remove('fd-active'));
+      document.querySelectorAll('#fd-modul .fd-rule-section').forEach(s => s.classList.remove('fd-visible'));
+      btn.classList.add('fd-active');
+      document.getElementById('fd-tab-' + btn.dataset.tab).classList.add('fd-visible');
+    });
+  });
+
+  const PATTERNS = [
+    { re: /GH/g,      type: 'silent',  note: 'GH sessiz' },
+    { re: /PH/g,      type: 'digraph', note: 'PH → F sesi' },
+    { re: /NG/g,      type: 'digraph', note: 'NG → ŋ sesi' },
+    { re: /TH/g,      type: 'digraph', note: 'TH → th sesi' },
+    { re: /SH/g,      type: 'digraph', note: 'SH → ş sesi' },
+    { re: /CH/g,      type: 'digraph', note: 'CH → ç sesi' },
+    { re: /WR/g,      type: 'silent',  note: 'WR başında W sessiz' },
+    { re: /KN/g,      type: 'silent',  note: 'KN başında K sessiz' },
+    { re: /MB$/,      type: 'silent',  note: 'Sonda MB → B sessiz' },
+    { re: /TION/g,    type: 'digraph', note: 'TION → şın' },
+    { re: /TURE/g,    type: 'digraph', note: 'TURE → çır' },
+    { re: /[AEIOU]{2}/g, type: 'vowel', note: 'İki ünlü → ilki uzun' },
+    { re: /[AEIOU]E$/,   type: 'vowel', note: 'Magic E → ünlüyü uzatır' },
+    { re: /[AEIOU]/g, type: 'vowel',  note: 'Ünlü' },
+    { re: /[BCDFGHJKLMNPQRSTVWXYZ]/g, type: 'cons', note: 'Sessiz harf' },
+  ];
+
+  function fdAnalyzeCustom() {
+    const inputEl = document.getElementById('fd-customWord');
+    const input = inputEl.value.trim().toUpperCase();
+    const resultEl = document.getElementById('fd-customResult');
+    if (!input || !/^[A-Z]+$/.test(input)) {
+      resultEl.innerHTML = '<p style="color:var(--fd-muted);font-size:.85rem">Sadece İngilizce harfler girebilirsin.</p>';
+      return;
+    }
+
+    const types = new Array(input.length).fill('cons');
+    const marked = new Array(input.length).fill(false);
+    const notes = new Set();
+
+    PATTERNS.forEach(({ re, type, note }) => {
+      re.lastIndex = 0;
+      let m;
+      while ((m = re.exec(input)) !== null) {
+        for (let k = m.index; k < m.index + m[0].length; k++) {
+          if (!marked[k]) { types[k] = type; marked[k] = true; }
+        }
+        notes.add(note);
+      }
+    });
+
+    resultEl.innerHTML = '';
+
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--fd-bg);border:1px solid var(--fd-border);border-radius:.65rem;padding:.9rem 1rem;';
+
+    const wordDiv = document.createElement('div');
+    wordDiv.className = 'fd-word-display';
+
+    const spans = [];
+    Array.from(input).forEach((ch, i) => {
+      const sp = document.createElement('span');
+      sp.className = 'fd-letter fd-' + types[i];
+      sp.textContent = ch;
+      wordDiv.appendChild(sp);
+      spans.push(sp);
+    });
+
+    const notesDiv = document.createElement('div');
+    notesDiv.style.cssText = 'margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.4rem;';
+    notes.forEach(n => {
+      const tag = document.createElement('span');
+      tag.style.cssText = 'background:var(--fd-surface);border:1px solid var(--fd-border);border-radius:.3rem;padding:.2rem .55rem;font-size:.72rem;color:var(--fd-muted);';
+      tag.textContent = n;
+      notesDiv.appendChild(tag);
+    });
+
+    const ttsBtn = document.createElement('button');
+    ttsBtn.className = 'fd-tts-btn';
+    ttsBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> Dinle';
+    ttsBtn.addEventListener('click', () => fdSpeakWord(input, ttsBtn));
+    ttsBtn.style.marginTop = '.7rem';
+
+    card.appendChild(wordDiv);
+    card.appendChild(notesDiv);
+    card.appendChild(ttsBtn);
+    resultEl.appendChild(card);
+
+    setTimeout(() => fdAnimateLetters(spans), 50);
+  }
+
+  const fdAnalyzeBtn = document.getElementById('fd-analyzeBtn');
+  const fdWordInput = document.getElementById('fd-customWord');
+  if (fdAnalyzeBtn) fdAnalyzeBtn.addEventListener('click', fdAnalyzeCustom);
+  if (fdWordInput) fdWordInput.addEventListener('keydown', e => { if (e.key === 'Enter') fdAnalyzeCustom(); });
+})();
+</script>
 </body>
 </html>
 /* force redeploy Mon Aug 31 07:48:37 UTC 2026 */
