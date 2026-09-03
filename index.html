@@ -1096,12 +1096,54 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <span onclick="goTo('sss')">SSS</span>
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
   </div>
+  <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px" title="Ara (Ctrl+K)">🔍</button>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
 <button class="btn-nav" onclick="goTo('dashboard')" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+
+<!-- GLOBAL ARAMA MODALI -->
+<style>
+  .arama-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(10,13,19,.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:flex-start;justify-content:center;padding:80px 20px 20px}
+  .arama-modal.acik{display:flex}
+  .arama-kutu{width:100%;max-width:600px;background:#12161f;border:1px solid rgba(245,166,35,.3);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+  .arama-header{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid rgba(245,166,35,.15);flex-shrink:0}
+  .arama-header-ikon{font-size:18px;flex-shrink:0}
+  .arama-input{flex:1;background:transparent;border:none;outline:none;font-size:16px;color:#ece7da;font-family:'IBM Plex Sans',sans-serif;min-width:0}
+  .arama-input::placeholder{color:#8b93a3}
+  .arama-kapat-btn{background:transparent;border:none;color:#8b93a3;font-size:20px;cursor:pointer;padding:4px 8px;line-height:1;flex-shrink:0}
+  .arama-kapat-btn:hover{color:#ece7da}
+  .arama-sonuclar{overflow-y:auto;padding:8px}
+  .arama-sonuc-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;cursor:pointer;transition:background .12s}
+  .arama-sonuc-item:hover,.arama-sonuc-item.arama-secili{background:rgba(245,166,35,.12)}
+  .arama-sonuc-ikon{font-size:19px;flex-shrink:0;width:26px;text-align:center}
+  .arama-sonuc-metin{flex:1;min-width:0}
+  .arama-sonuc-baslik{font-size:13.5px;font-weight:600;color:#ece7da;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .arama-sonuc-baslik mark{background:transparent;color:#f5a623;font-weight:800}
+  .arama-sonuc-alt{font-size:11.5px;color:#8b93a3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .arama-sonuc-kategori{font-size:9.5px;font-family:'IBM Plex Mono',monospace;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#f5a623;background:rgba(245,166,35,.12);padding:3px 8px;border-radius:6px;flex-shrink:0;white-space:nowrap}
+  .arama-bos{padding:40px 20px;text-align:center;color:#8b93a3;font-size:13px}
+  .arama-ipucu{padding:10px 18px;border-top:1px solid rgba(245,166,35,.15);font-size:11px;color:#8b93a3;display:flex;gap:14px;flex-shrink:0}
+  .arama-ipucu kbd{background:rgba(255,255,255,.08);border-radius:4px;padding:1px 6px;font-family:'IBM Plex Mono',monospace;font-size:10px}
+  @media(max-width:640px){
+    .arama-modal{padding:0}
+    .arama-kutu{max-width:none;width:100%;height:100%;max-height:100%;border-radius:0}
+    .arama-header{padding-top:calc(16px + env(safe-area-inset-top))}
+  }
+</style>
+<div class="arama-modal" id="arama-modal" onclick="if(event.target===this)globalAramaKapat()">
+  <div class="arama-kutu">
+    <div class="arama-header">
+      <span class="arama-header-ikon">🔍</span>
+      <input type="text" id="arama-input" class="arama-input" placeholder="Modül, konu, kelime veya soru tipi ara..." autocomplete="off" oninput="globalAramaAra()" onkeydown="globalAramaKeydown(event)">
+      <button class="arama-kapat-btn" onclick="globalAramaKapat()">✕</button>
+    </div>
+    <div class="arama-sonuclar" id="arama-sonuclar"></div>
+    <div class="arama-ipucu"><span><kbd>↑↓</kbd> gezin</span><span><kbd>Enter</kbd> seç</span><span><kbd>Esc</kbd> kapat</span></div>
+  </div>
+</div>
 
 <!-- TRUST BAR -->
 <div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:10px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;border-bottom:1px solid rgba(245,166,35,.3)">
@@ -1128,6 +1170,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <div class="streak-badges" id="streak-badges"></div>
 </div>
 <div class="mmenu" id="mmenu">
+  <a onclick="toggleMenu();globalAramaAc()">🔍 Ara</a>
   <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
   <a onclick="closeMenuGoTo('klod')">KLOD</a>
   <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
@@ -8709,6 +8752,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   const stOrnekBtn = document.getElementById('st-ornek-btn');
   if (stAnalizBtn) stAnalizBtn.addEventListener('click', stAnalizEt);
   if (stOrnekBtn) stOrnekBtn.addEventListener('click', stOrnekYukle);
+  window.ST_TIPLER = ST_TIPLER;
 })();
 </script>
 
@@ -9286,6 +9330,206 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   });
 
   gaRender();
+})();
+</script>
+
+<!-- GLOBAL ARAMA — site geneli modül/konu/kelime/soru-tipi araması -->
+<script>
+(function(){
+  const ARAMA_MODULLER=[
+    {ad:'Dashboard',anahtar:'Dashboard',ikon:'📊'},
+    {ad:'Sinyal Lab',anahtar:'Sinyal Lab',ikon:'🔬'},
+    {ad:'Günlük Tuzak',anahtar:'Gunluk Tuzak',ikon:'🎯'},
+    {ad:'SAT Metodu',anahtar:'SAT Metodu',ikon:'⚡'},
+    {ad:'Paragraf',anahtar:'Paragraf',ikon:'📖'},
+    {ad:'S+V+O',anahtar:'S+V+O',ikon:'📐'},
+    {ad:'Kelime Kartları',anahtar:'Kelime Kartlari',ikon:'🃏'},
+    {ad:'Avcı Master',anahtar:'Avcı Master',ikon:'🏹'},
+    {ad:'Raporlar',anahtar:'Raporlar',ikon:'📈'},
+    {ad:'Hata Defteri',anahtar:'Hata Defteri',ikon:'📝'},
+    {ad:'Zayıf Alan Radarı',anahtar:'Zayıf Alan Radarı',ikon:'🎯'},
+    {ad:'İstatistiklerim',anahtar:'İstatistiklerim',ikon:'📊'},
+    {ad:'Çalışma Planım',anahtar:'Çalışma Planım',ikon:'📅'},
+    {ad:'Acil Kurtarma Planı',anahtar:'Acil Kurtarma Planı',ikon:'🚨'},
+    {ad:'Liderlik',anahtar:'Liderlik',ikon:'🏆'},
+    {ad:'Mini Dersler',anahtar:'Mini Dersler',ikon:'🎬'},
+    {ad:'Canlı Ders',anahtar:'Canlı Ders',ikon:'🎓'},
+    {ad:'KLOD — AI Öğretmen',anahtar:'KLOD',ikon:'🤖'},
+    {ad:'Ses Kurs',anahtar:'Ses Kurs',ikon:'🎧'},
+    {ad:'Öğrenme Teknikleri',anahtar:'Öğrenme',ikon:'🧠'},
+    {ad:'Dil Avcısı',anahtar:'DİL AVCISI',ikon:'🌍'},
+  ];
+  const ARAMA_DIL_AVCISI_ALT=[
+    {ad:'Fonetik Dedektif',id:'fd-modul',ikon:'🔬'},
+    {ad:'Anlama Modülü',id:'anlama-modul',ikon:'🧩'},
+    {ad:'Kelime Hafızası',id:'kelime-hafiza-modul',ikon:'🧠'},
+    {ad:'Paragraf Diseksiyonu',id:'paragraf-diseksiyon-modul',ikon:'✂️'},
+    {ad:'Soru Tipi Tespiti',id:'soru-tipi-modul',ikon:'🧭'},
+    {ad:'Sınav Simülatörü',id:'sinav-simulator-modul',ikon:'📝'},
+    {ad:'Günlük Antrenman',id:'gunluk-antrenman-modul',ikon:'☀️'},
+  ];
+
+  function aramaEscHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function aramaModulGit(anahtar){
+    const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes(anahtar));
+    if(item)item.click();
+    document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+  }
+
+  function aramaDilAvcisiAltGit(scrollId,sonAksiyon){
+    const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('DİL AVCISI'));
+    if(item)item.click();
+    setTimeout(()=>{
+      const el=document.getElementById(scrollId);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+      if(sonAksiyon)setTimeout(sonAksiyon,350);
+    },300);
+  }
+
+  let ARAMA_INDEX=null;
+  function aramaIndexOlustur(){
+    const idx=[];
+    ARAMA_MODULLER.forEach(m=>{
+      idx.push({baslik:m.ad,kategori:'Modül',ikon:m.ikon,aksiyon:()=>aramaModulGit(m.anahtar)});
+    });
+    ARAMA_DIL_AVCISI_ALT.forEach(m=>{
+      idx.push({baslik:m.ad,kategori:'Dil Avcısı',ikon:m.ikon,aksiyon:()=>aramaDilAvcisiAltGit(m.id)});
+    });
+    if(typeof CL_KONULAR!=='undefined'){
+      CL_KONULAR.forEach((k,i)=>{
+        idx.push({baslik:k.baslik,altbaslik:(k.aciklama||'').slice(0,80),kategori:'Canlı Ders',ikon:'🎓',aksiyon:()=>medyaCanliDersGit(i)});
+      });
+    }
+    if(window.AM_TEKNIKLER){
+      window.AM_TEKNIKLER.forEach(t=>{
+        idx.push({baslik:t.baslik,altbaslik:t.neZaman,kategori:'Anlama Tekniği',ikon:t.ikon,aksiyon:()=>aramaDilAvcisiAltGit('anlama-modul',()=>{if(typeof amKartAc==='function')amKartAc(t.no);})});
+      });
+    }
+    if(window.KH_KELIMELER){
+      window.KH_KELIMELER.forEach(k=>{
+        idx.push({baslik:k.kelime.toUpperCase(),altbaslik:k.anlam,kategori:'Kelime',ikon:'🃏',aksiyon:()=>aramaDilAvcisiAltGit('kelime-hafiza-modul')});
+      });
+    }
+    if(typeof FONETIK_SESLILER!=='undefined'){
+      FONETIK_SESLILER.forEach((s,i)=>{
+        idx.push({baslik:s.harf+' Sesi — kısa/uzun okunuş',altbaslik:s.aciklama,kategori:'Fonetik',ikon:'🔤',aksiyon:()=>aramaDilAvcisiAltGit('fon-grid',()=>{if(typeof fonetikSesliAc==='function')fonetikSesliAc(i);})});
+      });
+    }
+    if(typeof OKUMA_DIGRAPHS!=='undefined'){
+      OKUMA_DIGRAPHS.forEach((d,i)=>{
+        idx.push({baslik:'"'+d.harfler+'" harf çifti ('+d.ses+')',altbaslik:d.ipucu,kategori:'Okuma Kuralı',ikon:'📖',aksiyon:()=>aramaDilAvcisiAltGit('ok-grid',()=>{if(typeof okumaDigraphAc==='function')okumaDigraphAc(i);})});
+      });
+    }
+    if(window.ST_TIPLER){
+      window.ST_TIPLER.forEach(t=>{
+        idx.push({baslik:t.teknikAdi,altbaslik:t.etiket,kategori:'Soru Tipi',ikon:'🧭',aksiyon:()=>aramaDilAvcisiAltGit('soru-tipi-modul')});
+      });
+    }
+    return idx;
+  }
+
+  function aramaVurgula(baslik,sorgu){
+    const esc=aramaEscHtml(baslik);
+    const q=sorgu.trim();
+    if(!q)return esc;
+    const idx=esc.toLowerCase().indexOf(q.toLowerCase());
+    if(idx===-1)return esc;
+    return esc.slice(0,idx)+'<mark>'+esc.slice(idx,idx+q.length)+'</mark>'+esc.slice(idx+q.length);
+  }
+
+  function aramaFiltrele(sorgu){
+    if(!ARAMA_INDEX)ARAMA_INDEX=aramaIndexOlustur();
+    const q=sorgu.trim().toLowerCase();
+    if(!q)return [];
+    return ARAMA_INDEX.filter(it=>{
+      const hay=(it.baslik+' '+(it.altbaslik||'')+' '+it.kategori).toLowerCase();
+      return hay.includes(q);
+    }).slice(0,40);
+  }
+
+  let aramaMevcutSonuclar=[];
+  let aramaSeciliIndex=-1;
+
+  function aramaRenderSonuclar(sonuclar,sorgu){
+    const el=document.getElementById('arama-sonuclar');
+    aramaSeciliIndex=sonuclar.length?0:-1;
+    if(!sorgu.trim()){
+      el.innerHTML='<div class="arama-bos">Modül, konu, kelime veya soru tipi aramak için yazmaya başla...</div>';
+      return;
+    }
+    if(!sonuclar.length){
+      el.innerHTML='<div class="arama-bos">"'+aramaEscHtml(sorgu)+'" için sonuç bulunamadı.</div>';
+      return;
+    }
+    el.innerHTML=sonuclar.map((s,i)=>`
+      <div class="arama-sonuc-item${i===0?' arama-secili':''}" onclick="aramaSonucSec(${i})">
+        <div class="arama-sonuc-ikon">${s.ikon}</div>
+        <div class="arama-sonuc-metin">
+          <div class="arama-sonuc-baslik">${aramaVurgula(s.baslik,sorgu)}</div>
+          ${s.altbaslik?`<div class="arama-sonuc-alt">${aramaEscHtml(s.altbaslik)}</div>`:''}
+        </div>
+        <div class="arama-sonuc-kategori">${aramaEscHtml(s.kategori)}</div>
+      </div>
+    `).join('');
+  }
+
+  function aramaAra(){
+    const sorgu=document.getElementById('arama-input').value;
+    aramaMevcutSonuclar=aramaFiltrele(sorgu);
+    aramaRenderSonuclar(aramaMevcutSonuclar,sorgu);
+  }
+
+  function aramaSonucSec(i){
+    const s=aramaMevcutSonuclar[i];
+    if(!s)return;
+    globalAramaKapat();
+    setTimeout(()=>{ if(s.aksiyon)s.aksiyon(); },200);
+  }
+
+  function aramaSeciliGuncelle(){
+    document.querySelectorAll('#arama-sonuclar .arama-sonuc-item').forEach((el,i)=>{
+      el.classList.toggle('arama-secili',i===aramaSeciliIndex);
+    });
+    const secili=document.querySelector('#arama-sonuclar .arama-sonuc-item.arama-secili');
+    if(secili)secili.scrollIntoView({block:'nearest'});
+  }
+
+  function globalAramaKeydown(e){
+    if(e.key==='Escape'){globalAramaKapat();return;}
+    if(e.key==='ArrowDown'){e.preventDefault();if(aramaMevcutSonuclar.length){aramaSeciliIndex=Math.min(aramaSeciliIndex+1,aramaMevcutSonuclar.length-1);aramaSeciliGuncelle();}return;}
+    if(e.key==='ArrowUp'){e.preventDefault();if(aramaMevcutSonuclar.length){aramaSeciliIndex=Math.max(aramaSeciliIndex-1,0);aramaSeciliGuncelle();}return;}
+    if(e.key==='Enter'){e.preventDefault();if(aramaSeciliIndex>=0)aramaSonucSec(aramaSeciliIndex);return;}
+  }
+
+  function globalAramaAc(){
+    if(!ARAMA_INDEX)ARAMA_INDEX=aramaIndexOlustur();
+    const modal=document.getElementById('arama-modal');
+    modal.classList.add('acik');
+    const input=document.getElementById('arama-input');
+    input.value='';
+    aramaRenderSonuclar([],'');
+    setTimeout(()=>input.focus(),50);
+    document.body.style.overflow='hidden';
+  }
+
+  function globalAramaKapat(){
+    document.getElementById('arama-modal').classList.remove('acik');
+    document.body.style.overflow='';
+  }
+
+  window.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+      e.preventDefault();
+      globalAramaAc();
+    }
+  });
+
+  window.globalAramaAc=globalAramaAc;
+  window.globalAramaKapat=globalAramaKapat;
+  window.globalAramaKeydown=globalAramaKeydown;
+  window.aramaAra=aramaAra;
+  window.aramaSonucSec=aramaSonucSec;
 })();
 </script>
 </body>
