@@ -2362,6 +2362,93 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="ss-alan"></div>
           </section>
 
+          <!-- GÜNLÜK ANTRENMAN MODÜLÜ — Her Gün Otomatik Değişen Rutin (#gunluk-antrenman-modul scope) -->
+          <section id="gunluk-antrenman-modul">
+          <style>
+            #gunluk-antrenman-modul{
+              --ga-bg:#0a0d13;
+              --ga-surface:#12161f;
+              --ga-border:rgba(245,166,35,.16);
+              --ga-text:#ece7da;
+              --ga-muted:#8b93a3;
+              --ga-accent:#f5a623;
+              --ga-yesil:#34D399;
+              --ga-kirmizi:#EF4444;
+              box-sizing:border-box;
+              background:var(--ga-bg);
+              color:var(--ga-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #gunluk-antrenman-modul *{box-sizing:border-box}
+            #gunluk-antrenman-modul .ga-header{margin-bottom:18px}
+            #gunluk-antrenman-modul .ga-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--ga-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #gunluk-antrenman-modul .ga-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #gunluk-antrenman-modul .ga-header h2 span{color:var(--ga-accent)}
+            #gunluk-antrenman-modul .ga-header p{color:var(--ga-muted);font-size:13px;line-height:1.6;max-width:560px;margin:0}
+
+            #gunluk-antrenman-modul .ga-ilerleme-bar{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+            #gunluk-antrenman-modul .ga-ilerleme-segment{flex:1;height:8px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+            #gunluk-antrenman-modul .ga-ilerleme-dolgu{height:100%;width:0%;background:linear-gradient(90deg,var(--ga-accent),#ffcf7a);border-radius:6px;transition:width .4s ease}
+            #gunluk-antrenman-modul .ga-ilerleme-dolgu.ga-dolu{width:100%}
+            #gunluk-antrenman-modul .ga-ilerleme-etiketler{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ga-muted);margin-bottom:18px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+            #gunluk-antrenman-modul .ga-ilerleme-etiketler span.ga-aktif-etiket{color:var(--ga-accent);font-weight:700}
+
+            #gunluk-antrenman-modul .ga-kutu{background:var(--ga-surface);border:1px solid var(--ga-border);border-radius:16px;padding:22px 20px}
+            #gunluk-antrenman-modul .ga-bolum-basligi{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+            #gunluk-antrenman-modul .ga-bolum-ikon{font-size:20px}
+            #gunluk-antrenman-modul .ga-bolum-baslik-metin{font-family:'IBM Plex Serif',serif;font-size:17px;font-weight:600;color:var(--ga-text)}
+
+            #gunluk-antrenman-modul .ga-teknik-etiket{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:8px;margin-bottom:10px}
+            #gunluk-antrenman-modul .ga-teknik-adi{font-size:16px;font-weight:700;color:var(--ga-text);margin-bottom:10px}
+            #gunluk-antrenman-modul .ga-alt-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ga-accent);margin:12px 0 5px}
+            #gunluk-antrenman-modul .ga-metin-kutu{font-size:13px;color:var(--ga-text);line-height:1.7;background:rgba(255,255,255,.03);border:1px solid var(--ga-border);border-radius:8px;padding:10px 14px}
+
+            #gunluk-antrenman-modul .ga-kelime-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+            #gunluk-antrenman-modul .ga-flashcard{background:var(--ga-bg);border:1px solid var(--ga-border);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:border-color .15s}
+            #gunluk-antrenman-modul .ga-flashcard:hover{border-color:var(--ga-accent)}
+            #gunluk-antrenman-modul .ga-flashcard.ga-cevrildi{border-color:var(--ga-yesil);background:rgba(52,211,153,.06)}
+            #gunluk-antrenman-modul .ga-flashcard-en{font-family:'IBM Plex Serif',serif;font-weight:700;font-size:14px;color:var(--ga-text)}
+            #gunluk-antrenman-modul .ga-flashcard-tr{font-size:11.5px;color:var(--ga-accent);font-weight:600}
+            #gunluk-antrenman-modul .ga-flashcard-ipucu{font-size:10px;color:var(--ga-muted)}
+
+            #gunluk-antrenman-modul .ga-paragraf-metin{font-size:13.5px;line-height:1.8;color:var(--ga-text);background:rgba(255,255,255,.03);border:1px solid var(--ga-border);border-radius:10px;padding:14px 16px;margin-bottom:16px}
+            #gunluk-antrenman-modul .ga-soru-blok{margin-bottom:16px}
+            #gunluk-antrenman-modul .ga-soru-metin{font-size:13px;font-weight:600;color:var(--ga-text);margin-bottom:8px}
+            #gunluk-antrenman-modul .ga-secenekler{display:flex;flex-direction:column;gap:6px}
+            #gunluk-antrenman-modul .ga-secenek{display:flex;gap:8px;text-align:left;background:var(--ga-bg);border:1.5px solid var(--ga-border);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12.5px;color:var(--ga-text);font-family:'IBM Plex Sans',sans-serif}
+            #gunluk-antrenman-modul .ga-secenek:hover{border-color:var(--ga-accent)}
+            #gunluk-antrenman-modul .ga-secenek.ga-secili{border-color:var(--ga-accent);background:rgba(245,166,35,.1)}
+            #gunluk-antrenman-modul .ga-secenek.ga-dogru-vurgu{border-color:var(--ga-yesil);background:rgba(52,211,153,.1)}
+            #gunluk-antrenman-modul .ga-secenek.ga-yanlis-vurgu{border-color:var(--ga-kirmizi);background:rgba(239,68,68,.1)}
+            #gunluk-antrenman-modul .ga-secenek-harf{font-weight:700;color:var(--ga-accent);flex-shrink:0}
+
+            #gunluk-antrenman-modul .ga-devam-btn{background:var(--ga-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:8px}
+            #gunluk-antrenman-modul .ga-devam-btn:hover{opacity:.88}
+            #gunluk-antrenman-modul .ga-devam-btn:disabled{opacity:.4;cursor:not-allowed}
+
+            #gunluk-antrenman-modul .ga-rozet-kutu{text-align:center;padding:30px 20px}
+            #gunluk-antrenman-modul .ga-rozet-emoji{font-size:48px;margin-bottom:10px}
+            #gunluk-antrenman-modul .ga-rozet-baslik{font-family:'IBM Plex Serif',serif;font-size:19px;font-weight:600;color:var(--ga-text);margin-bottom:8px}
+            #gunluk-antrenman-modul .ga-rozet-streak{display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:8px 18px;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--ga-accent)}
+            #gunluk-antrenman-modul .ga-rozet-alt{font-size:12.5px;color:var(--ga-muted);margin-top:12px}
+
+            @media (max-width:480px){
+              #gunluk-antrenman-modul .ga-kelime-grid{grid-template-columns:repeat(2,1fr)}
+            }
+          </style>
+
+          <div class="ga-header">
+            <div class="ga-header-badge">☀️ GÜNLÜK ANTRENMAN</div>
+            <h2>Bugünün <span>Rutini</span></h2>
+            <p>Her gün otomatik değişen kısa bir antrenman: günün tekniği, günün 5 kelimesi ve günün mini paragrafı. 3'ünü de tamamla, rozetini kazan!</p>
+          </div>
+
+          <div id="ga-alan"></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -8029,6 +8116,7 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
   }
 
   window.amKartAc = amKartAc;
+  window.AM_TEKNIKLER = AM_TEKNIKLER;
   amModulRender();
 })();
 </script>
@@ -8264,6 +8352,7 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
 
   window.khCevabiGoster = khCevabiGoster;
   window.khCevapla = khCevapla;
+  window.KH_KELIMELER = KH_KELIMELER;
   khModulRender();
 })();
 </script>
@@ -8882,6 +8971,302 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
 
   window.ssSecenekSec = ssSecenekSec;
   ssBaslangicRender();
+})();
+</script>
+
+<!-- GÜNLÜK ANTRENMAN MODÜLÜ — #gunluk-antrenman-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const GA_TIP_RENK = { anafikir:'#F5A623', detay:'#4ECDC4', cikarim:'#EAB308' };
+  const GA_TIP_ETIKET = { anafikir:'Ana Fikir', detay:'Detay', cikarim:'Çıkarım' };
+
+  const GA_PARAGRAFLAR = [
+    { metin:"Noise-cancelling headphones work by generating sound waves that are the exact opposite of ambient noise, effectively cancelling it out before it reaches the listener's ear. While early versions were bulky and expensive, modern miniaturized components have made the technology affordable and widely available. Many frequent travelers now consider such headphones an essential part of their luggage.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the passage mainly about?', secenekler:['The history of luggage design','How noise-cancelling headphones work and why they have become popular','Why traveling is stressful','The cost of modern electronics'], cevap:1 },
+        { tip:'detay', soru:'According to the passage, how did earlier noise-cancelling headphones differ from modern ones?', secenekler:['They used a completely different technology','They were bulkier and more expensive','They only worked on airplanes','They were louder than modern ones'], cevap:1 },
+      ]
+    },
+    { metin:"Procrastination is often mistaken for laziness, but psychologists argue that it is more closely linked to emotional regulation than to time management. People tend to delay tasks that trigger negative feelings such as anxiety or boredom, choosing short-term relief over long-term benefit. Understanding this emotional root, rather than simply trying to 'manage time better,' is considered a more effective way to overcome chronic procrastination.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?', secenekler:['Procrastination is always caused by laziness','Procrastination is more about managing emotions than managing time','Time management skills have no effect on procrastination','Boredom is the only cause of procrastination'], cevap:1 },
+        { tip:'cikarim', soru:'It can be inferred from the passage that traditional time-management techniques alone', secenekler:['always solve procrastination completely','may not address the true cause of procrastination','are more effective than any other method','are unrelated to emotional regulation'], cevap:1 },
+      ]
+    },
+    { metin:"Contrary to popular belief, not all fats are harmful to health. While trans fats and excessive saturated fats have been linked to heart disease, unsaturated fats found in foods such as olive oil, nuts, and fish can actually support cardiovascular health. Nutritionists now emphasize the type of fat consumed rather than simply reducing total fat intake.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?', secenekler:['All fats should be avoided completely','The type of fat matters more than the total amount consumed','Only olive oil is good for health','Trans fats are beneficial to the heart'], cevap:1 },
+        { tip:'detay', soru:'According to the passage, which fats have been linked to heart disease?', secenekler:['Unsaturated fats found in fish','Fats found in nuts','Trans fats and excessive saturated fats','All dietary fats equally'], cevap:2 },
+      ]
+    },
+    { metin:"Although Mars is often called Earth's 'sister planet' due to similarities in size and composition, its atmosphere is far too thin to support liquid water on its surface today. Scientists believe that billions of years ago, Mars had a much thicker atmosphere and possibly flowing rivers. Current missions are focused on searching for evidence of ancient microbial life preserved beneath the planet's surface.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the passage mainly about?', secenekler:['Mars is identical to Earth in every way','Mars may have once had conditions suitable for life, which scientists are now investigating','Mars currently has flowing rivers','No missions have ever explored Mars'], cevap:1 },
+        { tip:'cikarim', soru:"It can be inferred from the passage that Mars's atmosphere", secenekler:['has remained unchanged for billions of years','was likely thicker in the distant past than it is today','is thicker than Earth\'s atmosphere','has never supported any form of water'], cevap:1 },
+      ]
+    },
+    { metin:"The invention of photography in the 19th century initially alarmed many painters, who feared the new technology would make their craft obsolete. Instead of replacing painting, however, photography freed artists from the obligation of realistic representation, paving the way for movements such as Impressionism and, later, abstract art. In this sense, photography did not end painting but transformed its purpose.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?', secenekler:['Photography completely replaced painting','Photography changed the direction and purpose of painting rather than eliminating it','Painters immediately embraced photography with no resistance','Abstract art existed before photography was invented'], cevap:1 },
+        { tip:'detay', soru:'According to the passage, what did many painters initially fear about photography?', secenekler:['That it would be too expensive','That it would make their craft obsolete','That it would replace museums','That it would only capture landscapes'], cevap:1 },
+      ]
+    },
+    { metin:"Sleep is not a single uniform state but consists of several distinct stages, including light sleep, deep sleep, and REM (rapid eye movement) sleep, each serving different biological functions. Deep sleep is essential for physical recovery, while REM sleep plays a key role in memory consolidation and emotional processing. Disrupting these cycles repeatedly, as often happens with irregular sleep schedules, can impair both physical health and cognitive performance.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?', secenekler:['All sleep stages serve the same purpose','Sleep consists of different stages, each with a distinct biological function','REM sleep is the only important stage of sleep','Irregular sleep schedules have no effect on health'], cevap:1 },
+        { tip:'detay', soru:'According to the passage, which stage of sleep is linked to memory consolidation?', secenekler:['Light sleep','Deep sleep','REM sleep','All stages equally'], cevap:2 },
+      ]
+    },
+    { metin:"Bees play a far more critical role in global food production than most people realize, pollinating roughly a third of the crops humans consume. In recent years, however, bee populations have declined sharply due to pesticide use, habitat loss, and disease. Because so many crops depend directly on pollination, scientists warn that continued bee decline could eventually threaten global food security.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?', secenekler:['Bees are only important for producing honey','Declining bee populations could threaten global food security','Pesticides have no effect on bee populations','Only a small number of crops depend on bees'], cevap:1 },
+        { tip:'cikarim', soru:'It can be inferred from the passage that global food security', secenekler:['is completely unrelated to bee populations','may be at risk if bee decline continues','has already collapsed due to bee decline','depends only on pesticide use'], cevap:1 },
+      ]
+    },
+  ];
+
+  function gaGunSayisi(){
+    const simdi = new Date();
+    const yerelGun = new Date(simdi.getFullYear(), simdi.getMonth(), simdi.getDate());
+    return Math.floor(yerelGun.getTime() / 86400000);
+  }
+  function gaBugunTarih(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function gaGunFarki(t1, t2){ return Math.round((new Date(t1) - new Date(t2)) / 86400000); }
+  function gaTarihEkle(tarih, gun){
+    const d = new Date(tarih);
+    d.setDate(d.getDate() + gun);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function gaVeriYukle(){
+    let v;
+    try { v = JSON.parse(localStorage.getItem('sa_gunluk_antrenman')); } catch(e) { v = null; }
+    if (!v) v = { streak:0, sonTamamlananTarih:null, gunluk:{ tarih:null, teknik:false, kelime:false, paragraf:false, paragrafDogru:0 } };
+    const bugun = gaBugunTarih();
+    if (v.gunluk.tarih !== bugun) v.gunluk = { tarih:bugun, teknik:false, kelime:false, paragraf:false, paragrafDogru:0 };
+    if (v.sonTamamlananTarih && gaGunFarki(bugun, v.sonTamamlananTarih) > 1) v.streak = 0;
+    return v;
+  }
+  function gaVeriKaydet(v){ try{ localStorage.setItem('sa_gunluk_antrenman', JSON.stringify(v)); }catch(e){} }
+
+  let gaMevcutAsama = 'teknik';
+  let gaKelimeCevrilenler = [];
+  let gaParagrafCevaplar = [null, null];
+  let gaParagrafGosterildi = false;
+
+  function gaIlerlemeHtml(v){
+    const asamalar = ['teknik','kelime','paragraf'];
+    const etiketler = { teknik:'Günün Tekniği', kelime:'Günün Kelimeleri', paragraf:'Günün Paragrafı' };
+    return `
+      <div class="ga-ilerleme-bar">
+        ${asamalar.map(a => `<div class="ga-ilerleme-segment"><div class="ga-ilerleme-dolgu${v.gunluk[a] ? ' ga-dolu' : ''}"></div></div>`).join('')}
+      </div>
+      <div class="ga-ilerleme-etiketler">
+        ${asamalar.map(a => `<span class="${gaMevcutAsama === a ? 'ga-aktif-etiket' : ''}">${v.gunluk[a] ? '✓ ' : ''}${etiketler[a]}</span>`).join('')}
+      </div>
+    `;
+  }
+
+  function gaRender(){
+    const v = gaVeriYukle();
+    gaVeriKaydet(v);
+    const alan = document.getElementById('ga-alan');
+
+    if (v.gunluk.teknik && v.gunluk.kelime && v.gunluk.paragraf) {
+      gaRozetRender(v);
+      return;
+    }
+
+    if (!v.gunluk.teknik) gaMevcutAsama = 'teknik';
+    else if (!v.gunluk.kelime) gaMevcutAsama = 'kelime';
+    else gaMevcutAsama = 'paragraf';
+
+    const ustHtml = gaIlerlemeHtml(v);
+
+    if (gaMevcutAsama === 'teknik') {
+      alan.innerHTML = ustHtml + gaTeknikHtml();
+    } else if (gaMevcutAsama === 'kelime') {
+      alan.innerHTML = ustHtml + gaKelimeHtml();
+      gaKelimeCevrilenler = [];
+    } else {
+      alan.innerHTML = ustHtml + gaParagrafHtml();
+      gaParagrafCevaplar = [null, null];
+      gaParagrafGosterildi = false;
+    }
+  }
+
+  function gaTeknikHtml(){
+    const teknikler = window.AM_TEKNIKLER || [];
+    if (!teknikler.length) return '<div class="ga-kutu">Teknik verisi yüklenemedi.</div>';
+    const t = teknikler[gaGunSayisi() % teknikler.length];
+    return `
+      <div class="ga-kutu">
+        <div class="ga-bolum-basligi"><span class="ga-bolum-ikon">${t.ikon}</span><span class="ga-bolum-baslik-metin">Günün Tekniği</span></div>
+        <div class="ga-teknik-etiket" style="background:${t.renk}22;color:${t.renk}">${t.etiket}</div>
+        <div class="ga-teknik-adi">${t.baslik}</div>
+        <div class="ga-alt-baslik">Kısa Hatırlatma</div>
+        <div class="ga-metin-kutu">${t.neZaman}</div>
+        <div class="ga-alt-baslik">Pratik İpucu — Bugün Bunu Dene</div>
+        <div class="ga-metin-kutu">${t.adimlar[0]}</div>
+        <button class="ga-devam-btn" id="ga-teknik-tamamla">Tamamladım, Devam Et →</button>
+      </div>
+    `;
+  }
+
+  function gaTeknikTamamla(){
+    const v = gaVeriYukle();
+    v.gunluk.teknik = true;
+    gaVeriKaydet(v);
+    gaRender();
+  }
+
+  function gaKelimeHtml(){
+    const kelimeler = window.KH_KELIMELER || [];
+    if (!kelimeler.length) return '<div class="ga-kutu">Kelime verisi yüklenemedi.</div>';
+    const baslangic = (gaGunSayisi() * 5) % kelimeler.length;
+    const grup = [0,1,2,3,4].map(i => kelimeler[(baslangic + i) % kelimeler.length]);
+    return `
+      <div class="ga-kutu">
+        <div class="ga-bolum-basligi"><span class="ga-bolum-ikon">🃏</span><span class="ga-bolum-baslik-metin">Günün Kelime Grubu</span></div>
+        <div style="font-size:12px;color:var(--ga-muted);margin-bottom:14px">Kartlara tıkla, Türkçe anlamını gör. 5 kartın tamamını çevir.</div>
+        <div class="ga-kelime-grid" id="ga-kelime-grid">
+          ${grup.map((k, i) => `
+            <div class="ga-flashcard" id="ga-kart-${i}" onclick="gaKartCevir(${i})">
+              <div class="ga-flashcard-en">${k.kelime.toUpperCase()}</div>
+              <div class="ga-flashcard-ipucu">tıkla →</div>
+            </div>
+          `).join('')}
+        </div>
+        <button class="ga-devam-btn" id="ga-kelime-tamamla" disabled>Tüm Kartları Çevir (0/5)</button>
+      </div>
+    `;
+  }
+
+  function gaKartCevir(i){
+    const kelimeler = window.KH_KELIMELER || [];
+    const baslangic = (gaGunSayisi() * 5) % kelimeler.length;
+    const k = kelimeler[(baslangic + i) % kelimeler.length];
+    const kart = document.getElementById('ga-kart-' + i);
+    if (!kart || kart.classList.contains('ga-cevrildi')) return;
+    kart.classList.add('ga-cevrildi');
+    kart.innerHTML = `<div class="ga-flashcard-en">${k.kelime.toUpperCase()}</div><div class="ga-flashcard-tr">${k.anlam}</div>`;
+    if (!gaKelimeCevrilenler.includes(i)) gaKelimeCevrilenler.push(i);
+    const btn = document.getElementById('ga-kelime-tamamla');
+    btn.textContent = `Tüm Kartları Çevir (${gaKelimeCevrilenler.length}/5)`;
+    if (gaKelimeCevrilenler.length >= 5) {
+      btn.disabled = false;
+      btn.textContent = 'Devam Et →';
+    }
+  }
+
+  function gaKelimeTamamla(){
+    const v = gaVeriYukle();
+    v.gunluk.kelime = true;
+    gaVeriKaydet(v);
+    gaRender();
+  }
+
+  function gaParagrafHtml(){
+    const p = GA_PARAGRAFLAR[gaGunSayisi() % GA_PARAGRAFLAR.length];
+    return `
+      <div class="ga-kutu">
+        <div class="ga-bolum-basligi"><span class="ga-bolum-ikon">📄</span><span class="ga-bolum-baslik-metin">Günün Mini Paragrafı</span></div>
+        <div class="ga-paragraf-metin">${p.metin}</div>
+        <div id="ga-paragraf-sorular">
+          ${p.sorular.map((s, si) => `
+            <div class="ga-soru-blok">
+              <div class="ga-soru-metin"><span class="ga-teknik-etiket" style="background:${GA_TIP_RENK[s.tip]}22;color:${GA_TIP_RENK[s.tip]}">${GA_TIP_ETIKET[s.tip]}</span><br>${s.soru}</div>
+              <div class="ga-secenekler" id="ga-secenekler-${si}">
+                ${s.secenekler.map((sec, oi) => `
+                  <div class="ga-secenek" onclick="gaParagrafSecenekSec(${si},${oi})" id="ga-secenek-${si}-${oi}">
+                    <span class="ga-secenek-harf">${['A','B','C','D'][oi]})</span><span>${sec}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div id="ga-paragraf-sonuc"></div>
+        <button class="ga-devam-btn" id="ga-paragraf-btn">Cevapla ve Sonucu Gör</button>
+      </div>
+    `;
+  }
+
+  function gaParagrafSecenekSec(si, oi){
+    if (gaParagrafGosterildi) return;
+    gaParagrafCevaplar[si] = oi;
+    document.querySelectorAll(`#ga-secenekler-${si} .ga-secenek`).forEach((el, i) => {
+      el.classList.toggle('ga-secili', i === oi);
+    });
+  }
+
+  function gaParagrafSonucGoster(){
+    if (gaParagrafGosterildi) {
+      gaParagrafTamamla();
+      return;
+    }
+    const p = GA_PARAGRAFLAR[gaGunSayisi() % GA_PARAGRAFLAR.length];
+    let dogruSayisi = 0;
+    p.sorular.forEach((s, si) => {
+      const secilen = gaParagrafCevaplar[si];
+      if (secilen === s.cevap) dogruSayisi++;
+      document.querySelectorAll(`#ga-secenekler-${si} .ga-secenek`).forEach((el, oi) => {
+        if (oi === s.cevap) el.classList.add('ga-dogru-vurgu');
+        else if (oi === secilen) el.classList.add('ga-yanlis-vurgu');
+      });
+    });
+    gaParagrafGosterildi = true;
+    document.getElementById('ga-paragraf-sonuc').innerHTML = `<div class="ga-metin-kutu" style="margin-top:10px;font-weight:600">${dogruSayisi}/2 doğru — harika bir tekrar oldu!</div>`;
+    const btn = document.getElementById('ga-paragraf-btn');
+    btn.textContent = 'Devam Et →';
+
+    const v = gaVeriYukle();
+    v.gunluk.paragrafDogru = dogruSayisi;
+    gaVeriKaydet(v);
+  }
+
+  function gaParagrafTamamla(){
+    const v = gaVeriYukle();
+    v.gunluk.paragraf = true;
+    gaVeriKaydet(v);
+    gaRender();
+  }
+
+  function gaRozetRender(v){
+    const alan = document.getElementById('ga-alan');
+    const bugun = gaBugunTarih();
+    if (v.sonTamamlananTarih !== bugun) {
+      if (v.sonTamamlananTarih === gaTarihEkle(bugun, -1)) v.streak++;
+      else v.streak = 1;
+      v.sonTamamlananTarih = bugun;
+      gaVeriKaydet(v);
+    }
+    alan.innerHTML = `
+      <div class="ga-ilerleme-bar">
+        ${[1,2,3].map(() => '<div class="ga-ilerleme-segment"><div class="ga-ilerleme-dolgu ga-dolu"></div></div>').join('')}
+      </div>
+      <div class="ga-kutu ga-rozet-kutu">
+        <div class="ga-rozet-emoji">🏅</div>
+        <div class="ga-rozet-baslik">Bugünün rozetini kazandın!</div>
+        <div class="ga-rozet-streak">🔥 ${v.streak} gün üst üste</div>
+        <div class="ga-rozet-alt">Günün tekniğini öğrendin, 5 kelimeyi tekrar ettin ve mini paragrafı çözdün. Yarın yeni bir antrenman seni bekliyor!</div>
+      </div>
+    `;
+  }
+
+  window.gaKartCevir = gaKartCevir;
+  window.gaParagrafSecenekSec = gaParagrafSecenekSec;
+
+  document.getElementById('ga-alan').addEventListener('click', function(e){
+    if (e.target && e.target.id === 'ga-teknik-tamamla') gaTeknikTamamla();
+    else if (e.target && e.target.id === 'ga-kelime-tamamla' && !e.target.disabled) gaKelimeTamamla();
+    else if (e.target && e.target.id === 'ga-paragraf-btn') gaParagrafSonucGoster();
+  });
+
+  gaRender();
 })();
 </script>
 </body>
