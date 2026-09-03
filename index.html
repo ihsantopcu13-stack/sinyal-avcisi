@@ -2263,6 +2263,105 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="st-sonuc-alan"><div class="st-bos">Tespit sonucu burada görünecek.</div></div>
           </section>
 
+          <!-- SINAV SİMÜLATÖRÜ MODÜLÜ — Gerçek Formatlı Mini YDS Denemesi (#sinav-simulator-modul scope) -->
+          <section id="sinav-simulator-modul">
+          <style>
+            #sinav-simulator-modul{
+              --ss-bg:#0a0d13;
+              --ss-surface:#12161f;
+              --ss-border:rgba(245,166,35,.16);
+              --ss-text:#ece7da;
+              --ss-muted:#8b93a3;
+              --ss-accent:#f5a623;
+              --ss-yesil:#34D399;
+              --ss-kirmizi:#EF4444;
+              box-sizing:border-box;
+              background:var(--ss-bg);
+              color:var(--ss-text);
+              font-family:'IBM Plex Sans',sans-serif;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #sinav-simulator-modul *{box-sizing:border-box}
+            #sinav-simulator-modul .ss-header{margin-bottom:18px}
+            #sinav-simulator-modul .ss-header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);color:var(--ss-accent);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:12px}
+            #sinav-simulator-modul .ss-header h2{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:600;line-height:1.25;margin:0 0 6px}
+            #sinav-simulator-modul .ss-header h2 span{color:var(--ss-accent)}
+            #sinav-simulator-modul .ss-header p{color:var(--ss-muted);font-size:13px;line-height:1.6;max-width:560px;margin:0}
+
+            #sinav-simulator-modul .ss-baslangic-kutu{background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:16px;padding:26px 22px;text-align:center}
+            #sinav-simulator-modul .ss-bilgi-satir{display:flex;justify-content:center;gap:22px;margin:16px 0 20px;flex-wrap:wrap}
+            #sinav-simulator-modul .ss-bilgi-item{display:flex;flex-direction:column;align-items:center;gap:2px}
+            #sinav-simulator-modul .ss-bilgi-sayi{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:var(--ss-accent)}
+            #sinav-simulator-modul .ss-bilgi-etiket{font-size:11px;color:var(--ss-muted)}
+            #sinav-simulator-modul .ss-baslat-btn{background:var(--ss-accent);color:#0a0d13;border:none;border-radius:10px;padding:13px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #sinav-simulator-modul .ss-baslat-btn:hover{opacity:.88}
+            #sinav-simulator-modul .ss-son-sonuc{margin-top:16px;font-size:12px;color:var(--ss-muted)}
+
+            #sinav-simulator-modul .ss-ust-bar{display:flex;align-items:center;justify-content:space-between;background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:14px;padding:12px 18px;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+            #sinav-simulator-modul .ss-ilerleme{font-size:12.5px;color:var(--ss-muted);font-family:'IBM Plex Mono',monospace}
+            #sinav-simulator-modul .ss-sure{display:flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:var(--ss-text)}
+            #sinav-simulator-modul .ss-sure.ss-sure-kritik{color:var(--ss-kirmizi)}
+
+            #sinav-simulator-modul .ss-pasaj-kutu{background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:14px;padding:16px 18px;margin-bottom:14px;max-height:260px;overflow-y:auto}
+            #sinav-simulator-modul .ss-pasaj-konu{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ss-accent);margin-bottom:8px}
+            #sinav-simulator-modul .ss-pasaj-metin{font-size:13.5px;line-height:1.8;color:var(--ss-text)}
+
+            #sinav-simulator-modul .ss-soru-kutu{background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:14px;padding:18px 20px}
+            #sinav-simulator-modul .ss-soru-tip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:8px;margin-bottom:10px}
+            #sinav-simulator-modul .ss-soru-metin{font-size:14.5px;font-weight:600;color:var(--ss-text);line-height:1.6;margin-bottom:14px}
+            #sinav-simulator-modul .ss-secenekler{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+            #sinav-simulator-modul .ss-secenek{display:flex;align-items:flex-start;gap:10px;text-align:left;background:var(--ss-bg);border:1.5px solid var(--ss-border);border-radius:10px;padding:11px 14px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-size:13px;color:var(--ss-text);transition:border-color .15s}
+            #sinav-simulator-modul .ss-secenek:hover{border-color:var(--ss-accent)}
+            #sinav-simulator-modul .ss-secenek.ss-secili{border-color:var(--ss-accent);background:rgba(245,166,35,.1)}
+            #sinav-simulator-modul .ss-secenek-harf{font-weight:700;color:var(--ss-accent);flex-shrink:0}
+            #sinav-simulator-modul .ss-sonraki-btn{background:var(--ss-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 26px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #sinav-simulator-modul .ss-sonraki-btn:hover{opacity:.88}
+
+            #sinav-simulator-modul .ss-sonuc-ust{display:flex;align-items:center;gap:20px;background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:16px;padding:22px;margin-bottom:16px;flex-wrap:wrap}
+            #sinav-simulator-modul .ss-puan-buyuk{font-family:'IBM Plex Mono',monospace;font-size:38px;font-weight:700;color:var(--ss-accent)}
+            #sinav-simulator-modul .ss-puan-etiket{font-size:12px;color:var(--ss-muted)}
+            #sinav-simulator-modul .ss-mini-istatistik{display:flex;gap:16px;flex-wrap:wrap}
+            #sinav-simulator-modul .ss-mini-item{text-align:center}
+            #sinav-simulator-modul .ss-mini-sayi{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700}
+            #sinav-simulator-modul .ss-mini-etiket{font-size:10px;color:var(--ss-muted)}
+
+            #sinav-simulator-modul .ss-zayif-kutu{background:var(--ss-surface);border:1px solid var(--ss-border);border-left:4px solid var(--ss-kirmizi);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+            #sinav-simulator-modul .ss-zayif-baslik{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ss-kirmizi);margin-bottom:6px}
+            #sinav-simulator-modul .ss-zayif-metin{font-size:13px;color:var(--ss-text);line-height:1.6}
+
+            #sinav-simulator-modul .ss-detay-baslik{font-size:14px;font-weight:700;color:var(--ss-text);margin:18px 0 10px}
+            #sinav-simulator-modul .ss-detay-kart{background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+            #sinav-simulator-modul .ss-detay-ust{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+            #sinav-simulator-modul .ss-detay-no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ss-muted)}
+            #sinav-simulator-modul .ss-detay-durum{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:8px}
+            #sinav-simulator-modul .ss-detay-durum.ss-durum-dogru{background:rgba(52,211,153,.15);color:var(--ss-yesil)}
+            #sinav-simulator-modul .ss-detay-durum.ss-durum-yanlis{background:rgba(239,68,68,.15);color:var(--ss-kirmizi)}
+            #sinav-simulator-modul .ss-detay-durum.ss-durum-bos{background:rgba(139,147,163,.15);color:var(--ss-muted)}
+            #sinav-simulator-modul .ss-detay-soru{font-size:13px;color:var(--ss-text);margin-bottom:6px;font-weight:600}
+            #sinav-simulator-modul .ss-detay-cevap-satir{font-size:12px;color:var(--ss-muted);margin-bottom:4px}
+            #sinav-simulator-modul .ss-detay-cevap-satir b{color:var(--ss-text)}
+            #sinav-simulator-modul .ss-detay-aciklama{font-size:12px;color:var(--ss-muted);line-height:1.6;border-left:3px solid var(--ss-accent);padding-left:10px;margin-top:6px}
+
+            #sinav-simulator-modul .ss-tekrar-btn{background:transparent;color:var(--ss-muted);border:1px solid var(--ss-border);border-radius:10px;padding:11px 22px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:6px}
+            #sinav-simulator-modul .ss-tekrar-btn:hover{color:var(--ss-text);border-color:var(--ss-accent)}
+
+            @media (max-width:520px){
+              #sinav-simulator-modul .ss-bilgi-satir{gap:14px}
+              #sinav-simulator-modul .ss-sonuc-ust{flex-direction:column;align-items:flex-start}
+            }
+          </style>
+
+          <div class="ss-header">
+            <div class="ss-header-badge">📝 SINAV SİMÜLATÖRÜ</div>
+            <h2>Gerçek Formatlı <span>Mini Deneme</span></h2>
+            <p>3 özgün İngilizce paragraf, 15 soru, 45 dakika — gerçek YDS deneyimine en yakın pratik.</p>
+          </div>
+
+          <div id="ss-alan"></div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -8502,6 +8601,287 @@ async function dilaSor(){const input=document.getElementById('dila-input');const
   const stOrnekBtn = document.getElementById('st-ornek-btn');
   if (stAnalizBtn) stAnalizBtn.addEventListener('click', stAnalizEt);
   if (stOrnekBtn) stOrnekBtn.addEventListener('click', stOrnekYukle);
+})();
+</script>
+
+<!-- SINAV SİMÜLATÖRÜ MODÜLÜ — #sinav-simulator-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const SS_SURE_SANIYE = 45 * 60;
+
+  const SS_TIP_RENK = {
+    anafikir:'#F5A623', detay:'#4ECDC4', cikarim:'#EAB308', kelimeanlam:'#34D399',
+    negatif:'#EF4444', referans:'#38BDF8', organizasyon:'#A855F7', tuzak:'#F97316'
+  };
+  const SS_TIP_ETIKET = {
+    anafikir:'Ana Fikir', detay:'Detay', cikarim:'Çıkarım', kelimeanlam:'Kelime Anlam',
+    negatif:'Negatif Soru', referans:'Referans', organizasyon:'Paragraf Organizasyonu', tuzak:'Tuzak Seçenek'
+  };
+
+  const SS_SINAV = [
+    { konu:'Bilim & Teknoloji',
+      metin:"Since its discovery, CRISPR-Cas9 technology has transformed the field of genetic engineering by allowing scientists to edit DNA with unprecedented precision. Unlike earlier gene-editing methods, which were slow, expensive, and prone to error, CRISPR enables researchers to target specific genes and either disable them or replace them with corrected sequences. This breakthrough has opened new possibilities for treating genetic disorders such as sickle cell anemia and certain forms of blindness. However, the technology is not without controversy. Some scientists warn that editing human embryos could have unintended consequences that are passed on to future generations, a practice widely referred to as germline editing. In 2018, a Chinese researcher's claim to have created the world's first gene-edited babies sparked global outrage and led to calls for stricter international regulation. Despite these concerns, most experts agree that CRISPR holds enormous promise, provided that its use is carefully monitored. Ongoing clinical trials continue to explore its potential in treating cancer, while ethicists insist that clear boundaries must be established before the technology is applied more broadly.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the passage mainly about?',
+          secenekler:['The history of genetic diseases and their treatments','The promise and controversy surrounding CRISPR gene-editing technology',"The 2018 scandal involving a Chinese researcher",'Why sickle cell anemia is difficult to treat'],
+          cevap:1, aciklama:'Metin baştan sona CRISPR teknolojisinin hem sunduğu imkânları hem de yol açtığı tartışmaları ele alır; diğer seçenekler metnin sadece birer detayıdır.' },
+        { tip:'detay', soru:'According to the passage, what did the Chinese researcher claim to have done in 2018?',
+          secenekler:['Cured sickle cell anemia completely','Created the world\'s first gene-edited babies','Discovered the CRISPR-Cas9 method','Banned germline editing worldwide'],
+          cevap:1, aciklama:'Metinde "a Chinese researcher\'s claim to have created the world\'s first gene-edited babies" cümlesiyle birebir belirtilir.' },
+        { tip:'cikarim', soru:'It can be inferred from the passage that most experts believe CRISPR should be used',
+          secenekler:['only for cosmetic purposes','without any restrictions','with careful oversight and clear ethical boundaries','exclusively in cancer treatment'],
+          cevap:2, aciklama:'"provided that its use is carefully monitored" ve "clear boundaries must be established" ifadelerinden çıkarılır.' },
+        { tip:'kelimeanlam', soru:"The word 'unprecedented' in the passage is closest in meaning to",
+          secenekler:['unnecessary','never seen before','extremely expensive','temporary'],
+          cevap:1, aciklama:'"unprecedented precision" = daha önce hiç görülmemiş bir hassasiyet; CRISPR\'ın öncekilerden üstünlüğünü vurgular.' },
+        { tip:'referans', soru:"In the passage, the word 'its' in 'provided that its use is carefully monitored' refers to",
+          secenekler:['germline editing','sickle cell anemia','CRISPR','the Chinese researcher'],
+          cevap:2, aciklama:'Cümlenin öznesi CRISPR teknolojisidir; "its use" = CRISPR\'ın kullanımı.' },
+      ]
+    },
+    { konu:'Çevre & Ekoloji',
+      metin:"Coral reefs, often described as the rainforests of the sea, support roughly a quarter of all marine species despite covering less than one percent of the ocean floor. In recent decades, however, rising sea temperatures have triggered a phenomenon known as coral bleaching, in which corals expel the colorful algae living within their tissues and turn a ghostly white. Although bleached corals are not immediately dead, they become highly vulnerable to disease and starvation, and prolonged stress can eventually kill them. The Great Barrier Reef, the largest living structure on Earth, has experienced several mass bleaching events since 2016, alarming scientists worldwide. Some researchers have proposed selectively breeding heat-resistant coral strains, while others advocate for aggressive reductions in carbon emissions as the only long-term solution. Critics of selective breeding argue that such measures merely treat the symptoms rather than the root cause of the problem. Nevertheless, given the slow pace of international climate action, many marine biologists believe that a combination of both approaches will be necessary if reefs are to survive beyond the next few decades.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the main idea of the passage?',
+          secenekler:['Coral reefs cover a small fraction of the ocean floor','The Great Barrier Reef is the largest living structure on Earth','Rising ocean temperatures are endangering coral reefs, and experts disagree on how best to save them','Selective breeding is the only effective solution to coral bleaching'],
+          cevap:2, aciklama:'Metin, mercan resiflerinin ısınma nedeniyle tehdit altında olduğunu ve çözüm konusunda uzmanlar arasında görüş ayrılığı bulunduğunu anlatır.' },
+        { tip:'detay', soru:'According to the passage, what happens to corals during bleaching?',
+          secenekler:['They grow new species of algae','They expel the algae living in their tissues and turn white','They immediately die','They become more resistant to disease'],
+          cevap:1, aciklama:'"corals expel the colorful algae living within their tissues and turn a ghostly white" cümlesiyle birebir belirtilir.' },
+        { tip:'cikarim', soru:'It can be inferred from the passage that',
+          secenekler:['selective breeding alone will completely solve the problem of coral bleaching','marine biologists are optimistic that reefs will recover without any intervention','tackling coral bleaching may require more than one strategy','carbon emissions have no connection to coral bleaching'],
+          cevap:2, aciklama:'"a combination of both approaches will be necessary" ifadesinden tek bir çözümün yeterli olmayacağı çıkarılır.' },
+        { tip:'kelimeanlam', soru:"The word 'vulnerable' in the passage is closest in meaning to",
+          secenekler:['resistant','exposed to harm','invisible','profitable'],
+          cevap:1, aciklama:'"highly vulnerable to disease and starvation" = hastalık ve açlığa karşı savunmasız/kırılgan.' },
+        { tip:'negatif', soru:'According to the passage, all of the following are mentioned EXCEPT',
+          secenekler:['coral reefs support about a quarter of marine species','the Great Barrier Reef has experienced mass bleaching since 2016','some scientists support breeding heat-resistant corals','coral bleaching has already led to the complete extinction of all reef species'],
+          cevap:3, aciklama:'Metinde tam yok oluş (extinction) değil, sadece risk ve tehdit anlatılır; diğer üç seçenek metinde açıkça geçer.' },
+      ]
+    },
+    { konu:'Sosyal Bilimler',
+      metin:"Over the past decade, the rapid growth of remote work has fundamentally altered the relationship between employees and traditional office spaces. Proponents argue that remote work grants employees greater flexibility, eliminates lengthy commutes, and often leads to higher productivity. Employers, too, have benefited from reduced overhead costs associated with maintaining large office buildings. Nevertheless, sociologists have begun to raise concerns about the long-term social consequences of this shift. Workplaces have historically served not only as centers of productivity but also as vital sources of social interaction, mentorship, and a sense of belonging. Without regular face-to-face contact, some employees report feeling isolated and disconnected from their colleagues, particularly those who live alone or have recently entered the workforce. Furthermore, junior employees may find it more difficult to learn informally by observing experienced coworkers, a process that historically occurred through casual office interactions rather than formal training. In response, some companies have introduced mandatory in-person days or organized social events in an attempt to preserve a sense of community, though it remains unclear whether such measures can fully replicate the organic relationships once fostered by shared physical workspaces.",
+      sorular:[
+        { tip:'anafikir', soru:'What is the passage primarily concerned with?',
+          secenekler:['The financial benefits of remote work for employers','The advantages and potential social costs of remote work','How junior employees can find mentors online','A comparison between office buildings and home offices'],
+          cevap:1, aciklama:'Metin, uzaktan çalışmanın hem avantajlarını (esneklik, üretkenlik) hem de sosyal maliyetlerini (izolasyon, mentorluk eksikliği) dengeli biçimde ele alır.' },
+        { tip:'detay', soru:'According to the passage, which employees are particularly likely to feel isolated?',
+          secenekler:['Senior managers who work from large offices','Employees who live alone or are new to the workforce','Employees who commute long distances','Employers who reduced their office space'],
+          cevap:1, aciklama:'"particularly those who live alone or have recently entered the workforce" cümlesiyle birebir belirtilir.' },
+        { tip:'cikarim', soru:'It can be inferred from the passage that informal learning in the workplace',
+          secenekler:['is no longer necessary in any profession','has traditionally depended on in-person interaction','only benefits senior employees','has completely disappeared due to remote work'],
+          cevap:1, aciklama:'"a process that historically occurred through casual office interactions" ifadesinden, informal öğrenmenin geleneksel olarak yüz yüze etkileşime dayandığı çıkarılır.' },
+        { tip:'kelimeanlam', soru:"The word 'replicate' in the passage is closest in meaning to",
+          secenekler:['destroy','reproduce','forbid','ignore'],
+          cevap:1, aciklama:'"replicate the organic relationships" = kendiliğinden oluşan ilişkileri yeniden üretmek/kopyalamak.' },
+        { tip:'organizasyon', soru:"Why does the author mention that 'some companies have introduced mandatory in-person days'?",
+          secenekler:['To criticize companies for forcing employees back to the office','To provide an example of how companies are attempting to address the social costs of remote work','To argue that remote work should be completely banned','To prove that in-person work is always more productive'],
+          cevap:1, aciklama:'Bu cümle, önceki paragrafta bahsedilen sosyal izolasyon sorununa şirketlerin nasıl bir çözüm denediğini örnekler — yazarın amacı eleştiri değil, örnek sunmaktır.' },
+      ]
+    },
+  ];
+
+  const SS_SORULAR = SS_SINAV.flatMap((pasaj, pi) =>
+    pasaj.sorular.map(s => ({ ...s, pasajIndex: pi, pasajKonu: pasaj.konu, pasajMetin: pasaj.metin }))
+  );
+  const SS_TOPLAM_SORU = SS_SORULAR.length;
+  const SS_HARFLER = ['A','B','C','D'];
+
+  let ss = null; // exam state, created on start
+
+  function ssSaniyeFormat(saniye){
+    const dk = Math.floor(saniye / 60);
+    const sn = saniye % 60;
+    return String(dk).padStart(2,'0') + ':' + String(sn).padStart(2,'0');
+  }
+
+  function ssBaslangicRender(){
+    const alan = document.getElementById('ss-alan');
+    let sonSonucHtml = '';
+    try {
+      const kayit = JSON.parse(localStorage.getItem('sa_sinav_simulator_son'));
+      if (kayit) {
+        sonSonucHtml = `<div class="ss-son-sonuc">Son deneme: <b style="color:var(--ss-text)">${kayit.dogruSayisi}/${SS_TOPLAM_SORU} doğru</b> — tahmini puan ${kayit.puan.toFixed(2)} (${kayit.tarih})</div>`;
+      }
+    } catch(e) {}
+
+    alan.innerHTML = `
+      <div class="ss-baslangic-kutu">
+        <div style="font-size:32px;margin-bottom:6px">📝</div>
+        <div style="font-size:15px;font-weight:600;color:var(--ss-text);margin-bottom:4px">Mini Deneme Sınavına Hazır mısın?</div>
+        <div class="ss-bilgi-satir">
+          <div class="ss-bilgi-item"><div class="ss-bilgi-sayi">3</div><div class="ss-bilgi-etiket">Paragraf</div></div>
+          <div class="ss-bilgi-item"><div class="ss-bilgi-sayi">${SS_TOPLAM_SORU}</div><div class="ss-bilgi-etiket">Soru</div></div>
+          <div class="ss-bilgi-item"><div class="ss-bilgi-sayi">45</div><div class="ss-bilgi-etiket">Dakika</div></div>
+        </div>
+        <button class="ss-baslat-btn" id="ss-baslat-btn">Sınavı Başlat →</button>
+        ${sonSonucHtml}
+      </div>
+    `;
+    document.getElementById('ss-baslat-btn').addEventListener('click', ssSinaviBaslat);
+  }
+
+  function ssSinaviBaslat(){
+    ss = {
+      mevcutSoru: 0,
+      cevaplar: new Array(SS_TOPLAM_SORU).fill(null),
+      kalanSaniye: SS_SURE_SANIYE,
+      timerId: null,
+      bitti: false,
+    };
+    ss.timerId = setInterval(ssTimerTick, 1000);
+    ssSoruRender();
+  }
+
+  function ssTimerTick(){
+    if (!ss || ss.bitti) return;
+    ss.kalanSaniye--;
+    const sureEl = document.getElementById('ss-sure-metin');
+    if (sureEl) {
+      sureEl.textContent = ssSaniyeFormat(Math.max(0, ss.kalanSaniye));
+      const sureWrap = document.getElementById('ss-sure-wrap');
+      if (sureWrap) sureWrap.classList.toggle('ss-sure-kritik', ss.kalanSaniye <= 120);
+    }
+    if (ss.kalanSaniye <= 0) {
+      ssSinaviBitir();
+    }
+  }
+
+  function ssSoruRender(){
+    const alan = document.getElementById('ss-alan');
+    const soru = SS_SORULAR[ss.mevcutSoru];
+    const secilen = ss.cevaplar[ss.mevcutSoru];
+    const renk = SS_TIP_RENK[soru.tip];
+    const sonSoruMu = ss.mevcutSoru === SS_TOPLAM_SORU - 1;
+
+    alan.innerHTML = `
+      <div class="ss-ust-bar">
+        <div class="ss-ilerleme">Soru ${ss.mevcutSoru + 1} / ${SS_TOPLAM_SORU} — ${soru.pasajKonu}</div>
+        <div class="ss-sure" id="ss-sure-wrap"><span>⏱</span><span id="ss-sure-metin">${ssSaniyeFormat(ss.kalanSaniye)}</span></div>
+      </div>
+      <div class="ss-pasaj-kutu">
+        <div class="ss-pasaj-konu">${soru.pasajKonu} — Parça ${soru.pasajIndex + 1}</div>
+        <div class="ss-pasaj-metin">${soru.pasajMetin}</div>
+      </div>
+      <div class="ss-soru-kutu">
+        <div class="ss-soru-tip" style="background:${renk}22;color:${renk}">${SS_TIP_ETIKET[soru.tip]}</div>
+        <div class="ss-soru-metin">${soru.soru}</div>
+        <div class="ss-secenekler">
+          ${soru.secenekler.map((sec, i) => `
+            <div class="ss-secenek${secilen === i ? ' ss-secili' : ''}" onclick="ssSecenekSec(${i})">
+              <span class="ss-secenek-harf">${SS_HARFLER[i]})</span><span>${sec}</span>
+            </div>
+          `).join('')}
+        </div>
+        <button class="ss-sonraki-btn" id="ss-sonraki-btn">${sonSoruMu ? 'Sınavı Bitir' : 'Sonraki Soru →'}</button>
+      </div>
+    `;
+    document.getElementById('ss-sonraki-btn').addEventListener('click', ssSonrakiSoru);
+  }
+
+  function ssSecenekSec(index){
+    ss.cevaplar[ss.mevcutSoru] = index;
+    document.querySelectorAll('#sinav-simulator-modul .ss-secenek').forEach((el, i) => {
+      el.classList.toggle('ss-secili', i === index);
+    });
+  }
+
+  function ssSonrakiSoru(){
+    if (ss.mevcutSoru < SS_TOPLAM_SORU - 1) {
+      ss.mevcutSoru++;
+      ssSoruRender();
+    } else {
+      ssSinaviBitir();
+    }
+  }
+
+  function ssSinaviBitir(){
+    if (ss.bitti) return;
+    ss.bitti = true;
+    clearInterval(ss.timerId);
+
+    let dogru = 0, yanlis = 0, bos = 0;
+    const tipIstatistik = {};
+    SS_SORULAR.forEach((soru, i) => {
+      const cevap = ss.cevaplar[i];
+      if (!tipIstatistik[soru.tip]) tipIstatistik[soru.tip] = { toplam:0, dogru:0 };
+      tipIstatistik[soru.tip].toplam++;
+      if (cevap === null) { bos++; }
+      else if (cevap === soru.cevap) { dogru++; tipIstatistik[soru.tip].dogru++; }
+      else { yanlis++; }
+    });
+
+    const puan = Math.min(100, dogru * 6.67);
+    const tarih = new Date().toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' });
+
+    try {
+      localStorage.setItem('sa_sinav_simulator_son', JSON.stringify({ tarih, dogruSayisi:dogru, yanlisSayisi:yanlis, bosSayisi:bos, puan }));
+    } catch(e) {}
+
+    ssSonucRender({ dogru, yanlis, bos, puan, tipIstatistik });
+  }
+
+  function ssZayifAlanTespit(tipIstatistik){
+    const girdiler = Object.entries(tipIstatistik).map(([tip, v]) => ({ tip, oran: v.dogru / v.toplam, ...v }));
+    const tamPuan = girdiler.every(g => g.oran === 1);
+    if (tamPuan) {
+      return 'Tebrikler, tüm soru tiplerinde tam puan aldın — belirgin bir zayıf alan tespit edilmedi! 🎉';
+    }
+    const minOran = Math.min(...girdiler.map(g => g.oran));
+    const enZayif = girdiler.filter(g => g.oran === minOran);
+    const etiketler = enZayif.map(g => `${SS_TIP_ETIKET[g.tip]} (${g.dogru}/${g.toplam} doğru)`).join(', ');
+    return `En düşük başarı oranına sahip olduğun soru tipi: ${etiketler}. Bu tip sorularda Anlama Modülü ve Soru Tipi Tespit Modülü'ndeki ilgili teknikleri tekrar gözden geçirmeni öneririz.`;
+  }
+
+  function ssSonucRender({ dogru, yanlis, bos, puan, tipIstatistik }){
+    const alan = document.getElementById('ss-alan');
+    const zayifMetin = ssZayifAlanTespit(tipIstatistik);
+
+    const detaylarHtml = SS_SORULAR.map((soru, i) => {
+      const cevap = ss.cevaplar[i];
+      const durum = cevap === null ? 'bos' : (cevap === soru.cevap ? 'dogru' : 'yanlis');
+      const durumEtiket = durum === 'dogru' ? 'Doğru' : (durum === 'yanlis' ? 'Yanlış' : 'Boş');
+      const renk = SS_TIP_RENK[soru.tip];
+      return `
+        <div class="ss-detay-kart">
+          <div class="ss-detay-ust">
+            <span class="ss-detay-no">Soru ${i + 1}</span>
+            <span class="ss-soru-tip" style="background:${renk}22;color:${renk}">${SS_TIP_ETIKET[soru.tip]}</span>
+            <span class="ss-detay-durum ss-durum-${durum}">${durumEtiket}</span>
+          </div>
+          <div class="ss-detay-soru">${soru.soru}</div>
+          <div class="ss-detay-cevap-satir">Doğru cevap: <b>${SS_HARFLER[soru.cevap]}) ${soru.secenekler[soru.cevap]}</b></div>
+          ${cevap !== null ? `<div class="ss-detay-cevap-satir">Senin cevabın: <b>${SS_HARFLER[cevap]}) ${soru.secenekler[cevap]}</b></div>` : `<div class="ss-detay-cevap-satir">Senin cevabın: <b>Boş bırakıldı</b></div>`}
+          <div class="ss-detay-aciklama">${soru.aciklama}</div>
+        </div>
+      `;
+    }).join('');
+
+    alan.innerHTML = `
+      <div class="ss-sonuc-ust">
+        <div>
+          <div class="ss-puan-buyuk">${puan.toFixed(2)}</div>
+          <div class="ss-puan-etiket">Tahmini YDS Puanı</div>
+        </div>
+        <div class="ss-mini-istatistik">
+          <div class="ss-mini-item"><div class="ss-mini-sayi" style="color:var(--ss-yesil)">${dogru}</div><div class="ss-mini-etiket">Doğru</div></div>
+          <div class="ss-mini-item"><div class="ss-mini-sayi" style="color:var(--ss-kirmizi)">${yanlis}</div><div class="ss-mini-etiket">Yanlış</div></div>
+          <div class="ss-mini-item"><div class="ss-mini-sayi" style="color:var(--ss-muted)">${bos}</div><div class="ss-mini-etiket">Boş</div></div>
+        </div>
+      </div>
+      <div class="ss-zayif-kutu">
+        <div class="ss-zayif-baslik">Zayıf Alan Analizi</div>
+        <div class="ss-zayif-metin">${zayifMetin}</div>
+      </div>
+      <div class="ss-detay-baslik">Soru Bazında Sonuçlar</div>
+      ${detaylarHtml}
+      <button class="ss-tekrar-btn" id="ss-tekrar-btn">↺ Tekrar Dene</button>
+    `;
+    document.getElementById('ss-tekrar-btn').addEventListener('click', () => { ss = null; ssBaslangicRender(); });
+  }
+
+  window.ssSecenekSec = ssSecenekSec;
+  ssBaslangicRender();
 })();
 </script>
 </body>
