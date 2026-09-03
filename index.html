@@ -5610,26 +5610,24 @@ function medyaCanliDersGit(konuIndex){
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
 
+// AVCI_AKADEMI kartı -> Canlı Ders'teki CL_KONULAR indeksi. "Referans Zamirleri"
+// (this/these/such/the former/the latter) Canlı Ders'te birebir karşılık bulmuyor;
+// en yakın içerik Dil Avcısı > Anlama Modülü'ndeki "Referans Takibi" tekniği
+// olduğu için null işaretlenip ayrıca yönlendiriliyor.
+const AVCI_AKADEMI_KONU_INDEX=[0,3,2,4,null,8];
 function avciAkademiOyna(i){
-  const a=AVCI_AKADEMI[i];
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px';
-  overlay.innerHTML=`
-    <div style="background:linear-gradient(135deg,#1e1b4b,#0f172a);border-radius:20px;max-width:460px;width:100%;padding:28px;position:relative">
-      <button onclick="this.closest('.medya-overlay').remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
-      <div style="font-family:monospace;font-size:14px;color:#ffcb73;margin-bottom:8px">AVCI AKADEMİSİ · BÖLÜM ${a.no}</div>
-      <div style="font-size:20px;font-weight:700;color:#fff;margin-bottom:6px">${a.konu}</div>
-      <div style="font-size:15px;color:rgba(255,255,255,.5);margin-bottom:20px">Kapsam: ${a.aciklama}</div>
-      <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:18px;margin-bottom:20px">
-        <div style="font-size:15px;color:#ffcb73;font-weight:700;margin-bottom:8px">🎯 REFLEKS KURALI</div>
-        <div style="font-size:15px;color:rgba(255,255,255,.85);line-height:1.8">Bu konuda sinyal kelimesini gördüğünde 2 saniye dur. Sağa bak: yapı ne bekliyor? Sola bak: bağlam ne söylüyor? Şıkta aynı sinyali taşıyan seçeneği ele al.</div>
-      </div>
-      <button onclick="this.closest('.medya-overlay').remove();avciKomutGonder('BAĞLAÇ AVCISI BAŞLA')" style="width:100%;background:#ffcb73;color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🏹 KLOD ile ${a.konu} Pratik Yap</button>
-    </div>
-  `;
-  overlay.className='medya-overlay';
-  overlay.onclick=e=>{if(e.target===overlay)overlay.remove();};
-  document.body.appendChild(overlay);
+  const klIdx=AVCI_AKADEMI_KONU_INDEX[i];
+  if(klIdx!==null){
+    medyaCanliDersGit(klIdx);
+    return;
+  }
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('DİL AVCISI'));
+  if(item)item.click();
+  setTimeout(()=>{
+    const el=document.getElementById('anlama-modul');
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(()=>{ if(typeof amKartAc==='function')amKartAc(5); },350);
+  },300);
 }
 
 function podcastOyna(i){
