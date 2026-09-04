@@ -2503,6 +2503,212 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="ga-alan"></div>
           </section>
 
+          <!-- PASSIVE VOICE DERSİ — KLOD-MOTION tarzı 7-slaytlı mikro ders (#passive-voice-modul scope) -->
+          <section id="passive-voice-modul">
+          <style>
+            #passive-voice-modul{
+              --pvm-bg:#0d0f14;--pvm-surface:#161920;--pvm-border:#252830;
+              --pvm-accent:#5b8fff;--pvm-accent2:#38d9a9;--pvm-warn:#ff6b6b;
+              --pvm-text:#e8eaf0;--pvm-muted:#6b7280;--pvm-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--pvm-bg);color:var(--pvm-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              display:flex;flex-direction:column;align-items:center;
+              padding:26px 16px 40px;
+              margin-bottom:22px;
+            }
+            #passive-voice-modul *{box-sizing:border-box}
+            #passive-voice-modul .pvm-lesson-header{width:100%;max-width:640px;display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+            #passive-voice-modul .pvm-badge{background:var(--pvm-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px}
+            #passive-voice-modul .pvm-badge.pvm-dila{background:var(--pvm-accent2);color:#0d0f14}
+            #passive-voice-modul .pvm-lesson-title{font-size:13px;color:var(--pvm-muted);font-family:'IBM Plex Mono',monospace}
+            #passive-voice-modul .pvm-progress-wrap{width:100%;max-width:640px;margin-bottom:20px}
+            #passive-voice-modul .pvm-progress-track{height:3px;background:var(--pvm-border);border-radius:2px;overflow:hidden}
+            #passive-voice-modul .pvm-progress-fill{height:100%;background:var(--pvm-accent);border-radius:2px;transition:width .4s ease}
+            #passive-voice-modul .pvm-progress-label{font-size:11px;color:var(--pvm-muted);font-family:'IBM Plex Mono',monospace;margin-top:6px;text-align:right}
+            #passive-voice-modul .pvm-slide-card{width:100%;max-width:640px;background:var(--pvm-surface);border:1px solid var(--pvm-border);border-radius:12px;padding:28px 22px;min-height:320px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+            #passive-voice-modul .pvm-slide{display:none;flex-direction:column;gap:18px;animation:pvmFadeIn .3s ease}
+            #passive-voice-modul .pvm-slide.pvm-active{display:flex}
+            @keyframes pvmFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+            #passive-voice-modul .pvm-slide-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--pvm-muted);text-transform:uppercase;letter-spacing:.1em}
+            #passive-voice-modul .pvm-slide-heading{font-size:21px;font-weight:600;line-height:1.3;color:var(--pvm-text)}
+            #passive-voice-modul .pvm-slide-body{font-size:14.5px;line-height:1.7;color:#b0b8c8}
+            #passive-voice-modul .pvm-formula-block{background:var(--pvm-formula-bg);border:1px solid var(--pvm-accent);border-radius:8px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+            #passive-voice-modul .pvm-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--pvm-accent);letter-spacing:.1em}
+            #passive-voice-modul .pvm-formula-text{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;color:#fff;letter-spacing:.03em}
+            #passive-voice-modul .pvm-formula-text .pvm-be{color:var(--pvm-accent)}
+            #passive-voice-modul .pvm-formula-text .pvm-v3{color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-formula-sub{font-size:12px;color:var(--pvm-muted);line-height:1.5}
+            #passive-voice-modul .pvm-example-list{display:flex;flex-direction:column;gap:9px}
+            #passive-voice-modul .pvm-example-row{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid transparent}
+            #passive-voice-modul .pvm-example-row.pvm-neutral{border-left-color:var(--pvm-accent)}
+            #passive-voice-modul .pvm-ex-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+            #passive-voice-modul .pvm-ex-content{display:flex;flex-direction:column;gap:3px}
+            #passive-voice-modul .pvm-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--pvm-text)}
+            #passive-voice-modul .pvm-ex-tr{font-size:11.5px;color:var(--pvm-muted)}
+            #passive-voice-modul .pvm-signals-grid{display:flex;flex-direction:column;gap:11px}
+            #passive-voice-modul .pvm-signal-card{display:flex;align-items:center;gap:14px;padding:13px 15px;background:rgba(91,143,255,.07);border:1px solid rgba(91,143,255,.2);border-radius:8px}
+            #passive-voice-modul .pvm-signal-num{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--pvm-accent);line-height:1;flex-shrink:0}
+            #passive-voice-modul .pvm-signal-content{display:flex;flex-direction:column;gap:4px}
+            #passive-voice-modul .pvm-signal-trigger{font-size:13.5px;font-weight:600;color:var(--pvm-text)}
+            #passive-voice-modul .pvm-signal-example{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-dila-box{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.25);border-radius:10px;padding:15px 17px;display:flex;gap:12px;align-items:flex-start}
+            #passive-voice-modul .pvm-dila-avatar{width:32px;height:32px;border-radius:50%;background:var(--pvm-accent2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+            #passive-voice-modul .pvm-dila-bubble{font-size:13.5px;line-height:1.65;color:#c8f5ec}
+            #passive-voice-modul .pvm-dila-bubble strong{color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-quiz-question{font-size:16px;font-weight:600;line-height:1.4;color:var(--pvm-text)}
+            #passive-voice-modul .pvm-quiz-options{display:flex;flex-direction:column;gap:8px}
+            #passive-voice-modul .pvm-quiz-btn{background:rgba(255,255,255,.04);border:1px solid var(--pvm-border);border-radius:8px;padding:11px 15px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--pvm-text);cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+            #passive-voice-modul .pvm-quiz-btn:hover{background:rgba(91,143,255,.1);border-color:var(--pvm-accent)}
+            #passive-voice-modul .pvm-quiz-btn.pvm-correct-ans{background:rgba(56,217,169,.15);border-color:var(--pvm-accent2);color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-quiz-btn.pvm-wrong-ans{background:rgba(255,107,107,.1);border-color:var(--pvm-warn);color:var(--pvm-warn)}
+            #passive-voice-modul .pvm-quiz-feedback{font-size:12.5px;line-height:1.6;padding:11px 13px;border-radius:7px;display:none}
+            #passive-voice-modul .pvm-quiz-feedback.pvm-show{display:block}
+            #passive-voice-modul .pvm-quiz-feedback.pvm-ok{background:rgba(56,217,169,.1);color:var(--pvm-accent2);border:1px solid rgba(56,217,169,.2)}
+            #passive-voice-modul .pvm-quiz-feedback.pvm-no{background:rgba(255,107,107,.08);color:var(--pvm-warn);border:1px solid rgba(255,107,107,.2)}
+            #passive-voice-modul .pvm-cantwont{display:flex;gap:10px}
+            #passive-voice-modul .pvm-cw-card{flex:1;padding:15px;border-radius:8px;display:flex;flex-direction:column;gap:8px}
+            #passive-voice-modul .pvm-cw-card.pvm-wrong-card{background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2)}
+            #passive-voice-modul .pvm-cw-card.pvm-right-card{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.2)}
+            #passive-voice-modul .pvm-cw-label{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em}
+            #passive-voice-modul .pvm-cw-label.pvm-red{color:var(--pvm-warn)}
+            #passive-voice-modul .pvm-cw-label.pvm-green{color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-cw-formula{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600}
+            #passive-voice-modul .pvm-cw-formula.pvm-red{color:var(--pvm-warn)}
+            #passive-voice-modul .pvm-cw-formula.pvm-green{color:var(--pvm-accent2)}
+            #passive-voice-modul .pvm-cw-ex{font-size:11.5px;color:var(--pvm-muted)}
+            #passive-voice-modul .pvm-nav-row{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+            #passive-voice-modul .pvm-nav-btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .2s;font-family:'IBM Plex Sans',sans-serif}
+            #passive-voice-modul .pvm-nav-btn:disabled{opacity:.3;cursor:default}
+            #passive-voice-modul .pvm-btn-prev{background:var(--pvm-border);color:var(--pvm-muted)}
+            #passive-voice-modul .pvm-btn-next{background:var(--pvm-accent);color:#fff}
+            #passive-voice-modul .pvm-slide-counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--pvm-muted)}
+            #passive-voice-modul .pvm-finish-screen{display:none;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:16px 0}
+            #passive-voice-modul .pvm-finish-screen.pvm-show{display:flex}
+            #passive-voice-modul .pvm-finish-icon{font-size:48px}
+            #passive-voice-modul .pvm-finish-title{font-size:20px;font-weight:600}
+            #passive-voice-modul .pvm-finish-sub{font-size:13px;color:var(--pvm-muted);line-height:1.6}
+            @media(max-width:480px){
+              #passive-voice-modul .pvm-slide-card{padding:20px 16px}
+              #passive-voice-modul .pvm-formula-text{font-size:15px}
+              #passive-voice-modul .pvm-cantwont{flex-direction:column}
+              #passive-voice-modul .pvm-slide-heading{font-size:18px}
+            }
+          </style>
+
+          <div class="pvm-lesson-header">
+            <span class="pvm-badge">KLOD-MOTION</span>
+            <span class="pvm-badge pvm-dila">DILA</span>
+            <span class="pvm-lesson-title">Grammar · B1–B2 · Passive Voice</span>
+          </div>
+
+          <div class="pvm-progress-wrap">
+            <div class="pvm-progress-track"><div class="pvm-progress-fill" id="pvm-progressFill" style="width:0%"></div></div>
+            <div class="pvm-progress-label" id="pvm-progressLabel">0 / 7 tamamlandı</div>
+          </div>
+
+          <div class="pvm-slide-card">
+
+            <div class="pvm-slide pvm-active" id="pvm-slide-0">
+              <span class="pvm-slide-eyebrow">Ders 1 · Giriş</span>
+              <h3 class="pvm-slide-heading">Passive Voice neden bu kadar çok çıkar?</h3>
+              <p class="pvm-slide-body">YDS ve YÖKDİL'de metinlerin %60'ı akademik yazı. Akademik dilde özne gizlenir, eylem öne çıkar. Bu yüzden Passive her metin sorusunda karşına çıkar.</p>
+              <div class="pvm-dila-box">
+                <div class="pvm-dila-avatar">🤖</div>
+                <div class="pvm-dila-bubble">Merhaba! Ben <strong>DILA</strong>. Bu derste Passive'i <strong>3 saniyede</strong> teşhis etmeyi öğreneceğiz. Hazır mısın?</div>
+              </div>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-1">
+              <span class="pvm-slide-eyebrow">Temel Formül</span>
+              <h3 class="pvm-slide-heading">ÇİVİ: BE + V3</h3>
+              <div class="pvm-formula-block">
+                <span class="pvm-formula-label">PASSIVE FORMÜLÜ</span>
+                <div class="pvm-formula-text"><span class="pvm-be">BE</span> + <span class="pvm-v3">V3</span></div>
+                <div class="pvm-formula-sub">
+                  <strong style="color:#e8eaf0">BE</strong> = am / is / are / was / were / will be / has been / have been<br>
+                  <strong style="color:#e8eaf0">V3</strong> = past participle — opened, built, written, discovered
+                </div>
+              </div>
+              <p class="pvm-slide-body">Bu iki parça birlikte görünüyorsa → <strong style="color:#5b8fff">Passive</strong>. Hepsi bu.</p>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-2">
+              <span class="pvm-slide-eyebrow">Örnekler</span>
+              <h3 class="pvm-slide-heading">6 zaman, 6 örnek</h3>
+              <div class="pvm-example-list">
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>is closed</strong>.</span><span class="pvm-ex-tr">Present Passive → Kapı kapatılır / kapalı</span></div></div>
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>was closed</strong>.</span><span class="pvm-ex-tr">Past Passive → Kapı kapatıldı</span></div></div>
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>will be closed</strong>.</span><span class="pvm-ex-tr">Future Passive → Kapı kapatılacak</span></div></div>
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>has been closed</strong>.</span><span class="pvm-ex-tr">Perfect Passive → Kapı kapatılmış</span></div></div>
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>must be closed</strong>.</span><span class="pvm-ex-tr">Modal Passive → Kapı kapatılmalı</span></div></div>
+                <div class="pvm-example-row pvm-neutral"><span class="pvm-ex-icon">🟦</span><div class="pvm-ex-content"><span class="pvm-ex-en">The door <strong>is being closed</strong> now.</span><span class="pvm-ex-tr">Continuous Passive → Şu an kapatılıyor</span></div></div>
+              </div>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-3">
+              <span class="pvm-slide-eyebrow">3 Saniye Tekniği</span>
+              <h3 class="pvm-slide-heading">Sinyali gör, zamanı bul, yaz.</h3>
+              <div class="pvm-signals-grid">
+                <div class="pvm-signal-card"><span class="pvm-signal-num">1</span><div class="pvm-signal-content"><span class="pvm-signal-trigger">by + kişi gördün mü?</span><span class="pvm-signal-example">discovered by Fleming → Passive ✅</span></div></div>
+                <div class="pvm-signal-card"><span class="pvm-signal-num">2</span><div class="pvm-signal-content"><span class="pvm-signal-trigger">Türkçesi "-ildi / -ıldı / -ulacak" mı?</span><span class="pvm-signal-example">will be opened → açılacak ✅</span></div></div>
+                <div class="pvm-signal-card"><span class="pvm-signal-num">3</span><div class="pvm-signal-content"><span class="pvm-signal-trigger">Zaman ipucu var mı?</span><span class="pvm-signal-example">yesterday → past / tomorrow → future</span></div></div>
+              </div>
+              <div class="pvm-dila-box">
+                <div class="pvm-dila-avatar">🤖</div>
+                <div class="pvm-dila-bubble"><strong>by the manager</strong> + <strong>tomorrow</strong> gördüm → Future Passive → <strong>will be + V3</strong> → ✅ will be signed</div>
+              </div>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-4">
+              <span class="pvm-slide-eyebrow">En Sık Hata</span>
+              <h3 class="pvm-slide-heading">will be + V1 olmaz.</h3>
+              <div class="pvm-cantwont">
+                <div class="pvm-cw-card pvm-wrong-card"><span class="pvm-cw-label pvm-red">YANLIŞ 🚫</span><span class="pvm-cw-formula pvm-red">will be + V1</span><span class="pvm-cw-ex">will be open ✗</span></div>
+                <div class="pvm-cw-card pvm-right-card"><span class="pvm-cw-label pvm-green">DOĞRU ✅</span><span class="pvm-cw-formula pvm-green">will be + V3</span><span class="pvm-cw-ex">will be opened ✓</span></div>
+              </div>
+              <p class="pvm-slide-body">Seçeneklerde hem <code style="font-family:monospace;color:#5b8fff">will be open</code> hem <code style="font-family:monospace;color:#38d9a9">will be opened</code> varsa → Passive istiyorsa her zaman <strong>V3</strong>.</p>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-5">
+              <span class="pvm-slide-eyebrow">Mini Sınav · Soru 1 / 2</span>
+              <p class="pvm-quiz-question">The report _____ by the committee <em>yesterday</em>. Boşluğa ne gelir?</p>
+              <div class="pvm-quiz-options" id="pvm-q1-options">
+                <button class="pvm-quiz-btn" data-pvmq="1" data-pvmval="a" data-pvm-action="quiz-answer">a) will be reviewed</button>
+                <button class="pvm-quiz-btn" data-pvmq="1" data-pvmval="b" data-pvm-action="quiz-answer">b) was reviewed</button>
+                <button class="pvm-quiz-btn" data-pvmq="1" data-pvmval="c" data-pvm-action="quiz-answer">c) is reviewed</button>
+                <button class="pvm-quiz-btn" data-pvmq="1" data-pvmval="d" data-pvm-action="quiz-answer">d) has been reviewing</button>
+              </div>
+              <div class="pvm-quiz-feedback" id="pvm-q1-feedback"></div>
+            </div>
+
+            <div class="pvm-slide" id="pvm-slide-6">
+              <span class="pvm-slide-eyebrow">Mini Sınav · Soru 2 / 2</span>
+              <p class="pvm-quiz-question">The contract _____ by the CEO <em>tomorrow morning</em>.</p>
+              <div class="pvm-quiz-options" id="pvm-q2-options">
+                <button class="pvm-quiz-btn" data-pvmq="2" data-pvmval="a" data-pvm-action="quiz-answer">a) is signed</button>
+                <button class="pvm-quiz-btn" data-pvmq="2" data-pvmval="b" data-pvm-action="quiz-answer">b) was signed</button>
+                <button class="pvm-quiz-btn" data-pvmq="2" data-pvmval="c" data-pvm-action="quiz-answer">c) will be signed</button>
+                <button class="pvm-quiz-btn" data-pvmq="2" data-pvmval="d" data-pvm-action="quiz-answer">d) will be sign</button>
+              </div>
+              <div class="pvm-quiz-feedback" id="pvm-q2-feedback"></div>
+              <div class="pvm-finish-screen" id="pvm-finishScreen">
+                <div class="pvm-finish-icon">🎯</div>
+                <div class="pvm-finish-title">Ders tamamlandı!</div>
+                <div class="pvm-finish-sub">ÇİVİ kuralını öğrendin: <strong>BE + V3</strong>.<br>Sinyalleri gör, 3 saniyede çöz.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="pvm-nav-row">
+            <button class="pvm-nav-btn pvm-btn-prev" id="pvm-prevBtn" data-pvm-action="slide-prev" disabled>← Geri</button>
+            <span class="pvm-slide-counter" id="pvm-slideCounter">1 / 7</span>
+            <button class="pvm-nav-btn pvm-btn-next" id="pvm-nextBtn" data-pvm-action="slide-next">İleri →</button>
+          </div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -2539,6 +2745,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <button onclick="dilaSor()" style="background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Sor →</button>
             </div>
             <div id="dila-cevap" style="margin-top:12px;font-size:13px;color:rgba(236,231,218,.85);line-height:1.7;min-height:20px"></div>
+            <div style="margin-top:10px"><a onclick="pvmGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📘 Passive Voice mikro dersini aç (KLOD-MOTION) →</a></div>
           </div>
         </div>
 
@@ -3621,6 +3828,8 @@ const TUZAK_HAVUZ=[
   {q:'Boşluğa en uygun ifadeyi seçin:',sent:'"The report presented _____ evidence supporting the new hypothesis."',opts:['A) a plethora of','B) a scarcity of','C) a fraction of','D) an absence of'],dogru:0,fb:'"A plethora of" = bolca, çokça. Bağlam "supporting the hypothesis" bolluk anlamını destekler.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"Any complaint _____ within thirty days will be automatically dismissed."',opts:['A) not filed','B) not filing','C) that not filed','D) is not filed'],dogru:0,fb:'İndirgenmiş edilgen ilgi cümlesi: "that is not filed" → "not filed". Olumsuzluk fiilden önce gelir.'},
   {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Companies that fail to _____ with the new environmental standards will face heavy fines."',opts:['A) comply','B) conform','C) obey','D) abide'],dogru:0,fb:'"Comply with" = uymak, standart kelime öbeği. "Abide" ise "with" değil "by" edatıyla kullanılır.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ by the committee yesterday."',opts:['A) was reviewed','B) will be reviewed','C) is reviewed','D) has been reviewing'],dogru:0,fb:'"Yesterday" geçmiş zaman sinyali → Past Passive: was/were + V3 → "was reviewed".'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The contract _____ by the CEO tomorrow morning."',opts:['A) is signed','B) was signed','C) will be signed','D) will be sign'],dogru:2,fb:'"Tomorrow morning" gelecek zaman sinyali → Future Passive: will be + V3 → "will be signed" (V1 değil, V3!).'},
 ];
 
 let tuzakIdx=0,tuzakAnswered=false;
@@ -7627,6 +7836,12 @@ function dilavcisiYolHaritaRender(seviye) {
 }
 
 function dilavcisiYolDersAc(idx, seviye) {
+  // B1 skill tree'deki "Passive Voice" node'u -> zengin KLOD-MOTION mikro dersine bağlı
+  if (seviye === 'B1' && idx === 2) {
+    dilavcisiDersTamamlandi(seviye + '-' + idx);
+    if (typeof pvmGit === 'function') pvmGit();
+    return;
+  }
   // Ders detayını aç (mevcut ingDersAc mantığıyla)
   const alan = document.getElementById('ing-ders-alan');
   if (alan) {
@@ -9573,6 +9788,91 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   window.globalAramaKeydown=globalAramaKeydown;
   window.aramaAra=aramaAra;
   window.aramaSonucSec=aramaSonucSec;
+})();
+</script>
+
+<!-- PASSIVE VOICE DERSİ — #passive-voice-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const PVM_TOTAL = 7;
+  let pvmCurrent = 0;
+  const PVM_CORRECT = { 1: 'b', 2: 'c' };
+  const pvmQuizAnswered = { 1: false, 2: false };
+
+  function pvmUpdateUI(){
+    document.querySelectorAll('#passive-voice-modul .pvm-slide').forEach((s,i)=>s.classList.toggle('pvm-active', i===pvmCurrent));
+    document.getElementById('pvm-prevBtn').disabled = pvmCurrent===0;
+    document.getElementById('pvm-nextBtn').disabled = pvmCurrent===PVM_TOTAL-1;
+    document.getElementById('pvm-slideCounter').textContent = (pvmCurrent+1)+' / '+PVM_TOTAL;
+    const pct = Math.round((pvmCurrent/(PVM_TOTAL-1))*100);
+    document.getElementById('pvm-progressFill').style.width = pct+'%';
+    document.getElementById('pvm-progressLabel').textContent = pvmCurrent+' / '+(PVM_TOTAL-1)+' tamamlandı';
+  }
+
+  function pvmChangeSlide(dir){
+    const next = pvmCurrent+dir;
+    if(next<0||next>=PVM_TOTAL)return;
+    pvmCurrent=next;
+    pvmUpdateUI();
+    if(pvmCurrent===PVM_TOTAL-1 && pvmQuizAnswered[1] && pvmQuizAnswered[2])
+      document.getElementById('pvm-finishScreen').classList.add('pvm-show');
+  }
+
+  function pvmCheckAnswer(btn){
+    const qNum = parseInt(btn.dataset.pvmq,10);
+    const val = btn.dataset.pvmval;
+    if(pvmQuizAnswered[qNum])return;
+    pvmQuizAnswered[qNum]=true;
+    const correct = PVM_CORRECT[qNum];
+    document.querySelectorAll('#passive-voice-modul [data-pvmq="'+qNum+'"]').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.pvmval===correct)b.classList.add('pvm-correct-ans');
+    });
+    if(val!==correct)btn.classList.add('pvm-wrong-ans');
+    const fb = document.getElementById('pvm-q'+qNum+'-feedback');
+    fb.classList.add('pvm-show');
+    if(val===correct){
+      fb.className='pvm-quiz-feedback pvm-show pvm-ok';
+      fb.textContent = qNum===1
+        ? '✅ Doğru! "yesterday" → geçmiş zaman → Past Passive → was + V3 → was reviewed.'
+        : '✅ Doğru! "tomorrow" + "by the CEO" → Future Passive → will be + V3 → will be signed.';
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+    } else {
+      fb.className='pvm-quiz-feedback pvm-show pvm-no';
+      fb.textContent = qNum===1
+        ? '❌ "yesterday" geçmiş zaman sinyali. Past Passive = was/were + V3 → was reviewed.'
+        : '❌ "tomorrow" gelecek sinyal. Future Passive = will be + V3. "will be sign" V3 değil — V1!';
+    }
+    if(pvmQuizAnswered[1] && pvmQuizAnswered[2] && pvmCurrent===PVM_TOTAL-1)
+      document.getElementById('pvm-finishScreen').classList.add('pvm-show');
+  }
+
+  // data-pvm-action merkezi dinleyici (iOS Safari uyumlu) — sadece bu modül içinde çalışır,
+  // sitenin geri kalanındaki inline onclick'lerle çakışmaz (bağımsız, ek bir mekanizma).
+  const pvmKok = document.getElementById('passive-voice-modul');
+  if (pvmKok) {
+    pvmKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-pvm-action]');
+      if(!el)return;
+      const action = el.dataset.pvmAction;
+      if(action==='slide-next')pvmChangeSlide(1);
+      else if(action==='slide-prev')pvmChangeSlide(-1);
+      else if(action==='quiz-answer')pvmCheckAnswer(el);
+    });
+  }
+
+  // Dil Avcısı'na geçip Passive Voice dersine kaydırır — DILA mentor kutusu ve
+  // B1 skill tree'sindeki "Passive Voice" node'u buradan çağırır.
+  window.pvmGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('passive-voice-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  pvmUpdateUI();
 })();
 </script>
 </body>
