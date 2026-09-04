@@ -6688,6 +6688,29 @@ function clYaz(elId,text,hiz,callback){
     if(i>=text.length){clearInterval(clTypeTimer);el.classList.remove('cl-cursor');if(callback)callback();}
   },hiz);
 }
+// Konu değişince (özellikle bir önceki konu Soru+Cevap ile uzunken yeni konu
+// sadece Açıklama bloğuyla başladığında) sayfa yüksekliği aniden küçülüyor ama
+// scrollY aynı kalıyor — kullanıcı eski (artık boş) alanda kalıp yeni içeriği
+// görmüyor, yukarı kaydırınca buluyordu. Konu geçişinde içeriğin başını,
+// sabit navbar/streak-bar'ın altına gelecek şekilde scroll ile hizalıyoruz.
+function clScrollIcerigeGetir(){
+  const hedef=document.getElementById('cl-progress');
+  if(!hedef)return;
+  // Blok görünürlüğü senkron değişse de tarayıcı layout'u henüz commit
+  // etmemiş olabilir — bir sonraki paint'ten SONRA ölçüp scroll yapmak için
+  // çift requestAnimationFrame kullanıyoruz (mobilde de aynı şekilde çalışır).
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const nav=document.querySelector('nav');
+      const streakBar=document.getElementById('streak-bar');
+      const navAlt=nav?nav.getBoundingClientRect().bottom:0;
+      const streakAlt=(streakBar&&getComputedStyle(streakBar).display!=='none')?streakBar.getBoundingClientRect().bottom:0;
+      const sabitYukseklik=Math.max(navAlt,streakAlt,0);
+      const hedefTop=hedef.getBoundingClientRect().top+window.scrollY;
+      window.scrollTo({top:Math.max(0,hedefTop-sabitYukseklik-12),behavior:'smooth'});
+    });
+  });
+}
 function clOynatKonu(idx){
   clDurdur();
   clIdx=idx;
@@ -6697,6 +6720,7 @@ function clOynatKonu(idx){
   ['cl-metin-aciklama','cl-metin-ornek','cl-metin-ornek-tr','cl-metin-soru','cl-metin-cevap'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='';});
   const sec=document.getElementById('cl-secenekler');if(sec)sec.innerHTML='';
   clAsamaAciklama(k);
+  clScrollIcerigeGetir();
 }
 function clAsamaAciklama(k){
   document.getElementById('cl-blok-aciklama').style.display='block';
