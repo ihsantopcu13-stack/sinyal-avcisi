@@ -1715,6 +1715,24 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #crash-plan-modul .cp-day-topic{font-size:12.5px;color:var(--cp-text);line-height:1.4;flex:1}
             #crash-plan-modul .cp-day-row.cp-done .cp-day-topic{color:var(--cp-muted);text-decoration:line-through}
             #crash-plan-modul .cp-today-badge{font-size:9.5px;font-family:'IBM Plex Mono',monospace;background:rgba(91,143,255,.15);color:var(--cp-accent);padding:2px 7px;border-radius:10px;flex-shrink:0}
+            #crash-plan-modul .cp-hedef-section{margin-top:22px;padding-top:20px;border-top:1px solid var(--cp-border)}
+            #crash-plan-modul .cp-hedef-baslik{font-size:14px;font-weight:700;color:var(--cp-text);margin-bottom:4px}
+            #crash-plan-modul .cp-hedef-sub{font-size:11.5px;color:var(--cp-muted);margin-bottom:14px}
+            #crash-plan-modul .cp-hedef-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+            #crash-plan-modul .cp-hedef-tab{background:rgba(255,255,255,.04);border:1px solid var(--cp-border);color:var(--cp-muted);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background .15s,border-color .15s,color .15s}
+            #crash-plan-modul .cp-hedef-tab.cp-hedef-active.cp-hedef-1{background:rgba(255,107,107,.15);border-color:#ff6b6b;color:#ff6b6b}
+            #crash-plan-modul .cp-hedef-tab.cp-hedef-active.cp-hedef-2{background:rgba(245,158,11,.15);border-color:#f59e0b;color:#f59e0b}
+            #crash-plan-modul .cp-hedef-tab.cp-hedef-active.cp-hedef-3{background:rgba(91,143,255,.15);border-color:#5b8fff;color:#5b8fff}
+            #crash-plan-modul .cp-hedef-tab.cp-hedef-active.cp-hedef-4{background:rgba(56,217,169,.15);border-color:#38d9a9;color:#38d9a9}
+            #crash-plan-modul .cp-hedef-panel{background:var(--cp-surface);border:1px solid var(--cp-border);border-left:4px solid var(--cp-border);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+            #crash-plan-modul .cp-hedef-panel.cp-hedef-1{border-left-color:#ff6b6b}
+            #crash-plan-modul .cp-hedef-panel.cp-hedef-2{border-left-color:#f59e0b}
+            #crash-plan-modul .cp-hedef-panel.cp-hedef-3{border-left-color:#5b8fff}
+            #crash-plan-modul .cp-hedef-panel.cp-hedef-4{border-left-color:#38d9a9}
+            #crash-plan-modul .cp-hedef-panel-baslik{font-size:14px;font-weight:700;color:var(--cp-text)}
+            #crash-plan-modul .cp-hedef-row{display:flex;flex-direction:column;gap:3px}
+            #crash-plan-modul .cp-hedef-row-label{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;color:var(--cp-muted);text-transform:uppercase}
+            #crash-plan-modul .cp-hedef-row-val{font-size:12.5px;color:var(--cp-text);line-height:1.6}
             @media(max-width:480px){
               #crash-plan-modul .cp-header{flex-direction:column;align-items:flex-start}
               #crash-plan-modul .cp-day-topic{font-size:12px}
@@ -1735,6 +1753,18 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
 
           <div class="cp-weeks" id="cp-weeks"></div>
+
+          <div class="cp-hedef-section">
+            <div class="cp-hedef-baslik">🎯 Hedef Puana Göre Öncelik</div>
+            <div class="cp-hedef-sub">Puan aralığını seç, o hedefe özel çalışma önceliğini gör.</div>
+            <div class="cp-hedef-tabs" id="cp-hedefTabs">
+              <button class="cp-hedef-tab cp-hedef-active cp-hedef-1" type="button" data-cp-action="hedef-sec" data-cp-hedef="1">40-50 Puan</button>
+              <button class="cp-hedef-tab cp-hedef-2" type="button" data-cp-action="hedef-sec" data-cp-hedef="2">50-60 Puan</button>
+              <button class="cp-hedef-tab cp-hedef-3" type="button" data-cp-action="hedef-sec" data-cp-hedef="3">60-70 Puan</button>
+              <button class="cp-hedef-tab cp-hedef-4" type="button" data-cp-action="hedef-sec" data-cp-hedef="4">70-80+ Puan</button>
+            </div>
+            <div id="cp-hedefPanel"></div>
+          </div>
           </div>
         </div>
 
@@ -4312,6 +4342,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
                 <div class="voc-signal-card"><span class="voc-signal-trigger">implement</span><span class="voc-signal-example">policy / strategy / reform</span></div>
                 <div class="voc-signal-card"><span class="voc-signal-trigger">conduct</span><span class="voc-signal-example">research / study / survey</span></div>
               </div>
+              <p class="voc-slide-body" style="font-size:12.5px"><a onclick="if(typeof bsGit==='function')bsGit()" style="cursor:pointer;color:#38d9a9;text-decoration:underline;font-weight:600">🔍 Bilinmediğin kelimeyle karşılaşınca ne yapmalı? 4 Adımlı Bağlam Stratejisi'ni dene →</a></p>
             </div>
 
             <div class="voc-slide" id="voc-slide-2">
@@ -4435,6 +4466,118 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
           </section>
 
+          <!-- 4 ADIMLI BAĞLAM STRATEJİSİ — bilinmeyen kelime çözme tekniği + interaktif alıştırma (#baglam-strateji-modul scope) -->
+          <section id="baglam-strateji-modul">
+          <style>
+            #baglam-strateji-modul{
+              --bs-bg:#0d0f14;--bs-surface:#161920;--bs-border:#252830;
+              --bs-accent:#5b8fff;--bs-accent2:#38d9a9;--bs-warn:#ff6b6b;
+              --bs-text:#e8eaf0;--bs-muted:#6b7280;--bs-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--bs-bg);color:var(--bs-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #baglam-strateji-modul *{box-sizing:border-box}
+            #baglam-strateji-modul .bs-header{margin-bottom:18px}
+            #baglam-strateji-modul .bs-header-badge{display:inline-flex;align-items:center;gap:6px;background:var(--bs-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:4px 10px;border-radius:3px;margin-bottom:12px}
+            #baglam-strateji-modul .bs-header h2{font-family:'IBM Plex Sans',sans-serif;font-size:21px;font-weight:600;line-height:1.3;margin:0 0 6px;color:var(--bs-text)}
+            #baglam-strateji-modul .bs-header p{color:var(--bs-muted);font-size:13px;line-height:1.6;max-width:520px;margin:0}
+            #baglam-strateji-modul .bs-adim-block{background:rgba(255,255,255,.03);border:1px solid var(--bs-border);border-radius:10px;padding:15px 17px;margin-bottom:12px;display:flex;flex-direction:column;gap:9px}
+            #baglam-strateji-modul .bs-adim-baslik{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--bs-accent);letter-spacing:.08em}
+            #baglam-strateji-modul .bs-adim-metin{font-size:12.5px;color:var(--bs-text);line-height:1.6}
+            #baglam-strateji-modul .bs-example-list{display:flex;flex-direction:column;gap:7px}
+            #baglam-strateji-modul .bs-example-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid var(--bs-accent)}
+            #baglam-strateji-modul .bs-ex-icon{font-size:13px;margin-top:1px;flex-shrink:0}
+            #baglam-strateji-modul .bs-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:var(--bs-text)}
+            #baglam-strateji-modul .bs-ex-tr{font-size:11px;color:var(--bs-muted);line-height:1.5}
+            #baglam-strateji-modul .bs-cantwont{display:flex;gap:10px}
+            #baglam-strateji-modul .bs-cw-card{flex:1;padding:12px;border-radius:8px;background:rgba(56,217,169,.08);border:1px solid rgba(56,217,169,.25);display:flex;flex-direction:column;gap:7px}
+            #baglam-strateji-modul .bs-cw-card.bs-bad-card{background:rgba(255,107,107,.08);border-color:rgba(255,107,107,.25)}
+            #baglam-strateji-modul .bs-cw-label{font-size:9.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;font-weight:700;color:var(--bs-accent2)}
+            #baglam-strateji-modul .bs-cw-card.bs-bad-card .bs-cw-label{color:var(--bs-warn)}
+            #baglam-strateji-modul .bs-chip-row{display:flex;flex-wrap:wrap;gap:5px}
+            #baglam-strateji-modul .bs-chip{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:11px;background:rgba(56,217,169,.12);border:1px solid rgba(56,217,169,.3);color:var(--bs-accent2)}
+            #baglam-strateji-modul .bs-chip.bs-chip-bad{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.3);color:var(--bs-warn)}
+            #baglam-strateji-modul .bs-formula-block{background:var(--bs-formula-bg);border:1px solid var(--bs-accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;margin:16px 0}
+            #baglam-strateji-modul .bs-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--bs-accent);letter-spacing:.1em}
+            #baglam-strateji-modul .bs-formula-text{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:#fff;line-height:1.7}
+            #baglam-strateji-modul .bs-ornek-baslik{font-size:13px;font-weight:700;color:var(--bs-text);margin:18px 0 10px}
+            #baglam-strateji-modul .bs-ornek-item{background:var(--bs-surface);border:1px solid var(--bs-border);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:9px;margin-bottom:10px}
+            #baglam-strateji-modul .bs-ornek-cumle{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--bs-text);line-height:1.6}
+            #baglam-strateji-modul .bs-ornek-opts{display:flex;flex-wrap:wrap;gap:7px}
+            #baglam-strateji-modul .bs-opt-btn{background:rgba(255,255,255,.05);border:1px solid var(--bs-border);border-radius:7px;padding:7px 13px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--bs-text);cursor:pointer;transition:background .15s,border-color .15s}
+            #baglam-strateji-modul .bs-opt-btn:hover{border-color:var(--bs-accent)}
+            #baglam-strateji-modul .bs-opt-btn.bs-correct{background:rgba(56,217,169,.18);border-color:var(--bs-accent2);color:var(--bs-accent2)}
+            #baglam-strateji-modul .bs-opt-btn.bs-wrong{background:rgba(255,107,107,.15);border-color:var(--bs-warn);color:var(--bs-warn)}
+            #baglam-strateji-modul .bs-ornek-feedback{font-size:11.5px;color:var(--bs-muted);line-height:1.6;display:none}
+            #baglam-strateji-modul .bs-ornek-feedback.bs-show{display:block}
+            #baglam-strateji-modul .bs-progress-note{font-size:12px;color:var(--bs-muted);text-align:center;margin:14px 0;font-family:'IBM Plex Mono',monospace}
+            @media(max-width:480px){
+              #baglam-strateji-modul .bs-cantwont{flex-direction:column}
+            }
+          </style>
+
+          <div class="bs-header">
+            <div class="bs-header-badge">KLOD-MOTION</div>
+            <h2>4 Adımlı Bağlam Stratejisi</h2>
+            <p>Bilmediğin kelimeyle karşılaşınca 10 saniyede çöz: TÜR → TON → KÖK → İPUCU.</p>
+          </div>
+
+          <div class="bs-adim-block">
+            <span class="bs-adim-baslik">ADIM 1 — TÜR BELİRLE (2 sn)</span>
+            <div class="bs-adim-metin">Kelime cümledeki yerine göre ne?</div>
+            <div class="bs-example-list">
+              <div class="bs-example-row"><span class="bs-ex-icon">1</span><div><span class="bs-ex-en">Özne konumunda</span> <span class="bs-ex-tr">→ isim</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">2</span><div><span class="bs-ex-en">Fiilden önce</span> <span class="bs-ex-tr">→ sıfat/zarf</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">3</span><div><span class="bs-ex-en">Fiil konumunda</span> <span class="bs-ex-tr">→ fiil</span></div></div>
+            </div>
+            <div class="bs-adim-metin">Bu tek adım anlamı %50 daraltır.</div>
+          </div>
+
+          <div class="bs-adim-block">
+            <span class="bs-adim-baslik">ADIM 2 — TON ANALİZİ (3 sn)</span>
+            <div class="bs-adim-metin">Kelimenin çevresine bak: pozitif mi negatif mi?</div>
+            <div class="bs-cantwont">
+              <div class="bs-cw-card"><span class="bs-cw-label">✅ İYİ KELİMELER</span><div class="bs-chip-row"><span class="bs-chip">success</span><span class="bs-chip">breakthrough</span><span class="bs-chip">improve</span><span class="bs-chip">effective</span><span class="bs-chip">benefit</span><span class="bs-chip">reduce (risk)</span></div></div>
+              <div class="bs-cw-card bs-bad-card"><span class="bs-cw-label">❌ KÖTÜ KELİMELER</span><div class="bs-chip-row"><span class="bs-chip bs-chip-bad">fail</span><span class="bs-chip bs-chip-bad">decline</span><span class="bs-chip bs-chip-bad">problem</span><span class="bs-chip bs-chip-bad">risk</span><span class="bs-chip bs-chip-bad">costly</span><span class="bs-chip bs-chip-bad">harmful</span><span class="bs-chip bs-chip-bad">limited</span></div></div>
+            </div>
+            <div class="bs-adim-metin">→ Çevre olumluysa → negatif tonlu şıkları (detrimental, vague) anında ele<br>→ Çevre olumsuza → pozitif tonlu şıkları ele</div>
+          </div>
+
+          <div class="bs-adim-block">
+            <span class="bs-adim-baslik">ADIM 3 — KÖK-EK İPUCU (2 sn)</span>
+            <div class="bs-example-list">
+              <div class="bs-example-row"><span class="bs-ex-icon">🔤</span><div><span class="bs-ex-en">Önekler: un- / dis- / mis- / in- / im-</span> <span class="bs-ex-tr">→ olumsuzluk</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">🔤</span><div><span class="bs-ex-en">Sonekler: -tion / -ment / -ness</span> <span class="bs-ex-tr">→ isim</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">🔤</span><div><span class="bs-ex-en">Sonekler: -ous / -al / -ive / -ful</span> <span class="bs-ex-tr">→ sıfat</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">🔤</span><div><span class="bs-ex-en">Sonek: -ly</span> <span class="bs-ex-tr">→ zarf</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">🔤</span><div><span class="bs-ex-en">Sonekler: -ize / -ify</span> <span class="bs-ex-tr">→ fiil</span></div></div>
+            </div>
+          </div>
+
+          <div class="bs-adim-block">
+            <span class="bs-adim-baslik">ADIM 4 — İPUCU TARAMA (3 sn)</span>
+            <div class="bs-adim-metin">Cümle içinde şunlar var mı?</div>
+            <div class="bs-example-list">
+              <div class="bs-example-row"><span class="bs-ex-icon">👀</span><div><span class="bs-ex-en">"such as" / "for example"</span> <span class="bs-ex-tr">→ bilmediğin kelimenin tanımı hemen yanında</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">👀</span><div><span class="bs-ex-en">Virgüller arasında açıklama</span> <span class="bs-ex-tr">→ parantez gibi düşün</span></div></div>
+              <div class="bs-example-row"><span class="bs-ex-icon">👀</span><div><span class="bs-ex-en">"or" bağlacından sonra</span> <span class="bs-ex-tr">→ eş anlamlı açıklama gelebilir</span></div></div>
+            </div>
+          </div>
+
+          <div class="bs-formula-block">
+            <span class="bs-formula-label">EZBER</span>
+            <div class="bs-formula-text">TÜR → TON → KÖK → İPUCU (4 adım, 10 saniye)</div>
+          </div>
+
+          <div class="bs-ornek-baslik">3 İnteraktif Örnek — Doğru Kelimeyi Seç</div>
+          <div class="bs-progress-note" id="bs-progressNote">0 / 3 cevaplandı</div>
+          <div id="bs-grid"></div>
+          </section>
+
           <!-- 500 AKADEMİK KELİME BANKASI — flip-card kelime öğrenme bileşeni (#kelime-bankasi-modul scope) -->
           <section id="kelime-bankasi-modul">
           <style>
@@ -4507,6 +4650,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="6">Grup 6 · Yüksek Zorluk Fiilleri</button>
             <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="7">Grup 7 · Collocation Öbekleri</button>
             <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="8">Grup 8 · Bukalemun Kelimeler</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="9">Grup 9 · Akademik Bağlaç ve Zarf Öbekleri</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="10">Grup 10 · Akademik Sıfat ve Zarf Tamamlayıcılar</button>
           </div>
 
           <div class="kb-grid" id="kb-grid"></div>
@@ -5489,6 +5634,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <a onclick="ssGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🎯 Skimming & Scanning dersini aç (KLOD-MOTION) →</a>
               <a onclick="tgGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧭 Trigger Sistemi'ni aç →</a>
               <a onclick="psyGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧠 Psikoloji Terminolojisi dersini aç (KLOD-MOTION) →</a>
+              <a onclick="bsGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🔍 4 Adımlı Bağlam Stratejisi'ni aç →</a>
               <a onclick="cpGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📆 28 Gün Crash Plan'ı aç →</a>
               <a onclick="ahkGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🃏 AHA Kartları'nı aç →</a>
             </div>
@@ -13652,6 +13798,26 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     {id:'word78',en:'obscure',tr:'gizlemek, belirsizleştirmek (fiil)',ornek:'The company tried to obscure the truth about the accident.',ipucu:'obscure the truth',grup:8},
     {id:'word79',en:'qualify',tr:'nitelendirmek, sınırlandırmak (fiil)',ornek:'The professor qualified his statement with several exceptions.',ipucu:'qualify a statement',grup:8},
     {id:'word80',en:'elaborate',tr:'ayrıntılandırmak (fiil)',ornek:'Could you elaborate on that point, please?',ipucu:'elaborate on a point',grup:8},
+    {id:'word81',en:'on the contrary',tr:'tam tersine (iddiayı çürütür)',ornek:'The theory was not disproven; on the contrary, the results showed strong support.',ipucu:'on the contrary, the results showed...',grup:9},
+    {id:'word82',en:'thereby',tr:'bu sayede, böylece',ornek:'The company automated the process, thereby improving efficiency.',ipucu:'thereby improving efficiency',grup:9},
+    {id:'word83',en:'whereas',tr:'oysa ki, -e karşın',ornek:'Some people prefer coffee, whereas others prefer tea.',ipucu:'whereas others prefer tea',grup:9},
+    {id:'word84',en:'albeit',tr:'her ne kadar … olsa da',ornek:'The economy is recovering, albeit slowly.',ipucu:'albeit slowly',grup:9},
+    {id:'word85',en:'nonetheless',tr:'buna rağmen, yine de',ornek:'The budget was limited; nonetheless, the project succeeded.',ipucu:'nonetheless, the project succeeded',grup:9},
+    {id:'word86',en:'henceforth',tr:'bundan böyle',ornek:'Henceforth, the new rule applies to all students.',ipucu:'henceforth, the rule applies',grup:9},
+    {id:'word87',en:'notwithstanding',tr:'-e rağmen (resmi)',ornek:'Notwithstanding the difficulties, the team completed the project on time.',ipucu:'notwithstanding the difficulties',grup:9},
+    {id:'word88',en:'inasmuch as',tr:'… olduğu ölçüde',ornek:'The report is useful inasmuch as it is relevant to current policy.',ipucu:'inasmuch as it is relevant',grup:9},
+    {id:'word89',en:'insofar as',tr:'… olduğu kadarıyla',ornek:'The conclusion is valid insofar as the data allows.',ipucu:'insofar as the data allows',grup:9},
+    {id:'word90',en:'provided that',tr:'şartıyla',ornek:'You can join the team, provided that you agree to the schedule.',ipucu:'provided that you agree',grup:9},
+    {id:'word91',en:'inherent',tr:'doğasında olan',ornek:'There is an inherent risk in any scientific experiment.',ipucu:'inherent risk / inherent problem',grup:10},
+    {id:'word92',en:'subsequent',tr:'sonraki, akabindeki',ornek:'Subsequent research confirmed the initial hypothesis.',ipucu:'subsequent research / subsequent events',grup:10},
+    {id:'word93',en:'prior',tr:'önceki',ornek:'No prior experience is required for this position.',ipucu:'prior knowledge / prior experience',grup:10},
+    {id:'word94',en:'concurrent',tr:'eş zamanlı',ornek:'The two concurrent studies produced similar results.',ipucu:'concurrent studies / concurrent processes',grup:10},
+    {id:'word95',en:'comprehensive',tr:'kapsamlı',ornek:'The team conducted a comprehensive analysis of the market.',ipucu:'comprehensive study / comprehensive analysis',grup:10},
+    {id:'word96',en:'preliminary',tr:'ön, hazırlık niteliğinde',ornek:'The preliminary findings suggest a link between the two factors.',ipucu:'preliminary findings / preliminary results',grup:10},
+    {id:'word97',en:'marginal',tr:'sınırda olan, küçük',ornek:'The new method produced only a marginal improvement.',ipucu:'marginal improvement / marginal effect',grup:10},
+    {id:'word98',en:'predominant',tr:'baskın, egemen',ornek:'Cost was the predominant factor in the decision.',ipucu:'predominant factor / predominant view',grup:10},
+    {id:'word99',en:'plausible',tr:'makul, inandırıcı',ornek:'The scientist offered a plausible explanation for the anomaly.',ipucu:'plausible explanation / plausible theory',grup:10},
+    {id:'word100',en:'ambiguous',tr:'belirsiz, çift anlamlı',ornek:'The survey question was too ambiguous to interpret clearly.',ipucu:'ambiguous statement / ambiguous result',grup:10},
   ];
   let kbGrupAktif = 1;
 
@@ -13933,6 +14099,30 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     cpRender();
   }
 
+  const CP_HEDEFLER = [
+    {no:1, tier:'cp-hedef-1', aralik:'40-50 Puan Hedefi', oncelik:'Temel gramer iskeleti, bağlaçlar (although/because/however/therefore), en sık çıkan 100 akademik kelime', gunluk:'30 dk kelime + 30 dk bağlaç soruları', deneme:'Haftada 1 (40 soruluk mini)'},
+    {no:2, tier:'cp-hedef-2', aralik:'50-60 Puan Hedefi', oncelik:'Çeviri teknikleri, cümle tamamlama, kısa okuma parçaları, Passive Voice', gunluk:'20 dk kelime + 40 dk gramer + 30 dk okuma', deneme:'Haftada 1 (60 soruluk)'},
+    {no:3, tier:'cp-hedef-3', aralik:'60-70 Puan Hedefi', oncelik:'Paragraf ana fikir analizi, cümle tamamlama, kelime derinliği (eş anlamlar), Relative Clauses', gunluk:'20 dk kelime + 30 dk gramer + 40 dk okuma + 20 dk hata analizi', deneme:'Haftada 2 (80 soruluk)'},
+    {no:4, tier:'cp-hedef-4', aralik:'70-80+ Puan Hedefi', oncelik:'Restatement (yakın anlam), ince paraphrase farkları, çeldirici analizi, Modal Perfect, Conditionals', gunluk:'15 dk kelime + 25 dk ileri gramer + 50 dk okuma + 30 dk çeviri + 20 dk hata analizi', deneme:'Haftada 2 tam deneme (180 dk)'},
+  ];
+
+  function cpHedefRender(hedefNo){
+    const h = CP_HEDEFLER.find(function(x){ return x.no===hedefNo; });
+    if(!h)return;
+    document.querySelectorAll('#cp-hedefTabs .cp-hedef-tab').forEach(function(b){
+      b.classList.toggle('cp-hedef-active', parseInt(b.dataset.cpHedef,10)===hedefNo);
+    });
+    const panel = document.getElementById('cp-hedefPanel');
+    if(!panel)return;
+    panel.innerHTML =
+      '<div class="cp-hedef-panel '+h.tier+'">'+
+        '<div class="cp-hedef-panel-baslik">'+h.aralik+'</div>'+
+        '<div class="cp-hedef-row"><span class="cp-hedef-row-label">Öncelik</span><span class="cp-hedef-row-val">'+h.oncelik+'</span></div>'+
+        '<div class="cp-hedef-row"><span class="cp-hedef-row-label">Günlük</span><span class="cp-hedef-row-val">'+h.gunluk+'</span></div>'+
+        '<div class="cp-hedef-row"><span class="cp-hedef-row-label">Deneme</span><span class="cp-hedef-row-val">'+h.deneme+'</span></div>'+
+      '</div>';
+  }
+
   const cpKok = document.getElementById('crash-plan-modul');
   if (cpKok) {
     cpKok.addEventListener('click', function(e){
@@ -13942,6 +14132,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
       if(action==='day-toggle')cpToggleDay(parseInt(el.dataset.cpDay,10));
       else if(action==='week-toggle')cpToggleWeek(parseInt(el.dataset.cpWeek,10));
       else if(action==='reset')cpResetAll();
+      else if(action==='hedef-sec')cpHedefRender(parseInt(el.dataset.cpHedef,10));
     });
   }
 
@@ -13955,6 +14146,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   };
 
   cpRender();
+  cpHedefRender(1);
 })();
 </script>
 
@@ -14120,6 +14312,79 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   };
 
   psyUpdateUI();
+})();
+</script>
+
+<!-- 4 ADIMLI BAĞLAM STRATEJİSİ — #baglam-strateji-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const BS_ORNEKLER = [
+    {cumle:'"The findings were significant in that they _____ existing theories."', opts:['challenged','supported','confirmed','ignored'], answer:'challenged', aciklama:'Fiil konumu → fiil. Bağlam zıtlık ima ediyor (significant + existing theories\'i sarsan bir sonuç) → challenged.'},
+    {cumle:'"The policy had an _____ effect on economic growth."', opts:['beneficial','harmful','negative','negligible'], answer:'beneficial', aciklama:'Sıfat konumu → sıfat. Bağlam: "economic growth" pozitif → beneficial.'},
+    {cumle:'"Despite the _____ evidence, the committee approved the plan."', opts:['inconclusive','conclusive','overwhelming','sufficient'], answer:'inconclusive', aciklama:'Sıfat konumu → sıfat. "Despite" zıtlık sinyali → evidence olumsuz olmalı ki onay beklenmedik olsun → inconclusive.'},
+  ];
+  const bsAnswered = {};
+
+  function bsRender(){
+    const grid = document.getElementById('bs-grid');
+    if(!grid)return;
+    grid.innerHTML = BS_ORNEKLER.map(function(o,i){
+      return '<div class="bs-ornek-item" id="bs-item-'+i+'">'+
+        '<span class="bs-ornek-cumle">'+o.cumle+'</span>'+
+        '<div class="bs-ornek-opts">'+
+          o.opts.map(function(op){ return '<button class="bs-opt-btn" data-bs-action="answer" data-bs-idx="'+i+'" data-bs-opt="'+op+'">'+op+'</button>'; }).join('')+
+        '</div>'+
+        '<div class="bs-ornek-feedback" id="bs-fb-'+i+'"></div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function bsUpdateProgress(){
+    const n = Object.keys(bsAnswered).length;
+    const note = document.getElementById('bs-progressNote');
+    if(note)note.textContent = n+' / '+BS_ORNEKLER.length+' cevaplandı';
+    if(n===BS_ORNEKLER.length){
+      if(typeof xpKazan==='function')xpKazan('kelime',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('baglam-stratejisi');
+    }
+  }
+
+  function bsAnswer(idx, secilen){
+    if(bsAnswered[idx])return;
+    bsAnswered[idx]=true;
+    const o = BS_ORNEKLER[idx];
+    const dogruMu = secilen===o.answer;
+    const item = document.getElementById('bs-item-'+idx);
+    item.querySelectorAll('.bs-opt-btn').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.bsOpt===o.answer)b.classList.add('bs-correct');
+      else if(b.dataset.bsOpt===secilen)b.classList.add('bs-wrong');
+    });
+    const fb = document.getElementById('bs-fb-'+idx);
+    fb.classList.add('bs-show');
+    fb.textContent = (dogruMu?'✅ ':'❌ Doğru cevap: '+o.answer+'. ')+o.aciklama;
+    bsUpdateProgress();
+  }
+
+  const bsKok = document.getElementById('baglam-strateji-modul');
+  if (bsKok) {
+    bsKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-bs-action="answer"]');
+      if(!el)return;
+      bsAnswer(parseInt(el.dataset.bsIdx,10), el.dataset.bsOpt);
+    });
+  }
+
+  window.bsGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('baglam-strateji-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  bsRender();
 })();
 </script>
 </body>
