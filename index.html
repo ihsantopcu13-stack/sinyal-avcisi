@@ -1669,6 +1669,73 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <button onclick="planOlustur()" style="margin-top:10px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 7 Günlük Plan Oluştur →</button>
           </div>
           <div id="plan-icerik" style="margin-top:14px"></div>
+
+          <!-- 28 GÜN CRASH PLAN — interaktif takvim (#crash-plan-modul scope) -->
+          <div id="crash-plan-modul">
+          <style>
+            #crash-plan-modul{
+              --cp-bg:#0d0f14;--cp-surface:#161920;--cp-border:#252830;
+              --cp-accent:#5b8fff;--cp-accent2:#38d9a9;--cp-warn:#ff6b6b;
+              --cp-text:#e8eaf0;--cp-muted:#6b7280;
+              box-sizing:border-box;
+              background:var(--cp-bg);color:var(--cp-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-top:22px;
+            }
+            #crash-plan-modul *{box-sizing:border-box}
+            #crash-plan-modul .cp-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+            #crash-plan-modul .cp-header-left{display:flex;flex-direction:column;gap:6px}
+            #crash-plan-modul .cp-header-badge{display:inline-flex;align-items:center;gap:6px;background:var(--cp-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:4px 10px;border-radius:3px;width:fit-content}
+            #crash-plan-modul h2{font-family:'IBM Plex Sans',sans-serif;font-size:21px;font-weight:600;margin:0;color:var(--cp-text)}
+            #crash-plan-modul .cp-reset-btn{background:var(--cp-border);color:var(--cp-muted);border:none;border-radius:7px;padding:8px 16px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background .15s,color .15s}
+            #crash-plan-modul .cp-reset-btn:hover{background:rgba(255,107,107,.15);color:var(--cp-warn)}
+            #crash-plan-modul .cp-progress-wrap{margin-bottom:20px}
+            #crash-plan-modul .cp-progress-track{height:8px;background:var(--cp-border);border-radius:4px;overflow:hidden}
+            #crash-plan-modul .cp-progress-fill{height:100%;background:linear-gradient(90deg,var(--cp-accent),var(--cp-accent2));border-radius:4px;transition:width .4s ease}
+            #crash-plan-modul .cp-progress-label{font-size:12px;color:var(--cp-muted);font-family:'IBM Plex Mono',monospace;margin-top:8px;text-align:center}
+            #crash-plan-modul .cp-weeks{display:flex;flex-direction:column;gap:10px}
+            #crash-plan-modul .cp-week{background:var(--cp-surface);border:1px solid var(--cp-border);border-radius:10px;overflow:hidden}
+            #crash-plan-modul .cp-week-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;background:transparent;border:none;cursor:pointer;text-align:left;font-family:'IBM Plex Sans',sans-serif}
+            #crash-plan-modul .cp-week-title-wrap{display:flex;flex-direction:column;gap:3px}
+            #crash-plan-modul .cp-week-title{font-size:14px;font-weight:700;color:var(--cp-text)}
+            #crash-plan-modul .cp-week-sub{font-size:11px;color:var(--cp-muted);font-family:'IBM Plex Mono',monospace}
+            #crash-plan-modul .cp-week-chevron{font-size:12px;color:var(--cp-muted);transition:transform .2s;flex-shrink:0}
+            #crash-plan-modul .cp-week.cp-open .cp-week-chevron{transform:rotate(90deg)}
+            #crash-plan-modul .cp-week-body{display:none;flex-direction:column;padding:0 14px 14px;gap:6px}
+            #crash-plan-modul .cp-week.cp-open .cp-week-body{display:flex}
+            #crash-plan-modul .cp-day-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.03);cursor:pointer;transition:background .15s}
+            #crash-plan-modul .cp-day-row:hover{background:rgba(255,255,255,.06)}
+            #crash-plan-modul .cp-day-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--cp-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;transition:background .15s,border-color .15s}
+            #crash-plan-modul .cp-day-row.cp-done .cp-day-check{background:var(--cp-accent2);border-color:var(--cp-accent2);color:#0d0f14}
+            #crash-plan-modul .cp-day-row.cp-today .cp-day-check{border-color:var(--cp-accent)}
+            #crash-plan-modul .cp-day-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cp-muted);flex-shrink:0;min-width:28px}
+            #crash-plan-modul .cp-day-row.cp-today .cp-day-num{color:var(--cp-accent);font-weight:700}
+            #crash-plan-modul .cp-day-topic{font-size:12.5px;color:var(--cp-text);line-height:1.4;flex:1}
+            #crash-plan-modul .cp-day-row.cp-done .cp-day-topic{color:var(--cp-muted);text-decoration:line-through}
+            #crash-plan-modul .cp-today-badge{font-size:9.5px;font-family:'IBM Plex Mono',monospace;background:rgba(91,143,255,.15);color:var(--cp-accent);padding:2px 7px;border-radius:10px;flex-shrink:0}
+            @media(max-width:480px){
+              #crash-plan-modul .cp-header{flex-direction:column;align-items:flex-start}
+              #crash-plan-modul .cp-day-topic{font-size:12px}
+            }
+          </style>
+
+          <div class="cp-header">
+            <div class="cp-header-left">
+              <span class="cp-header-badge">KLOD-MOTION</span>
+              <h2>28 Gün Crash Plan</h2>
+            </div>
+            <button class="cp-reset-btn" type="button" data-cp-action="reset">↺ Sıfırla</button>
+          </div>
+
+          <div class="cp-progress-wrap">
+            <div class="cp-progress-track"><div class="cp-progress-fill" id="cp-progressFill" style="width:0%"></div></div>
+            <div class="cp-progress-label" id="cp-progressLabel">0 / 28 gün tamamlandı</div>
+          </div>
+
+          <div class="cp-weeks" id="cp-weeks"></div>
+          </div>
         </div>
 
         <!-- SINAV PLANIM — Kişiselleştirilmiş hedef planı -->
@@ -3986,6 +4053,728 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
           </section>
 
+          <!-- KELİME (VOCAB) MODÜLÜ — KLOD-MOTION 7-slaytlı şık avcılığı dersi (#kelime-strateji-modul scope) -->
+          <section id="kelime-strateji-modul">
+          <style>
+            #kelime-strateji-modul{
+              --voc-bg:#0d0f14;--voc-surface:#161920;--voc-border:#252830;
+              --voc-accent:#5b8fff;--voc-accent2:#38d9a9;--voc-warn:#ff6b6b;
+              --voc-text:#e8eaf0;--voc-muted:#6b7280;--voc-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--voc-bg);color:var(--voc-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              display:flex;flex-direction:column;align-items:center;
+              padding:26px 16px 40px;
+              margin-bottom:22px;
+            }
+            #kelime-strateji-modul *{box-sizing:border-box}
+            #kelime-strateji-modul .voc-lesson-header{width:100%;max-width:640px;display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+            #kelime-strateji-modul .voc-badge{background:var(--voc-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px}
+            #kelime-strateji-modul .voc-badge.voc-dila{background:var(--voc-accent2);color:#0d0f14}
+            #kelime-strateji-modul .voc-lesson-title{font-size:13px;color:var(--voc-muted);font-family:'IBM Plex Mono',monospace}
+            #kelime-strateji-modul .voc-progress-wrap{width:100%;max-width:640px;margin-bottom:20px}
+            #kelime-strateji-modul .voc-progress-track{height:3px;background:var(--voc-border);border-radius:2px;overflow:hidden}
+            #kelime-strateji-modul .voc-progress-fill{height:100%;background:var(--voc-accent);border-radius:2px;transition:width .4s ease}
+            #kelime-strateji-modul .voc-progress-label{font-size:11px;color:var(--voc-muted);font-family:'IBM Plex Mono',monospace;margin-top:6px;text-align:right}
+            #kelime-strateji-modul .voc-slide-card{width:100%;max-width:640px;background:var(--voc-surface);border:1px solid var(--voc-border);border-radius:12px;padding:28px 22px;min-height:320px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+            #kelime-strateji-modul .voc-slide{display:none;flex-direction:column;gap:18px;animation:vocFadeIn .3s ease}
+            #kelime-strateji-modul .voc-slide.voc-active{display:flex}
+            @keyframes vocFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+            #kelime-strateji-modul .voc-slide-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--voc-muted);text-transform:uppercase;letter-spacing:.1em}
+            #kelime-strateji-modul .voc-slide-heading{font-size:21px;font-weight:600;line-height:1.3;color:var(--voc-text)}
+            #kelime-strateji-modul .voc-slide-body{font-size:14.5px;line-height:1.7;color:#b0b8c8}
+            #kelime-strateji-modul .voc-formula-block{background:var(--voc-formula-bg);border:1px solid var(--voc-accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+            #kelime-strateji-modul .voc-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--voc-accent);letter-spacing:.1em}
+            #kelime-strateji-modul .voc-formula-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em;line-height:1.6}
+            #kelime-strateji-modul .voc-formula-sub{font-size:12px;color:var(--voc-muted);line-height:1.5}
+            #kelime-strateji-modul .voc-example-list{display:flex;flex-direction:column;gap:9px}
+            #kelime-strateji-modul .voc-example-row{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid var(--voc-accent)}
+            #kelime-strateji-modul .voc-ex-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+            #kelime-strateji-modul .voc-ex-content{display:flex;flex-direction:column;gap:3px}
+            #kelime-strateji-modul .voc-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--voc-text)}
+            #kelime-strateji-modul .voc-ex-tr{font-size:11.5px;color:var(--voc-muted);line-height:1.5}
+            #kelime-strateji-modul .voc-signals-grid{display:flex;flex-direction:column;gap:9px}
+            #kelime-strateji-modul .voc-signal-card{display:flex;align-items:center;gap:14px;padding:11px 14px;background:rgba(91,143,255,.07);border:1px solid rgba(91,143,255,.2);border-radius:8px}
+            #kelime-strateji-modul .voc-signal-trigger{font-size:12.5px;font-weight:700;color:var(--voc-text);font-family:'IBM Plex Mono',monospace;flex-shrink:0}
+            #kelime-strateji-modul .voc-signal-example{font-size:11.5px;color:var(--voc-accent2);text-align:right;margin-left:auto}
+            #kelime-strateji-modul .voc-cantwont{display:flex;gap:10px}
+            #kelime-strateji-modul .voc-cw-card{flex:1;padding:13px;border-radius:8px;background:rgba(56,217,169,.08);border:1px solid rgba(56,217,169,.25);display:flex;flex-direction:column;gap:8px}
+            #kelime-strateji-modul .voc-cw-card.voc-bad-card{background:rgba(255,107,107,.08);border-color:rgba(255,107,107,.25)}
+            #kelime-strateji-modul .voc-cw-label{font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;font-weight:700;color:var(--voc-accent2)}
+            #kelime-strateji-modul .voc-cw-card.voc-bad-card .voc-cw-label{color:var(--voc-warn)}
+            #kelime-strateji-modul .voc-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+            #kelime-strateji-modul .voc-chip{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:4px 9px;border-radius:12px;background:rgba(56,217,169,.12);border:1px solid rgba(56,217,169,.3);color:var(--voc-accent2)}
+            #kelime-strateji-modul .voc-chip.voc-chip-bad{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.3);color:var(--voc-warn)}
+            #kelime-strateji-modul .voc-word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+            #kelime-strateji-modul .voc-word-chip{background:rgba(255,255,255,.03);border:1px solid var(--voc-border);border-radius:7px;padding:9px 11px;display:flex;flex-direction:column;gap:2px}
+            #kelime-strateji-modul .voc-word-en{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:var(--voc-accent)}
+            #kelime-strateji-modul .voc-word-tr{font-size:11px;color:var(--voc-muted)}
+            #kelime-strateji-modul .voc-dila-box{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.25);border-radius:10px;padding:15px 17px;display:flex;gap:12px;align-items:flex-start}
+            #kelime-strateji-modul .voc-dila-avatar{width:32px;height:32px;border-radius:50%;background:var(--voc-accent2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+            #kelime-strateji-modul .voc-dila-bubble{font-size:13.5px;line-height:1.65;color:#c8f5ec}
+            #kelime-strateji-modul .voc-dila-bubble strong{color:var(--voc-accent2)}
+            #kelime-strateji-modul .voc-quiz-question{font-size:15.5px;font-weight:600;line-height:1.5;color:var(--voc-text)}
+            #kelime-strateji-modul .voc-quiz-options{display:flex;flex-direction:column;gap:8px}
+            #kelime-strateji-modul .voc-quiz-btn{background:rgba(255,255,255,.04);border:1px solid var(--voc-border);border-radius:8px;padding:11px 15px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--voc-text);cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+            #kelime-strateji-modul .voc-quiz-btn:hover{background:rgba(91,143,255,.1);border-color:var(--voc-accent)}
+            #kelime-strateji-modul .voc-quiz-btn.voc-correct-ans{background:rgba(56,217,169,.15);border-color:var(--voc-accent2);color:var(--voc-accent2)}
+            #kelime-strateji-modul .voc-quiz-btn.voc-wrong-ans{background:rgba(255,107,107,.1);border-color:var(--voc-warn);color:var(--voc-warn)}
+            #kelime-strateji-modul .voc-quiz-feedback{font-size:12.5px;line-height:1.6;padding:11px 13px;border-radius:7px;display:none}
+            #kelime-strateji-modul .voc-quiz-feedback.voc-show{display:block}
+            #kelime-strateji-modul .voc-quiz-feedback.voc-ok{background:rgba(56,217,169,.1);color:var(--voc-accent2);border:1px solid rgba(56,217,169,.2)}
+            #kelime-strateji-modul .voc-quiz-feedback.voc-no{background:rgba(255,107,107,.08);color:var(--voc-warn);border:1px solid rgba(255,107,107,.2)}
+            #kelime-strateji-modul .voc-quiz-block{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--voc-border)}
+            #kelime-strateji-modul .voc-quiz-block:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+            #kelime-strateji-modul .voc-nav-row{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+            #kelime-strateji-modul .voc-nav-btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .2s;font-family:'IBM Plex Sans',sans-serif}
+            #kelime-strateji-modul .voc-nav-btn:disabled{opacity:.3;cursor:default}
+            #kelime-strateji-modul .voc-btn-prev{background:var(--voc-border);color:var(--voc-muted)}
+            #kelime-strateji-modul .voc-btn-next{background:var(--voc-accent);color:#fff}
+            #kelime-strateji-modul .voc-slide-counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--voc-muted)}
+            @media(max-width:480px){
+              #kelime-strateji-modul .voc-slide-card{padding:20px 16px}
+              #kelime-strateji-modul .voc-slide-heading{font-size:18px}
+              #kelime-strateji-modul .voc-cantwont{flex-direction:column}
+              #kelime-strateji-modul .voc-signal-card{flex-direction:column;align-items:flex-start;gap:4px}
+              #kelime-strateji-modul .voc-signal-example{margin-left:0;text-align:left}
+            }
+          </style>
+
+          <div class="voc-lesson-header">
+            <span class="voc-badge">KLOD-MOTION</span>
+            <span class="voc-badge voc-dila">DILA</span>
+            <span class="voc-lesson-title">Kelime Stratejisi · B2 · 3 Adımlı Şık Avcılığı</span>
+          </div>
+
+          <div class="voc-progress-wrap">
+            <div class="voc-progress-track"><div class="voc-progress-fill" id="voc-progressFill" style="width:0%"></div></div>
+            <div class="voc-progress-label" id="voc-progressLabel">0 / 7 tamamlandı</div>
+          </div>
+
+          <div class="voc-slide-card">
+
+            <div class="voc-slide voc-active" id="voc-slide-0">
+              <span class="voc-slide-eyebrow">Giriş</span>
+              <h3 class="voc-slide-heading">Kelime sorusunda metni baştan sona okuma.</h3>
+              <p class="voc-slide-body">3 adımda doğru şıkkı avla: ton → zıt ele → collocation.</p>
+              <div class="voc-dila-box">
+                <div class="voc-dila-avatar">🤖</div>
+                <div class="voc-dila-bubble">Merhaba! Ben <strong>DILA</strong>. Bu derste kelime sorularını 10 saniyede çözmeyi öğreneceksin — ton yakalama, zıt anlamı eleme ve collocation (birlikte kullanılan kelimeler). Hazır mısın?</div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-1">
+              <span class="voc-slide-eyebrow">3 Adımlı Şık Avcılığı</span>
+              <h3 class="voc-slide-heading">Adım 1 — Ton Yakala (3 sn)</h3>
+              <p class="voc-slide-body">Boşluğun etrafına bak. Pozitif mi negatif mi?</p>
+              <div class="voc-cantwont">
+                <div class="voc-cw-card"><span class="voc-cw-label">✅ İYİ KELİMELER</span><div class="voc-chip-row"><span class="voc-chip">increase</span><span class="voc-chip">improve</span><span class="voc-chip">effective</span><span class="voc-chip">benefit</span><span class="voc-chip">success</span><span class="voc-chip">reduce (risk/cost)</span><span class="voc-chip">promising</span><span class="voc-chip">significant</span></div></div>
+                <div class="voc-cw-card voc-bad-card"><span class="voc-cw-label">❌ KÖTÜ KELİMELER</span><div class="voc-chip-row"><span class="voc-chip voc-chip-bad">decrease</span><span class="voc-chip voc-chip-bad">decline</span><span class="voc-chip voc-chip-bad">problem</span><span class="voc-chip voc-chip-bad">risk</span><span class="voc-chip voc-chip-bad">costly</span><span class="voc-chip voc-chip-bad">harmful</span><span class="voc-chip voc-chip-bad">limited</span><span class="voc-chip voc-chip-bad">fail</span><span class="voc-chip voc-chip-bad">controversial</span></div></div>
+              </div>
+              <div class="voc-formula-block">
+                <span class="voc-formula-label">KURAL</span>
+                <div class="voc-formula-text">→ İyi bağlam → pozitif anlamlı şık<br>→ Kötü bağlam → negatif anlamlı şık</div>
+              </div>
+              <h3 class="voc-slide-heading" style="font-size:17px">Adım 2 — Zıt Anlamı Ele (3 sn)</h3>
+              <div class="voc-formula-block">
+                <span class="voc-formula-label">KURAL</span>
+                <div class="voc-formula-text">Şıklarda açıkça zıt anlam varsa → o ikisini ele.<br>Kalan 2 şık üzerinden devam et.</div>
+              </div>
+              <h3 class="voc-slide-heading" style="font-size:17px">Adım 3 — Collocation Yakala (4 sn)</h3>
+              <p class="voc-slide-body">Bazı kelimeler hep birlikte gelir:</p>
+              <div class="voc-signals-grid">
+                <div class="voc-signal-card"><span class="voc-signal-trigger">mitigate / reduce</span><span class="voc-signal-example">impact / risk / damage</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">enhance / boost</span><span class="voc-signal-example">performance / quality / efficiency</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">address / tackle</span><span class="voc-signal-example">problem / issue / challenge</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">implement</span><span class="voc-signal-example">policy / strategy / reform</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">conduct</span><span class="voc-signal-example">research / study / survey</span></div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-2">
+              <span class="voc-slide-eyebrow">En Sık Çıkan 20 Kelime</span>
+              <h3 class="voc-slide-heading">YDS/YÖKDİL akademik kelime listesi</h3>
+              <div class="voc-word-grid">
+                <div class="voc-word-chip"><span class="voc-word-en">mitigate</span><span class="voc-word-tr">azaltmak (risk/impact ile)</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">enhance</span><span class="voc-word-tr">geliştirmek, artırmak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">address</span><span class="voc-word-tr">ele almak (problem ile)</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">implement</span><span class="voc-word-tr">uygulamaya koymak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">conduct</span><span class="voc-word-tr">yürütmek (araştırma ile)</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">advocate</span><span class="voc-word-tr">savunmak, desteklemek</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">undermine</span><span class="voc-word-tr">zayıflatmak, baltalamak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">sustain</span><span class="voc-word-tr">sürdürmek</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">attribute to</span><span class="voc-word-tr">…e bağlamak, atfetmek</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">facilitate</span><span class="voc-word-tr">kolaylaştırmak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">inevitably</span><span class="voc-word-tr">kaçınılmaz olarak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">whereas</span><span class="voc-word-tr">oysa ki, -e karşın</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">predominant</span><span class="voc-word-tr">baskın, egemen</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">albeit</span><span class="voc-word-tr">her ne kadar … olsa da</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">contend</span><span class="voc-word-tr">iddia etmek, savunmak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">concede</span><span class="voc-word-tr">kabul etmek (isteksizce)</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">refute</span><span class="voc-word-tr">çürütmek</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">scrutinize</span><span class="voc-word-tr">incelemek, mercek altına almak</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">viable</span><span class="voc-word-tr">uygulanabilir, geçerli</span></div>
+                <div class="voc-word-chip"><span class="voc-word-en">yield</span><span class="voc-word-tr">sonuç vermek; getiri sağlamak</span></div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-3">
+              <span class="voc-slide-eyebrow">Collocation Haritası</span>
+              <h3 class="voc-slide-heading">Fiil → ne ile gider?</h3>
+              <div class="voc-signals-grid">
+                <div class="voc-signal-card"><span class="voc-signal-trigger">mitigate</span><span class="voc-signal-example">risk / impact / damage / effects</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">enhance</span><span class="voc-signal-example">performance / quality / efficiency / skills</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">address</span><span class="voc-signal-example">problem / issue / challenge / concern</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">implement</span><span class="voc-signal-example">policy / strategy / reform / measure</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">conduct</span><span class="voc-signal-example">research / study / survey / experiment</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">advocate</span><span class="voc-signal-example">change / reform / rights / approach</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">undermine</span><span class="voc-signal-example">authority / confidence / stability / effort</span></div>
+                <div class="voc-signal-card"><span class="voc-signal-trigger">sustain</span><span class="voc-signal-example">growth / development / momentum / interest</span></div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-4">
+              <span class="voc-slide-eyebrow">Ton Testi Pratik</span>
+              <h3 class="voc-slide-heading">İyi→Kötü / Kötü→İyi</h3>
+              <div class="voc-example-list">
+                <div class="voc-example-row"><span class="voc-ex-icon">🟢→🔴</span><div class="voc-ex-content"><span class="voc-ex-en">"The policy was successful; however, it was costly."</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">🟢→🔴</span><div class="voc-ex-content"><span class="voc-ex-en">"Despite its benefits, the method has serious drawbacks."</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">🔴→🟢</span><div class="voc-ex-content"><span class="voc-ex-en">"The experiment failed; nevertheless, valuable data was collected."</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">🔴→🟢</span><div class="voc-ex-content"><span class="voc-ex-en">"The costs were high; yet the results justified the investment."</span></div></div>
+              </div>
+              <div class="voc-formula-block">
+                <span class="voc-formula-label">EZBER</span>
+                <div class="voc-formula-text">İyi kelime + kötü kelime aynı cümlede → ZITLIK bağlacı ara.</div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-5">
+              <span class="voc-slide-eyebrow">Akademik Kelime Tuzakları</span>
+              <h3 class="voc-slide-heading">En sık karıştırılanlar</h3>
+              <div class="voc-example-list">
+                <div class="voc-example-row"><span class="voc-ex-icon">⚖️</span><div class="voc-ex-content"><span class="voc-ex-en">affect (fiil) = etkilemek ↔ effect (isim) = etki</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">⚖️</span><div class="voc-ex-content"><span class="voc-ex-en">rise (fiil, geçişsiz) = yükselmek ↔ raise (fiil, geçişli) = yükseltmek</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">⚖️</span><div class="voc-ex-content"><span class="voc-ex-en">despite (edat) = -e rağmen ↔ although (bağlaç) = her ne kadar</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">⚖️</span><div class="voc-ex-content"><span class="voc-ex-en">whereas (bağlaç) = oysa ki ↔ however (zarf) = ancak</span></div></div>
+                <div class="voc-example-row"><span class="voc-ex-icon">⚖️</span><div class="voc-ex-content"><span class="voc-ex-en">contend (iddia etmek) ↔ concede (kabul etmek) ↔ refute (çürütmek)</span></div></div>
+              </div>
+            </div>
+
+            <div class="voc-slide" id="voc-slide-6">
+              <span class="voc-slide-eyebrow">Mini Sınav · 3 Soru</span>
+              <h3 class="voc-slide-heading">Doğru şıkkı seç</h3>
+
+              <div class="voc-quiz-block">
+                <p class="voc-quiz-question">1) "The new policy aims to _____ the risks associated with climate change."</p>
+                <div class="voc-quiz-options">
+                  <button class="voc-quiz-btn" data-vocq="1" data-vocval="a" data-voc-action="quiz-answer">a) exaggerate</button>
+                  <button class="voc-quiz-btn" data-vocq="1" data-vocval="b" data-voc-action="quiz-answer">b) ignore</button>
+                  <button class="voc-quiz-btn" data-vocq="1" data-vocval="c" data-voc-action="quiz-answer">c) mitigate</button>
+                  <button class="voc-quiz-btn" data-vocq="1" data-vocval="d" data-voc-action="quiz-answer">d) admire</button>
+                </div>
+                <div class="voc-quiz-feedback" id="voc-q1-feedback"></div>
+              </div>
+
+              <div class="voc-quiz-block">
+                <p class="voc-quiz-question">2) "The reform was expensive; _____, it significantly improved education quality."</p>
+                <div class="voc-quiz-options">
+                  <button class="voc-quiz-btn" data-vocq="2" data-vocval="a" data-voc-action="quiz-answer">a) therefore</button>
+                  <button class="voc-quiz-btn" data-vocq="2" data-vocval="b" data-voc-action="quiz-answer">b) nevertheless</button>
+                  <button class="voc-quiz-btn" data-vocq="2" data-vocval="c" data-voc-action="quiz-answer">c) because</button>
+                  <button class="voc-quiz-btn" data-vocq="2" data-vocval="d" data-voc-action="quiz-answer">d) despite</button>
+                </div>
+                <div class="voc-quiz-feedback" id="voc-q2-feedback"></div>
+              </div>
+
+              <div class="voc-quiz-block">
+                <p class="voc-quiz-question">3) "Scientists _____ a comprehensive study on air pollution last year."</p>
+                <div class="voc-quiz-options">
+                  <button class="voc-quiz-btn" data-vocq="3" data-vocval="a" data-voc-action="quiz-answer">a) made</button>
+                  <button class="voc-quiz-btn" data-vocq="3" data-vocval="b" data-voc-action="quiz-answer">b) did</button>
+                  <button class="voc-quiz-btn" data-vocq="3" data-vocval="c" data-voc-action="quiz-answer">c) conducted</button>
+                  <button class="voc-quiz-btn" data-vocq="3" data-vocval="d" data-voc-action="quiz-answer">d) performed</button>
+                </div>
+                <div class="voc-quiz-feedback" id="voc-q3-feedback"></div>
+              </div>
+
+              <div class="voc-dila-box" id="voc-finishBox" style="display:none">
+                <div class="voc-dila-avatar">🤖</div>
+                <div class="voc-dila-bubble">Tebrikler! Artık kelime sorularında <strong>ton yakalama</strong>, <strong>zıt anlam eleme</strong> ve <strong>collocation</strong> avcılığı yapabiliyorsun!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="voc-nav-row">
+            <button class="voc-nav-btn voc-btn-prev" id="voc-prevBtn" data-voc-action="slide-prev" disabled>← Geri</button>
+            <span class="voc-slide-counter" id="voc-slideCounter">1 / 7</span>
+            <button class="voc-nav-btn voc-btn-next" id="voc-nextBtn" data-voc-action="slide-next">İleri →</button>
+          </div>
+          </section>
+
+          <!-- READING / OKUMA MODÜLÜ — KLOD-MOTION 7-slaytlı soru odaklı okuma dersi (#reading-strateji-modul scope) -->
+          <section id="reading-strateji-modul">
+          <style>
+            #reading-strateji-modul{
+              --rd-bg:#0d0f14;--rd-surface:#161920;--rd-border:#252830;
+              --rd-accent:#5b8fff;--rd-accent2:#38d9a9;--rd-warn:#ff6b6b;
+              --rd-text:#e8eaf0;--rd-muted:#6b7280;--rd-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--rd-bg);color:var(--rd-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              display:flex;flex-direction:column;align-items:center;
+              padding:26px 16px 40px;
+              margin-bottom:22px;
+            }
+            #reading-strateji-modul *{box-sizing:border-box}
+            #reading-strateji-modul .rd-lesson-header{width:100%;max-width:640px;display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+            #reading-strateji-modul .rd-badge{background:var(--rd-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px}
+            #reading-strateji-modul .rd-badge.rd-dila{background:var(--rd-accent2);color:#0d0f14}
+            #reading-strateji-modul .rd-lesson-title{font-size:13px;color:var(--rd-muted);font-family:'IBM Plex Mono',monospace}
+            #reading-strateji-modul .rd-progress-wrap{width:100%;max-width:640px;margin-bottom:20px}
+            #reading-strateji-modul .rd-progress-track{height:3px;background:var(--rd-border);border-radius:2px;overflow:hidden}
+            #reading-strateji-modul .rd-progress-fill{height:100%;background:var(--rd-accent);border-radius:2px;transition:width .4s ease}
+            #reading-strateji-modul .rd-progress-label{font-size:11px;color:var(--rd-muted);font-family:'IBM Plex Mono',monospace;margin-top:6px;text-align:right}
+            #reading-strateji-modul .rd-slide-card{width:100%;max-width:640px;background:var(--rd-surface);border:1px solid var(--rd-border);border-radius:12px;padding:28px 22px;min-height:320px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+            #reading-strateji-modul .rd-slide{display:none;flex-direction:column;gap:18px;animation:rdFadeIn .3s ease}
+            #reading-strateji-modul .rd-slide.rd-active{display:flex}
+            @keyframes rdFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+            #reading-strateji-modul .rd-slide-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--rd-muted);text-transform:uppercase;letter-spacing:.1em}
+            #reading-strateji-modul .rd-slide-heading{font-size:21px;font-weight:600;line-height:1.3;color:var(--rd-text)}
+            #reading-strateji-modul .rd-slide-body{font-size:14.5px;line-height:1.7;color:#b0b8c8}
+            #reading-strateji-modul .rd-formula-block{background:var(--rd-formula-bg);border:1px solid var(--rd-accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+            #reading-strateji-modul .rd-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--rd-accent);letter-spacing:.1em}
+            #reading-strateji-modul .rd-formula-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em;line-height:1.6}
+            #reading-strateji-modul .rd-formula-sub{font-size:12px;color:var(--rd-muted);line-height:1.5}
+            #reading-strateji-modul .rd-example-list{display:flex;flex-direction:column;gap:9px}
+            #reading-strateji-modul .rd-example-row{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid var(--rd-accent)}
+            #reading-strateji-modul .rd-example-row.rd-devil{border-left-color:var(--rd-warn)}
+            #reading-strateji-modul .rd-example-row.rd-good{border-left-color:var(--rd-accent2)}
+            #reading-strateji-modul .rd-ex-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+            #reading-strateji-modul .rd-ex-content{display:flex;flex-direction:column;gap:3px}
+            #reading-strateji-modul .rd-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--rd-text)}
+            #reading-strateji-modul .rd-ex-tr{font-size:11.5px;color:var(--rd-muted);line-height:1.5}
+            #reading-strateji-modul .rd-signals-grid{display:flex;flex-direction:column;gap:9px}
+            #reading-strateji-modul .rd-signal-card{display:flex;align-items:center;gap:14px;padding:11px 14px;background:rgba(91,143,255,.07);border:1px solid rgba(91,143,255,.2);border-radius:8px}
+            #reading-strateji-modul .rd-signal-num{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;color:var(--rd-accent);line-height:1;flex-shrink:0}
+            #reading-strateji-modul .rd-signal-content{display:flex;flex-direction:column;gap:4px}
+            #reading-strateji-modul .rd-signal-trigger{font-size:13px;font-weight:600;color:var(--rd-text)}
+            #reading-strateji-modul .rd-signal-example{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--rd-accent2);line-height:1.5}
+            #reading-strateji-modul .rd-qtype-card{background:rgba(255,255,255,.03);border:1px solid var(--rd-border);border-radius:8px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+            #reading-strateji-modul .rd-qtype-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:var(--rd-accent)}
+            #reading-strateji-modul .rd-qtype-q{font-size:12.5px;color:var(--rd-text);font-style:italic}
+            #reading-strateji-modul .rd-qtype-steps{font-size:11.5px;color:var(--rd-muted);line-height:1.6}
+            #reading-strateji-modul .rd-dila-box{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.25);border-radius:10px;padding:15px 17px;display:flex;gap:12px;align-items:flex-start}
+            #reading-strateji-modul .rd-dila-avatar{width:32px;height:32px;border-radius:50%;background:var(--rd-accent2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+            #reading-strateji-modul .rd-dila-bubble{font-size:13.5px;line-height:1.65;color:#c8f5ec}
+            #reading-strateji-modul .rd-dila-bubble strong{color:var(--rd-accent2)}
+            #reading-strateji-modul .rd-quiz-question{font-size:15px;font-weight:600;line-height:1.5;color:var(--rd-text)}
+            #reading-strateji-modul .rd-quiz-options{display:flex;flex-direction:column;gap:8px}
+            #reading-strateji-modul .rd-quiz-btn{background:rgba(255,255,255,.04);border:1px solid var(--rd-border);border-radius:8px;padding:11px 15px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--rd-text);cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+            #reading-strateji-modul .rd-quiz-btn:hover{background:rgba(91,143,255,.1);border-color:var(--rd-accent)}
+            #reading-strateji-modul .rd-quiz-btn.rd-correct-ans{background:rgba(56,217,169,.15);border-color:var(--rd-accent2);color:var(--rd-accent2)}
+            #reading-strateji-modul .rd-quiz-btn.rd-wrong-ans{background:rgba(255,107,107,.1);border-color:var(--rd-warn);color:var(--rd-warn)}
+            #reading-strateji-modul .rd-quiz-feedback{font-size:12.5px;line-height:1.6;padding:11px 13px;border-radius:7px;display:none}
+            #reading-strateji-modul .rd-quiz-feedback.rd-show{display:block}
+            #reading-strateji-modul .rd-quiz-feedback.rd-ok{background:rgba(56,217,169,.1);color:var(--rd-accent2);border:1px solid rgba(56,217,169,.2)}
+            #reading-strateji-modul .rd-quiz-feedback.rd-no{background:rgba(255,107,107,.08);color:var(--rd-warn);border:1px solid rgba(255,107,107,.2)}
+            #reading-strateji-modul .rd-quiz-block{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--rd-border)}
+            #reading-strateji-modul .rd-quiz-block:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+            #reading-strateji-modul .rd-nav-row{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+            #reading-strateji-modul .rd-nav-btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .2s;font-family:'IBM Plex Sans',sans-serif}
+            #reading-strateji-modul .rd-nav-btn:disabled{opacity:.3;cursor:default}
+            #reading-strateji-modul .rd-btn-prev{background:var(--rd-border);color:var(--rd-muted)}
+            #reading-strateji-modul .rd-btn-next{background:var(--rd-accent);color:#fff}
+            #reading-strateji-modul .rd-slide-counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--rd-muted)}
+            @media(max-width:480px){
+              #reading-strateji-modul .rd-slide-card{padding:20px 16px}
+              #reading-strateji-modul .rd-slide-heading{font-size:18px}
+            }
+          </style>
+
+          <div class="rd-lesson-header">
+            <span class="rd-badge">KLOD-MOTION</span>
+            <span class="rd-badge rd-dila">DILA</span>
+            <span class="rd-lesson-title">Okuma Stratejisi · C1 · 3 Nokta Tekniği</span>
+          </div>
+
+          <div class="rd-progress-wrap">
+            <div class="rd-progress-track"><div class="rd-progress-fill" id="rd-progressFill" style="width:0%"></div></div>
+            <div class="rd-progress-label" id="rd-progressLabel">0 / 7 tamamlandı</div>
+          </div>
+
+          <div class="rd-slide-card">
+
+            <div class="rd-slide rd-active" id="rd-slide-0">
+              <span class="rd-slide-eyebrow">Giriş</span>
+              <h3 class="rd-slide-heading">Paragrafı baştan sona okursan zamanın biter.</h3>
+              <p class="rd-slide-body">3 Nokta Tekniği ile soruyu bul, cevabı avla.</p>
+              <div class="rd-dila-box">
+                <div class="rd-dila-avatar">🤖</div>
+                <div class="rd-dila-bubble">Merhaba! Ben <strong>DILA</strong>. Bu derste 4 soru tipini, Şeytan Üçgeni tuzaklarını ve CZ-REF referans tekniğini öğreneceksin. Soru odaklı okumaya hazır mısın?</div>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-1">
+              <span class="rd-slide-eyebrow">3 Nokta Tekniği</span>
+              <h3 class="rd-slide-heading">Baştan sona okuma yok, soru odaklı okuma var</h3>
+              <div class="rd-signals-grid">
+                <div class="rd-signal-card"><span class="rd-signal-num">1</span><div class="rd-signal-content"><span class="rd-signal-trigger">İlk cümle</span><span class="rd-signal-example">→ konuyu yaz (1 kelime)</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">2</span><div class="rd-signal-content"><span class="rd-signal-trigger">Her paragrafın SON cümlesi</span><span class="rd-signal-example">→ sonuç/bağ</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">3</span><div class="rd-signal-content"><span class="rd-signal-trigger">Soruda geçen kelimeyi metinde bul</span><span class="rd-signal-example">→ sadece o 1-2 satırı oku</span></div></div>
+              </div>
+              <div class="rd-formula-block">
+                <span class="rd-formula-label">KURAL</span>
+                <div class="rd-formula-text">Baştan sona okuma yok. Soru odaklı okuma var.</div>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-2">
+              <span class="rd-slide-eyebrow">4 Soru Tipi ve Tekniği</span>
+              <h3 class="rd-slide-heading">Her tipin kendi çözüm yolu var</h3>
+              <div class="rd-qtype-card">
+                <span class="rd-qtype-title">TİP 1 — ANA FİKİR</span>
+                <span class="rd-qtype-q">"What is the main idea / mainly about?"</span>
+                <span class="rd-qtype-steps">→ İlk cümle + son cümle oku<br>→ Abartılı veya çok dar şıkları ele<br>→ Tüm paragrafı kapsayan şık = doğru</span>
+              </div>
+              <div class="rd-qtype-card">
+                <span class="rd-qtype-title">TİP 2 — REFERANS (it / they / this / these)</span>
+                <span class="rd-qtype-q">"The word 'it' in line 3 refers to…"</span>
+                <span class="rd-qtype-steps">→ Zamirin hemen öncesine bak<br>→ En yakın uygun ismi bul<br>→ Yerine koyarak test et</span>
+              </div>
+              <div class="rd-qtype-card">
+                <span class="rd-qtype-title">TİP 3 — ÇIKARIM (inference)</span>
+                <span class="rd-qtype-q">"It can be inferred that…"</span>
+                <span class="rd-qtype-steps">→ Metinde açıkça yazmaz, ima var<br>→ "Kesinlikle doğru/yanlış" şıkları ele<br>→ Metinle örtüşen ama abartmayan şık = doğru</span>
+              </div>
+              <div class="rd-qtype-card">
+                <span class="rd-qtype-title">TİP 4 — KELİME ANLAMI</span>
+                <span class="rd-qtype-q">"The word '___' in line 5 is closest in meaning to…"</span>
+                <span class="rd-qtype-steps">→ Kelimeyi bağlamdan çıkar<br>→ Ton: pozitif mi negatif mi?<br>→ Yerine koyarak test et</span>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-3">
+              <span class="rd-slide-eyebrow">Şeytan Üçgeni</span>
+              <h3 class="rd-slide-heading">Yanlış şık tuzakları</h3>
+              <div class="rd-example-list">
+                <div class="rd-example-row rd-devil"><span class="rd-ex-icon">❌</span><div class="rd-ex-content"><span class="rd-ex-en">Abartılı şık</span><span class="rd-ex-tr">"always / never / all / completely / impossible"</span></div></div>
+                <div class="rd-example-row rd-devil"><span class="rd-ex-icon">❌</span><div class="rd-ex-content"><span class="rd-ex-en">Konu dışı şık</span><span class="rd-ex-tr">Kelimeler tanıdık ama paragrafta bu fikir yok</span></div></div>
+                <div class="rd-example-row rd-devil"><span class="rd-ex-icon">❌</span><div class="rd-ex-content"><span class="rd-ex-en">Ters anlam şık</span><span class="rd-ex-tr">Doğru kelimeler ama zıt ilişki</span></div></div>
+                <div class="rd-example-row rd-devil"><span class="rd-ex-icon">❌</span><div class="rd-ex-content"><span class="rd-ex-en">Çok dar şık</span><span class="rd-ex-tr">Paragrafın sadece bir cümlesini kapsar, tamamını değil</span></div></div>
+                <div class="rd-example-row rd-good"><span class="rd-ex-icon">✅</span><div class="rd-ex-content"><span class="rd-ex-en">Doğru şık</span><span class="rd-ex-tr">Metinle örtüşür, abartmaz, tüm paragrafı kapsar</span></div></div>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-4">
+              <span class="rd-slide-eyebrow">CZ-REF Tekniği</span>
+              <h3 class="rd-slide-heading">Referans + Bağlaç</h3>
+              <div class="rd-signals-grid">
+                <div class="rd-signal-card"><span class="rd-signal-num">🎯</span><div class="rd-signal-content"><span class="rd-signal-trigger">Referans tuzağı</span><span class="rd-signal-example">They/This/These/It → hemen önceki isme git. "This approach" → hangi yaklaşım? → önceki cümlede ara</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">🔗</span><div class="rd-signal-content"><span class="rd-signal-trigger">Bağlaç tuzağı</span><span class="rd-signal-example">Consequently/Therefore → önceki cümlenin sonucu. However/Nevertheless → önceki cümleyle zıt. For example → önceki iddiayı örnekler</span></div></div>
+              </div>
+              <div class="rd-formula-block">
+                <span class="rd-formula-label">10 SANİYELİK KURAL</span>
+                <div class="rd-formula-text">✅ They = önceki özne mi? ✅ This = hangi süreç? ✅ Consequently = hangi sebebin sonucu?</div>
+                <div class="rd-formula-sub">❌ Cevap yoksa → o cümle şeytan</div>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-5">
+              <span class="rd-slide-eyebrow">ÖSYM Paragraf Şablonları</span>
+              <h3 class="rd-slide-heading">Hızlı tanıma</h3>
+              <div class="rd-signals-grid">
+                <div class="rd-signal-card"><span class="rd-signal-num">1</span><div class="rd-signal-content"><span class="rd-signal-trigger">GİRİŞ → DETAY → ŞEYTAN → DESTEK → SONUÇ</span><span class="rd-signal-example">Sinyal: However / Although / Yet</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">2</span><div class="rd-signal-content"><span class="rd-signal-trigger">TANIM → NEDEN → ÖRNEK → SONUÇ</span><span class="rd-signal-example">Sinyal: For example / Therefore / Consequently</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">3</span><div class="rd-signal-content"><span class="rd-signal-trigger">PROBLEM → ÇÖZÜM → SINIR → SONUÇ</span><span class="rd-signal-example">Sinyal: But / However + may/might/could</span></div></div>
+                <div class="rd-signal-card"><span class="rd-signal-num">4</span><div class="rd-signal-content"><span class="rd-signal-trigger">GENEL → ÖZEL → GENEL</span><span class="rd-signal-example">Sinyal: For example + This/These</span></div></div>
+              </div>
+              <div class="rd-formula-block">
+                <span class="rd-formula-label">GİZLİ ŞEYTAN</span>
+                <div class="rd-formula-text">Bağlaç yok ama: başka alan / başka özne / başka problem → o cümle şeytan</div>
+              </div>
+            </div>
+
+            <div class="rd-slide" id="rd-slide-6">
+              <span class="rd-slide-eyebrow">Mini Sınav · 3 Soru</span>
+              <h3 class="rd-slide-heading">Doğru şıkkı seç</h3>
+
+              <div class="rd-quiz-block">
+                <p class="rd-quiz-question">1) The word 'it' in "Scientists discovered a new element; it was named after Marie Curie." refers to:</p>
+                <div class="rd-quiz-options">
+                  <button class="rd-quiz-btn" data-rdq="1" data-rdval="a" data-rd-action="quiz-answer">a) Scientists</button>
+                  <button class="rd-quiz-btn" data-rdq="1" data-rdval="b" data-rd-action="quiz-answer">b) discovery</button>
+                  <button class="rd-quiz-btn" data-rdq="1" data-rdval="c" data-rd-action="quiz-answer">c) a new element</button>
+                  <button class="rd-quiz-btn" data-rdq="1" data-rdval="d" data-rd-action="quiz-answer">d) Marie Curie</button>
+                </div>
+                <div class="rd-quiz-feedback" id="rd-q1-feedback"></div>
+              </div>
+
+              <div class="rd-quiz-block">
+                <p class="rd-quiz-question">2) Which question type asks you to read between the lines?</p>
+                <div class="rd-quiz-options">
+                  <button class="rd-quiz-btn" data-rdq="2" data-rdval="a" data-rd-action="quiz-answer">a) Ana fikir</button>
+                  <button class="rd-quiz-btn" data-rdq="2" data-rdval="b" data-rd-action="quiz-answer">b) Referans</button>
+                  <button class="rd-quiz-btn" data-rdq="2" data-rdval="c" data-rd-action="quiz-answer">c) Çıkarım</button>
+                  <button class="rd-quiz-btn" data-rdq="2" data-rdval="d" data-rd-action="quiz-answer">d) Kelime anlamı</button>
+                </div>
+                <div class="rd-quiz-feedback" id="rd-q2-feedback"></div>
+              </div>
+
+              <div class="rd-quiz-block">
+                <p class="rd-quiz-question">3) "Exercise has many benefits. _____, it can cause injury if done incorrectly." Boşluğa ne gelir?</p>
+                <div class="rd-quiz-options">
+                  <button class="rd-quiz-btn" data-rdq="3" data-rdval="a" data-rd-action="quiz-answer">a) Therefore</button>
+                  <button class="rd-quiz-btn" data-rdq="3" data-rdval="b" data-rd-action="quiz-answer">b) For example</button>
+                  <button class="rd-quiz-btn" data-rdq="3" data-rdval="c" data-rd-action="quiz-answer">c) However</button>
+                  <button class="rd-quiz-btn" data-rdq="3" data-rdval="d" data-rd-action="quiz-answer">d) In addition</button>
+                </div>
+                <div class="rd-quiz-feedback" id="rd-q3-feedback"></div>
+              </div>
+
+              <div class="rd-dila-box" id="rd-finishBox" style="display:none">
+                <div class="rd-dila-avatar">🤖</div>
+                <div class="rd-dila-bubble">Harika! Artık <strong>soru odaklı okuma</strong> yapabiliyor, <strong>Şeytan Üçgeni</strong> tuzaklarını görebiliyorsun. Bir sonraki metinde dene!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="rd-nav-row">
+            <button class="rd-nav-btn rd-btn-prev" id="rd-prevBtn" data-rd-action="slide-prev" disabled>← Geri</button>
+            <span class="rd-slide-counter" id="rd-slideCounter">1 / 7</span>
+            <button class="rd-nav-btn rd-btn-next" id="rd-nextBtn" data-rd-action="slide-next">İleri →</button>
+          </div>
+          </section>
+
+          <!-- MODAL PERFECT MODÜLÜ — KLOD-MOTION 7-slaytlı must/should/could/might have V3 dersi (#modal-perfect-modul scope) -->
+          <section id="modal-perfect-modul">
+          <style>
+            #modal-perfect-modul{
+              --mp-bg:#0d0f14;--mp-surface:#161920;--mp-border:#252830;
+              --mp-accent:#5b8fff;--mp-accent2:#38d9a9;--mp-warn:#ff6b6b;
+              --mp-text:#e8eaf0;--mp-muted:#6b7280;--mp-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--mp-bg);color:var(--mp-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              display:flex;flex-direction:column;align-items:center;
+              padding:26px 16px 40px;
+              margin-bottom:22px;
+            }
+            #modal-perfect-modul *{box-sizing:border-box}
+            #modal-perfect-modul .mp-lesson-header{width:100%;max-width:640px;display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+            #modal-perfect-modul .mp-badge{background:var(--mp-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px}
+            #modal-perfect-modul .mp-badge.mp-dila{background:var(--mp-accent2);color:#0d0f14}
+            #modal-perfect-modul .mp-lesson-title{font-size:13px;color:var(--mp-muted);font-family:'IBM Plex Mono',monospace}
+            #modal-perfect-modul .mp-progress-wrap{width:100%;max-width:640px;margin-bottom:20px}
+            #modal-perfect-modul .mp-progress-track{height:3px;background:var(--mp-border);border-radius:2px;overflow:hidden}
+            #modal-perfect-modul .mp-progress-fill{height:100%;background:var(--mp-accent);border-radius:2px;transition:width .4s ease}
+            #modal-perfect-modul .mp-progress-label{font-size:11px;color:var(--mp-muted);font-family:'IBM Plex Mono',monospace;margin-top:6px;text-align:right}
+            #modal-perfect-modul .mp-slide-card{width:100%;max-width:640px;background:var(--mp-surface);border:1px solid var(--mp-border);border-radius:12px;padding:28px 22px;min-height:320px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+            #modal-perfect-modul .mp-slide{display:none;flex-direction:column;gap:18px;animation:mpFadeIn .3s ease}
+            #modal-perfect-modul .mp-slide.mp-active{display:flex}
+            @keyframes mpFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+            #modal-perfect-modul .mp-slide-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mp-muted);text-transform:uppercase;letter-spacing:.1em}
+            #modal-perfect-modul .mp-slide-heading{font-size:21px;font-weight:600;line-height:1.3;color:var(--mp-text)}
+            #modal-perfect-modul .mp-slide-body{font-size:14.5px;line-height:1.7;color:#b0b8c8}
+            #modal-perfect-modul .mp-formula-block{background:var(--mp-formula-bg);border:1px solid var(--mp-accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+            #modal-perfect-modul .mp-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--mp-accent);letter-spacing:.1em}
+            #modal-perfect-modul .mp-formula-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em;line-height:1.6}
+            #modal-perfect-modul .mp-formula-sub{font-size:12px;color:var(--mp-muted);line-height:1.5}
+            #modal-perfect-modul .mp-modal-grid{display:flex;flex-direction:column;gap:10px}
+            #modal-perfect-modul .mp-modal-card{background:rgba(255,255,255,.03);border:1px solid var(--mp-border);border-radius:8px;padding:13px 15px;display:flex;flex-direction:column;gap:5px}
+            #modal-perfect-modul .mp-modal-formula{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:var(--mp-accent)}
+            #modal-perfect-modul .mp-modal-meaning{font-size:12px;color:var(--mp-accent2);font-weight:600}
+            #modal-perfect-modul .mp-modal-ex{font-size:11.5px;color:var(--mp-muted);font-family:'IBM Plex Mono',monospace;line-height:1.5}
+            #modal-perfect-modul .mp-example-list{display:flex;flex-direction:column;gap:9px}
+            #modal-perfect-modul .mp-example-row{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid var(--mp-accent)}
+            #modal-perfect-modul .mp-example-row.mp-devil{border-left-color:var(--mp-warn)}
+            #modal-perfect-modul .mp-example-row.mp-good{border-left-color:var(--mp-accent2)}
+            #modal-perfect-modul .mp-ex-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+            #modal-perfect-modul .mp-ex-content{display:flex;flex-direction:column;gap:3px}
+            #modal-perfect-modul .mp-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--mp-text)}
+            #modal-perfect-modul .mp-ex-tr{font-size:11.5px;color:var(--mp-muted);line-height:1.5}
+            #modal-perfect-modul .mp-signals-grid{display:flex;flex-direction:column;gap:9px}
+            #modal-perfect-modul .mp-signal-card{display:flex;flex-direction:column;gap:5px;padding:11px 14px;background:rgba(91,143,255,.07);border:1px solid rgba(91,143,255,.2);border-radius:8px}
+            #modal-perfect-modul .mp-signal-trigger{font-size:12.5px;font-weight:700;color:var(--mp-text);font-family:'IBM Plex Mono',monospace}
+            #modal-perfect-modul .mp-signal-example{font-size:11.5px;color:var(--mp-accent2);font-family:'IBM Plex Mono',monospace}
+            #modal-perfect-modul .mp-dila-box{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.25);border-radius:10px;padding:15px 17px;display:flex;gap:12px;align-items:flex-start}
+            #modal-perfect-modul .mp-dila-avatar{width:32px;height:32px;border-radius:50%;background:var(--mp-accent2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+            #modal-perfect-modul .mp-dila-bubble{font-size:13.5px;line-height:1.65;color:#c8f5ec}
+            #modal-perfect-modul .mp-dila-bubble strong{color:var(--mp-accent2)}
+            #modal-perfect-modul .mp-quiz-question{font-size:15px;font-weight:600;line-height:1.5;color:var(--mp-text)}
+            #modal-perfect-modul .mp-quiz-options{display:flex;flex-direction:column;gap:8px}
+            #modal-perfect-modul .mp-quiz-btn{background:rgba(255,255,255,.04);border:1px solid var(--mp-border);border-radius:8px;padding:11px 15px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mp-text);cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+            #modal-perfect-modul .mp-quiz-btn:hover{background:rgba(91,143,255,.1);border-color:var(--mp-accent)}
+            #modal-perfect-modul .mp-quiz-btn.mp-correct-ans{background:rgba(56,217,169,.15);border-color:var(--mp-accent2);color:var(--mp-accent2)}
+            #modal-perfect-modul .mp-quiz-btn.mp-wrong-ans{background:rgba(255,107,107,.1);border-color:var(--mp-warn);color:var(--mp-warn)}
+            #modal-perfect-modul .mp-quiz-feedback{font-size:12.5px;line-height:1.6;padding:11px 13px;border-radius:7px;display:none}
+            #modal-perfect-modul .mp-quiz-feedback.mp-show{display:block}
+            #modal-perfect-modul .mp-quiz-feedback.mp-ok{background:rgba(56,217,169,.1);color:var(--mp-accent2);border:1px solid rgba(56,217,169,.2)}
+            #modal-perfect-modul .mp-quiz-feedback.mp-no{background:rgba(255,107,107,.08);color:var(--mp-warn);border:1px solid rgba(255,107,107,.2)}
+            #modal-perfect-modul .mp-quiz-block{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--mp-border)}
+            #modal-perfect-modul .mp-quiz-block:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+            #modal-perfect-modul .mp-nav-row{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+            #modal-perfect-modul .mp-nav-btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .2s;font-family:'IBM Plex Sans',sans-serif}
+            #modal-perfect-modul .mp-nav-btn:disabled{opacity:.3;cursor:default}
+            #modal-perfect-modul .mp-btn-prev{background:var(--mp-border);color:var(--mp-muted)}
+            #modal-perfect-modul .mp-btn-next{background:var(--mp-accent);color:#fff}
+            #modal-perfect-modul .mp-slide-counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mp-muted)}
+            @media(max-width:480px){
+              #modal-perfect-modul .mp-slide-card{padding:20px 16px}
+              #modal-perfect-modul .mp-slide-heading{font-size:18px}
+            }
+          </style>
+
+          <div class="mp-lesson-header">
+            <span class="mp-badge">KLOD-MOTION</span>
+            <span class="mp-badge mp-dila">DILA</span>
+            <span class="mp-lesson-title">Modal Perfect · B2 · must/should/could/might have V3</span>
+          </div>
+
+          <div class="mp-progress-wrap">
+            <div class="mp-progress-track"><div class="mp-progress-fill" id="mp-progressFill" style="width:0%"></div></div>
+            <div class="mp-progress-label" id="mp-progressLabel">0 / 7 tamamlandı</div>
+          </div>
+
+          <div class="mp-slide-card">
+
+            <div class="mp-slide mp-active" id="mp-slide-0">
+              <span class="mp-slide-eyebrow">Giriş</span>
+              <h3 class="mp-slide-heading">must have done mu, should have done mı?</h3>
+              <p class="mp-slide-body">YDS'nin altın tuzağı: 4 modal, 4 Türkçe etiket — hepsini 10 saniyede ayırt et.</p>
+              <div class="mp-dila-box">
+                <div class="mp-dila-avatar">🤖</div>
+                <div class="mp-dila-bubble">Merhaba! Ben <strong>DILA</strong>. Bu derste 4 modal perfect'i (must/should/could/might have V3) Türkçe etiketleriyle ayırt etmeyi ve modal passive kalıplarını öğreneceksin. Hazır mısın?</div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-1">
+              <span class="mp-slide-eyebrow">4 Modal Perfect Formülü</span>
+              <h3 class="mp-slide-heading">FORMÜL: modal + have + V3</h3>
+              <div class="mp-modal-grid">
+                <div class="mp-modal-card"><span class="mp-modal-formula">must have V3</span><span class="mp-modal-meaning">KESİN geçmişte olmuştur</span><span class="mp-modal-ex">"He must have left early." → Erkenden ayrılmış olmalı (kesin kanı)</span></div>
+                <div class="mp-modal-card"><span class="mp-modal-formula">should have V3</span><span class="mp-modal-meaning">KEŞKE / yapmalıydı ama yapmadı</span><span class="mp-modal-ex">"She should have studied more." → Daha çok çalışmalıydı (ama çalışmadı)</span></div>
+                <div class="mp-modal-card"><span class="mp-modal-formula">could have V3</span><span class="mp-modal-meaning">OLABİLİRDİ / yapabilirdi ama yapmadı</span><span class="mp-modal-ex">"They could have won." → Kazanabilirlerdi (ama kazanamadılar)</span></div>
+                <div class="mp-modal-card"><span class="mp-modal-formula">might have V3</span><span class="mp-modal-meaning">MUHTEMELEN olmuştur / belirsiz ihtimal</span><span class="mp-modal-ex">"It might have rained last night." → Dün gece yağmış olabilir</span></div>
+              </div>
+              <div class="mp-formula-block">
+                <span class="mp-formula-label">HAFIZA ETİKETİ</span>
+                <div class="mp-formula-text">MUST = Kesin | SHOULD = Keşke | COULD = Olabilirdi | MIGHT = Muhtemel</div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-2">
+              <span class="mp-slide-eyebrow">Türkçe Karşılık Tablosu</span>
+              <h3 class="mp-slide-heading">4 modal, 4 anlam</h3>
+              <div class="mp-example-list">
+                <div class="mp-example-row"><span class="mp-ex-icon">1</span><div class="mp-ex-content"><span class="mp-ex-en">must have V3 → "-mış olmalı"</span><span class="mp-ex-tr">kesin</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">2</span><div class="mp-ex-content"><span class="mp-ex-en">should have V3 → "-malıydı / -meliydi"</span><span class="mp-ex-tr">pişmanlık/eleştiri</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">3</span><div class="mp-ex-content"><span class="mp-ex-en">could have V3 → "-bilirdi"</span><span class="mp-ex-tr">kaçırılmış fırsat</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">4</span><div class="mp-ex-content"><span class="mp-ex-en">might have V3 → "-mış olabilir"</span><span class="mp-ex-tr">belirsiz ihtimal</span></div></div>
+              </div>
+              <div class="mp-formula-block">
+                <span class="mp-formula-label">SINAV TUZAĞI</span>
+                <div class="mp-formula-text">"must have been" ≠ "should have been"</div>
+                <div class="mp-formula-sub">→ must = kesin kanı (evidence var)<br>→ should = beklenti karşılanmadı</div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-3">
+              <span class="mp-slide-eyebrow">Sinyal Kelimeleri</span>
+              <h3 class="mp-slide-heading">Hangi modal, hangi sinyalle gelir?</h3>
+              <div class="mp-signals-grid">
+                <div class="mp-signal-card"><span class="mp-signal-trigger">MUST HAVE sinyalleri</span><span class="mp-signal-example">obviously / clearly / certainly / no doubt / it is evident that<br>"The lights are off; he must have gone to bed."</span></div>
+                <div class="mp-signal-card"><span class="mp-signal-trigger">SHOULD HAVE sinyalleri</span><span class="mp-signal-example">but (didn't) / unfortunately / regret / criticism<br>"She should have called, but she didn't."</span></div>
+                <div class="mp-signal-card"><span class="mp-signal-trigger">COULD HAVE sinyalleri</span><span class="mp-signal-example">but (didn't) / missed opportunity / if only<br>"He could have passed if he had studied."</span></div>
+                <div class="mp-signal-card"><span class="mp-signal-trigger">MIGHT HAVE sinyalleri</span><span class="mp-signal-example">perhaps / possibly / not sure / uncertain<br>"She might have taken the wrong bus."</span></div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-4">
+              <span class="mp-slide-eyebrow">Modal Passive</span>
+              <h3 class="mp-slide-heading">Çok çıkar: FORMÜL modal + be + V3</h3>
+              <div class="mp-example-list">
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">must be signed</span><span class="mp-ex-tr">imzalanmalı (şimdi)</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">must have been signed</span><span class="mp-ex-tr">imzalanmış olmalı (geçmişte)</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">could be solved</span><span class="mp-ex-tr">çözülebilir (şimdi)</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">could have been solved</span><span class="mp-ex-tr">çözülebilirdi (geçmişte, ama çözülmedi)</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">should be done</span><span class="mp-ex-tr">yapılmalı (şimdi)</span></div></div>
+                <div class="mp-example-row"><span class="mp-ex-icon">🔹</span><div class="mp-ex-content"><span class="mp-ex-en">should have been done</span><span class="mp-ex-tr">yapılmalıydı (geçmişte, ama yapılmadı)</span></div></div>
+              </div>
+              <div class="mp-formula-block">
+                <span class="mp-formula-label">ÇİVİ</span>
+                <div class="mp-formula-text">modal + have been + V3 = geçmiş modal passive</div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-5">
+              <span class="mp-slide-eyebrow">En Sık 5 Tuzak</span>
+              <h3 class="mp-slide-heading">Doğru ✅ vs Yanlış ❌</h3>
+              <div class="mp-example-list">
+                <div class="mp-example-row mp-good"><span class="mp-ex-icon">1</span><div class="mp-ex-content"><span class="mp-ex-en">must have gone ✅ ≠ must have went ❌</span><span class="mp-ex-tr">V3 kullan, V2 değil</span></div></div>
+                <div class="mp-example-row mp-good"><span class="mp-ex-icon">2</span><div class="mp-ex-content"><span class="mp-ex-en">should have studied ✅ ≠ should have study ❌</span></div></div>
+                <div class="mp-example-row mp-good"><span class="mp-ex-icon">3</span><div class="mp-ex-content"><span class="mp-ex-en">might have been ✅ ≠ might been ❌</span><span class="mp-ex-tr">have atlanmaz</span></div></div>
+                <div class="mp-example-row mp-good"><span class="mp-ex-icon">4</span><div class="mp-ex-content"><span class="mp-ex-en">could have been done ✅ ≠ could been done ❌</span><span class="mp-ex-tr">modal perfect passive</span></div></div>
+                <div class="mp-example-row mp-good"><span class="mp-ex-icon">5</span><div class="mp-ex-content"><span class="mp-ex-en">"He must be tired" (şimdi) ≠ "He must have been tired" (geçmişte)</span></div></div>
+              </div>
+            </div>
+
+            <div class="mp-slide" id="mp-slide-6">
+              <span class="mp-slide-eyebrow">Mini Sınav · 3 Soru</span>
+              <h3 class="mp-slide-heading">Doğru şıkkı seç</h3>
+
+              <div class="mp-quiz-block">
+                <p class="mp-quiz-question">1) "The keys are missing. He _____ them at the office."</p>
+                <div class="mp-quiz-options">
+                  <button class="mp-quiz-btn" data-mpq="1" data-mpval="a" data-mp-action="quiz-answer">a) must leave</button>
+                  <button class="mp-quiz-btn" data-mpq="1" data-mpval="b" data-mp-action="quiz-answer">b) should leave</button>
+                  <button class="mp-quiz-btn" data-mpq="1" data-mpval="c" data-mp-action="quiz-answer">c) must have left</button>
+                  <button class="mp-quiz-btn" data-mpq="1" data-mpval="d" data-mp-action="quiz-answer">d) could leave</button>
+                </div>
+                <div class="mp-quiz-feedback" id="mp-q1-feedback"></div>
+              </div>
+
+              <div class="mp-quiz-block">
+                <p class="mp-quiz-question">2) "She didn't pass the exam. She _____ harder."</p>
+                <div class="mp-quiz-options">
+                  <button class="mp-quiz-btn" data-mpq="2" data-mpval="a" data-mp-action="quiz-answer">a) must have studied</button>
+                  <button class="mp-quiz-btn" data-mpq="2" data-mpval="b" data-mp-action="quiz-answer">b) should have studied</button>
+                  <button class="mp-quiz-btn" data-mpq="2" data-mpval="c" data-mp-action="quiz-answer">c) could study</button>
+                  <button class="mp-quiz-btn" data-mpq="2" data-mpval="d" data-mp-action="quiz-answer">d) might study</button>
+                </div>
+                <div class="mp-quiz-feedback" id="mp-q2-feedback"></div>
+              </div>
+
+              <div class="mp-quiz-block">
+                <p class="mp-quiz-question">3) "The report _____ before the meeting, but nobody did it."</p>
+                <div class="mp-quiz-options">
+                  <button class="mp-quiz-btn" data-mpq="3" data-mpval="a" data-mp-action="quiz-answer">a) must be submitted</button>
+                  <button class="mp-quiz-btn" data-mpq="3" data-mpval="b" data-mp-action="quiz-answer">b) should have been submitted</button>
+                  <button class="mp-quiz-btn" data-mpq="3" data-mpval="c" data-mp-action="quiz-answer">c) could submit</button>
+                  <button class="mp-quiz-btn" data-mpq="3" data-mpval="d" data-mp-action="quiz-answer">d) might submit</button>
+                </div>
+                <div class="mp-quiz-feedback" id="mp-q3-feedback"></div>
+              </div>
+
+              <div class="mp-dila-box" id="mp-finishBox" style="display:none">
+                <div class="mp-dila-avatar">🤖</div>
+                <div class="mp-dila-bubble">Tebrikler! Artık <strong>must/should/could/might have V3</strong>'ü ve <strong>modal passive</strong> kalıplarını ayırt edebiliyorsun!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mp-nav-row">
+            <button class="mp-nav-btn mp-btn-prev" id="mp-prevBtn" data-mp-action="slide-prev" disabled>← Geri</button>
+            <span class="mp-slide-counter" id="mp-slideCounter">1 / 7</span>
+            <button class="mp-nav-btn mp-btn-next" id="mp-nextBtn" data-mp-action="slide-next">İleri →</button>
+          </div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -4030,6 +4819,10 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <a onclick="giGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🔀 Gerund/Infinitive dersini aç (KLOD-MOTION) →</a>
               <a onclick="osmGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧭 ÖSYM Şablon Sistemi'ni aç (KLOD-MOTION) →</a>
               <a onclick="kfGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧩 Cümle Analizi dersini aç (KLOD-MOTION) →</a>
+              <a onclick="vocGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🗂️ Kelime Stratejisi dersini aç (KLOD-MOTION) →</a>
+              <a onclick="rdGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📖 Reading — 3 Nokta Tekniği'ni aç (KLOD-MOTION) →</a>
+              <a onclick="mpGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧠 Modal Perfect dersini aç (KLOD-MOTION) →</a>
+              <a onclick="cpGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📆 28 Gün Crash Plan'ı aç →</a>
               <a onclick="ahkGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🃏 AHA Kartları'nı aç →</a>
             </div>
           </div>
@@ -5193,6 +5986,21 @@ const TUZAK_HAVUZ=[
   {q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ never reached its destination."',opts:['A) which sending','B) he sends','C) to send','D) he sent'],dogru:3,fb:'Gizli that = "The letter [that] he sent" — sıfat cümleciği.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"Reading books _____ very beneficial."',opts:['A) is','B) are','C) were','D) being'],dogru:0,fb:'Reading = fiilimsi (özne) → kipli fiil "is".'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The painting _____ at the museum was priceless."',opts:['A) displaying','B) displayed','C) display','D) to display'],dogru:1,fb:'V3 sıfat cümleciği = which was displayed.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The scientist aimed to _____ the negative effects of the chemical."',opts:['A) mitigate','B) exaggerate','C) admire','D) ignore'],dogru:0,fb:'mitigate + effects → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The government decided to _____ a new education policy."',opts:['A) conduct','B) implement','C) advocate','D) sustain'],dogru:1,fb:'implement + policy → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Researchers _____ a study on the effects of social media."',opts:['A) made','B) performed','C) conducted','D) did'],dogru:2,fb:'conduct + study → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The new technology will _____ the efficiency of the production process."',opts:['A) undermine','B) decline','C) reduce','D) enhance'],dogru:3,fb:'enhance + efficiency → pozitif collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The opposition tried to _____ the government\'s claims with new evidence."',opts:['A) refute','B) concede','C) advocate','D) sustain'],dogru:0,fb:'refute = çürütmek, evidence ile gider.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The door is unlocked. Someone _____ to lock it."',opts:['A) should forget','B) must have forgotten','C) could forget','D) might forget'],dogru:1,fb:'Kanıt var (kapı kilitsiz) → kesin geçmiş kanı → must have V3.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"You _____ me earlier — I was waiting for hours!"',opts:['A) must have called','B) could call','C) should have called','D) might call'],dogru:2,fb:'Beklenti karşılanmadı + eleştiri → should have V3.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The package _____ yesterday, but it still hasn\'t arrived."',opts:['A) must arrive','B) could arrive','C) might arriving','D) should have arrived'],dogru:3,fb:'Beklenen ama gerçekleşmeyen → should have V3.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"She _____ the early bus — that\'s why she\'s late."',opts:['A) might have missed','B) must miss','C) should have missed','D) could miss'],dogru:0,fb:'Belirsiz ihtimal → might have V3.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ before the deadline, but no one submitted it."',opts:['A) must be submitted','B) could have been submitted','C) should submit','D) might submitted'],dogru:1,fb:'Kaçırılmış fırsat + passive → could have been V3.'},
+  {q:'Referans sorusunu yanıtlayın:',sent:'"The researchers published their findings; they were widely praised." — \'they\' refers to:',opts:['A) the researchers','B) the publishers','C) the findings','D) the critics'],dogru:2,fb:'they → hemen önceki isim = the findings.'},
+  {q:'Referans sorusunu yanıtlayın:',sent:'A paragraph ends with "This suggests that exercise alone is not sufficient." What does \'This\' refer to?',opts:['A) exercise','B) sufficiency','C) the paragraph title','D) the information presented before'],dogru:3,fb:'This = önceki cümlenin içeriği → CZ-REF tekniği.'},
+  {q:'Doğru cevabı seçin:',sent:'Which word signals a contrasting idea in a paragraph?',opts:['A) however','B) furthermore','C) consequently','D) for instance'],dogru:0,fb:'however = zıtlık bağlacı.'},
+  {q:'Doğru cevabı seçin:',sent:'What should you read FIRST when answering a main idea question?',opts:['A) every sentence','B) the first and last sentences','C) only the first sentence','D) the middle sentences'],dogru:1,fb:'3 Nokta Tekniği → ilk + son cümle.'},
+  {q:'Doğru cevabı seçin:',sent:'Which answer choice is most likely WRONG in an inference question?',opts:['A) one that paraphrases the text','B) one that is implied','C) one that uses \'always\' or \'never\'','D) one that matches the tone'],dogru:2,fb:'Abartılı şıklar → Şeytan Üçgeni.'},
 ];
 
 let tuzakIdx=0,tuzakAnswered=false;
@@ -9044,7 +9852,7 @@ function fonetikQuizCevap(si_harf,si,btn){
 }
 
 // ─── İNGİLİZCE KURSU ────────────────────────────────────────────────────────
-const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'},{ikon:'🎯',baslik:'Soru Tekniği',aciklama:'BEBEK sistemi — boşluk doldurmayı 20 saniyede çöz',ornekler:['Bak: S+V mi, isim mi?','Etiketle: Bağlaç/Edat/Relative/Tense/Modal','Böl-Ele-Karar: 3 bıçakla ele, kalan doğru.'],pratik:'BEBEK mikro dersini aç ve tekniği uygula!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'},{ikon:'🔁',baslik:'Verb Patterns',aciklama:'stop/remember/try + -ing veya to — anlam değişir',ornekler:['He stopped smoking. (bıraktı)','He stopped to smoke. (durdu, içmek için)','Remember to call me. (unutma)'],pratik:'STOP/REMEMBER/TRY mikro dersini aç ve mini sınavı çöz!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'},{ikon:'🧭',baslik:'Okuma Stratejisi',aciklama:'ÖSYM şablon sistemi — CZ-REF ve 3 tuzak',ornekler:['They = önceki özne mi?','This = hangi süreç?','Consequently = hangi sebebin sonucu?'],pratik:'ÖSYM Şablon Sistemi mikro dersini aç ve CZ-REF yapısını çöz!'},{ikon:'🧩',baslik:'Cümle Analizi',aciklama:'Kipli fiil vs fiilimsi — A/B/C analiz sistemi',ornekler:['stolen = sadece sıfat görevi','A/B/C: önce fiili (C) bul','Despite + isim, Although + cümle'],pratik:'Cümle Analizi mikro dersini aç ve A/B/C sistemini uygula!'}]};
+const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'},{ikon:'🎯',baslik:'Soru Tekniği',aciklama:'BEBEK sistemi — boşluk doldurmayı 20 saniyede çöz',ornekler:['Bak: S+V mi, isim mi?','Etiketle: Bağlaç/Edat/Relative/Tense/Modal','Böl-Ele-Karar: 3 bıçakla ele, kalan doğru.'],pratik:'BEBEK mikro dersini aç ve tekniği uygula!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'},{ikon:'🔁',baslik:'Verb Patterns',aciklama:'stop/remember/try + -ing veya to — anlam değişir',ornekler:['He stopped smoking. (bıraktı)','He stopped to smoke. (durdu, içmek için)','Remember to call me. (unutma)'],pratik:'STOP/REMEMBER/TRY mikro dersini aç ve mini sınavı çöz!'},{ikon:'🗂️',baslik:'Kelime Stratejisi',aciklama:'3 adımlı şık avcılığı — ton, zıt anlam, collocation',ornekler:['mitigate + risk/impact','enhance + performance/quality','İyi kelime + kötü kelime → zıtlık bağlacı ara'],pratik:'Kelime Stratejisi mikro dersini aç ve collocation haritasını çöz!'},{ikon:'🧠',baslik:'Modal Perfect',aciklama:'must/should/could/might have V3 — anlam kilidi',ornekler:['must have V3 = kesin','should have V3 = keşke','could have V3 = olabilirdi'],pratik:'Modal Perfect mikro dersini aç ve mini sınavı çöz!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'},{ikon:'🧭',baslik:'Okuma Stratejisi',aciklama:'3 Nokta Tekniği, 4 soru tipi, Şeytan Üçgeni ve CZ-REF',ornekler:['They = önceki özne mi?','Abartılı/konu dışı/ters anlam şıkları ele','İlk cümle + son cümle = ana fikir'],pratik:'Reading mikro dersini aç ve soru tiplerini çöz!'},{ikon:'🧩',baslik:'Cümle Analizi',aciklama:'Kipli fiil vs fiilimsi — A/B/C analiz sistemi',ornekler:['stolen = sadece sıfat görevi','A/B/C: önce fiili (C) bul','Despite + isim, Although + cümle'],pratik:'Cümle Analizi mikro dersini aç ve A/B/C sistemini uygula!'}]};
 
 function ingSeviyeSec(el,seviye){document.querySelectorAll('.ing-stab').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='transparent';b.style.color='var(--muted)';});el.style.borderColor='#a78bfa';el.style.background='#a78bfa20';el.style.color='#7c3aed';ingDerslerRender(seviye);dilavcisiVideoRender(seviye);dilavcisiYolHaritaRender(seviye);}
 
@@ -9218,16 +10026,31 @@ function dilavcisiYolDersAc(idx, seviye) {
     if (typeof giGit === 'function') giGit();
     return;
   }
-  // C1 skill tree'deki "Okuma Stratejisi" node'u -> ÖSYM Şablon Sistemi mikro dersine bağlı
+  // C1 skill tree'deki "Okuma Stratejisi" node'u -> Reading (rd) mikro dersine bağlı
+  // (ÖSYM Şablon Sistemi'nin CZ-REF/şablon içeriğini de kapsayan daha geniş okuma
+  // stratejisi dersi — bkz. Görev 2 commit notu. osm dersi silinmedi, kendi DILA
+  // linkinden hâlâ erişilebilir, sadece skill tree hedefi değişti.)
   if (seviye === 'C1' && idx === 3) {
     dilavcisiDersTamamlandi(seviye + '-' + idx);
-    if (typeof osmGit === 'function') osmGit();
+    if (typeof rdGit === 'function') rdGit();
     return;
   }
   // C1 skill tree'deki "Cümle Analizi" node'u -> Kipli Fiil/Cümle Analizi mikro dersine bağlı
   if (seviye === 'C1' && idx === 4) {
     dilavcisiDersTamamlandi(seviye + '-' + idx);
     if (typeof kfGit === 'function') kfGit();
+    return;
+  }
+  // B2 skill tree'deki "Kelime Stratejisi" node'u -> Kelime (Vocab) mikro dersine bağlı
+  if (seviye === 'B2' && idx === 5) {
+    dilavcisiDersTamamlandi(seviye + '-' + idx);
+    if (typeof vocGit === 'function') vocGit();
+    return;
+  }
+  // B2 skill tree'deki "Modal Perfect" node'u -> Modal Perfect mikro dersine bağlı
+  if (seviye === 'B2' && idx === 6) {
+    dilavcisiDersTamamlandi(seviye + '-' + idx);
+    if (typeof mpGit === 'function') mpGit();
     return;
   }
   // Ders detayını aç (mevcut ingDersAc mantığıyla)
@@ -11766,6 +12589,391 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   };
 
   kfUpdateUI();
+})();
+</script>
+
+<!-- KELİME (VOCAB) STRATEJİSİ — #kelime-strateji-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const VOC_TOTAL = 7;
+  let vocCurrent = 0;
+  const VOC_CORRECT = { 1:'c', 2:'b', 3:'c' };
+  const vocQuizAnswered = { 1:false, 2:false, 3:false };
+
+  function vocUpdateUI(){
+    document.querySelectorAll('#kelime-strateji-modul .voc-slide').forEach(function(s,i){ s.classList.toggle('voc-active', i===vocCurrent); });
+    document.getElementById('voc-prevBtn').disabled = vocCurrent===0;
+    document.getElementById('voc-nextBtn').disabled = vocCurrent===VOC_TOTAL-1;
+    document.getElementById('voc-slideCounter').textContent = (vocCurrent+1)+' / '+VOC_TOTAL;
+    const pct = Math.round((vocCurrent/(VOC_TOTAL-1))*100);
+    document.getElementById('voc-progressFill').style.width = pct+'%';
+    document.getElementById('voc-progressLabel').textContent = vocCurrent+' / '+(VOC_TOTAL-1)+' tamamlandı';
+  }
+
+  function vocChangeSlide(dir){
+    const next = vocCurrent+dir;
+    if(next<0||next>=VOC_TOTAL)return;
+    vocCurrent=next;
+    vocUpdateUI();
+  }
+
+  function vocCheckAnswer(btn){
+    const qNum = parseInt(btn.dataset.vocq,10);
+    const val = btn.dataset.vocval;
+    if(vocQuizAnswered[qNum])return;
+    vocQuizAnswered[qNum]=true;
+    const correct = VOC_CORRECT[qNum];
+    document.querySelectorAll('#kelime-strateji-modul [data-vocq="'+qNum+'"]').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.vocval===correct)b.classList.add('voc-correct-ans');
+    });
+    if(val!==correct)btn.classList.add('voc-wrong-ans');
+    const fb = document.getElementById('voc-q'+qNum+'-feedback');
+    fb.classList.add('voc-show');
+    const aciklamalar = {
+      1: 'mitigate + risk → klasik collocation ✅',
+      2: 'kötü (expensive) → iyi (improved) = zıtlık + noktalı virgül → nevertheless.',
+      3: 'conduct + research/study → sabit collocation ✅'
+    };
+    if(val===correct){
+      fb.className='voc-quiz-feedback voc-show voc-ok';
+      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+    } else {
+      fb.className='voc-quiz-feedback voc-show voc-no';
+      fb.textContent = '❌ '+aciklamalar[qNum];
+    }
+    if(vocQuizAnswered[1] && vocQuizAnswered[2] && vocQuizAnswered[3]){
+      document.getElementById('voc-finishBox').style.display='flex';
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('kelime-stratejisi');
+    }
+  }
+
+  const vocKok = document.getElementById('kelime-strateji-modul');
+  if (vocKok) {
+    vocKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-voc-action]');
+      if(!el)return;
+      const action = el.dataset.vocAction;
+      if(action==='slide-next')vocChangeSlide(1);
+      else if(action==='slide-prev')vocChangeSlide(-1);
+      else if(action==='quiz-answer')vocCheckAnswer(el);
+    });
+  }
+
+  window.vocGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('kelime-strateji-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  vocUpdateUI();
+})();
+</script>
+
+<!-- READING / OKUMA STRATEJİSİ — #reading-strateji-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const RD_TOTAL = 7;
+  let rdCurrent = 0;
+  const RD_CORRECT = { 1:'c', 2:'c', 3:'c' };
+  const rdQuizAnswered = { 1:false, 2:false, 3:false };
+
+  function rdUpdateUI(){
+    document.querySelectorAll('#reading-strateji-modul .rd-slide').forEach(function(s,i){ s.classList.toggle('rd-active', i===rdCurrent); });
+    document.getElementById('rd-prevBtn').disabled = rdCurrent===0;
+    document.getElementById('rd-nextBtn').disabled = rdCurrent===RD_TOTAL-1;
+    document.getElementById('rd-slideCounter').textContent = (rdCurrent+1)+' / '+RD_TOTAL;
+    const pct = Math.round((rdCurrent/(RD_TOTAL-1))*100);
+    document.getElementById('rd-progressFill').style.width = pct+'%';
+    document.getElementById('rd-progressLabel').textContent = rdCurrent+' / '+(RD_TOTAL-1)+' tamamlandı';
+  }
+
+  function rdChangeSlide(dir){
+    const next = rdCurrent+dir;
+    if(next<0||next>=RD_TOTAL)return;
+    rdCurrent=next;
+    rdUpdateUI();
+  }
+
+  function rdCheckAnswer(btn){
+    const qNum = parseInt(btn.dataset.rdq,10);
+    const val = btn.dataset.rdval;
+    if(rdQuizAnswered[qNum])return;
+    rdQuizAnswered[qNum]=true;
+    const correct = RD_CORRECT[qNum];
+    document.querySelectorAll('#reading-strateji-modul [data-rdq="'+qNum+'"]').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.rdval===correct)b.classList.add('rd-correct-ans');
+    });
+    if(val!==correct)btn.classList.add('rd-wrong-ans');
+    const fb = document.getElementById('rd-q'+qNum+'-feedback');
+    fb.classList.add('rd-show');
+    const aciklamalar = {
+      1: 'it → hemen önceki isim = a new element ✅',
+      2: 'Çıkarım (inference) = metinde açıkça yazmaz, ima var.',
+      3: 'fayda (iyi) → zarar (kötü) = zıtlık → however ✅'
+    };
+    if(val===correct){
+      fb.className='rd-quiz-feedback rd-show rd-ok';
+      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+    } else {
+      fb.className='rd-quiz-feedback rd-show rd-no';
+      fb.textContent = '❌ '+aciklamalar[qNum];
+    }
+    if(rdQuizAnswered[1] && rdQuizAnswered[2] && rdQuizAnswered[3]){
+      document.getElementById('rd-finishBox').style.display='flex';
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('reading-stratejisi');
+    }
+  }
+
+  const rdKok = document.getElementById('reading-strateji-modul');
+  if (rdKok) {
+    rdKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-rd-action]');
+      if(!el)return;
+      const action = el.dataset.rdAction;
+      if(action==='slide-next')rdChangeSlide(1);
+      else if(action==='slide-prev')rdChangeSlide(-1);
+      else if(action==='quiz-answer')rdCheckAnswer(el);
+    });
+  }
+
+  window.rdGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('reading-strateji-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  rdUpdateUI();
+})();
+</script>
+
+<!-- MODAL PERFECT — #modal-perfect-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const MP_TOTAL = 7;
+  let mpCurrent = 0;
+  const MP_CORRECT = { 1:'c', 2:'b', 3:'b' };
+  const mpQuizAnswered = { 1:false, 2:false, 3:false };
+
+  function mpUpdateUI(){
+    document.querySelectorAll('#modal-perfect-modul .mp-slide').forEach(function(s,i){ s.classList.toggle('mp-active', i===mpCurrent); });
+    document.getElementById('mp-prevBtn').disabled = mpCurrent===0;
+    document.getElementById('mp-nextBtn').disabled = mpCurrent===MP_TOTAL-1;
+    document.getElementById('mp-slideCounter').textContent = (mpCurrent+1)+' / '+MP_TOTAL;
+    const pct = Math.round((mpCurrent/(MP_TOTAL-1))*100);
+    document.getElementById('mp-progressFill').style.width = pct+'%';
+    document.getElementById('mp-progressLabel').textContent = mpCurrent+' / '+(MP_TOTAL-1)+' tamamlandı';
+  }
+
+  function mpChangeSlide(dir){
+    const next = mpCurrent+dir;
+    if(next<0||next>=MP_TOTAL)return;
+    mpCurrent=next;
+    mpUpdateUI();
+  }
+
+  function mpCheckAnswer(btn){
+    const qNum = parseInt(btn.dataset.mpq,10);
+    const val = btn.dataset.mpval;
+    if(mpQuizAnswered[qNum])return;
+    mpQuizAnswered[qNum]=true;
+    const correct = MP_CORRECT[qNum];
+    document.querySelectorAll('#modal-perfect-modul [data-mpq="'+qNum+'"]').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.mpval===correct)b.classList.add('mp-correct-ans');
+    });
+    if(val!==correct)btn.classList.add('mp-wrong-ans');
+    const fb = document.getElementById('mp-q'+qNum+'-feedback');
+    fb.classList.add('mp-show');
+    const aciklamalar = {
+      1: 'kanıt var (keys missing) → kesin geçmiş kanı → must have V3.',
+      2: 'geçmişte yapılmadı + eleştiri → should have V3.',
+      3: 'geçmişte yapılmadı + beklenti → should have been V3 (modal perfect passive).'
+    };
+    if(val===correct){
+      fb.className='mp-quiz-feedback mp-show mp-ok';
+      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+    } else {
+      fb.className='mp-quiz-feedback mp-show mp-no';
+      fb.textContent = '❌ '+aciklamalar[qNum];
+    }
+    if(mpQuizAnswered[1] && mpQuizAnswered[2] && mpQuizAnswered[3]){
+      document.getElementById('mp-finishBox').style.display='flex';
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('modal-perfect');
+    }
+  }
+
+  const mpKok = document.getElementById('modal-perfect-modul');
+  if (mpKok) {
+    mpKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-mp-action]');
+      if(!el)return;
+      const action = el.dataset.mpAction;
+      if(action==='slide-next')mpChangeSlide(1);
+      else if(action==='slide-prev')mpChangeSlide(-1);
+      else if(action==='quiz-answer')mpCheckAnswer(el);
+    });
+  }
+
+  window.mpGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('modal-perfect-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  mpUpdateUI();
+})();
+</script>
+
+<!-- 28 GÜN CRASH PLAN — #crash-plan-modul mantığı (Çalışma Planım içine gömülü) -->
+<script>
+(function(){
+  const CP_HAFTALAR = [
+    {no:1, baslik:'Puan Üreten Yapı Kilidi', gunler:[
+      {no:1, konu:'Although / Even though vs Despite / In spite of'},
+      {no:2, konu:'Because vs Because of / Due to / Owing to'},
+      {no:3, konu:'However / Therefore / Moreover (noktalama) + But / So'},
+      {no:4, konu:'Unless / If (0-1-2. tip mantığı)'},
+      {no:5, konu:'Tense tetikleri: since/for/ago/yesterday/last/in 1990'},
+      {no:6, konu:'Passive temel: is/was/will be V3 + by'},
+      {no:7, konu:'Mini Deneme 1 (40-60 soru) + detaylı analiz'}
+    ]},
+    {no:2, baslik:'Relative + Noun Clause + Past Perfect', gunler:[
+      {no:8, konu:'who / which / that (kısa net)'},
+      {no:9, konu:'where / when (yer-zaman)'},
+      {no:10, konu:'whose (sahiplik) + en sık tuzaklar'},
+      {no:11, konu:'Noun clause: fact that / argue that / claim that'},
+      {no:12, konu:'By the time → Past Perfect (had V3)'},
+      {no:13, konu:'Modal + anlam: should/can/might/could (temel)'},
+      {no:14, konu:'Mini Deneme 2 (60-80 soru) + analiz'}
+    ]},
+    {no:3, baslik:'Modal Perfect + Passive Büyük Puan', gunler:[
+      {no:15, konu:'must/should/could/might have V3 (anlam kilidi)'},
+      {no:16, konu:'Modal passive: must be V3 / can be V3'},
+      {no:17, konu:'Perfect Passive: has/have been V3 (+ just/already/yet)'},
+      {no:18, konu:'Conditionals: If + had V3 → would have V3 (3. tip)'},
+      {no:19, konu:'Bağlaç karışanlar: while / whereas / despite / although (karma)'},
+      {no:20, konu:'Reading hız günü (3 paragraf) + kelime çıkarma'},
+      {no:21, konu:'Mini Deneme 3 (80 soru) + analiz'}
+    ]},
+    {no:4, baslik:'Tam Sınav Simülasyonu + İnce Ayar', gunler:[
+      {no:22, konu:'En çok yanlış gelen konu (Hata defterine göre 1 numara)'},
+      {no:23, konu:'En çok yanlış gelen konu (2 numara)'},
+      {no:24, konu:'En çok yanlış gelen konu (3 numara)'},
+      {no:25, konu:'Reading yoğun (4 paragraf) + soru tipi ayrımı'},
+      {no:26, konu:'Karma test (60 soru) — süre tut'},
+      {no:27, konu:'Hafıza turu: tüm kartlar + 50 karma soru'},
+      {no:28, konu:'Final Deneme (tam süre) + analiz'}
+    ]}
+  ];
+  const CP_TOPLAM = 28;
+  let cpOpenWeeks = new Set([1]);
+
+  function cpLoadProgress(){
+    try{ return JSON.parse(localStorage.getItem('cp_progress')||'{}'); }catch(e){ return {}; }
+  }
+  function cpSaveProgress(p){
+    try{ localStorage.setItem('cp_progress', JSON.stringify(p)); }catch(e){}
+  }
+
+  function cpRender(){
+    const prog = cpLoadProgress();
+    let tamamlanan = 0;
+    for(let i=1;i<=CP_TOPLAM;i++){ if(prog['gun'+i])tamamlanan++; }
+    const fill = document.getElementById('cp-progressFill');
+    const label = document.getElementById('cp-progressLabel');
+    if(fill)fill.style.width = Math.round((tamamlanan/CP_TOPLAM)*100)+'%';
+    if(label)label.textContent = tamamlanan+' / '+CP_TOPLAM+' gün tamamlandı';
+
+    let bugunGun = null;
+    for(let i=1;i<=CP_TOPLAM;i++){ if(!prog['gun'+i]){ bugunGun=i; break; } }
+
+    const weeksEl = document.getElementById('cp-weeks');
+    if(!weeksEl)return;
+    weeksEl.innerHTML = CP_HAFTALAR.map(function(hafta){
+      const acikMi = cpOpenWeeks.has(hafta.no);
+      const haftaTamam = hafta.gunler.filter(function(g){ return !!prog['gun'+g.no]; }).length;
+      const gunlerHtml = hafta.gunler.map(function(g){
+        const done = !!prog['gun'+g.no];
+        const bugunMu = g.no === bugunGun;
+        return '<div class="cp-day-row'+(done?' cp-done':'')+(bugunMu?' cp-today':'')+'" data-cp-action="day-toggle" data-cp-day="'+g.no+'">'+
+          '<span class="cp-day-check">'+(done?'✓':'')+'</span>'+
+          '<span class="cp-day-num">G'+g.no+'</span>'+
+          '<span class="cp-day-topic">'+g.konu+'</span>'+
+          (bugunMu?'<span class="cp-today-badge">BUGÜN</span>':'')+
+        '</div>';
+      }).join('');
+      return '<div class="cp-week'+(acikMi?' cp-open':'')+'" data-cp-week="'+hafta.no+'">'+
+        '<button type="button" class="cp-week-header" data-cp-action="week-toggle" data-cp-week="'+hafta.no+'">'+
+          '<span class="cp-week-title-wrap"><span class="cp-week-title">Hafta '+hafta.no+' — '+hafta.baslik+'</span>'+
+          '<span class="cp-week-sub">'+haftaTamam+' / '+hafta.gunler.length+' gün · G'+hafta.gunler[0].no+'-G'+hafta.gunler[hafta.gunler.length-1].no+'</span></span>'+
+          '<span class="cp-week-chevron">▶</span>'+
+        '</button>'+
+        '<div class="cp-week-body">'+gunlerHtml+'</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function cpToggleDay(gunNo){
+    const prog = cpLoadProgress();
+    prog['gun'+gunNo] = !prog['gun'+gunNo];
+    cpSaveProgress(prog);
+    let tamamlanan = 0;
+    for(let i=1;i<=CP_TOPLAM;i++){ if(prog['gun'+i])tamamlanan++; }
+    cpRender();
+    if(tamamlanan===CP_TOPLAM){
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('crash-plan-28gun');
+    }
+  }
+
+  function cpToggleWeek(weekNo){
+    if(cpOpenWeeks.has(weekNo))cpOpenWeeks.delete(weekNo);
+    else cpOpenWeeks.add(weekNo);
+    const el = document.querySelector('#crash-plan-modul .cp-week[data-cp-week="'+weekNo+'"]');
+    if(el)el.classList.toggle('cp-open', cpOpenWeeks.has(weekNo));
+  }
+
+  function cpResetAll(){
+    cpSaveProgress({});
+    cpRender();
+  }
+
+  const cpKok = document.getElementById('crash-plan-modul');
+  if (cpKok) {
+    cpKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-cp-action]');
+      if(!el)return;
+      const action = el.dataset.cpAction;
+      if(action==='day-toggle')cpToggleDay(parseInt(el.dataset.cpDay,10));
+      else if(action==='week-toggle')cpToggleWeek(parseInt(el.dataset.cpWeek,10));
+      else if(action==='reset')cpResetAll();
+    });
+  }
+
+  window.cpGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('Çalışma Planım'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('crash-plan-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  cpRender();
 })();
 </script>
 </body>
