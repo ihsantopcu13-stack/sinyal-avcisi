@@ -4313,6 +4313,78 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
           </section>
 
+          <!-- 500 AKADEMİK KELİME BANKASI — flip-card kelime öğrenme bileşeni (#kelime-bankasi-modul scope) -->
+          <section id="kelime-bankasi-modul">
+          <style>
+            #kelime-bankasi-modul{
+              --kb-bg:#0d0f14;--kb-surface:#161920;--kb-border:#252830;
+              --kb-accent:#5b8fff;--kb-accent2:#38d9a9;
+              --kb-text:#e8eaf0;--kb-muted:#6b7280;--kb-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--kb-bg);color:var(--kb-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              padding:26px 20px 30px;
+              margin-bottom:22px;
+            }
+            #kelime-bankasi-modul *{box-sizing:border-box}
+            #kelime-bankasi-modul .kb-header{margin-bottom:16px}
+            #kelime-bankasi-modul .kb-header-badge{display:inline-flex;align-items:center;gap:6px;background:var(--kb-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:4px 10px;border-radius:3px;margin-bottom:12px}
+            #kelime-bankasi-modul .kb-header h2{font-family:'IBM Plex Sans',sans-serif;font-size:21px;font-weight:600;line-height:1.3;margin:0 0 6px;color:var(--kb-text)}
+            #kelime-bankasi-modul .kb-header p{color:var(--kb-muted);font-size:13px;line-height:1.6;max-width:520px;margin:0}
+            #kelime-bankasi-modul .kb-progress-wrap{margin:16px 0}
+            #kelime-bankasi-modul .kb-progress-track{height:8px;background:var(--kb-border);border-radius:4px;overflow:hidden}
+            #kelime-bankasi-modul .kb-progress-fill{height:100%;background:linear-gradient(90deg,var(--kb-accent),var(--kb-accent2));border-radius:4px;transition:width .4s ease}
+            #kelime-bankasi-modul .kb-progress-label{font-size:12px;color:var(--kb-muted);font-family:'IBM Plex Mono',monospace;margin-top:8px;text-align:center}
+            #kelime-bankasi-modul .kb-group-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+            #kelime-bankasi-modul .kb-group-btn{background:rgba(255,255,255,.04);border:1px solid var(--kb-border);color:var(--kb-muted);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background .15s,border-color .15s,color .15s}
+            #kelime-bankasi-modul .kb-group-btn:hover{border-color:var(--kb-accent)}
+            #kelime-bankasi-modul .kb-group-btn.kb-active{background:rgba(91,143,255,.15);border-color:var(--kb-accent);color:var(--kb-accent)}
+            #kelime-bankasi-modul .kb-group-label{font-size:12.5px;color:var(--kb-muted);margin-bottom:10px}
+            #kelime-bankasi-modul .kb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+            #kelime-bankasi-modul .kb-card{perspective:1000px;height:190px;position:relative}
+            #kelime-bankasi-modul .kb-card-inner{position:relative;width:100%;height:100%;cursor:pointer;transition:transform .5s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+            #kelime-bankasi-modul .kb-card.kb-flipped .kb-card-inner{transform:rotateY(180deg)}
+            #kelime-bankasi-modul .kb-card-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:12px;padding:14px 14px 38px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:7px}
+            #kelime-bankasi-modul .kb-card-front{background:var(--kb-surface);border:1px solid var(--kb-border)}
+            #kelime-bankasi-modul .kb-card.kb-learned .kb-card-front{border-color:var(--kb-accent2)}
+            #kelime-bankasi-modul .kb-card-back{background:var(--kb-formula-bg);border:1px solid var(--kb-accent);transform:rotateY(180deg)}
+            #kelime-bankasi-modul .kb-card-en{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:var(--kb-text)}
+            #kelime-bankasi-modul .kb-card-hint{font-size:10.5px;color:var(--kb-muted)}
+            #kelime-bankasi-modul .kb-card-tr{font-size:13px;font-weight:600;color:var(--kb-accent2);line-height:1.4}
+            #kelime-bankasi-modul .kb-card-ex{font-size:10.5px;color:var(--kb-muted);line-height:1.5;font-family:'IBM Plex Mono',monospace}
+            #kelime-bankasi-modul .kb-ogren-btn{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:5;background:rgba(10,12,17,.85);border:1px solid var(--kb-border);color:var(--kb-muted);border-radius:6px;padding:5px 10px;font-size:10.5px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+            #kelime-bankasi-modul .kb-ogren-btn.kb-on{background:rgba(56,217,169,.18);border-color:var(--kb-accent2);color:var(--kb-accent2)}
+            #kelime-bankasi-modul .kb-learned-badge{position:absolute;top:8px;right:10px;font-size:13px;display:none;z-index:5}
+            #kelime-bankasi-modul .kb-card.kb-learned .kb-learned-badge{display:block}
+            @media(max-width:480px){
+              #kelime-bankasi-modul .kb-grid{grid-template-columns:repeat(2,1fr)}
+              #kelime-bankasi-modul .kb-card{height:175px}
+            }
+          </style>
+
+          <div class="kb-header">
+            <div class="kb-header-badge">KLOD-MOTION</div>
+            <h2>500 Akademik Kelime Bankası</h2>
+            <p>YDS/YÖKDİL'de en sık çıkan akademik kelime ve collocation'lar. Karta tıkla, çevir; öğrendiysen işaretle.</p>
+          </div>
+
+          <div class="kb-progress-wrap">
+            <div class="kb-progress-track"><div class="kb-progress-fill" id="kb-progressFill" style="width:0%"></div></div>
+            <div class="kb-progress-label" id="kb-progressLabel">0 / 50 kelime öğrenildi</div>
+          </div>
+
+          <div class="kb-group-tabs" id="kb-groupTabs">
+            <button class="kb-group-btn kb-active" type="button" data-kb-action="grup" data-kb-grup="1">Grup 1 · Fiil Grupları</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="2">Grup 2 · Akademik Fiiller</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="3">Grup 3 · Akademik Sıfatlar</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="4">Grup 4 · Akademik İsimler</button>
+            <button class="kb-group-btn" type="button" data-kb-action="grup" data-kb-grup="5">Grup 5 · Collocation Çiftleri</button>
+          </div>
+
+          <div class="kb-grid" id="kb-grid"></div>
+          </section>
+
           <!-- READING / OKUMA MODÜLÜ — KLOD-MOTION 7-slaytlı soru odaklı okuma dersi (#reading-strateji-modul scope) -->
           <section id="reading-strateji-modul">
           <style>
@@ -4775,6 +4847,234 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
           </section>
 
+          <!-- SKIMMING & SCANNING + ÇİFT TURLU ÇÖZÜM — KLOD-MOTION 7-slaytlı sınav stratejisi dersi (#skimming-scanning-modul scope) -->
+          <section id="skimming-scanning-modul">
+          <style>
+            #skimming-scanning-modul{
+              --ss-bg:#0d0f14;--ss-surface:#161920;--ss-border:#252830;
+              --ss-accent:#5b8fff;--ss-accent2:#38d9a9;--ss-warn:#ff6b6b;
+              --ss-text:#e8eaf0;--ss-muted:#6b7280;--ss-formula-bg:#0a1628;
+              box-sizing:border-box;
+              background:var(--ss-bg);color:var(--ss-text);
+              font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+              border-radius:20px;
+              display:flex;flex-direction:column;align-items:center;
+              padding:26px 16px 40px;
+              margin-bottom:22px;
+            }
+            #skimming-scanning-modul *{box-sizing:border-box}
+            #skimming-scanning-modul .ss-lesson-header{width:100%;max-width:640px;display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+            #skimming-scanning-modul .ss-badge{background:var(--ss-accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px}
+            #skimming-scanning-modul .ss-badge.ss-dila{background:var(--ss-accent2);color:#0d0f14}
+            #skimming-scanning-modul .ss-lesson-title{font-size:13px;color:var(--ss-muted);font-family:'IBM Plex Mono',monospace}
+            #skimming-scanning-modul .ss-progress-wrap{width:100%;max-width:640px;margin-bottom:20px}
+            #skimming-scanning-modul .ss-progress-track{height:3px;background:var(--ss-border);border-radius:2px;overflow:hidden}
+            #skimming-scanning-modul .ss-progress-fill{height:100%;background:var(--ss-accent);border-radius:2px;transition:width .4s ease}
+            #skimming-scanning-modul .ss-progress-label{font-size:11px;color:var(--ss-muted);font-family:'IBM Plex Mono',monospace;margin-top:6px;text-align:right}
+            #skimming-scanning-modul .ss-slide-card{width:100%;max-width:640px;background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:12px;padding:28px 22px;min-height:320px;display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+            #skimming-scanning-modul .ss-slide{display:none;flex-direction:column;gap:18px;animation:ssFadeIn .3s ease}
+            #skimming-scanning-modul .ss-slide.ss-active{display:flex}
+            @keyframes ssFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+            #skimming-scanning-modul .ss-slide-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ss-muted);text-transform:uppercase;letter-spacing:.1em}
+            #skimming-scanning-modul .ss-slide-heading{font-size:21px;font-weight:600;line-height:1.3;color:var(--ss-text)}
+            #skimming-scanning-modul .ss-slide-body{font-size:14.5px;line-height:1.7;color:#b0b8c8}
+            #skimming-scanning-modul .ss-formula-block{background:var(--ss-formula-bg);border:1px solid var(--ss-accent);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+            #skimming-scanning-modul .ss-formula-label{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ss-accent);letter-spacing:.1em}
+            #skimming-scanning-modul .ss-formula-text{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#fff;letter-spacing:.01em;line-height:1.6}
+            #skimming-scanning-modul .ss-formula-sub{font-size:12px;color:var(--ss-muted);line-height:1.5}
+            #skimming-scanning-modul .ss-example-list{display:flex;flex-direction:column;gap:9px}
+            #skimming-scanning-modul .ss-example-row{display:flex;align-items:flex-start;gap:12px;padding:11px 13px;background:rgba(255,255,255,.03);border-radius:7px;border-left:3px solid var(--ss-accent)}
+            #skimming-scanning-modul .ss-example-row.ss-devil{border-left-color:var(--ss-warn)}
+            #skimming-scanning-modul .ss-example-row.ss-good{border-left-color:var(--ss-accent2)}
+            #skimming-scanning-modul .ss-ex-icon{font-size:14px;margin-top:1px;flex-shrink:0}
+            #skimming-scanning-modul .ss-ex-content{display:flex;flex-direction:column;gap:3px}
+            #skimming-scanning-modul .ss-ex-en{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:700;color:var(--ss-text)}
+            #skimming-scanning-modul .ss-ex-tr{font-size:11.5px;color:var(--ss-muted);line-height:1.5}
+            #skimming-scanning-modul .ss-signals-grid{display:flex;flex-direction:column;gap:9px}
+            #skimming-scanning-modul .ss-signal-card{display:flex;align-items:center;gap:14px;padding:11px 14px;background:rgba(91,143,255,.07);border:1px solid rgba(91,143,255,.2);border-radius:8px}
+            #skimming-scanning-modul .ss-signal-trigger{font-size:12.5px;font-weight:700;color:var(--ss-text);flex-shrink:0}
+            #skimming-scanning-modul .ss-signal-example{font-size:11.5px;color:var(--ss-accent2);text-align:right;margin-left:auto;font-family:'IBM Plex Mono',monospace}
+            #skimming-scanning-modul .ss-timer-table{display:flex;flex-direction:column;gap:8px}
+            #skimming-scanning-modul .ss-timer-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;background:rgba(255,255,255,.03);border-radius:7px;border:1px solid var(--ss-border)}
+            #skimming-scanning-modul .ss-timer-tip{font-size:12.5px;color:var(--ss-text);font-weight:600}
+            #skimming-scanning-modul .ss-timer-val{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ss-accent2);flex-shrink:0}
+            #skimming-scanning-modul .ss-dila-box{background:rgba(56,217,169,.07);border:1px solid rgba(56,217,169,.25);border-radius:10px;padding:15px 17px;display:flex;gap:12px;align-items:flex-start}
+            #skimming-scanning-modul .ss-dila-avatar{width:32px;height:32px;border-radius:50%;background:var(--ss-accent2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+            #skimming-scanning-modul .ss-dila-bubble{font-size:13.5px;line-height:1.65;color:#c8f5ec}
+            #skimming-scanning-modul .ss-dila-bubble strong{color:var(--ss-accent2)}
+            #skimming-scanning-modul .ss-quiz-question{font-size:15px;font-weight:600;line-height:1.5;color:var(--ss-text)}
+            #skimming-scanning-modul .ss-quiz-options{display:flex;flex-direction:column;gap:8px}
+            #skimming-scanning-modul .ss-quiz-btn{background:rgba(255,255,255,.04);border:1px solid var(--ss-border);border-radius:8px;padding:11px 15px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ss-text);cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+            #skimming-scanning-modul .ss-quiz-btn:hover{background:rgba(91,143,255,.1);border-color:var(--ss-accent)}
+            #skimming-scanning-modul .ss-quiz-btn.ss-correct-ans{background:rgba(56,217,169,.15);border-color:var(--ss-accent2);color:var(--ss-accent2)}
+            #skimming-scanning-modul .ss-quiz-btn.ss-wrong-ans{background:rgba(255,107,107,.1);border-color:var(--ss-warn);color:var(--ss-warn)}
+            #skimming-scanning-modul .ss-quiz-feedback{font-size:12.5px;line-height:1.6;padding:11px 13px;border-radius:7px;display:none}
+            #skimming-scanning-modul .ss-quiz-feedback.ss-show{display:block}
+            #skimming-scanning-modul .ss-quiz-feedback.ss-ok{background:rgba(56,217,169,.1);color:var(--ss-accent2);border:1px solid rgba(56,217,169,.2)}
+            #skimming-scanning-modul .ss-quiz-feedback.ss-no{background:rgba(255,107,107,.08);color:var(--ss-warn);border:1px solid rgba(255,107,107,.2)}
+            #skimming-scanning-modul .ss-quiz-block{display:flex;flex-direction:column;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--ss-border)}
+            #skimming-scanning-modul .ss-quiz-block:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+            #skimming-scanning-modul .ss-nav-row{width:100%;max-width:640px;display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+            #skimming-scanning-modul .ss-nav-btn{padding:10px 20px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:opacity .2s;font-family:'IBM Plex Sans',sans-serif}
+            #skimming-scanning-modul .ss-nav-btn:disabled{opacity:.3;cursor:default}
+            #skimming-scanning-modul .ss-btn-prev{background:var(--ss-border);color:var(--ss-muted)}
+            #skimming-scanning-modul .ss-btn-next{background:var(--ss-accent);color:#fff}
+            #skimming-scanning-modul .ss-slide-counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ss-muted)}
+            @media(max-width:480px){
+              #skimming-scanning-modul .ss-slide-card{padding:20px 16px}
+              #skimming-scanning-modul .ss-slide-heading{font-size:18px}
+              #skimming-scanning-modul .ss-signal-card{flex-direction:column;align-items:flex-start;gap:4px}
+              #skimming-scanning-modul .ss-signal-example{margin-left:0;text-align:left}
+              #skimming-scanning-modul .ss-timer-row{flex-direction:column;align-items:flex-start;gap:4px}
+            }
+          </style>
+
+          <div class="ss-lesson-header">
+            <span class="ss-badge">KLOD-MOTION</span>
+            <span class="ss-badge ss-dila">DILA</span>
+            <span class="ss-lesson-title">Okuma Stratejisi · C1 · Skimming, Scanning & Çift Turlu Çözüm</span>
+          </div>
+
+          <div class="ss-progress-wrap">
+            <div class="ss-progress-track"><div class="ss-progress-fill" id="ss-progressFill" style="width:0%"></div></div>
+            <div class="ss-progress-label" id="ss-progressLabel">0 / 7 tamamlandı</div>
+          </div>
+
+          <div class="ss-slide-card">
+
+            <div class="ss-slide ss-active" id="ss-slide-0">
+              <span class="ss-slide-eyebrow">Giriş</span>
+              <h3 class="ss-slide-heading">Paragrafı baştan sona çevirirsen zamanın biter.</h3>
+              <p class="ss-slide-body">2 teknik öğren: Skimming + Scanning. Sonra Çift Turlu çöz, baskıyı sıfırla.</p>
+              <div class="ss-dila-box">
+                <div class="ss-dila-avatar">🤖</div>
+                <div class="ss-dila-bubble">Merhaba! Ben <strong>DILA</strong>. Bu derste hızlı göz gezdirme (skimming), anahtar kelime tarama (scanning) ve sınavı iki turda çözme tekniğini öğreneceksin. Hazır mısın?</div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-1">
+              <span class="ss-slide-eyebrow">Skimming (60-90 saniye)</span>
+              <h3 class="ss-slide-heading">Metnin tamamını okumadan genel konuyu anla</h3>
+              <div class="ss-example-list">
+                <div class="ss-example-row"><span class="ss-ex-icon">1</span><div class="ss-ex-content"><span class="ss-ex-en">İlk cümleyi oku</span><span class="ss-ex-tr">konuyu belirler</span></div></div>
+                <div class="ss-example-row"><span class="ss-ex-icon">2</span><div class="ss-ex-content"><span class="ss-ex-en">Her paragrafın sadece ilk + son cümlesini oku</span></div></div>
+                <div class="ss-example-row"><span class="ss-ex-icon">3</span><div class="ss-ex-content"><span class="ss-ex-en">Başlık, alt başlık, kalın kelime varsa gözle tara</span></div></div>
+              </div>
+              <div class="ss-formula-block">
+                <span class="ss-formula-label">HEDEF</span>
+                <div class="ss-formula-text">"Bu metin ne hakkında?" sorusunu 90 saniyede yanıtla</div>
+                <div class="ss-formula-sub">❌ Her kelimeyi çevirme &nbsp;·&nbsp; ❌ Detaylarda takılma</div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-2">
+              <span class="ss-slide-eyebrow">Scanning (10-15 saniye/soru)</span>
+              <h3 class="ss-slide-heading">Sorudaki anahtar kelimeyi metinde bul</h3>
+              <div class="ss-example-list">
+                <div class="ss-example-row"><span class="ss-ex-icon">1</span><div class="ss-ex-content"><span class="ss-ex-en">Soruyu oku → anahtar kelimeyi belirle</span><span class="ss-ex-tr">isim, tarih, sayı, özel isim</span></div></div>
+                <div class="ss-example-row"><span class="ss-ex-icon">2</span><div class="ss-ex-content"><span class="ss-ex-en">Metinde o kelimeyi göz gezdirerek bul</span><span class="ss-ex-tr">okuma değil, tarama</span></div></div>
+                <div class="ss-example-row"><span class="ss-ex-icon">3</span><div class="ss-ex-content"><span class="ss-ex-en">Bulunan yerin 1-2 satırını oku</span></div></div>
+              </div>
+              <div class="ss-formula-block">
+                <span class="ss-formula-label">HEDEF</span>
+                <div class="ss-formula-text">Cevabı paragrafın tamamını okumadan bul</div>
+                <div class="ss-formula-sub">✅ İsimler, tarihler, rakamlar → hızlı taranır<br>✅ Büyük harf, italik, tırnak → göz önünde</div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-3">
+              <span class="ss-slide-eyebrow">Soru Tiplerine Göre Strateji</span>
+              <h3 class="ss-slide-heading">Her tipe uygun tekniği seç</h3>
+              <div class="ss-signals-grid">
+                <div class="ss-signal-card"><span class="ss-signal-trigger">Ana Fikir sorusu</span><span class="ss-signal-example">Skimming yeterli (ilk+son cümle)</span></div>
+                <div class="ss-signal-card"><span class="ss-signal-trigger">Referans sorusu (it/this/they)</span><span class="ss-signal-example">Zamirin hemen öncesine git</span></div>
+                <div class="ss-signal-card"><span class="ss-signal-trigger">Çıkarım sorusu</span><span class="ss-signal-example">İlgili paragrafı oku, abartılı şıkları ele</span></div>
+                <div class="ss-signal-card"><span class="ss-signal-trigger">Kelime anlamı sorusu</span><span class="ss-signal-example">Bağlamdan ton yakala, yerine koy test et</span></div>
+                <div class="ss-signal-card"><span class="ss-signal-trigger">Detay sorusu</span><span class="ss-signal-example">Scanning ile anahtar kelimeyi bul, 2 satır oku</span></div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-4">
+              <span class="ss-slide-eyebrow">Çift Turlu Çözüm Tekniği</span>
+              <h3 class="ss-slide-heading">2 turda baskıyı sıfırla</h3>
+              <div class="ss-example-list">
+                <div class="ss-example-row ss-good"><span class="ss-ex-icon">1️⃣</span><div class="ss-ex-content"><span class="ss-ex-en">TUR 1 — Hız (ilk geçiş)</span><span class="ss-ex-tr">Emin olduklarını 60-75 saniyede çöz. Zorlandıklarına ★ koy, geç. Amaç: kesin puanı garantile, zaman baskısını düşür.</span></div></div>
+                <div class="ss-example-row ss-good"><span class="ss-ex-icon">2️⃣</span><div class="ss-ex-content"><span class="ss-ex-en">TUR 2 — Derinlik (ikinci geçiş)</span><span class="ss-ex-tr">Sadece ★ işaretli sorulara dön. Saatin baskısı daha az, daha net düşünürsün. Hâlâ bilmiyorsan → tahmin et, boş bırakma.</span></div></div>
+              </div>
+              <div class="ss-formula-block">
+                <span class="ss-formula-label">ALTIN KURAL</span>
+                <div class="ss-formula-text">Hiçbir soruyu boş bırakma — yanlış doğruyu götürmez.</div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-5">
+              <span class="ss-slide-eyebrow">Zaman Yönetimi Tablosu</span>
+              <h3 class="ss-slide-heading">Soru tipine göre süre bütçesi</h3>
+              <div class="ss-timer-table">
+                <div class="ss-timer-row"><span class="ss-timer-tip">Kelime soruları</span><span class="ss-timer-val">60-75 sn/soru → hızlı geç</span></div>
+                <div class="ss-timer-row"><span class="ss-timer-tip">Gramer/bağlaç</span><span class="ss-timer-val">60-90 sn/soru → refleks kullan</span></div>
+                <div class="ss-timer-row"><span class="ss-timer-tip">Cümle tamamlama</span><span class="ss-timer-val">90-120 sn/soru → yapı analizi</span></div>
+                <div class="ss-timer-row"><span class="ss-timer-tip">Okuma parçaları</span><span class="ss-timer-val">2,5-3 dk/soru → skimming + scanning</span></div>
+                <div class="ss-timer-row"><span class="ss-timer-tip">Çeviri</span><span class="ss-timer-val">2-3 dk/soru → omurga taktiği</span></div>
+              </div>
+              <div class="ss-formula-block">
+                <span class="ss-formula-label">180 DAKİKA İÇİN ÖNERİ DAĞILIM</span>
+                <div class="ss-formula-text">Kelime + Gramer: 45 dk &nbsp;·&nbsp; Cümle tamamlama: 30 dk<br>Okuma: 75 dk &nbsp;·&nbsp; Çeviri: 30 dk</div>
+              </div>
+            </div>
+
+            <div class="ss-slide" id="ss-slide-6">
+              <span class="ss-slide-eyebrow">Mini Sınav · 3 Soru</span>
+              <h3 class="ss-slide-heading">Doğru şıkkı seç</h3>
+
+              <div class="ss-quiz-block">
+                <p class="ss-quiz-question">1) Skimming tekniğinde ilk ne okunur?</p>
+                <div class="ss-quiz-options">
+                  <button class="ss-quiz-btn" data-ssq="1" data-ssval="a" data-ss-action="quiz-answer">a) Her kelime tek tek</button>
+                  <button class="ss-quiz-btn" data-ssq="1" data-ssval="b" data-ss-action="quiz-answer">b) Sadece sorular</button>
+                  <button class="ss-quiz-btn" data-ssq="1" data-ssval="c" data-ss-action="quiz-answer">c) İlk cümle ve her paragrafın ilk+son cümlesi</button>
+                  <button class="ss-quiz-btn" data-ssq="1" data-ssval="d" data-ss-action="quiz-answer">d) Sadece başlık</button>
+                </div>
+                <div class="ss-quiz-feedback" id="ss-q1-feedback"></div>
+              </div>
+
+              <div class="ss-quiz-block">
+                <p class="ss-quiz-question">2) Scanning tekniğinde ne aranır?</p>
+                <div class="ss-quiz-options">
+                  <button class="ss-quiz-btn" data-ssq="2" data-ssval="a" data-ss-action="quiz-answer">a) Tüm metnin anlamı</button>
+                  <button class="ss-quiz-btn" data-ssq="2" data-ssval="b" data-ss-action="quiz-answer">b) Sorudaki anahtar kelime</button>
+                  <button class="ss-quiz-btn" data-ssq="2" data-ssval="c" data-ss-action="quiz-answer">c) Bağlaçlar</button>
+                  <button class="ss-quiz-btn" data-ssq="2" data-ssval="d" data-ss-action="quiz-answer">d) Fiil zamanları</button>
+                </div>
+                <div class="ss-quiz-feedback" id="ss-q2-feedback"></div>
+              </div>
+
+              <div class="ss-quiz-block">
+                <p class="ss-quiz-question">3) Çift Turlu Çözüm'de 1. turda ne yapılır?</p>
+                <div class="ss-quiz-options">
+                  <button class="ss-quiz-btn" data-ssq="3" data-ssval="a" data-ss-action="quiz-answer">a) Tüm sorular dikkatlice çözülür</button>
+                  <button class="ss-quiz-btn" data-ssq="3" data-ssval="b" data-ss-action="quiz-answer">b) Sadece okuma soruları çözülür</button>
+                  <button class="ss-quiz-btn" data-ssq="3" data-ssval="c" data-ss-action="quiz-answer">c) Emin olunanlar çözülür, zorlar ★ ile geçilir</button>
+                  <button class="ss-quiz-btn" data-ssq="3" data-ssval="d" data-ss-action="quiz-answer">d) Hiçbir şey çözülmez</button>
+                </div>
+                <div class="ss-quiz-feedback" id="ss-q3-feedback"></div>
+              </div>
+
+              <div class="ss-dila-box" id="ss-finishBox" style="display:none">
+                <div class="ss-dila-avatar">🤖</div>
+                <div class="ss-dila-bubble">Tebrikler! Artık <strong>Skimming</strong>, <strong>Scanning</strong> ve <strong>Çift Turlu Çözüm</strong> tekniklerini uygulayabiliyorsun. Sınavda zaman artık senin kontrolünde!</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="ss-nav-row">
+            <button class="ss-nav-btn ss-btn-prev" id="ss-prevBtn" data-ss-action="slide-prev" disabled>← Geri</button>
+            <span class="ss-slide-counter" id="ss-slideCounter">1 / 7</span>
+            <button class="ss-nav-btn ss-btn-next" id="ss-nextBtn" data-ss-action="slide-next">İleri →</button>
+          </div>
+          </section>
+
           <!-- KONUŞMA SİMÜLATÖRÜ -->
           <div style="background:linear-gradient(135deg,#0a1428,#0a0c14);border-radius:16px;padding:20px;margin-bottom:18px;border:1px solid #22d3ee30">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
@@ -4822,6 +5122,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <a onclick="vocGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🗂️ Kelime Stratejisi dersini aç (KLOD-MOTION) →</a>
               <a onclick="rdGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📖 Reading — 3 Nokta Tekniği'ni aç (KLOD-MOTION) →</a>
               <a onclick="mpGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🧠 Modal Perfect dersini aç (KLOD-MOTION) →</a>
+              <a onclick="kbGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📇 500 Akademik Kelime Bankası'nı aç →</a>
+              <a onclick="ssGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🎯 Skimming & Scanning dersini aç (KLOD-MOTION) →</a>
               <a onclick="cpGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">📆 28 Gün Crash Plan'ı aç →</a>
               <a onclick="ahkGit()" style="cursor:pointer;color:#38d9a9;font-size:12px;font-weight:600;text-decoration:underline">🃏 AHA Kartları'nı aç →</a>
             </div>
@@ -6001,6 +6303,18 @@ const TUZAK_HAVUZ=[
   {q:'Doğru cevabı seçin:',sent:'Which word signals a contrasting idea in a paragraph?',opts:['A) however','B) furthermore','C) consequently','D) for instance'],dogru:0,fb:'however = zıtlık bağlacı.'},
   {q:'Doğru cevabı seçin:',sent:'What should you read FIRST when answering a main idea question?',opts:['A) every sentence','B) the first and last sentences','C) only the first sentence','D) the middle sentences'],dogru:1,fb:'3 Nokta Tekniği → ilk + son cümle.'},
   {q:'Doğru cevabı seçin:',sent:'Which answer choice is most likely WRONG in an inference question?',opts:['A) one that paraphrases the text','B) one that is implied','C) one that uses \'always\' or \'never\'','D) one that matches the tone'],dogru:2,fb:'Abartılı şıklar → Şeytan Üçgeni.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Researchers decided to _____ a survey on student habits."',opts:['A) conduct','B) make','C) do','D) perform'],dogru:0,fb:'conduct + survey → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The new law aims to _____ the negative effects of pollution."',opts:['A) increase','B) mitigate','C) ignore','D) admire'],dogru:1,fb:'mitigate + effects → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Economic growth can _____ new job opportunities."',opts:['A) result from','B) depend on','C) give rise to','D) refer to'],dogru:2,fb:'give rise to = yol açmak.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The success of the project will _____ the team\'s cooperation."',opts:['A) result in','B) carry out','C) point out','D) depend on'],dogru:3,fb:'depend on = bağlı olmak.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The committee decided to _____ a thorough investigation."',opts:['A) carry out','B) make','C) bring','D) set'],dogru:0,fb:'carry out + investigation → sabit collocation.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ several key problems in the education system."',opts:['A) carried out','B) pointed out','C) resulted in','D) depended on'],dogru:1,fb:'point out = belirtmek.'},
+  {q:'Doğru cevabı seçin:',sent:'YDS\'de yanlış cevap doğruyu götürür mü?',opts:['A) Evet, götürür','B) Bazen götürür','C) Hayır, götürmez','D) Sadece okumada götürür'],dogru:2,fb:'Boş bırakmak yerine tahmin et — yanlış doğruyu götürmez.'},
+  {q:'Doğru cevabı seçin:',sent:'Scanning tekniği ne için kullanılır?',opts:['A) Genel konuyu anlamak','B) Bağlaçları bulmak','C) Çeviri yapmak','D) Metinde anahtar kelimeyi bulmak'],dogru:3,fb:'Scanning = metinde anahtar kelimeyi bulmak, tamamını okumak için değil.'},
+  {q:'Doğru cevabı seçin:',sent:'Okuma parçalarına ayrılması gereken ortalama süre nedir?',opts:['A) 2,5-3 dakika/soru','B) 1 dakika/soru','C) 5 dakika/soru','D) 30 saniye/soru'],dogru:0,fb:'Okuma parçaları: 2,5-3 dakika/soru.'},
+  {q:'Doğru cevabı seçin:',sent:'Çift Turlu Çözüm\'de ★ işareti ne anlama gelir?',opts:['A) Bu soru yanlış','B) Zorlandım, 2. turda döneceğim','C) Bu soruyu atla','D) Bu soru kolay'],dogru:1,fb:'★ = zorlandım, 2. turda döneceğim (Çift Turlu Çözüm).'},
+  {q:'Doğru cevabı seçin:',sent:'Referans sorusunda \'it\' kelimesi nereye işaret eder?',opts:['A) Sonraki cümleye','B) Paragrafın başına','C) Hemen önceki isme','D) Yazara'],dogru:2,fb:'Referans sorusunda "it" hemen önceki isme işaret eder (CZ-REF tekniği).'},
+  {q:'Doğru cevabı seçin:',sent:'Ana fikir sorusunda hangi cümleler önce okunur?',opts:['A) Sadece orta paragraf','B) Tüm metin','C) Sadece başlık','D) İlk cümle ve son cümle'],dogru:3,fb:'Ana fikir sorusunda 3 Nokta Tekniği: ilk cümle ve son cümle önce okunur.'},
 ];
 
 let tuzakIdx=0,tuzakAnswered=false;
@@ -9876,7 +10190,7 @@ function fonetikQuizCevap(si_harf,si,btn){
 }
 
 // ─── İNGİLİZCE KURSU ────────────────────────────────────────────────────────
-const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'},{ikon:'🎯',baslik:'Soru Tekniği',aciklama:'BEBEK sistemi — boşluk doldurmayı 20 saniyede çöz',ornekler:['Bak: S+V mi, isim mi?','Etiketle: Bağlaç/Edat/Relative/Tense/Modal','Böl-Ele-Karar: 3 bıçakla ele, kalan doğru.'],pratik:'BEBEK mikro dersini aç ve tekniği uygula!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'},{ikon:'🔁',baslik:'Verb Patterns',aciklama:'stop/remember/try + -ing veya to — anlam değişir',ornekler:['He stopped smoking. (bıraktı)','He stopped to smoke. (durdu, içmek için)','Remember to call me. (unutma)'],pratik:'STOP/REMEMBER/TRY mikro dersini aç ve mini sınavı çöz!'},{ikon:'🗂️',baslik:'Kelime Stratejisi',aciklama:'3 adımlı şık avcılığı — ton, zıt anlam, collocation',ornekler:['mitigate + risk/impact','enhance + performance/quality','İyi kelime + kötü kelime → zıtlık bağlacı ara'],pratik:'Kelime Stratejisi mikro dersini aç ve collocation haritasını çöz!'},{ikon:'🧠',baslik:'Modal Perfect',aciklama:'must/should/could/might have V3 — anlam kilidi',ornekler:['must have V3 = kesin','should have V3 = keşke','could have V3 = olabilirdi'],pratik:'Modal Perfect mikro dersini aç ve mini sınavı çöz!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'},{ikon:'🧭',baslik:'Okuma Stratejisi',aciklama:'3 Nokta Tekniği, 4 soru tipi, Şeytan Üçgeni ve CZ-REF',ornekler:['They = önceki özne mi?','Abartılı/konu dışı/ters anlam şıkları ele','İlk cümle + son cümle = ana fikir'],pratik:'Reading mikro dersini aç ve soru tiplerini çöz!'},{ikon:'🧩',baslik:'Cümle Analizi',aciklama:'Kipli fiil vs fiilimsi — A/B/C analiz sistemi',ornekler:['stolen = sadece sıfat görevi','A/B/C: önce fiili (C) bul','Despite + isim, Although + cümle'],pratik:'Cümle Analizi mikro dersini aç ve A/B/C sistemini uygula!'}]};
+const ING_DERSLER={A1:[{ikon:'👋',baslik:'Selamlaşma & Tanışma',aciklama:'Hello, Hi, Good morning — günlük selamlar',ornekler:['Hello! My name is Ahmet.','Nice to meet you!','How are you? I am fine, thank you.'],pratik:'Kendinizi 3 cümleyle tanıtın!'},{ikon:'🔢',baslik:'Sayılar & Renkler',aciklama:'1den 100e sayılar, temel renkler',ornekler:['One, two, three... ten','Red, blue, green, yellow','I have two cats.'],pratik:'1den 10a kadar sayın!'},{ikon:'🏠',baslik:'Aile & Ev',aciklama:'Aile üyeleri ve ev eşyaları',ornekler:['This is my mother.','I live in a house.','My room is small.'],pratik:'Ailenizi tanıtın!'},{ikon:'🍎',baslik:'Yiyecek & İçecek',aciklama:'Temel yiyecek ve içecek kelimeleri',ornekler:['I like apples.','Can I have water please?','My favorite food is pizza.'],pratik:'Favori yiyeceğinizi söyleyin!'},{ikon:'⏰',baslik:'Saat & Günler',aciklama:'Saatleri söyleme, haftanın günleri',ornekler:['What time is it? It is three oclock.','Today is Monday.','See you on Friday!'],pratik:'Şu anki saati söyleyin!'}],A2:[{ikon:'🛒',baslik:'Alışveriş',aciklama:'Mağazada konuşma, fiyat sorma',ornekler:['How much does this cost?','I would like to buy this.','Do you have it in blue?'],pratik:'Bir ürün için alışveriş diyaloğu yazın!'},{ikon:'🚌',baslik:'Ulaşım & Yol Tarifi',aciklama:'Otobüs, metro, taksi — yön sorma',ornekler:['Where is the bus stop?','Turn left at the corner.','How far is it?'],pratik:'Okulunuza yol tarifi verin!'},{ikon:'💼',baslik:'Meslekler',aciklama:'Meslekler ve iş yerleri',ornekler:['I am a teacher.','She works in a hospital.','What do you do?'],pratik:'Mesleğinizi anlatın!'},{ikon:'📅',baslik:'Geçmiş Zaman',aciklama:'Simple Past — was/were, V2 fiiller',ornekler:['I went to school yesterday.','She was happy.','We watched a movie.'],pratik:'Dün ne yaptığınızı yazın!'}],B1:[{ikon:'💭',baslik:'Present Perfect',aciklama:'Have/has + V3 — deneyim ve sonuç',ornekler:['I have visited Paris.','She has never eaten sushi.','Have you ever seen this film?'],pratik:'3 deneyiminizi yazın!'},{ikon:'🤔',baslik:'Modal Fiiller',aciklama:'Can, could, should, must, may',ornekler:['You should exercise more.','Can I help you?','It might rain today.'],pratik:'5 tavsiye cümlesi yazın!'},{ikon:'📝',baslik:'Passive Voice',aciklama:'Edilgen yapı — be + V3',ornekler:['This book was written by Orhan Pamuk.','English is spoken worldwide.'],pratik:'3 edilgen cümle kurun!'},{ikon:'🔗',baslik:'Bağlaçlar',aciklama:'Although, however, despite, therefore',ornekler:['Although it rained, we went out.','Despite the cold, he swam.'],pratik:'Bağlaçlarla 3 cümle yazın!'},{ikon:'🎯',baslik:'Soru Tekniği',aciklama:'BEBEK sistemi — boşluk doldurmayı 20 saniyede çöz',ornekler:['Bak: S+V mi, isim mi?','Etiketle: Bağlaç/Edat/Relative/Tense/Modal','Böl-Ele-Karar: 3 bıçakla ele, kalan doğru.'],pratik:'BEBEK mikro dersini aç ve tekniği uygula!'},{ikon:'📇',baslik:'Kelime Bankası',aciklama:'500 akademik kelime — flip-card ile öğren',ornekler:['depend on = bağlı olmak','result in = yol açmak','significant = önemli, anlamlı'],pratik:'Kelime Bankası\'nı aç, bir grubu bitir ve öğrendiklerini işaretle!'}],B2:[{ikon:'⚡',baslik:'Advanced Modals',aciklama:'Must have, should have, could have',ornekler:['She must have left early.','You should have called.','He could have won.'],pratik:'Geçmişe yönelik 3 çıkarım yazın!'},{ikon:'📚',baslik:'Akademik Kelimeler',aciklama:'Academic Word List temel 50',ornekler:['The research indicates a significant change.','This analysis reveals key factors.'],pratik:'5 akademik kelimeyi cümlede kullanın!'},{ikon:'✍️',baslik:'Essay Yazımı',aciklama:'Giriş, gelişme, sonuç yapısı',ornekler:['In conclusion, it is clear that...','On the other hand, some argue that...'],pratik:'Bir paragraf giriş yazın!'},{ikon:'🎯',baslik:'Conditionals',aciklama:'Type 1, 2, 3 koşul cümleleri',ornekler:['If I study hard, I will pass.','If she had tried, she would have succeeded.'],pratik:'Her tip için bir cümle yazın!'},{ikon:'🔁',baslik:'Verb Patterns',aciklama:'stop/remember/try + -ing veya to — anlam değişir',ornekler:['He stopped smoking. (bıraktı)','He stopped to smoke. (durdu, içmek için)','Remember to call me. (unutma)'],pratik:'STOP/REMEMBER/TRY mikro dersini aç ve mini sınavı çöz!'},{ikon:'🗂️',baslik:'Kelime Stratejisi',aciklama:'3 adımlı şık avcılığı — ton, zıt anlam, collocation',ornekler:['mitigate + risk/impact','enhance + performance/quality','İyi kelime + kötü kelime → zıtlık bağlacı ara'],pratik:'Kelime Stratejisi mikro dersini aç ve collocation haritasını çöz!'},{ikon:'🧠',baslik:'Modal Perfect',aciklama:'must/should/could/might have V3 — anlam kilidi',ornekler:['must have V3 = kesin','should have V3 = keşke','could have V3 = olabilirdi'],pratik:'Modal Perfect mikro dersini aç ve mini sınavı çöz!'}],C1:[{ikon:'🏛️',baslik:'Academic Writing',aciklama:'Araştırma makalesi dili',ornekler:['The findings suggest a correlation between...','Contrary to previous assumptions...'],pratik:'Bir abstract yazın!'},{ikon:'🎭',baslik:'Idiomatic English',aciklama:'Deyimler ve kalıplar',ornekler:['It is a piece of cake.','She is under the weather.','Let us bite the bullet.'],pratik:'5 deyimi cümlede kullanın!'},{ikon:'🔬',baslik:'YDS/YÖKDİL Köprüsü',aciklama:'C1den sınava geçiş — sinyal metodu',ornekler:['Despite extensive research, the results remain inconclusive.','The findings were far from satisfactory.'],pratik:'Sinyal Avcısına geç ve sına!'},{ikon:'🧭',baslik:'Okuma Stratejisi',aciklama:'Skimming, Scanning ve Çift Turlu Çözüm — sınav baskısını yönet',ornekler:['Skimming: ilk+son cümle, 90 saniyede konuyu yakala','Scanning: anahtar kelimeyi tara, oku değil','Tur 1: emin ol → Tur 2: ★ işaretlilere dön'],pratik:'Skimming & Scanning mikro dersini aç ve Çift Turlu Çözüm\'ü öğren!'},{ikon:'🧩',baslik:'Cümle Analizi',aciklama:'Kipli fiil vs fiilimsi — A/B/C analiz sistemi',ornekler:['stolen = sadece sıfat görevi','A/B/C: önce fiili (C) bul','Despite + isim, Although + cümle'],pratik:'Cümle Analizi mikro dersini aç ve A/B/C sistemini uygula!'}]};
 
 function ingSeviyeSec(el,seviye){document.querySelectorAll('.ing-stab').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='transparent';b.style.color='var(--muted)';});el.style.borderColor='#a78bfa';el.style.background='#a78bfa20';el.style.color='#7c3aed';ingDerslerRender(seviye);dilavcisiVideoRender(seviye);dilavcisiYolHaritaRender(seviye);}
 
@@ -10043,6 +10357,12 @@ function dilavcisiYolDersAc(idx, seviye) {
     if (typeof bbkGit === 'function') bbkGit();
     return;
   }
+  // B1 skill tree'deki "Kelime Bankası" node'u -> 500 Akademik Kelime Bankası'na bağlı
+  if (seviye === 'B1' && idx === 5) {
+    dilavcisiDersTamamlandi(seviye + '-' + idx);
+    if (typeof kbGit === 'function') kbGit();
+    return;
+  }
   // B2 skill tree'deki "Verb Patterns" node'u -> Gerund/Infinitive mikro dersine bağlı
   // (STOP/REMEMBER/TRY icerigini de kapsayan daha genis ders — bkz. Gorev 4 commit notu)
   if (seviye === 'B2' && idx === 4) {
@@ -10050,13 +10370,13 @@ function dilavcisiYolDersAc(idx, seviye) {
     if (typeof giGit === 'function') giGit();
     return;
   }
-  // C1 skill tree'deki "Okuma Stratejisi" node'u -> Reading (rd) mikro dersine bağlı
-  // (ÖSYM Şablon Sistemi'nin CZ-REF/şablon içeriğini de kapsayan daha geniş okuma
-  // stratejisi dersi — bkz. Görev 2 commit notu. osm dersi silinmedi, kendi DILA
-  // linkinden hâlâ erişilebilir, sadece skill tree hedefi değişti.)
+  // C1 skill tree'deki "Okuma Stratejisi" node'u -> Skimming & Scanning (ss) mikro
+  // dersine bağlı. Görev talebi açıkça "varsa bu derse bağla" dediği için node
+  // Reading (rd) dersinden buraya yeniden yönlendirildi — rd dersi silinmedi,
+  // kendi DILA linkinden hâlâ erişilebilir, sadece skill tree hedefi değişti.
   if (seviye === 'C1' && idx === 3) {
     dilavcisiDersTamamlandi(seviye + '-' + idx);
-    if (typeof rdGit === 'function') rdGit();
+    if (typeof ssGit === 'function') ssGit();
     return;
   }
   // C1 skill tree'deki "Cümle Analizi" node'u -> Kipli Fiil/Cümle Analizi mikro dersine bağlı
@@ -12859,6 +13179,225 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   };
 
   mpUpdateUI();
+})();
+</script>
+
+<!-- 500 AKADEMİK KELİME BANKASI — #kelime-bankasi-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const KB_KELIMELER = [
+    {id:'word1',en:'depend on',tr:'bağlı olmak, bağımlı olmak',ornek:'The success of the project depends on team cooperation.',grup:1},
+    {id:'word2',en:'result in',tr:'yol açmak, sonuçlanmak',ornek:'The new policy resulted in higher productivity.',grup:1},
+    {id:'word3',en:'contribute to',tr:'katkıda bulunmak',ornek:'Regular exercise contributes to better health.',grup:1},
+    {id:'word4',en:'refer to',tr:'atıfta bulunmak, bahsetmek',ornek:'The author refers to several earlier studies.',grup:1},
+    {id:'word5',en:'account for',tr:'açıklamak, oluşturmak (oran)',ornek:'Rising costs account for the price increase.',grup:1},
+    {id:'word6',en:'carry out',tr:'yürütmek, gerçekleştirmek',ornek:'The team carried out a detailed investigation.',grup:1},
+    {id:'word7',en:'point out',tr:'belirtmek, dikkat çekmek',ornek:'The report points out several key problems.',grup:1},
+    {id:'word8',en:'give rise to',tr:'yol açmak, doğurmak',ornek:'The new law gave rise to public debate.',grup:1},
+    {id:'word9',en:'bring about',tr:'meydana getirmek',ornek:'Technology has brought about major changes in education.',grup:1},
+    {id:'word10',en:'set out',tr:'ortaya koymak, başlamak',ornek:'The researchers set out to test the hypothesis.',grup:1},
+    {id:'word11',en:'analyze',tr:'analiz etmek',ornek:'Scientists analyzed the data carefully.',grup:2},
+    {id:'word12',en:'evaluate',tr:'değerlendirmek',ornek:'Teachers evaluate student performance regularly.',grup:2},
+    {id:'word13',en:'identify',tr:'tanımlamak, belirlemek',ornek:'The study aims to identify the main causes.',grup:2},
+    {id:'word14',en:'demonstrate',tr:'göstermek, kanıtlamak',ornek:'The results demonstrate a clear correlation.',grup:2},
+    {id:'word15',en:'establish',tr:'kurmak, ortaya koymak',ornek:'The research established a strong link between the two factors.',grup:2},
+    {id:'word16',en:'indicate',tr:'göstermek, işaret etmek',ornek:'The data indicate a steady increase in sales.',grup:2},
+    {id:'word17',en:'suggest',tr:'önermek, ima etmek',ornek:'The findings suggest a new approach is needed.',grup:2},
+    {id:'word18',en:'argue',tr:'öne sürmek, iddia etmek',ornek:'Some experts argue that the policy is ineffective.',grup:2},
+    {id:'word19',en:'examine',tr:'incelemek',ornek:'The paper examines the effects of climate change.',grup:2},
+    {id:'word20',en:'investigate',tr:'araştırmak',ornek:'Researchers investigated the cause of the outbreak.',grup:2},
+    {id:'word21',en:'significant',tr:'önemli, anlamlı',ornek:'There was a significant improvement in test scores.',grup:3},
+    {id:'word22',en:'substantial',tr:'önemli miktarda, büyük',ornek:'The company made a substantial investment in research.',grup:3},
+    {id:'word23',en:'crucial',tr:'kritik, hayati',ornek:'Sleep plays a crucial role in learning.',grup:3},
+    {id:'word24',en:'evident',tr:'açık, belirgin',ornek:'The benefits of the program are evident.',grup:3},
+    {id:'word25',en:'relevant',tr:'ilgili, alakalı',ornek:'Only relevant data was included in the analysis.',grup:3},
+    {id:'word26',en:'comprehensive',tr:'kapsamlı',ornek:'The report offers a comprehensive review of the topic.',grup:3},
+    {id:'word27',en:'potential',tr:'olası, potansiyel',ornek:'The drug has potential side effects.',grup:3},
+    {id:'word28',en:'prior',tr:'önceki',ornek:'No prior experience is required for this course.',grup:3},
+    {id:'word29',en:'subsequent',tr:'sonraki, akabinde gelen',ornek:'Subsequent studies confirmed the initial findings.',grup:3},
+    {id:'word30',en:'inherent',tr:'doğasında olan, özünde bulunan',ornek:'There are inherent risks in any experiment.',grup:3},
+    {id:'word31',en:'approach',tr:'yaklaşım',ornek:'The teacher used a new approach to explain the topic.',grup:4},
+    {id:'word32',en:'framework',tr:'çerçeve, yapı',ornek:'The study is based on a theoretical framework.',grup:4},
+    {id:'word33',en:'perspective',tr:'bakış açısı',ornek:'The book offers a fresh perspective on history.',grup:4},
+    {id:'word34',en:'impact',tr:'etki',ornek:'Climate change has a major impact on agriculture.',grup:4},
+    {id:'word35',en:'factor',tr:'etken, faktör',ornek:'Diet is an important factor in overall health.',grup:4},
+    {id:'word36',en:'evidence',tr:'kanıt, delil',ornek:'There is strong evidence to support the theory.',grup:4},
+    {id:'word37',en:'assumption',tr:'varsayım',ornek:'The argument is based on a false assumption.',grup:4},
+    {id:'word38',en:'implication',tr:'çıkarım, ima',ornek:'The findings have important implications for policy.',grup:4},
+    {id:'word39',en:'phenomenon',tr:'olgu, fenomen',ornek:'Global warming is a well-documented phenomenon.',grup:4},
+    {id:'word40',en:'mechanism',tr:'mekanizma, işleyiş',ornek:'The body has a natural mechanism to fight infection.',grup:4},
+    {id:'word41',en:'focus on',tr:'odaklanmak',ornek:'The course focuses on academic writing skills.',grup:5},
+    {id:'word42',en:'consist of',tr:'oluşmak, meydana gelmek',ornek:'The exam consists of four sections.',grup:5},
+    {id:'word43',en:'respond to',tr:'yanıt vermek',ornek:'The government responded to public criticism.',grup:5},
+    {id:'word44',en:'engage in',tr:'katılmak, meşgul olmak',ornek:'Students engage in group discussions every week.',grup:5},
+    {id:'word45',en:'rely on',tr:'güvenmek, dayanmak',ornek:'Many farmers rely on rainfall for irrigation.',grup:5},
+    {id:'word46',en:'deal with',tr:'ile başa çıkmak, ele almak',ornek:'The company had to deal with several complaints.',grup:5},
+    {id:'word47',en:'lead to',tr:'yol açmak',ornek:'Poor diet can lead to serious health problems.',grup:5},
+    {id:'word48',en:'result from',tr:'kaynaklanmak',ornek:'The delay resulted from a shortage of materials.',grup:5},
+    {id:'word49',en:'aim at/to',tr:'hedeflemek',ornek:'The project aims to reduce carbon emissions.',grup:5},
+    {id:'word50',en:'base on',tr:'dayandırmak, temel almak',ornek:'The decision was based on careful analysis.',grup:5},
+  ];
+  let kbGrupAktif = 1;
+
+  function kbLoadProgress(){
+    try{ return JSON.parse(localStorage.getItem('kb_progress')||'{}'); }catch(e){ return {}; }
+  }
+  function kbSaveProgress(p){
+    try{ localStorage.setItem('kb_progress', JSON.stringify(p)); }catch(e){}
+  }
+
+  function kbUpdateProgress(){
+    const prog = kbLoadProgress();
+    const tamamlanan = KB_KELIMELER.filter(function(w){ return !!prog[w.id]; }).length;
+    const fill = document.getElementById('kb-progressFill');
+    const label = document.getElementById('kb-progressLabel');
+    if(fill)fill.style.width = Math.round((tamamlanan/KB_KELIMELER.length)*100)+'%';
+    if(label)label.textContent = tamamlanan+' / '+KB_KELIMELER.length+' kelime öğrenildi';
+    if(tamamlanan===KB_KELIMELER.length){
+      if(typeof xpKazan==='function')xpKazan('kelime',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('kelime-bankasi-500');
+    }
+  }
+
+  function kbRender(){
+    const grid = document.getElementById('kb-grid');
+    if(!grid)return;
+    const prog = kbLoadProgress();
+    const kelimeler = KB_KELIMELER.filter(function(w){ return w.grup===kbGrupAktif; });
+    grid.innerHTML = kelimeler.map(function(w){
+      const ogrenildiMi = !!prog[w.id];
+      return '<div class="kb-card'+(ogrenildiMi?' kb-learned':'')+'" data-kb-action="flip" data-kb-id="'+w.id+'">'+
+        '<div class="kb-card-inner">'+
+          '<div class="kb-card-face kb-card-front"><span class="kb-card-en">'+w.en+'</span><span class="kb-card-hint">tıkla →</span></div>'+
+          '<div class="kb-card-face kb-card-back"><span class="kb-card-tr">'+w.tr+'</span><span class="kb-card-ex">'+w.ornek+'</span></div>'+
+        '</div>'+
+        '<button type="button" class="kb-ogren-btn'+(ogrenildiMi?' kb-on':'')+'" data-kb-action="ogren" data-kb-word="'+w.id+'">'+(ogrenildiMi?'Öğrenildi ✓':'Öğrendim ✓')+'</button>'+
+        '<span class="kb-learned-badge">✅</span>'+
+      '</div>';
+    }).join('');
+  }
+
+  function kbGrupSec(grupNo){
+    kbGrupAktif = grupNo;
+    document.querySelectorAll('#kelime-bankasi-modul .kb-group-btn').forEach(function(b){
+      b.classList.toggle('kb-active', parseInt(b.dataset.kbGrup,10)===grupNo);
+    });
+    kbRender();
+  }
+
+  function kbOgrendimToggle(wordId){
+    const prog = kbLoadProgress();
+    prog[wordId] = !prog[wordId];
+    kbSaveProgress(prog);
+    kbRender();
+    kbUpdateProgress();
+  }
+
+  const kbKok = document.getElementById('kelime-bankasi-modul');
+  if (kbKok) {
+    kbKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-kb-action]');
+      if(!el)return;
+      const action = el.dataset.kbAction;
+      if(action==='grup')kbGrupSec(parseInt(el.dataset.kbGrup,10));
+      else if(action==='ogren')kbOgrendimToggle(el.dataset.kbWord);
+      else if(action==='flip')el.classList.toggle('kb-flipped');
+    });
+  }
+
+  window.kbGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('kelime-bankasi-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  kbRender();
+  kbUpdateProgress();
+})();
+</script>
+
+<!-- SKIMMING & SCANNING + ÇİFT TURLU ÇÖZÜM — #skimming-scanning-modul mantığı (Dil Avcısı içine gömülü) -->
+<script>
+(function(){
+  const SS_TOTAL = 7;
+  let ssCurrent = 0;
+  const SS_CORRECT = { 1:'c', 2:'b', 3:'c' };
+  const ssQuizAnswered = { 1:false, 2:false, 3:false };
+
+  function ssUpdateUI(){
+    document.querySelectorAll('#skimming-scanning-modul .ss-slide').forEach(function(s,i){ s.classList.toggle('ss-active', i===ssCurrent); });
+    document.getElementById('ss-prevBtn').disabled = ssCurrent===0;
+    document.getElementById('ss-nextBtn').disabled = ssCurrent===SS_TOTAL-1;
+    document.getElementById('ss-slideCounter').textContent = (ssCurrent+1)+' / '+SS_TOTAL;
+    const pct = Math.round((ssCurrent/(SS_TOTAL-1))*100);
+    document.getElementById('ss-progressFill').style.width = pct+'%';
+    document.getElementById('ss-progressLabel').textContent = ssCurrent+' / '+(SS_TOTAL-1)+' tamamlandı';
+  }
+
+  function ssChangeSlide(dir){
+    const next = ssCurrent+dir;
+    if(next<0||next>=SS_TOTAL)return;
+    ssCurrent=next;
+    ssUpdateUI();
+  }
+
+  function ssCheckAnswer(btn){
+    const qNum = parseInt(btn.dataset.ssq,10);
+    const val = btn.dataset.ssval;
+    if(ssQuizAnswered[qNum])return;
+    ssQuizAnswered[qNum]=true;
+    const correct = SS_CORRECT[qNum];
+    document.querySelectorAll('#skimming-scanning-modul [data-ssq="'+qNum+'"]').forEach(function(b){
+      b.disabled=true;
+      if(b.dataset.ssval===correct)b.classList.add('ss-correct-ans');
+    });
+    if(val!==correct)btn.classList.add('ss-wrong-ans');
+    const fb = document.getElementById('ss-q'+qNum+'-feedback');
+    fb.classList.add('ss-show');
+    const aciklamalar = {
+      1: 'Skimming = genel konu → ilk cümle + paragraf başı/sonu.',
+      2: 'Scanning = anahtar kelimeyi metinde taramak.',
+      3: 'Tur 1 = hız + garanti puan; Tur 2 = zorlar (★ işaretliler).'
+    };
+    if(val===correct){
+      fb.className='ss-quiz-feedback ss-show ss-ok';
+      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+    } else {
+      fb.className='ss-quiz-feedback ss-show ss-no';
+      fb.textContent = '❌ '+aciklamalar[qNum];
+    }
+    if(ssQuizAnswered[1] && ssQuizAnswered[2] && ssQuizAnswered[3]){
+      document.getElementById('ss-finishBox').style.display='flex';
+      if(typeof xpKazan==='function')xpKazan('teknik',0);
+      if(typeof klodMotionDersKaydet==='function')klodMotionDersKaydet('skimming-scanning');
+    }
+  }
+
+  const ssKok = document.getElementById('skimming-scanning-modul');
+  if (ssKok) {
+    ssKok.addEventListener('click', function(e){
+      const el = e.target.closest('[data-ss-action]');
+      if(!el)return;
+      const action = el.dataset.ssAction;
+      if(action==='slide-next')ssChangeSlide(1);
+      else if(action==='slide-prev')ssChangeSlide(-1);
+      else if(action==='quiz-answer')ssCheckAnswer(el);
+    });
+  }
+
+  window.ssGit = function(){
+    const item=[...document.querySelectorAll('.dn-item')].find(function(e){ return e.textContent.includes('DİL AVCISI'); });
+    if(item)item.click();
+    setTimeout(function(){
+      const el=document.getElementById('skimming-scanning-modul');
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
+
+  ssUpdateUI();
 })();
 </script>
 
