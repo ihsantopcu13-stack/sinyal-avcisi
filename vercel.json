@@ -15,6 +15,8 @@
     }
   ],
   "crons": [
-    { "path": "/api/cron-streak-risk", "schedule": "0 18 * * *" }
+    { "path": "/api/cron-streak-risk", "schedule": "0 18 * * *" },
+    { "path": "/api/cron-instagram-sinyal", "schedule": "0 17 * * *" },
+    { "path": "/api/cron-instagram-5dk", "schedule": "0 17 * * *" }
   ]
 }
