@@ -5609,7 +5609,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <span style="color:#22d3ee">DILA:</span> Hi! Let's practice. Tell me about your day — what did you do this morning? 😊
             </div>
             <div style="display:flex;gap:8px">
-              <input id="konusma-input" placeholder="İngilizce cevap yaz..." style="flex:1;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da">
+              <input id="konusma-input" placeholder="İngilizce cevap yaz veya 🎤'ya konuş..." style="flex:1;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da">
+              <button id="konusma-mic-btn" type="button" onclick="konusmaSesTaniBaslat()" title="İngilizce konuş" style="background:#0a0c1480;color:#22d3ee;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">🎤</button>
               <button onclick="konusmaGonder()" style="background:#22d3ee;color:#0a1428;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
             </div>
           </div>
@@ -8243,6 +8244,14 @@ function xpKazan(tip,streak){
   d.bugun=(d.bugun||0)+puan;
   d.hafta=(d.hafta||0)+puan;
   xpSave(d);
+  // Giriş yapılmışsa XP'yi Supabase'e de best-effort senkronla (bkz.
+  // supabase/leaderboard-schema.sql — migration çalıştırılmadıysa RPC
+  // bulunamaz ve sessizce yutulur, localStorage kaydı yine de kalıcıdır).
+  if(sb&&currentUser){
+    sb.rpc('increment_xp',{p_xp:puan}).then(function(r){
+      if(r&&r.error)console.warn('[xp-sync] Supabase senkron atlandı (migration çalıştırılmamış olabilir):',r.error.message);
+    }).catch(function(){});
+  }
   xpBildirim(puan,tip);
   if(typeof coinFly==='function')coinFly();
   seviyeKontrol(d.toplam);
@@ -10226,27 +10235,43 @@ setTimeout(()=>{
 },2000);
 
 // ─── 3. LİDERLİK TABLOSU ────────────────────────────────────────────────────
-const SAHTE_LB_KULLANICILAR=[
-  {isim:'Ayşe K.',emoji:'👩‍🎓',xp:2840,seviye:'🔥 Usta'},
-  {isim:'Mehmet D.',emoji:'👨‍💼',xp:2210,seviye:'⚡ İleri'},
-  {isim:'Zeynep A.',emoji:'👩‍💻',xp:1890,seviye:'⚡ İleri'},
-  {isim:'Burak Y.',emoji:'🧑‍🔬',xp:1540,seviye:'📈 Gelişen'},
-  {isim:'Selin T.',emoji:'👩‍🏫',xp:1120,seviye:'📈 Gelişen'},
-];
-
-function liderTabloGoster(){
+// Not: Eskiden burada SAHTE_LB_KULLANICILAR adlı 5 uydurma isim/XP vardı ve
+// gerçek kullanıcının XP'siyle karıştırılıp gösteriliyordu. Artık liderlik
+// tablosu SADECE Supabase'deki gerçek kullanıcı XP'siyle (bkz.
+// supabase/leaderboard-schema.sql — get_leaderboard RPC'si) doldurulur.
+// Migration çalıştırılmadıysa veya kimse Supabase'e senkron olmuş XP'ye
+// sahip değilse liste boş kalır — sahte doldurma YAPILMAZ.
+async function liderTabloGoster(){
   const lb_el=document.getElementById('lb-liste');
   const benim_el=document.getElementById('lb-benim-xp');
   if(!lb_el)return;
   const xp=xpLoad();
   const kullaniciAdi=currentUser?.user_metadata?.ad||currentUser?.email?.split('@')[0]||'Sen';
-  // Sahte kullanıcılarla gerçek xp'yi birleştir
-  const tumListe=[...SAHTE_LB_KULLANICILAR,{isim:kullaniciAdi,emoji:'🎯',xp:xp.hafta||0,seviye:seviyeAl(xp.toplam||0).ad,benim:true}];
+  let gercekListe=[];
+  if(sb){
+    try{
+      const{data,error}=await sb.rpc('get_leaderboard',{p_limit:10});
+      if(error)console.warn('[leaderboard] Supabase get_leaderboard atlandı (migration çalıştırılmamış olabilir):',error.message);
+      else if(Array.isArray(data))gercekListe=data.map(r=>({isim:r.ad,emoji:'🏅',xp:r.xp_hafta||0}));
+    }catch(e){}
+  }
+  // Kendi satırını listeye ekle (Supabase listesinde zaten varsa iki kez
+  // görünmesin diye isme göre bir kez filtrele).
+  gercekListe=gercekListe.filter(u=>u.isim!==kullaniciAdi);
+  const tumListe=[...gercekListe,{isim:kullaniciAdi,emoji:'🎯',xp:xp.hafta||0,seviye:seviyeAl(xp.toplam||0).ad,benim:true}];
   tumListe.sort((a,b)=>b.xp-a.xp);
   const RANK_EMOJILER=['🥇','🥈','🥉'];
   // u.isim kullanıcının kendi profil adından geliyor (doğrulanmamış); XSS'i
   // önlemek için innerHTML yerine DOM API + textContent kullanılıyor.
   lb_el.innerHTML='';
+  if(tumListe.length===1&&(xp.hafta||0)===0){
+    const bos=document.createElement('div');
+    bos.style.cssText='font-size:13px;color:var(--muted);text-align:center;padding:16px 0';
+    bos.textContent='Bu hafta henüz kimse XP kazanmadı — ilk sen ol! 🚀';
+    lb_el.appendChild(bos);
+    if(benim_el)benim_el.textContent=(xp.hafta||0).toLocaleString('tr-TR')+' XP';
+    return;
+  }
   tumListe.forEach((u,i)=>{
     const row=document.createElement('div');
     row.className='lb-row'+(u.benim?' lb-sen':'');
@@ -10828,6 +10853,14 @@ function dilavcisiVeriYukle() {
 
 function dilavcisiVeriKaydet(veri) {
   localStorage.setItem('sa_dilavcisi', JSON.stringify(veri));
+  // Giriş yapılmışsa best-effort Supabase senkronu (bkz.
+  // supabase/dilavcisi-sync-schema.sql — migration çalıştırılmadıysa RPC
+  // bulunamaz ve sessizce yutulur, localStorage kaydı yine de kalıcıdır).
+  if(sb&&currentUser){
+    sb.rpc('update_dilavcisi_state',{state:veri}).then(function(r){
+      if(r&&r.error)console.warn('[dilavcisi-sync] Supabase senkron atlandı (migration çalıştırılmamış olabilir):',r.error.message);
+    }).catch(function(){});
+  }
 }
 
 function dilavcisiGunlukHedefGuncelle() {
@@ -11001,6 +11034,9 @@ async function konusmaGonder() {
     alan.innerHTML += `<div style="margin-top:10px"><span style="color:#22d3ee">DILA:</span> ${cevap.replace(/\n/g, '<br>')}</div>`;
     alan.scrollTop = alan.scrollHeight;
     konusmaGecmisi.push({rol: 'dila', icerik: cevap});
+    // Konuşma simülatörünü gerçek bir "speaking" pratiğine dönüştürmek için
+    // DILA'nın cevabını sesli de okuyoruz (Türkçe düzeltme parantezleri hariç).
+    if (window.ttsSpeakEleven) ttsSpeakEleven(cevap.replace(/\(([^)]*)\)/g, '').trim());
     // XP ver
     const veri = dilavcisiVeriYukle();
     veri.xp += 5;
@@ -11021,6 +11057,12 @@ function ingDersAc(el){const detay=el.querySelector('.ing-ders-detay');const che
 function ingPratikKlod(konu,gorev){const chatIn=document.getElementById('chat-in');if(chatIn){chatIn.value=`${konu} konusunda pratik yapmak istiyorum. Görev: "${gorev}" — Türkçe açıkla, İngilizce örnekler ver.`;}document.querySelector('.dn-item[onclick*="klod"]')?.click()||dtab(document.querySelector('.dtab[onclick*="sinyal"]'),'sinyal');}
 
 async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#15803d">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=metin.replace(/\n/g,'<br>');xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
+let konusmaRecognition=null;
+function konusmaSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('konusma-mic-btn');const input=document.getElementById('konusma-input');if(!konusmaRecognition){konusmaRecognition=new SR();konusmaRecognition.lang='en-US';konusmaRecognition.interimResults=false;konusmaRecognition.maxAlternatives=1;konusmaRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};konusmaRecognition.onend=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};konusmaRecognition.onerror=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};}
+  micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';
+  try{konusmaRecognition.start();}catch(e){}
+}
+(function(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const micBtn=document.getElementById('konusma-mic-btn');if(!SR&&micBtn)micBtn.style.display='none';})();
 let dilaRecognition=null;
 function dilaSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dila-mic-btn');const input=document.getElementById('dila-input');if(!dilaRecognition){dilaRecognition=new SR();dilaRecognition.lang='tr-TR';dilaRecognition.interimResults=false;dilaRecognition.maxAlternatives=1;dilaRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dilaRecognition.onend=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#c084fc';};dilaRecognition.onerror=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#c084fc';};}
 micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';micBtn.style.color='#1a0a2e';try{dilaRecognition.start();}catch(e){}}
