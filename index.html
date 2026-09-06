@@ -7088,8 +7088,14 @@ async function ttsEleven(text,lang,onEnd,onAudioReady){
   }
 }
 
-// Ana giriş noktası — tüm site bunu kullanır. Metindeki dile göre otomatik
-// olarak ElevenLabs (Türkçe) veya OpenAI nova (İngilizce) seçer.
+// Ana giriş noktası — tüm site bunu kullanır. Çağıran taraf zaten hangi dilde
+// okunacağını `lang` ile açıkça belirtiyor (her çağrıda 'en-US' ya da 'tr-TR'
+// geçiliyor) — bu yüzden dil seçimi ÖNCELİKLE `lang`'a göre yapılır. Eskiden
+// metindeki Türkçe karaktere (ç,ğ,ı,ö,ş,ü) bakılarak tahmin ediliyordu; bir
+// İngilizce cümlenin içine tek bir Türkçe kelime/etiket karışsa bile TÜM
+// cümle yanlışlıkla Türkçe (ElevenLabs) sesiyle okunuyordu — "Sinyal Lab"da
+// İngilizce cümlenin Türkçe aksanla okunması bu yüzdendi. `lang` verilmediği
+// nadir durumlar için eski içerik-tahmini yedek olarak duruyor.
 async function ttsSpeak(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
   // Boşluk doldurma sorularındaki "______" işaretleri TTS motoruna (ElevenLabs/
@@ -7097,7 +7103,8 @@ async function ttsSpeak(text,lang,onEnd,onAudioReady){
   // garip, uzayan bir ses üretiyordu. Doğal bir duraklama için "..." ile
   // değiştiriyoruz — hiçbir motor alt çizgiyi anlamlı okuyamıyor.
   text=text.replace(/_{2,}/g,'...');
-  if(ttsTurkceMi(text))return ttsEleven(text,lang,onEnd,onAudioReady);
+  const turkce=lang?/^tr/i.test(lang):ttsTurkceMi(text);
+  if(turkce)return ttsEleven(text,lang,onEnd,onAudioReady);
   return ttsOpenAINova(text,lang,onEnd,onAudioReady);
 }
 // Geriye dönük uyumluluk — artık o da aynı dil yönlendirmesinden geçer
