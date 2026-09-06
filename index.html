@@ -59,6 +59,20 @@
   --t-fast:140ms cubic-bezier(.4,0,.2,1);
   --t-med:220ms cubic-bezier(.4,0,.2,1);
 }
+/* KLOD-MOTION ders modülleri (DNA Testi, Trigger Sistemi, Gerund/Infinitive...) —
+   17 modülün her biri aynı 9 rengi kendi prefix'iyle tekrar tanımlıyordu.
+   Artık hepsi buradan besleniyor; renk değişikliği tek yerden yapılır. */
+:root{
+  --km-bg:#0d0f14;
+  --km-surface:#161920;
+  --km-border:#252830;
+  --km-accent:#5b8fff;
+  --km-accent2:#38d9a9;
+  --km-warn:#ff6b6b;
+  --km-text:#e8eaf0;
+  --km-muted:#6b7280;
+  --km-formula-bg:#0a1628;
+}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
 .section-title{font-family:'IBM Plex Serif',serif;font-size:clamp(28px,3vw,46px);letter-spacing:-.03em;line-height:1.12;color:var(--ink)}
@@ -1674,9 +1688,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div id="crash-plan-modul">
           <style>
             #crash-plan-modul{
-              --cp-bg:#0d0f14;--cp-surface:#161920;--cp-border:#252830;
-              --cp-accent:#5b8fff;--cp-accent2:#38d9a9;--cp-warn:#ff6b6b;
-              --cp-text:#e8eaf0;--cp-muted:#6b7280;
+              --cp-bg:var(--km-bg);--cp-surface:var(--km-surface);--cp-border:var(--km-border);
+              --cp-accent:var(--km-accent);--cp-accent2:var(--km-accent2);--cp-warn:var(--km-warn);
+              --cp-text:var(--km-text);--cp-muted:var(--km-muted);
               box-sizing:border-box;
               background:var(--cp-bg);color:var(--cp-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -2605,9 +2619,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="passive-voice-modul">
           <style>
             #passive-voice-modul{
-              --pvm-bg:#0d0f14;--pvm-surface:#161920;--pvm-border:#252830;
-              --pvm-accent:#5b8fff;--pvm-accent2:#38d9a9;--pvm-warn:#ff6b6b;
-              --pvm-text:#e8eaf0;--pvm-muted:#6b7280;--pvm-formula-bg:#0a1628;
+              --pvm-bg:var(--km-bg);--pvm-surface:var(--km-surface);--pvm-border:var(--km-border);
+              --pvm-accent:var(--km-accent);--pvm-accent2:var(--km-accent2);--pvm-warn:var(--km-warn);
+              --pvm-text:var(--km-text);--pvm-muted:var(--km-muted);--pvm-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--pvm-bg);color:var(--pvm-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -2811,9 +2825,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="bebek-modul">
           <style>
             #bebek-modul{
-              --bbk-bg:#0d0f14;--bbk-surface:#161920;--bbk-border:#252830;
-              --bbk-accent:#5b8fff;--bbk-accent2:#38d9a9;--bbk-warn:#ff6b6b;
-              --bbk-text:#e8eaf0;--bbk-muted:#6b7280;--bbk-formula-bg:#0a1628;
+              --bbk-bg:var(--km-bg);--bbk-surface:var(--km-surface);--bbk-border:var(--km-border);
+              --bbk-accent:var(--km-accent);--bbk-accent2:var(--km-accent2);--bbk-warn:var(--km-warn);
+              --bbk-text:var(--km-text);--bbk-muted:var(--km-muted);--bbk-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--bbk-bg);color:var(--bbk-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -2993,9 +3007,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="stop-remember-try-modul">
           <style>
             #stop-remember-try-modul{
-              --srt-bg:#0d0f14;--srt-surface:#161920;--srt-border:#252830;
-              --srt-accent:#5b8fff;--srt-accent2:#38d9a9;--srt-warn:#ff6b6b;
-              --srt-text:#e8eaf0;--srt-muted:#6b7280;--srt-formula-bg:#0a1628;
+              --srt-bg:var(--km-bg);--srt-surface:var(--km-surface);--srt-border:var(--km-border);
+              --srt-accent:var(--km-accent);--srt-accent2:var(--km-accent2);--srt-warn:var(--km-warn);
+              --srt-text:var(--km-text);--srt-muted:var(--km-muted);--srt-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--srt-bg);color:var(--srt-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3175,9 +3189,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="aha-karti-modul">
           <style>
             #aha-karti-modul{
-              --ahk-bg:#0d0f14;--ahk-surface:#161920;--ahk-border:#252830;
-              --ahk-accent:#5b8fff;--ahk-accent2:#38d9a9;
-              --ahk-text:#e8eaf0;--ahk-muted:#6b7280;--ahk-formula-bg:#0a1628;
+              --ahk-bg:var(--km-bg);--ahk-surface:var(--km-surface);--ahk-border:var(--km-border);
+              --ahk-accent:var(--km-accent);--ahk-accent2:var(--km-accent2);
+              --ahk-text:var(--km-text);--ahk-muted:var(--km-muted);--ahk-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--ahk-bg);color:var(--ahk-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3344,9 +3358,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="osym-sablon-modul">
           <style>
             #osym-sablon-modul{
-              --osm-bg:#0d0f14;--osm-surface:#161920;--osm-border:#252830;
-              --osm-accent:#5b8fff;--osm-accent2:#38d9a9;--osm-warn:#ff6b6b;
-              --osm-text:#e8eaf0;--osm-muted:#6b7280;--osm-formula-bg:#0a1628;
+              --osm-bg:var(--km-bg);--osm-surface:var(--km-surface);--osm-border:var(--km-border);
+              --osm-accent:var(--km-accent);--osm-accent2:var(--km-accent2);--osm-warn:var(--km-warn);
+              --osm-text:var(--km-text);--osm-muted:var(--km-muted);--osm-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--osm-bg);color:var(--osm-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3547,9 +3561,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="dna-testi-modul">
           <style>
             #dna-testi-modul{
-              --dna-bg:#0d0f14;--dna-surface:#161920;--dna-border:#252830;
-              --dna-accent:#5b8fff;--dna-accent2:#38d9a9;--dna-warn:#ff6b6b;
-              --dna-text:#e8eaf0;--dna-muted:#6b7280;--dna-formula-bg:#0a1628;
+              --dna-bg:var(--km-bg);--dna-surface:var(--km-surface);--dna-border:var(--km-border);
+              --dna-accent:var(--km-accent);--dna-accent2:var(--km-accent2);--dna-warn:var(--km-warn);
+              --dna-text:var(--km-text);--dna-muted:var(--km-muted);--dna-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--dna-bg);color:var(--dna-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3630,9 +3644,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="trigger-sistemi-modul">
           <style>
             #trigger-sistemi-modul{
-              --tg-bg:#0d0f14;--tg-surface:#161920;--tg-border:#252830;
-              --tg-accent:#5b8fff;--tg-accent2:#38d9a9;--tg-warn:#ff6b6b;
-              --tg-text:#e8eaf0;--tg-muted:#6b7280;--tg-formula-bg:#0a1628;
+              --tg-bg:var(--km-bg);--tg-surface:var(--km-surface);--tg-border:var(--km-border);
+              --tg-accent:var(--km-accent);--tg-accent2:var(--km-accent2);--tg-warn:var(--km-warn);
+              --tg-text:var(--km-text);--tg-muted:var(--km-muted);--tg-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--tg-bg);color:var(--tg-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3721,9 +3735,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="gerund-infinitive-modul">
           <style>
             #gerund-infinitive-modul{
-              --gi-bg:#0d0f14;--gi-surface:#161920;--gi-border:#252830;
-              --gi-accent:#5b8fff;--gi-accent2:#38d9a9;--gi-warn:#ff6b6b;
-              --gi-text:#e8eaf0;--gi-muted:#6b7280;--gi-formula-bg:#0a1628;
+              --gi-bg:var(--km-bg);--gi-surface:var(--km-surface);--gi-border:var(--km-border);
+              --gi-accent:var(--km-accent);--gi-accent2:var(--km-accent2);--gi-warn:var(--km-warn);
+              --gi-text:var(--km-text);--gi-muted:var(--km-muted);--gi-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--gi-bg);color:var(--gi-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -3948,9 +3962,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="cumle-analizi-modul">
           <style>
             #cumle-analizi-modul{
-              --kf-bg:#0d0f14;--kf-surface:#161920;--kf-border:#252830;
-              --kf-accent:#5b8fff;--kf-accent2:#38d9a9;--kf-warn:#ff6b6b;
-              --kf-text:#e8eaf0;--kf-muted:#6b7280;--kf-formula-bg:#0a1628;
+              --kf-bg:var(--km-bg);--kf-surface:var(--km-surface);--kf-border:var(--km-border);
+              --kf-accent:var(--km-accent);--kf-accent2:var(--km-accent2);--kf-warn:var(--km-warn);
+              --kf-text:var(--km-text);--kf-muted:var(--km-muted);--kf-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--kf-bg);color:var(--kf-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -4209,9 +4223,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="kelime-strateji-modul">
           <style>
             #kelime-strateji-modul{
-              --voc-bg:#0d0f14;--voc-surface:#161920;--voc-border:#252830;
-              --voc-accent:#5b8fff;--voc-accent2:#38d9a9;--voc-warn:#ff6b6b;
-              --voc-text:#e8eaf0;--voc-muted:#6b7280;--voc-formula-bg:#0a1628;
+              --voc-bg:var(--km-bg);--voc-surface:var(--km-surface);--voc-border:var(--km-border);
+              --voc-accent:var(--km-accent);--voc-accent2:var(--km-accent2);--voc-warn:var(--km-warn);
+              --voc-text:var(--km-text);--voc-muted:var(--km-muted);--voc-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--voc-bg);color:var(--voc-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -4470,9 +4484,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="baglam-strateji-modul">
           <style>
             #baglam-strateji-modul{
-              --bs-bg:#0d0f14;--bs-surface:#161920;--bs-border:#252830;
-              --bs-accent:#5b8fff;--bs-accent2:#38d9a9;--bs-warn:#ff6b6b;
-              --bs-text:#e8eaf0;--bs-muted:#6b7280;--bs-formula-bg:#0a1628;
+              --bs-bg:var(--km-bg);--bs-surface:var(--km-surface);--bs-border:var(--km-border);
+              --bs-accent:var(--km-accent);--bs-accent2:var(--km-accent2);--bs-warn:var(--km-warn);
+              --bs-text:var(--km-text);--bs-muted:var(--km-muted);--bs-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--bs-bg);color:var(--bs-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -4582,9 +4596,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="kelime-bankasi-modul">
           <style>
             #kelime-bankasi-modul{
-              --kb-bg:#0d0f14;--kb-surface:#161920;--kb-border:#252830;
-              --kb-accent:#5b8fff;--kb-accent2:#38d9a9;
-              --kb-text:#e8eaf0;--kb-muted:#6b7280;--kb-formula-bg:#0a1628;
+              --kb-bg:var(--km-bg);--kb-surface:var(--km-surface);--kb-border:var(--km-border);
+              --kb-accent:var(--km-accent);--kb-accent2:var(--km-accent2);
+              --kb-text:var(--km-text);--kb-muted:var(--km-muted);--kb-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--kb-bg);color:var(--kb-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -4661,9 +4675,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="reading-strateji-modul">
           <style>
             #reading-strateji-modul{
-              --rd-bg:#0d0f14;--rd-surface:#161920;--rd-border:#252830;
-              --rd-accent:#5b8fff;--rd-accent2:#38d9a9;--rd-warn:#ff6b6b;
-              --rd-text:#e8eaf0;--rd-muted:#6b7280;--rd-formula-bg:#0a1628;
+              --rd-bg:var(--km-bg);--rd-surface:var(--km-surface);--rd-border:var(--km-border);
+              --rd-accent:var(--km-accent);--rd-accent2:var(--km-accent2);--rd-warn:var(--km-warn);
+              --rd-text:var(--km-text);--rd-muted:var(--km-muted);--rd-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--rd-bg);color:var(--rd-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -4897,9 +4911,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="modal-perfect-modul">
           <style>
             #modal-perfect-modul{
-              --mp-bg:#0d0f14;--mp-surface:#161920;--mp-border:#252830;
-              --mp-accent:#5b8fff;--mp-accent2:#38d9a9;--mp-warn:#ff6b6b;
-              --mp-text:#e8eaf0;--mp-muted:#6b7280;--mp-formula-bg:#0a1628;
+              --mp-bg:var(--km-bg);--mp-surface:var(--km-surface);--mp-border:var(--km-border);
+              --mp-accent:var(--km-accent);--mp-accent2:var(--km-accent2);--mp-warn:var(--km-warn);
+              --mp-text:var(--km-text);--mp-muted:var(--km-muted);--mp-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--mp-bg);color:var(--mp-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -5123,9 +5137,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="skimming-scanning-modul">
           <style>
             #skimming-scanning-modul{
-              --ss-bg:#0d0f14;--ss-surface:#161920;--ss-border:#252830;
-              --ss-accent:#5b8fff;--ss-accent2:#38d9a9;--ss-warn:#ff6b6b;
-              --ss-text:#e8eaf0;--ss-muted:#6b7280;--ss-formula-bg:#0a1628;
+              --ss-bg:var(--km-bg);--ss-surface:var(--km-surface);--ss-border:var(--km-border);
+              --ss-accent:var(--km-accent);--ss-accent2:var(--km-accent2);--ss-warn:var(--km-warn);
+              --ss-text:var(--km-text);--ss-muted:var(--km-muted);--ss-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--ss-bg);color:var(--ss-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -5351,9 +5365,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="psikoloji-terim-modul">
           <style>
             #psikoloji-terim-modul{
-              --psy-bg:#0d0f14;--psy-surface:#161920;--psy-border:#252830;
-              --psy-accent:#5b8fff;--psy-accent2:#38d9a9;--psy-warn:#ff6b6b;
-              --psy-text:#e8eaf0;--psy-muted:#6b7280;--psy-formula-bg:#0a1628;
+              --psy-bg:var(--km-bg);--psy-surface:var(--km-surface);--psy-border:var(--km-border);
+              --psy-accent:var(--km-accent);--psy-accent2:var(--km-accent2);--psy-warn:var(--km-warn);
+              --psy-text:var(--km-text);--psy-muted:var(--km-muted);--psy-formula-bg:var(--km-formula-bg);
               box-sizing:border-box;
               background:var(--psy-bg);color:var(--psy-text);
               font-family:'IBM Plex Sans',sans-serif;font-size:15px;
@@ -7078,6 +7092,11 @@ async function ttsEleven(text,lang,onEnd,onAudioReady){
 // olarak ElevenLabs (Türkçe) veya OpenAI nova (İngilizce) seçer.
 async function ttsSpeak(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
+  // Boşluk doldurma sorularındaki "______" işaretleri TTS motoruna (ElevenLabs/
+  // OpenAI) olduğu gibi gidince motor alt çizgi dizisini seslendirmeye çalışıp
+  // garip, uzayan bir ses üretiyordu. Doğal bir duraklama için "..." ile
+  // değiştiriyoruz — hiçbir motor alt çizgiyi anlamlı okuyamıyor.
+  text=text.replace(/_{2,}/g,'...');
   if(ttsTurkceMi(text))return ttsEleven(text,lang,onEnd,onAudioReady);
   return ttsOpenAINova(text,lang,onEnd,onAudioReady);
 }
