@@ -39,11 +39,9 @@ async function claudeJsonUret() {
     body: JSON.stringify({
       model,
       max_tokens: 700,
-      temperature: 0.9,
       system: SISTEM_PROMPT,
       messages: [
         { role: "user", content: `Bugün ${bugun}. Bugüne özel, daha önce üretilmemiş yeni bir video senaryosu üret.` },
-        { role: "assistant", content: "{" },
       ],
     }),
   });
@@ -54,7 +52,8 @@ async function claudeJsonUret() {
 
   const data = await response.json();
   const text = data.content?.find((b) => b.type === "text")?.text || "";
-  return JSON.parse("{" + text);
+  const jsonMetni = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
+  return JSON.parse(jsonMetni);
 }
 
 function narrasyonVeAltyaziSatirlariUret(senaryo) {
