@@ -16,5 +16,13 @@
   ],
   "crons": [
     { "path": "/api/cron-streak-risk", "schedule": "0 18 * * *" }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.sinyal-avcisi.com" }],
+      "destination": "https://sinyal-avcisi.com/:path*",
+      "permanent": true
+    }
   ]
 }
