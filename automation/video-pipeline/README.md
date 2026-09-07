@@ -40,28 +40,25 @@ YouTube Data API v3, basit bir API anahtarı değil OAuth2 refresh token ister �
 4. **APIs & Services → Credentials → Create Credentials → OAuth client ID** →
    Application type: **Desktop app** → oluştur → **Client ID** ve **Client
    Secret**'ı kaydet (bunlar `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET`).
-5. Refresh token almak için (bir kereliğine, kendi bilgisayarında):
-   ```
-   npx google-auth-library-cli   # veya aşağıdaki manuel yöntem
-   ```
-   Manuel yöntem — bu klasörde (`automation/video-pipeline`) şu script'i çalıştır:
+5. Aynı Credentials sayfasında oluşturduğun client'a tıkla → **Authorized
+   redirect URIs** → **Add URI** → `http://localhost:53682` ekle → kaydet.
+   (Google "oob" kod kopyalama akışını kaldırdığı için, aşağıdaki script
+   yerel bir sunucu açıp bu adrese gelen yönlendirmeyi yakalıyor.)
+6. Refresh token almak için (bir kereliğine, kendi bilgisayarında):
    ```bash
-   node -e "
-   const { google } = require('googleapis');
-   const client = new google.auth.OAuth2('CLIENT_ID', 'CLIENT_SECRET', 'urn:ietf:wg:oauth:2.0:oob');
-   console.log(client.generateAuthUrl({ access_type: 'offline', scope: ['https://www.googleapis.com/auth/youtube.upload'] }));
-   "
+   cd automation/video-pipeline
+   npm install
+   node scripts/youtube-oauth-setup.mjs "CLIENT_ID" "CLIENT_SECRET"
    ```
-   Çıkan linki tarayıcıda aç → kendi YouTube kanalının bağlı olduğu Google
-   hesabıyla giriş yap → izin ver → sana bir kod gösterilecek. Sonra:
-   ```bash
-   node -e "
-   const { google } = require('googleapis');
-   const client = new google.auth.OAuth2('CLIENT_ID', 'CLIENT_SECRET', 'urn:ietf:wg:oauth:2.0:oob');
-   client.getToken('BURAYA_KODU_YAPIŞTIR').then(r => console.log(r.tokens.refresh_token));
-   "
-   ```
-   Çıkan `refresh_token` değeri → `YOUTUBE_REFRESH_TOKEN` secret'ı.
+   Terminalde çıkan linki tarayıcıda aç → kendi YouTube kanalının bağlı
+   olduğu Google hesabıyla giriş yap → izin ver. Tarayıcı otomatik olarak
+   script'in açtığı yerel sunucuya yönlenir, terminale `refresh_token`
+   değeri yazdırılır. Bu değer → `YOUTUBE_REFRESH_TOKEN` secret'ı.
+
+   Eğer terminalde `refresh_token dönmedi` hatası alırsan, bu hesaba daha
+   önce zaten izin vermişsindir: https://myaccount.google.com/permissions
+   adresinden "Sinyal Avcısı Video Pipeline" erişimini kaldır ve script'i
+   tekrar çalıştır.
 
 ## Yerelde tek adım test etmek
 
