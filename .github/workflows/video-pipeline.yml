@@ -33,8 +33,8 @@ jobs:
       - name: Remotion headless Chrome'u hazırla
         run: npx remotion browser ensure
 
-      - name: Pipeline'ı çalıştır
-        run: npm run pipeline
+      - name: GEÇİCİ DEBUG — ElevenLabs seslerini listele
+        run: node scripts/list-voices.mjs
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
