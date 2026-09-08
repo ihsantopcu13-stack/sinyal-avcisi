@@ -7,9 +7,9 @@
 
 import { rateLimit } from './_rateLimit.mjs';
 
-// Rachel — ElevenLabs'in hazır sesi, eleven_multilingual_v2 modeliyle Türkçe dahil
-// çoklu dili destekler
-const RACHEL_VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
+// İngilizce metinler için kullanılan ElevenLabs sesi, eleven_multilingual_v2
+// modeliyle çoklu dili destekler
+const DEFAULT_VOICE_ID = 'Ilz5AkH5DN6lUfEJGXlM';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Çok fazla ses isteği gönderdiniz. Biraz sonra tekrar deneyin.' });
   }
 
-  const { text, voiceId = RACHEL_VOICE_ID } = req.body;
+  const { text, voiceId = DEFAULT_VOICE_ID } = req.body;
 
   if (!text || typeof text !== 'string' || text.length > 2000) {
     return res.status(400).json({ error: 'Invalid text' });
