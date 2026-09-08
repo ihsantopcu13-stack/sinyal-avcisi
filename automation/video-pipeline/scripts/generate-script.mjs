@@ -38,7 +38,8 @@ async function claudeJsonUret() {
     },
     body: JSON.stringify({
       model,
-      max_tokens: 700,
+      max_tokens: 1024,
+      thinking: { type: "disabled" },
       system: SISTEM_PROMPT,
       messages: [
         { role: "user", content: `Bugün ${bugun}. Bugüne özel, daha önce üretilmemiş yeni bir video senaryosu üret.` },
@@ -53,7 +54,11 @@ async function claudeJsonUret() {
   const data = await response.json();
   const text = data.content?.find((b) => b.type === "text")?.text || "";
   const jsonMetni = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
-  return JSON.parse(jsonMetni);
+  try {
+    return JSON.parse(jsonMetni);
+  } catch (err) {
+    throw new Error(`Claude yanıtı JSON olarak parse edilemedi. stop_reason: ${data.stop_reason}, ham metin: ${JSON.stringify(text)}`);
+  }
 }
 
 function narrasyonVeAltyaziSatirlariUret(senaryo) {
