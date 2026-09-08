@@ -22,7 +22,7 @@ KURALLAR:
 - "kapanis_tr" kısa bir çağrı cümlesi olsun (max 12 kelime), "ücretsiz" kelimesini içersin.
 - Tüm Türkçe metinler SESLENDİRME için yazılıyor: kısa, akıcı, noktalama sade olsun.
 
-SADECE şu JSON şemasıyla cevap ver, başka hiçbir metin ekleme:
+SADECE şu JSON şemasıyla cevap ver — kod bloğu (\`\`\`) kullanma, taslak yazma, açıklama/önizleme ekleme, tek ve nihai bir JSON nesnesi döndür, başka hiçbir metin ekleme:
 {"hook":"...","soru_en":"...","siklar":["A) ...","B) ...","C) ...","D) ..."],"dogru_sik":0,"sinyal":"...","aciklama_tr":"...","kapanis_tr":"..."}`;
 
 async function claudeJsonUret() {
@@ -53,12 +53,39 @@ async function claudeJsonUret() {
 
   const data = await response.json();
   const text = data.content?.find((b) => b.type === "text")?.text || "";
-  const jsonMetni = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
-  try {
-    return JSON.parse(jsonMetni);
-  } catch (err) {
-    throw new Error(`Claude yanıtı JSON olarak parse edilemedi. stop_reason: ${data.stop_reason}, ham metin: ${JSON.stringify(text)}`);
+
+  // Claude bazen (talimata rağmen) taslak + düzeltme gibi birden fazla JSON
+  // bloğu üretebiliyor — kod bloklarını (varsa) ayrı ayrı dener, en sondan
+  // başlayarak şemayı tam sağlayan ilk adayı kabul eder.
+  const adaylar = [...text.matchAll(/```(?:json)?\s*([\s\S]*?)```/g)].map((m) => m[1]);
+  adaylar.push(text);
+
+  for (let i = adaylar.length - 1; i >= 0; i--) {
+    const aday = adaylar[i];
+    const jsonMetni = aday.slice(aday.indexOf("{"), aday.lastIndexOf("}") + 1);
+    try {
+      const senaryo = JSON.parse(jsonMetni);
+      if (senaryoTamMi(senaryo)) return senaryo;
+    } catch {
+      // sıradaki adaya geç
+    }
   }
+
+  throw new Error(`Claude yanıtı JSON olarak parse edilemedi. stop_reason: ${data.stop_reason}, ham metin: ${JSON.stringify(text)}`);
+}
+
+function senaryoTamMi(s) {
+  return (
+    s &&
+    typeof s.hook === "string" &&
+    typeof s.soru_en === "string" &&
+    Array.isArray(s.siklar) &&
+    s.siklar.length === 4 &&
+    typeof s.dogru_sik === "number" &&
+    typeof s.sinyal === "string" &&
+    typeof s.aciklama_tr === "string" &&
+    typeof s.kapanis_tr === "string"
+  );
 }
 
 function narrasyonVeAltyaziSatirlariUret(senaryo) {
