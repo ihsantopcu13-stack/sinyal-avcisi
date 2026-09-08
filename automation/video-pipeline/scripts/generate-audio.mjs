@@ -1,5 +1,5 @@
 // ============================================================
-// ADIM 2 — ElevenLabs: her senaryo satırı için ayrı seslendirme,
+// ADIM 2 — OpenAI TTS: her senaryo satırı için ayrı seslendirme,
 // aralarına kısa sessizlik koyarak tek bir audio.mp3'te birleştirme.
 // ============================================================
 // Satır satır TTS + ffmpeg concat kullanıyoruz (tek seferde uzun bir
@@ -31,23 +31,23 @@ async function ffprobeDuration(filePath) {
   return parseFloat(stdout.trim());
 }
 
-async function elevenLabsSesUret(text, voiceId, index) {
-  const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+async function openAiSesUret(text, voice, index) {
+  const response = await fetch("https://api.openai.com/v1/audio/speech", {
     method: "POST",
     headers: {
-      "xi-api-key": process.env.ELEVENLABS_API_KEY,
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       "Content-Type": "application/json",
-      Accept: "audio/mpeg",
     },
     body: JSON.stringify({
-      text,
-      model_id: "eleven_multilingual_v2",
-      voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+      model: "tts-1",
+      input: text,
+      voice,
+      response_format: "mp3",
     }),
   });
 
   if (!response.ok) {
-    throw new Error(`ElevenLabs hatası (satır ${index}): ${await response.text()}`);
+    throw new Error(`OpenAI TTS hatası (satır ${index}): ${await response.text()}`);
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());
@@ -70,21 +70,20 @@ async function sessizlikUret(seconds) {
 }
 
 async function birlestirVeSureleriHesapla(satirlar) {
-  const voiceId = process.env.ELEVENLABS_VOICE_ID_YUNUS;
-  if (!voiceId) throw new Error("ELEVENLABS_VOICE_ID_YUNUS env değişkeni tanımlı değil");
-  if (!process.env.ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY env değişkeni tanımlı değil");
+  const voice = process.env.OPENAI_TTS_VOICE || "onyx"; // onyx: erkek, derin — Yunus karakterine uygun
+  if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY env değişkeni tanımlı değil");
 
   await mkdir(AUDIO_DIR, { recursive: true });
 
   const lineFiles = [];
   for (let i = 0; i < satirlar.length; i++) {
-    lineFiles.push(await elevenLabsSesUret(satirlar[i], voiceId, i));
+    lineFiles.push(await openAiSesUret(satirlar[i], voice, i));
   }
   const silenceFile = await sessizlikUret(SILENCE_SECONDS);
 
   // ffmpeg concat filter için input listesi: satır, sessizlik, satır, sessizlik, ...
   // (son satırdan sonra sessizlik eklemiyoruz). Her girişi aynı sample
-  // rate/kanal düzenine zorluyoruz (aformat) — ElevenLabs çıktısı ile
+  // rate/kanal düzenine zorluyoruz (aformat) — OpenAI TTS çıktısı ile
   // anullsrc sessizliği farklı formatta gelirse concat filtresi hata verir.
   const inputs = [];
   const normalizeLabels = [];
