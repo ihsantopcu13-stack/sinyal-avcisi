@@ -19,7 +19,7 @@ KURALLAR:
 - "sinyal" mutlaka şunlardan biri olsun: despite/although/however/whereas/because/therefore/unless/provided that/must have/should have.
 - 4 şık üret, sadece biri doğru, diğerleri yapısal olarak yanlış (gramer tuzağı).
 - "aciklama_tr" sinyal kelimenin mantığını 1-2 kısa cümleyle Türkçe açıklasın (sesli okunacak, konuşma diline uygun olsun).
-- "kapanis_tr" kısa bir çağrı cümlesi olsun (max 12 kelime), "ücretsiz" kelimesini içersin.
+- "kapanis_tr" kısa bir çağrı cümlesi olsun (max 12 kelime), "ücretsiz" kelimesini ve "sinyal-avcisi.com" alan adını içersin. SADECE siteyi tanıt — canlı ders, kurs, video ders gibi platformun başka bir özelliğinden ASLA bahsetme.
 - Tüm Türkçe metinler SESLENDİRME için yazılıyor: kısa, akıcı, noktalama sade olsun.
 
 SADECE şu JSON şemasıyla cevap ver — kod bloğu (\`\`\`) kullanma, taslak yazma, açıklama/önizleme ekleme, tek ve nihai bir JSON nesnesi döndür, başka hiçbir metin ekleme:
