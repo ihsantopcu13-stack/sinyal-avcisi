@@ -9,11 +9,10 @@ import {
   spring,
 } from "remotion";
 
-// Site markasıyla birebir aynı palet (bkz. api/og-instagram.mjs sinyalKart)
-const BG = "linear-gradient(135deg,#0a1428,#0a0c14)";
-const AMBER = "#f5a623";
+// Koyu yeşil zemin + turkuaz vurgu + beyaz ana metin
+const BG = "linear-gradient(135deg,#0a2e1a,#04140b)";
 const CYAN = "#22d3ee";
-const INK = "#ece7da";
+const INK = "#ffffff";
 
 function CaptionLine({ text, active }) {
   const frame = useCurrentFrame();
@@ -40,7 +39,7 @@ function CaptionLine({ text, active }) {
           fontWeight: 800,
           lineHeight: 1.3,
           textAlign: "center",
-          color: active ? AMBER : INK,
+          color: active ? CYAN : INK,
           textShadow: "0 4px 24px rgba(0,0,0,0.6)",
         }}
       >
@@ -69,7 +68,7 @@ export const ShortVideo = ({ captions, brand, audioFile }) => {
       <AbsoluteFill style={{ justifyContent: "flex-start", alignItems: "center", paddingTop: 90 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ fontSize: 44 }}>🎯</div>
-          <div style={{ fontFamily: "sans-serif", fontSize: 38, fontWeight: 800, color: AMBER }}>
+          <div style={{ fontFamily: "sans-serif", fontSize: 38, fontWeight: 800, color: CYAN }}>
             {brand?.title || "SİNYAL AVCISI"}
           </div>
         </div>

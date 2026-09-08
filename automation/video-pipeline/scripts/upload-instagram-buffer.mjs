@@ -128,8 +128,10 @@ async function findInstagramChannel() {
 }
 
 function captionOlustur(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_sik] || "A";
-  return `🎯 ${senaryo.hook}\n\n${senaryo.soru_en}\n\n${(senaryo.siklar || []).join("\n")}\n\nDoğru cevap: ${dogruHarf} — Sinyal: "${senaryo.sinyal}"\n\n${senaryo.aciklama_tr}\n\n💙 Platform tamamen ücretsiz — link bio'da.\n\n#YDS #YÖKDİL #SinyalAvcısı #İngilizce #Reels`;
+  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
+  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
+  const sinyalSatiri = senaryo.sinyal ? ` — Sinyal: "${senaryo.sinyal}"` : "";
+  return `🎯 ${senaryo.hook}\n\n${senaryo.soru_en}\n\n${senaryo.soru_tr}\n${secenekSatirlari.join("\n")}\n\nDoğru cevap: ${dogruHarf}${sinyalSatiri}\n\n${senaryo.aciklama_tr}\n\n💙 Platform tamamen ücretsiz — link bio'da.\n\n#YDS #YÖKDİL #SinyalAvcısı #İngilizce #Reels`;
 }
 
 // Pipeline zaten istenen yayın saatinde çalıştığı için ileri bir tarihe

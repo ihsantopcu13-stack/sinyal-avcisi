@@ -1,104 +1,81 @@
 // ============================================================
-// ADIM 1 — Claude API: Sinyal Avcısı odaklı YDS/YÖKDİL video senaryosu
+// ADIM 1 — sinyal-avcisi.com'daki gerçek Sinyal Lab soru havuzundan
+// (data/sorular.json, bkz. scripts/extract-sorular.mjs) günün sorusunu
+// seçip video senaryosunu oluşturur.
 // ============================================================
-// _instagram-content.mjs'teki prefill (JSON garantili çıktı) tekniğiyle
-// aynı deseni kullanır. Çıktı out/script.json'a yazılır.
+// Uydurma bir soru üretmek yerine sitedeki gerçek YDS/YÖKDİL içeriğini
+// kullanıyoruz — hook ve kapanış cümlesi dışındaki her şey (soru, şıklar,
+// doğru cevap, açıklama) birebir site verisinden gelir.
 
-import { writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, "..", "out");
+const SORULAR_PATH = path.join(__dirname, "..", "data", "sorular.json");
 
-const SISTEM_PROMPT = `Sen Sinyal Avcısı platformunun kısa video (YouTube Shorts / Instagram Reels) senaryo yazarısın. YDS/YÖKDİL formatında, ÖSYM tarzı ORİJİNAL bir boşluk doldurma sorusu etrafında 25-35 saniyelik bir video senaryosu üret.
+const HOOK_SABLONLARI = [
+  "Bu cümlede herkes aynı hataya düşüyor, sen de düşecek misin?",
+  "ÖSYM bu tuzağı sevdiği için tekrar tekrar soruyor.",
+  "3 saniyede çöz: bu sinyali kaçırırsan puan gider.",
+  "Bu tuzağa düşenlerin çoğu sınavda bunu görmüştü.",
+  "Sinyal kelimeyi bulursan cevap kendini gösteriyor.",
+  "YDS/YÖKDİL'de en çok kaybettiren tuzaklardan biri bu.",
+];
 
-KURALLAR:
-- "hook" izleyiciyi ilk 2 saniyede durduracak, merak uyandıran Türkçe bir açılış cümlesi olsun (max 10 kelime).
-- "soru_en" cümlesi B2-C1 seviyesinde akademik İngilizce olsun, boşluk yerine "___" kullan.
-- "sinyal" mutlaka şunlardan biri olsun: despite/although/however/whereas/because/therefore/unless/provided that/must have/should have.
-- 4 şık üret, sadece biri doğru, diğerleri yapısal olarak yanlış (gramer tuzağı).
-- "aciklama_tr" sinyal kelimenin mantığını 1-2 kısa cümleyle Türkçe açıklasın (sesli okunacak, konuşma diline uygun olsun).
-- "kapanis_tr" kısa bir çağrı cümlesi olsun (max 12 kelime), "ücretsiz" kelimesini ve "sinyal-avcisi.com" alan adını içersin. SADECE siteyi tanıt — canlı ders, kurs, video ders gibi platformun başka bir özelliğinden ASLA bahsetme.
-- Tüm Türkçe metinler SESLENDİRME için yazılıyor: kısa, akıcı, noktalama sade olsun.
+const KAPANIS_SABLONLARI = [
+  "Bu tuzaklardan kurtulmak için sinyal-avcisi.com'a ücretsiz katıl.",
+  "Daha fazla sinyal için sinyal-avcisi.com'u ücretsiz keşfet.",
+  "sinyal-avcisi.com'da ücretsiz pratik yapmaya hemen başla.",
+  "Sinyalleri öğrenmek tamamen ücretsiz: sinyal-avcisi.com.",
+  "Bunun gibi yüzlerce soru sinyal-avcisi.com'da ücretsiz seni bekliyor.",
+];
 
-SADECE şu JSON şemasıyla cevap ver — kod bloğu (\`\`\`) kullanma, taslak yazma, açıklama/önizleme ekleme, tek ve nihai bir JSON nesnesi döndür, başka hiçbir metin ekleme:
-{"hook":"...","soru_en":"...","siklar":["A) ...","B) ...","C) ...","D) ..."],"dogru_sik":0,"sinyal":"...","aciklama_tr":"...","kapanis_tr":"..."}`;
-
-async function claudeJsonUret() {
-  const bugun = new Date().toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
-  const model = process.env.CLAUDE_MODEL || "claude-sonnet-5";
-
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "anthropic-version": "2023-06-01",
-      "x-api-key": process.env.ANTHROPIC_API_KEY,
-    },
-    body: JSON.stringify({
-      model,
-      max_tokens: 1024,
-      thinking: { type: "disabled" },
-      system: SISTEM_PROMPT,
-      messages: [
-        { role: "user", content: `Bugün ${bugun}. Bugüne özel, daha önce üretilmemiş yeni bir video senaryosu üret.` },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Anthropic API hatası: ${await response.text()}`);
-  }
-
-  const data = await response.json();
-  const text = data.content?.find((b) => b.type === "text")?.text || "";
-
-  // Claude bazen (talimata rağmen) taslak + düzeltme gibi birden fazla JSON
-  // bloğu üretebiliyor — kod bloklarını (varsa) ayrı ayrı dener, en sondan
-  // başlayarak şemayı tam sağlayan ilk adayı kabul eder.
-  const adaylar = [...text.matchAll(/```(?:json)?\s*([\s\S]*?)```/g)].map((m) => m[1]);
-  adaylar.push(text);
-
-  for (let i = adaylar.length - 1; i >= 0; i--) {
-    const aday = adaylar[i];
-    const jsonMetni = aday.slice(aday.indexOf("{"), aday.lastIndexOf("}") + 1);
-    try {
-      const senaryo = JSON.parse(jsonMetni);
-      if (senaryoTamMi(senaryo)) return senaryo;
-    } catch {
-      // sıradaki adaya geç
-    }
-  }
-
-  throw new Error(`Claude yanıtı JSON olarak parse edilemedi. stop_reason: ${data.stop_reason}, ham metin: ${JSON.stringify(text)}`);
+// Bir önceki gün ile aynı soru/hook/kapanışın tekrar etmemesi için gün
+// sayısına göre deterministik ama birbirinden bağımsız (farklı offsetli)
+// indeksler seçiyoruz — ekstra bir durum/dosya takibi gerekmeden.
+function gunSayisi() {
+  return Math.floor(Date.now() / 86_400_000);
 }
 
-function senaryoTamMi(s) {
-  return (
-    s &&
-    typeof s.hook === "string" &&
-    typeof s.soru_en === "string" &&
-    Array.isArray(s.siklar) &&
-    s.siklar.length === 4 &&
-    typeof s.dogru_sik === "number" &&
-    typeof s.sinyal === "string" &&
-    typeof s.aciklama_tr === "string" &&
-    typeof s.kapanis_tr === "string"
-  );
+function gununSorusunuSec(sorular) {
+  return sorular[gunSayisi() % sorular.length];
+}
+
+function sabloniSec(sablonlar, offset) {
+  return sablonlar[(gunSayisi() + offset) % sablonlar.length];
+}
+
+async function scriptOlustur() {
+  const sorular = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
+  const soru = gununSorusunuSec(sorular);
+
+  return {
+    hook: sabloniSec(HOOK_SABLONLARI, 7),
+    soru_en: soru.soru_en,
+    sinyal: soru.sinyal,
+    soru_tr: soru.soru_tr,
+    secenekler_tr: soru.secenekler_tr,
+    dogru_index: soru.dogru_index,
+    aciklama_tr: soru.aciklama_tr,
+    kapanis_tr: sabloniSec(KAPANIS_SABLONLARI, 13),
+  };
 }
 
 function narrasyonVeAltyaziSatirlariUret(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_sik] || "A";
-  const dogruMetni = (senaryo.siklar[senaryo.dogru_sik] || "").replace(/^[A-D]\)\s*/, "");
+  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
+  const dogruMetni = senaryo.secenekler_tr[senaryo.dogru_index] || "";
+  const secenekSatirlari = senaryo.secenekler_tr.map(
+    (s, i) => `${["A", "B", "C", "D"][i]}) ${s}`
+  );
 
-  // Her satır hem seslendirilecek hem de ekranda gösterilecek altyazı
-  // parçasıdır — sıralama, video akışının kendisidir.
   return [
     senaryo.hook,
-    `İşte cümle: ${senaryo.soru_en}`,
-    ...senaryo.siklar,
-    `Doğru sinyal kelime: ${senaryo.sinyal}.`,
+    `İngilizce metin: ${senaryo.soru_en}`,
+    senaryo.soru_tr,
+    ...secenekSatirlari,
+    senaryo.sinyal ? `Sinyal kelime: ${senaryo.sinyal}.` : null,
     senaryo.aciklama_tr,
     `Doğru cevap ${dogruHarf}: ${dogruMetni}`,
     senaryo.kapanis_tr,
@@ -106,7 +83,7 @@ function narrasyonVeAltyaziSatirlariUret(senaryo) {
 }
 
 export async function scriptUret() {
-  const senaryo = await claudeJsonUret();
+  const senaryo = await scriptOlustur();
   const satirlar = narrasyonVeAltyaziSatirlariUret(senaryo);
   const cikti = { senaryo, satirlar, narrasyon: satirlar.join(" ... ") };
 

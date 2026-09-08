@@ -2,8 +2,9 @@
   "name": "sinyal-avcisi-video-pipeline",
   "private": true,
   "type": "module",
-  "description": "Claude -> OpenAI TTS -> Remotion -> YouTube Shorts + Instagram Reels (Buffer) otomasyonu",
+  "description": "Gerçek soru havuzu -> OpenAI TTS -> Remotion -> YouTube Shorts + Instagram Reels (Buffer) otomasyonu",
   "scripts": {
+    "extract-sorular": "node scripts/extract-sorular.mjs",
     "generate-script": "node scripts/generate-script.mjs",
     "generate-audio": "node scripts/generate-audio.mjs",
     "render": "node scripts/render.mjs",

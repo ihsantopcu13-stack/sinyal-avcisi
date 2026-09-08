@@ -23,14 +23,16 @@ function oauthClient() {
 }
 
 function baslikVeAciklamaOlustur(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_sik] || "A";
+  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
+  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
   const title = `${senaryo.hook} #Shorts #YDS #YÖKDİL`.slice(0, 100);
   const description = [
     senaryo.soru_en,
     "",
-    (senaryo.siklar || []).join("\n"),
+    senaryo.soru_tr,
+    ...secenekSatirlari,
     "",
-    `Doğru cevap: ${dogruHarf} — Sinyal kelime: ${senaryo.sinyal}`,
+    senaryo.sinyal ? `Doğru cevap: ${dogruHarf} — Sinyal kelime: ${senaryo.sinyal}` : `Doğru cevap: ${dogruHarf}`,
     senaryo.aciklama_tr,
     "",
     "Sinyal Avcısı ile YDS/YÖKDİL'e ücretsiz hazırlan: https://sinyal-avcisi.com",

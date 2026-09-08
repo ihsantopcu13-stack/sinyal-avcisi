@@ -1,5 +1,5 @@
 // ============================================================
-// Tam akış: Claude → OpenAI TTS → Remotion → YouTube + Instagram (Buffer)
+// Tam akış: Gerçek soru havuzu → OpenAI TTS → Remotion → YouTube + Instagram (Buffer)
 // ============================================================
 
 import { scriptUret } from "./generate-script.mjs";
@@ -9,7 +9,7 @@ import { youtubeYukle } from "./upload-youtube.mjs";
 import { reelsYayinlaBuffer } from "./upload-instagram-buffer.mjs";
 
 async function main() {
-  console.log("1/5 Senaryo üretiliyor (Claude)...");
+  console.log("1/5 Günün sorusu seçiliyor (gerçek soru havuzu)...");
   await scriptUret();
 
   console.log("2/5 Seslendirme üretiliyor (OpenAI TTS)...");
