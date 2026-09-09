@@ -7,6 +7,7 @@ import { WhoseReel, TOTAL_FRAMES as WHOSE_FRAMES } from "./WhoseReel.jsx";
 import { AlthoughDespiteReel, TOTAL_FRAMES as ALTHOUGH_DESPITE_FRAMES } from "./AlthoughDespiteReel.jsx";
 import { BecauseReel, TOTAL_FRAMES as BECAUSE_FRAMES } from "./BecauseReel.jsx";
 import { HoweverReel, TOTAL_FRAMES as HOWEVER_FRAMES } from "./HoweverReel.jsx";
+import { UnlessReel, TOTAL_FRAMES as UNLESS_FRAMES } from "./UnlessReel.jsx";
 
 const FPS = 30;
 
@@ -108,6 +109,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={HOWEVER_FRAMES}
+      />
+      {/* Seri devamı — UNLESS Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="UnlessReel"
+        component={UnlessReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={UNLESS_FRAMES}
       />
     </>
   );
