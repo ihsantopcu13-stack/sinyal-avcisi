@@ -9,6 +9,7 @@ import { BecauseReel, TOTAL_FRAMES as BECAUSE_FRAMES } from "./BecauseReel.jsx";
 import { HoweverReel, TOTAL_FRAMES as HOWEVER_FRAMES } from "./HoweverReel.jsx";
 import { UnlessReel, TOTAL_FRAMES as UNLESS_FRAMES } from "./UnlessReel.jsx";
 import { AfterWhenReel, TOTAL_FRAMES as AFTER_WHEN_FRAMES } from "./AfterWhenReel.jsx";
+import { VingV3Reel, TOTAL_FRAMES as VING_V3_FRAMES } from "./VingV3Reel.jsx";
 
 const FPS = 30;
 
@@ -128,6 +129,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={AFTER_WHEN_FRAMES}
+      />
+      {/* Seri devamı — V-ING / V3 Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="VingV3Reel"
+        component={VingV3Reel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={VING_V3_FRAMES}
       />
     </>
   );
