@@ -6,6 +6,7 @@ import { TheNumberOfReel, TOTAL_FRAMES as THE_NUMBER_OF_FRAMES } from "./TheNumb
 import { WhoseReel, TOTAL_FRAMES as WHOSE_FRAMES } from "./WhoseReel.jsx";
 import { AlthoughDespiteReel, TOTAL_FRAMES as ALTHOUGH_DESPITE_FRAMES } from "./AlthoughDespiteReel.jsx";
 import { BecauseReel, TOTAL_FRAMES as BECAUSE_FRAMES } from "./BecauseReel.jsx";
+import { HoweverReel, TOTAL_FRAMES as HOWEVER_FRAMES } from "./HoweverReel.jsx";
 
 const FPS = 30;
 
@@ -98,6 +99,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={BECAUSE_FRAMES}
+      />
+      {/* Seri devamı — HOWEVER Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="HoweverReel"
+        component={HoweverReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={HOWEVER_FRAMES}
       />
     </>
   );
