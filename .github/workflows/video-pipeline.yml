@@ -1,0 +1,55 @@
+name: Video Pipeline (YDS/YÖKDİL Shorts + Reels)
+
+on:
+  schedule:
+    # Her gün 17:00 UTC = 20:00 Türkiye (DST yok)
+    - cron: "0 17 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Instagram Reels'e verilecek public URL için video, bu repoda bir GitHub Release asset'i olarak barındırılıyor
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Chromium bağımlılıklarını kur (Remotion render için)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+            libasound2t64 libpango-1.0-0 libpangocairo-1.0-0 ffmpeg
+
+      - name: Bağımlılıkları kur
+        run: npm install
+
+      - name: Remotion headless Chrome'u hazırla
+        run: npx remotion browser ensure
+
+      - name: Pipeline'ı çalıştır
+        run: npm run pipeline
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_CHANNEL_ID: ${{ secrets.BUFFER_CHANNEL_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Üretilen içerikleri artifact olarak sakla (hata ayıklama için)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-pipeline-out
+          path: automation/video-pipeline/out
+          retention-days: 7
