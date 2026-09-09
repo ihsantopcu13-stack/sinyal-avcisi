@@ -18,15 +18,27 @@ async function main() {
   console.log("3/5 Video render ediliyor (Remotion)...");
   await render();
 
+  // YouTube ve Instagram yüklemeleri birbirinden bağımsız: biri (örn. YouTube
+  // günlük yükleme kotası) başarısız olsa da diğeri yine de denenir.
   console.log("4/5 YouTube Shorts'a yükleniyor...");
-  const youtube = await youtubeYukle();
-
   console.log("5/5 Instagram Reels'e yükleniyor (Buffer)...");
-  const instagram = await reelsYayinlaBuffer();
+  const [youtube, instagram] = await Promise.allSettled([youtubeYukle(), reelsYayinlaBuffer()]);
 
-  console.log("\nTamamlandı:");
-  console.log("YouTube:", youtube.videoUrl);
-  console.log("Instagram Buffer post id:", instagram.id, instagram.status);
+  console.log("\n=== SONUÇ ===");
+  console.log(
+    "YouTube:",
+    youtube.status === "fulfilled" ? youtube.value.videoUrl : `HATA: ${youtube.reason?.message || youtube.reason}`
+  );
+  console.log(
+    "Instagram:",
+    instagram.status === "fulfilled"
+      ? `${instagram.value.id} ${instagram.value.status}`
+      : `HATA: ${instagram.reason?.message || instagram.reason}`
+  );
+
+  if (youtube.status === "rejected" || instagram.status === "rejected") {
+    process.exitCode = 1;
+  }
 }
 
 main().catch((err) => {
