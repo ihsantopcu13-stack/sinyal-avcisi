@@ -12,6 +12,7 @@ import { AfterWhenReel, TOTAL_FRAMES as AFTER_WHEN_FRAMES } from "./AfterWhenRee
 import { VingV3Reel, TOTAL_FRAMES as VING_V3_FRAMES } from "./VingV3Reel.jsx";
 import { PassiveReel, TOTAL_FRAMES as PASSIVE_FRAMES } from "./PassiveReel.jsx";
 import { WhoWhichReel, TOTAL_FRAMES as WHO_WHICH_FRAMES } from "./WhoWhichReel.jsx";
+import { ModalHaveReel, TOTAL_FRAMES as MODAL_HAVE_FRAMES } from "./ModalHaveReel.jsx";
 
 const FPS = 30;
 
@@ -158,6 +159,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={WHO_WHICH_FRAMES}
+      />
+      {/* Seri devamı — MODAL + HAVE V3 Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="ModalHaveReel"
+        component={ModalHaveReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={MODAL_HAVE_FRAMES}
       />
     </>
   );
