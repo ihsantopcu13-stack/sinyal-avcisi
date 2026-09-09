@@ -10,6 +10,7 @@ import { HoweverReel, TOTAL_FRAMES as HOWEVER_FRAMES } from "./HoweverReel.jsx";
 import { UnlessReel, TOTAL_FRAMES as UNLESS_FRAMES } from "./UnlessReel.jsx";
 import { AfterWhenReel, TOTAL_FRAMES as AFTER_WHEN_FRAMES } from "./AfterWhenReel.jsx";
 import { VingV3Reel, TOTAL_FRAMES as VING_V3_FRAMES } from "./VingV3Reel.jsx";
+import { PassiveReel, TOTAL_FRAMES as PASSIVE_FRAMES } from "./PassiveReel.jsx";
 
 const FPS = 30;
 
@@ -138,6 +139,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={VING_V3_FRAMES}
+      />
+      {/* Seri devamı — PASSIVE Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="PassiveReel"
+        component={PassiveReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={PASSIVE_FRAMES}
       />
     </>
   );
