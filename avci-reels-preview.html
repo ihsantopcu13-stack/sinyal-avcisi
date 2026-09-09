@@ -243,9 +243,8 @@ const statusEl = document.getElementById('status');
 let idx = -1;
 let playing = false;
 let muted = false;
-let raf = null;
-let segStart = 0;
 let audioEl = null;
+let fallbackTimer = null;
 const audioCache = new Map();
 
 progressEl.innerHTML = SLIDES.map(() => '<div class="seg"><i></i></div>').join('');
@@ -274,20 +273,8 @@ async function fetchNarration(text) {
 }
 
 function stopAudio() {
-  if (audioEl) { audioEl.pause(); audioEl = null; }
-}
-
-async function playNarration(text) {
-  stopAudio();
-  if (muted) return;
-  try {
-    const url = await fetchNarration(text);
-    audioEl = new Audio(url);
-    await audioEl.play();
-    setStatus('');
-  } catch (e) {
-    setStatus('Ses yüklenemedi — bu sayfayı Vercel üzerinden (vercel dev veya canlı site) açtığından emin ol. ' + e.message, true);
-  }
+  clearTimeout(fallbackTimer);
+  if (audioEl) { audioEl.pause(); audioEl.onended = null; audioEl = null; }
 }
 
 function showSlide(i) {
@@ -295,28 +282,72 @@ function showSlide(i) {
   segs.forEach((seg, si) => {
     seg.classList.toggle('done', si < i);
     seg.querySelector('i').style.transition = 'none';
-    seg.querySelector('i').style.width = si < i ? '100%' : (si === i ? '0%' : '0%');
+    seg.querySelector('i').style.width = si < i ? '100%' : '0%';
   });
 }
 
-function animateSeg(i, dur) {
+// fromZero=false: barı sıfırlamadan, o anki genişliğinden 100%'e devam ettirir
+// (duraklat/devam et sırasında sesin gerçek konumuyla senkron kalması için).
+function animateSeg(i, ms, fromZero = true) {
   const bar = segs[i].querySelector('i');
+  if (fromZero) { bar.style.transition = 'none'; bar.style.width = '0%'; }
   requestAnimationFrame(() => {
-    bar.style.transition = 'width ' + dur + 'ms linear';
+    bar.style.transition = 'width ' + Math.max(0, ms) + 'ms linear';
     bar.style.width = '100%';
   });
 }
 
+function freezeSeg(i) {
+  const seg = segs[i];
+  const bar = seg.querySelector('i');
+  const pct = seg.clientWidth ? (bar.getBoundingClientRect().width / seg.clientWidth * 100) : 0;
+  bar.style.transition = 'none';
+  bar.style.width = pct + '%';
+}
+
+// Bir slaytın seslendirmesini yükler ve oynatır. Slayt ilerlemesi artık sabit
+// bir süre TAHMİNİYLE değil, sesin kendi 'ended' olayıyla tetiklenir — böylece
+// cümle sesin yüklenmesi/oynatılması bitmeden asla kesilmez. `dur` sadece ses
+// hiç yüklenemezse (engellenmiş autoplay, ağ hatası) devreye giren bir
+// güvenlik sigortası olarak kullanılır.
+async function loadAndPlaySlide(i) {
+  stopAudio();
+  showSlide(i);
+  const { text, dur } = SLIDES[i];
+
+  const armFallback = () => {
+    animateSeg(i, dur);
+    fallbackTimer = setTimeout(() => { if (playing && idx === i) next(); }, dur);
+  };
+
+  if (muted) { armFallback(); return; }
+
+  setStatus('Ses yükleniyor…');
+  try {
+    const url = await fetchNarration(text);
+    if (!playing || idx !== i) return; // bu arada duraklatıldı veya başka slayta geçildi
+    setStatus('');
+    const el = new Audio(url);
+    audioEl = el;
+    el.addEventListener('loadedmetadata', () => {
+      if (audioEl === el && playing && idx === i) animateSeg(i, el.duration * 1000 + 200);
+    });
+    el.addEventListener('ended', () => {
+      if (audioEl === el && playing && idx === i) next();
+    });
+    await el.play();
+  } catch (e) {
+    if (idx !== i) return;
+    setStatus('Ses yüklenemedi, sabit sürelerle devam ediliyor — bu sayfayı Vercel üzerinden (vercel dev veya canlı site) açtığından emin ol. ' + e.message, true);
+    armFallback();
+  }
+}
+
 function next() {
+  clearTimeout(fallbackTimer);
   idx++;
   if (idx >= SLIDES.length) { idx = SLIDES.length - 1; pause(); return; }
-  showSlide(idx);
-  const { dur, text } = SLIDES[idx];
-  animateSeg(idx, dur);
-  playNarration(text);
-  segStart = performance.now();
-  clearTimeout(raf);
-  raf = setTimeout(next, dur);
+  loadAndPlaySlide(idx);
 }
 
 function play() {
@@ -324,24 +355,28 @@ function play() {
   playing = true;
   playBtn.textContent = '⏸ Duraklat';
   playBadge.classList.remove('show');
-  if (idx < 0) { next(); return; }
-  const { dur, text } = SLIDES[idx];
-  animateSeg(idx, dur);
-  if (audioEl && audioEl.paused) audioEl.play().catch(() => {}); else playNarration(text);
-  raf = setTimeout(next, dur);
+  if (idx < 0) { idx = 0; loadAndPlaySlide(0); return; }
+  if (audioEl && audioEl.paused && audioEl.currentTime > 0) {
+    audioEl.play().catch(() => {});
+    if (audioEl.duration) {
+      const remainingMs = Math.max(0, (audioEl.duration - audioEl.currentTime) * 1000 + 200);
+      animateSeg(idx, remainingMs, false);
+    }
+  } else {
+    loadAndPlaySlide(idx);
+  }
 }
 
 function pause() {
   playing = false;
   playBtn.textContent = '▶ Devam Et';
   playBadge.classList.add('show');
-  clearTimeout(raf);
+  clearTimeout(fallbackTimer);
   if (audioEl) audioEl.pause();
-  if (idx >= 0) segs[idx].querySelector('i').style.transition = 'none';
+  if (idx >= 0) freezeSeg(idx);
 }
 
 function restart() {
-  clearTimeout(raf);
   stopAudio();
   idx = -1;
   playing = false;
@@ -359,7 +394,11 @@ muteBtn.addEventListener('click', () => {
   muted = !muted;
   muteBtn.textContent = muted ? '🔇 Ses Kapalı' : '🔊 Ses Açık';
   soundIcon.textContent = muted ? '🔇' : '🔊';
-  if (muted) stopAudio();
+  if (muted) {
+    stopAudio();
+  } else if (playing && idx >= 0) {
+    loadAndPlaySlide(idx);
+  }
 });
 </script>
 </body>
