@@ -2,6 +2,7 @@ import { Composition, getInputProps } from "remotion";
 import { ShortVideo } from "./ShortVideo.jsx";
 import { OfTuzagiReel, TOTAL_FRAMES as OF_TUZAGI_FRAMES } from "./OfTuzagiReel.jsx";
 import { ANumberOfReel, TOTAL_FRAMES as A_NUMBER_OF_FRAMES } from "./ANumberOfReel.jsx";
+import { TheNumberOfReel, TOTAL_FRAMES as THE_NUMBER_OF_FRAMES } from "./TheNumberOfReel.jsx";
 
 const FPS = 30;
 
@@ -58,6 +59,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={A_NUMBER_OF_FRAMES}
+      />
+      {/* Seri devamı — THE NUMBER OF Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="TheNumberOfReel"
+        component={TheNumberOfReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={THE_NUMBER_OF_FRAMES}
       />
     </>
   );
