@@ -142,7 +142,7 @@ body{
 <div class="page-sub">
   ÖSYM'nin "aware of" gibi sabit sıfat+edat kalıplarında öğrenciyi tanıdık ama yanlış
   edatlarla (about, for, with) tuzağa düşürme taktiğini anlatan 5 slaytlık reels taslağı.
-  Seslendirme <code>/api/tts-eleven.mjs</code> üzerinden ElevenLabs (Rachel, eleven_multilingual_v2) ile üretilir.
+  Seslendirme <code>/api/tts-eleven.mjs</code> üzerinden ElevenLabs (özel sesimiz, eleven_multilingual_v2) ile üretilir.
 </div>
 
 <div class="phone">
@@ -227,7 +227,7 @@ const SLIDES = [
   { dur: 6000, text: "Sinyal: OF tuzağı. Aware, capable, afraid, proud, fond gibi sıfatların sabit edat ortağı çoğunlukla of'tur. ÖSYM bunu about, for, with gibi tanıdık ama yanlış edatlarla değiştirir. Mantık değil, kalıbı ez." },
   { dur: 4000, text: "Yedi sinyal tipini öğren, tuzağa düşme. Sinyal avcısı nokta kom. Tamamen ücretsiz, kayıt bile istemez." },
 ];
-const RACHEL_VOICE_ID = '21m00Tcm4TlvDq8ikWAM';
+const CUSTOM_VOICE_ID = 'OeL5m6KRTt2v1GZog2XX';
 
 const screen = document.getElementById('screen');
 const progressEl = document.getElementById('progress');
@@ -261,7 +261,7 @@ async function fetchNarration(text) {
   const res = await fetch('/api/tts-eleven', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, voiceId: RACHEL_VOICE_ID }),
+    body: JSON.stringify({ text, voiceId: CUSTOM_VOICE_ID }),
   });
   if (!res.ok) {
     const errText = await res.text().catch(() => '');

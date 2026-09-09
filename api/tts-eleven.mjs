@@ -7,9 +7,10 @@
 
 import { rateLimit } from './_rateLimit.mjs';
 
-// İngilizce metinler için kullanılan ElevenLabs sesi, eleven_multilingual_v2
-// modeliyle çoklu dili destekler
-const DEFAULT_VOICE_ID = 'Ilz5AkH5DN6lUfEJGXlM';
+// Kendi (custom/cloned) sesimiz — ElevenLabs Free planda library/hazır sesler
+// API üzerinden kullanılamadığı için (payment_required hatası) kendi sesimizi
+// kullanıyoruz. eleven_multilingual_v2 modeliyle çoklu dili destekler.
+const DEFAULT_VOICE_ID = 'OeL5m6KRTt2v1GZog2XX';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
