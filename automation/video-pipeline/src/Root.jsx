@@ -14,6 +14,7 @@ import { PassiveReel, TOTAL_FRAMES as PASSIVE_FRAMES } from "./PassiveReel.jsx";
 import { WhoWhichReel, TOTAL_FRAMES as WHO_WHICH_FRAMES } from "./WhoWhichReel.jsx";
 import { ModalHaveReel, TOTAL_FRAMES as MODAL_HAVE_FRAMES } from "./ModalHaveReel.jsx";
 import { ItTheyReel, TOTAL_FRAMES as IT_THEY_FRAMES } from "./ItTheyReel.jsx";
+import { MasterAvciReel, TOTAL_FRAMES as MASTER_AVCI_FRAMES } from "./MasterAvciReel.jsx";
 
 const FPS = 30;
 
@@ -178,6 +179,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={IT_THEY_FRAMES}
+      />
+      {/* Sezon finali — MASTER AVCI, aynı AVCI görsel kimliği, daha dramatik. */}
+      <Composition
+        id="MasterAvciReel"
+        component={MasterAvciReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={MASTER_AVCI_FRAMES}
       />
     </>
   );
