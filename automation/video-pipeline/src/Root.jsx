@@ -3,6 +3,7 @@ import { ShortVideo } from "./ShortVideo.jsx";
 import { OfTuzagiReel, TOTAL_FRAMES as OF_TUZAGI_FRAMES } from "./OfTuzagiReel.jsx";
 import { ANumberOfReel, TOTAL_FRAMES as A_NUMBER_OF_FRAMES } from "./ANumberOfReel.jsx";
 import { TheNumberOfReel, TOTAL_FRAMES as THE_NUMBER_OF_FRAMES } from "./TheNumberOfReel.jsx";
+import { WhoseReel, TOTAL_FRAMES as WHOSE_FRAMES } from "./WhoseReel.jsx";
 
 const FPS = 30;
 
@@ -68,6 +69,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={THE_NUMBER_OF_FRAMES}
+      />
+      {/* Seri devamı — WHOSE Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="WhoseReel"
+        component={WhoseReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={WHOSE_FRAMES}
       />
     </>
   );
