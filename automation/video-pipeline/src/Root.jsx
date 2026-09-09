@@ -8,6 +8,7 @@ import { AlthoughDespiteReel, TOTAL_FRAMES as ALTHOUGH_DESPITE_FRAMES } from "./
 import { BecauseReel, TOTAL_FRAMES as BECAUSE_FRAMES } from "./BecauseReel.jsx";
 import { HoweverReel, TOTAL_FRAMES as HOWEVER_FRAMES } from "./HoweverReel.jsx";
 import { UnlessReel, TOTAL_FRAMES as UNLESS_FRAMES } from "./UnlessReel.jsx";
+import { AfterWhenReel, TOTAL_FRAMES as AFTER_WHEN_FRAMES } from "./AfterWhenReel.jsx";
 
 const FPS = 30;
 
@@ -118,6 +119,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={UNLESS_FRAMES}
+      />
+      {/* Seri devamı — AFTER / WHEN Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="AfterWhenReel"
+        component={AfterWhenReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={AFTER_WHEN_FRAMES}
       />
     </>
   );
