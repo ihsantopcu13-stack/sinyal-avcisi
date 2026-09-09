@@ -4,6 +4,7 @@ import { OfTuzagiReel, TOTAL_FRAMES as OF_TUZAGI_FRAMES } from "./OfTuzagiReel.j
 import { ANumberOfReel, TOTAL_FRAMES as A_NUMBER_OF_FRAMES } from "./ANumberOfReel.jsx";
 import { TheNumberOfReel, TOTAL_FRAMES as THE_NUMBER_OF_FRAMES } from "./TheNumberOfReel.jsx";
 import { WhoseReel, TOTAL_FRAMES as WHOSE_FRAMES } from "./WhoseReel.jsx";
+import { AlthoughDespiteReel, TOTAL_FRAMES as ALTHOUGH_DESPITE_FRAMES } from "./AlthoughDespiteReel.jsx";
 
 const FPS = 30;
 
@@ -78,6 +79,15 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={WHOSE_FRAMES}
+      />
+      {/* Seri devamı — ALTHOUGH / DESPITE Tuzağı, aynı AVCI görsel kimliği. */}
+      <Composition
+        id="AlthoughDespiteReel"
+        component={AlthoughDespiteReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={ALTHOUGH_DESPITE_FRAMES}
       />
     </>
   );
