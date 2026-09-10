@@ -6369,6 +6369,21 @@ function dtab(el,mod){
     if(teknikContainer&&!teknikContainer.innerHTML){teknikContainer.innerHTML=teknikModulHTML();}
     return;
   }
+  if(mod==='dilavcisi'){
+    const dEl=document.getElementById('mod-dilavcisi');
+    if(dEl){
+      dEl.style.display='block';
+      // KLOD-MOTION ders modülleri (DNA Testi, Trigger Sistemi vb.) sayfa
+      // yüklenirken değil, Dil Avcısı ilk açıldığında render ediliyor —
+      // bkz. window.__dilavcisiLazyRenders kayıtları (her modülün kendi
+      // script'inin sonunda).
+      if(!dEl.dataset.lazyRendered){
+        (window.__dilavcisiLazyRenders||[]).forEach(fn=>{try{fn();}catch(e){console.error('dilavcisi lazy render hata:',e);}});
+        dEl.dataset.lazyRendered='1';
+      }
+    }
+    return;
+  }
   const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();}
 }
 function dnav(el){
@@ -13041,7 +13056,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  pvmUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(pvmUpdateUI);
 })();
 </script>
 
@@ -13094,7 +13109,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  bbkUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(bbkUpdateUI);
 })();
 </script>
 
@@ -13191,7 +13206,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  srtUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(srtUpdateUI);
 })();
 </script>
 
@@ -13295,7 +13310,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  osmUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(osmUpdateUI);
 })();
 </script>
 
@@ -13380,7 +13395,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  dnaRender();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(dnaRender);
 })();
 </script>
 
@@ -13462,7 +13477,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  giUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(giUpdateUI);
 })();
 </script>
 
@@ -13544,7 +13559,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  kfUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(kfUpdateUI);
 })();
 </script>
 
@@ -13626,7 +13641,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  vocUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(vocUpdateUI);
 })();
 </script>
 
@@ -13708,7 +13723,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  rdUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(rdUpdateUI);
 })();
 </script>
 
@@ -13790,7 +13805,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  mpUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(mpUpdateUI);
 })();
 </script>
 
@@ -13978,8 +13993,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  kbRender();
-  kbUpdateProgress();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(kbRender,kbUpdateProgress);
 })();
 </script>
 
@@ -14061,7 +14075,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  ssUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(ssUpdateUI);
 })();
 </script>
 
@@ -14225,7 +14239,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  cpRender();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(cpRender);
   cpHedefRender(1);
 })();
 </script>
@@ -14309,7 +14323,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  tgRender();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(tgRender);
 })();
 </script>
 
@@ -14391,7 +14405,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  psyUpdateUI();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(psyUpdateUI);
 })();
 </script>
 
@@ -14464,7 +14478,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     },300);
   };
 
-  bsRender();
+  (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(bsRender);
 })();
 </script>
 </body>
