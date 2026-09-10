@@ -1974,7 +1974,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor" opacity=".6"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
               FONETİK DEDEKTİF
             </div>
-            <h1>Harflerin <span>Gizli Sesi</span></h1>
+            <h2>Harflerin <span>Gizli Sesi</span></h2>
             <p>Her harf neden farklı okunur? Renk kodlu analiz ve sesli örneklerle öğren.</p>
           </div>
 
@@ -6467,13 +6467,6 @@ function dnav(el){
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
-// 19. BATCH - Soru üretim kuyruğu
-const soruKuyrugu=[];
-async function soruTopluUret(konu,adet=5){
-  const mesaj={role:'user',content:`${konu} konusunda YDS formatında ${adet} soru üret. XML formatı kullan:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>`};
-  const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[mesaj],mode:'structured',use_tools:false})});
-  return await res.json();
-}
 
 // ─── MOBİL ALT NAVİGASYON — sidebar gruplarını mobilde açılır liste olarak gösterir ───
 const MBN_GRUP_BASLIK={pratik:'🎯 Pratik',analiz:'📊 Analiz Et',planla:'📅 Planla',ogren:'📖 Öğren'};
@@ -6510,13 +6503,6 @@ function mobilNavGrupAc(grupKey,btn){
 function mobilNavKapat(){
   document.getElementById('mbnBackdrop')?.classList.remove('acik');
   document.getElementById('mbnSheet')?.classList.remove('acik');
-}
-
-// 15. META PROMPTING — Claude'a prompt yazdır
-async function metaPromptUret(){
-  const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:'Sinyal Avcısı için en iyi YDS soru üretme system promptunu yaz. Çıktı: sadece prompt metni.'}],mode:'chat'})});
-  const data=await res.json();
-  return data.content?.[0]?.text||'';
 }
 
 async function dnavChat(){
