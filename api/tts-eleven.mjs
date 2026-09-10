@@ -24,11 +24,13 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Çok fazla ses isteği gönderdiniz. Biraz sonra tekrar deneyin.' });
   }
 
-  const { text, voiceId = DEFAULT_VOICE_ID } = req.body;
+  const { text, voiceId = DEFAULT_VOICE_ID, speed } = req.body;
 
   if (!text || typeof text !== 'string' || text.length > 2000) {
     return res.status(400).json({ error: 'Invalid text' });
   }
+  // ElevenLabs voice_settings.speed: 0.7-1.2 arası, 1.0 varsayılan.
+  const safeSpeed = typeof speed === 'number' && speed >= 0.7 && speed <= 1.2 ? speed : undefined;
 
   if (!process.env.ELEVENLABS_API_KEY) {
     return res.status(500).json({ error: 'ELEVENLABS_API_KEY not configured' });
@@ -48,6 +50,7 @@ export default async function handler(req, res) {
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.75,
+          ...(safeSpeed ? { speed: safeSpeed } : {}),
         },
       }),
     });
