@@ -15,6 +15,7 @@ import { WhoWhichReel, TOTAL_FRAMES as WHO_WHICH_FRAMES } from "./WhoWhichReel.j
 import { ModalHaveReel, TOTAL_FRAMES as MODAL_HAVE_FRAMES } from "./ModalHaveReel.jsx";
 import { ItTheyReel, TOTAL_FRAMES as IT_THEY_FRAMES } from "./ItTheyReel.jsx";
 import { MasterAvciReel, TOTAL_FRAMES as MASTER_AVCI_FRAMES } from "./MasterAvciReel.jsx";
+import { Master01OfTuzagiReel, TOTAL_FRAMES as MASTER_01_FRAMES } from "./Master01OfTuzagiReel.jsx";
 
 const FPS = 30;
 
@@ -188,6 +189,17 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={MASTER_AVCI_FRAMES}
+      />
+      {/* MASTER VİDEO PAKETİ #1 — OF TUZAĞI (DETAY sürümü). Kısa OF Tuzağı
+          Reels'ten ayrı, öğretme+pekiştirme formatlı 30 bölümlük serinin
+          ilk videosu — bkz. data/master-video-paketi.md. */}
+      <Composition
+        id="Master01OfTuzagiReel"
+        component={Master01OfTuzagiReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={MASTER_01_FRAMES}
       />
     </>
   );
