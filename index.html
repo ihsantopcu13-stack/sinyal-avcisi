@@ -1128,15 +1128,15 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <button class="pwa-close-btn" onclick="pwaBannerKapat()">✕</button>
 </div>
 <nav>
-  <div class="nav-logo" onclick="goTo('hero')">Sinyal <b>Avcisi</b></div>
+  <div class="nav-logo" onclick="goTo('hero')" role="button" tabindex="0">Sinyal <b>Avcisi</b></div>
   <div class="nav-links">
-    <span onclick="goTo('nasil')">Nasıl Çalışır?</span>
-    <span onclick="goTo('klod')">KLOD</span>
-    <span onclick="goTo('ses')">Ses Kurs</span>
-    <span onclick="goTo('ekitap')">E-Kitap</span>
-    <span onclick="goTo('sss')">SSS</span>
-    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
-    <span onclick="if(typeof ahkGit==='function')ahkGit()" style="color:#5b8fff;font-weight:700">🃏 AHA Kartları</span>
+    <span onclick="goTo('nasil')" role="button" tabindex="0">Nasıl Çalışır?</span>
+    <span onclick="goTo('klod')" role="button" tabindex="0">KLOD</span>
+    <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
+    <span onclick="goTo('ekitap')" role="button" tabindex="0">E-Kitap</span>
+    <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
+    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
+    <span onclick="if(typeof ahkGit==='function')ahkGit()" style="color:#5b8fff;font-weight:700" role="button" tabindex="0">🃏 AHA Kartları</span>
   </div>
   <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px" title="Ara (Ctrl+K)">🔍</button>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
@@ -1175,11 +1175,11 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     .arama-header{padding-top:calc(16px + env(safe-area-inset-top))}
   }
 </style>
-<div class="arama-modal" id="arama-modal" onclick="if(event.target===this)globalAramaKapat()">
+<div class="arama-modal" id="arama-modal" onclick="if(event.target===this)globalAramaKapat()" role="button" tabindex="0">
   <div class="arama-kutu">
     <div class="arama-header">
       <span class="arama-header-ikon">🔍</span>
-      <input type="text" id="arama-input" class="arama-input" placeholder="Modül, konu, kelime veya soru tipi ara..." autocomplete="off" oninput="globalAramaAra()" onkeydown="globalAramaKeydown(event)">
+      <input type="text" id="arama-input" class="arama-input" placeholder="Modül, konu, kelime veya soru tipi ara..." autocomplete="off" oninput="globalAramaAra()" onkeydown="globalAramaKeydown(event)" aria-label="Modül, konu, kelime veya soru tipi ara">
       <button class="arama-kapat-btn" onclick="globalAramaKapat()">✕</button>
     </div>
     <div class="arama-sonuclar" id="arama-sonuclar"></div>
@@ -1281,7 +1281,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div style="font-family:'IBM Plex Serif',serif;font-size:22px;color:#f7f6f2">Sınav tarihin ne zaman?</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <input type="date" id="sinav-tarih-input" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;cursor:pointer">
+      <input type="date" id="sinav-tarih-input" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;cursor:pointer" aria-label="Sınav tarihi">
       <button onclick="sinavGeriSayim()" style="background:#f5a623;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Başlat</button>
     </div>
     <div id="geri-sayim-display" style="display:none;text-align:center">
@@ -1336,11 +1336,11 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <div class="section-title">Alanını seç, platform sana göre ayarlansın</div>
   <p class="alan-sub">Demo cümlesi, kelime bankası ve metin örnekleri alanına göre değişir.</p>
   <div class="alan-cards">
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','⚖️')"><div class="alan-icon">⚖️</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','📊')"><div class="alan-icon">📊</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','🔬')"><div class="alan-icon">🔬</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','🩺')"><div class="alan-icon">🩺</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
-    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','🎯')"><div class="alan-icon">🎯</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','⚖️')" role="button" tabindex="0"><div class="alan-icon">⚖️</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','📊')" role="button" tabindex="0"><div class="alan-icon">📊</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','🔬')" role="button" tabindex="0"><div class="alan-icon">🔬</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
+    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','🩺')" role="button" tabindex="0"><div class="alan-icon">🩺</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
+    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','🎯')" role="button" tabindex="0"><div class="alan-icon">🎯</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
   </div>
   <div id="alan-kelime-strip" style="margin-top:28px;text-align:center;min-height:28px"><span id="alan-kelime" style="font-family:IBM Plex Mono,monospace;font-size:15px;color:var(--contrast);letter-spacing:.08em"></span></div>
 </section>
@@ -1364,7 +1364,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <p class="ekitap-desc">37 sayfalik PDF rehber. Sinyal metodolojisinin tum adimlari, baglac haritalari, modal perfect rehberi ve gunluk calisma plani.</p>
       <ul class="ekitap-list"><li>Baglac sinyal haritalari</li><li>Modal perfect tuzak rehberi</li><li>30 gunluk calisma plani</li><li>OSYM en sik tuzak listesi</li></ul>
       <form onsubmit="ekitapIndir(event)" class="ekitap-form">
-        <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required>
+        <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
         <button class="ekitap-submit" type="submit">Ucretsiz Indir</button>
       </form>
       <div class="ekitap-note" id="ekitap-note">2.400+ kisi indirdi - Spam yok - Istediginde cik</div>
@@ -1377,9 +1377,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <div class="eyebrow" style="color:var(--signal)">AI Ogretmen</div>
     <div class="section-title">KLOD cevap vermez — düşündürür</div>
     <p class="klod-desc">Çoğu AI "doğru cevap B'dir" der. KLOD neden yanlış düşündüğünü bulur ve oradan öğretir.</p>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
   </div>
   <div class="chat-ui">
     <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni · Cevrimici</div></div></div>
@@ -1387,7 +1387,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="msg k">Merhaba! Sana bir OSYM cumlesi gostereyim. "must have left" ne anlama geliyor?</div>
       <div class="msg k">"She must have left before the meeting started."</div>
     </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key=='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">→</button></div>
+    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
   </div>
 </section>
 <section id="ses" class="ses">
@@ -1397,16 +1397,16 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="section-title" style="color:var(--ink)">Beyin sesten öğrenir</div>
       <p class="ses-desc">19 YDS/YÖKDİL gramer konusu — otobüste, yürüyüşte, yatmadan önce.</p>
       <div class="ses-modes">
-        <div class="ses-mode active" onclick="setSesMod(this)"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
+        <div class="ses-mode active" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
       </div>
     </div>
     <div class="player">
       <div class="p-topic" id="p-topic">KONU 3 / 19 - CONDITIONALS</div>
       <div class="p-en" id="p-en">If she had studied harder, she would have passed the exam.</div>
       <div class="p-tr" id="p-tr">Daha cok calisaydı sinavi gecmis olurdu.</div>
-      <div class="p-bar" onclick="seekPlayer(event)"><div class="p-fill" id="p-fill"></div></div>
+      <div class="p-bar" onclick="seekPlayer(event)" role="button" tabindex="0"><div class="p-fill" id="p-fill"></div></div>
       <div class="p-controls">
         <button class="p-btn" onclick="playerPrev()">⏮</button>
         <button class="p-btn" onclick="playerBack()">⏪</button>
@@ -1434,42 +1434,42 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="dash-sb">
         <div class="dash-logo">Sinyal <b>Avcisi</b></div>
         <div class="dash-nav">
-          <div class="dn-item active" onclick="dnav(this)">📊 Dashboard</div>
+          <div class="dn-item active" onclick="dnav(this)" role="button" tabindex="0">📊 Dashboard</div>
 
           <div class="dn-group" data-grup="pratik">
             <div class="dn-group-baslik">🎯 Pratik</div>
-            <div class="dn-item" onclick="dnav(this)">🔬 Sinyal Lab</div>
-            <div class="dn-item" onclick="dnav(this)">🎯 Gunluk Tuzak</div>
-            <div class="dn-item" onclick="dnav(this)">⚡ SAT Metodu</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[4],'paragraf')">📖 Paragraf</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')">📐 S+V+O</div>
-            <div class="dn-item" onclick="dnav(this)">🃏 Kelime Kartlari</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')">🏹 Avcı Master</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🔬 Sinyal Lab</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🎯 Gunluk Tuzak</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">⚡ SAT Metodu</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[4],'paragraf')" role="button" tabindex="0">📖 Paragraf</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')" role="button" tabindex="0">📐 S+V+O</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🃏 Kelime Kartlari</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')" role="button" tabindex="0">🏹 Avcı Master</div>
           </div>
 
           <div class="dn-group" data-grup="analiz">
             <div class="dn-group-baslik">📊 Analiz Et</div>
-            <div class="dn-item" onclick="dnav(this)">📈 Raporlar</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[7],'hatalar')">📝 Hata Defteri</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')">🎯 Zayıf Alan Radarı</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')">📊 İstatistiklerim</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">📈 Raporlar</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[7],'hatalar')" role="button" tabindex="0">📝 Hata Defteri</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')" role="button" tabindex="0">🎯 Zayıf Alan Radarı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')" role="button" tabindex="0">📊 İstatistiklerim</div>
           </div>
 
           <div class="dn-group" data-grup="planla">
             <div class="dn-group-baslik">📅 Planla</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')">🚨 Acil Kurtarma Planı</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')" role="button" tabindex="0">📅 Çalışma Planım</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')" role="button" tabindex="0">🚨 Acil Kurtarma Planı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')" role="button" tabindex="0">🏆 Liderlik</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')" role="button" tabindex="0">🎬 Mini Dersler</div>
           </div>
 
           <div class="dn-group" data-grup="ogren">
             <div class="dn-group-baslik">📖 Öğren</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')">🎓 Canlı Ders</div>
-            <div class="dn-item" onclick="dnav(this)">🤖 KLOD</div>
-            <div class="dn-item" onclick="dnav(this)">🎧 Ses Kurs</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[6],'teknik')">🧠 Öğrenme</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')" role="button" tabindex="0">🎓 Canlı Ders</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🤖 KLOD</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🎧 Ses Kurs</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[6],'teknik')" role="button" tabindex="0">🧠 Öğrenme</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800" role="button" tabindex="0">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#fff;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
           </div>
         </div>
         <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
@@ -1477,31 +1477,31 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
         <div class="bugun-kart" id="bugun-kart"></div>
-        <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()"></div>
+        <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
           <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
-          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')">Sinyal Lab'da calis →</div></div>
+          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da calis →</div></div>
           <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 — +12 puan kaldi</div></div>
           <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
         </div>
         <div class="dash-tabs">
-          <div class="dtab active" onclick="dtab(this,'sinyal')">Sinyal Lab</div>
-          <div class="dtab" onclick="dtab(this,'kelime')">Kelime Kartlari</div>
-          <div class="dtab" onclick="dtab(this,'tuzak')">Gunluk Tuzak</div>
-          <div class="dtab" onclick="dtab(this,'sat')">⚡ SAT Metodu</div>
-          <div class="dtab" onclick="dtab(this,'paragraf')">📖 Paragraf</div>
-          <div class="dtab" onclick="dtab(this,'svo')">📐 S+V+O</div>
-          <div class="dtab" onclick="dtab(this,'teknik')">🧠 Öğrenme</div>
-          <div class="dtab" onclick="dtab(this,'hatalar')">📝 Hata Defteri</div>
-          <div class="dtab" onclick="dtab(this,'avci')">🏹 Avcı Master</div>
-          <div class="dtab" onclick="dtab(this,'radar')">🎯 Zayıf Alan Radarı</div>
-          <div class="dtab" onclick="dtab(this,'plan')">📅 Çalışma Planım</div>
-          <div class="dtab" onclick="dtab(this,'lider')">🏆 Liderlik</div>
-          <div class="dtab" onclick="dtab(this,'mikro')">🎬 Mini Dersler</div>
-          <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800">🌍 Dil Avcısı</div>
-          <div class="dtab" onclick="dtab(this,'istatistik')">📊 İstatistiklerim</div>
-          <div class="dtab" onclick="dtab(this,'canliders')">🎓 Canlı Ders</div>
-          <div class="dtab" onclick="dtab(this,'sinavplanim')">🚨 Acil Kurtarma Planı</div>
+          <div class="dtab active" onclick="dtab(this,'sinyal')" role="button" tabindex="0">Sinyal Lab</div>
+          <div class="dtab" onclick="dtab(this,'kelime')" role="button" tabindex="0">Kelime Kartlari</div>
+          <div class="dtab" onclick="dtab(this,'tuzak')" role="button" tabindex="0">Gunluk Tuzak</div>
+          <div class="dtab" onclick="dtab(this,'sat')" role="button" tabindex="0">⚡ SAT Metodu</div>
+          <div class="dtab" onclick="dtab(this,'paragraf')" role="button" tabindex="0">📖 Paragraf</div>
+          <div class="dtab" onclick="dtab(this,'svo')" role="button" tabindex="0">📐 S+V+O</div>
+          <div class="dtab" onclick="dtab(this,'teknik')" role="button" tabindex="0">🧠 Öğrenme</div>
+          <div class="dtab" onclick="dtab(this,'hatalar')" role="button" tabindex="0">📝 Hata Defteri</div>
+          <div class="dtab" onclick="dtab(this,'avci')" role="button" tabindex="0">🏹 Avcı Master</div>
+          <div class="dtab" onclick="dtab(this,'radar')" role="button" tabindex="0">🎯 Zayıf Alan Radarı</div>
+          <div class="dtab" onclick="dtab(this,'plan')" role="button" tabindex="0">📅 Çalışma Planım</div>
+          <div class="dtab" onclick="dtab(this,'lider')" role="button" tabindex="0">🏆 Liderlik</div>
+          <div class="dtab" onclick="dtab(this,'mikro')" role="button" tabindex="0">🎬 Mini Dersler</div>
+          <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800" role="button" tabindex="0">🌍 Dil Avcısı</div>
+          <div class="dtab" onclick="dtab(this,'istatistik')" role="button" tabindex="0">📊 İstatistiklerim</div>
+          <div class="dtab" onclick="dtab(this,'canliders')" role="button" tabindex="0">🎓 Canlı Ders</div>
+          <div class="dtab" onclick="dtab(this,'sinavplanim')" role="button" tabindex="0">🚨 Acil Kurtarma Planı</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-sinyal')" title="Tam ekran">⛶</button>
@@ -1518,12 +1518,12 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         <div class="dmod" id="mod-kelime" style="display:none">
           <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-kelime')" title="Tam ekran">⛶</button>
           <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yükleniyor...</div>
-          <div class="kk" id="kk" onclick="kkFlip()">
+          <div class="kk" id="kk" onclick="kkFlip()" role="button" tabindex="0">
             <div id="kk-front"><div class="kk-word" id="kk-word-front" onmouseenter="if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.en,'en-US',null)" title="Üzerine gel — sesli dinle 🔊"></div><div class="kk-hint">Tikla — Türkçe gör · Kelimenin üzerine gel — sesli dinle 🔊</div></div>
             <div id="kk-back" style="display:none">
               <div class="kk-word" id="kk-word-back" style="color:var(--signal)"></div>
               <div style="font-size:13px;color:var(--muted);margin:8px 0 4px;font-weight:600;letter-spacing:.05em">ÖRNEK CÜMLE</div>
-              <div class="kk-ex" id="kk-ex-back" style="cursor:pointer" onmouseenter="if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.ex.replace(/['&quot;]/g,''),'en-US',null)" onclick="event.stopPropagation();if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.ex.replace(/['&quot;]/g,''),'en-US',null)" title="Üzerine gel — sesli dinle 🔊"></div>
+              <div class="kk-ex" id="kk-ex-back" style="cursor:pointer" onmouseenter="if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.ex.replace(/['&quot;]/g,''),'en-US',null)" onclick="event.stopPropagation();if(kkCurrent&&typeof ttsEleven==='function')ttsEleven(kkCurrent.ex.replace(/['&quot;]/g,''),'en-US',null)" title="Üzerine gel — sesli dinle 🔊" role="button" tabindex="0"></div>
               <div style="font-size:12px;color:var(--muted);margin-top:6px">🔊 Kelime veya cümlenin üzerine gel — otomatik sesli dinle</div>
             </div>
           </div>
@@ -1599,55 +1599,55 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px">
       <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px">🏹 MASTER KOMUTLAR — tıkla, KLOD'a gönder!</div>
       <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI MASTER BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI MASTER BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">AVCI MASTER BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Tüm sistemi otomatik çalıştır</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('CÜMLEYİ AVLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('CÜMLEYİ AVLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">CÜMLEYİ AVLA</span>
           <span style="font-size:10px;color:var(--muted)">→ S+V+O analizi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('KELİME AVCISI BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('KELİME AVCISI BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">KELİME AVCISI BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Kelime analizi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('BAĞLAÇ AVCISI BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('BAĞLAÇ AVCISI BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">BAĞLAÇ AVCISI BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Bağlaç analizi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('SORUYU AVLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('SORUYU AVLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">SORUYU AVLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Soru tipi analizi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('HATA AVCISI BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('HATA AVCISI BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">HATA AVCISI BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Yanlış analizi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('10 SANİYE AVCI BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('10 SANİYE AVCI BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">10 SANİYE AVCI BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Hızlı refleks antrenmanı</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('PARAGRAFI AVLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('PARAGRAFI AVLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">PARAGRAFI AVLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Reading stratejisi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('CLOZE AVCISI BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('CLOZE AVCISI BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">CLOZE AVCISI BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Boşluk doldurma</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('ÇEVİRİYİ AVLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('ÇEVİRİYİ AVLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">ÇEVİRİYİ AVLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Çeviri stratejisi</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('BÜTÜNLÜĞÜ AVLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('BÜTÜNLÜĞÜ AVLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">BÜTÜNLÜĞÜ AVLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Paragraf bütünlüğü</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI DENEME MODU BAŞLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI DENEME MODU BAŞLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">AVCI DENEME MODU BAŞLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Tam sınav simülasyonu</span>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI BUGÜNÜ PLANLA')">
+        <div style="display:flex;gap:8px;align-items:center;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='rgba(245,166,35,.07)'" onmouseout="this.style.background='transparent'" onclick="avciKomutGonder('AVCI BUGÜNÜ PLANLA')" role="button" tabindex="0">
           <span style="font-family:monospace;font-size:10px;background:var(--surface);color:#e8d5a3;padding:2px 8px;border-radius:4px">AVCI BUGÜNÜ PLANLA</span>
           <span style="font-size:10px;color:var(--muted)">→ Günlük adaptif plan</span>
         </div>
@@ -1701,7 +1701,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dm-eye">📅 KİŞİSEL ÇALIŞMA PLANIN — Sınava Geri Sayım</div>
           <div style="margin-top:14px;padding:14px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
             <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Sınav tarihini seç:</div>
-            <input type="date" id="plan-tarih" style="border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;color:var(--ink);background:var(--surface);width:100%">
+            <input type="date" id="plan-tarih" style="border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;color:var(--ink);background:var(--surface);width:100%" aria-label="Sınav tarihi">
             <button onclick="planOlustur()" style="margin-top:10px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 7 Günlük Plan Oluştur →</button>
           </div>
           <div id="plan-icerik" style="margin-top:14px"></div>
@@ -1809,10 +1809,10 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dm-eye">🚨 ACİL KURTARMA PLANI — Puanına özel hedef planı</div>
           <div style="margin-top:14px;padding:16px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="sp-dogru" min="0" value="17"></div>
-              <div class="sp-field"><label>Yanlış sayısı</label><input type="number" id="sp-yanlis" min="0" value="63"></div>
-              <div class="sp-field"><label>Hedef puan</label><input type="number" id="sp-hedefpuan" min="0" max="100" step="0.5" value="65"></div>
-              <div class="sp-field"><label>Sınav tarihi</label><input type="date" id="sp-tarih"></div>
+              <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="sp-dogru" min="0" value="17" aria-label="Doğru sayısı"></div>
+              <div class="sp-field"><label>Yanlış sayısı</label><input type="number" id="sp-yanlis" min="0" value="63" aria-label="Yanlış sayısı"></div>
+              <div class="sp-field"><label>Hedef puan</label><input type="number" id="sp-hedefpuan" min="0" max="100" step="0.5" value="65" aria-label="Hedef puan"></div>
+              <div class="sp-field"><label>Sınav tarihi</label><input type="date" id="sp-tarih" aria-label="Sınav tarihi"></div>
             </div>
             <button onclick="sinavPlanimOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 Planımı Oluştur →</button>
           </div>
@@ -2118,7 +2118,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="fd-custom-section">
             <h3>Kelimeni <span>Analiz Et</span></h3>
             <div class="fd-input-row">
-              <input class="fd-word-input" type="text" id="fd-customWord" placeholder="örn: FINGER, NATION, PHONE…" maxlength="20">
+              <input class="fd-word-input" type="text" id="fd-customWord" placeholder="örn: FINGER, NATION, PHONE…" maxlength="20" aria-label="Kendi kelimeni yaz">
               <button class="fd-analyze-btn" id="fd-analyzeBtn">Analiz Et</button>
             </div>
             <div class="fd-custom-result" id="fd-customResult"></div>
@@ -3167,7 +3167,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <div class="srt-quiz-block">
                 <p class="srt-quiz-question">1) She stopped _____ (smoke) after the doctor's warning.</p>
                 <div class="srt-quiz-input-row">
-                  <input type="text" class="srt-quiz-input" id="srt-q1-input" placeholder="cevabını yaz...">
+                  <input type="text" class="srt-quiz-input" id="srt-q1-input" placeholder="cevabını yaz..." aria-label="1. soru cevabı">
                   <button class="srt-quiz-check-btn" data-srt-action="quiz-check" data-srtq="1">Kontrol Et</button>
                 </div>
                 <div class="srt-quiz-feedback" id="srt-q1-feedback"></div>
@@ -3176,7 +3176,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <div class="srt-quiz-block">
                 <p class="srt-quiz-question">2) Don't forget to _____ (lock) the door before you leave.</p>
                 <div class="srt-quiz-input-row">
-                  <input type="text" class="srt-quiz-input" id="srt-q2-input" placeholder="cevabını yaz...">
+                  <input type="text" class="srt-quiz-input" id="srt-q2-input" placeholder="cevabını yaz..." aria-label="2. soru cevabı">
                   <button class="srt-quiz-check-btn" data-srt-action="quiz-check" data-srtq="2">Kontrol Et</button>
                 </div>
                 <div class="srt-quiz-feedback" id="srt-q2-feedback"></div>
@@ -3185,7 +3185,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <div class="srt-quiz-block">
                 <p class="srt-quiz-question">3) He tried _____ (open) the jar but couldn't.</p>
                 <div class="srt-quiz-input-row">
-                  <input type="text" class="srt-quiz-input" id="srt-q3-input" placeholder="cevabını yaz...">
+                  <input type="text" class="srt-quiz-input" id="srt-q3-input" placeholder="cevabını yaz..." aria-label="3. soru cevabı">
                   <button class="srt-quiz-check-btn" data-srt-action="quiz-check" data-srtq="3">Kontrol Et</button>
                 </div>
                 <div class="srt-quiz-feedback" id="srt-q3-feedback"></div>
@@ -5631,7 +5631,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
               <span style="color:#22d3ee">DILA:</span> Hi! Let's practice. Tell me about your day — what did you do this morning? 😊
             </div>
             <div style="display:flex;gap:8px">
-              <input id="konusma-input" placeholder="İngilizce cevap yaz veya 🎤'ya konuş..." style="flex:1;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da">
+              <input id="konusma-input" placeholder="İngilizce cevap yaz veya 🎤'ya konuş..." style="flex:1;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da" aria-label="İngilizce cevabını yaz veya mikrofona konuş">
               <button id="konusma-mic-btn" type="button" onclick="konusmaSesTaniBaslat()" title="İngilizce konuş" style="background:#0a0c1480;color:#22d3ee;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">🎤</button>
               <button onclick="konusmaGonder()" style="background:#22d3ee;color:#0a1428;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
             </div>
@@ -5651,7 +5651,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <div style="font-size:14px;font-weight:700;color:#c084fc;margin-bottom:8px">🤖 DILA — AI Dil Mentorum</div>
             <div style="font-size:12px;color:rgba(236,231,218,.6);margin-bottom:12px">İngilizce sorunuzu Türkçe yazın, DILA açıklasın</div>
             <div style="display:flex;gap:8px">
-              <input id="dila-input" placeholder="Örn: 'I have been' ne zaman kullanılır?" style="flex:1;border:1px solid #7c3aed40;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da">
+              <input id="dila-input" placeholder="Örn: 'I have been' ne zaman kullanılır?" style="flex:1;border:1px solid #7c3aed40;border-radius:8px;padding:10px 14px;font-size:13px;font-family:IBM Plex Sans,sans-serif;outline:none;background:#0a0c1480;color:#ece7da" aria-label="Sorunu yaz">
               <button id="dila-mic-btn" type="button" onclick="dilaSesTaniBaslat()" title="Sesle sor" style="background:#0a0c1480;color:#c084fc;border:1px solid #7c3aed40;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">🎤</button>
               <button onclick="dilaSor()" style="background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Sor →</button>
             </div>
@@ -5822,13 +5822,13 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <div class="sss-inner">
     <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sık Sorulan Sorular</div><div class="section-title" style="color:var(--ink)">Aklındaki sorular</div></div>
     <div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Alanını seçiyorsun — Sosyal, Fen, Sağlık veya Hukuk — ve platform sana özel metinler, sorular ve kelime bankasıyla çalışmaya başlıyor. İstediğin zaman alan değiştirebilirsin.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Gerçekten ücretsiz mi — gizli bir ücret var mı?</span><span class="sss-icon">+</span></div><div class="sss-a">Gerçekten ücretsiz. Tek kuruş yok, kredi kartı yok, abonelik yok, 7 gün sonra sürpriz ücret yok. Platform tamamen ücretsiz ve sonsuza kadar öyle kalacak. Çünkü bilgi, parasıyla satılacak bir şey değil.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>KLOD gerçek bir yapay zeka mı, yoksa hazır cevaplar mı veriyor?</span><span class="sss-icon">+</span></div><div class="sss-a">KLOD, gerçek bir yapay zeka — Claude API üzerine kurulu. Sana verdiği her cevap, yazdığın soruya göre anlık üretiliyor. Hazır şablon yok, her açıklama sana özel.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Kayıt olmak zorunda mıyım?</span><span class="sss-icon">+</span></div><div class="sss-a">Hayır. Kayıt olmadan da her şeyi kullanabilirsin. Ama kaydolursan streak'in, XP'n ve hata deftering kaybolmaz — kaldığın yerden devam edersin. Kayıt tamamen isteğe bağlı ve ücretsiz.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Sınavıma ne kadar kaldıysa o kadar vaktim var — yetişir mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Sinyal metodunun güzelliği hız. Gramer kural kitabı ezberlemek yerine 7 sinyal tipini tanımak yeterli. Kullanıcılarımız ortalama 3 ayda 15-25 puan artış yaşıyor. 1 ayın bile farkı var — hemen başla.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>İngilizce seviyem çok düşük, kullanabilir miyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. Tüm açıklamalar Türkçe, KLOD Türkçe anlatıyor. YDS/YÖKDİL sınavı gramer bilgisi değil, sinyal okuma becerisi ölçüyor. B2 seviyesi olmasan da bu sinyalleri öğrenebilirsin.</div></div>
-      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)"><span>Ses Kurs ve E-Kitap da ücretsiz mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, ikisi de tamamen ücretsiz. E-Kitabı e-posta adresinle indirebilirsin. 19 konuluk Ses Kursu da dahil — tüm içerik açık, hiçbir şey kilitli değil.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Alanını seçiyorsun — Sosyal, Fen, Sağlık veya Hukuk — ve platform sana özel metinler, sorular ve kelime bankasıyla çalışmaya başlıyor. İstediğin zaman alan değiştirebilirsin.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>Gerçekten ücretsiz mi — gizli bir ücret var mı?</span><span class="sss-icon">+</span></div><div class="sss-a">Gerçekten ücretsiz. Tek kuruş yok, kredi kartı yok, abonelik yok, 7 gün sonra sürpriz ücret yok. Platform tamamen ücretsiz ve sonsuza kadar öyle kalacak. Çünkü bilgi, parasıyla satılacak bir şey değil.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>KLOD gerçek bir yapay zeka mı, yoksa hazır cevaplar mı veriyor?</span><span class="sss-icon">+</span></div><div class="sss-a">KLOD, gerçek bir yapay zeka — Claude API üzerine kurulu. Sana verdiği her cevap, yazdığın soruya göre anlık üretiliyor. Hazır şablon yok, her açıklama sana özel.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>Kayıt olmak zorunda mıyım?</span><span class="sss-icon">+</span></div><div class="sss-a">Hayır. Kayıt olmadan da her şeyi kullanabilirsin. Ama kaydolursan streak'in, XP'n ve hata deftering kaybolmaz — kaldığın yerden devam edersin. Kayıt tamamen isteğe bağlı ve ücretsiz.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>Sınavıma ne kadar kaldıysa o kadar vaktim var — yetişir mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Sinyal metodunun güzelliği hız. Gramer kural kitabı ezberlemek yerine 7 sinyal tipini tanımak yeterli. Kullanıcılarımız ortalama 3 ayda 15-25 puan artış yaşıyor. 1 ayın bile farkı var — hemen başla.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>İngilizce seviyem çok düşük, kullanabilir miyim?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet. Tüm açıklamalar Türkçe, KLOD Türkçe anlatıyor. YDS/YÖKDİL sınavı gramer bilgisi değil, sinyal okuma becerisi ölçüyor. B2 seviyesi olmasan da bu sinyalleri öğrenebilirsin.</div></div>
+      <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>Ses Kurs ve E-Kitap da ücretsiz mi?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, ikisi de tamamen ücretsiz. E-Kitabı e-posta adresinle indirebilirsin. 19 konuluk Ses Kursu da dahil — tüm içerik açık, hiçbir şey kilitli değil.</div></div>
     </div>
   </div>
 </section>
@@ -5862,17 +5862,17 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <div class="footer-logo">Sinyal <b>Avcisi</b></div>
   <div class="footer-links">
     <a href="https://instagram.com/sinyalavcisi.yds" target="_blank" style="color:rgba(236,231,218,.5);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(10,13,19,.5)'">📸 @sinyalavcisi.yds</a>
-    <span onclick="goTo('klod')">KLOD ile tanış</span>
-    <span onclick="goTo('ekitap')">Ücretsiz E-Kitap</span>
-    <span onclick="goTo('sss')">SSS</span>
-    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700">📝 Deneme</span>
+    <span onclick="goTo('klod')" role="button" tabindex="0">KLOD ile tanış</span>
+    <span onclick="goTo('ekitap')" role="button" tabindex="0">Ücretsiz E-Kitap</span>
+    <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
+    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
   </div>
   <div class="footer-copy">
     2026 Sinyal Avcısı · YDS & YÖKDİL hazırlık platformu · Türkiye<br>
     <span style="color:rgba(236,231,218,.5);font-size:14px">Tek kuruş ödemeden · Kayıt bile istemeden · Çünkü bilgi herkese aittir.</span>
   </div>
 </footer>
-<div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()">
+<div class="modal-ov" id="modal" onclick="if(event.target==this)closeModal()" role="button" tabindex="0">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div id="modal-body">
@@ -5880,9 +5880,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <h2 style="font-family:'IBM Plex Serif',serif;font-size:26px;letter-spacing:-.02em">Hesap oluştur</h2>
       <p class="modal-sub" style="font-size:15px;line-height:1.7;color:var(--ink)">Platform zaten ücretsiz ve açık. Hesap açarsan streak'in, XP'n ve hata deftering kaybolmaz.</p>
       <form onsubmit="modalSubmit(event)" class="modal-form">
-        <input class="modal-input" type="text" id="m-ad" placeholder="Ad Soyad" required>
-        <input class="modal-input" type="email" id="m-email" placeholder="E-posta adresi" required>
-        <input class="modal-input" type="password" id="m-sifre" placeholder="Şifre (en az 8 karakter)" minlength="8" required>
+        <input class="modal-input" type="text" id="m-ad" placeholder="Ad Soyad" required aria-label="Ad Soyad">
+        <input class="modal-input" type="email" id="m-email" placeholder="E-posta adresi" required aria-label="E-posta adresi">
+        <input class="modal-input" type="password" id="m-sifre" placeholder="Şifre (en az 8 karakter)" minlength="8" required aria-label="Şifre">
         <button class="modal-submit" type="submit" style="background:linear-gradient(135deg,var(--signal),#7c3aed);font-size:16px;padding:15px;border-radius:10px">🎯 Ücretsiz Hesap Oluştur</button>
         <div style="text-align:center;margin-top:8px"><button type="button" onclick="sifremiUnuttum()" style="background:none;border:none;color:var(--signal);font-size:14px;cursor:pointer;text-decoration:underline">Şifremi unuttum</button></div>
       </form>
@@ -5922,16 +5922,16 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <button onclick="testimonialModalKapat();openModal('Ücretsiz Hesap','0')" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Giriş yap / Kaydol</button>
     </div>
     <form id="testimonial-form" onsubmit="testimonialGonder(event)">
-      <input id="tm-isim" placeholder="Adın (örn: Ahmet Y.)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)">
-      <input id="tm-unvan" placeholder="Unvanın (örn: YDS Adayı, Öğretmen)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)">
+      <input id="tm-isim" placeholder="Adın (örn: Ahmet Y.)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)" aria-label="Adın">
+      <input id="tm-unvan" placeholder="Unvanın (örn: YDS Adayı, Öğretmen)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)" aria-label="Unvanın">
       <textarea id="tm-yorum" placeholder="Sinyal Avcısı deneyimini anlat..." required maxlength="400" rows="4" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;resize:vertical;background:var(--paper);color:var(--ink)"></textarea>
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px" id="tm-yildizlar">
         <span style="font-size:13px;color:var(--muted);margin-right:6px">Puan:</span>
-        <span class="tm-star" data-v="1" onclick="tmYildizSec(1)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
-        <span class="tm-star" data-v="2" onclick="tmYildizSec(2)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
-        <span class="tm-star" data-v="3" onclick="tmYildizSec(3)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
-        <span class="tm-star" data-v="4" onclick="tmYildizSec(4)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
-        <span class="tm-star" data-v="5" onclick="tmYildizSec(5)" style="cursor:pointer;font-size:20px;color:var(--border)">★</span>
+        <span class="tm-star" data-v="1" onclick="tmYildizSec(1)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
+        <span class="tm-star" data-v="2" onclick="tmYildizSec(2)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
+        <span class="tm-star" data-v="3" onclick="tmYildizSec(3)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
+        <span class="tm-star" data-v="4" onclick="tmYildizSec(4)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
+        <span class="tm-star" data-v="5" onclick="tmYildizSec(5)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
       </div>
       <button type="submit" style="width:100%;background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
       <div id="tm-msg" style="font-size:13px;text-align:center;margin-top:10px;min-height:16px"></div>
@@ -6283,7 +6283,7 @@ const SAT_HAVUZ=[
 let satMod=0,satSoruIdx=0,satAnswered=false,satDogruSayisi=0,satTimer=null,satSure=0;
 function satRender(){
   const el=document.getElementById('sat-icerik');if(!el)return;
-  el.innerHTML=`<div class="sat-hero"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">⚡ SAT Metodu — 2 Saniyede Çöz</div><div class="sat-hero-title">Sinyal Avcı Tekniği</div><div class="sat-hero-sub">ÖSYM her soruya 3 tuzak koyar. Sinyali gör, şıkta bul, işaretle.</div></div><div class="sat-steps">${SAT_SINYALLER.map((s,i)=>`<div class="sat-step-pill ${satMod===i?'active':''}" onclick="satModSec(${i})"><span class="sat-step-pill-icon">${s.icon}</span><div class="sat-step-pill-label">${s.baslik.split(' ')[0]}</div></div>`).join('')}<div class="sat-step-pill ${satMod===3?'active':''}" onclick="satModSec(3)"><span class="sat-step-pill-icon">🎯</span><div class="sat-step-pill-label">Pratik</div></div></div><div id="sat-mod-icerik"></div>`;
+  el.innerHTML=`<div class="sat-hero"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">⚡ SAT Metodu — 2 Saniyede Çöz</div><div class="sat-hero-title">Sinyal Avcı Tekniği</div><div class="sat-hero-sub">ÖSYM her soruya 3 tuzak koyar. Sinyali gör, şıkta bul, işaretle.</div></div><div class="sat-steps">${SAT_SINYALLER.map((s,i)=>`<div class="sat-step-pill ${satMod===i?'active':''}" onclick="satModSec(${i})" role="button" tabindex="0"><span class="sat-step-pill-icon">${s.icon}</span><div class="sat-step-pill-label">${s.baslik.split(' ')[0]}</div></div>`).join('')}<div class="sat-step-pill ${satMod===3?'active':''}" onclick="satModSec(3)" role="button" tabindex="0"><span class="sat-step-pill-icon">🎯</span><div class="sat-step-pill-label">Pratik</div></div></div><div id="sat-mod-icerik"></div>`;
   satModGoster();
 }
 function satModSec(i){satMod=i;satRender();}
@@ -6420,7 +6420,7 @@ function dnav(el){
         <div class="msg k">Merhaba! 👋 Takıldığın bir yapı, kelime veya çözemediğin bir cümle varsa yaz — KLOD analiz eder.</div>
       </div>
       <div style="border-top:1px solid var(--border);padding:10px 0;display:flex;gap:8px;margin-top:8px">
-        <input class="chat-in" id="dnav-in" placeholder="Soruyu yaz... (örn: 'must have ne demek?')" onkeydown="if(event.key==='Enter')dnavChat()" style="flex:1">
+        <input class="chat-in" id="dnav-in" placeholder="Soruyu yaz... (örn: 'must have ne demek?')" onkeydown="if(event.key==='Enter')dnavChat()" style="flex:1" aria-label="Soru yaz">
         <button class="chat-send" onclick="dnavChat()">→</button>
       </div>
     `;
@@ -6432,7 +6432,7 @@ function dnav(el){
     document.getElementById('mod-tuzak').style.display='block';tuzakRender();
   } else if(txt.includes('Ses')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
-    t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;display:flex;justify-content:space-between;align-items:center"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
+    t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;display:flex;justify-content:space-between;align-items:center" role="button" tabindex="0"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
   } else if(txt.includes('Rapor')){
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
@@ -7922,7 +7922,7 @@ function teknikModulHTML(){
       <div style="font-size:15px;opacity:.85;line-height:1.7">Nobel ödüllü araştırmalar ve bilişsel psikoloji — YDS/YÖKDİL çalışmana direkt uygula.</div>
     </div>
     ${TEKNIKLER.map((t,i)=>`
-      <div style="background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .25s;cursor:pointer;border-left:4px solid ${t.renk};box-shadow:0 2px 12px rgba(0,0,0,.05)" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,.05)';this.style.transform='none'" onclick="teknikToggle(this)">
+      <div style="background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .25s;cursor:pointer;border-left:4px solid ${t.renk};box-shadow:0 2px 12px rgba(0,0,0,.05)" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,.05)';this.style.transform='none'" onclick="teknikToggle(this)" role="button" tabindex="0">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div style="display:flex;align-items:center;gap:12px">
             <div style="width:44px;height:44px;border-radius:12px;background:${t.renk}15;display:grid;place-items:center;font-size:22px;flex-shrink:0">${t.icon}</div>
@@ -8348,7 +8348,7 @@ function takvimOlustur(){
   if(takvimEl&&takvimDiv){
     takvimDiv.style.display='block';
     takvimEl.innerHTML=rotalar.map(r=>`
-      <div onclick="${r.onclick||''}" style="display:flex;align-items:center;gap:10px;background:${r.bg};border-radius:10px;padding:10px 14px;cursor:${r.onclick?'pointer':'default'};transition:all .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      <div onclick="${r.onclick||''}" style="display:flex;align-items:center;gap:10px;background:${r.bg};border-radius:10px;padding:10px 14px;cursor:${r.onclick?'pointer':'default'};transition:all .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" role="button" tabindex="0">
         <span style="font-size:20px;flex-shrink:0">${r.ikon}</span>
         <span style="font-size:14px;color:${r.renk};line-height:1.5">${r.metin}</span>
         ${r.onclick?'<span style="margin-left:auto;color:'+r.renk+';font-size:18px">→</span>':''}
@@ -8876,7 +8876,7 @@ function medyaRender(){
   const grid=document.getElementById('medya-grid');
   if(!grid)return;
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
-    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:20px;overflow:hidden;border:1px solid rgba(129,140,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(99,102,241,.5),0 0 30px rgba(99,102,241,.2)';this.style.borderColor='rgba(129,140,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(129,140,248,.25)'">
+    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0f172a,#1e1b4b);border-radius:20px;overflow:hidden;border:1px solid rgba(129,140,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(99,102,241,.5),0 0 30px rgba(99,102,241,.2)';this.style.borderColor='rgba(129,140,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(129,140,248,.25)'" role="button" tabindex="0">
       <div style="position:relative;padding:28px 20px;background:linear-gradient(135deg,${k.renk}22,transparent);display:flex;align-items:center;justify-content:center;overflow:hidden">
         <div style="position:absolute;top:10px;left:14px;background:${k.renk||'#f5a623'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">🎓 CANLI DERS</div>
         <div style="font-size:44px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))">${k.ikon}</div>
@@ -8891,7 +8891,7 @@ function medyaRender(){
 
   const aGrid=document.getElementById('avci-akademi-grid');
   if(aGrid)aGrid.innerHTML=AVCI_AKADEMI.map((a,i)=>`
-    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(129,140,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(129,140,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'" role="button" tabindex="0">
       <div style="font-family:monospace;font-size:10px;color:#ffcb73;margin-bottom:6px">BÖLÜM ${a.no}</div>
       <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">${a.konu}</div>
       <div style="font-size:14px;color:rgba(255,255,255,.4);margin-bottom:8px">${a.aciklama}</div>
@@ -8904,7 +8904,7 @@ function medyaRender(){
 
   const pList=document.getElementById('podcast-liste');
   if(pList)pList.innerHTML=PODCAST_LIST.map((p,i)=>`
-    <div onclick="podcastOyna(${i})" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(245,166,35,.1)'" onmouseout="this.style.boxShadow='none'">
+    <div onclick="podcastOyna(${i})" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(245,166,35,.1)'" onmouseout="this.style.boxShadow='none'" role="button" tabindex="0">
       <div style="width:44px;height:44px;background:var(--sl);border-radius:50%;display:grid;place-items:center;font-size:20px;flex-shrink:0">${p.ikon}</div>
       <div style="flex:1">
         <div style="font-size:10px;color:#ffcb73;font-weight:700;font-family:monospace;margin-bottom:2px">${p.no}</div>
@@ -9060,7 +9060,7 @@ function adminPanelAc(kullanicilar) {
       <div style="background:#1a1d27;border-radius:16px;overflow:hidden;border:1px solid #232836">
         <div style="padding:16px 20px;border-bottom:1px solid #232836;display:flex;align-items:center;justify-content:space-between">
           <div style="font-size:14px;font-weight:700;color:#ece7da">👥 Kullanıcılar</div>
-          <input id="adm-ara" placeholder="E-posta ara..." oninput="adminAra()" style="background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:6px 12px;font-size:13px;color:#ece7da;outline:none;width:200px">
+          <input id="adm-ara" placeholder="E-posta ara..." oninput="adminAra()" style="background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:6px 12px;font-size:13px;color:#ece7da;outline:none;width:200px" aria-label="E-posta ara">
         </div>
         <div style="overflow-x:auto">
           <table style="width:100%;border-collapse:collapse" id="adm-tablo">
@@ -9092,7 +9092,7 @@ function adminPanelAc(kullanicilar) {
           <div style="font-size:11px;color:var(--muted);margin-top:4px">Örn. yeni soru paketi eklendiğinde — bildirime izin veren tüm kullanıcılara push gönderilir</div>
         </div>
         <div style="padding:16px 20px">
-          <input id="adm-duyuru-baslik" placeholder="Başlık (örn: 🎯 50 yeni soru eklendi!)" maxlength="100" style="width:100%;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:9px 12px;font-size:13px;color:#ece7da;outline:none;margin-bottom:8px;font-family:IBM Plex Sans,sans-serif">
+          <input id="adm-duyuru-baslik" placeholder="Başlık (örn: 🎯 50 yeni soru eklendi!)" maxlength="100" style="width:100%;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:9px 12px;font-size:13px;color:#ece7da;outline:none;margin-bottom:8px;font-family:IBM Plex Sans,sans-serif" aria-label="Duyuru başlığı">
           <textarea id="adm-duyuru-mesaj" placeholder="Mesaj (örn: Günlük Tuzak'a yeni sorular eklendi, hemen çöz!)" maxlength="300" rows="2" style="width:100%;background:#0a0c10;border:1px solid #232836;border-radius:8px;padding:9px 12px;font-size:13px;color:#ece7da;outline:none;margin-bottom:10px;font-family:IBM Plex Sans,sans-serif;resize:vertical"></textarea>
           <button onclick="adminDuyuruGonder()" style="background:#4f8ef7;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
           <span id="adm-duyuru-sonuc" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
@@ -10331,7 +10331,7 @@ function mikroDersleriRender(){
   const el=document.getElementById('mikro-liste');
   if(!el)return;
   el.innerHTML=MIKRO_DERSLER.map(d=>`
-    <div class="micro-lesson-card" onclick="mikroDersAc(${d.id})">
+    <div class="micro-lesson-card" onclick="mikroDersAc(${d.id})" role="button" tabindex="0">
       <div class="micro-thumb" style="background:linear-gradient(135deg,${d.renk}22,${d.renk}44)">
         <div class="micro-play"><span style="margin-left:3px">▶</span></div>
         <div class="micro-sure">${d.sure}</div>
@@ -10603,7 +10603,7 @@ function okumaKurallariRender(){
   grid.innerHTML=OKUMA_DIGRAPHS.map((d,i)=>{
     const tamam=veri.tamamlanan.includes(d.harfler);
     const aktif=okumaAktifIdx===i;
-    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${d.renk}" onclick="okumaDigraphAc(${i})">
+    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${d.renk}" onclick="okumaDigraphAc(${i})" role="button" tabindex="0">
       <div class="ok-kart-harf">${d.harfler}</div>
       <div class="ok-kart-ses">${d.ses}</div>
       ${tamam?'<div class="ok-kart-check">✓</div>':''}
@@ -10623,7 +10623,7 @@ function okumaDigraphAc(i){
       <div class="ok-detay-ipucu">${d.ipucu}</div>
       <div class="ok-kelime-grid">
         ${d.kelimeler.map((k,ki)=>`
-          <div class="ok-kelime-chip" style="animation-delay:${(ki*0.12).toFixed(2)}s" onclick="ttsSpeakEleven('${k.kelime}')">
+          <div class="ok-kelime-chip" style="animation-delay:${(ki*0.12).toFixed(2)}s" onclick="ttsSpeakEleven('${k.kelime}')" role="button" tabindex="0">
             <span class="ok-kelime-en">🔊 ${k.kelime}</span>
             <span class="ok-kelime-tr">${k.anlam}</span>
           </div>
@@ -10706,7 +10706,7 @@ function fonetikKurallariRender(){
   grid.innerHTML=FONETIK_SESLILER.map((s,i)=>{
     const tamam=veri.tamamlanan.includes(s.harf);
     const aktif=fonetikAktifIdx===i;
-    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${s.renk}" onclick="fonetikSesliAc(${i})">
+    return `<div class="ok-kart${aktif?' aktif':''}" style="--ok-renk:${s.renk}" onclick="fonetikSesliAc(${i})" role="button" tabindex="0">
       <div class="ok-kart-harf">${s.harf}</div>
       <div class="ok-kart-ses">kısa/uzun</div>
       ${tamam?'<div class="ok-kart-check">✓</div>':''}
@@ -10727,7 +10727,7 @@ function fonetikSesliAc(i){
       <div class="fon-karsilastirma">
         <div class="fon-sutun fon-kisa">
           <div class="fon-etiket">🔒 Kapalı Hece — kısa ses</div>
-          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.kisa.kelime}')">
+          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.kisa.kelime}')" role="button" tabindex="0">
             <span class="fon-en">🔊 ${s.kisa.kelime}</span>
             <span class="fon-fonetik">${s.kisa.fonetik}</span>
             <span class="fon-tr">${s.kisa.anlam}</span>
@@ -10735,7 +10735,7 @@ function fonetikSesliAc(i){
         </div>
         <div class="fon-sutun fon-uzun">
           <div class="fon-etiket">🔓 Açık Hece — uzun ses</div>
-          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.uzun.kelime}')">
+          <div class="fon-kelime-chip" onclick="ttsSpeakEleven('${s.uzun.kelime}')" role="button" tabindex="0">
             <span class="fon-en">🔊 ${s.uzun.kelime}</span>
             <span class="fon-fonetik">${s.uzun.fonetik}</span>
             <span class="fon-tr">${s.uzun.anlam}</span>
@@ -10823,7 +10823,7 @@ function dilavcisiVideoRender(seviye) {
   if (!grid) return;
   const videolar = DILAVCISI_VIDEOLAR[seviye] || [];
   grid.innerHTML = videolar.map(v => `
-    <div onclick="dilavcisiVideoAc('${v.baslik}','${v.emoji}')" style="cursor:pointer;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,${v.renk}22,${v.renk}08);border:1px solid ${v.renk}40;transition:transform .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+    <div onclick="dilavcisiVideoAc('${v.baslik}','${v.emoji}')" style="cursor:pointer;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,${v.renk}22,${v.renk}08);border:1px solid ${v.renk}40;transition:transform .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''" role="button" tabindex="0">
       <div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative">
         ${v.emoji}
         <div style="position:absolute;bottom:6px;right:6px;width:22px;height:22px;background:rgba(0,0,0,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff">▶</div>
@@ -10929,7 +10929,7 @@ function dilavcisiYolHaritaRender(seviye) {
     const durum = tamamlandi ? 'tamamlandi' : (oncekiTamam ? 'aktif' : 'kilitli');
     const renk = tamamlandi ? '#a78bfa' : (oncekiTamam ? '#ffcb73' : '#4b5563');
     return `
-      <div class="yol-node ${durum}" onclick="${durum !== 'kilitli' ? `dilavcisiYolDersAc(${i},'${seviye}')` : ''}">
+      <div class="yol-node ${durum}" onclick="${durum !== 'kilitli' ? `dilavcisiYolDersAc(${i},'${seviye}')` : ''}" role="button" tabindex="0">
         <div class="yol-circle" style="background:${tamamlandi ? renk + '30' : durum === 'aktif' ? renk + '20' : 'rgba(255,255,255,.05)'};border:2px solid ${renk}">
           ${tamamlandi ? '✓' : d.ikon}
         </div>
@@ -11063,7 +11063,7 @@ async function konusmaGonder() {
 
 
 
-function ingDerslerRender(seviye='A1'){const alan=document.getElementById('ing-ders-alan');if(!alan)return;const dersler=ING_DERSLER[seviye]||[];alan.innerHTML=`<div style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">${seviye} Seviyesi — ${dersler.length} Konu</div><div style="height:4px;background:var(--border);border-radius:2px"><div style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px;width:20%"></div></div></div><div style="display:flex;flex-direction:column;gap:10px">${dersler.map((d,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer" onclick="ingDersAc(this)"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="width:40px;height:40px;background:linear-gradient(135deg,#a78bfa30,#7c3aed20);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0">${d.ikon}</div><div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)">${d.baslik}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d.aciklama}</div></div><div style="font-size:16px;color:var(--muted);transition:transform .2s" class="ing-chevron">▶</div></div><div style="display:none;padding:0 16px 16px" class="ing-ders-detay"><div style="background:#a78bfa15;border-radius:10px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:8px">📝 Örnekler — tıkla dinle 🔊</div>${d.ornekler.map(o=>`<div style="font-size:14px;color:var(--ink);padding:6px 0;border-bottom:1px solid #a78bfa30;cursor:pointer" onclick="if(window.ttsSpeakEleven)ttsSpeakEleven(this.textContent.replace('🔊 ',''))">🔊 ${o}</div>`).join('')}</div><div style="background:#fbbf2415;border-radius:10px;padding:12px"><div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:6px">🎯 Pratik Görev</div><div style="font-size:13px;color:var(--ink)">${d.pratik}</div><button onclick="ingPratikKlod('${d.baslik}','${d.pratik}')" style="margin-top:8px;background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🤖 DILA ile Pratik Yap</button></div></div></div>`).join('')}</div>`;}
+function ingDerslerRender(seviye='A1'){const alan=document.getElementById('ing-ders-alan');if(!alan)return;const dersler=ING_DERSLER[seviye]||[];alan.innerHTML=`<div style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">${seviye} Seviyesi — ${dersler.length} Konu</div><div style="height:4px;background:var(--border);border-radius:2px"><div style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);border-radius:2px;width:20%"></div></div></div><div style="display:flex;flex-direction:column;gap:10px">${dersler.map((d,i)=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer" onclick="ingDersAc(this)" role="button" tabindex="0"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px"><div style="width:40px;height:40px;background:linear-gradient(135deg,#a78bfa30,#7c3aed20);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0">${d.ikon}</div><div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)">${d.baslik}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${d.aciklama}</div></div><div style="font-size:16px;color:var(--muted);transition:transform .2s" class="ing-chevron">▶</div></div><div style="display:none;padding:0 16px 16px" class="ing-ders-detay"><div style="background:#a78bfa15;border-radius:10px;padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:8px">📝 Örnekler — tıkla dinle 🔊</div>${d.ornekler.map(o=>`<div style="font-size:14px;color:var(--ink);padding:6px 0;border-bottom:1px solid #a78bfa30;cursor:pointer" onclick="if(window.ttsSpeakEleven)ttsSpeakEleven(this.textContent.replace('🔊 ',''))" role="button" tabindex="0">🔊 ${o}</div>`).join('')}</div><div style="background:#fbbf2415;border-radius:10px;padding:12px"><div style="font-size:12px;font-weight:700;color:#d97706;margin-bottom:6px">🎯 Pratik Görev</div><div style="font-size:13px;color:var(--ink)">${d.pratik}</div><button onclick="ingPratikKlod('${d.baslik}','${d.pratik}')" style="margin-top:8px;background:#a78bfa;color:#1a0a2e;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🤖 DILA ile Pratik Yap</button></div></div></div>`).join('')}</div>`;}
 
 function ingDersAc(el){const detay=el.querySelector('.ing-ders-detay');const chevron=el.querySelector('.ing-chevron');const acik=detay.style.display!=='none';detay.style.display=acik?'none':'block';chevron.style.transform=acik?'':'rotate(90deg)';chevron.style.color=acik?'var(--muted)':'#34d399';}
 
@@ -11082,7 +11082,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
 (function(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const micBtn=document.getElementById('dila-mic-btn');if(!SR&&micBtn)micBtn.style.display='none';})();
 </script>
 <!-- HOŞ GELDİN KARŞILAMA ANİMASYONU -->
-<div id="hosgeldin-overlay" class="hg-overlay" onclick="hosgeldinKapat()">
+<div id="hosgeldin-overlay" class="hg-overlay" onclick="hosgeldinKapat()" role="button" tabindex="0">
   <div class="hg-radar-katman" aria-hidden="true"></div>
   <div class="hg-icerik">
     <div class="hg-baslik" id="hg-baslik"></div>
@@ -11108,7 +11108,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     <span class="mbn-ikon">📖</span><span class="mbn-lbl">Öğren</span>
   </button>
 </nav>
-<div class="mbn-sheet-backdrop" id="mbnBackdrop" onclick="mobilNavKapat()"></div>
+<div class="mbn-sheet-backdrop" id="mbnBackdrop" onclick="mobilNavKapat()" role="button" tabindex="0"></div>
 <div class="mbn-sheet" id="mbnSheet">
   <div class="mbn-sheet-handle"></div>
   <div class="mbn-sheet-baslik" id="mbnSheetBaslik"></div>
@@ -11579,7 +11579,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
     grid.innerHTML = AM_TEKNIKLER.map(t => {
       const ogrenildi = veri.acilanlar.includes(t.no);
       return `<div class="am-kart" id="am-kart-${t.no}" style="--kart-renk:${t.renk};--kart-renk-t:${t.renk}22">
-        <div class="am-kart-baslik" onclick="amKartAc(${t.no})">
+        <div class="am-kart-baslik" onclick="amKartAc(${t.no})" role="button" tabindex="0">
           ${ogrenildi ? `<div class="am-kart-check">✓</div>` : `<div class="am-kart-no">${t.no}</div>`}
           <div class="am-kart-ikon">${t.ikon}</div>
           <div class="am-kart-info">
@@ -12346,7 +12346,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
         <div class="ss-soru-metin">${soru.soru}</div>
         <div class="ss-secenekler">
           ${soru.secenekler.map((sec, i) => `
-            <div class="ss-secenek${secilen === i ? ' ss-secili' : ''}" onclick="ssSecenekSec(${i})">
+            <div class="ss-secenek${secilen === i ? ' ss-secili' : ''}" onclick="ssSecenekSec(${i})" role="button" tabindex="0">
               <span class="ss-secenek-harf">${SS_HARFLER[i]})</span><span>${sec}</span>
             </div>
           `).join('')}
@@ -12623,7 +12623,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
         <div style="font-size:12px;color:var(--ga-muted);margin-bottom:14px">Kartlara tıkla, Türkçe anlamını gör. 5 kartın tamamını çevir.</div>
         <div class="ga-kelime-grid" id="ga-kelime-grid">
           ${grup.map((k, i) => `
-            <div class="ga-flashcard" id="ga-kart-${i}" onclick="gaKartCevir(${i})">
+            <div class="ga-flashcard" id="ga-kart-${i}" onclick="gaKartCevir(${i})" role="button" tabindex="0">
               <div class="ga-flashcard-en">${k.kelime.toUpperCase()}</div>
               <div class="ga-flashcard-ipucu">tıkla →</div>
             </div>
@@ -12670,7 +12670,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
               <div class="ga-soru-metin"><span class="ga-teknik-etiket" style="background:${GA_TIP_RENK[s.tip]}22;color:${GA_TIP_RENK[s.tip]}">${GA_TIP_ETIKET[s.tip]}</span><br>${s.soru}</div>
               <div class="ga-secenekler" id="ga-secenekler-${si}">
                 ${s.secenekler.map((sec, oi) => `
-                  <div class="ga-secenek" onclick="gaParagrafSecenekSec(${si},${oi})" id="ga-secenek-${si}-${oi}">
+                  <div class="ga-secenek" onclick="gaParagrafSecenekSec(${si},${oi})" id="ga-secenek-${si}-${oi}" role="button" tabindex="0">
                     <span class="ga-secenek-harf">${['A','B','C','D'][oi]})</span><span>${sec}</span>
                   </div>
                 `).join('')}
@@ -12889,7 +12889,7 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
       return;
     }
     el.innerHTML=sonuclar.map((s,i)=>`
-      <div class="arama-sonuc-item${i===0?' arama-secili':''}" onclick="aramaSonucSec(${i})">
+      <div class="arama-sonuc-item${i===0?' arama-secili':''}" onclick="aramaSonucSec(${i})" role="button" tabindex="0">
         <div class="arama-sonuc-ikon">${s.ikon}</div>
         <div class="arama-sonuc-metin">
           <div class="arama-sonuc-baslik">${aramaVurgula(s.baslik,sorgu)}</div>
@@ -14466,6 +14466,20 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
 
   (window.__dilavcisiLazyRenders=window.__dilavcisiLazyRenders||[]).push(bsRender);
 })();
+</script>
+<script>
+// Erişilebilirlik: role="button" tabindex="0" ile işaretlenmiş div/span
+// tıklama hedefleri (gerçek <button> yerine kullanılanlar) klavyeyle de
+// (Enter/Boşluk) tetiklenebilsin diye tek bir delegasyonlu dinleyici —
+// her öğeye ayrı keydown handler eklemek yerine.
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Enter' && e.key!==' ')return;
+  const t=e.target;
+  if(t.getAttribute && t.getAttribute('role')==='button' && t.tagName!=='BUTTON' && t.tagName!=='A'){
+    e.preventDefault();
+    t.click();
+  }
+});
 </script>
 </body>
 </html>
