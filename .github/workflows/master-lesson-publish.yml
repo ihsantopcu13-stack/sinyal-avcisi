@@ -1,0 +1,43 @@
+name: Master Video Paketi — Günlük Yayın
+
+on:
+  schedule:
+    # Her gün 15:00 UTC = 18:00 Türkiye — ana günlük SinyalShort pipeline'ı
+    # (17:00 UTC) ile çakışmasın diye 2 saat önce.
+    - cron: "0 15 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  publish-next-lesson:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # ilerleme state dosyasını (master-publish-state.json) commit etmek için
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Bağımlılıkları kur
+        run: npm install
+
+      - name: Sıradaki MASTER bölümünü yayınla
+        run: node scripts/publish-next-master-lesson.mjs
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: İlerlemeyi commit'le
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/master-publish-state.json
+          git diff --staged --quiet || git commit -m "chore: master video paketi yayın ilerlemesi güncellendi [skip ci]"
+          git push

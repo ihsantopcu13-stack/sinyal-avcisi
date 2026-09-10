@@ -4,21 +4,21 @@ import {
   Sequence,
   staticFile,
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
   spring,
+  getInputProps,
 } from "remotion";
 import { CaptionOverlay } from "./captionUtils.jsx";
 
 // ============================================================
-// SİNYAL AVCISI — MASTER VİDEO PAKETİ — #1 OF TUZAĞI (DETAY sürümü)
-// automation/video-pipeline/data/master-video-paketi.md'deki #1
-// bölümünden birebir üretildi (kural/neden/örnek/tuzak/soru/çözüm/AVCI
-// kodu değiştirilmedi). OfTuzagiReel.jsx ile aynı görsel dil (siyah
-// zemin + neon kırmızı/sarı/yeşil, crosshair) ama bu seri "öğretme +
-// pekiştirme" formatında, kısa Reels'ten ayrı ve onu değiştirmiyor.
-// Sahne süreleri gerçek TTS ses uzunluklarına göre (bkz.
-// scripts/_tmp_gen_master01_audio.mjs çıktısı, public/master-01/durations.json).
+// SİNYAL AVCISI — MASTER VİDEO PAKETİ — genel/parametrik ders şablonu.
+// #1 OF TUZAĞI'nda (Master01OfTuzagiReel.jsx, artık arşiv) elle kurulan
+// 9 sahnelik yapı buraya veri-odaklı olarak taşındı — #2-#30 bu tek
+// component + data/master-lessons.mjs'teki lesson objeleriyle üretiliyor.
+// Görsel kimlik (siyah zemin + neon kırmızı/sarı/yeşil, crosshair),
+// öğretim akışı (HOOK→KURAL→NEDEN→ÖSYM TUZAĞI→ÖRNEK→MİNİ SORU→3-2-1→
+// CEVAP VE ÇÖZÜM→AVCI REFLEKSİ→marka) ve seslendirme (Murat/ElevenLabs)
+// #1'de onaylanan haliyle korunuyor.
 // ============================================================
 
 const FPS = 30;
@@ -27,10 +27,7 @@ const RED = "#ff1744";
 const YELLOW = "#faff00";
 const GREEN = "#39ff14";
 const WHITE = "#ffffff";
-
-export const SCENE_FRAMES = [45, 152, 118, 103, 267, 297, 168, 142, 60];
-export const TOTAL_FRAMES = SCENE_FRAMES.reduce((a, b) => a + b, 0);
-const STARTS = SCENE_FRAMES.reduce((acc, d, i) => [...acc, (acc[i - 1] ?? 0) + (i === 0 ? 0 : SCENE_FRAMES[i - 1])], []);
+const COLORS = { plain: WHITE, verb: YELLOW, trap: RED, good: GREEN };
 
 function pop(frame, delay = 0, damping = 12) {
   const f = Math.max(0, frame - delay);
@@ -73,68 +70,60 @@ function StepLabel({ children, color = YELLOW }) {
 }
 
 function CrosshairCorner() {
-  return (
-    <div style={{ position: "absolute", top: 56, right: 44, fontSize: 40, opacity: 0.85 }}>🎯</div>
-  );
+  return <div style={{ position: "absolute", top: 56, right: 44, fontSize: 40, opacity: 0.85 }}>🎯</div>;
 }
 
 // -------------------- SCENE 1 — HOOK --------------------
-function Scene1({ frame }) {
+function Scene1({ frame, lesson }) {
   const shake = frame < 8 ? Math.sin(frame * 3) * (8 - frame) : 0;
   const scale = pop(frame, 0, 10);
   const flash = interpolate(frame, [0, 3, 8], [1, 0.15, 0], { extrapolateRight: "clamp" });
   return (
-    <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 40px" }}>
       <AbsoluteFill style={{ background: RED, opacity: flash * 0.5 }} />
       <div
         style={{
           fontFamily: "sans-serif",
           fontWeight: 900,
-          fontSize: 92,
+          fontSize: 78,
           color: RED,
-          letterSpacing: 2,
+          letterSpacing: 1,
+          textAlign: "center",
           transform: `translateX(${shake}px) scale(${0.6 + 0.4 * scale})`,
           textShadow: `0 0 40px ${RED}, 0 0 80px ${RED}88`,
         }}
       >
-        ⚠ OF TUZAĞI!
+        {lesson.hookEmoji || "⚠"} {lesson.hookTitle}
       </div>
     </AbsoluteFill>
   );
 }
 
-// -------------------- SCENE 2 — KURAL / NASIL TANIRIM --------------------
-function Scene2({ frame }) {
-  const l1 = pop(frame, 0, 14);
-  const l2 = pop(frame, 20, 14);
-  const l3 = pop(frame, 45, 14);
+// -------------------- SCENE 2 — KURAL --------------------
+function Scene2({ frame, lesson }) {
+  const lineColors = [WHITE, YELLOW, GREEN, GREEN];
   return (
     <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 60px" }}>
       <CrosshairCorner />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, textAlign: "center" }}>
         <StepLabel color={GREEN}>KURAL</StepLabel>
-        <div style={{ opacity: l1, transform: `translateY(${(1 - l1) * 16}px)` }}>
-          <Word color={WHITE} size={40}>
-            "of" gördüğünde son ismi özne sanma.
-          </Word>
-        </div>
-        <div style={{ opacity: l2, transform: `translateY(${(1 - l2) * 16}px)` }}>
-          <Word color={YELLOW} size={40}>
-            Önce fiili bul.
-          </Word>
-        </div>
-        <div style={{ opacity: l3, transform: `translateY(${(1 - l3) * 16}px)` }}>
-          <Word color={GREEN} size={40}>
-            Sonra sola dön, patron ismi bul.
-          </Word>
-        </div>
+        {lesson.kuralLines.map((line, i) => {
+          const opIn = pop(frame, i * 22, 14);
+          return (
+            <div key={i} style={{ opacity: opIn, transform: `translateY(${(1 - opIn) * 16}px)` }}>
+              <Word color={lineColors[i % lineColors.length]} size={38}>
+                {line}
+              </Word>
+            </div>
+          );
+        })}
       </div>
     </AbsoluteFill>
   );
 }
 
 // -------------------- SCENE 3 — NEDEN --------------------
-function Scene3({ frame }) {
+function Scene3({ frame, lesson }) {
   const boxIn = pop(frame, 0, 12);
   const textIn = pop(frame, 25, 14);
   return (
@@ -147,7 +136,7 @@ function Scene3({ frame }) {
             transform: `scale(${0.85 + 0.15 * boxIn})`,
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 48,
+            fontSize: 42,
             color: YELLOW,
             border: `3px solid ${YELLOW}`,
             borderRadius: 14,
@@ -156,11 +145,11 @@ function Scene3({ frame }) {
             textShadow: `0 0 20px ${YELLOW}`,
           }}
         >
-          OF + İSİM
+          {lesson.nedenBadge}
         </div>
         <div style={{ opacity: textIn, transform: `translateY(${(1 - textIn) * 16}px)` }}>
-          <Word color={WHITE} size={38}>
-            kendinden önceki ismi tamamlayan bir edat grubudur.
+          <Word color={WHITE} size={36}>
+            {lesson.nedenText}
           </Word>
         </div>
       </div>
@@ -169,7 +158,7 @@ function Scene3({ frame }) {
 }
 
 // -------------------- SCENE 4 — ÖSYM TUZAĞI --------------------
-function Scene4({ frame }) {
+function Scene4({ frame, lesson }) {
   const shake = frame < 10 ? Math.sin(frame * 4) * (10 - frame) : 0;
   const scale = pop(frame, 0, 10);
   const subIn = pop(frame, 24, 14);
@@ -180,7 +169,7 @@ function Scene4({ frame }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 56,
+            fontSize: 52,
             color: RED,
             transform: `translateX(${shake}px) scale(${0.7 + 0.3 * scale})`,
             textShadow: `0 0 30px ${RED}`,
@@ -189,8 +178,8 @@ function Scene4({ frame }) {
           🚨 ÖSYM TUZAĞI
         </div>
         <div style={{ opacity: subIn, transform: `translateY(${(1 - subIn) * 16}px)` }}>
-          <Word color={WHITE} size={36}>
-            Fiile en yakın ismi özne sanmanı bekler.
+          <Word color={WHITE} size={34}>
+            {lesson.tuzakText}
           </Word>
         </div>
       </div>
@@ -199,62 +188,63 @@ function Scene4({ frame }) {
 }
 
 // -------------------- SCENE 5 — ÖRNEK --------------------
-function Scene5({ frame }) {
-  const verbIn = pop(frame, 95, 14);
-  const trapIn = pop(frame, 156, 14);
-  const svoIn = pop(frame, 210, 14);
-  const highlightPulse = 1 + 0.06 * Math.sin(frame / 3);
+function ExampleSentence({ parts }) {
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, textAlign: "center" }}>
+      {parts.map((p, i) => {
+        const style = p.style || "plain";
+        const isHighlight = style === "verb" || style === "trap" || style === "good";
+        const color = COLORS[style] || WHITE;
+        return (
+          <span
+            key={i}
+            style={{
+              fontFamily: "sans-serif",
+              fontWeight: isHighlight ? 900 : 800,
+              fontSize: 40,
+              color,
+              background: isHighlight ? color + "22" : "transparent",
+              border: isHighlight ? `3px solid ${color}` : "none",
+              borderRadius: isHighlight ? 10 : 0,
+              padding: isHighlight ? "2px 10px" : 0,
+              textShadow: isHighlight ? `0 0 18px ${color}` : "none",
+            }}
+          >
+            {p.text}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
+function Scene5({ frame, lesson, exampleRevealAt, breakdownRevealAt }) {
+  const revealIn = pop(frame, exampleRevealAt, 14);
+  const breakdownIn = pop(frame, breakdownRevealAt, 14);
   return (
     <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 44px" }}>
       <StepLabel color={GREEN}>ÖRNEK</StepLabel>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 30, marginTop: 10 }}>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, textAlign: "center" }}>
-          <Word>The rapid development</Word>{" "}
-          <span
-            style={{
-              fontFamily: "sans-serif",
-              fontWeight: 900,
-              fontSize: 42,
-              color: trapIn > 0.3 ? RED : WHITE,
-              background: trapIn > 0.3 ? RED + "22" : "transparent",
-              border: trapIn > 0.3 ? `3px solid ${RED}` : "none",
-              borderRadius: 10,
-              padding: trapIn > 0.3 ? "2px 10px" : 0,
-              transform: `scale(${trapIn > 0.3 ? 0.9 + 0.1 * trapIn : 1})`,
-              textShadow: trapIn > 0.3 ? `0 0 18px ${RED}` : "none",
-            }}
-          >
-            of technology
-          </span>{" "}
-          <span
-            style={{
-              fontFamily: "sans-serif",
-              fontWeight: 900,
-              fontSize: 42,
-              color: YELLOW,
-              background: verbIn > 0.2 ? YELLOW + "22" : "transparent",
-              border: verbIn > 0.2 ? `3px solid ${YELLOW}` : "none",
-              borderRadius: 10,
-              padding: verbIn > 0.2 ? "2px 10px" : 0,
-              transform: `scale(${verbIn > 0.2 ? highlightPulse : 1})`,
-              textShadow: verbIn > 0.2 ? `0 0 20px ${YELLOW}` : "none",
-            }}
-          >
-            changes
-          </span>{" "}
-          <Word>society.</Word>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, fontFamily: "sans-serif", fontWeight: 800, fontSize: 32 }}>
-          <div style={{ color: YELLOW, opacity: svoIn, transform: `translateX(${(1 - svoIn) * -20}px)`, textShadow: `0 0 14px ${YELLOW}` }}>
-            V → changes
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 26, marginTop: 10 }}>
+        {lesson.examples.map((ex, i) => (
+          <div key={i} style={{ opacity: i === 0 ? 1 : revealIn, transform: i === 0 ? "none" : `translateY(${(1 - revealIn) * 14}px)` }}>
+            <ExampleSentence parts={ex.parts} />
           </div>
-          <div style={{ color: GREEN, opacity: svoIn, transform: `translateX(${(1 - svoIn) * -20}px)`, textShadow: `0 0 14px ${GREEN}` }}>
-            patron isim → development
-          </div>
-          <div style={{ color: RED, opacity: svoIn, transform: `translateX(${(1 - svoIn) * -20}px)`, textShadow: `0 0 14px ${RED}` }}>
-            technology → özne DEĞİL, of grubunda
-          </div>
+        ))}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, fontFamily: "sans-serif", fontWeight: 800, fontSize: 30 }}>
+          {lesson.breakdown.map((b, i) => (
+            <div
+              key={i}
+              style={{
+                color: b.color,
+                opacity: breakdownIn,
+                transform: `translateX(${(1 - breakdownIn) * -20}px)`,
+                textShadow: `0 0 14px ${b.color}`,
+                textAlign: "center",
+              }}
+            >
+              {b.text}
+            </div>
+          ))}
         </div>
       </div>
     </AbsoluteFill>
@@ -262,9 +252,8 @@ function Scene5({ frame }) {
 }
 
 // -------------------- SCENE 6 — MİNİ SORU + 3-2-1 --------------------
-function Scene6({ frame }) {
+function Scene6({ frame, lesson, countdownStart }) {
   const cardIn = pop(frame, 0, 14);
-  const countdownStart = 233; // narasyon (l6_soru) bittikten hemen sonra
   const tick = frame - countdownStart;
   let num = null;
   if (tick >= 0 && tick < 18) num = "3";
@@ -285,7 +274,7 @@ function Scene6({ frame }) {
           border: `${borderPulse}px solid ${RED}`,
           borderRadius: 18,
           padding: "30px 30px",
-          width: 780,
+          width: 820,
           display: "flex",
           flexDirection: "column",
           gap: 18,
@@ -293,14 +282,13 @@ function Scene6({ frame }) {
           boxShadow: `0 0 40px ${RED}55`,
         }}
       >
-        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 32, color: WHITE, textAlign: "center" }}>
-          The rapid development of technology _____ new opportunities.
+        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 30, color: WHITE, textAlign: "center" }}>
+          {lesson.question.sentence}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: "sans-serif", fontWeight: 700, fontSize: 28, color: YELLOW }}>
-          <div>A) create</div>
-          <div>B) creates</div>
-          <div>C) creating</div>
-          <div>D) have created</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: "sans-serif", fontWeight: 700, fontSize: 27, color: YELLOW }}>
+          {lesson.question.options.map((o, i) => (
+            <div key={i}>{o}</div>
+          ))}
         </div>
       </div>
       {num && (
@@ -324,23 +312,24 @@ function Scene6({ frame }) {
 }
 
 // -------------------- SCENE 7 — CEVAP VE ÇÖZÜM --------------------
-function Scene7({ frame }) {
+function Scene7({ frame, lesson }) {
   const hitScale = pop(frame, 0, 9);
   const l1 = pop(frame, 18, 14);
   return (
-    <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center" }}>
+    <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 40px" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 26 }}>
         <div
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 58,
+            fontSize: 52,
             color: GREEN,
+            textAlign: "center",
             transform: `scale(${0.5 + 0.5 * hitScale})`,
             textShadow: `0 0 30px ${GREEN}`,
           }}
         >
-          🎯 B) CREATES
+          🎯 {lesson.answerLabel}
         </div>
         <div
           style={{
@@ -348,14 +337,14 @@ function Scene7({ frame }) {
             transform: `translateY(${(1 - l1) * 16}px)`,
             fontFamily: "sans-serif",
             fontWeight: 700,
-            fontSize: 32,
+            fontSize: 30,
             color: WHITE,
             textAlign: "center",
-            padding: "0 50px",
+            padding: "0 30px",
             textShadow: `0 4px 14px rgba(0,0,0,.8)`,
           }}
         >
-          Patron isim <span style={{ color: YELLOW }}>development</span> tekil.
+          {lesson.cozumText}
         </div>
       </div>
     </AbsoluteFill>
@@ -363,7 +352,7 @@ function Scene7({ frame }) {
 }
 
 // -------------------- SCENE 8 — AVCI REFLEKSİ --------------------
-function Scene8({ frame }) {
+function Scene8({ frame, lesson }) {
   const inAnim = pop(frame, 0, 10);
   return (
     <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 40px" }}>
@@ -382,14 +371,15 @@ function Scene8({ frame }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 42,
+            fontSize: 38,
             color: YELLOW,
             textAlign: "center",
             lineHeight: 1.4,
             textShadow: `0 0 24px ${YELLOW}`,
+            whiteSpace: "pre-line",
           }}
         >
-          OF GÖR → FİİLİ BUL →{"\n"}SOLA DÖN → PATRON İSMİ BUL → AVLA
+          {lesson.avciKodu}
         </div>
       </div>
     </AbsoluteFill>
@@ -421,8 +411,21 @@ function Scene9({ frame }) {
   );
 }
 
-export const Master01OfTuzagiReel = () => {
+function computeStarts(sceneFrames) {
+  return sceneFrames.reduce((acc, d, i) => [...acc, (acc[i - 1] ?? 0) + (i === 0 ? 0 : sceneFrames[i - 1])], []);
+}
+
+export function totalFramesFor(lesson) {
+  return lesson.sceneFrames.reduce((a, b) => a + b, 0);
+}
+
+export const MasterLessonReel = (props) => {
   const frame = useCurrentFrame();
+  const lesson = props?.lesson || getInputProps().lesson;
+  const SCENE_FRAMES = lesson.sceneFrames;
+  const STARTS = computeStarts(SCENE_FRAMES);
+  const af = (name) => staticFile(`${lesson.audioFolder}/${name}.mp3`);
+  const [a1, a2, a3, a4, a5, a6, a7, a8] = lesson.audioFiles;
 
   return (
     <AbsoluteFill style={{ background: BG }}>
@@ -430,17 +433,17 @@ export const Master01OfTuzagiReel = () => {
       <Sequence from={STARTS[0]} durationInFrames={SCENE_FRAMES[0]}>
         <Audio src={staticFile("of-tuzagi/siren.mp3")} />
         <Sequence from={2}>
-          <Audio src={staticFile("master-01/l1_hook.mp3")} />
+          <Audio src={af(a1)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[1]} durationInFrames={SCENE_FRAMES[1]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l2_kural.mp3")} />
+          <Audio src={af(a2)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[2]} durationInFrames={SCENE_FRAMES[2]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l3_neden.mp3")} />
+          <Audio src={af(a3)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[3]}>
@@ -448,17 +451,17 @@ export const Master01OfTuzagiReel = () => {
       </Sequence>
       <Sequence from={STARTS[3]} durationInFrames={SCENE_FRAMES[3]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l4_tuzak.mp3")} />
+          <Audio src={af(a4)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[4]} durationInFrames={SCENE_FRAMES[4]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l5_ornek.mp3")} />
+          <Audio src={af(a5)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[5]} durationInFrames={SCENE_FRAMES[5]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l6_soru.mp3")} />
+          <Audio src={af(a6)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[6]}>
@@ -466,12 +469,12 @@ export const Master01OfTuzagiReel = () => {
       </Sequence>
       <Sequence from={STARTS[6]} durationInFrames={SCENE_FRAMES[6]}>
         <Sequence from={5}>
-          <Audio src={staticFile("master-01/l7_cozum.mp3")} />
+          <Audio src={af(a7)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[7]} durationInFrames={SCENE_FRAMES[7]}>
         <Sequence from={4}>
-          <Audio src={staticFile("master-01/l8_avci.mp3")} />
+          <Audio src={af(a8)} />
         </Sequence>
       </Sequence>
       <Sequence from={STARTS[8]}>
@@ -480,42 +483,54 @@ export const Master01OfTuzagiReel = () => {
 
       {/* Görsel sahneler */}
       <Sequence from={STARTS[0]} durationInFrames={SCENE_FRAMES[0]}>
-        <Scene1 frame={frame - STARTS[0]} />
+        <Scene1 frame={frame - STARTS[0]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[1]} durationInFrames={SCENE_FRAMES[1]}>
-        <Scene2 frame={frame - STARTS[1]} />
+        <Scene2 frame={frame - STARTS[1]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[2]} durationInFrames={SCENE_FRAMES[2]}>
-        <Scene3 frame={frame - STARTS[2]} />
+        <Scene3 frame={frame - STARTS[2]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[3]} durationInFrames={SCENE_FRAMES[3]}>
-        <Scene4 frame={frame - STARTS[3]} />
+        <Scene4 frame={frame - STARTS[3]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[4]} durationInFrames={SCENE_FRAMES[4]}>
-        <Scene5 frame={frame - STARTS[4]} />
+        <Scene5
+          frame={frame - STARTS[4]}
+          lesson={lesson}
+          exampleRevealAt={lesson.exampleRevealAt ?? 40}
+          breakdownRevealAt={lesson.breakdownRevealAt ?? Math.round(SCENE_FRAMES[4] * 0.55)}
+        />
       </Sequence>
       <Sequence from={STARTS[5]} durationInFrames={SCENE_FRAMES[5]}>
-        <Scene6 frame={frame - STARTS[5]} />
+        <Scene6 frame={frame - STARTS[5]} lesson={lesson} countdownStart={lesson.countdownStart} />
       </Sequence>
       <Sequence from={STARTS[6]} durationInFrames={SCENE_FRAMES[6]}>
-        <Scene7 frame={frame - STARTS[6]} />
+        <Scene7 frame={frame - STARTS[6]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[7]} durationInFrames={SCENE_FRAMES[7]}>
-        <Scene8 frame={frame - STARTS[7]} />
+        <Scene8 frame={frame - STARTS[7]} lesson={lesson} />
       </Sequence>
       <Sequence from={STARTS[8]} durationInFrames={SCENE_FRAMES[8]}>
         <Scene9 frame={frame - STARTS[8]} />
       </Sequence>
 
-      {/* Altyazılar — narasyonla senkron (bkz. captionUtils.jsx) */}
-      <CaptionOverlay frame={frame - STARTS[0] - 2} text="OF TUZAĞI!" durationFrames={29} accentColor={RED} top={520} />
-      <CaptionOverlay frame={frame - STARTS[1] - 4} text="Son ismi özne sanma. Fiili bul, sola dön." durationFrames={137} accentColor={GREEN} top={150} />
-      <CaptionOverlay frame={frame - STARTS[2] - 4} text="'Of artı isim', önceki ismi tamamlayan bir edat grubudur." durationFrames={103} accentColor={YELLOW} top={150} />
-      <CaptionOverlay frame={frame - STARTS[3] - 4} text="Fiile en yakın ismi özne sanma tuzağı." durationFrames={88} accentColor={RED} top={150} />
-      <CaptionOverlay frame={frame - STARTS[4] - 4} text="The rapid development of technology changes society. Fiil: changes. Patron isim: development." durationFrames={253} accentColor={YELLOW} top={130} />
-      <CaptionOverlay frame={frame - STARTS[5] - 4} text="Şimdi sırada soru var. A create, B creates, C creating, D have created." durationFrames={233} accentColor={YELLOW} top={150} />
-      <CaptionOverlay frame={frame - STARTS[6] - 5} text="Cevap B, creates. Patron isim development tekil." durationFrames={148} accentColor={GREEN} top={150} />
-      <CaptionOverlay frame={frame - STARTS[7] - 4} text="OF gör, fiili bul, sola dön, patron ismi bul, avla!" durationFrames={127} accentColor={RED} top={150} />
+      {/* Altyazılar — narasyonla senkron, kısa öbekler, sinyal kelime
+          vurgulu (bkz. captionUtils.jsx). Her narasyon Sequence'ının
+          "from" ofsetiyle birebir hizalı, mevcut soru/şık metnini
+          engellemesin diye üst güvenli alanda (top). */}
+      {lesson.audioFrames && (
+        <>
+          <CaptionOverlay frame={frame - STARTS[0] - 2} text={lesson.narration.hook} durationFrames={lesson.audioFrames.hook} accentColor={RED} top={520} />
+          <CaptionOverlay frame={frame - STARTS[1] - 4} text={lesson.narration.kural} durationFrames={lesson.audioFrames.kural} accentColor={GREEN} top={150} />
+          <CaptionOverlay frame={frame - STARTS[2] - 4} text={lesson.narration.neden} durationFrames={lesson.audioFrames.neden} accentColor={YELLOW} top={150} />
+          <CaptionOverlay frame={frame - STARTS[3] - 4} text={lesson.narration.tuzak} durationFrames={lesson.audioFrames.tuzak} accentColor={RED} top={150} />
+          <CaptionOverlay frame={frame - STARTS[4] - 4} text={lesson.narration.ornek} durationFrames={lesson.audioFrames.ornek} accentColor={YELLOW} top={130} />
+          <CaptionOverlay frame={frame - STARTS[5] - 4} text={lesson.narration.soru} durationFrames={lesson.audioFrames.soru} accentColor={YELLOW} top={150} />
+          <CaptionOverlay frame={frame - STARTS[6] - 5} text={lesson.narration.cozum} durationFrames={lesson.audioFrames.cozum} accentColor={GREEN} top={150} />
+          <CaptionOverlay frame={frame - STARTS[7] - 4} text={lesson.narration.avci} durationFrames={lesson.audioFrames.avci} accentColor={RED} top={150} />
+        </>
+      )}
     </AbsoluteFill>
   );
 };

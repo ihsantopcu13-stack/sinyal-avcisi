@@ -16,6 +16,8 @@ import { ModalHaveReel, TOTAL_FRAMES as MODAL_HAVE_FRAMES } from "./ModalHaveRee
 import { ItTheyReel, TOTAL_FRAMES as IT_THEY_FRAMES } from "./ItTheyReel.jsx";
 import { MasterAvciReel, TOTAL_FRAMES as MASTER_AVCI_FRAMES } from "./MasterAvciReel.jsx";
 import { Master01OfTuzagiReel, TOTAL_FRAMES as MASTER_01_FRAMES } from "./Master01OfTuzagiReel.jsx";
+import { MasterLessonReel, totalFramesFor } from "./MasterLessonReel.jsx";
+import { DUMMY_LESSON } from "../data/master-lessons.mjs";
 
 const FPS = 30;
 
@@ -200,6 +202,21 @@ export const RemotionRoot = () => {
         width={1080}
         height={1920}
         durationInFrames={MASTER_01_FRAMES}
+      />
+      {/* MASTER VİDEO PAKETİ #2-#30 — genel/parametrik ders şablonu.
+          Her render, --props ile bir data/master-lessons.mjs LESSONS[i]
+          objesi alır (bkz. scripts/render-master-lesson.mjs). */}
+      <Composition
+        id="MasterLessonReel"
+        component={MasterLessonReel}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        durationInFrames={totalFramesFor(getInputProps()?.lesson || DUMMY_LESSON)}
+        defaultProps={{ lesson: DUMMY_LESSON }}
+        calculateMetadata={({ props }) => ({
+          durationInFrames: totalFramesFor(props?.lesson || DUMMY_LESSON),
+        })}
       />
     </>
   );
