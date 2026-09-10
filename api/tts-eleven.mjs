@@ -7,10 +7,11 @@
 
 import { rateLimit } from './_rateLimit.mjs';
 
-// Kendi (custom/cloned) sesimiz — ElevenLabs Free planda library/hazır sesler
-// API üzerinden kullanılamadığı için (payment_required hatası) kendi sesimizi
-// kullanıyoruz. eleven_multilingual_v2 modeliyle çoklu dili destekler.
-const DEFAULT_VOICE_ID = 'OeL5m6KRTt2v1GZog2XX';
+// ElevenLabs shared voice library'den "Murat - Serious, Soft, Male Narrator"
+// (tr-TR, sıcak/yumuşak anlatıcı) — önceki custom klonlanmış ses (Sinyal-TR)
+// beğenilmediği için değiştirildi. eleven_multilingual_v2 modeliyle çoklu
+// dili destekler.
+const DEFAULT_VOICE_ID = 'BIRihW545cVw2Iv97Fbs';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
