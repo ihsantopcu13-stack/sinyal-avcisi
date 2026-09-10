@@ -8,6 +8,7 @@ import { createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { google } from "googleapis";
+import { hashtagSeti, youtubeTags } from "./_seo.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, "..", "out");
@@ -25,7 +26,14 @@ function oauthClient() {
 function baslikVeAciklamaOlustur(senaryo) {
   const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
   const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
-  const title = `${senaryo.hook} #Shorts #YDS #YÖKDİL`.slice(0, 100);
+  // 2026 YouTube Shorts SEO: başlıkta hashtag KULLANMA — anahtar kelime
+  // öne yüklensin, mobilde tam görünmesi için ~70 karakterde kessin.
+  // (bkz. scripts/_seo.mjs üstündeki not)
+  const sinyalEki = senaryo.sinyal ? ` — "${senaryo.sinyal}" sinyali` : "";
+  const genisletilmisBaslik = `${senaryo.hook}${sinyalEki}`;
+  // Sinyal eki eklenince 70 karakteri aşıyorsa kelimenin ortasından
+  // kesmek yerine ekisiz hook'u kullan (hook'lar zaten ~70'i geçmiyor).
+  const title = genisletilmisBaslik.length <= 70 ? genisletilmisBaslik : senaryo.hook.slice(0, 70);
   const description = [
     senaryo.soru_en,
     "",
@@ -36,7 +44,7 @@ function baslikVeAciklamaOlustur(senaryo) {
     senaryo.aciklama_tr,
     "",
     "Sinyal Avcısı ile YDS/YÖKDİL'e ücretsiz hazırlan: https://sinyal-avcisi.com",
-    "#YDS #YÖKDİL #İngilizce #Shorts #SinyalAvcısı",
+    hashtagSeti(senaryo).join(" "),
   ].join("\n");
   return { title, description };
 }
@@ -56,7 +64,7 @@ export async function youtubeYukle() {
       snippet: {
         title,
         description,
-        tags: ["YDS", "YÖKDİL", "İngilizce", "Shorts", "SinyalAvcısı"],
+        tags: youtubeTags(script.senaryo),
         categoryId: "27", // Eğitim
       },
       status: {
