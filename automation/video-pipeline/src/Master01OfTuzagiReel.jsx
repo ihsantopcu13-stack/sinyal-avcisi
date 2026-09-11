@@ -22,13 +22,15 @@ import { CaptionOverlay } from "./captionUtils.jsx";
 // ============================================================
 
 const FPS = 30;
-const BG = "#000000";
-const RED = "#ff1744";
-const YELLOW = "#faff00";
-const GREEN = "#39ff14";
-const WHITE = "#ffffff";
+// 2026-09-11 onaylı görsel standart (bkz. MasterLessonReel.jsx) — bu dosya
+// ayrı bir bileşen olduğu için eski neon paleti taşımıştı, aynı standarda getirildi.
+const BG = "#05070d";
+const RED = "#dc2626";
+const YELLOW = "#eab308";
+const GREEN = "#22c55e";
+const WHITE = "#f4f3ef";
 
-export const SCENE_FRAMES = [45, 152, 118, 103, 267, 297, 168, 142, 60];
+export const SCENE_FRAMES = [45, 107, 128, 95, 234, 236, 119, 137, 60];
 export const TOTAL_FRAMES = SCENE_FRAMES.reduce((a, b) => a + b, 0);
 const STARTS = SCENE_FRAMES.reduce((acc, d, i) => [...acc, (acc[i - 1] ?? 0) + (i === 0 ? 0 : SCENE_FRAMES[i - 1])], []);
 
@@ -114,17 +116,17 @@ function Scene2({ frame }) {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 22, textAlign: "center" }}>
         <StepLabel color={GREEN}>KURAL</StepLabel>
         <div style={{ opacity: l1, transform: `translateY(${(1 - l1) * 16}px)` }}>
-          <Word color={WHITE} size={40}>
+          <Word color={WHITE} size={46}>
             "of" gördüğünde son ismi özne sanma.
           </Word>
         </div>
         <div style={{ opacity: l2, transform: `translateY(${(1 - l2) * 16}px)` }}>
-          <Word color={YELLOW} size={40}>
+          <Word color={YELLOW} size={46}>
             Önce fiili bul.
           </Word>
         </div>
         <div style={{ opacity: l3, transform: `translateY(${(1 - l3) * 16}px)` }}>
-          <Word color={GREEN} size={40}>
+          <Word color={GREEN} size={46}>
             Sonra sola dön, patron ismi bul.
           </Word>
         </div>
@@ -147,7 +149,7 @@ function Scene3({ frame }) {
             transform: `scale(${0.85 + 0.15 * boxIn})`,
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 48,
+            fontSize: 50,
             color: YELLOW,
             border: `3px solid ${YELLOW}`,
             borderRadius: 14,
@@ -159,7 +161,7 @@ function Scene3({ frame }) {
           OF + İSİM
         </div>
         <div style={{ opacity: textIn, transform: `translateY(${(1 - textIn) * 16}px)` }}>
-          <Word color={WHITE} size={38}>
+          <Word color={WHITE} size={42}>
             kendinden önceki ismi tamamlayan bir edat grubudur.
           </Word>
         </div>
@@ -189,7 +191,7 @@ function Scene4({ frame }) {
           🚨 ÖSYM TUZAĞI
         </div>
         <div style={{ opacity: subIn, transform: `translateY(${(1 - subIn) * 16}px)` }}>
-          <Word color={WHITE} size={36}>
+          <Word color={WHITE} size={40}>
             Fiile en yakın ismi özne sanmanı bekler.
           </Word>
         </div>
@@ -215,7 +217,7 @@ function Scene5({ frame }) {
             style={{
               fontFamily: "sans-serif",
               fontWeight: 900,
-              fontSize: 42,
+              fontSize: 46,
               color: trapIn > 0.3 ? RED : WHITE,
               background: trapIn > 0.3 ? RED + "22" : "transparent",
               border: trapIn > 0.3 ? `3px solid ${RED}` : "none",
@@ -231,7 +233,7 @@ function Scene5({ frame }) {
             style={{
               fontFamily: "sans-serif",
               fontWeight: 900,
-              fontSize: 42,
+              fontSize: 46,
               color: YELLOW,
               background: verbIn > 0.2 ? YELLOW + "22" : "transparent",
               border: verbIn > 0.2 ? `3px solid ${YELLOW}` : "none",
@@ -245,7 +247,7 @@ function Scene5({ frame }) {
           </span>{" "}
           <Word>society.</Word>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, fontFamily: "sans-serif", fontWeight: 800, fontSize: 32 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, fontFamily: "sans-serif", fontWeight: 800, fontSize: 36 }}>
           <div style={{ color: YELLOW, opacity: svoIn, transform: `translateX(${(1 - svoIn) * -20}px)`, textShadow: `0 0 14px ${YELLOW}` }}>
             V → changes
           </div>
@@ -264,7 +266,7 @@ function Scene5({ frame }) {
 // -------------------- SCENE 6 — MİNİ SORU + 3-2-1 --------------------
 function Scene6({ frame }) {
   const cardIn = pop(frame, 0, 14);
-  const countdownStart = 233; // narasyon (l6_soru) bittikten hemen sonra
+  const countdownStart = 172; // narasyon (l6_soru) bittikten hemen sonra
   const tick = frame - countdownStart;
   let num = null;
   if (tick >= 0 && tick < 18) num = "3";
@@ -284,19 +286,19 @@ function Scene6({ frame }) {
           background: "#0a0a0a",
           border: `${borderPulse}px solid ${RED}`,
           borderRadius: 18,
-          padding: "30px 30px",
-          width: 780,
+          padding: "36px 34px",
+          width: 970,
           display: "flex",
           flexDirection: "column",
-          gap: 18,
+          gap: 24,
           marginTop: 14,
           boxShadow: `0 0 40px ${RED}55`,
         }}
       >
-        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 32, color: WHITE, textAlign: "center" }}>
+        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 40, lineHeight: 1.3, color: WHITE, textAlign: "center" }}>
           The rapid development of technology _____ new opportunities.
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: "sans-serif", fontWeight: 700, fontSize: 28, color: YELLOW }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, fontFamily: "sans-serif", fontWeight: 700, fontSize: 38, color: YELLOW }}>
           <div>A) create</div>
           <div>B) creates</div>
           <div>C) creating</div>
@@ -348,7 +350,7 @@ function Scene7({ frame }) {
             transform: `translateY(${(1 - l1) * 16}px)`,
             fontFamily: "sans-serif",
             fontWeight: 700,
-            fontSize: 32,
+            fontSize: 36,
             color: WHITE,
             textAlign: "center",
             padding: "0 50px",
@@ -382,7 +384,7 @@ function Scene8({ frame }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 42,
+            fontSize: 44,
             color: YELLOW,
             textAlign: "center",
             lineHeight: 1.4,
@@ -509,14 +511,14 @@ export const Master01OfTuzagiReel = () => {
       </Sequence>
 
       {/* Altyazılar — narasyonla senkron (bkz. captionUtils.jsx) */}
-      <CaptionOverlay frame={frame - STARTS[0] - 2} text="OF TUZAĞI!" durationFrames={29} accentColor={RED} top={520} />
-      <CaptionOverlay frame={frame - STARTS[1] - 4} text="Son ismi özne sanma. Fiili bul, sola dön." durationFrames={137} accentColor={GREEN} top={150} />
-      <CaptionOverlay frame={frame - STARTS[2] - 4} text="'Of artı isim', önceki ismi tamamlayan bir edat grubudur." durationFrames={103} accentColor={YELLOW} top={150} />
-      <CaptionOverlay frame={frame - STARTS[3] - 4} text="Fiile en yakın ismi özne sanma tuzağı." durationFrames={88} accentColor={RED} top={150} />
-      <CaptionOverlay frame={frame - STARTS[4] - 4} text="The rapid development of technology changes society. Fiil: changes. Patron isim: development." durationFrames={253} accentColor={YELLOW} top={130} />
-      <CaptionOverlay frame={frame - STARTS[5] - 4} text="Şimdi sırada soru var. A create, B creates, C creating, D have created." durationFrames={233} accentColor={YELLOW} top={150} />
-      <CaptionOverlay frame={frame - STARTS[6] - 5} text="Cevap B, creates. Patron isim development tekil." durationFrames={148} accentColor={GREEN} top={150} />
-      <CaptionOverlay frame={frame - STARTS[7] - 4} text="OF gör, fiili bul, sola dön, patron ismi bul, avla!" durationFrames={127} accentColor={RED} top={150} />
+      <CaptionOverlay frame={frame - STARTS[0] - 2} text="OF TUZAĞI!" durationFrames={35} accentColor={RED} top={520} />
+      <CaptionOverlay frame={frame - STARTS[1] - 4} text="Son ismi özne sanma. Fiili bul, sola dön." durationFrames={92} accentColor={GREEN} top={150} />
+      <CaptionOverlay frame={frame - STARTS[2] - 4} text="'Of artı isim', önceki ismi tamamlayan bir edat grubudur." durationFrames={113} accentColor={YELLOW} top={150} />
+      <CaptionOverlay frame={frame - STARTS[3] - 4} text="Fiile en yakın ismi özne sanma tuzağı." durationFrames={80} accentColor={RED} top={150} />
+      <CaptionOverlay frame={frame - STARTS[4] - 4} text="The rapid development of technology changes society. Fiil: changes. Patron isim: development." durationFrames={219} accentColor={YELLOW} top={130} />
+      <CaptionOverlay frame={frame - STARTS[5] - 4} text="Şimdi sırada soru var. A create, B creates, C creating, D have created." durationFrames={172} accentColor={YELLOW} top={150} />
+      <CaptionOverlay frame={frame - STARTS[6] - 5} text="Cevap B, creates. Patron isim development tekil." durationFrames={99} accentColor={GREEN} top={150} />
+      <CaptionOverlay frame={frame - STARTS[7] - 4} text="OF gör, fiili bul, sola dön, patron ismi bul, avla!" durationFrames={122} accentColor={RED} top={150} />
     </AbsoluteFill>
   );
 };

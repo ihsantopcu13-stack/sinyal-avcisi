@@ -9,10 +9,13 @@
 // edilir (buradaki değerler yalnızca placeholder / Studio preview içindir).
 // ============================================================
 
-const Y = "#faff00";
-const G = "#39ff14";
-const R = "#ff1744";
-const W = "#ffffff";
+// 2026-09-11 onaylı görsel standart (bkz. src/MasterLessonReel.jsx BG/RED/
+// YELLOW/GREEN/WHITE) — breakdown satırları bu değerleri LİTERAL hex olarak
+// (style-key değil) taşıyor, bu yüzden burada da ayrıca güncellenmesi gerekti.
+const Y = "#eab308";
+const G = "#22c55e";
+const R = "#dc2626";
+const W = "#f4f3ef";
 
 const DEFAULT_SCENE_FRAMES = [45, 130, 110, 95, 220, 250, 150, 130, 60];
 const AUDIO_FILES = ["l1_hook", "l2_kural", "l3_neden", "l4_tuzak", "l5_ornek", "l6_soru", "l7_cozum", "l8_avci"];
@@ -861,6 +864,2404 @@ export const LESSONS = [
     cozumText: "Sağda S+V var; iletişim gelişmesine RAĞMEN izolasyon var — zıtlık.",
     avciKodu: "GÖR→FİİLİ BUL→S+V+O→PATRON İSMİ→\nSİNYALİ YAKALA→ŞIKLARI ELE→ANLAMI DOĞRULA→🎯AVLA",
     sceneFrames: [45, 150, 130, 110, 260, 260, 160, 160, 70],
+  }),
+  lesson({
+    id: "not-only-but-also", epNum: 31, audioFolder: "master-31",
+    hookTitle: "NOT ONLY...BUT ALSO TUZAĞI!",
+    kuralLines: ["İki yapıyı paralel bağlar, vurgu yapar","Fiil ve yapı sırası kritiktir"],
+    narration: {
+      hook: "Aynı anda iki şeyi söylemek istiyorsanız, not only...but also'nun sırrını bilmelisiniz!",
+      kural: "Not only + yapı A, but also + yapı B şeklinde kullanılır. Burada yapı A ve yapı B dilbilgisel olarak aynı türde olmalıdır — ikisi de isim öbeği, ikisi de fiil öbeği veya ikisi de sıfat olabilir. Fiil konusu değişirse, fiil de değişebilir ama paralel yapı bozulmamalıdır.",
+      neden: "İngilizce, denge ve simetri sevdiği için paralel yapıları tercih eder. Not only...but also, dinleyiciye 'iki şey de önemli' mesajı verir ve cümleyi ritmik kılar. Sağında ve solunda aynı gramer kategorisi aranır.",
+      tuzak: "Sınav, not only'den sonra bir yapı, but also'dan sonra farklı bir yapı sunarak öğrenciyi paralel yapıyı bozmaya teşvik eder.",
+      ornek: "Not only is she intelligent, but also she is kind. Burada 'is she intelligent' ve 'she is kind' paralel yapıdır — her ikisi de özne + fiil + sıfat şeklindedir.",
+      soru: "Aşağıdaki cümlede not only...but also yapısını doğru kullanan seçeneği bulun.",
+      cozum: "Not only'den sonra gelen yapı ile but also'dan sonra gelen yapı dilbilgisel olarak aynı türde olmalıdır. Fiil konusu değişirse, fiil de değişebilir ama yapının kategorisi aynı kalmalıdır.",
+      avci: "Not only → yapı A, but also → yapı A (paralel) | Fiil konusu değişse bile yapı türü aynı kalmalı!",
+    },
+    nedenBadge: "PARALEL YAPININ GÜCÜ",
+    nedenText: "Not only...but also, iki benzer yapıyı bağlayarak ikincisine daha fazla vurgu katar ve cümleyi dengeli tutar.",
+    tuzakText: "ÖSYM, fiil konumunu değiştirerek veya paralel yapıyı bozarak yanlış seçenekler sunar.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Not only",
+        "style": "trap"
+      },
+      {
+        "text": "does he speak English",
+        "style": "verb"
+      },
+      {
+        "text": ", but also",
+        "style": "trap"
+      },
+      {
+        "text": "he speaks French fluently",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Not only",
+        "style": "trap"
+      },
+      {
+        "text": "is the book interesting",
+        "style": "verb"
+      },
+      {
+        "text": ", but also",
+        "style": "trap"
+      },
+      {
+        "text": "it is educational",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Not only'den sonra ters yapı (inversion) gelebilir: Does he...?", color: Y },
+      { text: "But also'dan sonra normal yapı gelir: he speaks...", color: G },
+      { text: "Paralel yapı: her iki kısım da aynı gramer kategorisinde olmalı", color: G }
+    ],
+    question: { sentence: "Not only _____ the project on time, but also she delivered exceptional results.", options: ["A) she completed","B) did she complete","C) she did complete","D) completing"] },
+    answerLabel: "B) DID SHE COMPLETE",
+    cozumText: "Not only'den sonra ters yapı (inversion) kullanılır: did she complete.",
+    avciKodu: "Not only → TERS YAPIYI KONTROL ET (does/did/is vb. öne gelir) | But also → normal yapı | Paralel tutarlılık zorunlu!",
+  }),
+  lesson({
+    id: "neither-nor", epNum: 32, audioFolder: "master-32",
+    hookTitle: "NEITHER...NOR TUZAĞI!",
+    kuralLines: ["Neither...nor olumsuz seçim sunar","Fiil her zaman tekil olur"],
+    narration: {
+      hook: "İki şeyi aynı anda reddetmek istediğinde İngilizce'de hangi yapı kullanırsın?",
+      kural: "Neither...nor, iki isim veya isim öbeğini bağlayarak her ikisini de olumsuz yapar. Bu yapıda fiil daima tekil (singular) olur, çünkü 'hiçbiri' anlamı taşır. Örneğin: 'Neither Ali nor Veli' — ikisinden hiçbiri, yani tekil.",
+      neden: "Sağında ve solunda iki seçenek vardır, ama neither...nor bunları birleştirerek tek bir olumsuz birim oluşturur. Gramer açısından bu, 'ne bu ne de o' demek olduğu için tekil fiil alır.",
+      tuzak: "ÖSYM, neither...nor'un yanına çoğul fiil koyarak veya neither'i yanlış yerde (ortada, başında) göstererek öğrenciyi yanıltır.",
+      ornek: "Cümle: 'Neither the manager nor the assistant was available.' — manager ve assistant iki kişi olsa da, neither...nor yapısı onları birlikte reddediyor, bu yüzden 'was' (tekil) kullanılır.",
+      soru: "Aşağıdaki cümlede boşluğa hangi fiil gelmelidir?",
+      cozum: "Neither...nor yapısı iki seçeneği birlikte olumsuz yapar ve gramer olarak tekil kabul edilir. Bu yüzden 'was' doğru, 'were' yanlıştır.",
+      avci: "Neither...nor = hiçbiri → TEKİL FİİL ⚡ Sağ ve sol ikisi de reddedilir, ama sayı açısından 'bir' olur.",
+    },
+    nedenBadge: "ÇİFT OLUMSUZLUK KÖPRÜSÜ",
+    nedenText: "Neither...nor yapısı iki seçeneği birlikte reddeder; gramer olarak tekil fiil gerektirir çünkü 'hiçbiri' anlamı taşır.",
+    tuzakText: "ÖSYM, çoğul fiil koyan şıkları doğru göstererek veya neither'i yanlış konumlandırarak kandırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Neither",
+        "style": "trap"
+      },
+      {
+        "text": "coffee",
+        "style": "plain"
+      },
+      {
+        "text": "nor",
+        "style": "trap"
+      },
+      {
+        "text": "tea",
+        "style": "plain"
+      },
+      {
+        "text": "is",
+        "style": "verb"
+      },
+      {
+        "text": "available in the office.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Neither",
+        "style": "trap"
+      },
+      {
+        "text": "the student",
+        "style": "plain"
+      },
+      {
+        "text": "nor",
+        "style": "trap"
+      },
+      {
+        "text": "the teacher",
+        "style": "plain"
+      },
+      {
+        "text": "has",
+        "style": "verb"
+      },
+      {
+        "text": "completed the assignment.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Neither...nor iki ismi bağlar ve her ikisini reddeder", color: G },
+      { text: "Fiil daima tekil (is, has, was) olur", color: Y },
+      { text: "Trap: Çoğul fiil (are, have) seçmek yanlıştır", color: R }
+    ],
+    question: { sentence: "Neither the doctor nor the nurse _____ able to attend the emergency meeting yesterday.", options: ["A) were","B) are","C) was","D) have been"] },
+    answerLabel: "C) WAS",
+    cozumText: "Neither...nor tekil fiil alır; geçmiş zaman için 'was' doğru.",
+    avciKodu: "Neither...nor → Tekil Fiil ⚡ | Sağ + Sol = Hiçbiri (1 birim) | was/is/has ✓ | were/are/have ✗",
+  }),
+  lesson({
+    id: "either-or", epNum: 33, audioFolder: "master-33",
+    hookTitle: "EITHER...OR TUZAĞI!",
+    kuralLines: ["Either A or B = A veya B seçeneklerinden biri","Fiil, sağdaki isimle uyumlu olur"],
+    narration: {
+      hook: "İki seçenekten birini seçerken, fiil kimi dinler — solda olanı mı, sağda olanı mı?",
+      kural: "Either...or yapısı iki seçeneği birbirinden ayırır. Fiil, 'or' dan sonra gelen isimle uyum sağlar. Yani sağdaki isim, fiil formunu belirler.",
+      neden: "Either...or, mantıksal olarak 'ya bu ya da şu' anlamı taşır; seçim yapılmış olur. Gramer açısından, seçim yapıldıktan sonra (sağdaki isim), o isimle fiil uyumlandırılır.",
+      tuzak: "Öğrenci solda bulunan isimle fiili eşleştirmeye çalışır ve sağdaki ismi göz ardı eder. ÖSYM bu yanılgıyı test eder.",
+      ornek: "Either the manager or the employees are responsible for the project. Burada 'employees' (çoğul) sağda olduğu için 'are' kullanılır, 'manager' (tekil) göz ardı edilir.",
+      soru: "Şimdi senin için hazırladığım mini soruyu çöz ve either...or'un gerçek kuralını yakala.",
+      cozum: "Doğru cevap C'dir çünkü 'or' dan sonra gelen 'students' (çoğul) fiili belirler; 'have' kullanılır, 'has' değil.",
+      avci: "Either A or B → Sağdaki ismi bul → O isimle fiili uydur → Solda olanı unut!",
+    },
+    nedenBadge: "SEÇİM VE UYUM",
+    nedenText: "Either...or iki seçeneği sunar; fiil, 'or' dan sonraki isimle anlaşma kurar.",
+    tuzakText: "ÖSYM solda bulunan isimle fiil uyumunu sınar, sağdaki ismi görmezden gelmeyi bekler.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Either",
+        "style": "trap"
+      },
+      {
+        "text": " the teacher ",
+        "style": "plain"
+      },
+      {
+        "text": "or",
+        "style": "trap"
+      },
+      {
+        "text": " the students ",
+        "style": "plain"
+      },
+      {
+        "text": "are",
+        "style": "verb"
+      },
+      {
+        "text": " attending the conference.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Either",
+        "style": "trap"
+      },
+      {
+        "text": " John ",
+        "style": "plain"
+      },
+      {
+        "text": "or",
+        "style": "trap"
+      },
+      {
+        "text": " his parents ",
+        "style": "plain"
+      },
+      {
+        "text": "have",
+        "style": "verb"
+      },
+      {
+        "text": " the final say.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Either...or iki seçeneği sunar; ikincisi (or'dan sonra) fiil uyumunu kontrol eder.", color: G },
+      { text: "Sağdaki isim tekil ise → is/has; çoğul ise → are/have kullan.", color: Y },
+      { text: "Soldaki isim göz ardı edilir; sadece sağdaki isim fiili belirler.", color: R }
+    ],
+    question: { sentence: "Either the director or the team members _____ responsible for the delay in the project.", options: ["A) is","B) was","C) are","D) has been"] },
+    answerLabel: "C) ARE",
+    cozumText: "Sağdaki 'members' çoğul → 'are' gerekli; solda 'director' yok sayılır.",
+    avciKodu: "Either __ or [SAĞDAKI İSİM] → Sağdakinin sayısını bul → Fiili ona uydur → ✓",
+  }),
+  lesson({
+    id: "such-that-result-clause", epNum: 34, audioFolder: "master-34",
+    hookTitle: "SUCH...THAT TUZAĞI!",
+    kuralLines: ["SUCH + sıfat/isim + THAT + sonuç","Sonuç cümlecikle bağlantı şarttır"],
+    narration: {
+      hook: "Bir sıfat o kadar güçlüyse, arkasında mutlaka bir sonuç cümlecik gelir — bu bağlantıyı kaçıran öğrenci hata yapar.",
+      kural: "SUCH yapısı bir şeyin derecesini (ne kadar çok, ne kadar yoğun) gösterir ve bu derecenin bir sonucu vardır. Sıfat + SUCH + THAT + sonuç cümlecik şeklinde ilerler. SUCH'tan sonra THAT gelmelidir, aksi halde cümle eksik kalır.",
+      neden: "SUCH bir yoğunluk/derecenin göstergesidir; bu yoğunluğun bir sonucu olmak zorundadır. THAT'sız SUCH cümlesi mantıksal olarak tamamlanmamış, öğrenci için de anlamı belirsiz kalır.",
+      tuzak: "ÖSYM seçeneklerde SUCH'tan sonra BECAUSE, SO, WHICH gibi yanlış bağlaçlar koyarak öğrenciyi kandırır; ayrıca THAT'sız cümleleri doğru gösterir.",
+      ornek: "The problem was such a complex issue that the team couldn't solve it in one day. — Burada SUCH + isim + THAT + sonuç cümlecik (couldn't solve it) net şekilde görülüyor.",
+      soru: "Aşağıdaki cümlede boşluğu dolduracak en uygun yapıyı seçin ve SUCH...THAT kuralını test edin.",
+      cozum: "SUCH'tan sonra THAT gelmelidir çünkü derecenin bir sonucu vardır. Diğer bağlaçlar (BECAUSE, SO, WHICH) bu yapıda kullanılamaz.",
+      avci: "SUCH gördün mü? → Hemen THAT ara; sonuç cümlecik gelecek, THAT'sız SUCH yapısı yalan!",
+    },
+    nedenBadge: "SONUÇ GÖSTERMEK İÇİN",
+    nedenText: "Bir şeyin o kadar yoğun/çok olduğunu göstermek için sonuç cümlecik gereklidir.",
+    tuzakText: "ÖSYM, SUCH'tan sonra THAT olmadan cümle tamamlamaya çalıştırır veya yanlış bağlaç koyar.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The weather was",
+        "style": "plain"
+      },
+      {
+        "text": "such",
+        "style": "trap"
+      },
+      {
+        "text": "terrible",
+        "style": "verb"
+      },
+      {
+        "text": "that",
+        "style": "trap"
+      },
+      {
+        "text": "we cancelled the picnic.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "She gave",
+        "style": "plain"
+      },
+      {
+        "text": "such",
+        "style": "trap"
+      },
+      {
+        "text": "a brilliant presentation",
+        "style": "verb"
+      },
+      {
+        "text": "that",
+        "style": "trap"
+      },
+      {
+        "text": "everyone applauded.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "SUCH her zaman derecenin göstergesi, yoğunluğu vurgular.", color: G },
+      { text: "THAT sonuç cümlecik başlatır, SUCH'tan ayrılmaz.", color: Y },
+      { text: "SUCH...THAT arasında sıfat veya isim + sıfat gelir.", color: G }
+    ],
+    question: { sentence: "The noise was _____ that I couldn't concentrate on my work.", options: ["A) so loud","B) such loud","C) very loud","D) too loud"] },
+    answerLabel: "A) SO LOUD",
+    cozumText: "SUCH değil SO kullanılır; sıfat + THAT sonuç cümlecik.",
+    avciKodu: "SUCH + (isim/sıfat+isim) + THAT | SO + sıfat + THAT → Derecenin sonucu var mı? → THAT'ı ara!",
+  }),
+  lesson({
+    id: "so-that-sonuc-yapisi", epNum: 35, audioFolder: "master-35",
+    hookTitle: "SO...THAT TUZAĞI: SONUÇ CÜMLECİĞİ!",
+    kuralLines: ["SO + sıfat/zarf + THAT + sonuç cümlesi","Neden-sonuç ilişkisi, amaç değil"],
+    narration: {
+      hook: "Bir şey çok fazla olunca, doğal olarak bir sonuç meydana geliyor — işte bu SO...THAT'in sırrı!",
+      kural: "SO...THAT yapısında SO'dan sonra sıfat veya zarf gelir, ardından THAT ile sonuç cümlesi başlar. Bu yapı 'o kadar çok ki' anlamını taşır ve gerçekleşen bir sonucu gösterir, planlanmış bir amacı değil.",
+      neden: "İngilizce'de neden-sonuç ilişkisini göstermek için bu yapı kullanılır. Solunda derecesi yüksek bir durum, sağında ise o durumun doğal sonucu vardır. Amaç cümlecikleri (IN ORDER TO, SO THAT'in amaç versiyonu) ile karıştırılması yaygındır.",
+      tuzak: "ÖSYM, SO...THAT'i IN ORDER TO veya PURPOSE ifadeleriyle karıştıran seçenekler koyar; öğrenci sonuç yerine amacı seçebilir.",
+      ornek: "The coffee was SO hot THAT she couldn't drink it immediately. — Kahve o kadar sıcaktı ki, o hemen içemedi. Burada amaç değil, sıcaklığın doğal sonucu gösterilir.",
+      soru: "Şimdi bir mini soru ile SO...THAT'in gerçek sonuç anlamını yakalayalım.",
+      cozum: "Doğru cevap, SO'dan sonra sıfat/zarf + THAT + sonuç cümlesi yapısını koruyandır. Amaç ifadeleri (IN ORDER TO, FOR) bu yapıyı bozar.",
+      avci: "SO + (sıfat/zarf) + THAT = SONUÇ (amaç DEĞİL) → Solda derece, sağda doğal sonuç!",
+    },
+    nedenBadge: "SONUÇ GÖSTERMEK İÇİN",
+    nedenText: "Bir durumun derecesi o kadar yüksek ki, doğal sonuç ortaya çıkıyor; amaç değil, gerçek sonuç anlatılır.",
+    tuzakText: "ÖSYM, SO...THAT'i IN ORDER TO (amaç) ile karıştırtarak yanlış seçeneği çeldirici yapar.",
+    examples: [
+      { parts: [
+        { text: "The music was", style: "plain" },
+        { text: "SO loud", style: "trap" },
+        { text: "THAT", style: "verb" },
+        { text: "nobody could hear the announcement.", style: "plain" },
+      ] },
+      { parts: [
+        { text: "She spoke", style: "plain" },
+        { text: "SO quickly", style: "trap" },
+        { text: "THAT", style: "verb" },
+        { text: "I missed half of what she said.", style: "plain" },
+      ] },
+    ],
+    breakdown: [
+      { text: "SO + sıfat/zarf = derece gösterir", color: G },
+      { text: "THAT + sonuç cümlesi = gerçekleşen sonuç", color: Y },
+      { text: "Amaç DEĞİL, doğal sonuç anlatılır", color: R },
+    ],
+    question: { sentence: "The weather was _____ that all outdoor events were cancelled.", options: ["A) so bad in order to","B) so bad that","C) bad enough for","D) too bad to prevent"] },
+    answerLabel: "B) SO...THAT SONUÇ",
+    cozumText: "SO bad THAT = sonuç (iptal edildi). Diğerleri amaç veya yanlış yapı.",
+    avciKodu: "SO + sıfat/zarf + THAT + sonuç cümlesi ← SONUÇ YAKALAMAK İÇİN!",
+  }),
+  lesson({
+    id: "no-sooner-than-inversion", epNum: 36, audioFolder: "master-36",
+    hookTitle: "NO SOONER...THAN DEVRIK TUZAĞI!",
+    kuralLines: ["NO SOONER'dan sonra ters sıra geliyor","Yardımcı fiil başa alınır mutlaka"],
+    narration: {
+      hook: "İngilizce'de bazı kelimeler cümleyi baştan sona ters çevirir — NO SOONER bunlardan biri!",
+      kural: "NO SOONER ile başlayan cümlede yardımcı fiil (did, had, was) özneyi takip eder. Mesela: 'No sooner had he arrived than...' — 'had' hemen 'he'nin önüne geçer. Bu devrik yapı (inversion) İngilizce'de dramatik etki yaratır.",
+      neden: "NO SOONER olumsuz/kısıtlayıcı anlamı taşıdığı için cümle ters sıraya girer. Sağında THAN gelir, solunda ise yardımcı fiil + özne + ana fiil düzeni vardır. Bu yapı vurguyu güçlendirir.",
+      tuzak: "ÖSYM normal özne-fiil sırasını seçeneklere koyar; öğrenci devrik yapıyı bilmezse yanlış seçer.",
+      ornek: "Cümle: 'No sooner had the meeting ended than everyone left.' — Burada 'had' (yardımcı fiil) 'the meeting' (özne) önüne geçti. Eğer normal sıra olsaydı 'No sooner the meeting had ended' olurdu — bu yanlış!",
+      soru: "Aşağıdaki cümlede boşluğu tamamlayan doğru yapı hangisidir?",
+      cozum: "NO SOONER'dan sonra yardımcı fiil gelir, sonra özne. Seçeneklerde 'had he' devrik yapısı doğru, 'he had' normal sıra yanlış.",
+      avci: "NO SOONER → THAN → Yardımcı Fiil + Özne (devrik) | Normal sıra = TUZAK",
+    },
+    nedenBadge: "DEVRIK YAPILAR ÖNEMLİ",
+    nedenText: "NO SOONER, HARDLY, SCARCELY gibi olumsuz anlamlar cümleyi ters çevirir.",
+    tuzakText: "Sınav normal sıra gösterir, öğrenci devrik yapıyı fark etmez.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "No sooner",
+        "style": "trap"
+      },
+      {
+        "text": "had",
+        "style": "verb"
+      },
+      {
+        "text": "she",
+        "style": "plain"
+      },
+      {
+        "text": "arrived than her friends called her.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "No sooner",
+        "style": "trap"
+      },
+      {
+        "text": "did",
+        "style": "verb"
+      },
+      {
+        "text": "the storm pass",
+        "style": "plain"
+      },
+      {
+        "text": "than the sun appeared.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "NO SOONER başında devrik yapı başlar", color: R },
+      { text: "Yardımcı fiil (had/did/was) özneyi takip eder", color: Y },
+      { text: "THAN ile ikinci olay bağlanır", color: G }
+    ],
+    question: { sentence: "No sooner _____ the project completed than the team celebrated their success.", options: ["A) the manager had","B) had the manager","C) the manager has","D) has the manager"] },
+    answerLabel: "B) HAD THE MANAGER",
+    cozumText: "NO SOONER'dan sonra 'had' (yardımcı fiil) gelir, ardından özne 'the manager'.",
+    avciKodu: "NO SOONER + THAN = Devrik Yapı Sinyali | Yardımcı Fiil ÖNCE, Özne SONRA | Normal sıra = ✗",
+  }),
+  lesson({
+    id: "hardly-scarcely-when-inversion", epNum: 37, audioFolder: "master-37",
+    hookTitle: "HARDLY/SCARCELY...WHEN TUZAĞI!",
+    kuralLines: ["Hardly/Scarcely + had + özne + fiil, when...","Devrik yapı: olumsuz başlayınca inversion zorunlu"],
+    narration: {
+      hook: "Hardly ve Scarcely ile başlayan cümlelerde fiil ve özne yer değiştirir — bunu kaçıran öğrenci soruyu hemen yanlış yapar.",
+      kural: "Hardly/Scarcely ile başlayan cümlelerde auxiliary fiil (had, was, did vb.) öznenin önüne geçer. Bu yapı 'neredeyse hiç' anlamında geçmiş zamanda iki olayın hemen peş peşe gerçekleşmesini gösterir. Sıra: Hardly/Scarcely + auxiliary + özne + fiil + when + diğer cümle.",
+      neden: "Hardly ve Scarcely olumsuz anlamdaki adverblerdir; cümleyi olumsuzluk/kısıtlama ile başlattığında, İngilizcede soru veya vurgulanmış cümleler gibi inversion (yer değişimi) meydana gelir. Bu, dil yapısının doğal vurgulama mekanizmasıdır.",
+      tuzak: "Sınav sorusu normal sıra (Hardly he had) sunabilir veya when yerine başka bağlaç koyabilir; öğrenci devrik yapıyı kontrol etmezse yanlış seçer.",
+      ornek: "Cümle: 'Hardly had she arrived when the phone rang.' — Burada 'had' (auxiliary) 'she' (özne) öncesine geçmiştir. Eğer normal sıra olsaydı 'Hardly she had arrived' olurdu ama bu yanlıştır.",
+      soru: "Aşağıdaki cümlede boşluğu doğru şekilde tamamlayın ve devrik yapının kuralını kontrol edin.",
+      cozum: "Hardly ile başlayan cümlede auxiliary fiil öznenin önüne geçmelidir. Doğru sıra: Hardly + had + özne + fiil. When bağlacı ikinci cümleyi bağlar.",
+      avci: "Hardly/Scarcely gördün → hemen 'had/was/did + özne' ara → when'i kontrol et → devrik yapı tamamlandı!",
+    },
+    nedenBadge: "OLUMSUZ BAŞLAMA KURALI",
+    nedenText: "Hardly ve Scarcely cümleyi olumsuz başlattığı için auxiliary fiil öznenin önüne geçer, tıpkı sorularda olduğu gibi.",
+    tuzakText: "ÖSYM normal sırayı (Hardly had he) sunup, öğrenciyi devrik yapıyı unutturtmaya çalışır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Hardly",
+        "style": "trap"
+      },
+      {
+        "text": "had",
+        "style": "verb"
+      },
+      {
+        "text": "we",
+        "style": "plain"
+      },
+      {
+        "text": "finished",
+        "style": "verb"
+      },
+      {
+        "text": "dinner",
+        "style": "plain"
+      },
+      {
+        "text": "when",
+        "style": "trap"
+      },
+      {
+        "text": "the guests arrived.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Scarcely",
+        "style": "trap"
+      },
+      {
+        "text": "had",
+        "style": "verb"
+      },
+      {
+        "text": "the meeting begun",
+        "style": "plain"
+      },
+      {
+        "text": "when",
+        "style": "trap"
+      },
+      {
+        "text": "an urgent call interrupted it.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Hardly/Scarcely = olumsuz adverb, cümle başında inversion tetikler", color: R },
+      { text: "Auxiliary fiil (had/was/did) özne öncesine geçer", color: Y },
+      { text: "When bağlacı ikinci olayı bağlar, devrik yapı değişmez", color: G }
+    ],
+    question: { sentence: "_____ had the storm passed _____ the sun emerged from behind the clouds.", options: ["A) Hardly / than","B) Hardly / when","C) Scarcely / before","D) Scarcely / than"] },
+    answerLabel: "B) HARDLY/WHEN",
+    cozumText: "Hardly devrik yapı gerektirir; when iki olayı bağlayan doğru bağlaçtır.",
+    avciKodu: "Hardly/Scarcely → aux + özne kontrol ✓ → when/before seç (when daha yaygın) ✓ → cevap B",
+  }),
+  lesson({
+    id: "by-the-time", epNum: 38, audioFolder: "master-38",
+    hookTitle: "BY THE TIME TUZAĞI!",
+    kuralLines: ["By the time = belirli bir zaman noktasına kadar","Sonraki fiil PERFECT tense olmalı"],
+    narration: {
+      hook: "By the time ile başlayan cümlede zaman karmaşası yaşayan adaylar, sınav salonunda çıkmazda kalıyor.",
+      kural: "By the time, 'belirli bir zaman noktasına kadar' anlamında kullanılır ve sonrasında gelen fiil Perfect tense (have/has + past participle) şeklinde olmalıdır. Eğer Simple Past yazarsanız, iki olayın zamansal sırası belirsiz kalır.",
+      neden: "By the time cümlesi, bir olayın diğer olaydan ÖNCE tamamlanmış olduğunu gösterir. Bu nedenle Perfect tense gereklidir çünkü 'tamamlanmış' anlamını taşır. Sağında her zaman bir zaman ifadesi, solunda Perfect tense fiil aranır.",
+      tuzak: "Sınav sorularında by the time'dan sonra Simple Past yazılı şıklar sunulur; öğrenci zamansal ilişkiyi göremeyip yanlış seçer.",
+      ornek: "By the time I arrived at the station, the train had already left. — Burada 'arrived' (Simple Past) ana olay, 'had left' (Perfect) ise ondan önce tamamlanan olay. By the time'dan sonra Perfect tense gelmiş.",
+      soru: "Şimdi sana by the time yapısında bir sınav sorusu göstereceğim; dikkatini Perfect tense'e ver.",
+      cozum: "By the time'dan sonra gelen fiil Perfect tense olmalıdır çünkü bu olay, by the time'dan sonraki zaman noktasından ÖNCE tamamlanmış olmalıdır. Simple Past seçilirse zamansal sıralama bozulur.",
+      avci: "BY THE TIME = önceki olay PERFECT, sonraki olay SIMPLE PAST. Zaman sırası: Perfect → Simple Past.",
+    },
+    nedenBadge: "ZAMAN SIRALAMASI ÖNEMLİ",
+    nedenText: "By the time cümlesi, iki olayın zamansal ilişkisini gösterir; önceki olay mutlaka Perfect tense'te olmalıdır.",
+    tuzakText: "ÖSYM, by the time'dan sonra Simple Past yazıp Perfect tense'i atlatan öğrenciyi seçtirmeye çalışır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "By the time",
+        "style": "trap"
+      },
+      {
+        "text": "she finished her homework,",
+        "style": "plain"
+      },
+      {
+        "text": "her friends had already gone",
+        "style": "verb"
+      },
+      {
+        "text": "to the cinema.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "By the time",
+        "style": "trap"
+      },
+      {
+        "text": "the doctor arrived,",
+        "style": "plain"
+      },
+      {
+        "text": "the patient had recovered",
+        "style": "verb"
+      },
+      {
+        "text": "from the shock.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "By the time = belirli zaman noktasına kadar", color: G },
+      { text: "Sonraki fiil MUTLAKA Perfect tense (have/has + past participle)", color: Y },
+      { text: "Simple Past yazılırsa zamansal sıralama kaybolur", color: R }
+    ],
+    question: { sentence: "By the time the conference started, most delegates _____ their registration forms.", options: ["A) submitted","B) have submitted","C) had submitted","D) were submitting"] },
+    answerLabel: "C) HAD SUBMITTED",
+    cozumText: "By the time'dan sonra Perfect tense (had submitted) gelir; olay önceden tamamlanmış.",
+    avciKodu: "BY THE TIME + PERFECT TENSE ← Zaman sırası: Önceki olay (Perfect) → Sonraki olay (Simple Past)",
+  }),
+  lesson({
+    id: "as-soon-as", epNum: 39, audioFolder: "master-39",
+    hookTitle: "AS SOON AS TUZAĞI!",
+    kuralLines: ["AS SOON AS = hemen, derhal, anında","İki fiil arasında zaman bağlantısı kurar"],
+    narration: {
+      hook: "Bir olayın hemen ardından diğeri başlıyor — işte bu bağlantıyı AS SOON AS kuruyor.",
+      kural: "AS SOON AS, iki eylemi zaman açısından bağlar: birincisi bittiğinde, ikincisi hemen başlar. Yapı: AS SOON AS + zaman cümlesi (Present Simple), ana cümle (Future/Imperative). Örneğin: 'As soon as you arrive, call me.' — Siz vardığınız an, ben çağırırım.",
+      neden: "İngilizce, gelecek zaman cümlelerinde (Future Simple) zaman cümlesi kısmında Present Simple kullanır. AS SOON AS'ın solunda gelecek eylem, sağında (zaman cümlesi içinde) şimdiki zaman gelir. Bu, İngilizcenin zaman mantığının temel kuralıdır.",
+      tuzak: "ÖSYM, AS SOON AS'ın ardından WILL veya GOING TO koyduğu şıkları sunarak, öğrenciyi zaman cümlesi kuralını ihlal etmeye çeker.",
+      ornek: "Cümle: 'As soon as the meeting finishes, we will discuss the results.' — Toplantı bittiği an, sonuçları tartışacağız. AS SOON AS'ın ardında 'finishes' (Present Simple) gelir, ana cümlede 'will discuss' (Future Simple) vardır.",
+      soru: "Şimdi sana, AS SOON AS yapısını test eden bir soru gösterelim — hangisi doğru?",
+      cozum: "Doğru cevap, AS SOON AS'ın ardından Present Simple kullanandır. Zaman cümlesi kuralı gereği, gelecek bağlamda bile şimdiki zaman gerekir.",
+      avci: "AS SOON AS = gelecek cümlede Present Simple zorunlu, WILL yasak!",
+    },
+    nedenBadge: "ZAMAN BAĞLANTISI SİNYALİ",
+    nedenText: "AS SOON AS, iki olayın çok yakın zaman içinde peş peşe gerçekleştiğini gösterir.",
+    tuzakText: "ÖSYM, AS SOON AS'ı WHEN yerine geçebileceğini düşündürerek, zaman cümlesi kuralını (Present Simple) unutturur.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "As soon as",
+        "style": "trap"
+      },
+      {
+        "text": "she receives",
+        "style": "verb"
+      },
+      {
+        "text": "the email, she will respond immediately.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "As soon as",
+        "style": "trap"
+      },
+      {
+        "text": "you finish",
+        "style": "verb"
+      },
+      {
+        "text": "your homework, you can play outside.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "As soon as",
+        "style": "trap"
+      },
+      {
+        "text": "the sun rises",
+        "style": "verb"
+      },
+      {
+        "text": ", the birds start singing.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "AS SOON AS'ın ardı sıra Present Simple gelir (finishes, receives, arrives).", color: G },
+      { text: "Ana cümlede Future Simple (will + verb) veya Imperative (command) kullanılır.", color: Y },
+      { text: "WILL, AS SOON AS'ın hemen ardına gelmez — bu çok yaygın hata.", color: R }
+    ],
+    question: { sentence: "_____ the train arrives, we will pick you up from the station.", options: ["A) As soon as you will arrive","B) As soon as the train arrives","C) When the train will arrive","D) Immediately the train will arrive"] },
+    answerLabel: "B) AS SOON AS PRESENT",
+    cozumText: "AS SOON AS'ın ardı sıra Present Simple (arrives) zorunludur.",
+    avciKodu: "AS SOON AS + Present Simple ✓ | AS SOON AS + will ✗ | Zaman cümlesi = Present!",
+  }),
+  lesson({
+    id: "rather-than", epNum: 40, audioFolder: "master-40",
+    hookTitle: "RATHER THAN TUZAĞI!",
+    kuralLines: ["Rather than + fiil (base form veya -ing)","Seçim/tercih anlamında kullanılır"],
+    narration: {
+      hook: "Rather than sadece bir bağlaç değil, seçim yaparken kullandığımız güçlü bir tercih ifadesidir.",
+      kural: "Rather than'dan sonra her zaman fiil base form (to olmadan) veya -ing formu gelir. Asla to-infinitive gelmez. Cümlenin ilk yarısındaki fiil formuyla tutarlılık önemlidir.",
+      neden: "Rather than karşılaştırma yapan bir yapı olduğu için, her iki tarafta da aynı gramer yapısı kullanılmalıdır (parallelism). Bu sayede cümle dengeli ve anlaşılır olur.",
+      tuzak: "Sınav yazarları rather than'dan sonra 'to + verb' koyarak öğrenciyi kandırır; oysa doğru form base verb veya -ing'dir.",
+      ornek: "Rather than waiting for a promotion, she decided to start her own business. Burada 'waiting' (-ing formu) 'decided' ile paralel yapıdadır ve tercih açıkça görülür.",
+      soru: "Şimdi aşağıdaki cümlede doğru formu seçerek rather than tuzağından kurtulun.",
+      cozum: "Rather than'dan sonra base form veya -ing gelmelidir; to-infinitive asla gelmez. Cümlenin diğer tarafıyla parallelism sağlanmalıdır.",
+      avci: "Rather than → base verb VEYA -ing ✓ | Rather than → to + verb ✗",
+    },
+    nedenBadge: "TERCİH VE KARŞITLIK",
+    nedenText: "Rather than iki seçeneği karşılaştırırken, hangisini tercih ettiğimizi gösterir.",
+    tuzakText: "ÖSYM, rather than'dan sonra yanlış fiil formu (to-infinitive) koyarak öğrenciyi tuzağa düşürür.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Rather than",
+        "style": "trap"
+      },
+      {
+        "text": "complaining",
+        "style": "verb"
+      },
+      {
+        "text": "about the problem, he took action to solve it.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "I prefer",
+        "style": "plain"
+      },
+      {
+        "text": "reading books",
+        "style": "verb"
+      },
+      {
+        "text": "rather than",
+        "style": "trap"
+      },
+      {
+        "text": "watching television.",
+        "style": "verb"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Rather than + base form/gerund = tercih gösterme", color: G },
+      { text: "Parallelism kuralı: her iki taraf aynı yapıda olmalı", color: G },
+      { text: "To-infinitive rather than'dan sonra YASAKLANMIŞTIR", color: R }
+    ],
+    question: { sentence: "The company decided _____ outsourcing the work, they hired full-time employees.", options: ["A) to outsource rather than","B) rather than to outsource","C) rather than outsourcing","D) outsourcing rather than"] },
+    answerLabel: "C) RATHER THAN",
+    cozumText: "Rather than'dan sonra -ing formu gelir; to-infinitive değil.",
+    avciKodu: "Rather than → kontrol et → base/ing mi? → EVET ✓ | to-infinitive mi? → HAYIR ✗",
+  }),
+  lesson({
+    id: "let-alone", epNum: 41, audioFolder: "master-41",
+    hookTitle: "LET ALONE TUZAĞI!",
+    kuralLines: ["Let alone = 'bir şey yok, başka şey de yok'","Olumsuz bağlamda kullanılır, ikinci şey daha imkansız"],
+    narration: {
+      hook: "Bir şeyi yapamayan biri, daha zor bir şeyi nasıl yapabilir?",
+      kural: "Let alone, olumsuz bir durumdan başlayıp daha ağır bir duruma geçer. Örneğin 'Türkçe konuşamıyor, let alone İngilizce' demek; Türkçe konuşamadığı için İngilizce konuşması imkansız demektir.",
+      neden: "Bu yapı mantıksal bir sıralama yapar: ilk şey zaten başarısız ise, ikinci şey (daha zor) kesinlikle başarısız olur. Solunda olumsuz durum, sağında daha imkansız durum vardır.",
+      tuzak: "Sınav, 'let alone' yerine 'much less', 'not to mention' ya da 'aside from' gibi yakın anlamlı yapıları sunarak öğrenciyi yanıltır; ancak 'let alone' sadece olumsuz zincir için kullanılır.",
+      ornek: "He can't even speak French, let alone Mandarin Chinese. = Fransızca bile konuşamıyor, Mandarin'i konuşması imkansız.",
+      soru: "Şimdi bir test cümlesi ile bu yapıyı tanıyıp doğru seçeneği bulabilir misin?",
+      cozum: "Let alone'dan sonra gelen durum, önceki durumdan daha imkansız/zor olmalıdır. Olumsuz bağlam korunmalı ve mantıksal sıralama bozulmamalıdır.",
+      avci: "Let alone = İlki başarısız → İkincisi DAHA başarısız. Olumsuzluk zinciri, sağında daha ağır durum.",
+    },
+    nedenBadge: "OLUMSUZLUK ZINCIRI",
+    nedenText: "Let alone, ilk durumun imkansız olduğunu söyleyip ikinci durumun daha da imkansız olduğunu vurgular.",
+    tuzakText: "ÖSYM, 'let alone' yerine 'much less' ya da 'not to mention' gibi benzer yapıları şıklara koyarak öğrenciyi yanıltır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "She couldn't afford a car,",
+        "style": "plain"
+      },
+      {
+        "text": "let alone",
+        "style": "trap"
+      },
+      {
+        "text": "a house.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "He has never read a novel,",
+        "style": "plain"
+      },
+      {
+        "text": "let alone",
+        "style": "trap"
+      },
+      {
+        "text": "written one.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Let alone her parents, she doesn't even know her own address. (Ebeveynlerini tanımıyor, kendisinin adresini bile bilmiyor.)", color: G },
+      { text: "I can't cook rice, let alone prepare a five-course meal. (Pirinç pişiremiyorum, beş çeşit yemek hazırlamak imkansız.)", color: Y }
+    ],
+    question: { sentence: "The company hasn't released a single product this year, _____ launched a successful marketing campaign.", options: ["A) much less","B) let alone","C) not to mention","D) aside from"] },
+    answerLabel: "B) LET ALONE",
+    cozumText: "Ürün yok → kampanya imkansız. Olumsuz zincir let alone ile kurulur.",
+    avciKodu: "Olumsuz durum₁ + let alone + Daha olumsuz durum₂ → Mantıksal imkansızlık sırası",
+  }),
+  lesson({
+    id: "reported-speech-zaman-kayması", epNum: 42, audioFolder: "master-42",
+    hookTitle: "DOLAYLÍ ANLATIMDA ZAMAN KAYMASINI KAÇIRMA!",
+    kuralLines: ["Doğru konuşmada Present → Reported'da Past","Zaman bir adım geriye kayıyor, her zaman"],
+    narration: {
+      hook: "Birinin söylediğini aktarırken, zaman makinesi geriye gidiyor — bunu bilmezsen sınavda hata yaparsın.",
+      kural: "Doğru konuşma (Direct Speech) geçmişte söylendiğinde, Reported Speech'te tüm fiiller bir zaman adım geriye kaymak zorundadır. Present Simple → Past Simple, Present Perfect → Past Perfect, will → would olur.",
+      neden: "Çünkü konuşma anı geçmiş olduğu için, o anki 'şimdi' bizim 'o zaman'ımızdır. Dinleyici için her şey geçmiş perspektiften anlatılır.",
+      tuzak: "ÖSYM, doğru konuşmanın zamanını aynen bırakıp, 'doğru cevap' gibi gösteren şıkları koyar; öğrenci zaman kaymayı unutup yanıltılır.",
+      ornek: "Direct: 'I am happy.' (şimdi söylüyor). Reported: She said (that) she was happy. — 'am' → 'was' oldu, çünkü konuşma geçmişte.",
+      soru: "Şimdi, bu kuralı test etmek için gerçek bir sınav sorusuna bakacaksın.",
+      cozum: "Doğru cevap, konuşmanın geçmiş olduğu bağlamda zamanı geriye kaymış olan şıktır. Diğer şıklar ya zamanı değiştirmemiş ya da yanlış zaman kullanmıştır.",
+      avci: "KURAL: Reported Speech = Zaman bir adım geriye. Direct Past → Reported Past Perfect. Direct Present → Reported Past. Direct will → Reported would. Şık seçerken: 'Konuşma geçmişte mi?' diye sor, evet ise zamanı geri kaydır.",
+    },
+    nedenBadge: "ZAMAN DÜZLEMİ KAYIŞI",
+    nedenText: "Konuşma anı geçmiş olduğu için, anlatılan olayın zamanı da geriye kaymak zorundadır.",
+    tuzakText: "ÖSYM, doğru konuşmanın zamanını değiştirmeden bırakıp, öğrenciyi yanıltıcı şıklarla tuzağa düşürür.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "She told me",
+        "style": "plain"
+      },
+      {
+        "text": "(that)",
+        "style": "trap"
+      },
+      {
+        "text": "she was",
+        "style": "verb"
+      },
+      {
+        "text": "working on the project.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "He said",
+        "style": "plain"
+      },
+      {
+        "text": "(that)",
+        "style": "trap"
+      },
+      {
+        "text": "he had already finished",
+        "style": "verb"
+      },
+      {
+        "text": "his homework.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "They announced",
+        "style": "plain"
+      },
+      {
+        "text": "(that)",
+        "style": "trap"
+      },
+      {
+        "text": "they would attend",
+        "style": "verb"
+      },
+      {
+        "text": "the conference.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Direct: 'I work here.' → Reported: She said she worked there. (Present → Past)", color: G },
+      { text: "Direct: 'I have seen it.' → Reported: He said he had seen it. (Present Perfect → Past Perfect)", color: Y },
+      { text: "Direct: 'I will come.' → Reported: She said she would come. (will → would)", color: G },
+      { text: "Tuzak: Zamanı değiştirmemiş şıklar yanıltıcıdır, her zaman kayma olmalı.", color: R }
+    ],
+    question: { sentence: "The manager announced that the company _____ a new office in the city center next year.", options: ["A) opens","B) had opened","C) would open","D) is opening"] },
+    answerLabel: "C) WOULD OPEN",
+    cozumText: "Konuşma geçmiş ('announced'), direct 'will' → reported 'would' olur.",
+    avciKodu: "announced (geçmiş) → zaman kayması başla → will → would. Şık C doğru. A/D şimdi zamanı (tuzak), B yanlış zaman.",
+  }),
+  lesson({
+    id: "wish-if-only-pismanlık", epNum: 43, audioFolder: "master-43",
+    hookTitle: "WISH/IF ONLY TUZAĞI: ZAMAN KARMAŞASI!",
+    kuralLines: ["WISH/IF ONLY + PAST = şimdiki pişmanlık","WISH/IF ONLY + PAST PERFECT = geçmiş pişmanlığı"],
+    narration: {
+      hook: "Geçmişe dönüş istiyorsanız, dileklerinizi zamanında söylemelisiniz — ama hangi zamanda?",
+      kural: "WISH ve IF ONLY, pişmanlık ve dilek ifade eder. Şimdiki duruma pişmanlık Past Simple ile, geçmiş olayına pişmanlık Past Perfect ile yazılır. Kısaca: bir zaman geriye gidiyorsun, ama ne kadar geriye?",
+      neden: "Pişmanlık, gerçeklikten uzaklaşmayı gerektirir; dilekçe ne kadar eski olursa, zaman formu da o kadar gerilere gider. Sağında 'now' gibi işaretler varsa Past Simple, 'yesterday/last year' varsa Past Perfect aranır.",
+      tuzak: "ÖSYM, Present Simple veya Present Perfect seçenekleri koyarak öğrenciyi 'pişmanlık' kelimesini görmeden gerçek zamanda bırakmaya çalışır.",
+      ornek: "I wish I studied harder yesterday (geçmiş olayı) vs. I wish I studied harder now (şimdiki duruma pişmanlık). Birincisi Past Perfect, ikincisi Past Simple — ikisi de 'studied' gibi görünse de bağlam farklı.",
+      soru: "Aşağıdaki cümlede boşluğu tamamlayan en uygun seçeneği bulun.",
+      cozum: "Cümlede 'now' veya geçmiş zaman işareti aranır. Eğer 'now' varsa Past Simple, 'yesterday/last year' varsa Past Perfect. Doğru seçenek her zaman pişmanlık zamanı kuralına uyar.",
+      avci: "WISH/IF ONLY → Pişmanlık = Zaman Geri Git | Şimdi'ye pişmanlık: Past Simple | Geçmiş'e pişmanlık: Past Perfect",
+    },
+    nedenBadge: "ZAMAN KAYMASI TUZAĞI",
+    nedenText: "Pişmanlık ifade etmek için gerçek zamandan bir adım geri gidilir; ÖSYM bu farkı görmeyenleri yakalar.",
+    tuzakText: "Sınav, pişmanlığın konusu (şimdi mi geçmiş mi) görmeden yanlış zaman seçtiren şıklar sunar.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "I wish",
+        "style": "plain"
+      },
+      {
+        "text": "I had studied",
+        "style": "trap"
+      },
+      {
+        "text": "harder",
+        "style": "plain"
+      },
+      {
+        "text": "for the exam last week.",
+        "style": "verb"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "If only",
+        "style": "plain"
+      },
+      {
+        "text": "she lived",
+        "style": "trap"
+      },
+      {
+        "text": "closer to",
+        "style": "plain"
+      },
+      {
+        "text": "the university now.",
+        "style": "verb"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Past Perfect (had + V3) = geçmiş olayına pişmanlık", color: G },
+      { text: "Past Simple (V2) = şimdiki duruma pişmanlık", color: Y },
+      { text: "'now' = Past Simple; 'yesterday/last year' = Past Perfect", color: R }
+    ],
+    question: { sentence: "I wish I _____ that job offer three months ago; it would have changed my career.", options: ["A) accept","B) accepted","C) had accepted","D) have accepted"] },
+    answerLabel: "C) HAD ACCEPTED",
+    cozumText: "Geçmiş olayına pişmanlık: 'three months ago' → Past Perfect (had + V3).",
+    avciKodu: "WISH + [zaman işareti] → Şimdi: Past Simple | Geçmiş: Past Perfect ✓",
+  }),
+  lesson({
+    id: "had-better-would-rather", epNum: 44, audioFolder: "master-44",
+    hookTitle: "HAD BETTER vs WOULD RATHER KARIŞIKLIĞI!",
+    kuralLines: ["Had better = güçlü tavsiye, uyarı","Would rather = kişisel tercih, istek"],
+    narration: {
+      hook: "İngilizce'de birisi sana 'Had better study!' derse, o sadece tavsiye değil, tehdit içeren uyarıdır.",
+      kural: "Had better, zorunluluk ve olumsuz sonuç duygusunu taşır — 'bunu yapmazsan kötü olur' anlamı vardır. Would rather ise tamamen kişisel tercih ve hoşlanmadır — 'ben bunu daha çok seviyorum' demektir.",
+      neden: "Had better, konuşmacının dış dünyada bir riski veya baskıyı hissettiğini gösterir; would rather ise tamamen içsel, duygusal bir seçimdir. Sağında her zaman bir tehdit veya sonuç gizlidir.",
+      tuzak: "Sınav, her iki yapıyı da 'tavsiye' olarak sunup, farkı görmeyenleri yanıltır; ayrıca 'better' kelimesini 'prefer' ile karıştırtmaya çalışır.",
+      ornek: "You had better finish your homework or you'll fail the exam. — Bu cümlede 'or you'll fail' kısmı, had better'ın uyarı/tehdit yönünü gösterir. Oysa I would rather watch a movie than read a book. cümlesi sadece kişisel tercih anlatır.",
+      soru: "Bu mini soruyu çözerek had better ile would rather arasındaki duygusal farkı yakalayacaksın.",
+      cozum: "Had better seçilirse, cümlede olumsuz sonuç veya zorunluluk olmalı; would rather seçilirse, sadece kişisel hoşlanma/tercih olmalı.",
+      avci: "Had better = uyarı + tehdit | Would rather = sadece tercih ✓",
+    },
+    nedenBadge: "TAVSIYE vs TERCİH FARKINI",
+    nedenText: "Had better dış baskı/sonuç içerir; would rather sadece kişisel hoşlanma ifade eder.",
+    tuzakText: "ÖSYM her ikisini de 'tavsiye' gibi göstererek yapısal farkı gizler.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "You",
+        "style": "plain"
+      },
+      {
+        "text": "had better",
+        "style": "trap"
+      },
+      {
+        "text": "leave",
+        "style": "verb"
+      },
+      {
+        "text": "now or the boss will be angry.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "I",
+        "style": "plain"
+      },
+      {
+        "text": "would rather",
+        "style": "trap"
+      },
+      {
+        "text": "stay",
+        "style": "verb"
+      },
+      {
+        "text": "home than go to the party.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Had better + fiil = zorunluluk + uyarı tonusu", color: R },
+      { text: "Would rather + fiil = kişisel tercih, olumsuz sonuç yok", color: G }
+    ],
+    question: { sentence: "She _____ call her mother immediately, or she will worry all night.", options: ["A) would rather","B) had better","C) would prefer","D) should like"] },
+    answerLabel: "B) HAD BETTER",
+    cozumText: "Cümlede 'or she will worry' uyarı/tehdit içeriyor; had better gerekli.",
+    avciKodu: "Had better → sonuç/tehdit varsa ✓ | Would rather → tercih/hoşlanma varsa",
+  }),
+  lesson({
+    id: "used-to-be-used-to-get-used-to", epNum: 45, audioFolder: "master-45",
+    hookTitle: "USED TO / BE USED TO / GET USED TO TUZAĞI!",
+    kuralLines: ["USED TO = geçmiş alışkanlık, şimdi yok","BE USED TO = şu an alışkın, devam ediyor","GET USED TO = alışma süreci başlıyor"],
+    narration: {
+      hook: "Aynı 'used' kelimesi üç farklı anlama gelebilir — hangisini seçersen sınav puanın değişir!",
+      kural: "USED TO geçmiş alışkanlığı anlatır (şimdi artık yapılmıyor), BE USED TO şu anki alışkanlığı gösterir (hâlâ yapıyorsun), GET USED TO ise alışma işleminin başlamasını ifade eder (henüz tam alışmadın). Üçü de 'alışkanlık' konusu ama zaman ve durum tamamen farklı.",
+      neden: "İngilizce, geçmiş, şimdiki ve gelecek alışkanlıkları ayrı ayrı kodlar. USED TO'da 'used' geçmiş fiil, BE USED TO'da 'used' sıfat gibi çalışır, GET USED TO'da ise 'used' yine sıfat ama süreç halindedir. Sağında ne geldiğine bakmalısın.",
+      tuzak: "Sınav, cümlede sadece 'used' kelimesini göstererek öğrenciyi yanıltır; oysa sağında 'to + fiil' mi, 'to + isim' mi, yoksa başında 'be' veya 'get' mi var, onu kontrol etmek gerekir.",
+      ornek: "I used to smoke cigarettes (geçmiş alışkanlık, artık bıraktım). I am used to smoking (şu an alışkınım, hâlâ yapıyorum). I am getting used to smoking (yeni başladım, henüz tam alışmadım). Her cümlede 'used' var ama anlam tamamen değişiyor.",
+      soru: "Şimdi sana bir cümle göstereceğim; hangi 'used to' yapısının doğru olduğunu bul — zamanı ve alışkanlığın durumunu dikkate al.",
+      cozum: "Cümlede geçmiş zaman işareti varsa USED TO, şimdiki durum ve alışkanlık varsa BE USED TO, alışma süreci varsa GET USED TO seç. Sağında 'to + fiil' mi 'to + isim' mi, onu da kontrol et.",
+      avci: "USED TO (geçmiş, bitti) → BE USED TO (şimdi, alışkın) → GET USED TO (süreç, alışıyor) — zaman ve durum sırasını hatırla!",
+    },
+    nedenBadge: "ZAMAN VE DURUM FARKIDIR",
+    nedenText: "Her üç yapı farklı zamansal perspektif ve alışkanlığın durumunu gösterir.",
+    tuzakText: "ÖSYM, 'used' kelimesinin aynı görünüşüne aldanarak yanlış zamanı seçtirtir.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "She",
+        "style": "plain"
+      },
+      {
+        "text": "used to",
+        "style": "trap"
+      },
+      {
+        "text": "work",
+        "style": "verb"
+      },
+      {
+        "text": "in London, but she moved to Paris five years ago.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "He is",
+        "style": "plain"
+      },
+      {
+        "text": "used to",
+        "style": "trap"
+      },
+      {
+        "text": "living",
+        "style": "verb"
+      },
+      {
+        "text": "in a big city now.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "They are getting",
+        "style": "plain"
+      },
+      {
+        "text": "used to",
+        "style": "trap"
+      },
+      {
+        "text": "eating",
+        "style": "verb"
+      },
+      {
+        "text": "spicy food since they moved to India.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "USED TO + fiil (bare) = geçmiş alışkanlık", color: G },
+      { text: "BE USED TO + isim/gerund = şimdiki alışkanlık", color: Y },
+      { text: "GET USED TO + isim/gerund = alışma süreci", color: R }
+    ],
+    question: { sentence: "After living abroad for two years, Maria _____ the different culture and now she enjoys it very much.", options: ["A) used to accept","B) is used to accepting","C) has used to accept","D) gets used to accepting"] },
+    answerLabel: "B) IS USED TO",
+    cozumText: "Şimdiki durum (now) ve alışkanlık (enjoys) → BE USED TO + gerund.",
+    avciKodu: "Zaman işareti: NOW (şimdi) → BE USED TO ✓ | Fiil: accepting (gerund) → BE USED TO ✓ | CEVAP: B",
+  }),
+  lesson({
+    id: "cleft-sentences-it-is-that", epNum: 46, audioFolder: "master-46",
+    hookTitle: "IT IS...THAT VURGU TUZAĞI!",
+    kuralLines: ["It is + vurgulanan öğe + that + cümlenin geri kalanı","Vurgulamak için yapı değişir, anlam aynı kalır"],
+    narration: {
+      hook: "Aynı cümleyi farklı şekilde vurgulamak istersen, yapı değişir ama anlam çoğu zaman aynı kalır — işte bu tuzak!",
+      kural: "Cleft sentence, 'It is + vurgulanan kısım + that + geri kalan' şeklinde kurulur. Örneğin 'John bought the car yesterday' cümlesinde 'John'u vurgulamak istersen 'It is John that bought the car yesterday' dersin. Vurgulanan kısım değişirse, that'ten sonraki yapı da değişebilir.",
+      neden: "İngilizce konuşurken önemli bilgiyi öne çıkarmak için bu yapıyı kullanırız. That'ten sonra gelen kısım, orijinal cümlenin geri kalanı olmalı ve fiil zamanı korunmalıdır.",
+      tuzak: "ÖSYM, vurgulanan öğeyi değiştirdiğinde that'ten sonraki fiili veya zamanı yanlış seçmeni ister; ya da 'it is' yerine başka yapı sunar.",
+      ornek: "Orijinal: 'She solved the problem with logic.' → Vurgu: 'It is with logic that she solved the problem.' Burada 'with logic' vurgulandı, that'ten sonra orijinal cümlenin geri kalanı (she solved the problem) geldi.",
+      soru: "Şimdi senin çözmek için hazır bir mini soru var — cleft yapısının doğru formunu bulabilir misin?",
+      cozum: "Doğru cevap C'dir: 'It is the manager that makes the final decision.' Vurgulanan 'the manager' after 'that' fiil ve nesne korunmuş, zaman değişmemiş.",
+      avci: "IT IS + [VURGULANAN] + THAT + [GERİ KALAN CÜMLENİN AYNI HALI] — vurgulanan kısım değişse bile that'ten sonrası orijinal kalır!",
+    },
+    nedenBadge: "VURGU İÇİN YAPIYA UYUM",
+    nedenText: "İngilizce, cümlenin hangi kısmını öne çıkarmak istiyorsa onu 'It is...that' arasına sıkıştırır.",
+    tuzakText: "ÖSYM, orijinal cümleyi tanımadığında veya that'ten sonraki fiili yanlış seçtiğinde kandırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "It is",
+        "style": "plain"
+      },
+      {
+        "text": "the quality of the product",
+        "style": "trap"
+      },
+      {
+        "text": "that",
+        "style": "verb"
+      },
+      {
+        "text": "attracts customers the most.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "It is",
+        "style": "plain"
+      },
+      {
+        "text": "yesterday",
+        "style": "trap"
+      },
+      {
+        "text": "that",
+        "style": "verb"
+      },
+      {
+        "text": "we received the important email.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "It is",
+        "style": "plain"
+      },
+      {
+        "text": "the professor",
+        "style": "trap"
+      },
+      {
+        "text": "that",
+        "style": "verb"
+      },
+      {
+        "text": "explained the complex theory.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "It is + vurgulanan öğe = cümlenin odak noktası, önemli kısım", color: G },
+      { text: "That + geri kalan = orijinal cümlenin yapısı korunur, zaman değişmez", color: Y },
+      { text: "Vurgulanan kısım değişirse, that'ten sonrası aynı kalır — bu fark sınavda soru olur", color: R }
+    ],
+    question: { sentence: "Original sentence: 'The team won the championship because of their dedication.' If we want to emphasize 'because of their dedication', which cleft sentence is correct? _____ that the team won the championship.", options: ["A) It is their dedication","B) It is because of their dedication","C) It is because their dedication","D) It is the dedication that"] },
+    answerLabel: "B) BECAUSE OF THEIR DEDICATION",
+    cozumText: "Vurgulanan kısım 'because of their dedication' — that'ten sonra 'the team won the championship' gelir.",
+    avciKodu: "VURGULANAN ÖĞE → IT IS [___] THAT [GERİ KALAN] ← ZAMAN/FİİL AYNI KALIR",
+  }),
+  lesson({
+    id: "causative-have-get-something-done", epNum: 47, audioFolder: "master-47",
+    hookTitle: "CAUSATIVE TUZAĞI: KİM YAPTI, SEN Mİ?",
+    kuralLines: ["have/get + object + past participle","Başkasına yaptırıyorsun, sen değil"],
+    narration: {
+      hook: "Fotoğrafını çektirdin mi, çektin mi? Cevap gramer kuralında gizli!",
+      kural: "Causative yapıda have veya get kullanıyorsun, sonra object (nesne) ve past participle (fiilinin -ed hali) gelir. Örneğin: 'I had my car repaired' — arabamı (başkasına) tamir ettirdim, ben tamir etmedim.",
+      neden: "İngilizce, kim işi yaptığını net göstermek ister. Eğer sen yaptıysan 'I repaired' dersin, ama başkasına yaptırdıysan 'I had it repaired' dersin. Bu ayrım, cümlenin anlamını tamamen değiştirir.",
+      tuzak: "Sınav, causative cümlede active voice fiili koyarak kandırır. Örneğin 'have + repair' yerine 'have + repaired' yazıp yazmamanızı test eder.",
+      ornek: "Cümle: 'She got her hair cut yesterday.' — Saçını (başkasına) kestirdi. 'cut' past participle, çünkü başkası kesti, o değil. Eğer 'got her hair cutting' yazarsan, yanlış olur.",
+      soru: "Aşağıdaki cümlede boşluğu doğru causative yapıyla doldurun.",
+      cozum: "Causative yapıda have/get sonrası object gelir, sonra mutlaka past participle. Doğru seçenek bu sıraya uyar.",
+      avci: "have/get → object → past participle (ASLA -ing değil, ASLA active fiil değil)",
+    },
+    nedenBadge: "BAŞKASI YAPAR, SEN DEĞİL",
+    nedenText: "Causative yapı, işi kendimiz yapmadığımız, başkasına yaptırdığımız durumları anlatır.",
+    tuzakText: "ÖSYM, active voice (ben yaptım) ile causative (yaptırdım) arasında karıştırma yaratır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "I",
+        "style": "plain"
+      },
+      {
+        "text": "had",
+        "style": "trap"
+      },
+      {
+        "text": "my house",
+        "style": "plain"
+      },
+      {
+        "text": "painted",
+        "style": "verb"
+      },
+      {
+        "text": "last month.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "They",
+        "style": "plain"
+      },
+      {
+        "text": "got",
+        "style": "trap"
+      },
+      {
+        "text": "their documents",
+        "style": "plain"
+      },
+      {
+        "text": "translated",
+        "style": "verb"
+      },
+      {
+        "text": "by a professional.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "We",
+        "style": "plain"
+      },
+      {
+        "text": "will have",
+        "style": "trap"
+      },
+      {
+        "text": "the website",
+        "style": "plain"
+      },
+      {
+        "text": "redesigned",
+        "style": "verb"
+      },
+      {
+        "text": "next week.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "have/get = başkasına yaptırma işareti", color: G },
+      { text: "Past participle (painted, translated, redesigned) = işi başkası yaptı", color: Y },
+      { text: "-ing form ASLA causative'de kullanılmaz", color: R },
+      { text: "Active voice fiil (paint, translate) causative'de ASLA tek başına gelmez", color: R }
+    ],
+    question: { sentence: "The company _____ its annual report _____ by an external auditor.", options: ["A) had; audited","B) has; auditing","C) got; audit","D) will have; auditing"] },
+    answerLabel: "A) HAD; AUDITED",
+    cozumText: "had (causative) + object + audited (past participle) = başkasına yaptırdı",
+    avciKodu: "have/get + [kişi/şey] + [fiil-ed] ← Bu sıra SABIT. -ing veya bare verb = TUZAK!",
+  }),
+  lesson({
+    id: "mixed-conditionals-zaman-karması", epNum: 48, audioFolder: "master-48",
+    hookTitle: "MIXED CONDITIONALS: ZAMANI KARIŞTIRANLAR!",
+    kuralLines: ["Geçmiş koşul + şimdiki sonuç veya tersi","Zaman düzeylerini ayırt etmelisin"],
+    narration: {
+      hook: "Ya geçmişte yapmazsam, şimdi ne olurdu? İşte bu Mixed Conditional'ın sırrı!",
+      kural: "Mixed Conditional, koşul cümlesi ile sonuç cümlesi farklı zaman düzeylerinde olduğunda kullanılır. Örneğin, geçmişte alınan bir karar, bugünkü durumu etkiliyor olabilir. Her zaman kendi kuralını takip eder: geçmiş için past perfect, şimdiki için would + verb.",
+      neden: "Gerçek hayatta, geçmiş olaylar şimdiki sonuçlara yol açar. Dilbilgisi de bu mantığı yansıtır. Koşul geçmişse Past Perfect, sonuç şimdiyse would + base verb kullanılır.",
+      tuzak: "Sınav sorusu tüm fiilleri aynı zamanda sunarak, öğrenciyi standart If I had... I would have... kalıbına yönlendirir; oysa sonuç şimdiki olabilir.",
+      ornek: "If you had studied harder, you would understand this topic now. — Geçmiş koşul (had studied), şimdiki sonuç (would understand).",
+      soru: "Şimdi sana, koşul ve sonucun zamanlarını doğru seçmen gereken bir cümle göstereceğim.",
+      cozum: "Koşul geçmişte (If you had...), sonuç şimdiki duruma etki ediyorsa (would + verb), bu Mixed Conditional Type 3-2'dir. Zamanları karıştırma, her biri kendi kuralını takip eder.",
+      avci: "GEÇMIŞ KOŞUL + ŞİMDİKİ SONUÇ = Past Perfect + would + V1 | Zaman uyumsuzluğu gördüğün anda Mixed Conditional'ı düşün!",
+    },
+    nedenBadge: "ZAMAN UYUMSUZLUĞU KURALı",
+    nedenText: "Koşul ve sonuç farklı zaman düzeylerindeyse, her biri kendi zamanını korur.",
+    tuzakText: "ÖSYM, tüm kısımları aynı zamanda koymaya çalışır; sen farkı görüp doğru zamanı seçmelisin.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "If",
+        "style": "plain"
+      },
+      {
+        "text": "you had listened",
+        "style": "verb"
+      },
+      {
+        "text": "to my advice",
+        "style": "plain"
+      },
+      {
+        "text": "you",
+        "style": "plain"
+      },
+      {
+        "text": "would know",
+        "style": "verb"
+      },
+      {
+        "text": "the answer now.",
+        "style": "trap"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "If",
+        "style": "plain"
+      },
+      {
+        "text": "she didn't have",
+        "style": "verb"
+      },
+      {
+        "text": "a car",
+        "style": "plain"
+      },
+      {
+        "text": "she",
+        "style": "plain"
+      },
+      {
+        "text": "couldn't have arrived",
+        "style": "verb"
+      },
+      {
+        "text": "on time yesterday.",
+        "style": "trap"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Past Perfect (had + V3) koşul cümlesi geçmiş olayı gösterir", color: G },
+      { text: "would + V1 sonuç cümlesi şimdiki durumu veya yeteneği ifade eder", color: Y },
+      { text: "Zaman göstergeleri (now, today, yesterday) yapıyı doğrular", color: R }
+    ],
+    question: { sentence: "If he _____ to university, he would have a better job today.", options: ["A) went","B) had gone","C) goes","D) would go"] },
+    answerLabel: "B) HAD GONE",
+    cozumText: "Geçmiş koşul (had gone) + şimdiki sonuç (would have) = Mixed Conditional.",
+    avciKodu: "GEÇMIŞ KOŞUL mi? → Past Perfect (had + V3) | ŞİMDİKİ SONUÇ mu? → would + V1 | Zaman uyumsuzluğu = MİXED!",
+  }),
+  lesson({
+    id: "ellipsis-so-do-i-neither", epNum: 49, audioFolder: "master-49",
+    hookTitle: "SO DO I / NEITHER DO I TUZAĞI!",
+    kuralLines: ["Aynı durumda katılmak için ellipsis kullan","Olumlu: SO + yardımcı fiil + özne"],
+    narration: {
+      hook: "Arkadaşın 'I love coffee' dediğinde sen 'Me too' mi diyorsun, yoksa 'So do I' mi?",
+      kural: "Birisi olumlu bir cümle söylediğinde aynı durumda olduğunu göstermek için 'SO + yardımcı fiil + özne' yapısını kullanırız. Olumsuz durumda ise 'NEITHER + yardımcı fiil + özne' yapısı geçerlidir. Bu yapı, tekrarlanan fiili atlayıp (ellipsis) sadece yardımcı fiili ve öznesi korur.",
+      neden: "Cümlenin başında yardımcı fiil gelir çünkü bu, İngilizcede ters soru yapısıdır (inversion). Ellipsis sayesinde konuşma doğal ve akıcı kalır; aksi halde 'I love coffee too' gibi basit cevap yerine 'So I love coffee' gibi garip görünürdü.",
+      tuzak: "Öğrenciler sık sık 'So I do' yazarlar (özne-fiil sırası) veya yanlış yardımcı fiil seçerler ('So am I' yerine 'So do I' yazarlar). ÖSYM bu hataları şıklara yerleştirir.",
+      ornek: "A: 'I have finished my homework.' B: 'So have I.' — Burada 'have' yardımcı fiilidir, özne (I) sonra gelir, ve orijinal fiil (finished) atlanmıştır.",
+      soru: "Aşağıdaki diyalogu tamamlayarak ellipsis kuralını doğru uygulayacak mısın?",
+      cozum: "Cümlenin türüne (olumlu/olumsuz) ve yardımcı fiil türüne (do/have/be) bakılır. 'I like pizza' olumlu ve 'do' içerdiğinden, katılmak için 'So do I' yazılır. Özne ve fiil sırası ters soru gibi olur.",
+      avci: "SINYAL: Olumlu + yardımcı fiil → SO + fiil + özne | Olumsuz → NEITHER + fiil + özne | Fiil türü cümleyle eşleş!",
+    },
+    nedenBadge: "TEKRAR KAÇINMA VE UYUM",
+    nedenText: "İngilizce aynı fiili tekrar etmemek için kısa form kullanır, ancak yardımcı fiilin sırası değişir.",
+    tuzakText: "ÖSYM, özne ve yardımcı fiilin yerini karıştırarak veya yanlış yardımcı fiil seçtirerek hata yaptırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "A: 'I",
+        "style": "plain"
+      },
+      {
+        "text": "have",
+        "style": "verb"
+      },
+      {
+        "text": "been to Paris.'",
+        "style": "plain"
+      },
+      {
+        "text": "B: 'So",
+        "style": "trap"
+      },
+      {
+        "text": "have",
+        "style": "verb"
+      },
+      {
+        "text": "I.'",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "A: 'I",
+        "style": "plain"
+      },
+      {
+        "text": "don't",
+        "style": "verb"
+      },
+      {
+        "text": "like spicy food.'",
+        "style": "plain"
+      },
+      {
+        "text": "B: 'Neither",
+        "style": "trap"
+      },
+      {
+        "text": "do",
+        "style": "verb"
+      },
+      {
+        "text": "I.'",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "A: 'She",
+        "style": "plain"
+      },
+      {
+        "text": "is",
+        "style": "verb"
+      },
+      {
+        "text": "a doctor.'",
+        "style": "plain"
+      },
+      {
+        "text": "B: 'So",
+        "style": "trap"
+      },
+      {
+        "text": "am",
+        "style": "verb"
+      },
+      {
+        "text": "I.'",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Olumlu cevap: SO + yardımcı fiil + özne", color: G },
+      { text: "Olumsuz cevap: NEITHER + yardımcı fiil + özne", color: G },
+      { text: "Yardımcı fiil cümleyle eşleşmeli (do/does/did/have/has/had/be)", color: Y },
+      { text: "Özne her zaman ters soru sırasında gelir", color: R }
+    ],
+    question: { sentence: "A: 'I haven't finished the project yet.' B: '_____ have I.'", options: ["A) So","B) Neither","C) Either","D) Nor"] },
+    answerLabel: "B) NEITHER",
+    cozumText: "Olumsuz cümleye olumsuz cevap: NEITHER + have + I.",
+    avciKodu: "Olumsuz sinyal (haven't) → NEITHER seç | Olumlu sinyal → SO seç | Yardımcı fiili cümleden kopyala",
+  }),
+  lesson({
+    id: "enough-too-to", epNum: 50, audioFolder: "master-50",
+    hookTitle: "ENOUGH/TOO...TO TUZAĞI!",
+    kuralLines: ["ENOUGH: isim/sıfat + enough + to","TOO: too + sıfat/zarf + to"],
+    narration: {
+      hook: "Aynı anlama gelen iki yapı, ama biri başa, biri sona gidiyor — hangisi?",
+      kural: "ENOUGH kelimesi, niteleyeceği isim veya sıfatın ÖNCESİNE gelir, sonra to + fiil gelir. TOO ise sıfat/zarfın ÖNCESİNE gelir, sonra to + fiil gelir. İkisinin de amacı 'sonuç' göstermektir, ama pozisyonları terstir.",
+      neden: "ENOUGH 'yeterlilik' anlamını taşır ve niteleyeceği kelimeyi destekler; TOO ise 'aşırılık' anlamını taşır ve sıfatı vurgular. Türkçede 'yeterince' ve 'çok fazla' gibi zarflar da sıfatın önüne gelir, bu sebeple İngilizce de aynı kuralı takip eder.",
+      tuzak: "Şıklarda 'too enough' veya 'enough too' gibi yanlış kombinasyonlar, ya da doğru kelimeler ama ters sırada sunulur.",
+      ornek: "Cümle: 'She is intelligent enough to solve this problem' — burada 'intelligent' sıfat, 'enough' onun sonrasında gelir. Karşılaştırma: 'This problem is too difficult to solve' — burada 'too' sıfat 'difficult'in önünde gelir.",
+      soru: "Şimdi bu yapıyı sınav formatında test edelim ve hangi şıkkın doğru pozisyonu gösterdiğini bulalım.",
+      cozum: "Doğru cevap, enough'u isim/sıfatın sonrasına, too'yu sıfat/zarfın öncesine koyan şıktır; diğer tüm kombinasyonlar gramer açısından yanlıştır.",
+      avci: "ENOUGH = kelime + enough + to | TOO = too + kelime + to — sıra ters, anlam benzer!",
+    },
+    nedenBadge: "SÖZ DİZİMİ FARKIDIR",
+    nedenText: "Enough ve too aynı anlama gelse de, kelime sırası tamamen zıttır; yanlış sıra cümleyi gramer açısından yanlış yapar.",
+    tuzakText: "ÖSYM, şıklarda doğru kelimeyi yanlış konuma koyarak öğrencileri kandırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The water is",
+        "style": "plain"
+      },
+      {
+        "text": "too",
+        "style": "trap"
+      },
+      {
+        "text": "hot",
+        "style": "verb"
+      },
+      {
+        "text": "to drink.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "He has",
+        "style": "plain"
+      },
+      {
+        "text": "enough",
+        "style": "trap"
+      },
+      {
+        "text": "experience",
+        "style": "verb"
+      },
+      {
+        "text": "to lead the team.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "This book is",
+        "style": "plain"
+      },
+      {
+        "text": "too",
+        "style": "trap"
+      },
+      {
+        "text": "complicated",
+        "style": "verb"
+      },
+      {
+        "text": "to understand.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "ENOUGH: nitelik + enough + to (yeterlilik)", color: G },
+      { text: "TOO: too + nitelik + to (aşırılık)", color: Y },
+      { text: "Her iki yapı da sonuç gösterir, ama sıra zıttır", color: R }
+    ],
+    question: { sentence: "The test was _____ difficult _____ everyone to pass.", options: ["A) enough / to","B) too / to","C) to / too","D) too / for"] },
+    answerLabel: "B) TOO...TO",
+    cozumText: "Too sıfatın önüne, to fiilden önce gelir; aşırılık anlamı.",
+    avciKodu: "TOO + sıfat + TO → ✓ | ENOUGH + sıfat + TO → ✗ (enough sonra gelir)",
+  }),
+  lesson({
+    id: "as-long-as-on-condition-that", epNum: 51, audioFolder: "master-51",
+    hookTitle: "AS LONG AS / ON CONDITION THAT TUZAĞI!",
+    kuralLines: ["Koşul + ana cümle yapısı","Her ikisi de şart anlamı taşır"],
+    narration: {
+      hook: "Bir şeyin olması başka bir şeyin olmasına bağlıysa, İngilizce'de bunu nasıl söyleriz?",
+      kural: "AS LONG AS ve ON CONDITION THAT ikisi de koşul cümlesi kurar. AS LONG AS daha sık ve konuşma dilinde kullanılır; ON CONDITION THAT ise daha resmi ve yazı dilindedir. Her ikisi de \"şu şart sağlandığı sürece\" anlamını taşır.",
+      neden: "Bu yapılar, ana eylemin gerçekleşmesinin önceden belirlenmiş bir koşula tamamen bağlı olduğunu vurgular. Solunda koşul, sağında sonuç vardır ve bu ilişki zorunludur.",
+      tuzak: "ÖSYM, IF ile AS LONG AS / ON CONDITION THAT'ı karıştırmaya çalışır; IF daha genel şartı ifade ederken, bu yapılar daha kesin sınır ve süreklilik belirtir.",
+      ornek: "\"As long as you study hard, you will pass the exam.\" cümlesinde AS LONG AS koşul belirtir; koşul yerine ON CONDITION THAT koyarsak aynı anlamı taşır ama daha resmi olur.",
+      soru: "Şimdi sınav formatında bu yapıyı tanıyıp doğru seçeneği bulabilir misin?",
+      cozum: "Doğru cevap, koşul ve ana cümle arasında zorunlu ilişki kuran yapıdır. AS LONG AS veya ON CONDITION THAT kullanıldığında, koşul sağlanmadığı sürece ana eylem gerçekleşmez.",
+      avci: "AS LONG AS / ON CONDITION THAT = Koşul + Zorunlu Sonuç (IF'ten daha kesin!)",
+    },
+    nedenBadge: "KOŞUL VE SINIR BELIRTME",
+    nedenText: "Bu yapılar bir eylemin gerçekleşmesinin başka bir koşula bağlı olduğunu gösterir.",
+    tuzakText: "ÖSYM, benzer anlamlı bu iki yapıyı karıştırarak yanlış seçeneği doğru gibi sunabilir.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "As long as",
+        "style": "trap"
+      },
+      {
+        "text": "you have a valid passport,",
+        "style": "plain"
+      },
+      {
+        "text": "you can",
+        "style": "verb"
+      },
+      {
+        "text": "travel abroad.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "On condition that",
+        "style": "trap"
+      },
+      {
+        "text": "the weather remains clear,",
+        "style": "plain"
+      },
+      {
+        "text": "the flight will",
+        "style": "verb"
+      },
+      {
+        "text": "depart on time.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "AS LONG AS = koşul süresi boyunca, konuşma dili", color: G },
+      { text: "ON CONDITION THAT = resmi koşul, yazı dili", color: G },
+      { text: "Her ikisi de IF'ten daha zorunlu ve kesin", color: Y }
+    ],
+    question: { sentence: "The company will hire new employees _____ they meet the required qualifications and pass the background check.", options: ["A) if only","B) as long as","C) unless","D) in case"] },
+    answerLabel: "B) AS LONG AS",
+    cozumText: "AS LONG AS koşul sağlandığı sürece sonuç garantidir; zorunlu ilişki kurar.",
+    avciKodu: "AS LONG AS / ON CONDITION THAT → Koşul (MUTLAKA) → Sonuç ✓ | IF → Koşul (BELKİ) → Sonuç",
+  }),
+  lesson({
+    id: "due-to-owing-to-reason", epNum: 52, audioFolder: "master-52",
+    hookTitle: "DUE TO / OWING TO TUZAĞI!",
+    kuralLines: ["İsim tamlaması ile neden gösterir","Fiilden sonra gelmez, yalnızca isim"],
+    narration: {
+      hook: "Due to ve owing to'yu gördüğünde, hemen arkasında isim var mı diye kontrol et — çünkü bu iki yapı sadece isim sevgidir!",
+      kural: "Due to ve owing to, 'neden' anlamında kullanılan prepozisyonel ifadelerdir. Bunlar daima bir isim veya isim tamlamasından sonra gelir. Eğer fiil gerekirse, because of veya because kullanmalısın.",
+      neden: "Bu yapılar prepozisyon grubunun başında yer alır ve prepozisyon her zaman isim gerektirir. Sağında isim, solunda da genellikle 'be' fiili veya başka bir fiil bulunur.",
+      tuzak: "ÖSYM, due to/owing to'dan sonra V-ing (gerund) veya infinitive formlarını doğru gibi göstererek öğrenciyi kandırır; oysa bu formlar fiil davranışı gösterir.",
+      ornek: "The match was postponed owing to heavy rain. — Burada 'owing to' dan sonra 'heavy rain' (isim tamlaması) gelir, fiil değil. Eğer 'owing to raining' dersek, yanlış olur.",
+      soru: "Şimdi sınav formatında bir soru çözerek bu tuzaktan nasıl kurtulacağını öğren.",
+      cozum: "Doğru cevap due to/owing to'dan sonra gelen yapının İSİM TAMLAMASI olup olmadığını kontrol etmektir. Eğer fiil formu (V-ing, infinitive) varsa, o şık yanlıştır.",
+      avci: "DUE TO / OWING TO → İSİM GELMELİ (fiil değil) → 'be' + DUE TO/OWING TO + İSİM ✓",
+    },
+    nedenBadge: "İSİM TAŞIYICI YAPISI",
+    nedenText: "Due to ve owing to, kendilerinden sonra İSİM (veya isim tamlaması) gerektirir; fiil değil.",
+    tuzakText: "ÖSYM, due to/owing to'dan sonra fiil formları (V-ing, infinitive) koymak isteyen çeldirici şıklar sunar.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The flight was cancelled",
+        "style": "plain"
+      },
+      {
+        "text": "due to",
+        "style": "trap"
+      },
+      {
+        "text": "bad weather",
+        "style": "good"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Owing to",
+        "style": "trap"
+      },
+      {
+        "text": "the manager's absence",
+        "style": "good"
+      },
+      {
+        "text": ", the meeting was rescheduled",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Her success is",
+        "style": "plain"
+      },
+      {
+        "text": "owing to",
+        "style": "trap"
+      },
+      {
+        "text": "hard work",
+        "style": "good"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Due to / Owing to = prepozisyon grubu, 'neden' anlamı", color: G },
+      { text: "Arkasında daima İSİM veya isim tamlaması gelir", color: G },
+      { text: "Fiil formu (V-ing, to+V) gelmez; yanlış tuzaktır", color: R },
+      { text: "Cümlenin başında veya ortasında yer alabilir", color: Y }
+    ],
+    question: { sentence: "The project was delayed _____ the lack of funding and resources.", options: ["A) owing to","B) owing to having","C) owing to be","D) owing to being delayed"] },
+    answerLabel: "A) OWING TO",
+    cozumText: "Owing to'dan sonra isim tamlaması gelir; 'the lack of funding' isimdir.",
+    avciKodu: "DUE TO / OWING TO + İSİM ✓ | DUE TO / OWING TO + V-ing ✗ | DUE TO / OWING TO + to+V ✗",
+  }),
+  lesson({
+    id: "result-in-result-from", epNum: 53, audioFolder: "master-53",
+    hookTitle: "RESULT IN vs RESULT FROM KARIŞIKLIĞI!",
+    kuralLines: ["RESULT IN = sebep → sonuç yönü","RESULT FROM = sonuç ← sebep yönü"],
+    narration: {
+      hook: "Aynı sonucu anlatan iki fiil var ama hangisini seçeceğini biliyor musun?",
+      kural: "RESULT IN demek: bir şey yapıyor, o da başka bir şeye yol açıyor — sebepten sonuca doğru gidiyorsun. RESULT FROM demek: bir şey var, o da başka bir şeyden kaynaklanıyor — sonuçtan sebebine doğru bakıyorsun.",
+      neden: "İngilizce sebep-sonuç ilişkisini iki yönden görebilir: başlangıç noktasından (RESULT IN) veya bitiş noktasından (RESULT FROM). Cümlede hangi taraf ön planda ise o yön seçilir.",
+      tuzak: "Sınav her iki fiili de aynı cümlede sunup yanlış yönü seçtirtmeye çalışır; öğrenci anlamı bilse de yönü karıştırır.",
+      ornek: "The accident RESULTED IN three injuries — kaza sebep, yaralanma sonuç, sebepten sonuca gidiyoruz. The injuries RESULTED FROM the accident — yaralanma sonuç, kaza sebep, sonuçtan sebebine bakıyoruz.",
+      soru: "Şimdi bir sınav cümlesini çöz ve doğru yönü bul.",
+      cozum: "Cümlede hangi isim ön planda ise, o isimden başla: eğer sebep ön plandaysa RESULT IN, sonuç ön plandaysa RESULT FROM kullan.",
+      avci: "SEBEP ÖN PLANDA → RESULT IN | SONUÇ ÖN PLANDA → RESULT FROM",
+    },
+    nedenBadge: "YÖNLENDİRME FARKIDIR",
+    nedenText: "İki fiilin anlamı aynı ama sebep-sonuç ilişkisinin yönü tam tersidir.",
+    tuzakText: "ÖSYM her iki yapıyı aynı cümlede sunarak hangi yönün doğru olduğunu karıştırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The policy changes",
+        "style": "plain"
+      },
+      {
+        "text": "resulted in",
+        "style": "verb"
+      },
+      {
+        "text": "significant economic growth.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The company's success",
+        "style": "plain"
+      },
+      {
+        "text": "resulted from",
+        "style": "verb"
+      },
+      {
+        "text": "years of research and development.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Heavy rainfall",
+        "style": "plain"
+      },
+      {
+        "text": "resulted in",
+        "style": "trap"
+      },
+      {
+        "text": "severe flooding in rural areas.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "RESULT IN: sebep → sonuç yönü, sebebi söyle sonuç çıkar", color: G },
+      { text: "RESULT FROM: sonuç ← sebep yönü, sonucu söyle sebebi ara", color: Y },
+      { text: "Cümlede ön planda hangi taraf varsa o yön doğru", color: G }
+    ],
+    question: { sentence: "The delayed shipment _____ in customer dissatisfaction and lost sales.", options: ["A) resulted from","B) resulted in","C) has resulted","D) results"] },
+    answerLabel: "B) RESULTED IN",
+    cozumText: "Gecikmiş kargo sebep, müşteri memnuniyetsizliği sonuç — RESULT IN doğru.",
+    avciKodu: "DELAYED SHIPMENT (sebep) → DISSATISFACTION (sonuç) = RESULTED IN ✓",
+  }),
+  lesson({
+    id: "not-until-inversion", epNum: 54, audioFolder: "master-54",
+    hookTitle: "NOT UNTIL TUZAĞI: DEVRIK YAPIYI KAÇIRMA!",
+    kuralLines: ["NOT UNTIL başında → fiil devrik olur","Olumsuz yapı, fakat olumlu anlam taşır"],
+    narration: {
+      hook: "NOT UNTIL ile başlayan cümleler neden kafa karıştırıyor? Çünkü fiil ve özne yer değiştiriyor!",
+      kural: "NOT UNTIL bir zaman belirteci olarak cümlenin başına geldiğinde, yardımcı fiil (auxiliary verb) öznenin önüne geçer — bu devrik yapıdır. Örneğin: \"Not until 2020 did the company launch its new product\" — burada \"did\" (yardımcı fiil) \"the company\" (özne) öncesine yerleşir.",
+      neden: "İngilizcede olumsuz veya sınırlayıcı zaman belirteçleri cümlenin başında gelince, vurgu ve dramatiklik için fiil devrik olur. Bu, cümleyi daha güçlü ve resmi kılar.",
+      tuzak: "ÖSYM, NOT UNTIL'in ardından normal sıra (subject+verb) sunar ve öğrenci bunu doğru sanır; oysa devrik sıra (auxiliary verb+subject) gereklidir.",
+      ornek: "\"Not until she arrived did everyone understand the situation.\" — NOT UNTIL başında olduğu için \"did\" (yardımcı fiil) \"she\" (özne) öncesine geçmiş, devrik yapı oluşmuştur.",
+      soru: "Aşağıdaki cümlede NOT UNTIL devrik yapısı doğru şekilde kullanılmış mı? Test et!",
+      cozum: "NOT UNTIL cümlenin başında geldiğinde, yardımcı fiil özne öncesine geçmeli. Eğer normal sıra varsa (subject+verb), yapı yanlıştır.",
+      avci: "NOT UNTIL başında → AUX+SUBJECT+VERB sırası zorunlu; normal sıra = TUZAK!",
+    },
+    nedenBadge: "DEVRIK YAPININ KURALI",
+    nedenText: "NOT UNTIL cümlesi başında gelince, olumsuz bir zaman belirteci olarak işlev görür ve İngilizcede devrik (inversion) yapısını tetikler.",
+    tuzakText: "ÖSYM, öğrenciyi normal sıra (NOT UNTIL...subject+verb) ile devrik sıra (NOT UNTIL...verb+subject) arasında karıştırır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Not until",
+        "style": "trap"
+      },
+      {
+        "text": "the results were announced",
+        "style": "plain"
+      },
+      {
+        "text": "did",
+        "style": "verb"
+      },
+      {
+        "text": "the team realize their mistake.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Not until",
+        "style": "trap"
+      },
+      {
+        "text": "last year",
+        "style": "plain"
+      },
+      {
+        "text": "did",
+        "style": "verb"
+      },
+      {
+        "text": "I understand the importance of saving.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "NOT UNTIL = olumsuz zaman belirteci, cümle başında devrik yapı tetikler", color: R },
+      { text: "DID/DOES/DID = yardımcı fiil, özne öncesine geçer (inversion)", color: Y },
+      { text: "Devrik yapı = formal, dramatik, vurgulu anlatım", color: G }
+    ],
+    question: { sentence: "Not until the manager approved the budget _____ the project team begin their work.", options: ["A) could the","B) the could","C) could they","D) they could"] },
+    answerLabel: "C) COULD THEY",
+    cozumText: "NOT UNTIL başında → yardımcı fiil (could) özne (they) öncesine geçer.",
+    avciKodu: "NOT UNTIL başı → [AUX + SUBJECT + MAIN VERB] | A/B/D = normal sıra tuzağı",
+  }),
+  lesson({
+    id: "apposition-virgul-isim-tamlamasi", epNum: 55, audioFolder: "master-55",
+    hookTitle: "APPOSITION: İKİ İSİM BİR KİŞİ!",
+    kuralLines: ["Virgülle ayrılmış iki isim aynı kişi/şey","İkinci isim birincinin açıklaması/tanımı"],
+    narration: {
+      hook: "Bir cümlede aynı kişi iki farklı isimle anılabilir — ama nasıl?",
+      kural: "Apposition, virgülle ayrılmış iki ismin aynı kişi veya şeyi gösterdiği yapıdır. Birinci isim tanıtır, ikinci isim onu açıklar ya da başka bir adla anılmasını sağlar.",
+      neden: "İngilizce, bir kişinin kimliğini ya da rolünü hemen netleştirmek için bu yapıyı kullanır. Okuyucu virgülü gördüğünde 'ah, bu kişi başka bir şekilde de tanınıyor' diye anlar.",
+      tuzak: "Sınav sorusu virgülü çıkarıp iki ayrı yapı gibi gösterir, ya da apposition olmayan virgüllü yapıları apposition sanıyor gibi şıklar sunar.",
+      ornek: "Cümlede 'John, the manager, arrived late' dediğimizde John ve the manager aynı kişidir. Virgüller John'un rolünü açıklar.",
+      soru: "Şimdi apposition yapısını tanıyıp doğru cevabı bulmaya hazır mısın?",
+      cozum: "Doğru cevap apposition'ı gösteren seçenektir — virgülle ayrılmış iki isim, aynı varlık, açıklama ilişkisi.",
+      avci: "VIRGÜL + İSİM + VIRGÜL = Aynı kişi iki kez anılıyor → Apposition!",
+    },
+    nedenBadge: "AÇIKLAMA İÇİN TEKRAR",
+    nedenText: "Bir ismi açıklamak için yanına virgülle aynı kişi/şeyi gösteren başka bir isim koyarız.",
+    tuzakText: "ÖSYM virgülü görmezden gelip iki ayrı cümle sanıyor gibi şıklar sunar.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "My friend",
+        "style": "plain"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "Sarah",
+        "style": "good"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "is a doctor.",
+        "style": "verb"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The CEO",
+        "style": "plain"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "Mr. Thompson",
+        "style": "good"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "announced the merger.",
+        "style": "verb"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Istanbul",
+        "style": "plain"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "the largest city in Turkey",
+        "style": "good"
+      },
+      {
+        "text": ",",
+        "style": "trap"
+      },
+      {
+        "text": "attracts millions of tourists.",
+        "style": "verb"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Virgül + isim = Apposition sinyali", color: R },
+      { text: "İkinci isim birincinin kimliğini/rolünü açıklar", color: G },
+      { text: "Virgülsüz ise apposition değil, başka yapı", color: Y }
+    ],
+    question: { sentence: "Dr. Elizabeth, _____, has published three groundbreaking papers this year.", options: ["A) who is a neuroscientist and researcher","B) a neuroscientist and researcher,","C) being a neuroscientist and researcher","D) that is a neuroscientist and researcher"] },
+    answerLabel: "B) APPOSITION FORM",
+    cozumText: "Virgülle ayrılmış isim Dr. Elizabeth'i açıklayan apposition yapısı.",
+    avciKodu: "VIRGÜL + İSİM + VIRGÜL = Apposition ✓ | WHO/THAT/BEING = Başka yapı ✗",
+  }),
+  lesson({
+    id: "participle-clauses-indirgenmiş-cümlecik", epNum: 56, audioFolder: "master-56",
+    hookTitle: "PARTICIPLE CLAUSES TUZAĞI!",
+    kuralLines: ["V-ing veya V3 ile cümle kısalt","Özne aynı kalmalı, yoksa hata"],
+    narration: {
+      hook: "Bir cümleyi kısaltırken iki özne birden kullanırsan, sınav senin için tuzak kurar.",
+      kural: "Participle clause, ana cümlenin öznesiyle aynı kişi/nesneyi anlatmalıdır. V-ing (present participle) veya V3 (past participle) kullanarak yan cümleyi indirgenmiş hale getirirsin, ama her zaman özne tutarlılığını kontrol etmelisin.",
+      neden: "İngilizce, dilbilgisel ekonomi için cümleleri kısaltır; ancak bu kısaltma sırasında anlam kaybı yaşanmaması için özne hiçbir zaman değişmemelidir. Okuyucu, participle'ın ana özneyi işaret ettiğini otomatik olarak varsayar.",
+      tuzak: "ÖSYM, ana cümlenin öznesiyle uyuşmayan bir participle clause sunarak, öğrencinin mantık hatası yapmasını bekler.",
+      ornek: "\"Having finished the report, the manager left the office.\" — 'Having finished' (V3 participle), 'the manager' (özne) ile tutarlı. Eğer \"Having finished the report, the office was empty.\" dersek, 'having finished' ofise atfedilir ki bu yanlıştır.",
+      soru: "Şimdi senin için hazırladığım mini soruyu çöz ve participle clause'un özne tutarlılığını yakala.",
+      cozum: "Doğru cevap, participle clause'un ana cümlenin öznesiyle eşleştiği seçenektir; yanlış seçenekler, farklı özne taşıyan yapıları sunar.",
+      avci: "Participle gördün mü? Hemen sor: 'Bu participle, ana özneyi mi anlatıyor, yoksa başka birini mi?' Eşleşirse ✓, eşleşmezse ✗",
+    },
+    nedenBadge: "ÖZNE TUTARLILIĞI ŞART",
+    nedenText: "Participle clause'un öznesi, ana cümlenin öznesiyle aynı olmalı; aksi takdirde anlam bozulur.",
+    tuzakText: "ÖSYM, farklı özneyle participle clause sunarak mantık hatası yaptırtmaya çalışır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "Having completed",
+        "style": "verb"
+      },
+      {
+        "text": "the project,",
+        "style": "plain"
+      },
+      {
+        "text": "the team",
+        "style": "plain"
+      },
+      {
+        "text": "celebrated",
+        "style": "verb"
+      },
+      {
+        "text": "their success.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Exhausted",
+        "style": "verb"
+      },
+      {
+        "text": "by the long journey,",
+        "style": "plain"
+      },
+      {
+        "text": "the travelers",
+        "style": "plain"
+      },
+      {
+        "text": "rested",
+        "style": "verb"
+      },
+      {
+        "text": "at the hotel.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Being",
+        "style": "verb"
+      },
+      {
+        "text": "a talented musician,",
+        "style": "plain"
+      },
+      {
+        "text": "Sarah",
+        "style": "plain"
+      },
+      {
+        "text": "performed",
+        "style": "verb"
+      },
+      {
+        "text": "brilliantly.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Participle (V-ing/V3) her zaman ana cümlenin öznesiyle aynı kişi/nesneyi anlatır.", color: G },
+      { text: "Özne değişirse, cümle gramer ve anlam açısından yanlış olur.", color: R },
+      { text: "Participle clause, ana cümleden önce veya sonra gelebilir, ancak özne tutarlılığı her zaman korunmalı.", color: Y }
+    ],
+    question: { sentence: "_____ the urgent email, the director immediately called an emergency meeting.", options: ["A) Receiving","B) Having received","C) Being received","D) To receive"] },
+    answerLabel: "B) HAVING RECEIVED",
+    cozumText: "Participle 'the director' (özne) ile tutarlı, tamamlanmış eylem gerekli.",
+    avciKodu: "Participle → Özne kontrol → Ana cümle öznesiyle eşleş? → Evet = ✓ | Hayır = ✗",
+  }),
+  lesson({
+    id: "discourse-markers-zitlik-contrast", epNum: 57, audioFolder: "master-57",
+    hookTitle: "ZITLIK İŞARETLERİ TUZAĞI!",
+    kuralLines: ["Zıtlık işaretleri iki fikri karşılaştırır","Sağında/solunda mantık bağlantısı ara"],
+    narration: {
+      hook: "Bir cümle olumlu görünüyor ama 'on the other hand' gelince bütün oyun değişiyor—hangisi gerçek mesaj?",
+      kural: "Zıtlık işaretleri (on the other hand, nevertheless, nonetheless) iki fikri birbirine karşıt olarak sunar. İlk fikir kabul edilir ama ikinci fikir daha güçlü veya farklı bir açıdan sunulur. Bu işaretler 'evet ama' anlamında çalışır.",
+      neden: "İngilizce yazıda mantıksal akış önemlidir; zıtlık işaretleri okuyucuya 'dikkat, şimdi başka bir bakış açısı geliyor' diye sinyal verir. Solunda pozitif/kabul, sağında olumsuz/karşı fikir veya farklı perspektif beklenir.",
+      tuzak: "ÖSYM, zıtlık işaretinden sonra aynı yönde devam eden cümleler koyarak öğrenciyi yanıltır; örneğin 'The project was successful; nevertheless, it was very successful' gibi mantıksız seçenekler sunar.",
+      ornek: "Cümle: 'The economy improved last quarter. On the other hand, unemployment rates remained high.' İlk kısım olumlu (ekonomi iyileşti), zıtlık işareti sonrası olumsuz (işsizlik yüksek). Bu yapı doğru kontrastı gösterir.",
+      soru: "Şimdi sana bir boşluk doldurma sorusu sunacağım; zıtlık işaretinin sağında ne tür fikir gelmesi gerektiğini sen belirle.",
+      cozum: "Doğru cevap, zıtlık işaretinden sonra ilk fikirle çelişen veya farklı bir açı sunan seçenektir. Aynı yönde devam eden seçenekler tuzaktır.",
+      avci: "ZITLIK İŞARETİ = İlk fikir ✓ / Sonrası ✗ veya ≠ Mantık. Sağında karşı veya farklı görüş olmalı!",
+    },
+    nedenBadge: "FİKİR KARŞITLIĞI GÖSTERGESI",
+    nedenText: "Yazarın bir fikri kabul etmesine rağmen başka bir fikri vurgulamak istediğini gösterir.",
+    tuzakText: "ÖSYM, zıtlık işaretinden sonra aynı yönde fikir koyarak öğrenciyi yanıltır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The technology is innovative and cost-effective.",
+        "style": "plain"
+      },
+      {
+        "text": "Nevertheless,",
+        "style": "trap"
+      },
+      {
+        "text": "many companies",
+        "style": "plain"
+      },
+      {
+        "text": "hesitate",
+        "style": "verb"
+      },
+      {
+        "text": "to adopt it due to implementation challenges.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The proposal received strong support from management.",
+        "style": "plain"
+      },
+      {
+        "text": "On the other hand,",
+        "style": "trap"
+      },
+      {
+        "text": "the team",
+        "style": "plain"
+      },
+      {
+        "text": "raised",
+        "style": "verb"
+      },
+      {
+        "text": "serious concerns about its feasibility.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The research findings are promising.",
+        "style": "plain"
+      },
+      {
+        "text": "Nonetheless,",
+        "style": "trap"
+      },
+      {
+        "text": "further testing",
+        "style": "plain"
+      },
+      {
+        "text": "is",
+        "style": "verb"
+      },
+      {
+        "text": "required before commercial release.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "On the other hand = ama, fakat, tersine (zıt fikir başlat)", color: R },
+      { text: "Nevertheless/Nonetheless = yine de, buna rağmen (karşı görüş vur)", color: R },
+      { text: "Solunda kabul/olumlu, sağında karşı/olumsuz veya farklı açı", color: G }
+    ],
+    question: { sentence: "The report demonstrates significant cost savings. _____, the environmental impact of the process remains concerning to stakeholders.", options: ["A) Furthermore","B) On the other hand","C) In addition","D) As a result"] },
+    answerLabel: "B) ON THE OTHER HAND",
+    cozumText: "Maliyet tasarrufu (olumlu) vs. çevre etkisi (olumsuz) = zıtlık gerekli.",
+    avciKodu: "Zıtlık İşareti Motoru:\n→ Solda: ✓ (olumlu/kabul)\n→ Sağda: ✗ veya ≠ (olumsuz/karşı)\n→ İkisi KARŞIT ise: Nevertheless/On the other hand ✓\n→ İkisi AYNI YÖN ise: Furthermore/Moreover ✗",
+  }),
+  lesson({
+    id: "discourse-markers-reason-result", epNum: 58, audioFolder: "master-58",
+    hookTitle: "THEREFORE / THUS / CONSEQUENTLY TUZAĞI!",
+    kuralLines: ["Neden-sonuç bağlacı: sebep → sonuç","Virgül + bağlaç + virgül kuralı"],
+    narration: {
+      hook: "Bir cümle mantıklı sonuç çıkarıyorsa, onu bağlamak için hangi kelimeyi kullanmalısın?",
+      kural: "Therefore, thus, consequently gibi bağlaçlar önceki cümlenin sonucunu gösterir. Bu kelimeler her zaman virgülle çevrelenir: cümle + , therefore, + cümle. Aralarında mantıksal bir neden-sonuç ilişkisi olmalıdır.",
+      neden: "İngilizce yazı dilinde sonuç bildiren bağlaçlar, okuyucuya 'bunun sonucu şudur' mesajı verir. Solunda sebep, sağında sonuç aranır. Bu yapı mantıksal akışı güçlendirir.",
+      tuzak: "ÖSYM, bu bağlaçları cümlenin ortasına yerleştirerek veya mantıksız bir neden-sonuç ilişkisinde sunarak çelişki yaratır. Ayrıca 'and', 'but' gibi bağlaçlarla karıştırarak seçenekler sunar.",
+      ornek: "Örnek cümlede 'The company invested heavily in research; therefore, they developed innovative products.' yapısında therefore, virgülle çevrelenerek iki bağımsız cümleyi birleştirir. Solda yatırım (sebep), sağda ürün geliştirme (sonuç) vardır.",
+      soru: "Aşağıdaki cümlede boş yere hangi bağlaç uygun gelir, incele.",
+      cozum: "Therefore/thus/consequently, önceki cümlenin doğrudan sonucunu gösterir ve her zaman virgülle çevrelenir. Mantıksal ilişki net olmalıdır.",
+      avci: "THEREFORE = Sebep → Virgül → Therefore → Virgül → Sonuç (mantık zinciri kırılmaz!)",
+    },
+    nedenBadge: "SONUÇ BAĞLAYICI SİNYAL",
+    nedenText: "İki bağımsız cümleyi mantıksal neden-sonuç ilişkisiyle birleştirir.",
+    tuzakText: "ÖSYM, bu bağlaçları yanlış konumda veya yanlış anlamda sunarak öğrenciyi yanıltır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The weather was extremely cold",
+        "style": "plain"
+      },
+      {
+        "text": "therefore",
+        "style": "trap"
+      },
+      {
+        "text": "the outdoor event",
+        "style": "plain"
+      },
+      {
+        "text": "was postponed.",
+        "style": "verb"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "She studied diligently for months",
+        "style": "plain"
+      },
+      {
+        "text": "consequently",
+        "style": "trap"
+      },
+      {
+        "text": "she",
+        "style": "plain"
+      },
+      {
+        "text": "passed the exam with distinction.",
+        "style": "verb"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The factory reduced its emissions significantly",
+        "style": "plain"
+      },
+      {
+        "text": "thus",
+        "style": "trap"
+      },
+      {
+        "text": "improving",
+        "style": "verb"
+      },
+      {
+        "text": "the air quality in the region.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "Therefore/thus/consequently = sonuç bildiren bağlaç", color: G },
+      { text: "Her zaman virgülle çevrelenir: , bağlaç,", color: G },
+      { text: "Solda sebep, sağda sonuç mantığı", color: Y },
+      { text: "Cümle ortasına konulamaz, cümle başında yer alır", color: R }
+    ],
+    question: { sentence: "The government implemented strict environmental regulations; _____, pollution levels decreased significantly within two years.", options: ["A) and then","B) therefore","C) however","D) meanwhile"] },
+    answerLabel: "B) THEREFORE",
+    cozumText: "Therefore, sebep-sonuç ilişkisini gösterir; virgülle çevrelenir.",
+    avciKodu: "Sebep (regulations) → Therefore → Sonuç (pollution decreased) ✓ | And/However/Meanwhile ✗",
+  }),
+  lesson({
+    id: "referans-kelimeleri-this-that-such", epNum: 59, audioFolder: "master-59",
+    hookTitle: "THIS/THAT/SUCH ATIF TUZAĞI!",
+    kuralLines: ["This/That/Such önceki fikri işaret eder","Yanlış antesedent seçmek sınav kaybı"],
+    narration: {
+      hook: "Bir cümlede 'this' veya 'that' gördüğünde, hangisine atıf yaptığını biliyor musun?",
+      kural: "This/That/Such gibi referans kelimeleri, paragrafta önceki bir fikri, durumu veya ismi işaret eder. Bunlar kısaltma değil, bağlantı köprüsüdür. Doğru antesedenti (geri atıf yaptığı şeyi) bulmak, cümlenin anlamını değiştirir.",
+      neden: "İngilizce yazı akışında tekrar etmemek için bu kelimeler kullanılır. Sınav sorusu, öğrencinin paragrafı bütünsel olarak okumasını ve mantıksal bağlantıyı görmesini test eder. Yanlış seçim, cümleyi anlamsız veya çelişkili kılar.",
+      tuzak: "ÖSYM, yakın duran bir kelimeyi veya ismi şık olarak sunar; ama 'this' aslında daha önceki bir cümlenin tamamına veya başka bir isme atıf yapmaktadır.",
+      ornek: "Cümlede 'The government announced new policies. This decision shocked many citizens.' yazıyorsa, 'This' sadece 'policies' değil, 'announcement' olayının tamamına atıf yapar. Kontekst bunu belirler.",
+      soru: "Aşağıdaki paragrafta 'that' kelimesi hangi fikre atıf yapmaktadır? Seçenekleri okuyarak mantıksal bağlantıyı takip et.",
+      cozum: "Doğru cevap, 'that' veya 'this' kelimesinden hemen önceki cümlenin ana fikrini veya önceki paragrafın sonuç cümlesini işaret eder. Cümleyi oku, anlam bütünlüğünü kontrol et.",
+      avci: "THIS/THAT/SUCH → Bir adım geri git, önceki cümleyi oku, 'ne' işaret ettiğini sor, mantık tutarsa doğru!",
+    },
+    nedenBadge: "PARAGRAF BAĞLANTISI SINAVI",
+    nedenText: "Sınav yazarı, öğrenciyi yanlış cümleye veya yanlış isme bağlamaya çalışır.",
+    tuzakText: "Yakın kelime veya isim seçmek, ama gerçek referans daha uzaktadır.",
+    examples: [
+  {
+    "parts": [
+      {
+        "text": "The company invested heavily in renewable energy. ",
+        "style": "plain"
+      },
+      {
+        "text": "This",
+        "style": "trap"
+      },
+      {
+        "text": " decision ",
+        "style": "plain"
+      },
+      {
+        "text": "reflected",
+        "style": "verb"
+      },
+      {
+        "text": " their commitment to sustainability.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "Scientists discovered a new species in the Amazon. ",
+        "style": "plain"
+      },
+      {
+        "text": "Such",
+        "style": "trap"
+      },
+      {
+        "text": " findings ",
+        "style": "plain"
+      },
+      {
+        "text": "are",
+        "style": "verb"
+      },
+      {
+        "text": " rare and require further study.",
+        "style": "plain"
+      }
+    ]
+  },
+  {
+    "parts": [
+      {
+        "text": "The policy was rejected by parliament. ",
+        "style": "plain"
+      },
+      {
+        "text": "That",
+        "style": "trap"
+      },
+      {
+        "text": " outcome ",
+        "style": "plain"
+      },
+      {
+        "text": "disappointed",
+        "style": "verb"
+      },
+      {
+        "text": " environmental groups.",
+        "style": "plain"
+      }
+    ]
+  }
+],
+    breakdown: [
+      { text: "This = yakın geçmiş / şu anda söylenen fikir", color: G },
+      { text: "That = daha uzak / önceki paragrafın fikri", color: G },
+      { text: "Such = benzer tür / kategori işaret eder", color: G },
+      { text: "Antesedent = atıf yapılan kelime/fikir, her zaman öncedir", color: Y }
+    ],
+    question: { sentence: "The government introduced strict environmental regulations. Many industries opposed _____ decision because it increased operational costs.", options: ["A) the government's","B) that","C) this","D) such"] },
+    answerLabel: "B) THAT",
+    cozumText: "'That' önceki cümledeki 'regulations' kararını işaret eder, mantık tutarlı.",
+    avciKodu: "THIS/THAT/SUCH → [Kelimeyi gör] → [Bir cümle geri git] → [Anlam tutarsa ✓] → Seç!",
+  }),
+  lesson({
+    id: "master-avci-3-finale", epNum: 60, audioFolder: "master-60",
+    hookTitle: "MASTER AVCI 3 — FİNAL BOSS!",
+    kuralLines: ["Bütün motoru tek soruda çalıştır.", "Sinyal, devrik yapı, patron isim, anlam."],
+    narration: {
+      hook: "MASTER AVCI 3! FİNAL BOSS! Bütün öğrendiklerini tek cümlede kullanacaksın!",
+      kural: "Not only bir cümlenin başına geldiğinde devrik yapı ister; yardımcı fiil özneden önce gelir. But also ile ikinci parçayı bağlarsın.",
+      neden: "Not only...but also paralel yapı ve vurgu kurar; başta olduğunda inversion (devrik sözdizimi) zorunludur — bu, cümleye resmiyet ve vurgu katar.",
+      tuzak: "Öğrenci 'Not only' gördüğünde normal sözdizimini (S+V) seçer, devrik yapıyı (yardımcı fiil+özne) gözden kaçırır — ÖSYM bu yüzden normal sıralı şıkları çeldirici koyar.",
+      ornek: "Not only did the company launch a new product, but it also expanded into three new markets. Fiil: did launch / expanded. Sinyal: Not only...but also, devrik yapı.",
+      soru: "Şimdi sırada final soru var. A the team not only improved, B not only did the team improve, C the team did not only improve, D not only the team improved.",
+      cozum: "Cevap B, not only did the team improve. Not only cümle başında, devrik yapı zorunlu: yardımcı fiil (did) özneden (the team) önce gelir.",
+      avci: "Gör, fiili bul, S V O, patron ismi bul, sinyali yakala, devrik mi kontrol et, sağ sol kontrol, şıkları ele, anlamı doğrula, avla!",
+    },
+    nedenBadge: "TÜM MOTORU ÇALIŞTIR",
+    nedenText: "sinyali yakala, devrik yapıyı kontrol et, patron ismi bul, anlamı doğrula.",
+    tuzakText: "\"Not only\" başta iken normal sözdizimi (S+V) seçmek — devrik yapı zorunlu, gözden kaçırılıyor.",
+    examples: [
+      { parts: [
+        { text: "Not only", style: "trap" },
+        { text: "did", style: "verb" },
+        { text: "the company launch a new product, but it also expanded into three new markets.", style: "plain" },
+      ] },
+    ],
+    breakdown: [
+      { text: "sinyal → Not only...but also (devrik + paralel)", color: Y },
+      { text: "fiiller → did launch / expanded", color: G },
+    ],
+    question: { sentence: "_____ improve its efficiency, but it also reduced overall costs significantly.", options: ["A) The team not only improved", "B) Not only did the team improve", "C) The team did not only improve", "D) Not only the team improved"] },
+    answerLabel: "B) NOT ONLY DID",
+    cozumText: "Not only başta → devrik yapı zorunlu: yardımcı fiil + özne.",
+    avciKodu: "GÖR→FİİLİ BUL→S+V+O→PATRON İSMİ→\nSİNYALİ YAKALA→DEVRİK Mİ KONTROL ET→ŞIKLARI ELE→ANLAMI DOĞRULA→🎯AVLA",
   }),
 ];
 

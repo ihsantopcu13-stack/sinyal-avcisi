@@ -182,7 +182,8 @@ export async function gunlukDersUret({ soruIndexOffset = 0 } = {}) {
   return { lesson, outFile, totalSec };
 }
 
-const COLOR_MAP = { plain: "#ffffff", verb: "#faff00", trap: "#ff1744", good: "#39ff14" };
+// 2026-09-11 onaylı görsel standart (bkz. src/MasterLessonReel.jsx).
+const COLOR_MAP = { plain: "#f4f3ef", verb: "#eab308", trap: "#dc2626", good: "#22c55e" };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   gunlukDersUret().catch((err) => {

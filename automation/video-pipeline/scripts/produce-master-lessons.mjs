@@ -98,9 +98,12 @@ async function produceLesson(l) {
 
   const outFile = path.join(ROOT, "out", `master-${String(l.epNum).padStart(2, "0")}-${l.id}.mp4`);
   console.log(`  [#${l.epNum}] render ediliyor -> ${outFile}`);
+  // --concurrency=2 — sistem belleği uzun toplu render'larda tükenip
+  // arka plan işleri öldürülmesin diye (2026-09-11'de yaşandı) varsayılan
+  // (CPU çekirdek sayısına göre otomatik, çok daha yüksek) yerine sınırlı.
   await execFileAsync(
     "npx",
-    ["remotion", "render", "src/index.jsx", "MasterLessonReel", outFile, "--props", propsPath],
+    ["remotion", "render", "src/index.jsx", "MasterLessonReel", outFile, "--props", propsPath, "--concurrency=2"],
     { cwd: ROOT, shell: true, maxBuffer: 1024 * 1024 * 50 }
   );
   console.log(`  [#${l.epNum}] TAMAM: ${outFile}`);
