@@ -24,7 +24,8 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stderr.reconfigure(encoding="utf-8")
 
 import whisper
-from moviepy import AudioFileClip, ColorClip, CompositeVideoClip, TextClip
+from moviepy import AudioFileClip, ColorClip, CompositeVideoClip, TextClip, concatenate_audioclips
+from moviepy.audio.AudioClip import AudioClip
 
 WIDTH, HEIGHT = 1080, 1920
 FPS = 30
@@ -57,7 +58,7 @@ CARD_TRANSLATION_COLOR = "#FACC15"
 CARD_STROKE_WIDTH = 4
 CARD_LINE_GAP = 36
 CARD_TEXT_WIDTH = WIDTH - 160  # kenar boşluğu, satır kaydırma (wrap) için
-CARD_TAIL_BUFFER = 0.4  # kartın son satırı bir sonraki karta geçmeden önce bu kadar ekranda kalsın
+CARD_AUDIO_GAP = 0.35  # her satır sesi arasına eklenen doğal duraklama (sn)
 
 
 def transcribe_words(audio_path: str, model_size: str, language: str):
@@ -128,45 +129,57 @@ def parse_card_groups(script_path: str):
     return groups
 
 
-def build_narration_text_from_cards(groups):
-    parts = []
+def flat_card_lines(groups):
+    """15 satırı (5 grup x 3 satır) sırayla düz bir liste olarak döner —
+    dıştaki TTS üretim script'i bu sırayla line_000.mp3, line_001.mp3, ...
+    dosyalarını üretmeli."""
+    lines = []
     for g in groups:
-        parts.extend([g["signal"] + ".", g["example"], g["translation"]])
-    return " ".join(parts)
+        lines += [g["signal"], g["example"], g["translation"]]
+    return lines
 
 
-def align_cards_to_timestamps(groups, whisper_words):
-    """Her grubun 3 satırındaki kelime sayısı kadar whisper kelimesi tüketerek
-    her satıra (start, end) zaman aralığı atar. Toplam kelime sayısı uyuşmazsa
-    None döner (çağıran taraf whisper'ın ham transkripsiyonuna düşer)."""
-    flat_script_words = []
-    for g in groups:
-        flat_script_words += g["signal"].split() + g["example"].split() + g["translation"].split()
-    if len(flat_script_words) != len(whisper_words):
-        return None
+def silent_clip(duration: float):
+    return AudioClip(lambda t: 0, duration=duration)
 
+
+def load_card_audio_and_timing(groups, audio_dir: str):
+    """Whisper KULLANMAZ — her satır için ayrı üretilmiş mp3'ün gerçek
+    süresini (ffprobe/moviepy) doğrudan ölçüp zamanlamayı bundan hesaplar.
+    Karışık dilli (TR/EN) tek bir sesi whisper'a transkript ettirmenin
+    (dil karışıklığında tamamen yanlış kelime sayısı/metin üretmesi)
+    önüne geçer — bkz. 2026-09-11 carousel denemesi."""
+    audio_dir = Path(audio_dir)
+    clips = []
+    cursor = 0.0
     cards = []
-    idx = 0
+    line_idx = 0
     for g in groups:
-        line_ranges = []
+        line_starts = {}
         for key in ("signal", "example", "translation"):
-            n = len(g[key].split())
-            line_words = whisper_words[idx: idx + n]
-            line_ranges.append((line_words[0]["start"], line_words[-1]["end"]))
-            idx += n
+            line_path = audio_dir / f"line_{line_idx:03d}.mp3"
+            if not line_path.exists():
+                sys.exit(f"HATA: ses dosyası bulunamadı: {line_path} (--print-lines ile üretilen satır sırasına göre isimlendirilmeli)")
+            clip = AudioFileClip(str(line_path))
+            clips.append(clip)
+            line_starts[key] = cursor
+            cursor += clip.duration
+            clips.append(silent_clip(CARD_AUDIO_GAP))
+            cursor += CARD_AUDIO_GAP
+            line_idx += 1
         cards.append({
             "signal": g["signal"], "example": g["example"], "translation": g["translation"],
-            "signal_start": line_ranges[0][0],
-            "example_start": line_ranges[1][0],
-            "translation_start": line_ranges[2][0],
-            "group_end": line_ranges[2][1] + CARD_TAIL_BUFFER,
+            "signal_start": line_starts["signal"],
+            "example_start": line_starts["example"],
+            "translation_start": line_starts["translation"],
+            "group_end": cursor,
         })
-    return cards
+    full_audio = concatenate_audioclips(clips)
+    return cards, full_audio
 
 
-def build_cards_video(cards, audio_path: str, output_path: str, font: str):
-    audio = AudioFileClip(audio_path)
-    duration = audio.duration
+def build_cards_video(cards, audio_clip, output_path: str, font: str):
+    duration = audio_clip.duration
 
     background = ColorClip(size=(WIDTH, HEIGHT), color=(0, 0, 0), duration=duration)
     watermark = (
@@ -206,7 +219,7 @@ def build_cards_video(cards, audio_path: str, output_path: str, font: str):
         )
         layers += [signal_clip, example_clip, translation_clip]
 
-    video = CompositeVideoClip(layers, size=(WIDTH, HEIGHT)).with_audio(audio)
+    video = CompositeVideoClip(layers, size=(WIDTH, HEIGHT)).with_audio(audio_clip)
     print(f"Video render ediliyor -> {output_path}")
     video.write_videofile(output_path, fps=FPS, codec="libx264", audio_codec="aac")
 
@@ -266,51 +279,53 @@ def build_video(words, audio_path: str, output_path: str, font: str):
 
 def main():
     parser = argparse.ArgumentParser(description="mp3 + script -> senkronize 9:16 video")
-    parser.add_argument("--audio", help="Ses dosyası (mp3) — --print-narration ile birlikte gerekmez")
+    parser.add_argument("--audio", help="(word modu) Ses dosyası (mp3)")
+    parser.add_argument("--audio-dir", help="(cards modu) --print-lines sırasına göre line_000.mp3, line_001.mp3, ... içeren klasör")
     parser.add_argument("--script", required=True, help="Script metni (txt dosyası)")
-    parser.add_argument("--output", help="Çıktı video (mp4) — --print-narration ile birlikte gerekmez")
-    parser.add_argument("--model", default="medium", help="Whisper model boyutu: tiny/base/small/medium/large")
-    parser.add_argument("--language", default="tr", help="Ses dili (whisper dil kodu)")
+    parser.add_argument("--output", help="Çıktı video (mp4) — --print-lines ile birlikte gerekmez")
+    parser.add_argument("--model", default="medium", help="(word modu) Whisper model boyutu: tiny/base/small/medium/large")
+    parser.add_argument("--language", default="tr", help="(word modu) Ses dili (whisper dil kodu)")
     parser.add_argument("--font", default=DEFAULT_FONT, help="TTF/OTF font dosya yolu")
     parser.add_argument("--mode", choices=["word", "cards"], default="word",
-                         help="word: kelime kelime akış (varsayılan). cards: sinyal/örnek/çeviri 3 satır bir arada (boş satırla ayrılmış 3'er satırlık gruplar)")
-    parser.add_argument("--print-narration", action="store_true",
-                         help="(cards modu) script'i grup grup okuyup TTS için düz anlatım metnini yazdırır ve çıkar — video üretmez")
+                         help="word: kelime kelime akış, whisper ile senkronize (varsayılan). "
+                              "cards: sinyal/örnek/çeviri 3 satır bir arada — whisper KULLANMAZ, "
+                              "her satır için ayrı üretilmiş sesin gerçek süresine göre zamanlar "
+                              "(karışık dilli içerikte whisper transkripsiyonu güvenilmez).")
+    parser.add_argument("--print-lines", action="store_true",
+                         help="(cards modu) script'teki her satırı (sinyal/örnek/çeviri) sırayla, birer satır halinde yazdırır ve çıkar — "
+                              "her satır için ayrı ayrı TTS üretip line_000.mp3, line_001.mp3, ... olarak kaydedin, sonra --audio-dir ile video üretin")
     args = parser.parse_args()
 
     if not Path(args.script).exists():
         sys.exit(f"HATA: script dosyası bulunamadı: {args.script}")
 
-    if args.print_narration:
+    if args.print_lines:
         if args.mode != "cards":
-            sys.exit("HATA: --print-narration sadece --mode cards ile kullanılır.")
+            sys.exit("HATA: --print-lines sadece --mode cards ile kullanılır.")
         groups = parse_card_groups(args.script)
-        print(build_narration_text_from_cards(groups))
+        for line in flat_card_lines(groups):
+            print(line)
         return
 
-    if not args.audio or not args.output:
-        sys.exit("HATA: --audio ve --output gerekli (--print-narration kullanmıyorsanız).")
+    if not args.output:
+        sys.exit("HATA: --output gerekli (--print-lines kullanmıyorsanız).")
     if not Path(args.font).exists():
         sys.exit(f"HATA: font dosyası bulunamadı: {args.font}")
-    if not Path(args.audio).exists():
-        sys.exit(f"HATA: ses dosyası bulunamadı: {args.audio}")
-
-    whisper_words = transcribe_words(args.audio, args.model, args.language)
-    if not whisper_words:
-        sys.exit("HATA: whisper hiç kelime tespit edemedi.")
 
     if args.mode == "cards":
+        if not args.audio_dir:
+            sys.exit("HATA: --mode cards için --audio-dir gerekli (bkz. --print-lines).")
         groups = parse_card_groups(args.script)
-        cards = align_cards_to_timestamps(groups, whisper_words)
-        if cards is None:
-            total_script_words = sum(len(g["signal"].split()) + len(g["example"].split()) + len(g["translation"].split()) for g in groups)
-            sys.exit(
-                f"HATA: script kelime sayısı ({total_script_words}) whisper kelime sayısından "
-                f"({len(whisper_words)}) farklı — cards modunda güvenli bir eşleme yapılamıyor. "
-                f"Sesin script'i birebir okuduğundan emin olun."
-            )
-        build_cards_video(cards, args.audio, args.output, args.font)
+        cards, audio_clip = load_card_audio_and_timing(groups, args.audio_dir)
+        build_cards_video(cards, audio_clip, args.output, args.font)
     else:
+        if not args.audio:
+            sys.exit("HATA: --mode word için --audio gerekli.")
+        if not Path(args.audio).exists():
+            sys.exit(f"HATA: ses dosyası bulunamadı: {args.audio}")
+        whisper_words = transcribe_words(args.audio, args.model, args.language)
+        if not whisper_words:
+            sys.exit("HATA: whisper hiç kelime tespit edemedi.")
         script_words = load_script_words(args.script)
         print(f"Script'te {len(script_words)} kelime var.")
         words = align_script_to_timestamps(script_words, whisper_words)
