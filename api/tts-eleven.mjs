@@ -7,11 +7,11 @@
 
 import { rateLimit } from './_rateLimit.mjs';
 
-// ElevenLabs shared voice library'den "Murat - Serious, Soft, Male Narrator"
-// (tr-TR, sıcak/yumuşak anlatıcı) — önceki custom klonlanmış ses (Sinyal-TR)
-// beğenilmediği için değiştirildi. eleven_multilingual_v2 modeliyle çoklu
-// dili destekler.
-const DEFAULT_VOICE_ID = 'BIRihW545cVw2Iv97Fbs';
+// "George - Warm, Captivating Storyteller" (ElevenLabs premade, en-GB) —
+// kullanıcının 2026-09-11'de onayladığı kalıcı anlatıcı ses (önceki Murat,
+// tr-TR, BIRihW545cVw2Iv97Fbs, yerine). eleven_multilingual_v2 modeliyle
+// Türkçe metni de İngilizce native sesin tınısıyla üretir.
+const DEFAULT_VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
