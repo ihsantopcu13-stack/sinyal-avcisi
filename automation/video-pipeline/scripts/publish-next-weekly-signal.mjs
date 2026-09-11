@@ -148,7 +148,9 @@ async function uploadInstagram(item, videoUrl) {
 }
 
 async function uploadFacebook(item, videoUrl) {
-  return uploadViaBuffer("facebook", item.facebook || item.instagram, videoUrl);
+  return uploadViaBuffer("facebook", item.facebook || item.instagram, videoUrl, {
+    metadata: "{ facebook: { type: reel } }",
+  });
 }
 
 async function publishOne(item) {
