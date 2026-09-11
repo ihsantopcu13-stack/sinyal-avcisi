@@ -173,7 +173,48 @@ async function publishOne(item) {
   };
 }
 
+// Ana kuyruk state'i ilerlemiş olsa bile, tek seferlik bir platform hatası
+// yüzünden atlanmış öğeleri yeniden denemek için: data/facebook-retry.json
+// içine ["gun-tur", ...] id listesi konursa, bu id'ler için SADECE Facebook'a
+// yeniden post atılır (YouTube/Instagram'a dokunulmaz, state ilerletilmez),
+// sonra dosya boşaltılır.
+const FB_RETRY_PATH = path.join(ROOT, "data", "facebook-retry.json");
+
+async function retryFacebook() {
+  let ids;
+  try {
+    ids = JSON.parse(await readFile(FB_RETRY_PATH, "utf-8"));
+  } catch {
+    return [];
+  }
+  if (!Array.isArray(ids) || ids.length === 0) return [];
+
+  const results = [];
+  for (const id of ids) {
+    const item = WEEKLY_SIGNALS_QUEUE.find((i) => i.id === id);
+    if (!item) {
+      results.push({ id, error: "Kuyrukta bulunamadı" });
+      continue;
+    }
+    console.log(`Facebook yeniden deneniyor: ${item.id} (${item.videoFile})`);
+    try {
+      const videoUrl = await getReleaseAssetUrl(item.videoFile);
+      const post = await uploadFacebook(item, videoUrl);
+      results.push({ id: item.id, ...post });
+    } catch (err) {
+      results.push({ id: item.id, error: err.message });
+    }
+  }
+  await writeFile(FB_RETRY_PATH, "[]\n");
+  return results;
+}
+
 export async function publishNext() {
+  const retryResults = await retryFacebook();
+  if (retryResults.length) {
+    console.log("Facebook yeniden deneme sonuçları:", JSON.stringify(retryResults, null, 2));
+  }
+
   const state = await readState();
   if (state.nextIndex >= WEEKLY_SIGNALS_QUEUE.length) {
     console.log("Tüm haftalık sinyal videoları zaten yayınlandı.");
