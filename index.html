@@ -794,17 +794,10 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .tahta-wrap{background:#0b3d2e;background-image:radial-gradient(circle at 18% 15%,rgba(255,255,255,.035),transparent 55%),radial-gradient(circle at 82% 75%,rgba(255,255,255,.03),transparent 55%);border-radius:14px;padding:26px 24px 30px;border:12px solid #5c4030;box-shadow:inset 0 0 50px rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.28);position:relative;min-height:340px;overflow:hidden}
 .tahta-wrap::after{content:'';position:absolute;left:16px;right:16px;bottom:8px;height:9px;background:linear-gradient(180deg,#7a5638,#5c4030);border-radius:0 0 6px 6px;box-shadow:0 2px 4px rgba(0,0,0,.3);z-index:1}
 .cl-ogretmen{position:absolute;left:-6px;bottom:10px;width:150px;z-index:2;filter:drop-shadow(0 10px 14px rgba(0,0,0,.4));pointer-events:none}
-.cl-ogretmen img{width:100%;height:auto;display:block;border-radius:14px;border:2px solid rgba(255,255,255,.15)}
-#cl-kol{transform-origin:128px 172px}
-#cl-el{transform-origin:160px 90px}
-.cl-ogretmen.konusuyor #cl-kol{animation:clKolSallan .6s ease-in-out infinite}
-.cl-ogretmen.konusuyor #cl-el{animation:clElSallan .32s ease-in-out infinite}
-@keyframes clKolSallan{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-6deg)}}
-@keyframes clElSallan{0%,100%{transform:rotate(0deg)}50%{transform:rotate(10deg)}}
-#cl-goz-kapak-sol,#cl-goz-kapak-sag{animation:clKirpma 5s ease-in-out infinite}
-#cl-goz-kapak-sag{animation-delay:.05s}
-@keyframes clKirpma{0%,92%,100%{opacity:0}94%,97%{opacity:1}}
-#cl-agiz{transition:ry .06s linear}
+.cl-ogretmen img{width:100%;height:auto;display:block;border-radius:14px;border:2px solid rgba(255,255,255,.15);animation:clNefes 4s ease-in-out infinite}
+@keyframes clNefes{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.cl-ogretmen.konusuyor img{animation:clKonusPulse .5s ease-in-out infinite}
+@keyframes clKonusPulse{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.025) translateY(-3px)}}
 .tahta-icerik{position:relative;z-index:1;padding-left:210px}
 .tahta-blok{margin-bottom:18px}
 .tahta-blok:last-child{margin-bottom:0}
