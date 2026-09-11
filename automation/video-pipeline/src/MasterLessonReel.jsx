@@ -22,11 +22,15 @@ import { CaptionOverlay, computeChunkTimings } from "./captionUtils.jsx";
 // ============================================================
 
 const FPS = 30;
-const BG = "#000000";
-const RED = "#ff1744";
-const YELLOW = "#faff00";
-const GREEN = "#39ff14";
-const WHITE = "#ffffff";
+// 2026-09-11 renk revizyonu (önizleme onayı bekliyor) — premium/akademik
+// kimlik: nötr koyu lacivert-antrasit zemin, kontrollü altın/kırmızı/yeşil
+// bilgi hiyerarşisi. Eski neon (#ff1744 pembe-kırmızı, #faff00 asit sarı,
+// #39ff14 neon yeşil) tonları KALDIRILDI.
+const BG = "#05070d";
+const RED = "#dc2626";
+const YELLOW = "#eab308";
+const GREEN = "#22c55e";
+const WHITE = "#f4f3ef";
 const COLORS = { plain: WHITE, verb: YELLOW, trap: RED, good: GREEN };
 
 function pop(frame, delay = 0, damping = 12) {
@@ -361,7 +365,7 @@ function Scene7({ frame, lesson, durationFrames }) {
               textShadow: `0 0 20px ${RED}`,
             }}
           >
-            ❌ {optionFullText(lesson, elim.option)}
+            ✕ {optionFullText(lesson, elim.option)}
           </div>
           <div
             style={{
