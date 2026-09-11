@@ -115,7 +115,7 @@ function Scene2({ frame, lesson }) {
           const opIn = pop(frame, i * 22, 14);
           return (
             <div key={i} style={{ opacity: opIn, transform: `translateY(${(1 - opIn) * 16}px)` }}>
-              <Word color={lineColors[i % lineColors.length]} size={38}>
+              <Word color={lineColors[i % lineColors.length]} size={46}>
                 {line}
               </Word>
             </div>
@@ -140,7 +140,7 @@ function Scene3({ frame, lesson }) {
             transform: `scale(${0.85 + 0.15 * boxIn})`,
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 42,
+            fontSize: 46,
             color: YELLOW,
             border: `3px solid ${YELLOW}`,
             borderRadius: 14,
@@ -152,7 +152,7 @@ function Scene3({ frame, lesson }) {
           {lesson.nedenBadge}
         </div>
         <div style={{ opacity: textIn, transform: `translateY(${(1 - textIn) * 16}px)` }}>
-          <Word color={WHITE} size={36}>
+          <Word color={WHITE} size={42}>
             {lesson.nedenText}
           </Word>
         </div>
@@ -173,7 +173,7 @@ function Scene4({ frame, lesson }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 52,
+            fontSize: 56,
             color: RED,
             transform: `translateX(${shake}px) scale(${0.7 + 0.3 * scale})`,
             textShadow: `0 0 30px ${RED}`,
@@ -182,7 +182,7 @@ function Scene4({ frame, lesson }) {
           🚨 ÖSYM TUZAĞI
         </div>
         <div style={{ opacity: subIn, transform: `translateY(${(1 - subIn) * 16}px)` }}>
-          <Word color={WHITE} size={34}>
+          <Word color={WHITE} size={40}>
             {lesson.tuzakText}
           </Word>
         </div>
@@ -205,7 +205,7 @@ function ExampleSentence({ parts }) {
             style={{
               fontFamily: "sans-serif",
               fontWeight: isHighlight ? 900 : 800,
-              fontSize: 40,
+              fontSize: 46,
               color,
               background: isHighlight ? color + "22" : "transparent",
               border: isHighlight ? `3px solid ${color}` : "none",
@@ -234,7 +234,7 @@ function Scene5({ frame, lesson, exampleRevealAt, breakdownRevealAt }) {
             <ExampleSentence parts={ex.parts} />
           </div>
         ))}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, fontFamily: "sans-serif", fontWeight: 800, fontSize: 30 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, fontFamily: "sans-serif", fontWeight: 800, fontSize: 36 }}>
           {lesson.breakdown.map((b, i) => (
             <div
               key={i}
@@ -277,19 +277,19 @@ function Scene6({ frame, lesson, countdownStart }) {
           background: "#0a0a0a",
           border: `${borderPulse}px solid ${RED}`,
           borderRadius: 18,
-          padding: "30px 30px",
-          width: 820,
+          padding: "36px 34px",
+          width: 970,
           display: "flex",
           flexDirection: "column",
-          gap: 18,
+          gap: 24,
           marginTop: 14,
           boxShadow: `0 0 40px ${RED}55`,
         }}
       >
-        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 30, color: WHITE, textAlign: "center" }}>
+        <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 40, lineHeight: 1.3, color: WHITE, textAlign: "center" }}>
           {lesson.question.sentence}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: "sans-serif", fontWeight: 700, fontSize: 27, color: YELLOW }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, fontFamily: "sans-serif", fontWeight: 700, fontSize: 38, color: YELLOW }}>
           {lesson.question.options.map((o, i) => (
             <div key={i}>{o}</div>
           ))}
@@ -351,15 +351,16 @@ function Scene7({ frame, lesson, durationFrames }) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 16,
-            maxWidth: 900,
+            gap: 18,
+            maxWidth: 980,
           }}
         >
           <div
             style={{
               fontFamily: "sans-serif",
               fontWeight: 900,
-              fontSize: 34,
+              fontSize: 40,
+              lineHeight: 1.3,
               color: RED,
               textAlign: "center",
               textShadow: `0 0 20px ${RED}`,
@@ -371,7 +372,8 @@ function Scene7({ frame, lesson, durationFrames }) {
             style={{
               fontFamily: "sans-serif",
               fontWeight: 700,
-              fontSize: 28,
+              fontSize: 34,
+              lineHeight: 1.35,
               color: WHITE,
               textAlign: "center",
               textShadow: "0 4px 14px rgba(0,0,0,.8)",
@@ -393,7 +395,7 @@ function Scene7({ frame, lesson, durationFrames }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 52,
+            fontSize: 58,
             color: GREEN,
             textAlign: "center",
             transform: `scale(${0.5 + 0.5 * hitScale})`,
@@ -408,7 +410,7 @@ function Scene7({ frame, lesson, durationFrames }) {
             transform: `translateY(${(1 - l1) * 16}px)`,
             fontFamily: "sans-serif",
             fontWeight: 700,
-            fontSize: 30,
+            fontSize: 36,
             color: WHITE,
             textAlign: "center",
             padding: "0 30px",
@@ -442,7 +444,7 @@ function Scene8({ frame, lesson }) {
           style={{
             fontFamily: "sans-serif",
             fontWeight: 900,
-            fontSize: 38,
+            fontSize: 44,
             color: YELLOW,
             textAlign: "center",
             lineHeight: 1.4,
