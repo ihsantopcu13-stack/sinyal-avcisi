@@ -1,6 +1,6 @@
 // ============================================================
 // HAFTALIK SİNYAL VİDEOLARI — sıradaki videoyu (ya da PUBLISH_COUNT ile
-// birden fazlasını) YouTube + Instagram'a yayınlar. Günlük GitHub Actions
+// birden fazlasını) YouTube + Instagram + Facebook'a yayınlar. Günlük GitHub Actions
 // cron'u (weekly-signals-publish.yml) bunu çalıştırır, state'i ilerletir
 // — böylece 14 video hepsi birden değil, düzenli bir takvimde yayınlanır.
 //
@@ -107,15 +107,19 @@ async function bufferGraphQL(query) {
   return json.data;
 }
 
-async function uploadInstagram(item, videoUrl) {
+async function findBufferChannel(service) {
   const orgs = await bufferGraphQL("{ account { organizations { id } } }");
   const orgId = orgs.account.organizations[0].id;
   const channelsData = await bufferGraphQL(`{ channels(input: { organizationId: "${orgId}" }) { id service } }`);
-  const channel = channelsData.channels.find((c) => c.service === "instagram");
-  if (!channel) throw new Error("Bağlı Instagram kanalı bulunamadı.");
+  return channelsData.channels.find((c) => c.service === service);
+}
 
-  const caption = item.instagram;
+async function uploadViaBuffer(service, caption, videoUrl, { metadata } = {}) {
+  const channel = await findBufferChannel(service);
+  if (!channel) throw new Error(`Bağlı ${service} kanalı bulunamadı.`);
+
   const dueAt = new Date(Date.now() + 60_000).toISOString();
+  const metadataField = metadata ? `\n        metadata: ${metadata}` : "";
   const mutation = `
     mutation {
       createPost(input: {
@@ -124,8 +128,7 @@ async function uploadInstagram(item, videoUrl) {
         schedulingType: automatic
         mode: customScheduled
         dueAt: "${dueAt}"
-        assets: [{ video: { url: "${videoUrl}" } }]
-        metadata: { instagram: { type: reel, shouldShareToFeed: true } }
+        assets: [{ video: { url: "${videoUrl}" } }]${metadataField}
       }) {
         ... on PostActionSuccess { post { id status } }
         ... on MutationError { message }
@@ -133,9 +136,19 @@ async function uploadInstagram(item, videoUrl) {
     }`;
   const data = await bufferGraphQL(mutation);
   if (!data.createPost || data.createPost.message) {
-    throw new Error(`Instagram post oluşturulamadı: ${data.createPost?.message ?? "boş yanıt"}`);
+    throw new Error(`${service} post oluşturulamadı: ${data.createPost?.message ?? "boş yanıt"}`);
   }
   return data.createPost.post;
+}
+
+async function uploadInstagram(item, videoUrl) {
+  return uploadViaBuffer("instagram", item.instagram, videoUrl, {
+    metadata: "{ instagram: { type: reel, shouldShareToFeed: true } }",
+  });
+}
+
+async function uploadFacebook(item, videoUrl) {
+  return uploadViaBuffer("facebook", item.facebook || item.instagram, videoUrl);
 }
 
 async function publishOne(item) {
@@ -143,9 +156,10 @@ async function publishOne(item) {
   const videoPath = await resolveVideoPath(item.videoFile);
   const videoUrl = await getReleaseAssetUrl(item.videoFile);
 
-  const [ytResult, igResult] = await Promise.allSettled([
+  const [ytResult, igResult, fbResult] = await Promise.allSettled([
     uploadYouTube(item, videoPath),
     uploadInstagram(item, videoUrl),
+    uploadFacebook(item, videoUrl),
   ]);
 
   return {
@@ -153,6 +167,7 @@ async function publishOne(item) {
     videoFile: item.videoFile,
     youtube: ytResult.status === "fulfilled" ? ytResult.value : { error: ytResult.reason?.message },
     instagram: igResult.status === "fulfilled" ? igResult.value : { error: igResult.reason?.message },
+    facebook: fbResult.status === "fulfilled" ? fbResult.value : { error: fbResult.reason?.message },
   };
 }
 
