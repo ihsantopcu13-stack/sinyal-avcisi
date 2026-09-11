@@ -29,12 +29,16 @@ from moviepy import AudioFileClip, ColorClip, CompositeVideoClip, TextClip
 WIDTH, HEIGHT = 1080, 1920
 FPS = 30
 
-WORD_FONT_SIZE = 130
+WORD_FONT_SIZE = 100
 WORD_COLOR = "#FACC15"  # sarı
 WORD_STROKE_COLOR = "black"
 WORD_STROKE_WIDTH = 6
+# Türkçe alt-uzantılı harfler (ç/ş/ğ) + kalın stroke, dar bbox'ta kesilebiliyor —
+# margin bu boşluğu ekliyor (yatay, dikey).
+WORD_MARGIN = (30, 40)
 POP_DURATION = 0.15  # kelime çıkarken "vurma" animasyonu süresi (sn)
 POP_START_SCALE = 1.35
+MIN_WORD_DURATION = 0.45  # her kelime en az bu kadar ekranda kalsın (sn)
 
 WATERMARK_TEXT = "George - Sinyal Avcısı"
 WATERMARK_FONT_SIZE = 34
@@ -42,6 +46,18 @@ WATERMARK_COLOR = "white"
 WATERMARK_MARGIN = 40
 
 DEFAULT_FONT = r"C:\Windows\Fonts\arialbd.ttf"
+
+# --- "cards" modu (sinyal / örnek cümle / çeviri, 3 satır bir arada) ---
+CARD_SIGNAL_FONT_SIZE = 92
+CARD_SIGNAL_COLOR = "#FACC15"
+CARD_EXAMPLE_FONT_SIZE = 52
+CARD_EXAMPLE_COLOR = "white"
+CARD_TRANSLATION_FONT_SIZE = 52
+CARD_TRANSLATION_COLOR = "#FACC15"
+CARD_STROKE_WIDTH = 4
+CARD_LINE_GAP = 36
+CARD_TEXT_WIDTH = WIDTH - 160  # kenar boşluğu, satır kaydırma (wrap) için
+CARD_TAIL_BUFFER = 0.4  # kartın son satırı bir sonraki karta geçmeden önce bu kadar ekranda kalsın
 
 
 def transcribe_words(audio_path: str, model_size: str, language: str):
@@ -75,6 +91,124 @@ def align_script_to_timestamps(script_words, whisper_words):
         file=sys.stderr,
     )
     return whisper_words
+
+
+def enforce_minimum_duration(words, min_duration: float):
+    """Her kelimeyi en az min_duration kadar ekranda tut — whisper'ın tespit
+    ettiği doğal süre daha kısaysa uzat. Bir sonraki kelimenin başlangıcını
+    geçmeyecek şekilde sınırlanır (üst üste binme olmasın diye); çok hızlı
+    art arda gelen kelimelerde bu sınır min_duration'ın altına düşebilir,
+    bu durumda mevcut boşluğun tamamı kullanılır."""
+    adjusted = []
+    for i, w in enumerate(words):
+        start, end = w["start"], w["end"]
+        desired_end = max(end, start + min_duration)
+        if i + 1 < len(words):
+            desired_end = min(desired_end, words[i + 1]["start"])
+        adjusted.append({"text": w["text"], "start": start, "end": max(desired_end, start + 0.05)})
+    return adjusted
+
+
+def parse_card_groups(script_path: str):
+    """Boş satırla ayrılmış gruplar, her grup TAM 3 satır: sinyal / İngilizce
+    örnek cümle / Türkçe çevirisi."""
+    text = Path(script_path).read_text(encoding="utf-8")
+    blocks = [b.strip() for b in text.split("\n\n") if b.strip()]
+    groups = []
+    for block in blocks:
+        lines = [l.strip() for l in block.splitlines() if l.strip()]
+        if len(lines) != 3:
+            sys.exit(
+                f"HATA: script'te bir grup 3 satır değil (sinyal/örnek/çeviri), "
+                f"{len(lines)} satır bulundu: {lines!r}"
+            )
+        groups.append({"signal": lines[0], "example": lines[1], "translation": lines[2]})
+    if not groups:
+        sys.exit("HATA: script'te (cards modu) hiç grup bulunamadı — boş satırla ayrılmış 3'er satırlık gruplar olmalı.")
+    return groups
+
+
+def build_narration_text_from_cards(groups):
+    parts = []
+    for g in groups:
+        parts.extend([g["signal"] + ".", g["example"], g["translation"]])
+    return " ".join(parts)
+
+
+def align_cards_to_timestamps(groups, whisper_words):
+    """Her grubun 3 satırındaki kelime sayısı kadar whisper kelimesi tüketerek
+    her satıra (start, end) zaman aralığı atar. Toplam kelime sayısı uyuşmazsa
+    None döner (çağıran taraf whisper'ın ham transkripsiyonuna düşer)."""
+    flat_script_words = []
+    for g in groups:
+        flat_script_words += g["signal"].split() + g["example"].split() + g["translation"].split()
+    if len(flat_script_words) != len(whisper_words):
+        return None
+
+    cards = []
+    idx = 0
+    for g in groups:
+        line_ranges = []
+        for key in ("signal", "example", "translation"):
+            n = len(g[key].split())
+            line_words = whisper_words[idx: idx + n]
+            line_ranges.append((line_words[0]["start"], line_words[-1]["end"]))
+            idx += n
+        cards.append({
+            "signal": g["signal"], "example": g["example"], "translation": g["translation"],
+            "signal_start": line_ranges[0][0],
+            "example_start": line_ranges[1][0],
+            "translation_start": line_ranges[2][0],
+            "group_end": line_ranges[2][1] + CARD_TAIL_BUFFER,
+        })
+    return cards
+
+
+def build_cards_video(cards, audio_path: str, output_path: str, font: str):
+    audio = AudioFileClip(audio_path)
+    duration = audio.duration
+
+    background = ColorClip(size=(WIDTH, HEIGHT), color=(0, 0, 0), duration=duration)
+    watermark = (
+        TextClip(font=font, text=WATERMARK_TEXT, font_size=WATERMARK_FONT_SIZE, color=WATERMARK_COLOR, method="label")
+        .with_position((WATERMARK_MARGIN, WATERMARK_MARGIN))
+        .with_duration(duration)
+    )
+
+    layers = [background, watermark]
+    for c in cards:
+        group_end = min(c["group_end"], duration)
+
+        signal_clip = (
+            TextClip(font=font, text=c["signal"].upper(), font_size=CARD_SIGNAL_FONT_SIZE, color=CARD_SIGNAL_COLOR,
+                      stroke_color="black", stroke_width=CARD_STROKE_WIDTH, method="label", margin=(20, 30))
+            .with_start(c["signal_start"]).with_duration(max(group_end - c["signal_start"], 0.1))
+        )
+        example_clip = (
+            TextClip(font=font, text=c["example"], font_size=CARD_EXAMPLE_FONT_SIZE, color=CARD_EXAMPLE_COLOR,
+                      stroke_color="black", stroke_width=2, method="caption", size=(CARD_TEXT_WIDTH, None),
+                      text_align="center", margin=(10, 20))
+            .with_start(c["example_start"]).with_duration(max(group_end - c["example_start"], 0.1))
+        )
+        translation_clip = (
+            TextClip(font=font, text=c["translation"], font_size=CARD_TRANSLATION_FONT_SIZE, color=CARD_TRANSLATION_COLOR,
+                      stroke_color="black", stroke_width=2, method="caption", size=(CARD_TEXT_WIDTH, None),
+                      text_align="center", margin=(10, 20))
+            .with_start(c["translation_start"]).with_duration(max(group_end - c["translation_start"], 0.1))
+        )
+
+        total_h = signal_clip.h + CARD_LINE_GAP + example_clip.h + CARD_LINE_GAP + translation_clip.h
+        top = (HEIGHT - total_h) // 2
+        signal_clip = signal_clip.with_position(("center", top))
+        example_clip = example_clip.with_position(("center", top + signal_clip.h + CARD_LINE_GAP))
+        translation_clip = translation_clip.with_position(
+            ("center", top + signal_clip.h + CARD_LINE_GAP + example_clip.h + CARD_LINE_GAP)
+        )
+        layers += [signal_clip, example_clip, translation_clip]
+
+    video = CompositeVideoClip(layers, size=(WIDTH, HEIGHT)).with_audio(audio)
+    print(f"Video render ediliyor -> {output_path}")
+    video.write_videofile(output_path, fps=FPS, codec="libx264", audio_codec="aac")
 
 
 def pop_scale(t):
@@ -116,6 +250,7 @@ def build_video(words, audio_path: str, output_path: str, font: str):
                 stroke_color=WORD_STROKE_COLOR,
                 stroke_width=WORD_STROKE_WIDTH,
                 method="label",
+                margin=WORD_MARGIN,
             )
             .with_start(start)
             .with_duration(end - start)
@@ -130,31 +265,58 @@ def build_video(words, audio_path: str, output_path: str, font: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="mp3 + script -> kelime kelime senkronize 9:16 video")
-    parser.add_argument("--audio", required=True, help="Ses dosyası (mp3)")
+    parser = argparse.ArgumentParser(description="mp3 + script -> senkronize 9:16 video")
+    parser.add_argument("--audio", help="Ses dosyası (mp3) — --print-narration ile birlikte gerekmez")
     parser.add_argument("--script", required=True, help="Script metni (txt dosyası)")
-    parser.add_argument("--output", required=True, help="Çıktı video (mp4)")
+    parser.add_argument("--output", help="Çıktı video (mp4) — --print-narration ile birlikte gerekmez")
     parser.add_argument("--model", default="medium", help="Whisper model boyutu: tiny/base/small/medium/large")
     parser.add_argument("--language", default="tr", help="Ses dili (whisper dil kodu)")
     parser.add_argument("--font", default=DEFAULT_FONT, help="TTF/OTF font dosya yolu")
+    parser.add_argument("--mode", choices=["word", "cards"], default="word",
+                         help="word: kelime kelime akış (varsayılan). cards: sinyal/örnek/çeviri 3 satır bir arada (boş satırla ayrılmış 3'er satırlık gruplar)")
+    parser.add_argument("--print-narration", action="store_true",
+                         help="(cards modu) script'i grup grup okuyup TTS için düz anlatım metnini yazdırır ve çıkar — video üretmez")
     args = parser.parse_args()
 
+    if not Path(args.script).exists():
+        sys.exit(f"HATA: script dosyası bulunamadı: {args.script}")
+
+    if args.print_narration:
+        if args.mode != "cards":
+            sys.exit("HATA: --print-narration sadece --mode cards ile kullanılır.")
+        groups = parse_card_groups(args.script)
+        print(build_narration_text_from_cards(groups))
+        return
+
+    if not args.audio or not args.output:
+        sys.exit("HATA: --audio ve --output gerekli (--print-narration kullanmıyorsanız).")
     if not Path(args.font).exists():
         sys.exit(f"HATA: font dosyası bulunamadı: {args.font}")
     if not Path(args.audio).exists():
         sys.exit(f"HATA: ses dosyası bulunamadı: {args.audio}")
-    if not Path(args.script).exists():
-        sys.exit(f"HATA: script dosyası bulunamadı: {args.script}")
 
     whisper_words = transcribe_words(args.audio, args.model, args.language)
     if not whisper_words:
         sys.exit("HATA: whisper hiç kelime tespit edemedi.")
 
-    script_words = load_script_words(args.script)
-    print(f"Script'te {len(script_words)} kelime var.")
+    if args.mode == "cards":
+        groups = parse_card_groups(args.script)
+        cards = align_cards_to_timestamps(groups, whisper_words)
+        if cards is None:
+            total_script_words = sum(len(g["signal"].split()) + len(g["example"].split()) + len(g["translation"].split()) for g in groups)
+            sys.exit(
+                f"HATA: script kelime sayısı ({total_script_words}) whisper kelime sayısından "
+                f"({len(whisper_words)}) farklı — cards modunda güvenli bir eşleme yapılamıyor. "
+                f"Sesin script'i birebir okuduğundan emin olun."
+            )
+        build_cards_video(cards, args.audio, args.output, args.font)
+    else:
+        script_words = load_script_words(args.script)
+        print(f"Script'te {len(script_words)} kelime var.")
+        words = align_script_to_timestamps(script_words, whisper_words)
+        words = enforce_minimum_duration(words, MIN_WORD_DURATION)
+        build_video(words, args.audio, args.output, args.font)
 
-    words = align_script_to_timestamps(script_words, whisper_words)
-    build_video(words, args.audio, args.output, args.font)
     print(f"Tamamlandı: {args.output}")
 
 
