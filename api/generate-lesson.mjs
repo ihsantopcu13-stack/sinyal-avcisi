@@ -86,7 +86,9 @@ Bu soruyu aşağıdaki JSON şemasında genişlet (SADECE geçerli JSON döndür
     {"option": "harf", "text": "neden yanlış"}
   ],
   "recognitionTip": "bu yapı başka bir soruda tekrar karşına gelirse nasıl tanırsın, 1 cümle",
-  "avciKodu": "AVCI ÇÖZÜM MOTORU'nun bu soruya özel kısa versiyonu, oklarla (örn: DESPITE GÖR → SAĞINA BAK → İSİM/V-ING Mİ → ZITLIK KUR)"
+  "avciKodu": "AVCI ÇÖZÜM MOTORU'nun bu soruya özel kısa versiyonu, oklarla (örn: DESPITE GÖR → SAĞINA BAK → İSİM/V-ING Mİ → ZITLIK KUR)",
+  "answerLabel": "kısa ekran etiketi, harf + max 3 kelime, büyük harf (örn: B) GEÇERLİ KALDI)",
+  "cozumText": "doğru cevabın kısa özet kuralı, tek satır, max 12 kelime (örn: DESPITE + hata → solunda ZITLIK ara.)"
 }
 
 NOT: "examples" alanındaki İngilizce örnek cümle, SORU'daki İngilizce metinle aynı veya ondan türetilmiş olmalı — parts'a bölünürken kelimeler/öbekler sırayla ve boşluklu birleştirildiğinde orijinal cümleyi verecek şekilde ayrılmalı. "style" değerleri SADECE şunlardan biri olabilir: plain, verb, trap, good. "breakdown" içindeki "styleColor" SADECE şunlardan biri olabilir: plain, verb, trap, good.`;
