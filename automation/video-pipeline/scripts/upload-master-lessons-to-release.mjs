@@ -68,8 +68,8 @@ async function getOrCreateRelease() {
 async function uploadAsset(release, filePath, assetName) {
   const existingAsset = (release.assets || []).find((a) => a.name === assetName);
   if (existingAsset) {
-    console.log(`  zaten yüklü, atlanıyor: ${assetName}`);
-    return existingAsset.browser_download_url;
+    await ghApi(`/releases/assets/${existingAsset.id}`, { method: "DELETE" });
+    console.log(`  eski asset silindi, güncelleniyor: ${assetName}`);
   }
   const uploadBase = release.upload_url.replace(/\{.*\}$/, "");
   const fileBuffer = await readFile(filePath);

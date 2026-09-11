@@ -1,4 +1,5 @@
-import { Composition, getInputProps } from "remotion";
+import { Composition, Still, getInputProps } from "remotion";
+import { Thumbnail } from "./Thumbnail.jsx";
 import { ShortVideo } from "./ShortVideo.jsx";
 import { OfTuzagiReel, TOTAL_FRAMES as OF_TUZAGI_FRAMES } from "./OfTuzagiReel.jsx";
 import { ANumberOfReel, TOTAL_FRAMES as A_NUMBER_OF_FRAMES } from "./ANumberOfReel.jsx";
@@ -218,6 +219,11 @@ export const RemotionRoot = () => {
           durationInFrames: totalFramesFor(props?.lesson || DUMMY_LESSON),
         })}
       />
+      {/* Özel kapak görseli — otomatik seçilen video karesi yerine CTR için
+          özel tasarlanmış tek kare. İki boyut: Instagram cover (9:16) ve
+          YouTube thumbnail (16:9, YouTube'un standart oranı). */}
+      <Still id="Thumbnail" component={Thumbnail} width={1080} height={1920} />
+      <Still id="ThumbnailWide" component={Thumbnail} width={1280} height={720} />
     </>
   );
 };

@@ -5,7 +5,7 @@
 // her bölüme özel niş bir hashtag (konu adından türetilir).
 // ============================================================
 
-function topicName(lesson) {
+export function topicName(lesson) {
   return lesson.hookTitle.replace(/!$/, "").replace(/\s*TUZAĞI$/, "").trim();
 }
 

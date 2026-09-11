@@ -416,6 +416,7 @@ function Scene9({ frame }) {
         </div>
         <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 34, color: WHITE }}>YDS / YÖKDİL</div>
         <div style={{ fontFamily: "sans-serif", fontWeight: 800, fontSize: 34, color: RED, textShadow: `0 0 16px ${RED}` }}>HEDEF 60+</div>
+        <div style={{ fontFamily: "sans-serif", fontWeight: 700, fontSize: 26, color: GREEN, marginTop: 8 }}>Tam ders ücretsiz → sinyal-avcisi.com</div>
       </div>
     </AbsoluteFill>
   );

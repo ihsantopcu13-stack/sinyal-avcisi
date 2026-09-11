@@ -4,13 +4,17 @@
 // zamanla açıldıkça). Başarılı olanları TEKRAR yayınlamaz.
 // ============================================================
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, access } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ALL_EPISODES_META } from "../data/master-lessons.mjs";
-import { youtubeMeta, instagramCaption } from "./_master-publish-meta.mjs";
+import { youtubeMeta, instagramCaption, topicName } from "./_master-publish-meta.mjs";
 import { createReadStream, existsSync } from "node:fs";
 import { google } from "googleapis";
+
+const execFileAsync = promisify(execFile);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -22,6 +26,26 @@ function youtubeClient() {
   return google.youtube({ version: "v3", auth: client });
 }
 
+// Özel kapak görseli (bkz. src/Thumbnail.jsx) — otomatik seçilen video
+// karesi yerine CTR için tasarlanmış tek kare. Opsiyonel: üretilemezse
+// veya ayarlanamazsa yükleme akışını bozmadan sessizce geçilir.
+async function kapakGoruntusuUretVeAyarla(youtube, videoId, episode) {
+  const thumbPath = path.join(ROOT, "out", `thumb-${episode.id}.png`);
+  const propsPath = path.join(ROOT, "out", `thumb-props-${episode.id}.json`);
+  try {
+    await writeFile(propsPath, JSON.stringify({ topic: topicName(episode), sub: "YDS / YÖKDİL" }, null, 2));
+    await execFileAsync(
+      "npx",
+      ["remotion", "still", "src/index.jsx", "ThumbnailWide", thumbPath, "--props", propsPath],
+      { cwd: ROOT, shell: true, maxBuffer: 1024 * 1024 * 50 }
+    );
+    await youtube.thumbnails.set({ videoId, media: { mimeType: "image/png", body: createReadStream(thumbPath) } });
+    console.log(`  #${episode.epNum} özel kapak görseli ayarlandı.`);
+  } catch (err) {
+    console.error(`  #${episode.epNum} kapak görseli ayarlanamadı (devam ediliyor):`, err.message);
+  }
+}
+
 async function uploadYouTube(episode, videoPath) {
   const { title, description, tags } = youtubeMeta(episode);
   const youtube = youtubeClient();
@@ -30,7 +54,9 @@ async function uploadYouTube(episode, videoPath) {
     requestBody: { snippet: { title, description, tags, categoryId: "27" }, status: { privacyStatus: "public", selfDeclaredMadeForKids: false } },
     media: { body: createReadStream(videoPath) },
   });
-  return { videoId: res.data.id, videoUrl: `https://youtube.com/shorts/${res.data.id}` };
+  const videoId = res.data.id;
+  await kapakGoruntusuUretVeAyarla(youtube, videoId, episode);
+  return { videoId, videoUrl: `https://youtube.com/shorts/${videoId}` };
 }
 
 async function bufferGraphQL(query) {

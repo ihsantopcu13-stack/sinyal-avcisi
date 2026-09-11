@@ -3,7 +3,7 @@
 // ============================================================
 // OAuth2 refresh token gerektirir (bkz. README.md "YouTube OAuth kurulumu").
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, access } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -81,6 +81,18 @@ export async function youtubeYukle() {
   const videoUrl = `https://youtube.com/shorts/${videoId}`;
   await writeFile(path.join(OUT_DIR, "youtube-result.json"), JSON.stringify({ videoId, videoUrl }, null, 2));
   console.log("YouTube'a yüklendi:", videoUrl);
+
+  // Özel kapak görseli varsa (bkz. generate-thumbnail.mjs) otomatik seçilen
+  // video karesi yerine onu kullan — opsiyonel, yoksa/başarısız olursa sessizce geç.
+  const thumbPath = path.join(OUT_DIR, "thumbnail-wide.png");
+  try {
+    await access(thumbPath);
+    await youtube.thumbnails.set({ videoId, media: { mimeType: "image/png", body: createReadStream(thumbPath) } });
+    console.log("Özel kapak görseli ayarlandı.");
+  } catch (err) {
+    if (err.code !== "ENOENT") console.error("Kapak görseli ayarlanamadı (devam ediliyor):", err.message);
+  }
+
   return { videoId, videoUrl };
 }
 

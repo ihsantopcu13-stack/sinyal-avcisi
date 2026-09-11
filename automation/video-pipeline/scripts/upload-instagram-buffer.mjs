@@ -17,7 +17,7 @@
 // Opsiyonel env: BUFFER_CHANNEL_ID (verilmezse bağlı Instagram kanalı
 // otomatik bulunur)
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { hashtagSeti } from "./_seo.mjs";
@@ -65,7 +65,7 @@ async function getOrCreateRelease(tag) {
   return created.json();
 }
 
-async function uploadReleaseAsset(release, filePath, assetName) {
+async function uploadReleaseAsset(release, filePath, assetName, contentType = "video/mp4") {
   const uploadBase = release.upload_url.replace(/\{.*\}$/, "");
   const fileBuffer = await readFile(filePath);
 
@@ -78,7 +78,7 @@ async function uploadReleaseAsset(release, filePath, assetName) {
     method: "POST",
     headers: {
       Authorization: `Bearer ${GITHUB_TOKEN}`,
-      "Content-Type": "video/mp4",
+      "Content-Type": contentType,
     },
     body: fileBuffer,
   });
@@ -146,7 +146,8 @@ function dueAtIso() {
   return new Date(Date.now() + 60_000).toISOString();
 }
 
-async function publishToBuffer(channelId, videoUrl, caption) {
+async function publishToBuffer(channelId, videoUrl, caption, thumbnailUrl) {
+  const thumbField = thumbnailUrl ? `, thumbnailUrl: "${thumbnailUrl}"` : "";
   const mutation = `
     mutation {
       createPost(input: {
@@ -155,7 +156,7 @@ async function publishToBuffer(channelId, videoUrl, caption) {
         schedulingType: automatic
         mode: customScheduled
         dueAt: "${dueAtIso()}"
-        assets: [{ video: { url: "${videoUrl}" } }]
+        assets: [{ video: { url: "${videoUrl}"${thumbField} } }]
         metadata: { instagram: { type: reel, shouldShareToFeed: true } }
       }) {
         ... on PostActionSuccess {
@@ -188,10 +189,22 @@ export async function reelsYayinlaBuffer() {
   const videoUrl = await uploadReleaseAsset(release, path.join(OUT_DIR, "video.mp4"), "video.mp4");
   console.log("Video herkese açık URL:", videoUrl);
 
+  // Özel kapak görseli varsa (bkz. generate-thumbnail.mjs) yükleyip Instagram
+  // cover'ı olarak kullan — opsiyonel, yoksa Buffer otomatik kare seçer.
+  let thumbnailUrl;
+  const thumbPath = path.join(OUT_DIR, "thumbnail.png");
+  try {
+    await access(thumbPath);
+    thumbnailUrl = await uploadReleaseAsset(release, thumbPath, "thumbnail.png", "image/png");
+    console.log("Kapak görseli herkese açık URL:", thumbnailUrl);
+  } catch (err) {
+    if (err.code !== "ENOENT") console.error("Kapak görseli yüklenemedi (devam ediliyor):", err.message);
+  }
+
   const channel = await findInstagramChannel();
   console.log(`Bağlı Instagram kanalı: ${channel.name} (${channel.id})`);
 
-  const post = await publishToBuffer(channel.id, videoUrl, caption);
+  const post = await publishToBuffer(channel.id, videoUrl, caption, thumbnailUrl);
   await writeFile(path.join(OUT_DIR, "instagram-result.json"), JSON.stringify(post, null, 2));
   console.log("Instagram Reels Buffer'a gönderildi:", post.id, post.status, post.dueAt);
   return post;

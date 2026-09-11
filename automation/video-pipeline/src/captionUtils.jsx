@@ -34,15 +34,17 @@ export function splitIntoCaptionChunks(text) {
     .map((s) => s.trim())
     .filter(Boolean);
 
+  // Daha büyük fontta okunabilir kalması için öbekler küçük tutuluyor
+  // (eskiden 5-6 kelime, artık en fazla 3-4 — büyük/kalın caption stiline uygun).
   const chunks = [];
   for (const clause of clauses) {
     const words = clause.split(/\s+/);
-    if (words.length <= 6) {
+    if (words.length <= 4) {
       chunks.push(clause);
       continue;
     }
-    for (let i = 0; i < words.length; i += 5) {
-      chunks.push(words.slice(i, i + 5).join(" "));
+    for (let i = 0; i < words.length; i += 3) {
+      chunks.push(words.slice(i, i + 3).join(" "));
     }
   }
   return chunks.length ? chunks : [text];
@@ -69,7 +71,7 @@ export function computeChunkTimings(chunks, totalFrames) {
   });
 }
 
-function renderWithHighlight(text, color) {
+export function renderWithHighlight(text, color, { uppercase = true } = {}) {
   // text.split(regex-with-1-capture-group) -> [öncesi, YAKALANAN, sonrası, YAKALANAN, ...]
   // yakalanan parçalar HER ZAMAN tek indexte (1,3,5,...) gelir — global
   // regex'i .test() ile tekrar tekrar kullanmak lastIndex state bug'ına
@@ -78,7 +80,7 @@ function renderWithHighlight(text, color) {
   return parts.map((part, i) =>
     i % 2 === 1 && part.length > 0 ? (
       <span key={i} style={{ color, textShadow: `0 0 16px ${color}` }}>
-        {part.toLocaleUpperCase("tr-TR")}
+        {uppercase ? part.toLocaleUpperCase("tr-TR") : part}
       </span>
     ) : (
       <span key={i}>{part}</span>
@@ -121,12 +123,16 @@ export function CaptionOverlay({ frame, text, durationFrames, accentColor = "#fa
         style={{
           fontFamily: "sans-serif",
           fontWeight: 900,
-          fontSize: 34,
-          lineHeight: 1.25,
+          fontSize: 52,
+          lineHeight: 1.2,
           color: "#ffffff",
           textAlign: "center",
-          textShadow: "0 3px 10px rgba(0,0,0,.9), 0 0 22px rgba(0,0,0,.7)",
-          WebkitTextStroke: "1px rgba(0,0,0,.5)",
+          textShadow: "0 4px 14px rgba(0,0,0,.95), 0 0 28px rgba(0,0,0,.85)",
+          WebkitTextStroke: "2px rgba(0,0,0,.65)",
+          background: "rgba(0,0,0,.5)",
+          borderRadius: 16,
+          padding: "10px 26px",
+          boxShadow: "0 4px 18px rgba(0,0,0,.4)",
         }}
       >
         {renderWithHighlight(chunks[idx].toLocaleUpperCase("tr-TR"), accentColor)}
