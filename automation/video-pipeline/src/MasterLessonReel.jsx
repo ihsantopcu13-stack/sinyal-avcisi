@@ -8,7 +8,7 @@ import {
   spring,
   getInputProps,
 } from "remotion";
-import { CaptionOverlay } from "./captionUtils.jsx";
+import { CaptionOverlay, computeChunkTimings } from "./captionUtils.jsx";
 
 // ============================================================
 // SİNYAL AVCISI — MASTER VİDEO PAKETİ — genel/parametrik ders şablonu.
@@ -311,10 +311,77 @@ function Scene6({ frame, lesson, countdownStart }) {
   );
 }
 
-// -------------------- SCENE 7 — CEVAP VE ÇÖZÜM --------------------
-function Scene7({ frame, lesson }) {
-  const hitScale = pop(frame, 0, 9);
-  const l1 = pop(frame, 18, 14);
+// -------------------- SCENE 7 — ŞIKLARI ELE + CEVAP VE ÇÖZÜM --------------------
+// Yanlış şıklar tek tek elenir ("A olmaz çünkü...") sonra doğru cevap
+// yeşille vurgulanır — 2026-09-11 içerik standardı (bkz. proje hafızası:
+// "şıkları nasıl eleyeceğim" / "yanlış seçenekler neden yanlış" maddeleri).
+// narration.cozum tek bir ses dosyasında tüm elemeleri + doğru cevabı art
+// arda anlatıyor; ekrandaki geçişler bu sesle computeChunkTimings ile
+// orantılı senkronlanıyor (captionUtils.jsx'teki aynı mantık).
+function optionFullText(lesson, letter) {
+  const found = (lesson.question?.options || []).find((o) => o.trim().startsWith(`${letter})`));
+  return found || `${letter})`;
+}
+
+function Scene7({ frame, lesson, durationFrames }) {
+  const eliminations = lesson.eliminations || [];
+  const chunks = [...eliminations.map((e) => `${e.option}: ${e.text}`), lesson.cozumText || ""];
+  const timings = durationFrames ? computeChunkTimings(chunks, durationFrames) : null;
+  const idx = timings ? timings.findIndex((t) => frame >= t.start && frame < t.end) : -1;
+  const activeIdx = idx === -1 ? chunks.length - 1 : idx;
+  const isFinal = activeIdx >= eliminations.length;
+  const localStart = timings?.[activeIdx]?.start ?? 0;
+  const local = frame - localStart;
+
+  if (!isFinal && eliminations.length > 0) {
+    const elim = eliminations[activeIdx];
+    const inAnim = pop(local, 0, 11);
+    return (
+      <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 44px" }}>
+        <StepLabel color={RED}>ŞIKLARI ELE</StepLabel>
+        <div
+          style={{
+            marginTop: 10,
+            opacity: inAnim,
+            transform: `translateX(${(1 - inAnim) * -24}px)`,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 16,
+            maxWidth: 900,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "sans-serif",
+              fontWeight: 900,
+              fontSize: 34,
+              color: RED,
+              textAlign: "center",
+              textShadow: `0 0 20px ${RED}`,
+            }}
+          >
+            ❌ {optionFullText(lesson, elim.option)}
+          </div>
+          <div
+            style={{
+              fontFamily: "sans-serif",
+              fontWeight: 700,
+              fontSize: 28,
+              color: WHITE,
+              textAlign: "center",
+              textShadow: "0 4px 14px rgba(0,0,0,.8)",
+            }}
+          >
+            {elim.text}
+          </div>
+        </div>
+      </AbsoluteFill>
+    );
+  }
+
+  const hitScale = pop(local, 0, 9);
+  const l1 = pop(local, 14, 14);
   return (
     <AbsoluteFill style={{ background: BG, justifyContent: "center", alignItems: "center", padding: "0 40px" }}>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 26 }}>
@@ -507,7 +574,7 @@ export const MasterLessonReel = (props) => {
         <Scene6 frame={frame - STARTS[5]} lesson={lesson} countdownStart={lesson.countdownStart} />
       </Sequence>
       <Sequence from={STARTS[6]} durationInFrames={SCENE_FRAMES[6]}>
-        <Scene7 frame={frame - STARTS[6]} lesson={lesson} />
+        <Scene7 frame={frame - STARTS[6]} lesson={lesson} durationFrames={lesson.audioFrames.cozum} />
       </Sequence>
       <Sequence from={STARTS[7]} durationInFrames={SCENE_FRAMES[7]}>
         <Scene8 frame={frame - STARTS[7]} lesson={lesson} />
@@ -528,7 +595,13 @@ export const MasterLessonReel = (props) => {
           <CaptionOverlay frame={frame - STARTS[3] - 4} text={lesson.narration.tuzak} durationFrames={lesson.audioFrames.tuzak} accentColor={RED} top={150} />
           <CaptionOverlay frame={frame - STARTS[4] - 4} text={lesson.narration.ornek} durationFrames={lesson.audioFrames.ornek} accentColor={YELLOW} top={130} />
           <CaptionOverlay frame={frame - STARTS[5] - 4} text={lesson.narration.soru} durationFrames={lesson.audioFrames.soru} accentColor={YELLOW} top={150} />
-          <CaptionOverlay frame={frame - STARTS[6] - 5} text={lesson.narration.cozum} durationFrames={lesson.audioFrames.cozum} accentColor={GREEN} top={150} />
+          {/* Şıkları eleme sahnesi (bkz. Scene7) kendi senkronlu metin
+              gösterimini zaten sağlıyor — üstte genel CaptionOverlay ile
+              çakışıp iki farklı senkronsuz metin göstermemesi için
+              eliminations olan derslerde (yeni içerik standardı) atlanır. */}
+          {!(lesson.eliminations && lesson.eliminations.length > 0) && (
+            <CaptionOverlay frame={frame - STARTS[6] - 5} text={lesson.narration.cozum} durationFrames={lesson.audioFrames.cozum} accentColor={GREEN} top={150} />
+          )}
           <CaptionOverlay frame={frame - STARTS[7] - 4} text={lesson.narration.avci} durationFrames={lesson.audioFrames.avci} accentColor={RED} top={150} />
         </>
       )}
