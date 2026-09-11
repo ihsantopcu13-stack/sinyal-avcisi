@@ -28,10 +28,12 @@ async function ffprobeDuration(filePath) {
 }
 
 async function ttsMurat(text, outPath) {
+  // speed 1.05 — kullanıcının 2026-09-11 A/B testiyle onayladığı ses standardı
+  // (Murat, eleven_multilingual_v2, stability 0.5, similarity_boost 0.75).
   const res = await fetch("https://sinyal-avcisi.com/api/tts-eleven", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, speed: 1.2 }),
+    body: JSON.stringify({ text, speed: 1.05 }),
   });
   if (!res.ok) throw new Error(`TTS hata: ${res.status} ${await res.text()}`);
   const buf = Buffer.from(await res.arrayBuffer());
