@@ -52,6 +52,10 @@ MEVCUT AÇIKLAMA: ${soru.aciklama_tr}
 Bu soruyu aşağıdaki JSON şemasında genişlet (SADECE geçerli JSON döndür, kod bloğu/markdown/açıklama YOK):
 {
   "hookTitle": "kısa çarpıcı başlık, büyük harf, sonunda ! (örn: DESPITE TUZAĞI!)",
+  "kuralLines": ["kural satırı 1 (kısa, max 6 kelime)", "kural satırı 2 (kısa)"],
+  "nedenBadge": "KISA ROZET METNİ (max 4 kelime, büyük harf, örn: DESPITE + İSİM/V-ING)",
+  "nedenText": "\"neden böyle\" açıklaması, tek kısa cümle",
+  "tuzakText": "ÖSYM'nin kandırma yöntemi, tek kısa cümle",
   "narration": {
     "hook": "1 cümle, dikkat çekici, merak uyandıran",
     "kural": "sinyal kelimenin/yapının kuralı, doğal konuşma diliyle, 2-3 cümle",
@@ -62,6 +66,20 @@ Bu soruyu aşağıdaki JSON şemasında genişlet (SADECE geçerli JSON döndür
     "cozum": "doğru cevabın mantığı, adım adım kısa gerekçe, 1-2 cümle",
     "avci": "AVCI REFLEKSİ — bu yapı için kısa, akılda kalıcı, formül gibi bir cümle"
   },
+  "examples": [
+    {
+      "parts": [
+        {"text": "kelime/öbek 1", "style": "plain"},
+        {"text": "sinyal veya tuzak kelime/öbek", "style": "trap"},
+        {"text": "fiil", "style": "verb"},
+        {"text": "kalan kısım", "style": "plain"}
+      ]
+    }
+  ],
+  "breakdown": [
+    {"text": "S → özne (kısa açıklama)", "styleColor": "good"},
+    {"text": "V → fiil (kısa açıklama)", "styleColor": "verb"}
+  ],
   "eliminations": [
     {"option": "harf (doğru olmayan şıklardan biri)", "text": "neden yanlış, kısa ve net, doğal dille"},
     {"option": "harf", "text": "neden yanlış"},
@@ -69,7 +87,9 @@ Bu soruyu aşağıdaki JSON şemasında genişlet (SADECE geçerli JSON döndür
   ],
   "recognitionTip": "bu yapı başka bir soruda tekrar karşına gelirse nasıl tanırsın, 1 cümle",
   "avciKodu": "AVCI ÇÖZÜM MOTORU'nun bu soruya özel kısa versiyonu, oklarla (örn: DESPITE GÖR → SAĞINA BAK → İSİM/V-ING Mİ → ZITLIK KUR)"
-}`;
+}
+
+NOT: "examples" alanındaki İngilizce örnek cümle, SORU'daki İngilizce metinle aynı veya ondan türetilmiş olmalı — parts'a bölünürken kelimeler/öbekler sırayla ve boşluklu birleştirildiğinde orijinal cümleyi verecek şekilde ayrılmalı. "style" değerleri SADECE şunlardan biri olabilir: plain, verb, trap, good. "breakdown" içindeki "styleColor" SADECE şunlardan biri olabilir: plain, verb, trap, good.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -81,7 +101,7 @@ Bu soruyu aşağıdaki JSON şemasında genişlet (SADECE geçerli JSON döndür
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2000,
+        max_tokens: 3000,
         temperature: 0.4,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userPrompt }],
