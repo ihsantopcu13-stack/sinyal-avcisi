@@ -35,14 +35,32 @@
     border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.6);
   }
   #timeline{position:absolute;inset:0}
+  /* every animation on the timeline stays frozen at frame 0 of its delay
+     until JS lifts this class — the moment it's lifted becomes "t=0",
+     which is also the moment the narration audio starts playing */
+  #timeline.paused,#timeline.paused *{animation-play-state:paused!important}
 
-  /* ---- character: bottom-left, talking bounce loop, whole 30s ---- */
+  /* ---- tap-to-start overlay (mobile browsers block audio autoplay) ---- */
+  #tap-overlay{
+    position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:18px;background:rgba(10,10,26,.86);
+    cursor:pointer;
+  }
+  #tap-overlay .play-btn{
+    width:130px;height:130px;border-radius:50%;background:var(--orange);
+    display:flex;align-items:center;justify-content:center;font-size:52px;color:#1a1200;
+    box-shadow:0 0 60px rgba(245,158,11,.6);
+  }
+  #tap-overlay .play-label{font-size:26px;font-weight:700;color:#fff}
+  #tap-overlay[hidden]{display:none}
+
+  /* ---- character: bottom-right corner, semi-transparent watermark, talking bounce loop, whole clip ---- */
   .character{
-    position:absolute;left:20px;bottom:0;width:460px;height:600px;
-    overflow:hidden;z-index:5;
+    position:absolute;right:24px;bottom:24px;width:400px;height:560px;
+    overflow:hidden;z-index:5;opacity:.55;border-radius:16px;
   }
   .character img{
-    width:460px;height:810px;object-fit:cover;object-position:50% 8%;
+    width:400px;height:700px;object-fit:cover;object-position:50% 8%;
     display:block;
     animation:hocaTalk .62s ease-in-out infinite;
   }
@@ -51,9 +69,13 @@
     50%{transform:translateY(-13px) scale(1.012)}
   }
 
-  /* ---- generic scene wrapper: true full-frame vertical centering, fades in fast, out at scene end ---- */
+  /* ---- generic scene wrapper: fixed + centered on the true vertical middle of the stage.
+     (#stage carries a CSS transform for the responsive scale-to-fit, and a transformed
+     ancestor becomes the containing block for its `position:fixed` descendants — so this
+     "fixed" centers within the 1080x1920 stage, not the browser viewport.) ---- */
   .scene{
-    position:absolute;inset:0;padding:0 48px;
+    position:fixed;left:0;right:0;top:50%;transform:translateY(-50%);
+    padding:0 48px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:18px;text-align:center;opacity:0;z-index:4;
   }
@@ -61,15 +83,15 @@
   /* flash punch used at a few scene-cuts */
   .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:8}
 
-  /* ================= SCENE 1 — 0-3s ================= */
-  #s1{animation:sceneFade 3s ease forwards;animation-delay:0s}
+  /* ================= SCENE 1 — 0.00–4.35s ================= */
+  #s1{animation:sceneFade 4.35s ease forwards;animation-delay:0s}
   #s1-21{font-size:360px;font-weight:900;color:var(--red);line-height:1;
     text-shadow:0 0 60px rgba(239,68,68,.65);
-    animation:s1TwentyOne 1.3s cubic-bezier(.36,.07,.19,.97) forwards;animation-delay:0s}
+    animation:s1TwentyOne 1.88s cubic-bezier(.36,.07,.19,.97) forwards;animation-delay:0s}
   #s1-60{position:absolute;font-size:400px;font-weight:900;color:var(--green);line-height:1;
     text-shadow:0 0 70px rgba(34,197,94,.7);opacity:0;
-    animation:s1Sixty 1.7s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:1.3s}
-  #s1-flash{animation:flashPulse .3s ease forwards;animation-delay:0s}
+    animation:s1Sixty 2.46s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:1.88s}
+  #s1-flash{animation:flashPulse .43s ease forwards;animation-delay:0s}
   @keyframes s1TwentyOne{
     0%{opacity:0;transform:scale(.5)}
     12%{opacity:1;transform:scale(1)}
@@ -86,13 +108,13 @@
     100%{opacity:1;transform:scale(1)}
   }
 
-  /* ================= SCENE 2 — 3-6s ================= */
-  #s2{animation:sceneFade 3s ease forwards;animation-delay:3s}
+  /* ================= SCENE 2 — 4.35–7.00s ================= */
+  #s2{animation:sceneFade 2.66s ease forwards;animation-delay:4.35s}
   #s2-yanlis{font-size:150px;font-weight:900;color:var(--red);line-height:1.05;
     text-shadow:0 0 40px rgba(239,68,68,.55);
-    animation:s2Swing 1.7s ease forwards;animation-delay:0s}
+    animation:s2Swing 1.51s ease forwards;animation-delay:4.35s}
   #s2-strateji{font-size:92px;font-weight:700;color:var(--white);
-    animation:s2FadeUp 1.2s ease forwards;animation-delay:1.8s;opacity:0}
+    animation:s2FadeUp 1.06s ease forwards;animation-delay:5.94s;opacity:0}
   @keyframes s2Swing{
     0%{opacity:0;transform:rotate(-18deg) scale(.7)}
     15%{opacity:1;transform:rotate(13deg) scale(1.05)}
@@ -106,23 +128,23 @@
     75%{transform:translateY(0)} 100%{opacity:1;transform:translateY(0)}
   }
 
-  /* ================= SCENE 3 — 6-14s (Puan Analizörü mockup) ================= */
-  #s3{animation:sceneFade 8s ease forwards;animation-delay:6s}
+  /* ================= SCENE 3 — 7.00–11.92s (Puan Analizörü mockup) ================= */
+  #s3{animation:sceneFade 4.91s ease forwards;animation-delay:7s}
   .pa-mock{width:900px;background:var(--card);border:2px solid var(--card-border);border-radius:24px;
     padding:44px 40px;opacity:0;transform:scale(.85) translateY(30px);
-    animation:paMockIn .6s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:0s}
+    animation:paMockIn .37s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:7s}
   .pa-mock-title{font-family:'IBM Plex Mono',monospace;font-size:26px;letter-spacing:.06em;
     color:var(--orange);text-transform:uppercase;margin-bottom:28px;font-weight:700}
   .pa-mock-row{display:flex;gap:20px;margin-bottom:22px}
   .pa-mock-field{flex:1;background:#0d1024;border:1px solid var(--card-border);border-radius:14px;padding:18px 22px;text-align:left}
   .pa-mock-label{font-size:20px;color:#8b93a3;margin-bottom:10px;font-weight:600}
   .pa-mock-val{font-size:64px;font-weight:900;line-height:1;min-height:64px}
-  #s3-dogru{color:var(--green);opacity:0;animation:paPop .6s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:1s}
-  #s3-yanlis{color:var(--red);opacity:0;animation:paPop .6s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:2.3s}
+  #s3-dogru{color:var(--green);opacity:0;animation:paPop .37s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:7.62s}
+  #s3-yanlis{color:var(--red);opacity:0;animation:paPop .37s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:8.42s}
   #s3-btn{margin-top:6px;background:var(--orange);color:#1a1200;font-weight:800;font-size:30px;
     border-radius:14px;padding:22px;text-align:center;
-    animation:paBtnGlow 1.9s ease forwards;animation-delay:3.6s}
-  #s3-sonuc{margin-top:30px;opacity:0;animation:paResult 1s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:5.7s}
+    animation:paBtnGlow 1.17s ease forwards;animation-delay:9.21s}
+  #s3-sonuc{margin-top:30px;opacity:0;animation:paResult .61s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:10.5s}
   #s3-sonuc .n{font-size:150px;font-weight:900;color:var(--red);line-height:1;text-shadow:0 0 40px rgba(239,68,68,.5)}
   #s3-sonuc .l{font-size:34px;color:var(--white);font-weight:700;margin-top:6px}
   @keyframes paMockIn{0%{opacity:0;transform:scale(.85) translateY(30px)}100%{opacity:1;transform:scale(1) translateY(0)}}
@@ -142,16 +164,16 @@
     70%{transform:scale(.96)} 100%{opacity:1;transform:scale(1)}
   }
 
-  /* ================= SCENE 4 — 14-20s (however/although/despite) ================= */
-  #s4{animation:sceneFade 6s ease forwards;animation-delay:14s}
+  /* ================= SCENE 4 — 11.92–16.34s (however/although/despite) ================= */
+  #s4{animation:sceneFade 4.43s ease forwards;animation-delay:11.92s}
   .flyword{position:absolute;font-size:190px;font-weight:900;color:var(--orange);
     text-shadow:0 0 50px rgba(245,158,11,.6);opacity:0;
-    animation:flyIn 1.1s cubic-bezier(.2,.9,.25,1) forwards}
-  #s4-however{animation-delay:0s}
-  #s4-although{animation-delay:1.1s}
-  #s4-despite{animation-delay:2.2s}
+    animation:flyIn .81s cubic-bezier(.2,.9,.25,1) forwards}
+  #s4-however{animation-delay:11.92s}
+  #s4-although{animation-delay:12.73s}
+  #s4-despite{animation-delay:13.54s}
   #s4-summary{font-size:78px;font-weight:700;color:var(--white);opacity:0;
-    animation:s2FadeUp 1s ease forwards;animation-delay:3.3s}
+    animation:s2FadeUp .74s ease forwards;animation-delay:14.35s}
   @keyframes flyIn{
     0%{opacity:0;transform:scale(.35) translateX(140px)}
     35%{opacity:1;transform:scale(1.28) translateX(0)}
@@ -159,11 +181,11 @@
     100%{opacity:0;transform:scale(.8)}
   }
 
-  /* ================= SCENE 5 — 20-25s (KLOD prompt card) ================= */
-  #s5{animation:sceneFade 5s ease forwards;animation-delay:20s}
+  /* ================= SCENE 5 — 16.34–18.52s (KLOD prompt card) ================= */
+  #s5{animation:sceneFade 2.17s ease forwards;animation-delay:16.34s}
   .klod-card{width:920px;background:var(--card);border:2px solid var(--card-border);border-radius:20px;
     overflow:hidden;text-align:left;opacity:0;transform:scale(.9);
-    animation:cardPop .35s ease forwards;animation-delay:.15s}
+    animation:cardPop .15s ease forwards;animation-delay:16.41s}
   .klod-head{display:flex;align-items:center;justify-content:space-between;gap:16px;
     padding:24px 28px;border-bottom:1px solid var(--card-border);background:#0d1024}
   .klod-type{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:800;letter-spacing:.05em;color:var(--orange)}
@@ -174,22 +196,22 @@
   .klod-copy .t1,.klod-copy .t2{display:block;grid-area:1/1}
   .klod-copy .t2{opacity:0;color:#fff}
   .klod-copy{display:grid}
-  #klod-btn{animation:copyBtnGo .5s ease forwards;animation-delay:2s}
-  #klod-btn .t1{animation:copyTxtOut .01s ease forwards;animation-delay:2s}
-  #klod-btn .t2{animation:copyTxtIn .3s ease forwards;animation-delay:2s}
+  #klod-btn{animation:copyBtnGo .22s ease forwards;animation-delay:17.21s}
+  #klod-btn .t1{animation:copyTxtOut .01s ease forwards;animation-delay:17.21s}
+  #klod-btn .t2{animation:copyTxtIn .13s ease forwards;animation-delay:17.21s}
   .klod-body{padding:28px;font-family:'IBM Plex Mono',monospace;font-size:22px;line-height:1.6;color:#c9cee0}
   @keyframes cardPop{0%{opacity:0;transform:scale(.9)}60%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
   @keyframes copyBtnGo{0%{background:#1a1e38;border-color:var(--card-border)}100%{background:var(--green);border-color:var(--green)}}
   @keyframes copyTxtOut{to{opacity:0}}
   @keyframes copyTxtIn{to{opacity:1;color:#0a1a0f}}
 
-  /* ================= SCENE 6 — 25-30s (final CTA) ================= */
-  #s6{animation:sceneFadeHold 5s ease forwards;animation-delay:25s}
+  /* ================= SCENE 6 — 18.52–22.06s (final CTA, holds) ================= */
+  #s6{animation:sceneFadeHold 3.54s ease forwards;animation-delay:18.52s}
   #s6-logo{font-size:98px;font-weight:900;color:var(--gold);opacity:0;
-    animation:s6LogoIn .9s cubic-bezier(.2,.9,.25,1) forwards, s6LogoGlow 1.8s ease-in-out infinite 1s;
-    animation-delay:0s}
+    animation:s6LogoIn .64s cubic-bezier(.2,.9,.25,1) 18.52s forwards,
+              s6LogoGlow 1.8s ease-in-out infinite 19.23s}
   #s6-cta{font-size:64px;font-weight:700;color:var(--white);opacity:0;
-    animation:s2FadeUp 1s ease forwards;animation-delay:1.2s}
+    animation:s2FadeUp .71s ease forwards;animation-delay:19.37s}
   @keyframes s6LogoIn{0%{opacity:0;transform:scale(.6)}60%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
   @keyframes s6LogoGlow{0%,100%{text-shadow:0 0 30px rgba(245,166,35,.5)}50%{text-shadow:0 0 70px rgba(245,166,35,.95)}}
 
@@ -202,7 +224,7 @@
 <body>
 
   <div class="chrome">
-    <span>SİNYAL AVCISI — Puan Analizörü Reels · 1080×1920 · 30sn</span>
+    <span>SİNYAL AVCISI — Puan Analizörü Reels · 1080×1920 · <b id="total-dur">22sn</b></span>
     <span>Sahne <b id="scene-no">1</b>/6 · <b id="clock">00:00</b></span>
     <button onclick="replay()">↻ Yeniden Oynat</button>
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
@@ -210,8 +232,10 @@
 
   <div class="stage-wrap">
     <div id="stage">
-      <div id="timeline">
-        <div class="character"><img src="hoca.png" alt="Hoca"></div>
+      <audio id="reel-audio" src="reels-ses.mp3" preload="auto"></audio>
+
+      <div id="timeline" class="paused">
+        <div class="character"><img id="hoca-img" src="hoca.png" alt="Hoca"></div>
 
         <div class="flash" id="s1-flash"></div>
 
@@ -275,14 +299,20 @@
         </div>
 
       </div>
+
+      <div id="tap-overlay">
+        <div class="play-btn">▶</div>
+        <div class="play-label">🔊 Başlatmak için dokun</div>
+      </div>
     </div>
   </div>
 
 <script>
-  const STAGE_W = 1080, STAGE_H = 1920, DURATION = 30;
+  const STAGE_W = 1080, STAGE_H = 1920;
+  let DURATION = 22.06; // fallback; replaced by the mp3's real duration once it loads
   const SCENES = [
-    {id:'s1', start:0},  {id:'s2', start:3},  {id:'s3', start:6},
-    {id:'s4', start:14}, {id:'s5', start:20}, {id:'s6', start:25}
+    {id:'s1', start:0},     {id:'s2', start:4.35},  {id:'s3', start:7.00},
+    {id:'s4', start:11.92}, {id:'s5', start:16.34}, {id:'s6', start:18.52}
   ];
 
   function fitStage(){
@@ -294,8 +324,53 @@
   window.addEventListener('resize', fitStage);
   fitStage();
 
-  let startTime = performance.now();
+  // ---- hoca.png load diagnostics — check the console (desktop devtools, or
+  // remote-inspect the phone: chrome://inspect on Android, Safari > Develop menu on iPhone) ----
+  const hocaImg = document.getElementById('hoca-img');
+  console.log('[hoca] resolved URL =', hocaImg.src);
+  hocaImg.addEventListener('load', () => {
+    console.log('[hoca] loaded OK —', hocaImg.naturalWidth + 'x' + hocaImg.naturalHeight);
+  });
+  hocaImg.addEventListener('error', () => {
+    console.error('[hoca] FAILED TO LOAD:', hocaImg.src, '— check that assets/hoca.png exists at this exact path/case');
+  });
+
+  // ---- audio + sync ----
+  const audio = document.getElementById('reel-audio');
+  const tapOverlay = document.getElementById('tap-overlay');
+  let startTime = null;
+
+  audio.addEventListener('loadedmetadata', () => {
+    if (isFinite(audio.duration) && audio.duration > 0) {
+      DURATION = audio.duration;
+      document.getElementById('total-dur').textContent = Math.round(DURATION) + 'sn';
+    }
+  });
+  audio.addEventListener('error', () => {
+    console.error('[reel-audio] FAILED TO LOAD reels-ses.mp3 — animation will still run on its own timeline.');
+  });
+
+  function beginSync(){
+    tapOverlay.hidden = true;
+    // re-queried live — after replay() this is the freshly-cloned node, not the original
+    document.getElementById('timeline').classList.remove('paused');
+    startTime = performance.now();
+    requestAnimationFrame(tick);
+  }
+  function tryAutoplay(){
+    const p = audio.play();
+    if (p && typeof p.then === 'function') {
+      p.then(beginSync).catch(() => { tapOverlay.hidden = false; });
+    } else {
+      beginSync();
+    }
+  }
+  tapOverlay.addEventListener('click', () => {
+    audio.play().then(beginSync).catch(beginSync); // user gesture — should always succeed
+  });
+
   function tick(){
+    if (startTime === null) return;
     const elapsed = Math.min(DURATION, (performance.now() - startTime) / 1000);
     document.getElementById('progress-fill').style.width = (elapsed / DURATION * 100) + '%';
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
@@ -306,15 +381,19 @@
     document.getElementById('scene-no').textContent = current;
     if (elapsed < DURATION) requestAnimationFrame(tick);
   }
-  requestAnimationFrame(tick);
 
   function replay(){
+    audio.pause();
+    audio.currentTime = 0;
     const old = document.getElementById('timeline');
     const fresh = old.cloneNode(true);
+    fresh.classList.add('paused');
     old.parentNode.replaceChild(fresh, old);
-    startTime = performance.now();
-    requestAnimationFrame(tick);
+    startTime = null;
+    tryAutoplay();
   }
+
+  tryAutoplay();
 </script>
 </body>
 </html>
