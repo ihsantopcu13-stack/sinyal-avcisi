@@ -688,6 +688,38 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .sp-check-item.done span{color:var(--muted);text-decoration:line-through}
 .sp-rapor{margin-top:10px;font-size:12px;color:var(--muted)}
 
+/* PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* */
+.pa-bolum-grid{display:flex;gap:8px;flex-wrap:wrap}
+.pa-bolum-opt{flex:1;min-width:120px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.pa-bolum-opt.active{border-color:var(--signal);background:var(--sl);color:var(--signal)}
+.pa-bolum-opt:disabled{opacity:.4;cursor:not-allowed}
+.pa-bolum-opt .pa-yakinda{display:block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.pa-hedef-grid{display:flex;gap:8px;flex-wrap:wrap}
+.pa-hedef-opt{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.pa-hedef-opt.active{border-color:var(--signal);background:var(--signal);color:#fff}
+.pa-yorum{margin-top:14px;padding:14px 16px;border-radius:12px;border-left:3px solid var(--signal);background:var(--sl);font-size:13px;line-height:1.6;color:var(--ink)}
+.pa-yorum b{color:var(--signal)}
+.pa-faz-block{margin-top:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.pa-faz-block+.pa-faz-block{margin-top:10px}
+.pa-faz-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7c3aed;background:#7c3aed15;border-radius:10px;padding:2px 9px;display:inline-block;margin-bottom:6px}
+.pa-faz-baslik{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pa-faz-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.pa-prompt-card{background:var(--paper);border:1px solid var(--border);border-radius:10px;margin-top:8px;overflow:hidden}
+.pa-prompt-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border)}
+.pa-prompt-type{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em}
+.pa-prompt-title{font-size:12px;font-weight:700;color:var(--ink)}
+.pa-copy-btn{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s}
+.pa-copy-btn:hover{background:var(--signal);color:#fff;border-color:var(--signal)}
+.pa-copy-btn.copied{background:#059669;color:#fff;border-color:#059669}
+.pa-prompt-body{padding:10px 12px;font-size:12px;line-height:1.6;color:var(--ink);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap}
+.pa-haftalik{margin-top:14px;padding:16px;background:linear-gradient(135deg,#1a2030,#241a30);border-radius:12px;border:1px solid #2d3348}
+.pa-haftalik-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:8px}
+.pa-haftalik-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.pa-haftalik-val{font-family:'IBM Plex Serif',serif;font-size:19px;color:var(--signal)}
+.pa-haftalik-lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
+.pa-full-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--signal);text-decoration:none;font-weight:700;padding:10px;border:1px dashed var(--border);border-radius:10px}
+.pa-full-link:hover{background:var(--sl)}
+
 /* BUGÜN KARTI — Dashboard'un en üstü, günün tek görevi */
 .bugun-kart{
   background:linear-gradient(150deg,#12161f,#1a1408 130%);
@@ -1452,6 +1484,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <div class="dn-group-baslik">📅 Planla</div>
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')">📅 Çalışma Planım</div>
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')">🚨 Acil Kurtarma Planı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[17],'puananaliz')">📊 Puan Analizörü</div>
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')">🏆 Liderlik</div>
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')">🎬 Mini Dersler</div>
           </div>
@@ -1495,6 +1528,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dtab" onclick="dtab(this,'istatistik')">📊 İstatistiklerim</div>
           <div class="dtab" onclick="dtab(this,'canliders')">🎓 Canlı Ders</div>
           <div class="dtab" onclick="dtab(this,'sinavplanim')">🚨 Acil Kurtarma Planı</div>
+          <div class="dtab" onclick="dtab(this,'puananaliz')">📊 Puan Analizörü</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-sinyal')" title="Tam ekran">⛶</button>
@@ -1810,6 +1844,28 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <button onclick="sinavPlanimOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 Planımı Oluştur →</button>
           </div>
           <div id="sp-icerik" style="margin-top:16px"></div>
+        </div>
+
+        <!-- PUAN ANALİZÖRÜ & ÇALIŞMA PLANI -->
+        <div class="dmod" id="mod-puananaliz" style="display:none">
+          <div class="dm-eye">📊 PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — sonucunu gir, KLOD prompt'larıyla haftalık planını al</div>
+          <div style="margin-top:14px;padding:16px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="pa-dogru" min="0" max="80" value="17"></div>
+              <div class="sp-field"><label>Yanlış sayısı</label><input type="number" id="pa-yanlis" min="0" max="80" value="63"></div>
+            </div>
+            <div style="margin-top:10px">
+              <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600">Bölüm</label>
+              <div class="pa-bolum-grid" id="pa-bolum-grid"></div>
+            </div>
+            <div style="margin-top:10px">
+              <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600">Hedef puan</label>
+              <div class="pa-hedef-grid" id="pa-hedef-grid"></div>
+            </div>
+            <div style="margin-top:10px" class="sp-field"><label>Sınav tarihi (YDS/2 varsayılan: 22 Kasım 2026)</label><input type="date" id="pa-tarih"></div>
+            <button onclick="puanAnaliziOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📊 Analiz Et →</button>
+          </div>
+          <div id="pa-icerik" style="margin-top:16px"></div>
         </div>
 
         <!-- LİDERLİK TABLOSU -->
@@ -6367,7 +6423,7 @@ function dtab(el,mod){
     if(teknikContainer&&!teknikContainer.innerHTML){teknikContainer.innerHTML=teknikModulHTML();}
     return;
   }
-  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();}
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
 }
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
@@ -10241,6 +10297,214 @@ function bugunGorevGit(dnAra){
   const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes(dnAra));
   if(item)item.click();
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
+}
+
+// ─── PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* ─────────────────────────────────
+const PA_BOLUMLER=[
+  {key:'sosyal',etiket:'Sosyal Bilimler',aktif:true},
+  {key:'fen',etiket:'Fen Bilimleri',aktif:false},
+  {key:'saglik',etiket:'Sağlık Bilimleri',aktif:false}
+];
+const PA_HEDEFLER=[50,60,70,80];
+const PA_FAZLAR=[
+  {id:'p1',baslik:'Bağlaç Avcılığı ve Sinyal Okuma',etiket:'Temel Sinyal Eğitimi',desc:'63 yanlışın büyük bölümü buradan geliyor. Kelime kelime okumayı bırakıp sinyal avlamayı öğren.',
+    promptlar:[
+      {tip:'sinyal',baslik:'Bağlaç tespiti pratiği',metin:`Bana sosyal bilimler konularinda (tarih, sosyoloji, psikoloji, siyaset) bir YDS paragrafi ver. Ben sana once sadece baglaclar ve sinyal kelimeleri isaretleyeyim, sonra cevabi acikla. Turkce acikla. Birden fazla baglac varsa hangisinin "ana sinyal" oldugunu sor bana.`},
+      {tip:'sinyal',baslik:'Zıtlık sinyalleri (however / although / despite)',metin:`Sosyal bilimler metninde "zitlik" sinyali iceren (however, although, despite, even though, yet, while) 3 cumle yaz. Her cumlede bana sunu sor: "Bu cumlede yazar ne bekliyorduk, ne verdi?" Turkce anlat.`},
+      {tip:'tuzak',baslik:'Hidden negative tespiti',metin:`Bana YDS tarzı "gizli olumsuzluk" iceren 3 cumle yaz. (hardly, rarely, seldom, neither...nor, fail to, lack of gibi). Cumleleri ver, ben olumsuzlugu bulayim, sonra dogrula. Neden tuzak oldugunu Turkce acikla.`}
+    ]},
+  {id:'p2',baslik:'Akademik Kelime Kazanımı',etiket:'Kelime Savaşı',desc:'Sosyal bilimler metinleri akademik kelime ağırlıklı. Günde 15 kelime, spaced repetition ile.',
+    promptlar:[
+      {tip:'kelime',baslik:'Sosyal bilimler kelime seti',metin:`Bana sosyal bilimler YDS metinlerinde sik gecen 10 akademik kelime ver. Her kelime icin: 1) Turkce anlami, 2) Bir cumlede kullanim, 3) OSYM'nin bu kelimeyle nasil tuzak kurdugu. Tablo formatinda yaz.`},
+      {tip:'kelime',baslik:'Karıştırılan kelimeler testi',metin:`Sosyal bilimlerde sik karistirilan kelime ciftleri ver (ornek: affect/effect, adapt/adopt, imply/infer). Her cift icin ikisini ayni anda cumlede kullan ve farki bir hafiza hilesiyle anlat. Turkce.`},
+      {tip:'kelime',baslik:'Closest in meaning antrenman',metin:`YDS'deki "closest in meaning" soru tipini pratik etmek istiyorum. Sosyal bilimler metninden alti cizili bir kelime ver, 4 secenek sun. Ben seceyim, neden yanlis/dogru oldugunu acikla. 5 soru yap, her seferinde bir tane.`}
+    ]},
+  {id:'p3',baslik:'Zayıf Nokta Tespiti ve Onarımı',etiket:'Soru Tipi Kırımı',desc:'Artık yanlışları kategoriye göre analiz edip o tipe özel antrenman yapma zamanı.',
+    promptlar:[
+      {tip:'analiz',baslik:'Paragraf tamamlama stratejisi',metin:`YDS paragraf tamamlama sorularinda cok yanlis yapiyorum. Sosyal bilimler konusunda bir paragraf ver, sonu bos biraksin. Ben doldurayim. Sonra: dogru cevabin neden dogru, yanlis seceneklerin neden yanlis oldugunu "sinyal kelime" bazinda acikla.`},
+      {tip:'analiz',baslik:'Anlam bütünlüğü bozulan cümle',metin:`YDS'de "anlam bakimindan ilgisiz cumleyi bul" sorusu icin antrenman yap benimle. Sosyal bilimler konusunda 5 cumleli bir paragraf ver, biri yabanci. Ben bulayim. Neden o cumlenin yabanci oldugunu sinyal kelimeleriyle acikla.`},
+      {tip:'tuzak',baslik:'ÖSYM tuzak analizi (yanlışların üzerinden)',metin:`Sana bir YDS sorusu ve yanlis isaretledigim secenegi soyliyecegim. Sen sunu analiz et: 1) Ben neden o secenegi sectim (OSYM beni nasil yaniltti), 2) Dogru cevaba giden sinyal neydi, 3) Bir dahaki seferinde bu tuzagi nasil fark ederim. Turkce, kisa ve net.`}
+    ]},
+  {id:'p4',baslik:'Sınav Psikolojisi ve Zaman Yönetimi',etiket:'Tam Strateji',desc:'Artık bilgi var, strateji eksik. Hangi soruları atlayacaksın, hangilerine gireceksin?',
+    promptlar:[
+      {tip:'strateji',baslik:'Atlama ve devam etme kararı',metin:`YDS sinavinda hangi sorulari atlayip hangilerine girmeliyim? Sosyal bilimler ogrencisi olarak bana soru tiplerine gore "gir / atla / bos birak" karari icin bir karar agaci cikar. Turkce, tablo formatinda.`},
+      {tip:'strateji',baslik:'3 saati planlama',metin:`YDS'de 3 saat 80 sorum var. Sosyal bilimler ogrencisi icin soru tiplerine gore ideal zaman dagilimi nasil olmali? (Kelime, ceviri, paragraf, tamamlama, diyalog) Her tipe kac dakika ayirmaliyim? Neden? Turkce acikla.`},
+      {tip:'strateji',baslik:'Hedef puana ulaşma hesabı',metin:`YDS'de hedef puanimi almak icin kac dogru kac yanlis yapabilirim? Farkli senaryolar goster (orn. cok dogru az yanlis vs. daha az dogru sifir yanlis). Hangi soru tiplerine odaklanırsam en garantili sekilde hedefe ulasırim? Turkce hesapla.`}
+    ]},
+  {id:'p5',baslik:'Deneme ve Hata Temizleme',etiket:'Son Düzlük',desc:'Yeni öğrenme yok. Sadece yanlışları sil, refleksleri pekiştir.',
+    promptlar:[
+      {tip:'analiz',baslik:'Son deneme analizi',metin:`Bugün tam deneme cozdum. Sonuclarim: [DOGRU] dogru, [YANLIS] yanlis. Yanlislarim su soru tiplerinde yogunlasiyor: [TIP YAZ]. Bana bu tiplere ozel 10 dakikalik bir "son hafta tarama egzersizi" yap. Turkce.`},
+      {tip:'tuzak',baslik:'Karışan kelimeler - son tarama',metin:`Sosyal bilimlerde hala karistirdigim kelimeler var. Bana hizli bir kelime savasi yap: 20 kelime, sadece Turkce anlamini soyle, ben Ingilizce karsiligini yazayim. Sonra yanlislarimi listele ve "sinavda nasil gelir?" diye goster.`},
+      {tip:'strateji',baslik:'Sınav günü checklist',metin:`YDS sinav gunu sabahindan salon cikisina kadar yapacaklarimin listesini cikar. Psikolojik hazirlik, ilk 10 dakika stratejisi, panikleyince ne yapacagim, kacinci soruda molaya ihtiyac duyarim. Kisa ve pratik. Turkce.`}
+    ]}
+];
+const PA_TIP_ETIKET={sinyal:'SİNYAL OKUMA',kelime:'KELİME',tuzak:'TUZAK',analiz:'ANALİZ',strateji:'STRATEJİ'};
+const PA_TIP_RENK={sinyal:'#f5a623',kelime:'#34d399',tuzak:'#d97706',analiz:'#7c3aed',strateji:'#dc2626'};
+
+function paVarsayilanTarih(){
+  const now=new Date();
+  let hedef=new Date(2026,10,22); // YDS/2 — 22 Kasım 2026
+  if(hedef<now)hedef=new Date(now.getFullYear()+1,10,22);
+  const ay=String(hedef.getMonth()+1).padStart(2,'0');
+  const gun=String(hedef.getDate()).padStart(2,'0');
+  return hedef.getFullYear()+'-'+ay+'-'+gun;
+}
+function paVarsayilanAyar(){
+  return{dogru:17,yanlis:63,bolum:'sosyal',hedefPuan:60,tarih:paVarsayilanTarih()};
+}
+function paAyarYukle(){
+  try{
+    const v=JSON.parse(localStorage.getItem('sa_pa_ayar'));
+    if(v&&v.dogru!=null&&v.yanlis!=null&&v.hedefPuan!=null&&v.tarih)return v;
+  }catch(e){}
+  return paVarsayilanAyar();
+}
+function paBolumSec(key){
+  const bolum=PA_BOLUMLER.find(b=>b.key===key);
+  if(!bolum||!bolum.aktif)return;
+  document.querySelectorAll('.pa-bolum-opt').forEach(b=>b.classList.toggle('active',b.dataset.key===key));
+  puanAnaliziOlustur();
+}
+function paHedefSec(val){
+  document.querySelectorAll('.pa-hedef-opt').forEach(b=>b.classList.toggle('active',b.dataset.val==val));
+  puanAnaliziOlustur();
+}
+function paSeciliBolum(){
+  const el=document.querySelector('.pa-bolum-opt.active');
+  return el?el.dataset.key:'sosyal';
+}
+function paSeciliHedef(){
+  const el=document.querySelector('.pa-hedef-opt.active');
+  return el?parseFloat(el.dataset.val):60;
+}
+// YDS puanlama: Net = Doğru − Yanlış/4, Puan = Net × 100/80
+function paHesapla(dogru,yanlis,hedefPuan,tarihStr){
+  const net=Math.max(0,dogru-yanlis/4);
+  const mevcutPuan=Math.round((net*100/80)*100)/100;
+  const hedefTarih=new Date(tarihStr+'T23:59:59');
+  const simdi=new Date();
+  const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
+  const kalanHafta=Math.max(1,Math.ceil(kalanGun/7));
+  const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
+  const gerekliNet=Math.min(80,hedefPuan*80/100);
+  const gerekliDogru=Math.max(0,Math.ceil(gerekliNet));
+  const ekDogruGerekli=Math.max(0,gerekliDogru-dogru);
+  let yanlisAzaltYuzde=0;
+  if(yanlis>0){
+    const izinliYanlis=Math.max(0,(dogru-gerekliNet)*4);
+    yanlisAzaltYuzde=Math.min(100,Math.max(0,Math.round((1-Math.min(yanlis,izinliYanlis)/yanlis)*100)));
+  }
+  return{dogru,yanlis,hedefPuan,tarihStr,net:Math.round(net*100)/100,mevcutPuan,kalanGun,kalanHafta,puanFarki,gerekliDogru,ekDogruGerekli,yanlisAzaltYuzde};
+}
+function paYorum(puan){
+  if(puan<21)return'En kritik sorun: temel eksikleri kapatmak — sinyal okuma ve temel kelimeden başla.';
+  if(puan<=30)return'En kritik sorun: strateji eksikliği';
+  if(puan<=45)return'En kritik sorun: kelime + yapı';
+  if(puan<=55)return'En kritik sorun: tuzak sorular';
+  if(puan<=65)return'En kritik sorun: ince ayar';
+  return'En kritik sorun yok — tempo ve deneme sınavı temposunu koru, küçük hatalara odaklan.';
+}
+// Kalan haftaya göre kaç faz gösterileceğini belirler (10+→5, 6-9→3, 3-5→2, 1-2→1); her plan fazı 1+ kaynak fazın promptlarını taşır
+function paPlanFazlariniOlustur(kalanHafta){
+  const P=PA_FAZLAR;
+  let gruplar;
+  if(kalanHafta>=10)gruplar=[[P[0]],[P[1]],[P[2]],[P[3]],[P[4]]];
+  else if(kalanHafta>=6)gruplar=[[P[0],P[1]],[P[2],P[3]],[P[4]]];
+  else if(kalanHafta>=3)gruplar=[[P[0],P[1],P[2]],[P[3],P[4]]];
+  else gruplar=[[P[4]]];
+  const haftaBasi=Math.max(1,Math.floor(kalanHafta/gruplar.length));
+  return gruplar.map((kaynaklar,i)=>{
+    const haftaBaslangic=i*haftaBasi+1;
+    const haftaBitis=i===gruplar.length-1?kalanHafta:(i+1)*haftaBasi;
+    const promptlar=[];
+    kaynaklar.forEach(f=>promptlar.push(...f.promptlar.slice(0,1)));
+    while(promptlar.length<2&&kaynaklar[0].promptlar.length>promptlar.length)promptlar.push(kaynaklar[0].promptlar[promptlar.length]);
+    return{
+      baslik:kaynaklar.map(f=>f.baslik).join(' + '),
+      etiket:kaynaklar.map(f=>f.etiket).join(' · '),
+      desc:kaynaklar[0].desc,
+      haftaAraligi:haftaBaslangic===haftaBitis?`Hafta ${haftaBaslangic}`:`Hafta ${haftaBaslangic}-${haftaBitis}`,
+      promptlar:promptlar.slice(0,2)
+    };
+  });
+}
+function puanAnaliziRender(){
+  const bolumGrid=document.getElementById('pa-bolum-grid'),hedefGrid=document.getElementById('pa-hedef-grid');
+  if(!bolumGrid)return;
+  const ayar=paAyarYukle();
+  bolumGrid.innerHTML=PA_BOLUMLER.map(b=>`<button class="pa-bolum-opt${b.key===ayar.bolum?' active':''}" data-key="${b.key}" ${b.aktif?`onclick="paBolumSec('${b.key}')"`:'disabled'}>${b.etiket}${b.aktif?'':'<span class="pa-yakinda">Yakında</span>'}</button>`).join('');
+  hedefGrid.innerHTML=PA_HEDEFLER.map(h=>`<button class="pa-hedef-opt${h===ayar.hedefPuan?' active':''}" data-val="${h}" onclick="paHedefSec(${h})">${h===80?'80+':h}</button>`).join('');
+  document.getElementById('pa-dogru').value=ayar.dogru;
+  document.getElementById('pa-yanlis').value=ayar.yanlis;
+  document.getElementById('pa-tarih').value=ayar.tarih;
+  puanAnaliziOlustur();
+}
+function puanAnaliziOlustur(){
+  const icerikEl=document.getElementById('pa-icerik');
+  if(!icerikEl)return;
+  const dogru=Math.min(80,Math.max(0,parseInt(document.getElementById('pa-dogru').value)||0));
+  const yanlis=Math.min(80,Math.max(0,parseInt(document.getElementById('pa-yanlis').value)||0));
+  const bolum=paSeciliBolum();
+  const hedefPuan=paSeciliHedef();
+  const tarihEl=document.getElementById('pa-tarih');
+  const tarihStr=tarihEl.value||paVarsayilanTarih();
+  localStorage.setItem('sa_pa_ayar',JSON.stringify({dogru,yanlis,bolum,hedefPuan,tarih:tarihStr}));
+
+  const v=paHesapla(dogru,yanlis,hedefPuan,tarihStr);
+  const planFazlari=paPlanFazlariniOlustur(v.kalanHafta);
+  const gunlukSoru=Math.min(80,Math.max(10,Math.ceil((v.ekDogruGerekli*3.5)/v.kalanGun)||15));
+  const haftalikSoru=gunlukSoru*7;
+  const haftalikKelime=planFazlari[0]&&/Kelime/i.test(planFazlari[0].etiket)?105:30;
+  const buHaftaKonu=planFazlari[0]?planFazlari[0].baslik:'Son Düzlük';
+
+  icerikEl.innerHTML=`
+    <div class="sp-grid">
+      <div class="sp-stat${v.mevcutPuan<30?' uyari':''}"><div class="sp-stat-val">${v.mevcutPuan}</div><div class="sp-stat-lbl">Mevcut Puan</div></div>
+      <div class="sp-stat vurgu"><div class="sp-stat-val">${hedefPuan}</div><div class="sp-stat-lbl">Hedef Puan</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${v.puanFarki}</div><div class="sp-stat-lbl">Hedefe Kalan Puan</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${v.kalanHafta}</div><div class="sp-stat-lbl">Hafta Kaldı</div></div>
+    </div>
+    <div class="sp-grid" style="margin-top:10px">
+      <div class="sp-stat"><div class="sp-stat-val">+${v.ekDogruGerekli}</div><div class="sp-stat-lbl">Ek Doğru Gerekli</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">%${v.yanlisAzaltYuzde}</div><div class="sp-stat-lbl">Azaltılacak Yanlış</div></div>
+    </div>
+    <div class="pa-yorum"><b>${paYorum(v.mevcutPuan)}</b></div>
+    <div style="margin-top:16px">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">📅 Faz Bazlı Çalışma Planın — ${planFazlari.length} faz</div>
+      ${planFazlari.map(f=>`
+        <div class="pa-faz-block">
+          <div class="pa-faz-eyebrow">${f.haftaAraligi} · ${f.etiket}</div>
+          <div class="pa-faz-baslik">${f.baslik}</div>
+          <div class="pa-faz-desc">${f.desc}</div>
+          ${f.promptlar.map(p=>`
+            <div class="pa-prompt-card">
+              <div class="pa-prompt-head">
+                <div><span class="pa-prompt-type" style="color:${PA_TIP_RENK[p.tip]}">${PA_TIP_ETIKET[p.tip]}</span> · <span class="pa-prompt-title">${p.baslik}</span></div>
+                <button class="pa-copy-btn" onclick="paPromptKopyala(this)">Kopyala</button>
+              </div>
+              <div class="pa-prompt-body">${p.metin}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>
+    <div class="pa-haftalik">
+      <div style="font-size:13px;font-weight:700;color:var(--ink)">🎯 Bu Hafta Hedefin</div>
+      <div class="pa-haftalik-grid">
+        <div class="pa-haftalik-stat"><div class="pa-haftalik-val">${haftalikSoru}</div><div class="pa-haftalik-lbl">Soru Çöz</div></div>
+        <div class="pa-haftalik-stat"><div class="pa-haftalik-val">${haftalikKelime}</div><div class="pa-haftalik-lbl">Yeni Kelime</div></div>
+        <div class="pa-haftalik-stat"><div class="pa-haftalik-val" style="font-size:13px">${buHaftaKonu}</div><div class="pa-haftalik-lbl">KLOD Konusu</div></div>
+      </div>
+    </div>
+    <a class="pa-full-link" href="/klod-sosyal-bilimler-prompt-seti.html" target="_blank" rel="noopener">📖 Tüm 10 Haftalık KLOD Prompt Setini Gör →</a>
+  `;
+}
+function paPromptKopyala(btn){
+  const body=btn.closest('.pa-prompt-card').querySelector('.pa-prompt-body');
+  navigator.clipboard.writeText(body.textContent.trim()).then(()=>{
+    btn.textContent='Kopyalandı';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Kopyala';btn.classList.remove('copied');},2000);
+  });
 }
 
 setTimeout(()=>{

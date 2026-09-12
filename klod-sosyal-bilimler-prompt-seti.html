@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLOD Prompt Seti — Sosyal Bilimler</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root {
+    --ink: #1a1a2e; --paper: #f7f5f0; --accent: #2563a8; --accent-light: #dbeafe;
+    --warm: #92400e; --warm-light: #fef3c7; --green: #065f46; --green-light: #d1fae5;
+    --red: #7f1d1d; --red-light: #fee2e2; --border: #d1c9b8; --muted: #6b6355;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; padding: 2rem 1rem; }
+  .container { max-width: 720px; margin: 0 auto; }
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; font-weight: 500; background: var(--ink); color: var(--paper); padding: 0.2rem 0.6rem; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  h1 { font-size: 1.6rem; font-weight: 600; line-height: 1.25; margin-bottom: 0.4rem; }
+  .subtitle { color: var(--muted); font-size: 0.9rem; font-style: italic; }
+  .score-bar { display: flex; gap: 1rem; margin: 1.5rem 0; padding: 1rem 1.25rem; background: white; border: 1px solid var(--border); }
+  .score-item { text-align: center; flex: 1; }
+  .score-item .num { font-family: 'IBM Plex Mono', monospace; font-size: 1.6rem; font-weight: 500; line-height: 1; }
+  .score-item .label { font-size: 0.7rem; color: var(--muted); margin-top: 0.2rem; }
+  .score-item.danger .num { color: #b91c1c; }
+  .score-item.target .num { color: var(--accent); }
+  .score-item.now .num { color: var(--warm); }
+  .divider { width: 1px; background: var(--border); align-self: stretch; }
+  .week-nav { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .week-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; padding: 0.4rem 0.75rem; border: 1px solid var(--border); background: white; cursor: pointer; color: var(--ink); transition: all 0.15s; }
+  .week-btn:hover, .week-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .phase { display: none; }
+  .phase.active { display: block; }
+  .phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.75rem; text-transform: uppercase; }
+  .phase h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .phase .desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; font-style: italic; }
+  .prompt-card { background: white; border: 1px solid var(--border); margin-bottom: 1rem; overflow: hidden; }
+  .prompt-card-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: #fafaf8; }
+  .prompt-type { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.05em; }
+  .prompt-type.sinyal { color: var(--accent); }
+  .prompt-type.kelime { color: var(--green); }
+  .prompt-type.tuzak { color: var(--warm); }
+  .prompt-type.analiz { color: #7c3aed; }
+  .prompt-type.strateji { color: var(--red); }
+  .prompt-title { font-weight: 600; font-size: 0.88rem; }
+  .copy-btn { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; padding: 0.3rem 0.7rem; border: 1px solid var(--border); background: white; cursor: pointer; color: var(--muted); transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+  .copy-btn.copied { background: var(--green); color: white; border-color: var(--green); }
+  .prompt-body { padding: 1rem; font-size: 0.82rem; line-height: 1.65; color: #2d2a24; font-family: 'IBM Plex Mono', monospace; white-space: pre-wrap; border-left: 3px solid transparent; }
+  .prompt-card:hover .prompt-body { border-left-color: var(--border); }
+  .tip-box { padding: 0.9rem 1.1rem; margin-bottom: 1rem; font-size: 0.82rem; line-height: 1.6; border-left: 3px solid; }
+  .tip-box.info { border-color: var(--accent); background: var(--accent-light); color: #1e40af; }
+  .tip-box.warn { border-color: #d97706; background: var(--warm-light); color: var(--warm); }
+  .tip-box.success { border-color: #059669; background: var(--green-light); color: var(--green); }
+  .tip-box strong { font-weight: 600; }
+  footer { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">SİNYAL AVCISI × KLOD</div>
+    <h1>Sosyal Bilimler Öğrencisi<br>KLOD Prompt Seti</h1>
+    <p class="subtitle">YDS/2 Kasım 2026 — 10 Haftalık Çalışma Rehberi</p>
+  </header>
+  <div class="score-bar">
+    <div class="score-item danger"><div class="num">21</div><div class="label">Mevcut puan</div></div>
+    <div class="divider"></div>
+    <div class="score-item target"><div class="num">60</div><div class="label">Hedef puan</div></div>
+    <div class="divider"></div>
+    <div class="score-item now"><div class="num">10</div><div class="label">Hafta kaldı</div></div>
+    <div class="divider"></div>
+    <div class="score-item"><div class="num">48</div><div class="label">Hedef doğru</div></div>
+  </div>
+  <div class="week-nav">
+    <button class="week-btn active" onclick="showPhase('p1', this)">Hafta 1-2</button>
+    <button class="week-btn" onclick="showPhase('p2', this)">Hafta 3-4</button>
+    <button class="week-btn" onclick="showPhase('p3', this)">Hafta 5-6</button>
+    <button class="week-btn" onclick="showPhase('p4', this)">Hafta 7-8</button>
+    <button class="week-btn" onclick="showPhase('p5', this)">Hafta 9-10</button>
+  </div>
+  <div class="phase active" id="p1">
+    <div class="phase-label">Faz 1 / Temel Sinyal Egitimi</div>
+    <h2>Baglac Avciligi ve Sinyal Okuma</h2>
+    <p class="desc">63 yanlisin buyuk bolumu buradan geliyor. Kelime kelime okumayi birakip sinyal avlamayi ogren.</p>
+    <div class="tip-box warn"><strong>Neden buradan basliyoruz?</strong> 63 yanlis = strateji eksikligi. Her soruyu okumaya calisiyorsun, ama OSYM zaten okumana gerek olmadigi sekilde kuruyor soruyu. Sinyal avciligini bunu tersine cevirir.</div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type sinyal">SINYAL OKUMA</div><div class="prompt-title">Baglac tespiti pratigi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Bana sosyal bilimler konularinda (tarih, sosyoloji, psikoloji, siyaset) bir YDS paragrafi ver. Ben sana once sadece baglaclar ve sinyal kelimeleri isaretleyeyim, sonra cevabi acikla. Turkce acikla. Birden fazla baglac varsa hangisinin "ana sinyal" oldugunu sor bana.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type sinyal">SINYAL OKUMA</div><div class="prompt-title">Zitlik sinyalleri (however / although / despite)</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Sosyal bilimler metninde "zitlik" sinyali iceren (however, although, despite, even though, yet, while) 3 cumle yaz. Her cumlede bana sunu sor: "Bu cumlede yazar ne bekliyorduk, ne verdi?" Turkce anlat.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type tuzak">TUZAK</div><div class="prompt-title">Hidden negative tespiti</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Bana YDS tarzı "gizli olumsuzluk" iceren 3 cumle yaz. (hardly, rarely, seldom, neither...nor, fail to, lack of gibi). Cumleleri ver, ben olumsuzlugu bulayim, sonra dogrula. Neden tuzak oldugunu Turkce acikla.</div>
+    </div>
+  </div>
+  <div class="phase" id="p2">
+    <div class="phase-label">Faz 2 / Kelime Savasi</div>
+    <h2>Akademik Kelime Kazanimi</h2>
+    <p class="desc">Sosyal bilimler metinleri akademik kelime agirlikli. Gunde 15 kelime, spaced repetition ile.</p>
+    <div class="tip-box success"><strong>Hedef:</strong> 2 haftada 140 yeni kelime. KLOD'a kelime sorularken sadece anlam degil, "sinavda nasil tuzak yapilir?" diye sor.</div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type kelime">KELIME</div><div class="prompt-title">Sosyal bilimler kelime seti</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Bana sosyal bilimler YDS metinlerinde sik gecen 10 akademik kelime ver. Her kelime icin: 1) Turkce anlami, 2) Bir cumlede kullanim, 3) OSYM'nin bu kelimeyle nasil tuzak kurdugu. Tablo formatinda yaz.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type kelime">KELIME</div><div class="prompt-title">Karistirilan kelimeler testi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Sosyal bilimlerde sik karistirilan kelime ciftleri ver (ornek: affect/effect, adapt/adopt, imply/infer). Her cift icin ikisini ayni anda cumlede kullan ve farki bir hafiza hilesiyle anlat. Turkce.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type kelime">KELIME</div><div class="prompt-title">Closest in meaning antrenman</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS'deki "closest in meaning" soru tipini pratik etmek istiyorum. Sosyal bilimler metninden alti cizili bir kelime ver, 4 secenek sun. Ben seceyim, neden yanlis/dogru oldugunu acikla. 5 soru yap, her seferinde bir tane.</div>
+    </div>
+  </div>
+  <div class="phase" id="p3">
+    <div class="phase-label">Faz 3 / Soru Tipi Kirimi</div>
+    <h2>Zayif Nokta Tespiti ve Onarimi</h2>
+    <p class="desc">Artik yanlislari kategoriye gore analiz edip o tipe ozel antrenman yapma zamani.</p>
+    <div class="tip-box info"><strong>Once Mini Exam coz,</strong> Smart Report Card'i al, en cok yanlis yaptigin soru tipini buraya yaz. Sonra o tipe ozel KLOD prompt'unu kullan.</div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type analiz">ANALIZ</div><div class="prompt-title">Paragraf tamamlama stratejisi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS paragraf tamamlama sorularinda cok yanlis yapiyorum. Sosyal bilimler konusunda bir paragraf ver, sonu bos biraksin. Ben doldurayim. Sonra: dogru cevabin neden dogru, yanlis seceneklerin neden yanlis oldugunu "sinyal kelime" bazinda acikla.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type analiz">ANALIZ</div><div class="prompt-title">Anlam butunlugu bozulan cumle</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS'de "anlam bakimindan ilgisiz cumleyi bul" sorusu icin antrenman yap benimle. Sosyal bilimler konusunda 5 cumleli bir paragraf ver, biri yabanci. Ben bulayim. Neden o cumlenin yabanci oldugunu sinyal kelimeleriyle acikla.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type tuzak">TUZAK</div><div class="prompt-title">OSYM tuzak analizi (yanlislarim uzerinden)</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Sana bir YDS sorusu ve yanlis isaretledigim secenegi soyliyecegim. Sen sunu analiz et: 1) Ben neden o secenegi sectim (OSYM beni nasil yaniltti), 2) Dogru cevaba giden sinyal neydi, 3) Bir dahaki seferinde bu tuzagi nasil fark ederim. Turkce, kisa ve net.</div>
+    </div>
+  </div>
+  <div class="phase" id="p4">
+    <div class="phase-label">Faz 4 / Tam Strateji</div>
+    <h2>Sinav Psikolojisi ve Zaman Yonetimi</h2>
+    <p class="desc">Artik bilgi var, strateji eksik. Hangi sorulari atlayacaksin, hangilerine giriseceksin?</p>
+    <div class="tip-box warn"><strong>Kritik kural:</strong> 63 yanlis - her 4 yanlis 1 dogruyu siliyor. Bilmiyorsan bos birak. Bu tek kural 5-8 puan kazandirir.</div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type strateji">STRATEJI</div><div class="prompt-title">Atlama ve devam etme karari</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS sinavinda hangi sorulari atlayip hangilerine girmeliyim? Sosyal bilimler ogrencisi olarak bana soru tiplerine gore "gir / atla / bos birak" karari icin bir karar agaci cikar. Turkce, tablo formatinda.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type strateji">STRATEJI</div><div class="prompt-title">3 saati planlama</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS'de 3 saat 80 sorum var. Sosyal bilimler ogrencisi icin soru tiplerine gore ideal zaman dagilimi nasil olmali? (Kelime, ceviri, paragraf, tamamlama, diyalog) Her tipe kac dakika ayirmaliyim? Neden? Turkce acikla.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type strateji">STRATEJI</div><div class="prompt-title">60 puana ulasma hesabi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS'de 60 puan almak icin kac dogru kac yanlis yapabilirim? Farkli senaryolar goster: (orn. 50 dogru 0 yanlis vs. 48 dogru 10 yanlis). Hangi soru tiplerine odaklanırsam en garantili sekilde 60'a ulasırim? Turkce hesapla.</div>
+    </div>
+  </div>
+  <div class="phase" id="p5">
+    <div class="phase-label">Faz 5 / Son Duzluk</div>
+    <h2>Deneme ve Hata Temizleme</h2>
+    <p class="desc">Yeni ogrenme yok. Sadece yanlislari sil, refleksleri pekistir.</p>
+    <div class="tip-box success"><strong>Bu haftalar calisma degil, tarama haftaları.</strong> Ogrendigin her seyi sinav kosullarinda test et. Yeni konu ekleme.</div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type analiz">ANALIZ</div><div class="prompt-title">Son deneme analizi</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Bugün tam deneme cozdum. Sonuclarim: [DOGRU] dogru, [YANLIS] yanlis. Yanlislarim su soru tiplerinde yogunlasiyyor: [TIP YAZ]. Bana bu tiplere ozel 10 dakikalik bir "son hafta tarama egzersizi" yap. Turkce.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type tuzak">TUZAK</div><div class="prompt-title">Karisan kelimeler - son tarama</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">Sosyal bilimlerde hala karistirdigim kelimeler var. Bana hizli bir kelime savasi yap: 20 kelime, sadece Turkce anlamini soyle, ben Ingilizce karsiligini yazayim. Sonra yanlislarimi listele ve "sinavda nasil gelir?" diye goster.</div>
+    </div>
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <div><div class="prompt-type strateji">STRATEJI</div><div class="prompt-title">Sinav gunu checklist</div></div>
+        <button class="copy-btn" onclick="copyPrompt(this)">Kopyala</button>
+      </div>
+      <div class="prompt-body">YDS sinav gunu sabagindan salon cikisina kadar yapacaklarimin listesini cikar. Psikolojik hazirlik, ilk 10 dakika stratejisi, panikleyince ne yapacagim, kacinci soruda molaya ihtiyac duyarim. Kisa ve pratik. Turkce.</div>
+    </div>
+  </div>
+  <footer>
+    <span>sinyal-avcisi.com</span>
+    <span>YDS/2 - Kasim 2026</span>
+  </footer>
+</div>
+<script>
+function showPhase(id, btn) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function copyPrompt(btn) {
+  const body = btn.closest('.prompt-card').querySelector('.prompt-body');
+  navigator.clipboard.writeText(body.textContent.trim()).then(() => {
+    btn.textContent = 'Kopyalandi';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Kopyala'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
