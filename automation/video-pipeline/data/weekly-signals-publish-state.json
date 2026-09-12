@@ -1,0 +1,63 @@
+{
+  "nextIndex": 4,
+  "history": [
+    {
+      "id": "pazartesi-reels1",
+      "videoFile": "pazartesi_reels1.mp4",
+      "youtube": {
+        "videoId": "T47o39LeTSI",
+        "videoUrl": "https://youtube.com/shorts/T47o39LeTSI"
+      },
+      "instagram": {
+        "id": "6aa43547c38efd44b07591fa",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-11T17:07:19.781Z"
+    },
+    {
+      "id": "pazartesi-reels2",
+      "videoFile": "pazartesi_reels2.mp4",
+      "youtube": {
+        "videoId": "0pZ4ygQoumQ",
+        "videoUrl": "https://youtube.com/shorts/0pZ4ygQoumQ"
+      },
+      "instagram": {
+        "id": "6aa43549d9fa202f610774a3",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-11T17:07:21.841Z"
+    },
+    {
+      "id": "sali-reels1",
+      "videoFile": "sali_reels1.mp4",
+      "youtube": {
+        "videoId": "FRWoaGK1iOc",
+        "videoUrl": "https://youtube.com/shorts/FRWoaGK1iOc"
+      },
+      "instagram": {
+        "id": "6aa4412fd9fa202f61089ab9",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "error": "facebook post oluşturulamadı: Invalid post: Facebook posts require a type (post, story, or reel)."
+      },
+      "publishedAt": "2026-09-11T17:58:08.443Z"
+    },
+    {
+      "id": "sali-reels2",
+      "videoFile": "sali_reels2.mp4",
+      "youtube": {
+        "videoId": "P8nisgH7NYk",
+        "videoUrl": "https://youtube.com/shorts/P8nisgH7NYk"
+      },
+      "instagram": {
+        "id": "6aa44131d9fa202f61089aec",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "error": "facebook post oluşturulamadı: Invalid post: Facebook posts require a type (post, story, or reel)."
+      },
+      "publishedAt": "2026-09-11T17:58:10.085Z"
+    }
+  ]
+}

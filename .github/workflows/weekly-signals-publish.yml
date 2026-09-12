@@ -1,0 +1,49 @@
+name: Haftalık Sinyal Videoları — Günlük Yayın
+
+on:
+  schedule:
+    # Her gün 13:00 UTC = 16:00 Türkiye — diğer günlük yayın cron'larıyla
+    # (15:00 ve 17:00 UTC) çakışmasın diye önce çalışır.
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      publish_count:
+        description: "Bu çalıştırmada kaç video yayınlansın"
+        required: false
+        default: "2"
+
+jobs:
+  publish-next-weekly-signals:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # ilerleme state dosyasını (weekly-signals-publish-state.json) commit etmek için
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Bağımlılıkları kur
+        run: npm install
+
+      - name: Sıradaki haftalık sinyal videolarını yayınla
+        run: node scripts/publish-next-weekly-signal.mjs
+        env:
+          PUBLISH_COUNT: ${{ github.event.inputs.publish_count || '2' }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: İlerlemeyi commit'le
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/weekly-signals-publish-state.json
+          git diff --staged --quiet || git commit -m "chore: haftalık sinyal videoları yayın ilerlemesi güncellendi [skip ci]"
+          git push

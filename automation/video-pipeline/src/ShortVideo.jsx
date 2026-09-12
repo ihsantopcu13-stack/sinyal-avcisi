@@ -8,11 +8,13 @@ import {
   interpolate,
   spring,
 } from "remotion";
+import { renderWithHighlight } from "./captionUtils.jsx";
 
 // Koyu yeşil zemin + turkuaz vurgu + beyaz ana metin
 const BG = "linear-gradient(135deg,#0a2e1a,#04140b)";
 const CYAN = "#22d3ee";
 const INK = "#ffffff";
+const YELLOW = "#faff00";
 
 function CaptionLine({ text, active }) {
   const frame = useCurrentFrame();
@@ -43,7 +45,7 @@ function CaptionLine({ text, active }) {
           textShadow: "0 4px 24px rgba(0,0,0,0.6)",
         }}
       >
-        {text}
+        {renderWithHighlight(text, YELLOW, { uppercase: false })}
       </div>
     </div>
   );
