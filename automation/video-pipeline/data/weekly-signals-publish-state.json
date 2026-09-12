@@ -1,5 +1,5 @@
 {
-  "nextIndex": 4,
+  "nextIndex": 6,
   "history": [
     {
       "id": "pazartesi-reels1",
@@ -58,6 +58,40 @@
         "error": "facebook post oluşturulamadı: Invalid post: Facebook posts require a type (post, story, or reel)."
       },
       "publishedAt": "2026-09-11T17:58:10.085Z"
+    },
+    {
+      "id": "carsamba-reels1",
+      "videoFile": "carsamba_reels1.mp4",
+      "youtube": {
+        "videoId": "qpXoozT2koo",
+        "videoUrl": "https://youtube.com/shorts/qpXoozT2koo"
+      },
+      "instagram": {
+        "id": "6aa578b6ef23d0656ae98229",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aa578b63da5f8715332eb47",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-12T16:07:18.976Z"
+    },
+    {
+      "id": "carsamba-reels2",
+      "videoFile": "carsamba_reels2.mp4",
+      "youtube": {
+        "videoId": "NDE38MPYXwg",
+        "videoUrl": "https://youtube.com/shorts/NDE38MPYXwg"
+      },
+      "instagram": {
+        "id": "6aa578b83da5f8715332eb88",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aa578b8f7b1958d5cd05a34",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-12T16:07:20.951Z"
     }
   ]
 }
