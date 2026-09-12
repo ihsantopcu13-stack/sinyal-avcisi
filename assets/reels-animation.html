@@ -42,24 +42,21 @@
     overflow:hidden;z-index:5;
   }
   .character img{
-    width:100%;height:135%;object-fit:cover;object-position:50% 8%;
-    display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.6));
+    width:460px;height:810px;object-fit:cover;object-position:50% 8%;
+    display:block;
     animation:hocaTalk .62s ease-in-out infinite;
-    -webkit-mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
-    mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
   }
   @keyframes hocaTalk{
     0%,100%{transform:translateY(0) scale(1)}
     50%{transform:translateY(-13px) scale(1.012)}
   }
 
-  /* ---- generic scene wrapper: fills upper 2/3 (keeps clear of character), fades in fast, out at scene end ---- */
+  /* ---- generic scene wrapper: true full-frame vertical centering, fades in fast, out at scene end ---- */
   .scene{
-    position:absolute;inset:0;padding:0 48px 620px;
+    position:absolute;inset:0;padding:0 48px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:18px;text-align:center;opacity:0;z-index:4;
   }
-  .scene.hold{padding-bottom:560px}
 
   /* flash punch used at a few scene-cuts */
   .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:8}
@@ -272,7 +269,7 @@
           </div>
         </div>
 
-        <div class="scene hold" id="s6">
+        <div class="scene" id="s6">
           <div id="s6-logo">sinyal-avcisi.com</div>
           <div id="s6-cta">Ücretsiz. Şimdi analiz et.</div>
         </div>
