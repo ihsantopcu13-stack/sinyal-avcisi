@@ -373,6 +373,25 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 .footer-copy{font-size:16px;color:rgba(236,231,218,.35);grid-column:1/-1;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;line-height:1.7}
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-ov.open{display:flex}
+.sinyal-panel-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:9950}
+.sinyal-panel-ov.acik{opacity:1;pointer-events:auto}
+.sinyal-panel{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--surface);border-left:1px solid var(--border);box-shadow:-12px 0 40px rgba(0,0,0,.35);transform:translateX(100%);transition:transform .32s cubic-bezier(.16,1,.3,1);z-index:9951;display:flex;flex-direction:column}
+.sinyal-panel.acik{transform:translateX(0)}
+.sinyal-panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sinyal-panel-title{font-size:15px;font-weight:800;color:var(--ink);font-family:'IBM Plex Sans',sans-serif}
+.sinyal-panel-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:4px;border-radius:6px}
+.sinyal-panel-close:hover{color:var(--ink)}
+.sinyal-panel-body{flex:1;overflow-y:auto;padding:22px}
+.sinyal-coz-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:14px;cursor:pointer;color:var(--muted);transition:all .2s;flex-shrink:0}
+.sinyal-coz-btn:hover{border-color:var(--signal);color:var(--signal);transform:scale(1.08)}
+.sinyal-opt-row{padding:12px 14px;border-radius:10px;border:1px solid var(--border);margin-bottom:8px;font-size:14px;line-height:1.5;background:var(--surface);transition:background .3s,border-color .3s,color .3s}
+.sinyal-opt-kirmizi{animation:sinyalKirmiziYanip .7s ease-in-out 3;background:#2a1414;border-color:var(--trap);color:var(--trap)}
+.sinyal-opt-sari{animation:sinyalSariTitre .4s ease-in-out 2;background:#2e2410;border-color:#d97706;color:#d97706}
+.sinyal-opt-turuncu{animation:sinyalSariTitre .4s ease-in-out 2;background:#2a1c10;border-color:#ea580c;color:#ea580c}
+.sinyal-opt-yesil{animation:sinyalYesilParla 1.4s ease-in-out infinite;background:#0f2418;border-color:#16a34a;color:#15803d}
+@keyframes sinyalKirmiziYanip{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes sinyalSariTitre{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes sinyalYesilParla{0%,100%{box-shadow:0 0 0 rgba(34,197,94,0)}50%{box-shadow:0 0 20px rgba(34,197,94,.65)}}
 .modal{background:var(--surface);border-radius:var(--r-xl);padding:40px;max-width:440px;width:100%;box-shadow:0 32px 96px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.06);position:relative}
 .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
 .modal-eye{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
@@ -5948,6 +5967,14 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </div>
   </div>
 </div>
+<div class="sinyal-panel-ov" id="sinyalPanelOv" onclick="sinyalPaneliKapat()" role="button" tabindex="0"></div>
+<div class="sinyal-panel" id="sinyalPanel">
+  <div class="sinyal-panel-head">
+    <div class="sinyal-panel-title">🎯 Avcı Çözüm Motoru</div>
+    <button class="sinyal-panel-close" onclick="sinyalPaneliKapat()">✕</button>
+  </div>
+  <div class="sinyal-panel-body" id="sinyalPanelBody"></div>
+</div>
 <div id="exit-popup" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
   <div style="background:var(--surface);border-radius:20px;padding:40px;max-width:480px;width:100%;text-align:center;position:relative">
     <button onclick="exitKapat()" style="position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">✕</button>
@@ -8223,7 +8250,10 @@ function paragrafSec(idx){
     <div style="display:flex;flex-direction:column;gap:14px">
       ${p.sorular.map((s,si)=>`
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px" id="psoru-${idx}-${si}">
-          <div style="font-size:14px;font-weight:700;color:var(--signal);margin-bottom:8px">SORU ${si+1}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="font-size:14px;font-weight:700;color:var(--signal)">SORU ${si+1}</div>
+            <button class="sinyal-coz-btn" onclick="sinyalPaneliAc(${idx},${si})" title="Avcı Çözüm Motoru ile çöz">🎯</button>
+          </div>
           <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:14px">${s.q}</div>
           <div style="display:flex;flex-direction:column;gap:8px">
             ${s.opts.map((o,oi)=>`<button class="popt-btn" onclick="paragrafCevapla(${idx},${si},${oi},${s.ans})" id="popt-${idx}-${si}-${oi}" style="text-align:left;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:15px;cursor:pointer;background:var(--surface);font-family:IBM Plex Sans,sans-serif;transition:all .2s">${String.fromCharCode(65+oi)}) ${o}</button>`).join('')}
@@ -8269,6 +8299,124 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
   } else {
     hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
     if(typeof saShakeBtn==='function')saShakeBtn(document.getElementById('popt-'+pidx+'-'+sidx+'-'+oidx));
+  }
+}
+
+// ─── AVCI ÇÖZÜM MOTORU — sağdan kayan panel, paragraf sorusunu Anthropic API
+// ile sinyal metodolojisine göre çözer, şıkları paragrafa göre renklendirir.
+let sinyalPanelAktif=null; // {pidx,sidx} — yanıt geldiğinde panel hâlâ aynı soruda mı diye kontrol için
+
+function sinyalPaneliAc(pidx,sidx){
+  sinyalPanelAktif={pidx,sidx};
+  const p=PARAGRAFLAR[pidx];
+  const s=p.sorular[sidx];
+  const temizMetin=p.metin.replace(/<[^>]*>/g,'');
+  const harfler=['A','B','C','D'];
+  const body=document.getElementById('sinyalPanelBody');
+  if(body){
+    body.innerHTML=`
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">PARAGRAF</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--ink);background:var(--sl);border-radius:10px;padding:12px;margin-bottom:18px;max-height:200px;overflow-y:auto">${temizMetin}</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--muted);margin-bottom:6px">SORU</div>
+      <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:14px">${s.q}</div>
+      <div id="sinyalOptListe">${s.opts.map((o,i)=>`<div class="sinyal-opt-row" id="sinyalOpt-${i}">${harfler[i]}) ${o}</div>`).join('')}</div>
+      <div style="margin-top:16px;background:var(--sl);border-radius:10px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--signal);margin-bottom:8px">⭐ ALTIN KURALLAR</div>
+        <div style="font-size:12.5px;line-height:1.9;color:var(--ink)">
+          🔴 Paragrafta olmayan bilgi → direkt elenir<br>
+          🟡 Kısmi doğru şık → tuzak<br>
+          🟠 Abartılmış yorum → elenir<br>
+          ✅ Sinyal kelimesinden SONRA gelen bilgi → asıl cevap
+        </div>
+      </div>
+      <div id="sinyalDurum" style="margin-top:16px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px">
+        <span class="chat-typing"><span></span><span></span><span></span></span> Avcı Çözüm Motoru düşünüyor...
+      </div>
+      <div id="sinyalAnalizMetin" style="margin-top:14px;font-size:14px;line-height:1.75;color:var(--ink);white-space:pre-wrap"></div>
+    `;
+  }
+  document.getElementById('sinyalPanel')?.classList.add('acik');
+  document.getElementById('sinyalPanelOv')?.classList.add('acik');
+  avciSinyalCoz(pidx,sidx);
+}
+
+function sinyalPaneliKapat(){
+  document.getElementById('sinyalPanel')?.classList.remove('acik');
+  document.getElementById('sinyalPanelOv')?.classList.remove('acik');
+  sinyalPanelAktif=null;
+}
+
+const SINYAL_RENK_SINIFI={'🔴':'sinyal-opt-kirmizi','🟡':'sinyal-opt-sari','🟠':'sinyal-opt-turuncu','✅':'sinyal-opt-yesil'};
+const SINYAL_EMOJI_RE='(🔴|🟡|🟠|✅)';
+
+// Anthropic'in ham SSE gövdesini (api/klod.mjs stream modunda olduğu gibi
+// aktarıyor) satır satır ayrıştırıp sadece metin delta'larını döndürür.
+async function* sseMetinAkisi(reader){
+  const decoder=new TextDecoder();
+  let buffer='';
+  while(true){
+    const {done,value}=await reader.read();
+    if(done)break;
+    buffer+=decoder.decode(value,{stream:true});
+    const parcalar=buffer.split('\n\n');
+    buffer=parcalar.pop(); // son parça yarım olabilir, bir sonrakiyle birleştirmek için sakla
+    for(const parca of parcalar){
+      const veriSatiri=parca.split('\n').find(l=>l.startsWith('data:'));
+      if(!veriSatiri)continue;
+      const jsonStr=veriSatiri.slice(5).trim();
+      if(!jsonStr||jsonStr==='[DONE]')continue;
+      let evt;
+      try{evt=JSON.parse(jsonStr);}catch(e){continue;}
+      if(evt.type==='content_block_delta'&&evt.delta?.type==='text_delta'){
+        yield evt.delta.text;
+      }
+    }
+  }
+}
+
+async function avciSinyalCoz(pidx,sidx){
+  const p=PARAGRAFLAR[pidx];
+  const s=p.sorular[sidx];
+  const temizMetin=p.metin.replace(/<[^>]*>/g,'');
+  const harfler=['A','B','C','D'];
+  const promptText=`PARAGRAF:\n"""\n${temizMetin}\n"""\n\nSORU: ${s.q}\n\nŞIKLAR:\n${s.opts.map((o,i)=>harfler[i]+') '+o).join('\n')}`;
+  const metinEl=document.getElementById('sinyalAnalizMetin');
+  const durumEl=document.getElementById('sinyalDurum');
+  const islenmisHarfler=new Set();
+  let fullText='';
+
+  function siklariRenklendir(){
+    harfler.forEach((h,hi)=>{
+      if(islenmisHarfler.has(h))return;
+      const m=fullText.match(new RegExp('^'+h+'\\)\\s*'+SINYAL_EMOJI_RE,'m'));
+      if(!m)return;
+      islenmisHarfler.add(h);
+      const el=document.getElementById('sinyalOpt-'+hi);
+      if(el&&SINYAL_RENK_SINIFI[m[1]])el.classList.add(SINYAL_RENK_SINIFI[m[1]]);
+    });
+  }
+
+  const gecerliMi=()=>sinyalPanelAktif&&sinyalPanelAktif.pidx===pidx&&sinyalPanelAktif.sidx===sidx;
+
+  try{
+    const res=await fetch('/api/klod',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:promptText}],mode:'sinyal_analiz',stream:true})
+    });
+    if(!res.ok||!res.body)throw new Error('Akış başlatılamadı');
+    for await (const parca of sseMetinAkisi(res.body.getReader())){
+      if(!gecerliMi())return; // panel kapandı ya da başka soruya geçildi
+      if(durumEl)durumEl.remove();
+      fullText+=parca;
+      if(metinEl)metinEl.textContent=fullText;
+      siklariRenklendir();
+    }
+    if(!fullText.trim()&&metinEl)metinEl.textContent='⚠️ Analiz alınamadı, tekrar dene.';
+  }catch(e){
+    if(!gecerliMi())return;
+    if(durumEl)durumEl.remove();
+    if(metinEl)metinEl.textContent='⚠️ Bağlantı hatası, tekrar dene.';
   }
 }
 

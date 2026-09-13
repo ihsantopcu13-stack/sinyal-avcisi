@@ -143,6 +143,41 @@ const TOOLS = [
   }
 ];
 
+// Avcı Çözüm Motoru — paragraf sorusu panelinin çözüm metni. Serbest metin +
+// streaming kullanıyoruz (tool_use değil): kullanıcı "1-2 saniyede sonuç,
+// anlık yazsın" istedi — tool_use'un JSON delta'ları typewriter göstermek için
+// uygun değil, düz metni parça parça ekrana yazdırmak çok daha hızlı hissettiriyor.
+// İstemci tarafı, ŞIKLAR bölümündeki "A) <emoji>" satırlarını regex ile
+// yakalayıp o şıkkı canlı canlı renklendiriyor — format SIKI TUTULMALI.
+// Altın kurallar sabit/genel geçer olduğu için AI'a ürettirilmiyor — panelde
+// anında (API beklemeden) statik gösteriliyor, bu da hem hızı hem tutarlılığı
+// artırıyor (bkz. index.html sinyalPaneliAc).
+const SINYAL_ANALIZ_SYSTEM_PROMPT = `Sen Sinyal Avcısı platformunun Avcı Çözüm Motorusun. Sana bir YDS/YÖKDİL paragraf okuma sorusu (paragraf + soru + şıklar) verilecek.
+
+TARZ: Doğal, sohbet gibi Türkçe konuş — bebek gibi anlaşılır anlat, ağır gramer terimleriyle boğma. ÇOK KISA yaz, toplam 110 kelimeyi geçme. Sadece paragraftaki bilgiye dayan, dış bilgi/varsayım kullanma.
+
+ÇIKTIYI TAM OLARAK BU FORMATTA VER (başlıkları, emojileri, satır düzenini DEĞİŞTİRME):
+
+SİNYAL KELİMESİ: <sinyal kelime/ifade> — <kategori: bağlaç/gizli olumsuz/modal perfect/zaman sinyali/koşul/zıtlık>. <ne anlama geldiği, 1 basit cümle>
+
+PARAGRAF ANALİZİ:
+Sinyal öncesi (tuzak kısım): <1 kısa cümle, basit dille>
+Sinyal sonrası (asıl cevap): <1 kısa cümle, basit dille>
+
+ŞIK ELİMİNASYONU:
+A) <EMOJI> <max 10 kelimelik gerekçe>
+B) <EMOJI> <max 10 kelimelik gerekçe>
+C) <EMOJI> <max 10 kelimelik gerekçe>
+D) <EMOJI> <max 10 kelimelik gerekçe>
+
+CEVAP: <harf> (çözüm süresi: ~<n> saniye)
+
+<EMOJI> kesinlikle şu 4 emojiden biri olmalı (başka işaret KULLANMA, açıklama ekleme, sadece emoji koy):
+- 🔴: şık paragrafta hiç geçmiyor / paragrafla çelişiyor → direkt elenir
+- 🟡: şık kısmen doğru ama tam isabetli olmayan bir tuzak
+- 🟠: şık paragraftaki bir bilgiyi abartıyor/aşırı yorumluyor
+- ✅: paragrafça tam desteklenen doğru cevap (yalnızca 1 şık ✅ olmalı, sinyal kelimesinden SONRAKİ bilgiye dayanmalı)`;
+
 // 17. VISION — PDF/Görsel analiz
 async function visionAnaliz(imageBase64, mediaType, soru) {
   return {
@@ -193,7 +228,7 @@ export default async function handler(req, res) {
 
   // 7. TEMPERATURE — Görev tipine göre
   const msgType = detectMessageType(messages);
-  const temperature = getTemperature(msgType);
+  const temperature = mode === 'sinyal_analiz' ? 0.1 : getTemperature(msgType); // paragrafa sıkı sadakat, yaratıcılık istemiyoruz
 
   // 17. VISION — Görsel varsa mesaja ekle
   let processedMessages = messages;
@@ -212,10 +247,11 @@ export default async function handler(req, res) {
     : trimmedMessages;
 
   // 14. PROMPT CACHING — Cache'li system prompt
+  const defaultSystem = mode === 'sinyal_analiz' ? SINYAL_ANALIZ_SYSTEM_PROMPT : KLOD_SYSTEM_PROMPT;
   const systemContent = [
     {
       type: "text",
-      text: system || KLOD_SYSTEM_PROMPT,
+      text: system || defaultSystem,
       cache_control: { type: "ephemeral" } // Cache'le!
     }
   ];
@@ -242,20 +278,23 @@ export default async function handler(req, res) {
     : '';
 
   try {
-    // 18. STREAMING — Destekli yapı
-    const useStream = req.body.stream === true;
-    
+    // 18. STREAMING — Destekli yapı. sinyal_analiz her zaman stream'li: panel
+    // "anlık yazsın" istiyor, ilk token'ın gelmesi tüm cevabı beklemekten
+    // çok daha hızlı hissettiriyor.
+    const useStream = mode === 'sinyal_analiz' ? true : req.body.stream === true;
+
     const requestBody = {
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: mode === 'soru_uret' ? 512 : 350,
+      max_tokens: mode === 'soru_uret' ? 512 : mode === 'sinyal_analiz' ? 400 : 350,
       temperature,
       system: systemContent,
       messages: finalMessages,
       stream: useStream,
     };
 
-    // 16. TOOL USE — Gerektiğinde araç ekle
-    if (use_tools) {
+    // 16. TOOL USE — Gerektiğinde araç ekle (sinyal_analiz serbest metin
+    // olarak stream ediliyor, tool kullanmıyor — bkz. SINYAL_ANALIZ_SYSTEM_PROMPT)
+    if (use_tools && mode !== 'sinyal_analiz') {
       requestBody.tools = TOOLS;
       requestBody.tool_choice = { type: "auto" };
     }
