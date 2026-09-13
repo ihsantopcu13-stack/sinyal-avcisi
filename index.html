@@ -96,7 +96,9 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .mmenu.open{display:flex}
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
-.hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;max-width:1200px;margin:0 auto}
+.hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
+.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
+.hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 40%,rgba(10,13,19,.35),rgba(10,13,19,.88) 65%)}
 .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--signal)}
 .hero h1{font-family:'IBM Plex Serif',serif;font-size:clamp(34px,4.5vw,56px);line-height:1.1;letter-spacing:-.03em;margin-bottom:22px}
@@ -419,6 +421,7 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
   .dash-ui{grid-template-columns:1fr}.dash-sb{display:none}
   .dash-karts{grid-template-columns:1fr 1fr}
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
+  .hero-bg-video{display:none}
   body{padding-bottom:64px}
 }
 
@@ -1265,6 +1268,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <a onclick="goTo('dashboard');closeMenu()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
+  <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
+    <source src="assets/hero-bg.mp4" type="video/mp4">
+  </video>
   <div class="hero-floaters" aria-hidden="true">
     <span class="hero-float-q" style="left:2%;top:3%;font-size:40px;animation-delay:0s;animation-duration:7s">?</span>
     <span class="hero-float-q" style="left:93%;top:5%;font-size:46px;animation-delay:1.2s;animation-duration:9s">?</span>
