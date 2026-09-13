@@ -7190,6 +7190,109 @@ if(window.speechSynthesis){
   }, {once:true});
 }
 
+// ─── TTS KARAOKE — ses çalarken kelime kelime highlight ────────────────────
+// ttsSpeak'i DEĞİŞTİRMEZ, sadece onAudioReady/onEnd callback'lerine bağlanan
+// ayrı bir katman. Gerçek kelime zamanlaması (whisper vb.) yok — bu yüzden
+// automation/video-pipeline/src/captionUtils.jsx'teki ile aynı yaklaşım:
+// toplam süre bilinince (Audio.duration) her kelimeye KARAKTER UZUNLUĞUNA
+// ORANTILI bir zaman aralığı veriliyor, sonra requestAnimationFrame ile
+// audio.currentTime'a bakılıp o anki kelime highlight ediliyor.
+function ttsKaraokeSplit(text){
+  return (text||'').trim().split(/\s+/).filter(Boolean);
+}
+
+function ttsKaraokeTimings(words,totalSeconds){
+  const MIN=0.12; // her kelime en az bu kadar (sn) — çok kısa kelimeler görünmeden geçmesin
+  const lens=words.map(w=>w.length);
+  const totalLen=lens.reduce((a,b)=>a+b,0)||1;
+  let remaining=totalSeconds;
+  const raw=lens.map((len,i)=>{
+    const isLast=i===lens.length-1;
+    const d=isLast?remaining:Math.max(MIN,(len/totalLen)*totalSeconds);
+    remaining-=d;
+    return d;
+  });
+  let cursor=0;
+  return raw.map(d=>{const start=cursor;cursor+=d;return {start,end:cursor};});
+}
+
+let ttsKaraokeRAF=null;
+let ttsKaraokeNesil=0; // yarış koruması: yeni bir ttsKaraoke çağrısı öncekinin highlight döngüsünü durdurur
+let ttsKaraokeClearFn=null; // durdurulan çağrının highlight'ını temizlemek için (yoksa eski kelime kalıcı vurgulu kalır)
+let ttsKaraokeOnEndFn=null; // durdurulan çağrının onEnd'i — yeni bir çağrı bunu geçersiz kılınca da tetiklenmeli
+// (yoksa örn. bir butonun "çalıyor" durumu, üstüne hızlıca başka bir kelime
+// tıklanınca hiç kapanmadan kalıcı takılı kalır)
+
+function ttsKaraokeStop(){
+  ttsKaraokeNesil++;
+  if(ttsKaraokeRAF){cancelAnimationFrame(ttsKaraokeRAF);ttsKaraokeRAF=null;}
+  if(ttsKaraokeClearFn){ttsKaraokeClearFn();ttsKaraokeClearFn=null;}
+  if(ttsKaraokeOnEndFn){const fn=ttsKaraokeOnEndFn;ttsKaraokeOnEndFn=null;fn();}
+}
+
+// text: okunacak/highlight edilecek metin. containerEl: içine kelime span'ları
+// yazılacak DOM elementi (mevcut içeriğinin yerini alır). onEnd: opsiyonel,
+// okuma bitince (highlight temizlendikten sonra) çağrılır — örn. bir butonun
+// "çalıyor" durumunu kapatmak için.
+function ttsKaraoke(text,containerEl,onEnd){
+  if(!text||!containerEl)return;
+  ttsKaraokeStop();
+  const benimNesil=ttsKaraokeNesil;
+  const words=ttsKaraokeSplit(text);
+  if(!words.length)return;
+
+  containerEl.innerHTML=words.map((w,i)=>`<span class="tts-karaoke-word" data-i="${i}">${w}</span>`).join(' ');
+  const spans=containerEl.querySelectorAll('.tts-karaoke-word');
+
+  function highlight(idx){
+    spans.forEach((s,i)=>{
+      if(i===idx){s.style.color='var(--signal)';s.style.fontWeight='700';}
+      else{s.style.color='';s.style.fontWeight='';}
+    });
+  }
+  ttsKaraokeClearFn=()=>highlight(-1);
+  ttsKaraokeOnEndFn=onEnd||null;
+
+  function runLoop(getCurrentTime,timings){
+    let lastIdx=-1;
+    function tick(){
+      if(benimNesil!==ttsKaraokeNesil)return;
+      const t=getCurrentTime();
+      const idx=timings.findIndex(tm=>t>=tm.start&&t<tm.end);
+      if(idx!==lastIdx){highlight(idx);lastIdx=idx;}
+      ttsKaraokeRAF=requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  return ttsSpeak(text,null,
+    function onSpeakEnd(){
+      // Doğal bitiş — nesil hâlâ bizimkiyse ttsKaraokeStop() highlight'ı temizler
+      // ve saklanan onEnd'i bir kez tetikler. Nesil değiştiyse (bu çağrı zaten
+      // başka bir ttsKaraoke tarafından geçersiz kılınmıştır) hiçbir şey yapma —
+      // temizlik zaten o çağrının başında yapıldı.
+      if(benimNesil===ttsKaraokeNesil)ttsKaraokeStop();
+    },
+    function onAudioReady(source){
+      if(benimNesil!==ttsKaraokeNesil)return;
+      if(source instanceof Audio){
+        const start=function(){
+          const total=isFinite(source.duration)&&source.duration>0?source.duration:words.join(' ').length*0.06;
+          runLoop(()=>source.currentTime,ttsKaraokeTimings(words,total));
+        };
+        if(isFinite(source.duration)&&source.duration>0)start();
+        else source.addEventListener('loadedmetadata',start,{once:true});
+      }else if(source instanceof SpeechSynthesisUtterance){
+        // Web Speech fallback: gerçek Audio elementi yok, süre bilinmiyor —
+        // ortalama okuma hızından tahmini toplam süre + geçen gerçek zamanla ilerlet.
+        const total=Math.max(words.length*0.35,words.join(' ').length*0.06);
+        const t0=performance.now();
+        runLoop(()=>(performance.now()-t0)/1000,ttsKaraokeTimings(words,total));
+      }
+    }
+  );
+}
+
 // ─── SİNYAL PİNG SİSTEMİ — radar ping + ses + kontak günlüğü ───────────────
 // Sinyal Lab ve Canlı Ders'teki sinyal kelimelerine tıklayınca tetiklenir.
 const SINYAL_PING_KELIMELER=['provided that','must have','far from','despite','however','although','unless','yet'];
@@ -11523,15 +11626,14 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
   }
 
   function fdSpeakWord(word, btn) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(word.toLowerCase());
-    utt.lang = 'en-US';
-    utt.rate = 0.8;
+    // Test amaçlı: ttsKaraoke'ye bağlandı (bkz. ttsKaraoke tanımı) — kelime
+    // tek token olduğu için "kelime kelime" highlight burada tüm süre boyunca
+    // tek span'ı işaretler, fd-word-display'in harf renklendirmesini okuma
+    // sırasında geçici olarak ezer.
+    const card = btn.closest('.fd-example-card');
+    const wordDiv = card ? card.querySelector('.fd-word-display') : null;
     btn.classList.add('fd-playing');
-    utt.onend = () => btn.classList.remove('fd-playing');
-    utt.onerror = () => btn.classList.remove('fd-playing');
-    window.speechSynthesis.speak(utt);
+    ttsKaraoke(word.toLowerCase(), wordDiv || btn, () => btn.classList.remove('fd-playing'));
   }
 
   Object.entries(EXAMPLES).forEach(([id, examples]) => {
