@@ -10361,7 +10361,18 @@ function sinavKutlamaGoster(){
 }
 
 // Günlük giriş mesajı — günde 1 kez
+function spAyarVarMi(){
+  // spAyarYukle() ayar hiç kaydedilmemişse spVarsayilanAyar()'a (uydurma
+  // tarih/hedef) düşer — bu, hiç plan yapmamış yeni bir ziyaretçiye "Hedefine
+  // 78 gün kaldı" gibi anlamsız/yanıltıcı bir bildirim göstermeye yol açıyordu.
+  // Bu fonksiyon SADECE gerçekten kaydedilmiş bir ayar olup olmadığını sorar.
+  try{
+    const v=JSON.parse(localStorage.getItem('sa_sp_ayar'));
+    return !!(v&&v.dogru!=null&&v.yanlis!=null&&v.hedefPuan!=null&&v.tarih);
+  }catch(e){return false;}
+}
 function sinavGunlukMesajGoster(){
+  if(!spAyarVarMi())return; // hiç sınav planı kurmamış ziyaretçiye gösterme
   const bugun=sinavChecklistBugunAnahtari();
   if(localStorage.getItem('sa_sp_son_mesaj')===bugun)return;
   localStorage.setItem('sa_sp_son_mesaj',bugun);
