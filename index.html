@@ -7230,19 +7230,58 @@ function ttsKaraokeStop(){
   if(ttsKaraokeOnEndFn){const fn=ttsKaraokeOnEndFn;ttsKaraokeOnEndFn=null;fn();}
 }
 
-// text: okunacak/highlight edilecek metin. containerEl: içine kelime span'ları
-// yazılacak DOM elementi (mevcut içeriğinin yerini alır). onEnd: opsiyonel,
-// okuma bitince (highlight temizlendikten sonra) çağrılır — örn. bir butonun
-// "çalıyor" durumunu kapatmak için.
-function ttsKaraoke(text,containerEl,onEnd){
+// containerEl'in İÇİNDEKİ mevcut işaretlemeyi (örn. paragraf modülündeki
+// .s-sig/.s-key/.s-trap sinyal kelime tooltip'leri) BOZMADAN kelime kelime
+// highlight uygulamak için: sadece üst seviye çocukları gezer, düz metin
+// parçalarını kelime kelime yeni span'lara sarar, var olan bir element'i
+// (örn. <span class="s-sig">While</span>) TEK bir highlight birimi olarak
+// olduğu gibi bırakır (içini tekrar bölmez). Yalnızca PARAGRAFLAR gibi üst
+// seviyede düz metin + ara sıra inline <span> içeren yapılar için uygundur.
+function ttsKaraokeWrapInPlace(containerEl){
+  const units=[];
+  Array.from(containerEl.childNodes).forEach(node=>{
+    if(node.nodeType===3){
+      const parts=node.textContent.split(/(\s+)/);
+      const frag=document.createDocumentFragment();
+      parts.forEach(part=>{
+        if(part==='')return;
+        if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return;}
+        const sp=document.createElement('span');
+        sp.className='tts-karaoke-word';
+        sp.textContent=part;
+        frag.appendChild(sp);
+        units.push(sp);
+      });
+      node.replaceWith(frag);
+    }else if(node.nodeType===1){
+      units.push(node);
+    }
+  });
+  return units;
+}
+
+// text: okunacak metin (TTS'e bu gönderilir — containerEl'in görünen metniyle
+// aynı sırada/kelimede olmalı, örn. containerEl.innerText). containerEl: kelime
+// kelime highlight uygulanacak DOM elementi. onEnd: opsiyonel, okuma bitince
+// (highlight temizlendikten sonra) çağrılır — örn. bir butonun "çalıyor"
+// durumunu kapatmak için. opts.preserveMarkup: true ise containerEl'in mevcut
+// içeriği ttsKaraokeWrapInPlace ile korunur; false/verilmezse (varsayılan)
+// containerEl.innerHTML tamamen düz kelime span'larıyla değiştirilir.
+function ttsKaraoke(text,containerEl,onEnd,opts){
   if(!text||!containerEl)return;
   ttsKaraokeStop();
   const benimNesil=ttsKaraokeNesil;
-  const words=ttsKaraokeSplit(text);
-  if(!words.length)return;
-
-  containerEl.innerHTML=words.map((w,i)=>`<span class="tts-karaoke-word" data-i="${i}">${w}</span>`).join(' ');
-  const spans=containerEl.querySelectorAll('.tts-karaoke-word');
+  let spans;
+  if(opts&&opts.preserveMarkup){
+    spans=ttsKaraokeWrapInPlace(containerEl);
+  }else{
+    const words=ttsKaraokeSplit(text);
+    if(!words.length)return;
+    containerEl.innerHTML=words.map((w,i)=>`<span class="tts-karaoke-word" data-i="${i}">${w}</span>`).join(' ');
+    spans=Array.from(containerEl.querySelectorAll('.tts-karaoke-word'));
+  }
+  if(!spans.length)return;
+  const wordTexts=spans.map(s=>s.textContent||'');
 
   function highlight(idx){
     spans.forEach((s,i)=>{
@@ -7277,17 +7316,17 @@ function ttsKaraoke(text,containerEl,onEnd){
       if(benimNesil!==ttsKaraokeNesil)return;
       if(source instanceof Audio){
         const start=function(){
-          const total=isFinite(source.duration)&&source.duration>0?source.duration:words.join(' ').length*0.06;
-          runLoop(()=>source.currentTime,ttsKaraokeTimings(words,total));
+          const total=isFinite(source.duration)&&source.duration>0?source.duration:wordTexts.join(' ').length*0.06;
+          runLoop(()=>source.currentTime,ttsKaraokeTimings(wordTexts,total));
         };
         if(isFinite(source.duration)&&source.duration>0)start();
         else source.addEventListener('loadedmetadata',start,{once:true});
       }else if(source instanceof SpeechSynthesisUtterance){
         // Web Speech fallback: gerçek Audio elementi yok, süre bilinmiyor —
         // ortalama okuma hızından tahmini toplam süre + geçen gerçek zamanla ilerlet.
-        const total=Math.max(words.length*0.35,words.join(' ').length*0.06);
+        const total=Math.max(wordTexts.length*0.35,wordTexts.join(' ').length*0.06);
         const t0=performance.now();
-        runLoop(()=>(performance.now()-t0)/1000,ttsKaraokeTimings(words,total));
+        runLoop(()=>(performance.now()-t0)/1000,ttsKaraokeTimings(wordTexts,total));
       }
     }
   );
@@ -8172,8 +8211,8 @@ function paragrafSec(idx){
         <span style="background:var(--sl);color:var(--signal);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em">${p.baslik.toUpperCase()}</span>
         <span style="background:${p.seviye==='Zor'?'#2a1414':'#2e2410'};color:${p.seviye==='Zor'?'var(--trap)':'#d97706'};font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px">${p.seviye}</span>
       </div>
-      <div style="font-size:16px;line-height:1.9;color:var(--ink);border-left:3px solid var(--signal);padding-left:16px;cursor:pointer" onmouseenter="if(window.ttsSpeak)ttsSpeak(this.innerText,'en-US',null)">${p.metin}</div>
-      <div style="font-size:13px;color:var(--muted);margin-top:12px">🔊 Paragrafa hover et — sesli dinle</div>
+      <div style="font-size:16px;line-height:1.9;color:var(--ink);border-left:3px solid var(--signal);padding-left:16px;cursor:pointer" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.innerText,this,null,{preserveMarkup:true})">${p.metin}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:12px">🔊 Paragrafa hover et — kelime kelime sesli dinle</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px">
       ${p.sorular.map((s,si)=>`
