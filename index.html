@@ -1298,6 +1298,12 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </style>
     <h1 style="font-size:clamp(32px,4vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:16px 0 20px">YDS'de hedefine ulaşmak için tek ihtiyacın doğru strateji.<br><em style="color:#f5a623;font-style:normal">Parayı biz hallettik.</em></h1>
     <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">YDS ve YÖKDİL için aylarca para ödemek zorunda değilsin. <strong>Tek kuruş ödemeden</strong> — sürekli büyüyen soru bankası, AI mentor, ses kursu — hepsi senin. <em style="color:var(--signal)">Sonsuza kadar.</em></p>
+    <div style="max-width:500px;margin:-6px 0 22px;padding:14px 18px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.16);border-radius:10px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--signal);text-transform:uppercase;margin-bottom:6px">Neden Ücretsiz?</div>
+      <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0">
+        Kurucumuz yıllarca aynı sınava giren arkadaşlarının bu yüzden yıllarını kaybettiğini gördü. Onlar için para değil, doğru strateji eksikti. Bu platformu o döngüyü bitirmek için kurdu — kayıt bile istemeden, sonsuza kadar ücretsiz.
+      </p>
+    </div>
     <div class="hero-btns">
       <button class="btn-primary" onclick="goTo('dashboard')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Hemen Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="openModal('Ücretsiz Hesap','0')" style="font-size:14px;color:rgba(236,231,218,.5)">📊 Kaydol — ilerlemeni kaydet</button>
@@ -1307,7 +1313,38 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <span class="hero-badge">Kredi kartı yok</span>
       <span class="hero-badge">Sonsuza kadar ücretsiz</span>
     </div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:1px solid rgba(236,231,218,.1)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px" aria-hidden="true">🎯</span>
+        <div>
+          <div id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:19px;color:var(--signal);line-height:1.1">—</div>
+          <div style="font-size:12px;color:var(--muted)">Kasım YDS/YÖKDİL'e kalan gün</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:22px" aria-hidden="true">📖</span>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:19px;color:var(--ink);line-height:1.1">2.400+</div>
+          <div style="font-size:12px;color:var(--muted)">e-kitap indirildi</div>
+        </div>
+      </div>
+    </div>
   </div>
+  <script>
+    // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
+    // (29 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
+    // (o fonksiyon dosyanın çok ilerisinde tanımlı) kendi başına hesaplar.
+    // Hedef tarih değişirse ikisini birlikte güncelle.
+    (function(){
+      var el=document.getElementById('hero-geri-sayim');
+      if(!el)return;
+      var now=new Date();
+      var hedef=new Date(now.getFullYear(),10,29);
+      if(hedef<now)hedef=new Date(now.getFullYear()+1,10,29);
+      var gun=Math.max(0,Math.ceil((hedef-now)/(1000*60*60*24)));
+      el.textContent=gun;
+    })();
+  </script>
   <div id="demo" class="demo-card">
     <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
     <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsKaraoke){const c=this.textContent.replace(/[\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
@@ -6403,7 +6440,7 @@ function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkra
 function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(245,166,35,.1);color:var(--signal);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
   const metin='⚡ SAT Metodunda %'+yuzde+' doğruluk oranı yakaladım!\n\n🎯 ÖSYM tuzaklarını 2 saniyede çözmeyi öğreniyorum.\ndespite, far from, must have... Artık bunlar beni kandıramaz!\n\n💙 Bu platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek';
-  if(navigator.share){navigator.share({title:'Sinyal Avcısı — SAT Metodu %'+yuzde+' Doğruluk!',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
+  if(navigator.share){navigator.share({title:'Sinyal Avcısı — SAT Metodu %'+yuzde+' Doğruluk!',text:metin,url:'https://sinyal-avcisi.com'});}
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clearInterval(satTimer);satPratikRender();}
@@ -7005,8 +7042,8 @@ function tuzakAns(btn,correct,dogru){
 function tuzakPaylas(correct,soru){
   const sonuc=correct?'✅ Doğru bildim!':'❌ Yanıldım!';
   const temizSoru=soru.sent.replace(/<[^>]*>/g,'').substring(0,80);
-  const metin=sonuc+'\n\n📌 Bugünün YDS/YÖKDİL tuzağı:\n"'+temizSoru+'..."\n\n🎯 Bu tür tuzakları 2 saniyede çözmek ister misin?\n👇 Sinyal Avcısı — Ücretsiz dene\nsinyal-avcisi-five.vercel.app\n\n#YDS #YÖKDİL #SinyalAvcısı #İngilizce #AkademikingilizcesineSinyalAvcisi';
-  if(navigator.share){navigator.share({title:'Sinyal Avcısı — Günlük YDS Tuzağı',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
+  const metin=sonuc+'\n\n📌 Bugünün YDS/YÖKDİL tuzağı:\n"'+temizSoru+'..."\n\n🎯 Bu tür tuzakları 2 saniyede çözmek ister misin?\n👇 Sinyal Avcısı — Ücretsiz dene\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #İngilizce #AkademikingilizcesineSinyalAvcisi';
+  if(navigator.share){navigator.share({title:'Sinyal Avcısı — Günlük YDS Tuzağı',text:metin,url:'https://sinyal-avcisi.com'});}
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram\'a yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function tuzakSonraki(){
@@ -8601,7 +8638,7 @@ function xpBildirim(puan,tip){
 function xpPaylas(puan){
   const xd=xpLoad();
   const metin='🎯 Bu hafta '+xd.hafta+' XP kazandım!\n\n📚 YDS/YÖKDİL çalışıyorum — her gün sinyal metoduyla ÖSYM tuzaklarını çözüyorum.\n\n💙 Platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek #YabancıDil';
-  if(navigator.share){navigator.share({title:'Sinyal Avcısı — '+puan+' XP Kazandım!',text:metin,url:'https://sinyal-avcisi-five.vercel.app'});}
+  if(navigator.share){navigator.share({title:'Sinyal Avcısı — '+puan+' XP Kazandım!',text:metin,url:'https://sinyal-avcisi.com'});}
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function seviyeAl(toplam){return SEVIYE_TABLOSU.find(s=>toplam>=s.min&&toplam<=s.max)||SEVIYE_TABLOSU[0];}
