@@ -81,7 +81,7 @@ export default async function handler(req, res) {
               <li>ÖSYM en sık tuzak listesi</li>
             </ul>
           </div>
-          <a href="https://sinyal-avcisi.com" style="display:inline-block;background:#1a4fd6;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;margin-bottom:24px">
+          <a href="https://sinyal-avcisi.com/assets/ekitap-icerik.pdf" style="display:inline-block;background:#1a4fd6;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;margin-bottom:24px">
             📥 E-Kitabı İndir →
           </a>
           <p style="font-size:13px;color:#9ca3af;line-height:1.6">
