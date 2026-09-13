@@ -84,7 +84,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
 .section-title{font-family:'IBM Plex Serif',serif;font-size:clamp(28px,3vw,46px);letter-spacing:-.03em;line-height:1.12;color:var(--ink)}
 nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,19,.97);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(226,224,216,.8);display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
-.nav-logo{font-family:'IBM Plex Serif',serif;font-size:18px;cursor:pointer;letter-spacing:-.01em}
+.nav-logo{font-family:'IBM Plex Serif',serif;font-size:18px;cursor:pointer;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
 .nav-logo b{color:var(--signal);font-weight:400}
 .nav-links{display:flex;gap:24px}
 .nav-links span{font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s}
@@ -96,7 +96,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .mmenu.open{display:flex}
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
-.hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
+.hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
 .hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
 .hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 40%,rgba(10,13,19,.35),rgba(10,13,19,.88) 65%)}
 .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:18px;display:flex;align-items:center;gap:8px}
@@ -227,10 +227,8 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:rgba(255,255,255,.15);color:#fff;outline:none}
 .ekitap-submit{background:var(--surface);color:var(--signal);font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
 .ekitap-note{font-size:15px;color:rgba(255,255,255,.5);margin-top:8px}
-.ekitap-mockup{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:32px 24px;text-align:center}
-.ekitap-mockup-title{font-family:'IBM Plex Serif',serif;font-size:17px;line-height:1.3;margin-bottom:8px}
-.ekitap-mockup-sub{font-size:16px;color:rgba(255,255,255,.6)}
-.ekitap-mockup-pages{font-size:15px;color:var(--contrast);margin-top:8px;font-family:'IBM Plex Mono',monospace}
+.ekitap-mockup{display:flex;justify-content:center}
+.ekitap-mockup img{width:100%;max-width:320px;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12)}
 .klod{padding:80px 5vw;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
 .klod-desc{font-size:15px;color:var(--ink);line-height:1.7;margin:12px 0 24px}
 .klod-feat{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:10px;transition:all .2s}
@@ -413,7 +411,7 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 .ms-p{font-size:16px;color:var(--ink);line-height:1.6}
 @media(max-width:900px){
   .nav-links{display:none}.hamburger{display:block}.btn-nav{display:none}
-  .hero{grid-template-columns:1fr;padding:90px 5vw 56px;gap:36px}
+  .hero{grid-template-columns:minmax(0,1fr);padding:90px 5vw 56px;gap:36px}
   .klod,.ses-inner{grid-template-columns:1fr;gap:36px}
   .hedef-grid{grid-template-columns:1fr}
   .alan-cards{flex-direction:column;align-items:center}
@@ -1175,7 +1173,14 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <button class="pwa-close-btn" onclick="pwaBannerKapat()">✕</button>
 </div>
 <nav>
-  <div class="nav-logo" onclick="goTo('hero')" role="button" tabindex="0">Sinyal <b>Avcisi</b></div>
+  <div class="nav-logo" onclick="goTo('hero')" role="button" tabindex="0">
+    <svg width="20" height="20" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="27" stroke="#f5a623" stroke-width="4"/>
+      <circle cx="32" cy="32" r="15" stroke="#f5a623" stroke-width="4"/>
+      <circle cx="32" cy="32" r="5" fill="#f5a623"/>
+    </svg>
+    Sinyal <b>Avcisi</b>
+  </div>
   <div class="nav-links">
     <span onclick="goTo('nasil')" role="button" tabindex="0">Nasıl Çalışır?</span>
     <span onclick="goTo('klod')" role="button" tabindex="0">KLOD</span>
@@ -1283,7 +1288,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   </div>
   <div>
     <div style="margin-bottom:24px">
-      <span style="background:linear-gradient(135deg,#2e2410,#4a3a10);color:#92400e;font-size:14px;font-weight:800;padding:8px 20px;border-radius:30px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(180,120,0,.25);animation:badgePulse 2.5s ease-in-out infinite">
+      <span style="background:linear-gradient(135deg,#2e2410,#4a3a10);color:#92400e;font-size:14px;font-weight:800;padding:8px 20px;border-radius:30px;letter-spacing:.06em;display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(180,120,0,.25);animation:badgePulse 2.5s ease-in-out infinite;box-sizing:border-box">
         <span style="width:8px;height:8px;background:#e97316;border-radius:50%;animation:pulse 1.5s ease infinite;flex-shrink:0"></span>
         🇹🇷 TEK KURUŞ ÖDEMEDEN — SONSUZA KADAR
       </span>
@@ -1419,7 +1424,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       </form>
       <div class="ekitap-note" id="ekitap-note">2.400+ kisi indirdi - Spam yok - Istediginde cik</div>
     </div>
-    <div class="ekitap-mockup"><div style="font-size:48px;margin-bottom:12px">📖</div><div class="ekitap-mockup-title">30 Gunluk Metin Fetih Kilavuzu</div><div class="ekitap-mockup-sub">YDS & YOKDiL Sinyal Metodolojisi</div><div class="ekitap-mockup-pages">37 sayfa - PDF - Ucretsiz</div></div>
+    <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
   </div>
 </section>
 <section id="klod" class="klod">
