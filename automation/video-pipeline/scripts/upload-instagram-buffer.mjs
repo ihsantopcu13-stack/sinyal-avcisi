@@ -146,8 +146,11 @@ function dueAtIso() {
   return new Date(Date.now() + 60_000).toISOString();
 }
 
-async function publishToBuffer(channelId, videoUrl, caption, thumbnailUrl) {
-  const thumbField = thumbnailUrl ? `, thumbnailUrl: "${thumbnailUrl}"` : "";
+async function publishToBuffer(channelId, videoUrl, caption) {
+  // Not: Buffer'ın Instagram için video asset'inde thumbnailUrl alanı
+  // desteklenmiyor — gönderilirse "Invalid post" hatası dönüyor. Kapak
+  // görseli yine GitHub Release'e yükleniyor (bkz. aşağı), sadece Buffer'a
+  // iletilmiyor.
   const mutation = `
     mutation {
       createPost(input: {
@@ -156,7 +159,7 @@ async function publishToBuffer(channelId, videoUrl, caption, thumbnailUrl) {
         schedulingType: automatic
         mode: customScheduled
         dueAt: "${dueAtIso()}"
-        assets: [{ video: { url: "${videoUrl}"${thumbField} } }]
+        assets: [{ video: { url: "${videoUrl}" } }]
         metadata: { instagram: { type: reel, shouldShareToFeed: true } }
       }) {
         ... on PostActionSuccess {
@@ -204,7 +207,7 @@ export async function reelsYayinlaBuffer() {
   const channel = await findInstagramChannel();
   console.log(`Bağlı Instagram kanalı: ${channel.name} (${channel.id})`);
 
-  const post = await publishToBuffer(channel.id, videoUrl, caption, thumbnailUrl);
+  const post = await publishToBuffer(channel.id, videoUrl, caption);
   await writeFile(path.join(OUT_DIR, "instagram-result.json"), JSON.stringify(post, null, 2));
   console.log("Instagram Reels Buffer'a gönderildi:", post.id, post.status, post.dueAt);
   return post;
