@@ -1,4 +1,16 @@
 {
-  "nextIndex": 0,
-  "history": []
+  "nextIndex": 1,
+  "history": [
+    {
+      "id": "story-1",
+      "type": "instagram_story",
+      "post": {
+        "id": "6aa78ddcc5102442ffeaa0ff",
+        "text": "YDS seni kaç yıldır bekletiyor? 🎯\n\nStrateji değil, tek kuruş ödemeden başlayacağın bir yer eksikti. Sinyal Avcısı'nda kayıt bile istemeden, sonsuza kadar ücretsiz başla.\n\n👉 Bio'daki linkten şimdi başla.",
+        "dueAt": "2026-09-14T06:03:04.261Z",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-14T06:02:04.985Z"
+    }
+  ]
 }
