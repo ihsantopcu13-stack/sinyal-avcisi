@@ -12,7 +12,9 @@
     "upload-instagram": "node scripts/upload-instagram-buffer.mjs",
     "pipeline": "node scripts/run-pipeline.mjs",
     "generate-gunun-sorusu": "node scripts/generate-gunun-sorusu-kart.mjs",
-    "publish-gunun-sorusu": "node scripts/publish-gunun-sorusu.mjs"
+    "publish-gunun-sorusu": "node scripts/publish-gunun-sorusu.mjs",
+    "generate-threads-post": "node scripts/generate-threads-post.mjs",
+    "publish-threads": "node scripts/publish-threads.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.290",
