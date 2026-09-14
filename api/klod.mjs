@@ -291,6 +291,9 @@ export default async function handler(req, res) {
   // oranı bozulmasın — sadece bu ek blok isteğe göre değişiyor.
   // sinyal_analiz zaten kendi paragrafından grounded olduğu ve caller
   // özel bir `system` verdiğinde onun isteğine karışmamak için atlanıyor.
+  // GEÇİCİ DEBUG — canlıda RAG'ın gerçekten tetiklenip tetiklenmediğini
+  // doğrulamak için. Doğrulama bitince kaldırılacak.
+  let __ragDebug = { havuzBoyutu: SORU_HAVUZU.length, eslesme: 0, mesaj: null };
   if (!system && mode !== 'sinyal_analiz') {
     const sonKullaniciMesaji = [...trimmedMessages].reverse().find((m) => m.role === 'user');
     const mesajMetni =
@@ -299,7 +302,9 @@ export default async function handler(req, res) {
         : Array.isArray(sonKullaniciMesaji?.content)
           ? sonKullaniciMesaji.content.find((b) => b.type === 'text')?.text || ''
           : '';
+    __ragDebug.mesaj = mesajMetni;
     const ilgiliSorular = ilgiliSorulariBul(mesajMetni);
+    __ragDebug.eslesme = ilgiliSorular.length;
     if (ilgiliSorular.length > 0) {
       const ornekMetni = ilgiliSorular.map((s) => `- "${s.soru_en}" → ${s.aciklama_tr}`).join('\n');
       systemContent.push({
@@ -418,7 +423,8 @@ export default async function handler(req, res) {
       tool_results: toolResults,
       token_info: tokenInfo,
       message_type: msgType,
-      temperature_used: temperature
+      temperature_used: temperature,
+      __ragDebug,
     });
 
   } catch (error) {
