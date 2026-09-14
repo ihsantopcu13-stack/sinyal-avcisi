@@ -5,14 +5,16 @@
 // üzerinden yayınlar.
 //
 // ÖNEMLİ — doğrulanmış Buffer sınırlaması: Buffer'ın GraphQL şemasında
-// Instagram için "firstComment" alanı VAR ama sessizce çalışmıyor
-// (post oluşuyor, alan kabul ediliyor, ama yorum hiç atılmıyor —
-// Facebook ve LinkedIn'de aynı alan sorunsuz çalışıyor). Bu yüzden:
-//   - Facebook: cevap gerçekten firstComment olarak atılıyor, kartın
-//     "Cevap için yoruma bak" vaadi orada birebir tutuyor.
-//   - Instagram: cevap captionın İÇİNE, birkaç boş satırla "kaydırmadan
-//     önce düşün" boşluğu bırakılarak ekleniyor — Buffer/Instagram
-//     otomatik yorum atamadığı için tek güvenilir yol bu.
+// "firstComment" alanı var ama İKİ platformda da gerçek bir yorum atmıyor:
+//   - Instagram: alan kabul ediliyor, post oluşuyor, ama yorum sessizce
+//     hiç atılmıyor (bilinen Buffer sorunu).
+//   - Facebook: mutation'ın kendisi reddediliyor — "First comment
+//     requires a paid plan" (bu Buffer hesabının planında yok).
+// Bu yüzden kartın "Cevap için yoruma bak" vaadi HİÇBİR platformda gerçek
+// bir yorum olarak tutmuyor — cevap her iki platformda da caption'ın
+// İÇİNE, birkaç boş satırla "kaydırmadan önce düşün" boşluğu bırakılarak
+// ekleniyor. Gerçekten Buffer planı yükseltilirse Facebook için
+// firstComment tekrar denenebilir.
 //
 // Gerekli env: BUFFER_ACCESS_TOKEN, GITHUB_TOKEN, GITHUB_REPOSITORY
 // ============================================================
@@ -150,12 +152,27 @@ function instagramCaptionOlustur(soru, dogruHarf) {
     .join("\n");
 }
 
-function facebookCaptionOlustur(soru) {
-  return [ortakGovde(soru), ``, `Cevap ve açıklama ilk yorumda 👇`].join("\n");
-}
-
-function facebookFirstComment(soru, dogruHarf) {
-  return `Doğru cevap: ${dogruHarf}\n\n${soru.aciklama_tr}\n\n💙 sinyal-avcisi.com'da tamamen ücretsiz pratik yap.`;
+// Buffer'ın firstComment alanı Facebook'ta da bu hesabın planında
+// desteklenmiyor ("First comment requires a paid plan") — Instagram'daki
+// (sessizce çalışmayan) sorunla farklı ama sonuç aynı: cevabı gerçek bir
+// yoruma atamıyoruz. Bu yüzden Facebook'ta da Instagram'la aynı yöntem:
+// cevap caption'ın içine, birkaç boş satır sonra ekleniyor.
+function facebookCaptionOlustur(soru, dogruHarf) {
+  const bosluk = Array(6).fill("⠀").join("\n");
+  return [
+    ortakGovde(soru),
+    ``,
+    soru.sinyal ? `Sinyal: "${soru.sinyal}"` : null,
+    ``,
+    `👇 Cevabı görmeden önce kendi cevabını düşün`,
+    bosluk,
+    `Doğru cevap: ${dogruHarf}`,
+    soru.aciklama_tr,
+    ``,
+    `💙 Bunun gibi yüzlerce soru sinyal-avcisi.com'da tamamen ücretsiz.`,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
 }
 
 async function publishInstagram(item, imageUrl, caption) {
@@ -186,7 +203,7 @@ async function publishInstagram(item, imageUrl, caption) {
   return result.post;
 }
 
-async function publishFacebook(item, imageUrl, caption, firstComment) {
+async function publishFacebook(item, imageUrl, caption) {
   const channel = await findBufferChannel("facebook");
   if (!channel) throw new Error("Bağlı bir Facebook kanalı bulunamadı.");
 
@@ -199,7 +216,7 @@ async function publishFacebook(item, imageUrl, caption, firstComment) {
         mode: customScheduled
         dueAt: "${dueAtIso()}"
         assets: [{ image: { url: "${imageUrl}" } }]
-        metadata: { facebook: { type: post, firstComment: ${JSON.stringify(firstComment)} } }
+        metadata: { facebook: { type: post } }
       }) {
         ... on PostActionSuccess { post { id text dueAt status } }
         ... on MutationError { message }
@@ -233,12 +250,11 @@ export async function yayinla() {
   console.log("Kart herkese açık URL:", imageUrl);
 
   const igCaption = instagramCaptionOlustur(soru, dogruHarf);
-  const fbCaption = facebookCaptionOlustur(soru);
-  const fbFirstComment = facebookFirstComment(soru, dogruHarf);
+  const fbCaption = facebookCaptionOlustur(soru, dogruHarf);
 
   const [igResult, fbResult] = await Promise.allSettled([
     publishInstagram(soru, imageUrl, igCaption),
-    publishFacebook(soru, imageUrl, fbCaption, fbFirstComment),
+    publishFacebook(soru, imageUrl, fbCaption),
   ]);
 
   const sonuc = {
@@ -250,10 +266,16 @@ export async function yayinla() {
   await writeFile(path.join(OUT_DIR, "gunun-sorusu-result.json"), JSON.stringify(sonuc, null, 2));
   console.log(JSON.stringify(sonuc, null, 2));
 
-  // İkisi de başarısız olduysa iş görünür şekilde başarısız olsun.
-  if (igResult.status === "rejected" && fbResult.status === "rejected") {
+  // Sadece 2 platform var ve ayrı bir retry mekanizması yok — kısmi
+  // başarı bile sessizce yeşil geçmesin diye TEK platform başarısız
+  // olsa bile iş görünür şekilde başarısız olsun (workflow kırmızı X
+  // alsın, bildirim gitsin). Başarılı olan platforma dokunulmadı,
+  // sadece görünürlük için.
+  if (igResult.status === "rejected" || fbResult.status === "rejected") {
     throw new Error(
-      `Her iki platform da başarısız: IG=${igResult.reason?.message} FB=${fbResult.reason?.message}`
+      `Bir veya daha fazla platform başarısız: IG=${
+        igResult.status === "rejected" ? igResult.reason?.message : "ok"
+      } FB=${fbResult.status === "rejected" ? fbResult.reason?.message : "ok"}`
     );
   }
   return sonuc;
