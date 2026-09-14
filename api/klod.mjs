@@ -3,7 +3,36 @@
 // 20 Pro Prompt Engineering Tekniği Uygulandı
 // ============================================================
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
+
+// RAG — gerçek soru bankası (data/sorular.json, automation/video-pipeline
+// ile aynı kaynaktan kopyalanmıştır — o pipeline extract-sorular.mjs ile
+// sitenin gerçek SAT/Sinyal Lab içeriğinden üretiyor, burada da uydurma
+// yok). Modül yüklenirken bir kere okunuyor, soğuk başlangıç dışında
+// sıcak fonksiyon çağrılarında tekrar disk I/O yok.
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+let SORU_HAVUZU = [];
+try {
+  SORU_HAVUZU = JSON.parse(readFileSync(path.join(__dirname, 'data', 'sorular.json'), 'utf-8'));
+} catch (e) {
+  console.error('Soru havuzu yüklenemedi (RAG devre dışı, devam ediliyor):', e.message);
+}
+
+// Kullanıcının mesajında geçen sinyal kelimeye (despite, must have, by no
+// means...) göre gerçek soru bankasından 1-2 örnek bulur. Basit anahtar
+// kelime eşleştirmesi — 59 kayıtlık bir havuz için vektör arama gereksiz
+// karmaşıklık olurdu. Eşleşme yoksa boş dizi döner, KLOD normal (RAG'sız)
+// çalışmaya devam eder.
+function ilgiliSorulariBul(kullaniciMesaji, limit = 2) {
+  if (!kullaniciMesaji || SORU_HAVUZU.length === 0) return [];
+  const metin = kullaniciMesaji.toLowerCase();
+  return SORU_HAVUZU
+    .filter((s) => s.sinyal && metin.includes(s.sinyal.toLowerCase()))
+    .slice(0, limit);
+}
 
 // 1. SYSTEM PROMPT — Tutarlı karakter tanımı
 const KLOD_SYSTEM_PROMPT = `Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin.
@@ -255,6 +284,30 @@ export default async function handler(req, res) {
       cache_control: { type: "ephemeral" } // Cache'le!
     }
   ];
+
+  // RAG — öğrencinin son mesajında bir sinyal kelime geçiyorsa, gerçek soru
+  // bankasından örnek(ler)i AYRI, cache'lenmeyen bir system bloğu olarak
+  // ekle. Ana prompt'u değiştirmiyoruz ki yukarıdaki cache_control hit
+  // oranı bozulmasın — sadece bu ek blok isteğe göre değişiyor.
+  // sinyal_analiz zaten kendi paragrafından grounded olduğu ve caller
+  // özel bir `system` verdiğinde onun isteğine karışmamak için atlanıyor.
+  if (!system && mode !== 'sinyal_analiz') {
+    const sonKullaniciMesaji = [...trimmedMessages].reverse().find((m) => m.role === 'user');
+    const mesajMetni =
+      typeof sonKullaniciMesaji?.content === 'string'
+        ? sonKullaniciMesaji.content
+        : Array.isArray(sonKullaniciMesaji?.content)
+          ? sonKullaniciMesaji.content.find((b) => b.type === 'text')?.text || ''
+          : '';
+    const ilgiliSorular = ilgiliSorulariBul(mesajMetni);
+    if (ilgiliSorular.length > 0) {
+      const ornekMetni = ilgiliSorular.map((s) => `- "${s.soru_en}" → ${s.aciklama_tr}`).join('\n');
+      systemContent.push({
+        type: "text",
+        text: `Öğrencinin sorusuyla ilgili platformun gerçek soru bankasından örnek(ler) — cevabını bunlarla tutarlı ver:\n${ornekMetni}`,
+      });
+    }
+  }
 
   // 8. PROMPT CHAINING — Mod bazlı zincir
   let finalMessages = calibratedMessages;

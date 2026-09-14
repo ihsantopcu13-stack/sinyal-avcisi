@@ -1,0 +1,828 @@
+[
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The appellate court ruled that, despite the irregularities, the verdict was by no means invalid.",
+    "sinyal": "despite",
+    "soru_tr": "Bu metne gore mahkeme karari hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Usul hatalari karari gecersiz kildi.",
+      "Usul hatalarina ragmen karar gecerlilligini korodu.",
+      "Mahkeme yeniden yargilama istedi.",
+      "Karar kesinlikle gecersiz bulundu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Despite\" = zitlik, \"by no means invalid\" = kesinlikle gecersiz degil."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The researchers concluded that, despite the promising results, the treatment was far from guaranteed.",
+    "sinyal": "despite",
+    "soru_tr": "Arastirmacilar tedavi hakkinda ne soylemistir?",
+    "secenekler_tr": [
+      "Tedavi tum hastalar icin etkilidir.",
+      "Tedavi umit verici ama garantili degildir.",
+      "Sonuclar yetersiz kaldi.",
+      "Tedavi basariyla tamamlandi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from guaranteed\" = garantili degil. Gizli olumsuz tuzak!"
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The statute was far from unambiguous, yet the court applied it strictly.",
+    "sinyal": "yet",
+    "soru_tr": "Kanun hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Kanun tamamen acik ve kesindir.",
+      "Kanun belirsiz olmasina ragmen sıkı uygulandı.",
+      "Mahkeme kanunu esnek yorumladi.",
+      "Kanun uygulanmadi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from unambiguous\" = belirsiz + \"yet\" = zitlik. İki sinyal bir arada!"
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The treatment was far from effective although it had shown promising results in trials.",
+    "sinyal": "although",
+    "soru_tr": "Tedavi hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Denemelerde etkili bulundu.",
+      "Umit verici sonuclara ragmen etkili olmadi.",
+      "Klinik denemelerde basarisiz oldu.",
+      "Sonuclar degerlendirilmedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from effective\" + \"although promising\" = umit verici ama etkili degil."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "Sociologists argue that stratification hardly operates independently of cultural norms.",
+    "sinyal": null,
+    "soru_tr": "Sosyologlar tabakalasma icin ne soyler?",
+    "secenekler_tr": [
+      "Kulturel normlardan tamamen bagimsizdır.",
+      "Kulturel normlarla yakindan iliskilidir.",
+      "Ekonomik bir olgudur.",
+      "Sadece kentsel alanlarda gorulur."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Hardly operates independently\" = neredeyse hic bagimsiz degil."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "The catalyst failed to accelerate the reaction even though the temperature was optimal.",
+    "sinyal": "even though",
+    "soru_tr": "Katalizor icin ne soylenebilir?",
+    "secenekler_tr": [
+      "Reaksiyonu basariyla hizlandirdi.",
+      "Sicaklik optimum olsa da basarisiz oldu.",
+      "Sicaklik cok dusuktu.",
+      "Katalizor ve sicaklik birlikte etkili oldu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Failed to\" = basaramadi + \"even though optimal\" = tezat."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The committee was by no means unanimous in its decision, nor did it reach a consensus.",
+    "sinyal": "nor",
+    "soru_tr": "Komite karari hakkinda ne dogrudur?",
+    "secenekler_tr": [
+      "Komite oybirligi ile karar aldi.",
+      "Komite ne oybirligi sagladi ne de uzlasti.",
+      "Komite cogunlukla uzlasti.",
+      "Karar ertelendi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"By no means unanimous\" + \"nor\" = ne ... ne de. Cift olumsuz-zitlik kombinasyonu!"
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "Prior to the enactment of the law, companies were rarely held liable.",
+    "sinyal": "Prior to",
+    "soru_tr": "Kanun oncesinde sirketler icin ne gercekti?",
+    "secenekler_tr": [
+      "Sirketler her zaman sorumlu tutulurdu.",
+      "Sirketler neredeyse hic sorumlu tutulmazdi.",
+      "Sorumluluk kanunla azalti.",
+      "Sirketler goniullu sorumluluk aldi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Rarely\" = gizli olumsuz, neredeyse hic. \"Prior to\" = oncesinde."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "Whereas early studies suggested a strong correlation, recent findings have failed to replicate these results.",
+    "sinyal": "Whereas",
+    "soru_tr": "Yeni bulgular hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Erken bulgulari dogruladi.",
+      "Erken bulgularla celisiyor, sonuclari tekrarlayamadi.",
+      "Korrelasyonun guclu oldugunu gosterdi.",
+      "Sonuclar henuz degerlendirilmedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Whereas\" = karsitlik + \"failed to replicate\" = tekrarlayamadi."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The drug scarcely reduced inflammation despite being administered at the maximum dosage.",
+    "sinyal": "despite",
+    "soru_tr": "Ilac hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Maksimum dozda cok etkili oldu.",
+      "Maksimum doza ragmen neredeyse hic etki etmedi.",
+      "Doz artirinca etkinligi artti.",
+      "Ilac hicbir doz icin test edilmedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Scarcely\" = neredeyse hic + \"despite maximum dosage\" = doza ragmen."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "The policy was anything but neutral; it disproportionately affected marginalized communities.",
+    "sinyal": "marginalized",
+    "soru_tr": "Politika hakkinda ne dogrudur?",
+    "secenekler_tr": [
+      "Tamamen tarafsizdi.",
+      "Tarafsiz degildi; dezavantajli topluluklar daha cok etkilendi.",
+      "Tum gruplar esit sekilde etkilendi.",
+      "Politika uygulanmadi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Anything but neutral\" = tarafsiz degil. Guclu gizli olumsuz!"
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "The experiment by no means confirmed the hypothesis; on the contrary, it contradicted previous assumptions.",
+    "sinyal": "on the contrary",
+    "soru_tr": "Deney sonuclari ne gosterdi?",
+    "secenekler_tr": [
+      "Hipotezi tamamen dogruladi.",
+      "Hipotezi dogrulamadi, aksine onceki varsayimlari cururtti.",
+      "Hipotezi kismen destekledi.",
+      "Sonuclar belirsizdi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"By no means confirmed\" + \"on the contrary\" = kesinlikle dogrulamadi, aksine cururdu."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "No sooner had the new regulation been implemented than companies began lobbying against it.",
+    "sinyal": "No sooner had",
+    "soru_tr": "Bu cumleye gore ne oldu?",
+    "secenekler_tr": [
+      "Sirketler yonetmelikten once lobi yapti.",
+      "Yonetmelik hayata gecmeden hemen sirketler lobi yapmaya basladi.",
+      "Sirketler yonetmeligi destekledi.",
+      "Lobi faaliyetleri başarılı oldu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"No sooner...than\" = yapar yapmaz. Devrik yapi + zaman sinyali."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The defendant's argument was not without merit, yet the court ultimately ruled against him.",
+    "sinyal": "yet",
+    "soru_tr": "Savunma argumani hakkinda ne dogrudur?",
+    "secenekler_tr": [
+      "Tamamen degersizdi.",
+      "Belirli bir degeri vardi ama mahkeme yine de aleyhine karar verdi.",
+      "Mahkemeyi ikna etti.",
+      "Degerlendirilmedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Not without merit\" = cift olumsuz = degerli. \"Yet\" = ama. Klasik OSYM tuzagi!"
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "While proponents argue the reform is essential, critics maintain it is far from sufficient.",
+    "sinyal": "While",
+    "soru_tr": "Elestirenler reform hakkinda ne dusunuyor?",
+    "secenekler_tr": [
+      "Reform yeterli ve gereklidir.",
+      "Reform gerekli olabilir ama yeterli degildir.",
+      "Reform tamamen gereksizdir.",
+      "Reform henuz degerlendirilmemistir."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from sufficient\" = yeterli degil. \"While\" zitlik olusturuyor."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The defendant, notwithstanding the overwhelming evidence, pleaded not guilty.",
+    "sinyal": "notwithstanding",
+    "soru_tr": "Bu metne gore savunma hakkinda ne dogrudur?",
+    "secenekler_tr": [
+      "Deliller savunuyu destekledi.",
+      "Guclu delillere ragmen suclu olmadigi iddia edildi.",
+      "Mahkeme savunuyu reddetti.",
+      "Deliller yetersiz bulundu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Notwithstanding\" = -e ragmen. Guçlu delil varken sucsuz dendi."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "By the time the symptoms appeared, the infection had already spread to adjacent tissue.",
+    "sinyal": "By the time",
+    "soru_tr": "Semptomlarin ortaya cikmasiyla enfeksiyon arasindaki iliski nedir?",
+    "secenekler_tr": [
+      "Semptomlar enfeksiyonu durdurdu.",
+      "Enfeksiyon semptomlarin gozlemlenmesinden once yayilmisti.",
+      "Semptomlar dokuyu korudu.",
+      "Enfeksiyon semptomlarin ardindan basladi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"By the time\" + past perfect: semptomlardan ONCE yayilma tamamlandi."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "The catalyst, rather than being consumed, facilitates the reaction without undergoing permanent change.",
+    "sinyal": "rather than",
+    "soru_tr": "Katalizor hakkinda hangisi dogrudur?",
+    "secenekler_tr": [
+      "Reaksiyonda tuketilir.",
+      "Kalici degisime ugramadan reaksiyonu kolaylastirir.",
+      "Reaksiyonu engeller.",
+      "Kimyasal olarak donusur."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Rather than being consumed\" = tuketilmek yerine. Katalizor degismez."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "Consequently, urbanization rates declined in regions where agricultural subsidies were increased.",
+    "sinyal": "Consequently",
+    "soru_tr": "Tarim sübvansiyonlarinin artirilmasiyla ne iliskili?",
+    "secenekler_tr": [
+      "Kentlesme hizlandi.",
+      "Kentlesme orani azaldi.",
+      "Sübvansiyonlar etkisiz kaldi.",
+      "Tarim uretimi düstü."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Consequently\" sonuc bildirir. \"Declined\" = azaldi. Sübvansiyon artti, kentlesme düstü."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The statute provided that any contract signed under duress shall be deemed voidable at the discretion of the aggrieved party.",
+    "sinyal": "provided that",
+    "soru_tr": "Kanuna gore baskı altında imzalanan sozlesme icin ne soylenebilir?",
+    "secenekler_tr": [
+      "Sozlesme kesinlikle gecersizdir.",
+      "Magdur tarafin talebine gore iptal edilebilir.",
+      "Sozlesme her durumda gecerlidir.",
+      "Mahkeme sozlesmeyi kendilginden iptal eder."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Voidable\" = iptal edilebilir ama otomatik gecersiz degil. \"At discretion\" = ihtiyara bagli."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "Although the drug demonstrated efficacy in clinical trials, its long-term safety profile remained uncertain.",
+    "sinyal": "Although",
+    "soru_tr": "Ilac hakkında hangisi dogrudur?",
+    "secenekler_tr": [
+      "Klinik etkisi kanitlanmamistir.",
+      "Etkin oldugu gosterilmis ancak uzun vadeli güvenligi belirsizdir.",
+      "Uzun vadeli güvenligi tanimlanmistir.",
+      "Klinik deneyler tamamlanmamistir."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Although\" zitlik: etkinlik VAR ama güvenlik belirsiz. \"Efficacy\" = etkinlik."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "Prior to the discovery of penicillin, bacterial infections were often fatal.",
+    "sinyal": "Prior to",
+    "soru_tr": "Penisilin kesfinden once bakteriyel enfeksiyonlar hakkinda ne soylenebilir?",
+    "secenekler_tr": [
+      "Kolayca tedavi ediliyordu.",
+      "Cogunlukla olumcul sonuclaniyordu.",
+      "Nadiren gorulüyordu.",
+      "Etkili tedavileri mevcuttu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Prior to\" = -den once. \"Often fatal\" = cogunlukla olumcul."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "The study found that social mobility, contrary to popular belief, has declined over the past two decades.",
+    "sinyal": "contrary to popular belief",
+    "soru_tr": "Arastirmanin sosyal hareketlilik hakkindaki bulgulari nedir?",
+    "secenekler_tr": [
+      "Son yıllarda artmistir.",
+      "Yaygin inancanin aksine azalmistir.",
+      "Degisim gozlemlenmemistir.",
+      "Yalnızca gelismis ulkelerde düsmüstür."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Contrary to popular belief\" = yaygin inancanin aksine. \"Declined\" = azaldi."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The study's findings were far from conclusive, yet they sparked considerable debate among scholars.",
+    "sinyal": "yet",
+    "soru_tr": "Çalışmanın bulgularıyla ilgili ne söylenebilir?",
+    "secenekler_tr": [
+      "Bulgular kesin sonuçlar ortaya koydu.",
+      "Bulgular kesin olmasa da akademisyenler arasında tartışma yarattı.",
+      "Bulgular akademisyenler tarafından görmezden gelindi.",
+      "Tartışma bulgulardan önce başladı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from conclusive\" = kesin değil + \"yet\" = zıtlık. Kesin değil AMA tartışma yarattı."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "Although the experiment failed to yield the expected results, the researchers remained optimistic about future prospects.",
+    "sinyal": "Although",
+    "soru_tr": "Araştırmacıların tutumu nedir?",
+    "secenekler_tr": [
+      "Başarısız deney sonrasında umutsuzluğa kapıldılar.",
+      "Beklenmedik sonuçlara rağmen iyimserliklerini korudular.",
+      "Deneyi tekrarlamaya karar verdiler.",
+      "Beklenen sonuçlara ulaştılar."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Although failed\" = zıtlık. Başarısız olsa da iyimserlikleri devam etti."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The new policy was anything but popular despite the government's efforts to promote it.",
+    "sinyal": "despite",
+    "soru_tr": "Yeni politika hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Politika hükümet desteğiyle popüler oldu.",
+      "Tanıtım çabalarına rağmen politika hiç popüler olmadı.",
+      "Politika kısmen popüler bulundu.",
+      "Hükümet politikayı tanıtmaktan vazgeçti."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Anything but popular\" = hiç popüler değil + \"despite\" = zıtlık. Çaba olmasına rağmen başarısız."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The economy recovered more quickly than anticipated, even though analysts had predicted a prolonged recession.",
+    "sinyal": "even though",
+    "soru_tr": "Ekonomik toparlanma için ne söylenebilir?",
+    "secenekler_tr": [
+      "Toparlanma analistlerin öngördüğü kadar yavaş oldu.",
+      "Uzun durgunluk öngörülmesine karşın ekonomi hızla toparlıandı.",
+      "Analistler hızlı toparlanmayı öngörmüştü.",
+      "Ekonomi toparlanamadı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Even though predicted recession\" = zıtlık. Durgunluk beklendi AMA hızlı toparlıandı."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The defendant's argument was by no means convincing, yet the jury deliberated for three days.",
+    "sinyal": "yet",
+    "soru_tr": "Sanığın savunması hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Savunma ikna ediciydi ve jury hızla karar verdi.",
+      "Savunma ikna edici olmasa da jury üç gün müzakere etti.",
+      "Jury savunmayı ikna edici buldu.",
+      "Jury bir gün içinde karar verdi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"By no means convincing\" = hiç ikna edici değil + \"yet\" = zıtlık."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "Despite the overwhelming evidence, the court was far from unanimous in its ruling.",
+    "sinyal": "Despite",
+    "soru_tr": "Mahkemenin kararıyla ilgili ne söylenebilir?",
+    "secenekler_tr": [
+      "Mahkeme kanıtlar ışığında oybirliğiyle karar verdi.",
+      "Ağırlıklı kanıtlara rağmen mahkeme oybirliğinden uzaktı.",
+      "Mahkeme oybirliğiyle beraat kararı verdi.",
+      "Kanıtlar yetersiz bulundu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Despite overwhelming evidence\" = zıtlık + \"far from unanimous\" = oybirliği yok."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The contract's terms were hardly favorable to either party, yet both sides agreed to proceed.",
+    "sinyal": "yet",
+    "soru_tr": "Sözleşme şartları hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Şartlar her iki taraf için de çok avantajlıydı.",
+      "Şartlar neredeyse hiç avantajlı olmasa da taraflar devam etmeye karar verdi.",
+      "Taraflar şartları avantajlı buldukları için anlaşmaya vardı.",
+      "Sözleşme müzakere aşamasında iptal edildi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Hardly favorable\" = neredeyse hiç avantajlı değil + \"yet\" = zıtlık."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The clinical trial results were nowhere near as promising as initially hoped, although researchers continued the study.",
+    "sinyal": "although",
+    "soru_tr": "Klinik araştırma sonuçları nasıl değerlendirilir?",
+    "secenekler_tr": [
+      "Sonuçlar başlangıçta umut edilenden çok daha iyi çıktı.",
+      "Sonuçlar beklendiği kadar umut verici olmasa da araştırma sürdü.",
+      "Araştırmacılar hayal kırıklığı yaşayınca çalışmayı durdurdu.",
+      "Sonuçlar tam olarak beklendiği gibiydi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Nowhere near as promising\" = hiç umut verici değil + \"although\" = zıtlık."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "Despite years of research, scientists have yet to find a definitive cure for the disease.",
+    "sinyal": "Despite",
+    "soru_tr": "Hastalığın tedavisiyle ilgili ne söylenebilir?",
+    "secenekler_tr": [
+      "Bilim insanları kesin bir tedavi yöntemi bulmuştur.",
+      "Yıllarca araştırmaya rağmen kesin bir tedavi henüz bulunamamıştır.",
+      "Araştırmalar tedavinin imkansız olduğunu göstermiştir.",
+      "Tedavi yakın zamanda bulunacağı öngörülmektedir."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Despite years\" = zıtlık + \"yet to find\" = henüz bulunamadı."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The medication proved far from harmless, even though it had passed initial safety screenings.",
+    "sinyal": "even though",
+    "soru_tr": "İlaçla ilgili ne öğrenilmiştir?",
+    "secenekler_tr": [
+      "İlaç güvenlik testlerini geçtiği için zararsız olduğu kanıtlandı.",
+      "İlk güvenlik taramalarını geçmesine rağmen ilaç zararlı çıktı.",
+      "İlaç zararlı olduğu için güvenlik testlerini geçemedi.",
+      "Güvenlik taramaları ilaç için yapılmadı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from harmless\" = zararsız değil + \"even though passed\" = zıtlık."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "The experiment's results were scarcely reproducible, despite the controlled laboratory conditions.",
+    "sinyal": "despite",
+    "soru_tr": "Deneyin sonuçları için ne söylenebilir?",
+    "secenekler_tr": [
+      "Kontrollü koşullar sayesinde sonuçlar kolayca tekrarlanabilirdi.",
+      "Kontrollü koşullara rağmen sonuçlar neredeyse tekrarlanamadı.",
+      "Laboratuvar koşulları deneyin tekrarlanmasını engelledi.",
+      "Sonuçlar her seferinde aynı çıktı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Scarcely reproducible\" = neredeyse tekrarlanamaz + \"despite controlled conditions\" = zıtlık."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "Although the hypothesis seemed plausible, the data failed to provide sufficient support.",
+    "sinyal": "Although",
+    "soru_tr": "Hipotez hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Hipotez verilerle tamamen desteklendi.",
+      "Hipotez makul görünse de veriler yeterli destek sağlayamadı.",
+      "Veriler hipotezi çürüttü.",
+      "Hipotez veri toplanmadan reddedildi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Although plausible\" = zıtlık. Makul görünüyordu AMA veri destek vermedi."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "The social program was far from achieving its intended outcomes, despite significant funding.",
+    "sinyal": "despite",
+    "soru_tr": "Sosyal program hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Program önemli fonlarla hedeflerine ulaştı.",
+      "Önemli finansmana rağmen program hedeflerine ulaşmaktan uzak kaldı.",
+      "Program hedeflerine kısmen ulaştı.",
+      "Fon yetersizliği programın başarısını engelledi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from achieving\" = ulaşamadı + \"despite funding\" = zıtlık."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "Public support for the initiative was by no means guaranteed, even though surveys showed initial enthusiasm.",
+    "sinyal": "even though",
+    "soru_tr": "Kamuoyunun girişime desteği nasıldı?",
+    "secenekler_tr": [
+      "Anketler büyük destek olacağını garantiledi.",
+      "İlk coşkuya rağmen kamuoyu desteği kesinlikle garantili değildi.",
+      "Kamuoyu desteği hiç olmadı.",
+      "Anketler desteğin olmayacağını gösterdi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"By no means guaranteed\" = kesinlikle garantili değil + \"even though enthusiasm\" = zıtlık."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "Given the available evidence, the investigators concluded that the suspect must have been at the scene.",
+    "sinyal": null,
+    "soru_tr": "Araştırmacıların sonucuna göre şüpheli için ne söylenebilir?",
+    "secenekler_tr": [
+      "Şüpheli kesinlikle olay yerinde değildi.",
+      "Mevcut kanıtlara göre şüphelinin olay yerinde bulunmuş olması gerekir.",
+      "Şüphelinin olay yerinde olup olmadığı belirsizdir.",
+      "Araştırmacılar şüpheliyi serbest bıraktı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Must have been\" = geçmişe güçlü çıkarım. Kanıtlara dayanarak bu sonuca varıldı."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The team should have consulted the experts before making such a critical decision.",
+    "sinyal": null,
+    "soru_tr": "Bu cümleden çıkarılacak sonuç nedir?",
+    "secenekler_tr": [
+      "Ekip uzmanlarla danıştıktan sonra karar aldı.",
+      "Ekip kritik kararı almadan önce uzmanlarla danışmalıydı ama danışmadı.",
+      "Uzmanlar ekibin kararını onayladı.",
+      "Ekip doğru kararı aldı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Should have consulted\" = danışmalıydı ama danışmadı. Geçmişe pişmanlık yapısı!"
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The patient's symptoms could have been misdiagnosed, as they were consistent with multiple conditions.",
+    "sinyal": null,
+    "soru_tr": "Hastanın belirtileri hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Belirtiler kesinlikle yanlış teşhis edildi.",
+      "Belirtiler birden fazla durumla uyumluydu, bu yüzden yanlış teşhis mümkün görünüyordu.",
+      "Belirtiler yalnızca tek bir hastalığa işaret ediyordu.",
+      "Teşhis kesinlikle doğruydu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Could have been misdiagnosed\" = yanlış teşhis edilmiş olabilirdi. Geçmişe olasılık."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The project was severely underfunded; consequently, the team was forced to abandon several key objectives.",
+    "sinyal": "consequently",
+    "soru_tr": "Projenin yetersiz finansmanının sonucu nedir?",
+    "secenekler_tr": [
+      "Ekip hedeflerine rağmen projeyi tamamladı.",
+      "Yetersiz fon nedeniyle ekip bazı temel hedeflerden vazgeçmek zorunda kaldı.",
+      "Ekip daha fazla fon talep etti.",
+      "Hedefler revize edildi ama terk edilmedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Consequently\" = sonuç sinyali. Yetersiz fon → hedeflerin terk edilmesi."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "The population grew exponentially over the decade; as a result, housing prices reached unprecedented levels.",
+    "sinyal": "as a result",
+    "soru_tr": "Nüfus artışının sonucu nedir?",
+    "secenekler_tr": [
+      "Nüfus artışı konut fiyatlarını düşürdü.",
+      "On yıllık nüfus artışının sonucunda konut fiyatları görülmemiş seviyelere yükseldi.",
+      "Konut fiyatları nüfus artışından bağımsız olarak yükseldi.",
+      "Nüfus azalması konut fiyatlarını artırdı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"As a result\" = sonuç sinyali. Nüfus artışı → konut fiyatları arttı."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The agreement will remain valid provided that both parties fulfill their obligations within the specified timeframe.",
+    "sinyal": "provided that",
+    "soru_tr": "Anlaşmanın geçerliliği neye bağlıdır?",
+    "secenekler_tr": [
+      "Anlaşma her koşulda geçerlidir.",
+      "Anlaşma, tarafların yükümlülüklerini belirtilen sürede yerine getirmesiyle geçerliliğini korur.",
+      "Anlaşma tek taraflı olarak iptal edilebilir.",
+      "Belirtilen süre anlaşmanın geçerliliğini etkilemez."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Provided that\" = şartıyla/koşuluyla. Yükümlülük yerine getirilirse geçerli."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The defendant will be released on condition that they comply with all restrictions imposed by the court.",
+    "sinyal": "on condition that",
+    "soru_tr": "Sanığın serbest bırakılması ne koşula bağlıdır?",
+    "secenekler_tr": [
+      "Sanık koşulsuz olarak serbest bırakıldı.",
+      "Sanık, mahkemenin koyduğu tüm kısıtlamalara uyması koşuluyla serbest bırakılacak.",
+      "Mahkeme tüm kısıtlamaları kaldırdı.",
+      "Sanık tüm kısıtlamaları ihlal etti."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"On condition that\" = şartıyla. Kısıtlamalara uyma koşuluyla serbest."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The negotiations were nowhere near completion, yet both parties expressed optimism about reaching a deal.",
+    "sinyal": "yet",
+    "soru_tr": "Müzakereler hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Müzakereler tamamlanmak üzereydi.",
+      "Tamamlanmaktan uzaktı ama taraflar iyimserdi.",
+      "Taraflar anlaşmadan vazgeçti.",
+      "Müzakereler resmi olarak sona erdi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Nowhere near completion\" = tamamlanmaktan çok uzak + \"yet\" = zıtlık."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "Unless the appeal is filed within thirty days, the ruling will become final and binding.",
+    "sinyal": "Unless",
+    "soru_tr": "Kararın kesinleşmesi neye bağlıdır?",
+    "secenekler_tr": [
+      "Otuz gün içinde itiraz edilmezse karar kesinleşecektir.",
+      "Karar hiçbir koşulda kesinleşmez.",
+      "İtiraz süresi sınırsızdır.",
+      "Karar zaten kesinleşmiştir."
+    ],
+    "dogru_index": 0,
+    "aciklama_tr": "\"Unless\" = eğer olmazsa. İtiraz edilmezse (30 gün içinde) karar kesinleşir."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "The clinical guidelines were revised after new evidence cast doubt on the drug's long-term safety.",
+    "sinyal": "after",
+    "soru_tr": "Klinik kılavuzların revize edilme nedeni nedir?",
+    "secenekler_tr": [
+      "İlacın etkinliği kanıtlandığı için.",
+      "Yeni kanıtlar ilacın uzun vadeli güvenliğine şüphe düşürdüğü için.",
+      "Hastalar şikayette bulunduğu için.",
+      "Kılavuzlar zaten güncel değildi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Cast doubt on\" = şüphe uyandırmak. Yeni kanıt güvenliği sorgulattı, bu yüzden kılavuz revize edildi."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "Contrary to earlier assumptions, the compound proved anything but stable at room temperature.",
+    "sinyal": "Contrary to",
+    "soru_tr": "Bileşik hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Oda sıcaklığında kararlıdır.",
+      "Önceki varsayımların aksine oda sıcaklığında kararsızdır.",
+      "Yalnızca düşük sıcaklıklarda test edilmiştir.",
+      "Önceki varsayımlar doğrulanmıştır."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Contrary to\" = aksine + \"anything but stable\" = hiç kararlı değil."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "As a consequence of declining birth rates, several countries have revised their pension systems.",
+    "sinyal": "As a consequence of",
+    "soru_tr": "Doğum oranlarındaki düşüşün sonucu nedir?",
+    "secenekler_tr": [
+      "Bazı ülkeler emeklilik sistemlerini gözden geçirdi.",
+      "Emeklilik sistemleri değişmeden kaldı.",
+      "Doğum oranları yapay olarak artırıldı.",
+      "Ülkeler göçü tamamen durdurdu."
+    ],
+    "dogru_index": 0,
+    "aciklama_tr": "\"As a consequence of\" = sonucu olarak, nedensellik bildirir."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "The proposal, while theoretically sound, has proven next to impossible to implement in practice.",
+    "sinyal": "while",
+    "soru_tr": "Teklif hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Uygulaması son derece kolaydır.",
+      "Teoride mantıklı olsa da uygulamada neredeyse imkansızdır.",
+      "Teorik olarak da hatalıdır.",
+      "Henüz test edilmemiştir."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Next to impossible\" = neredeyse imkansız. \"While\" zıtlık kurar: teori iyi, uygulama zor."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "Had the witness come forward earlier, the outcome of the trial might have been different.",
+    "sinyal": null,
+    "soru_tr": "Bu cümleden ne çıkarılabilir?",
+    "secenekler_tr": [
+      "Tanık zamanında ifade verdi ve dava sonucu değişmedi.",
+      "Tanık daha erken ifade verseydi dava sonucu farklı olabilirdi.",
+      "Dava tanık ifadesi olmadan sonuçlandı.",
+      "Tanığın ifadesi davayı etkilemedi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Had the witness come forward\" = devrik 3. tip koşul (if düşmüş). Gerçekleşmemiş bir geçmiş varsayım."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "Once the infection had been misdiagnosed, treatment was delayed by several critical weeks.",
+    "sinyal": "Once",
+    "soru_tr": "Tedavinin gecikmesinin nedeni nedir?",
+    "secenekler_tr": [
+      "Hasta tedaviyi reddetti.",
+      "Enfeksiyon yanlış teşhis edildikten sonra tedavi haftalarca gecikti.",
+      "Hastane kapasitesi yetersizdi.",
+      "İlaç stokta yoktu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Once...had been misdiagnosed\" = yanlış teşhisten sonra. \"Delayed by\" = ile gecikti."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "The satellite's trajectory deviated only slightly from the projected path, a fact that nonetheless required immediate correction.",
+    "sinyal": "a fact that",
+    "soru_tr": "Uydunun yörüngesi hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Öngörülen yoldan çok büyük ölçüde saptı.",
+      "Çok az sapmasına rağmen anında düzeltme gerekti.",
+      "Hiçbir sapma gözlemlenmedi.",
+      "Düzeltmeye gerek duyulmadı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Deviated only slightly\" = çok az saptı ama yine de düzeltme gerekti — küçük sapmanın önemi vurgulanıyor."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "Even though the survey sample was representative, critics claim the results were far from generalizable.",
+    "sinyal": "Even though",
+    "soru_tr": "Eleştirmenlerin ankete yönelik itirazı nedir?",
+    "secenekler_tr": [
+      "Örneklem temsil edici değildi.",
+      "Örneklem temsil edici olsa da sonuçların genellenebilir olmadığını düşünüyorlar.",
+      "Anket hiç yapılmadı.",
+      "Sonuçlar tamamen genellenebilir bulundu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Far from generalizable\" = genellenebilir değil. \"Even though representative\" zıtlık kurar."
+  },
+  {
+    "kategori": "Genel - YDS Metni",
+    "soru_en": "Not only did the merger fail to boost profits, but it also triggered a wave of layoffs.",
+    "sinyal": "Not only",
+    "soru_tr": "Birleşmenin sonucu hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Kârı artırdı ve istihdamı korudu.",
+      "Kârı artıramadığı gibi işten çıkarmalara da yol açtı.",
+      "Yalnızca kârı etkiledi, istihdamı etkilemedi.",
+      "Birleşme iptal edildi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Not only...but also\" = hem ...hem de. İki olumsuz sonuç birlikte verilir."
+  },
+  {
+    "kategori": "Hukuk - YDS Metni",
+    "soru_en": "The clause was drafted so as to prevent either party from unilaterally terminating the agreement.",
+    "sinyal": "so as to",
+    "soru_tr": "Maddenin amacı nedir?",
+    "secenekler_tr": [
+      "Tarafların anlaşmayı istedikleri zaman feshetmesine izin vermek.",
+      "Taraflardan hiçbirinin anlaşmayı tek taraflı feshetmesini önlemek.",
+      "Anlaşmayı otomatik olarak sona erdirmek.",
+      "Yalnızca bir tarafa fesih hakkı tanımak."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"So as to prevent\" = önlemek amacıyla. \"Unilaterally terminating\" = tek taraflı feshetme."
+  },
+  {
+    "kategori": "Saglik - YOKDiL Metni",
+    "soru_en": "Despite its promising early results, the therapy was withheld from the general population pending further trials.",
+    "sinyal": "Despite",
+    "soru_tr": "Tedavi neden genel nüfusa uygulanmadı?",
+    "secenekler_tr": [
+      "Erken sonuçlar olumsuzdu.",
+      "Erken sonuçlar umut verici olsa da ek denemeler beklenene kadar uygulamadan alıkonuldu.",
+      "Tedavi tüm hastalara başarıyla uygulandı.",
+      "Denemeler tamamen durduruldu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Withheld from\" = alıkonuldu, uygulanmadı. \"Despite promising\" zıtlık kurar, yine de bekletildi."
+  },
+  {
+    "kategori": "Fen - YOKDiL Metni",
+    "soru_en": "Provided that the temperature remains stable, the reaction will proceed without further intervention.",
+    "sinyal": "Provided that",
+    "soru_tr": "Reaksiyonun devam etmesi için hangi koşul gereklidir?",
+    "secenekler_tr": [
+      "Sıcaklığın sürekli değişmesi.",
+      "Sıcaklığın kararlı kalması.",
+      "Sürekli müdahale edilmesi.",
+      "Katalizör eklenmesi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Provided that\" = şartıyla. Sıcaklık kararlı kalırsa reaksiyon müdahalesiz devam eder."
+  },
+  {
+    "kategori": "Sosyal - YOKDiL Metni",
+    "soru_en": "Public opinion on the reform has shifted markedly since the initial announcement, with support dwindling steadily.",
+    "sinyal": "since",
+    "soru_tr": "Kamuoyu desteği ile ilgili ne söylenebilir?",
+    "secenekler_tr": [
+      "İlk açıklamadan bu yana istikrarlı biçimde arttı.",
+      "İlk açıklamadan bu yana belirgin biçimde azaldı.",
+      "Hiç değişmedi.",
+      "Açıklamadan önce zaten düşüktü."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "\"Dwindling steadily\" = istikrarlı biçimde azalan. \"Shifted markedly since\" = belirgin değişim, zamanla."
+  }
+]
