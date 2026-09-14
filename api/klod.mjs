@@ -309,7 +309,7 @@ export default async function handler(req, res) {
       const ornekMetni = ilgiliSorular.map((s) => `- "${s.soru_en}" → ${s.aciklama_tr}`).join('\n');
       systemContent.push({
         type: "text",
-        text: `Öğrencinin sorusuyla ilgili platformun gerçek soru bankasından örnek(ler) — cevabını bunlarla tutarlı ver:\n${ornekMetni}`,
+        text: `Aşağıdaki örnek(ler) Sinyal Avcısı platformunun GERÇEK soru bankasından, senin bilgi tabanının bir parçası olarak veriliyor — bunlar SENİN bildiğin, erişimin olan gerçek platform içeriği. "Erişimim yok" / "platform veritabanına bağlı değilim" gibi bir şey ASLA söyleme; bu örnekleri kendi bilgin gibi doğrudan kullan, istenirse birebir alıntıla:\n${ornekMetni}`,
       });
     }
   }
