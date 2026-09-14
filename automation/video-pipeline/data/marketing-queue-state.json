@@ -1,5 +1,5 @@
 {
-  "nextIndex": 1,
+  "nextIndex": 2,
   "history": [
     {
       "id": "story-1",
@@ -11,6 +11,17 @@
         "status": "scheduled"
       },
       "publishedAt": "2026-09-14T06:02:04.985Z"
+    },
+    {
+      "id": "story-2",
+      "type": "instagram_story",
+      "post": {
+        "id": "6aa7e984c62bda8a7dc0e9c0",
+        "text": "ÖSYM'nin kurduğu tuzağı 10 saniyede gör 🔍\n\n7 sinyal tipini öğren, gramer ezberi yerine cümledeki tuzağı okumayı öğren.\n\n👉 Bio'daki linkten ücretsiz başla.",
+        "dueAt": "2026-09-14T12:34:08.330Z",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-14T12:33:08.907Z"
     }
   ]
 }
