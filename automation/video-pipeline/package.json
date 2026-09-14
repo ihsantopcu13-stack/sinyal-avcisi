@@ -10,7 +10,9 @@
     "render": "node scripts/render.mjs",
     "upload-youtube": "node scripts/upload-youtube.mjs",
     "upload-instagram": "node scripts/upload-instagram-buffer.mjs",
-    "pipeline": "node scripts/run-pipeline.mjs"
+    "pipeline": "node scripts/run-pipeline.mjs",
+    "generate-gunun-sorusu": "node scripts/generate-gunun-sorusu-kart.mjs",
+    "publish-gunun-sorusu": "node scripts/publish-gunun-sorusu.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.290",
@@ -19,6 +21,7 @@
     "remotion": "4.0.290",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "googleapis": "^144.0.0"
+    "googleapis": "^144.0.0",
+    "puppeteer": "^25.10.0"
   }
 }

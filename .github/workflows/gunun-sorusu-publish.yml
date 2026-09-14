@@ -1,0 +1,50 @@
+name: Günün Sorusu — Günlük Kart Yayını
+
+on:
+  schedule:
+    # Her gün 09:00 UTC = 12:00 Türkiye (DST yok).
+    - cron: "0 9 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # kart görselinin public URL'i için bu repoda bir GitHub Release asset'i olarak barındırılıyor
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Chromium bağımlılıklarını kur (Puppeteer için)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+            libasound2t64 libpango-1.0-0 libpangocairo-1.0-0
+
+      - name: Bağımlılıkları kur
+        run: npm install
+
+      - name: Günün Sorusu kartını üret
+        run: npm run generate-gunun-sorusu
+
+      - name: Kartı Instagram + Facebook'a yayınla
+        run: npm run publish-gunun-sorusu
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Üretilen içerikleri artifact olarak sakla (hata ayıklama için)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gunun-sorusu-out
+          path: automation/video-pipeline/out
+          retention-days: 7
