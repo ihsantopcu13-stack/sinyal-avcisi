@@ -1,0 +1,78 @@
+SİNYAL AVCISI — TikTok Video Scripti
+Konu: ÖSYM'nin en sinsi tuzağı — "despite" vs "although"
+Süre: ~40 saniye
+Format: Dikey video (9:16), tek kişi kamera karşısında veya ekran kaydı + voiceover
+
+============================================================
+[0:00–0:03] HOOK
+============================================================
+GÖRÜNTÜ: Hızlı zoom, ekranda kırmızı çarpı (✗) animasyonu.
+EKRAN YAZISI (OST): "BU SORUYU YANLIŞ YAPIYORSUN!"
+SESLENDİRME (VO):
+"Dur. Bu soruyu yanlış yapıyorsun — ve ÖSYM bunu bile bile soruyor."
+
+============================================================
+[0:03–0:10] TUZAK CÜMLESİ
+============================================================
+GÖRÜNTÜ: Ekranda boşluklu YDS tipi soru beliriyor.
+EKRAN YAZISI:
+"_____ the heavy rain, the match continued."
+a) Although        b) Despite
+
+VO:
+"Çoğu kişi ikisinin de 'rağmen' demek olduğunu bilir. Ama biri doğru,
+biri seni ekarte eder. Hangisi?"
+
+(1 saniye duraklama — izleyici tahmin etsin)
+
+============================================================
+[0:10–0:22] TUZAK AÇIKLAMASI
+============================================================
+EKRAN YAZISI: "CEVAP: Despite ✅"
+VO:
+"Cevap 'despite'. Neden mi? 'The heavy rain' bir İSİM. Ve despite
+bir EDAT — yani isim veya isim grubu ister. 'Although' ise bir
+BAĞLAÇ — arkasında mutlaka ÖZNE + FİİL olmak zorunda."
+
+GÖRÜNTÜ: Ekranda iki formül yan yana beliriyor (basit, büyük punto):
+  ALTHOUGH + özne + fiil   → "Although it rained..."
+  DESPITE + isim / -ing    → "Despite the rain..."
+
+VO (formülleri işaret ederek):
+"Yapı isim mi, cümle mi — sinyal orada. Anlamda değil."
+
+============================================================
+[0:22–0:32] İKİNCİ ÖRNEKLE PEKİŞTİRME + GİZLİ TUZAK
+============================================================
+GÖRÜNTÜ: Yeni cümle beliriyor.
+EKRAN YAZISI:
+"Although the budget was limited, the project exceeded expectations."
+
+VO:
+"Bak, burada 'the budget was limited' bir cümle — özne var, fiil var.
+O yüzden 'although'. Ama dikkat, ÖSYM'nin gizli silahı var:
+'In spite of the fact that' — 'despite' ailesinden ama arkasında
+yine tam cümle ister. Sınavda seni bununla yakalar."
+
+============================================================
+[0:32–0:40] CTA (KAPANIŞ)
+============================================================
+GÖRÜNTÜ: Sinyal Avcısı logosu + radar animasyonu.
+EKRAN YAZISI: "7 SİNYAL TİPİ · ÜCRETSİZ · SONSUZA KADAR"
+VO:
+"YDS ve YÖKDİL'de bu tip tuzaklardan 7 tane var. Hepsini Sinyal
+Avcısı'nda, tek kuruş ödemeden, kayıt bile olmadan öğrenebilirsin.
+Bio'daki linkten başla."
+
+============================================================
+NOTLAR
+============================================================
+- Ton: Hızlı, iddialı, "seni yakaladım" enerjisi — öğretici ama eğlenceli.
+- Metin overlay'ler büyük ve kontrastlı olmalı (amber #f5a623 vurgu, navy #0d1b3e zemin).
+- Müzik: Gerilim/merak hissi veren kısa bir loop, cevap anında (0:10) kesilip
+  net bir "ding" efektiyle değişebilir.
+- Alt yazı (caption) mutlaka eklenmeli — TikTok izleyicilerinin çoğu sessiz izler.
+- Video açıklaması (caption) önerisi:
+  "ÖSYM bu tuzağı her sınavda kurar 🎯 despite vs although farkını
+  10 saniyede öğren. Ücretsiz platform bio'da. #YDS #YÖKDİL #İngilizce
+  #SinyalAvcısı #AkademikKariyer"
