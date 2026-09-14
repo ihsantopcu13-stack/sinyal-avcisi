@@ -4,7 +4,7 @@
   "description": "YDS & YÖKDİL hazırlık platformu — sinyal metodu ile ÖSYM sorularını çöz",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0d13",
+  "background_color": "#0d1b3e",
   "theme_color": "#f5a623",
   "orientation": "portrait",
   "lang": "tr",

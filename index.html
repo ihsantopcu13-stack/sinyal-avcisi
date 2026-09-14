@@ -41,11 +41,11 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Caveat:wght@500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;min-width:0}
 :root{
   /* Core — Gece Nöbeti */
   --ink:#ece7da;
-  --paper:#0a0d13;
+  --paper:#0d1b3e;
   --signal:#f5a623;
   --signal-light:rgba(245,166,35,.14);
   --signal-dark:#c9791a;
@@ -311,9 +311,10 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .dk-bar{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin:5px 0}
 .dk-fill{height:100%;background:var(--signal);border-radius:2px;width:40%}
 .dk-action{font-size:15px;font-weight:600;color:var(--signal);margin-top:5px;cursor:pointer}
-.dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px}
-.dtab{font-size:16px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent}
+.dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.dtab{font-size:16px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0}
 .dtab.active{color:#047857;border-bottom-color:#047857}
+.dtab-raporlar-mobil{display:none}
 .dmod{animation:fadein .2s ease;position:relative}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .tam-ekran-btn{position:absolute;top:0;right:0;z-index:50;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:36px;height:36px;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,color .15s}
@@ -348,7 +349,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .tuzak-fb{font-size:16px;font-weight:500;min-height:14px;margin-bottom:6px}
 .tuzak-fb.ok{color:#16a34a}.tuzak-fb.err{color:var(--trap)}
 .tuzak-next-btn{display:none;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:16px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
-.sss{padding:72px 5vw;background:#0a0d13;border-top:1px solid var(--border);color:var(--ink)}
+.sss{padding:72px 5vw;background:#0d1b3e;border-top:1px solid var(--border);color:var(--ink)}
 .sss-inner{max-width:700px;margin:0 auto}
 .sss-header{text-align:center;margin-bottom:44px}
 .sss-item{border-bottom:1px solid var(--border)}
@@ -417,14 +418,16 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
   .alan-cards{flex-direction:column;align-items:center}
   .demo-opts,.dm-opts{grid-template-columns:1fr}
   .dash-ui{grid-template-columns:1fr}.dash-sb{display:none}
+  .dtab-raporlar-mobil{display:block}
   .dash-karts{grid-template-columns:1fr 1fr}
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
+  footer{grid-template-columns:1fr}
   .hero-bg-video{display:none}
   body{padding-bottom:64px}
 }
 
 /* HOŞ GELDİN KARŞILAMA ANİMASYONU */
-.hg-overlay{position:fixed;inset:0;z-index:99995;background:#0a0d13;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .6s ease;cursor:pointer}
+.hg-overlay{position:fixed;inset:0;z-index:99995;background:#0d1b3e;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .6s ease;cursor:pointer}
 .hg-overlay.acik{opacity:1;pointer-events:auto}
 .hg-radar-katman{position:absolute;top:50%;left:50%;width:0;height:0;pointer-events:none}
 .hg-ping-ring{position:absolute;top:0;left:0;width:20px;height:20px;margin:-10px 0 0 -10px;border:2px solid #f5a623;border-radius:50%;box-shadow:0 0 30px 0 rgba(245,166,35,.4);animation:hgPingOut 2.4s cubic-bezier(.16,.84,.44,1) infinite}
@@ -440,7 +443,7 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 
 /* MOBİL ALT NAVİGASYON — 4 grup + Dashboard */
 .mobile-bottom-nav{
-  display:none;position:fixed;left:0;right:0;bottom:0;z-index:850;
+  display:none;position:fixed;left:0;right:0;top:auto;bottom:0;height:auto;z-index:850;
   background:rgba(6,31,24,.94);backdrop-filter:blur(10px);
   border-top:1px solid rgba(255,255,255,.08);
   padding:6px 4px calc(6px + env(safe-area-inset-bottom));
@@ -573,7 +576,7 @@ html.a11y-buyuk-yazi{zoom:1.2}
    ============================================================ */
 body.dark-mode{
   --ink:#ece7da;
-  --paper:#0a0d13;
+  --paper:#0d1b3e;
   --border:rgba(245,166,35,.16);
   --muted:#8b93a3;
   --sl:rgba(245,166,35,.10);
@@ -628,7 +631,7 @@ body.dark-mode #podcast-liste .dinle-btn{color:#4f8ef7!important}
 body.dark-mode [style*="color:var(--ink)"]{color:#e8eaf0}
 body.dark-mode [style*="background:var(--surface)"]{background:#1a1d27!important}
 body.dark-mode [style*="background:white"]{background:#1a1d27!important}
-body.dark-mode [style*="background:#0a0d13"]{background:#111318!important}
+body.dark-mode [style*="background:#0d1b3e"]{background:#111318!important}
 body.dark-mode [style*="background:var(--paper)"]{background:#111318!important}
 body.dark-mode [style*="color:var(--ink)"]{color:#e8eaf0!important}
 body.dark-mode [style*="color:#374151"]{color:#d1d5db!important}
@@ -1620,6 +1623,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         </div>
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')" role="button" tabindex="0">Sinyal Lab</div>
+          <div class="dtab dtab-raporlar-mobil" onclick="dnav(this)" role="button" tabindex="0">📈 Raporlar</div>
           <div class="dtab" onclick="dtab(this,'kelime')" role="button" tabindex="0">Kelime Kartlari</div>
           <div class="dtab" onclick="dtab(this,'tuzak')" role="button" tabindex="0">Gunluk Tuzak</div>
           <div class="dtab" onclick="dtab(this,'sat')" role="button" tabindex="0">⚡ SAT Metodu</div>
@@ -2286,7 +2290,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="anlama-modul">
           <style>
             #anlama-modul{
-              --am-bg:#0a0d13;
+              --am-bg:#0d1b3e;
               --am-surface:#12161f;
               --am-border:rgba(245,166,35,.16);
               --am-text:#ece7da;
@@ -2319,7 +2323,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #anlama-modul .am-kart-info{flex:1;min-width:0}
             #anlama-modul .am-kart-baslik-metin{font-size:14px;font-weight:600;color:var(--am-text)}
             #anlama-modul .am-kart-etiket{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;color:var(--kart-renk,var(--am-accent));margin-top:2px;text-transform:uppercase}
-            #anlama-modul .am-kart-check{width:20px;height:20px;border-radius:50%;background:var(--kart-renk,var(--am-accent));color:#0a0d13;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+            #anlama-modul .am-kart-check{width:20px;height:20px;border-radius:50%;background:var(--kart-renk,var(--am-accent));color:#0d1b3e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
             #anlama-modul .am-kart-ok{color:var(--am-muted);transition:transform .25s;flex-shrink:0;font-size:11px}
             #anlama-modul .am-kart.am-acik .am-kart-ok{transform:rotate(180deg)}
             #anlama-modul .am-kart-govde{max-height:0;overflow:hidden;transition:max-height .35s ease}
@@ -2355,7 +2359,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="kelime-hafiza-modul">
           <style>
             #kelime-hafiza-modul{
-              --kh-bg:#0a0d13;
+              --kh-bg:#0d1b3e;
               --kh-surface:#12161f;
               --kh-border:rgba(245,166,35,.16);
               --kh-text:#ece7da;
@@ -2398,7 +2402,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #kelime-hafiza-modul .kh-kart{background:var(--kh-surface);border:1px solid var(--kh-border);border-radius:16px;padding:28px 24px;text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
             #kelime-hafiza-modul .kh-kart-etiket-ust{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--kart-renk,var(--kh-muted))}
             #kelime-hafiza-modul .kh-kelime-en{font-family:'IBM Plex Serif',serif;font-size:34px;font-weight:700;color:var(--kh-text);word-break:break-word}
-            #kelime-hafiza-modul .kh-goster-btn{background:var(--kh-accent);color:#0a0d13;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:6px}
+            #kelime-hafiza-modul .kh-goster-btn{background:var(--kh-accent);color:#0d1b3e;border:none;border-radius:10px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:6px}
             #kelime-hafiza-modul .kh-goster-btn:hover{opacity:.88}
 
             #kelime-hafiza-modul .kh-kelime-en-kucuk{font-family:'IBM Plex Serif',serif;font-size:24px;font-weight:700;color:var(--kh-text)}
@@ -2453,7 +2457,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="paragraf-diseksiyon-modul">
           <style>
             #paragraf-diseksiyon-modul{
-              --pd-bg:#0a0d13;
+              --pd-bg:#0d1b3e;
               --pd-surface:#12161f;
               --pd-border:rgba(245,166,35,.16);
               --pd-text:#ece7da;
@@ -2483,7 +2487,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #paragraf-diseksiyon-modul .pd-textarea::placeholder{color:var(--pd-muted)}
 
             #paragraf-diseksiyon-modul .pd-btn-satir{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-            #paragraf-diseksiyon-modul .pd-analiz-btn{background:var(--pd-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #paragraf-diseksiyon-modul .pd-analiz-btn{background:var(--pd-accent);color:#0d1b3e;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #paragraf-diseksiyon-modul .pd-analiz-btn:hover{opacity:.88}
             #paragraf-diseksiyon-modul .pd-ornek-btn{background:transparent;color:var(--pd-muted);border:1px solid var(--pd-border);border-radius:10px;padding:11px 18px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #paragraf-diseksiyon-modul .pd-ornek-btn:hover{color:var(--pd-text);border-color:var(--pd-accent)}
@@ -2543,7 +2547,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="soru-tipi-modul">
           <style>
             #soru-tipi-modul{
-              --st-bg:#0a0d13;
+              --st-bg:#0d1b3e;
               --st-surface:#12161f;
               --st-border:rgba(245,166,35,.16);
               --st-text:#ece7da;
@@ -2569,7 +2573,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #soru-tipi-modul .st-textarea::placeholder{color:var(--st-muted)}
 
             #soru-tipi-modul .st-btn-satir{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-            #soru-tipi-modul .st-analiz-btn{background:var(--st-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #soru-tipi-modul .st-analiz-btn{background:var(--st-accent);color:#0d1b3e;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #soru-tipi-modul .st-analiz-btn:hover{opacity:.88}
             #soru-tipi-modul .st-ornek-btn{background:transparent;color:var(--st-muted);border:1px solid var(--st-border);border-radius:10px;padding:11px 18px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #soru-tipi-modul .st-ornek-btn:hover{color:var(--st-text);border-color:var(--st-accent)}
@@ -2612,7 +2616,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="sinav-simulator-modul">
           <style>
             #sinav-simulator-modul{
-              --ss-bg:#0a0d13;
+              --ss-bg:#0d1b3e;
               --ss-surface:#12161f;
               --ss-border:rgba(245,166,35,.16);
               --ss-text:#ece7da;
@@ -2640,7 +2644,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #sinav-simulator-modul .ss-bilgi-item{display:flex;flex-direction:column;align-items:center;gap:2px}
             #sinav-simulator-modul .ss-bilgi-sayi{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:var(--ss-accent)}
             #sinav-simulator-modul .ss-bilgi-etiket{font-size:11px;color:var(--ss-muted)}
-            #sinav-simulator-modul .ss-baslat-btn{background:var(--ss-accent);color:#0a0d13;border:none;border-radius:10px;padding:13px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #sinav-simulator-modul .ss-baslat-btn{background:var(--ss-accent);color:#0d1b3e;border:none;border-radius:10px;padding:13px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #sinav-simulator-modul .ss-baslat-btn:hover{opacity:.88}
             #sinav-simulator-modul .ss-son-sonuc{margin-top:16px;font-size:12px;color:var(--ss-muted)}
 
@@ -2661,7 +2665,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #sinav-simulator-modul .ss-secenek:hover{border-color:var(--ss-accent)}
             #sinav-simulator-modul .ss-secenek.ss-secili{border-color:var(--ss-accent);background:rgba(245,166,35,.1)}
             #sinav-simulator-modul .ss-secenek-harf{font-weight:700;color:var(--ss-accent);flex-shrink:0}
-            #sinav-simulator-modul .ss-sonraki-btn{background:var(--ss-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 26px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+            #sinav-simulator-modul .ss-sonraki-btn{background:var(--ss-accent);color:#0d1b3e;border:none;border-radius:10px;padding:11px 26px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
             #sinav-simulator-modul .ss-sonraki-btn:hover{opacity:.88}
 
             #sinav-simulator-modul .ss-sonuc-ust{display:flex;align-items:center;gap:20px;background:var(--ss-surface);border:1px solid var(--ss-border);border-radius:16px;padding:22px;margin-bottom:16px;flex-wrap:wrap}
@@ -2711,7 +2715,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <section id="gunluk-antrenman-modul">
           <style>
             #gunluk-antrenman-modul{
-              --ga-bg:#0a0d13;
+              --ga-bg:#0d1b3e;
               --ga-surface:#12161f;
               --ga-border:rgba(245,166,35,.16);
               --ga-text:#ece7da;
@@ -2770,7 +2774,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             #gunluk-antrenman-modul .ga-secenek.ga-yanlis-vurgu{border-color:var(--ga-kirmizi);background:rgba(239,68,68,.1)}
             #gunluk-antrenman-modul .ga-secenek-harf{font-weight:700;color:var(--ga-accent);flex-shrink:0}
 
-            #gunluk-antrenman-modul .ga-devam-btn{background:var(--ga-accent);color:#0a0d13;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:8px}
+            #gunluk-antrenman-modul .ga-devam-btn{background:var(--ga-accent);color:#0d1b3e;border:none;border-radius:10px;padding:11px 24px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:8px}
             #gunluk-antrenman-modul .ga-devam-btn:hover{opacity:.88}
             #gunluk-antrenman-modul .ga-devam-btn:disabled{opacity:.4;cursor:not-allowed}
 
@@ -13442,4 +13446,3 @@ document.addEventListener('keydown', function(e){
 </script>
 </body>
 </html>
-/* force redeploy Mon Aug 31 07:48:37 UTC 2026 */
