@@ -1,0 +1,46 @@
+name: TikTok — İzole Test Yayını (manuel)
+
+# Yalnızca workflow_dispatch — cron YOK. upload-tiktok-buffer.mjs'i,
+# pahalı Remotion render + TTS adımlarını tekrarlamadan ve YouTube/
+# Instagram'a dokunmadan, gerçek Buffer API'sine karşı test etmek için.
+on:
+  workflow_dispatch:
+    inputs:
+      reuse_release_tag:
+        description: "Yeniden kullanılacak video release tag'i (boş bırakılırsa en son video-* otomatik seçilir)"
+        required: false
+        default: ""
+
+jobs:
+  test-tiktok:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Bağımlılıkları kur
+        run: npm install
+
+      - name: TikTok'a izole test yayını
+        run: node scripts/_test-tiktok-standalone.mjs
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_TIKTOK_CHANNEL_ID: ${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REUSE_RELEASE_TAG: ${{ github.event.inputs.reuse_release_tag }}
+
+      - name: Sonuçları artifact olarak sakla
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-test-out
+          path: automation/video-pipeline/out
+          retention-days: 3

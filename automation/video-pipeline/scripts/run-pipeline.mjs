@@ -1,5 +1,5 @@
 // ============================================================
-// Tam akış: Gerçek soru havuzu → OpenAI TTS → Remotion → YouTube + Instagram (Buffer)
+// Tam akış: Gerçek soru havuzu → OpenAI TTS → Remotion → YouTube + Instagram + TikTok (Buffer)
 // ============================================================
 
 import { scriptUret } from "./generate-script.mjs";
@@ -8,6 +8,7 @@ import { render } from "./render.mjs";
 import { kapakGoruntusuUret } from "./generate-thumbnail.mjs";
 import { youtubeYukle } from "./upload-youtube.mjs";
 import { reelsYayinlaBuffer } from "./upload-instagram-buffer.mjs";
+import { tiktokYayinlaBuffer } from "./upload-tiktok-buffer.mjs";
 
 async function main() {
   console.log("1/6 Günün sorusu seçiliyor (gerçek soru havuzu)...");
@@ -28,11 +29,17 @@ async function main() {
     console.error("Kapak görseli üretilemedi (devam ediliyor):", err.message);
   }
 
-  // YouTube ve Instagram yüklemeleri birbirinden bağımsız: biri (örn. YouTube
-  // günlük yükleme kotası) başarısız olsa da diğeri yine de denenir.
-  console.log("5/6 YouTube Shorts'a yükleniyor...");
-  console.log("6/6 Instagram Reels'e yükleniyor (Buffer)...");
-  const [youtube, instagram] = await Promise.allSettled([youtubeYukle(), reelsYayinlaBuffer()]);
+  // YouTube, Instagram ve TikTok yüklemeleri birbirinden bağımsız: biri
+  // (örn. YouTube günlük yükleme kotası) başarısız olsa da diğerleri
+  // yine de denenir.
+  console.log("5/7 YouTube Shorts'a yükleniyor...");
+  console.log("6/7 Instagram Reels'e yükleniyor (Buffer)...");
+  console.log("7/7 TikTok'a yükleniyor (Buffer)...");
+  const [youtube, instagram, tiktok] = await Promise.allSettled([
+    youtubeYukle(),
+    reelsYayinlaBuffer(),
+    tiktokYayinlaBuffer(),
+  ]);
 
   console.log("\n=== SONUÇ ===");
   console.log(
@@ -45,8 +52,12 @@ async function main() {
       ? `${instagram.value.id} ${instagram.value.status}`
       : `HATA: ${instagram.reason?.message || instagram.reason}`
   );
+  console.log(
+    "TikTok:",
+    tiktok.status === "fulfilled" ? `${tiktok.value.id} ${tiktok.value.status}` : `HATA: ${tiktok.reason?.message || tiktok.reason}`
+  );
 
-  if (youtube.status === "rejected" || instagram.status === "rejected") {
+  if (youtube.status === "rejected" || instagram.status === "rejected" || tiktok.status === "rejected") {
     process.exitCode = 1;
   }
 }
