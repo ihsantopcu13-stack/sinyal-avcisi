@@ -145,7 +145,9 @@ async function publishInstagramStory(item) {
         mode: customScheduled
         dueAt: "${dueAtIso()}"
         assets: [{ image: { url: "${imageUrl}" } }]
-        metadata: { instagram: { type: story } }
+        # Buffer'ın şeması shouldShareToFeed'i type ne olursa olsun zorunlu
+        # kılıyor; story feed'e değil sadece story'ye gittiği için false.
+        metadata: { instagram: { type: story, shouldShareToFeed: false } }
       }) {
         ... on PostActionSuccess { post { id text dueAt status } }
         ... on MutationError { message }
