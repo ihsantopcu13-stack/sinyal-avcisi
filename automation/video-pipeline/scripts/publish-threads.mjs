@@ -33,13 +33,20 @@ async function bufferGraphQL(query) {
 async function findThreadsChannel() {
   const accountData = await bufferGraphQL("{ account { organizations { id } } }");
   const organizations = accountData?.account?.organizations ?? [];
+  const hepsiKanallar = [];
   for (const org of organizations) {
     const channelsData = await bufferGraphQL(
       `{ channels(input: { organizationId: "${org.id}" }) { id name service } }`
     );
-    const match = (channelsData?.channels ?? []).find((c) => c.service === "threads");
+    const channels = channelsData?.channels ?? [];
+    hepsiKanallar.push(...channels);
+    const match = channels.find((c) => c.service === "threads");
     if (match) return match;
   }
+  // Bulunamadıysa hata ayıklama için bağlı TÜM kanalları (id/isim/servis) logla
+  // — "threads" servis adı yanlış tahmin mi, yoksa kanal gerçekten yok mu
+  // tek çalıştırmada anlaşılsın.
+  console.error("Bağlı kanallar:", JSON.stringify(hepsiKanallar, null, 2));
   throw new Error("Bağlı bir Threads kanalı bulunamadı.");
 }
 
