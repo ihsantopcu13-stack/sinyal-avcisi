@@ -15,7 +15,7 @@ jobs:
   test-tiktok:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # upload-tiktok-buffer.mjs, videoyu Buffer için yeniden barındıracak yeni bir Release oluşturuyor
     defaults:
       run:
         working-directory: automation/video-pipeline
