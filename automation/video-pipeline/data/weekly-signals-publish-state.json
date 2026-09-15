@@ -1,5 +1,5 @@
 {
-  "nextIndex": 10,
+  "nextIndex": 12,
   "history": [
     {
       "id": "pazartesi-reels1",
@@ -158,6 +158,38 @@
         "status": "scheduled"
       },
       "publishedAt": "2026-09-14T18:27:42.833Z"
+    },
+    {
+      "id": "cumartesi-reels1",
+      "videoFile": "cumartesi_reels1.mp4",
+      "youtube": {
+        "error": "invalid_grant"
+      },
+      "instagram": {
+        "id": "6aa981b3323b820786e4220b",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aa981b3c42b8c8a4384bd0e",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-15T17:34:43.410Z"
+    },
+    {
+      "id": "cumartesi-reels2",
+      "videoFile": "cumartesi_reels2.mp4",
+      "youtube": {
+        "error": "invalid_grant"
+      },
+      "instagram": {
+        "id": "6aa981b5323b820786e4227d",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aa981b4c3fab7dfd1820722",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-15T17:34:45.472Z"
     }
   ]
 }
