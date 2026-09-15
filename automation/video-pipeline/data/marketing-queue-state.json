@@ -1,5 +1,5 @@
 {
-  "nextIndex": 2,
+  "nextIndex": 3,
   "history": [
     {
       "id": "story-1",
@@ -22,6 +22,17 @@
         "status": "scheduled"
       },
       "publishedAt": "2026-09-14T12:33:08.907Z"
+    },
+    {
+      "id": "story-3",
+      "type": "instagram_story",
+      "post": {
+        "id": "6aa92654203a4231d60313f2",
+        "text": "\"Bilgi, parasıyla satılacak bir şey değil.\" 💛\n\nBu yüzden Sinyal Avcısı'nda kayıt bile istemeden, tek kuruş ödemeden, sonsuza kadar öğrenebilirsin.\n\n👉 Bio'daki linkten keşfet.",
+        "dueAt": "2026-09-15T11:05:52.449Z",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-15T11:04:52.985Z"
     }
   ]
 }
