@@ -6780,7 +6780,7 @@ function dAns(btn,correct){
   // FAZ 2 — question_answered + answer_correct/answer_wrong. slAnswered
   // guard'ı zaten yukarıda erken-çıkış yaptığı için bu event'ler her
   // soru için tam olarak 1 kez atılır (duplicate riski yok).
-  var __slQidAns=SL_HAVUZ.indexOf(soru);
+  var __slQidAns=soru.id;
   faz2GaEvent('question_answered',{question_id:__slQidAns,correct:Boolean(correct)});
   faz2GaEvent(correct?'answer_correct':'answer_wrong',{question_id:__slQidAns});
   if(correct){
@@ -8018,28 +8018,20 @@ const SL_HAVUZ=[
 let slIdx=0,slAnswered=false,slCurrentSoru=null;
 
 // ============================================================
-// FAZ 2 — LEGACY_SL_HAVUZ_ADAPTER (GEÇİCİ, KALDIRILABİLİR)
+// FAZ 2 — LEGACY_SL_HAVUZ_ADAPTER
 // ============================================================
-// SL_HAVUZ, automation/video-pipeline/data/sorular.json ile AYNI 59
-// soru ama ayrı, elle gömülü bir kopya — temiz bir "sinyal" alanı YOK,
-// sinyal kelimesi sadece <span class="s-sig"> içinde HTML olarak duruyor.
-// Gerçek source-of-truth sorular.json'dur; frontend şu an ona doğrudan
-// (bir API üzerinden) bağlı değil (mevcut statik mimari). Bu adaptör
-// SADECE bu boşluğu geçici olarak dolduruyor: SL_HAVUZ'un HTML'inden
-// sinyal bilgisini çıkarıp deep-link eşleştirmesi için kullanıyor.
-//
-// BU REGEX PARSING UYGULAMANIN DOMAIN MANTIĞI DEĞİLDİR — sadece bu
-// adaptörle sınırlıdır. Gelecekte frontend gerçek soru verisine (API/
-// fetch ile) bağlanırsa bu adaptör kaldırılıp SL_HAVUZ yerine o veri
-// kullanılabilir; index.html'in başka hiçbir yeri buna bağımlı değil.
+// SL_HAVUZ artık canonical api/data/sorular.json'dan üretilen bir
+// mirror (bkz. scripts/sl-havuz-generator.mjs) — her girişte temiz bir
+// `sinyal` alanı VAR, regex ile HTML'den çıkarmaya gerek yok. Bu
+// adaptör sadece deep-link çözümleyicisi için normalize edilmiş
+// sinyal->indeks haritası tutuyor.
 var LEGACY_SL_HAVUZ_ADAPTER=(function(){
   var indeksHaritasi=null; // {normalizeSinyal(sinyal): [havuz indeksleri]}
   function haritayiKur(){
     indeksHaritasi={};
     SL_HAVUZ.forEach(function(soru,i){
-      var m=/class="s-sig"[^>]*>([^<]+)</.exec(soru.sent||'');
-      if(!m)return;
-      var sinyal=window.SinyalAttribution?window.SinyalAttribution._normalizeSinyal(m[1]):m[1].trim().toLowerCase();
+      if(!soru.sinyal)return;
+      var sinyal=window.SinyalAttribution?window.SinyalAttribution._normalizeSinyal(soru.sinyal):soru.sinyal.trim().toLowerCase();
       if(!sinyal)return;
       (indeksHaritasi[sinyal]=indeksHaritasi[sinyal]||[]).push(i);
     });
@@ -8098,7 +8090,7 @@ function slRender(){
   }
   slCurrentSoru=soru;
   // FAZ 2 — question_view (aynı soru tekrar render edilirse duplicate atmaz)
-  var __slQid=SL_HAVUZ.indexOf(soru);
+  var __slQid=soru.id;
   if(window.__slLastViewedQid!==__slQid){
     window.__slLastViewedQid=__slQid;
     faz2GaEvent('question_view',{question_id:__slQid});

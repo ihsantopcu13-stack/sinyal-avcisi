@@ -47,6 +47,7 @@ jobs:
           node --check scripts/sl-havuz-generator.mjs
           node --check scripts/generate-sl-havuz.mjs
           node --check tests/sot-mirror.test.mjs
+          node --check tests/sot-lookup-analytics.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -71,3 +72,6 @@ jobs:
 
       - name: SOURCE OF TRUTH — AŞAMA 3 frontend generated mirror testi
         run: node tests/sot-mirror.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 4 stable lookup + analytics testi
+        run: node tests/sot-lookup-analytics.test.mjs
