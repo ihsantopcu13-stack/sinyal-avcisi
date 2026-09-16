@@ -31,12 +31,12 @@ export const SINYAL_KURALLARI = {
   "although": "\"Although\" bir BAĞLAÇ'tır — arkasından S+V (tam cümle) gelir, isim/V-ing gelmez.",
   "even though": "\"Even though\" bir BAĞLAÇ'tır (although ile eşdeğer, daha vurgulu) — arkasından S+V (tam cümle) gelir.",
   "whereas": "\"Whereas\" bir BAĞLAÇ'tır — iki cümleyi zıtlık ilişkisiyle bağlar, her iki tarafta da S+V bulunur.",
-  "while": "\"While\" bağlam bağlı bir BAĞLAÇ'tır — hem zıtlık (\"oysa\") hem eşzamanlılık (\"iken\") anlamı verebilir; arkasından S+V gelir.",
-  "yet": "\"Yet\" bir bağlaçtır — iki cümle/fikir arasında zıtlık kurar, \"ama/yine de\" anlamındadır.",
+  "while": "\"While\" BAĞLAÇ'tır, arkasından S+V gelir. İki taraf karşıt bilgi veriyorsa ZITLIK (\"oysa\"), aynı anda oluyorsa EŞZAMANLILIK (\"-iken\") anlamındadır.",
+  "yet": "\"Yet\" iki bağımsız cümleyi bağlarsa \"ama/fakat\" zıtlığı verir. \"Henüz\" anlamındaki zarf kullanımıyla (\"has yet to\") karıştırma.",
 
   // NEDEN-SONUÇ
   "because": "\"Because\" bir BAĞLAÇ'tır — arkasından S+V (tam cümle) gelir, sebep bildirir.",
-  "since": "\"Since\" bağlam bağlı bir BAĞLAÇ'tır — hem sebep (\"çünkü\") hem zaman (\"-den beri\") anlamı verebilir; arkasından S+V gelir.",
+  "since": "\"Since\" isim alırsa EDAT'tır (zaman: \"-den beri\"), S+V alırsa BAĞLAÇ'tır (zaman \"-den beri\" veya sebep \"çünkü/mademki\"). Cümlenin bütününe bak.",
   "consequently": "\"Consequently\" bir zarf/bağlayıcıdır — önceki cümlenin SONUCUNU bildirir, genelde yeni bir cümle başında kullanılır.",
   "as a result": "\"As a result\" bir zarf ifadesidir — önceki cümlenin sonucunu bildirir.",
   "as a consequence of": "\"As a consequence of\" bir EDAT ifadesidir — arkasından isim/V-ing gelir, sonuç-sebep ilişkisi kurar.",
