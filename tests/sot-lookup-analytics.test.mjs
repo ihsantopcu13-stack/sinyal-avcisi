@@ -1,13 +1,14 @@
 // SOURCE OF TRUTH — AŞAMA 4: stable lookup + analytics doğrulaması.
 //
-// (a) LEGACY_SL_HAVUZ_ADAPTER'ın sinyal->indeks eşlemesi artık HTML'den
+// (a) SL_SINYAL_LOOKUP'ın (AŞAMA 7 öncesi adıyla LEGACY_SL_HAVUZ_ADAPTER)
+//     sinyal->indeks eşlemesi artık HTML'den
 //     regex ile değil, doğrudan soru.sinyal alanından kuruluyor.
 // (b) GA4 question_view/question_answered/answer_correct/answer_wrong
 //     artık array index değil, stable qNNN id gönderiyor.
 // (c) despite deep-linki ve bilinmeyen sinyal fallback'i hâlâ çalışıyor.
 //
 // Gerçek index.html'den marker tabanlı çıkarım kullanılır (kopya
-// oluşturulmaz) — bkz. tests/faz2-legacy-adapter.test.mjs ile aynı desen.
+// oluşturulmaz) — bkz. tests/sot-signal-lookup.test.mjs ile aynı desen.
 
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
@@ -43,7 +44,7 @@ const SL_HAVUZ = new Function(`return [${havuzBody}];`)();
 const attributionModPath = path.join(__dirname, "..", "assets", "modules", "attribution.js");
 const SinyalAttribution = require(attributionModPath);
 
-const adapterBody = extractBetween(html, "var LEGACY_SL_HAVUZ_ADAPTER=(function(){", "})();");
+const adapterBody = extractBetween(html, "var SL_SINYAL_LOOKUP=(function(){", "})();");
 const adapterFactory = new Function("SL_HAVUZ", "window", `return (function(){${adapterBody}})();`);
 
 // ---- a) regex bağımlılığı kalktı mı: sent HTML'i tamamen bozulmuş bir

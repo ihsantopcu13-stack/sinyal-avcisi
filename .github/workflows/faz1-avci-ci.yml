@@ -40,7 +40,7 @@ jobs:
           node --check tests/faz2-attribution.test.mjs
           node --check automation/video-pipeline/scripts/_deeplink.mjs
           node --check automation/video-pipeline/tests/faz2-deeplink.test.mjs
-          node --check tests/faz2-legacy-adapter.test.mjs
+          node --check tests/sot-signal-lookup.test.mjs
           node --check tests/faz2-input-contract.test.mjs
           node --check tests/sot-schema.test.mjs
           node --check tests/sot-migration.test.mjs
@@ -59,8 +59,8 @@ jobs:
       - name: FAZ 2 — deep-link generator testleri
         run: node automation/video-pipeline/tests/faz2-deeplink.test.mjs
 
-      - name: FAZ 2 — legacy adapter / signal lookup testleri (gerçek index.html verisine karşı)
-        run: node tests/faz2-legacy-adapter.test.mjs
+      - name: SOURCE OF TRUTH — stable sinyal lookup testleri (gerçek index.html verisine karşı, eski adı faz2-legacy-adapter)
+        run: node tests/sot-signal-lookup.test.mjs
 
       - name: FAZ 2 — attribution input contract / sanitization testleri
         run: node tests/faz2-input-contract.test.mjs

@@ -8018,14 +8018,13 @@ const SL_HAVUZ=[
 let slIdx=0,slAnswered=false,slCurrentSoru=null;
 
 // ============================================================
-// FAZ 2 — LEGACY_SL_HAVUZ_ADAPTER
+// SL_SINYAL_LOOKUP — stable sinyal->indeks haritası
 // ============================================================
-// SL_HAVUZ artık canonical api/data/sorular.json'dan üretilen bir
-// mirror (bkz. scripts/sl-havuz-generator.mjs) — her girişte temiz bir
-// `sinyal` alanı VAR, regex ile HTML'den çıkarmaya gerek yok. Bu
-// adaptör sadece deep-link çözümleyicisi için normalize edilmiş
-// sinyal->indeks haritası tutuyor.
-var LEGACY_SL_HAVUZ_ADAPTER=(function(){
+// SL_HAVUZ canonical api/data/sorular.json'dan üretilen bir mirror
+// (bkz. scripts/sl-havuz-generator.mjs) — her girişte temiz bir
+// `sinyal` alanı var. Bu, deep-link çözümleyicisi için normalize
+// edilmiş sinyal->indeks haritasını tek seferlik kurup önbelleğe alır.
+var SL_SINYAL_LOOKUP=(function(){
   var indeksHaritasi=null; // {normalizeSinyal(sinyal): [havuz indeksleri]}
   function haritayiKur(){
     indeksHaritasi={};
@@ -8065,7 +8064,7 @@ function faz2DeepLinkUygula(){
     if(!window.SinyalAttribution)return;
     var ctx=window.SinyalAttribution.context();
     if(!ctx.signal)return;
-    var indeksler=LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul(ctx.signal);
+    var indeksler=SL_SINYAL_LOOKUP.indeksleriBul(ctx.signal);
     if(indeksler.length===0)return; // bilinmeyen sinyal -> güvenli fallback (genel havuz)
     var idx=indeksler[0];
     slIdx=idx;
