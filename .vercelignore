@@ -1,0 +1,14 @@
+# Bu proje bir framework/build sistemi kullanmıyor (statik site + api/
+# serverless fonksiyonları) — Vercel varsayılan olarak repo kökündeki
+# HERHANGİ bir dosyayı (api/ hariç) doğrudan public URL'den servis ediyor.
+# automation/ klasörü tamamen internal tooling (video pipeline, karaoke
+# render script'leri) — site veya api/ fonksiyonları tarafından runtime'da
+# HİÇ okunmuyor (api/klod.mjs kendi api/data/ kopyasını okuyor). Ama
+# içindeki data/sorular.json (dogru_index dahil, tüm 59 sorunun cevap
+# anahtarı) bugüne kadar yanlışlıkla public olarak servis ediliyordu.
+#
+# Bu satır SADECE Vercel deployment çıktısından hariç tutar — git
+# repository'yi, GitHub Actions checkout'unu veya lokal `node` ile dosya
+# erişimini ETKİLEMEZ (video pipeline ve testler bu dosyaları git
+# checkout'undan okur, Vercel'in servis ettiği kopyadan değil).
+automation/
