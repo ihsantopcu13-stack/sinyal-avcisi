@@ -1,5 +1,5 @@
 {
-  "nextIndex": 12,
+  "nextIndex": 14,
   "history": [
     {
       "id": "pazartesi-reels1",
@@ -190,6 +190,38 @@
         "status": "scheduled"
       },
       "publishedAt": "2026-09-15T17:34:45.472Z"
+    },
+    {
+      "id": "pazar-reels1",
+      "videoFile": "pazar_reels1.mp4",
+      "youtube": {
+        "error": "invalid_client"
+      },
+      "instagram": {
+        "id": "6aaad306fc5a88693189dde2",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aaad306aa221af9bff74bda",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-16T17:33:58.895Z"
+    },
+    {
+      "id": "pazar-reels2",
+      "videoFile": "pazar_reels2.mp4",
+      "youtube": {
+        "error": "invalid_client"
+      },
+      "instagram": {
+        "id": "6aaad3090ef3cc67c26e3c1f",
+        "status": "scheduled"
+      },
+      "facebook": {
+        "id": "6aaad309aa221af9bff74c3e",
+        "status": "scheduled"
+      },
+      "publishedAt": "2026-09-16T17:34:01.213Z"
     }
   ]
 }
