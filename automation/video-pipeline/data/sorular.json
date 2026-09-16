@@ -142,7 +142,7 @@
   {
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "The policy was anything but neutral; it disproportionately affected marginalized communities.",
-    "sinyal": "marginalized",
+    "sinyal": "anything but",
     "soru_tr": "Politika hakkinda ne dogrudur?",
     "secenekler_tr": [
       "Tamamen tarafsizdi.",
@@ -730,7 +730,7 @@
   {
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The satellite's trajectory deviated only slightly from the projected path, a fact that nonetheless required immediate correction.",
-    "sinyal": "a fact that",
+    "sinyal": "nonetheless",
     "soru_tr": "Uydunun yörüngesi hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Öngörülen yoldan çok büyük ölçüde saptı.",
