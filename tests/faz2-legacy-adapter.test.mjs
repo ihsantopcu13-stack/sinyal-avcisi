@@ -34,7 +34,10 @@ function extractBetween(text, startMarker, endMarker) {
 }
 
 const htmlPath = path.join(__dirname, "..", "index.html");
-const html = readFileSync(htmlPath, "utf-8");
+// \r\n -> \n normalize: Windows'ta git core.autocrlf checkout'ta CRLF'e
+// çevirebiliyor (CI'nin Linux runner'ında bu olmuyor) — marker eşleşmesi
+// satır sonu stilinden bağımsız olmalı.
+const html = readFileSync(htmlPath, "utf-8").replace(/\r\n/g, "\n");
 
 // ---- Gerçek SL_HAVUZ verisini çıkar (kopyalama değil, doğrudan kaynaktan) ----
 const havuzBody = extractBetween(html, "const SL_HAVUZ=[", "\n];\n");
