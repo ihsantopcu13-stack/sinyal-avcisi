@@ -48,6 +48,7 @@ jobs:
           node --check scripts/generate-sl-havuz.mjs
           node --check tests/sot-mirror.test.mjs
           node --check tests/sot-lookup-analytics.test.mjs
+          node --check automation/video-pipeline/tests/sot-pipeline.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -75,3 +76,6 @@ jobs:
 
       - name: SOURCE OF TRUTH — AŞAMA 4 stable lookup + analytics testi
         run: node tests/sot-lookup-analytics.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 5 AVCI/KLOD/video pipeline canonical kaynak testi
+        run: node automation/video-pipeline/tests/sot-pipeline.test.mjs

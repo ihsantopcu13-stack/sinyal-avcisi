@@ -36,7 +36,10 @@ function kontrol(ad, sonuc, detay) {
 const generateScriptMod = await import(pathToFileURL(path.join(ROOT, "scripts", "generate-script.mjs")).href);
 const avciMod = await import(pathToFileURL(path.join(ROOT, "scripts", "avci-ogretim-katmani.mjs")).href);
 const sinyalKurallariMod = await import(pathToFileURL(path.join(ROOT, "data", "sinyal-kurallari.mjs")).href);
-const sorular = JSON.parse(await readFile(path.join(ROOT, "data", "sorular.json"), "utf-8"));
+// SOURCE OF TRUTH AŞAMA 5: tek canonical kaynak — pipeline'ın gerçekte
+// okuduğu dosyayla aynı (bkz. generate-script.mjs SORULAR_PATH).
+const CANONICAL_SORULAR_PATH = path.join(ROOT, "..", "..", "api", "data", "sorular.json");
+const sorular = JSON.parse(await readFile(CANONICAL_SORULAR_PATH, "utf-8"));
 
 function fixtureOk(harf, adimlar) {
   return {
