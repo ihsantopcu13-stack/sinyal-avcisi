@@ -92,5 +92,23 @@ const canonical = JSON.parse(await readFile(CANONICAL_PATH, "utf-8"));
   kontrol("f) avci-ogretim-katmani.mjs hâlâ dogru_index'i tek otorite kabul ediyor, AI cevap seçmiyor", aiCevapSecmiyorYorum && dogruIndexKullaniliyor);
 }
 
+// ---- g/h/i) AŞAMA 8: duplicate canonical kopyası ve onu üreten ölü
+// script kalıcı olarak kaldırıldı (yeniden oluşmasına karşı regresyon
+// koruması) ----
+{
+  const duplicatePath = path.join(ROOT, "data", "sorular.json");
+  const varMi = await readFile(duplicatePath, "utf-8").then(() => true).catch(() => false);
+  kontrol("g) automation/video-pipeline/data/sorular.json artık mevcut değil (canonical tek dosya)", !varMi);
+}
+{
+  const extractPath = path.join(ROOT, "scripts", "extract-sorular.mjs");
+  const varMi = await readFile(extractPath, "utf-8").then(() => true).catch(() => false);
+  kontrol("h) extract-sorular.mjs (ölü/ters yönlü senkron script'i) kaldırıldı", !varMi);
+}
+{
+  const pkg = JSON.parse(await readFile(path.join(ROOT, "package.json"), "utf-8"));
+  kontrol("i) package.json'da 'extract-sorular' npm script'i kalmamış", !("extract-sorular" in (pkg.scripts || {})));
+}
+
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
 if (basarisiz > 0) process.exit(1);
