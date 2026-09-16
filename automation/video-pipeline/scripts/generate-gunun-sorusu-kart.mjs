@@ -19,7 +19,8 @@ import { nicheHashtag } from "./_seo.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const OUT_DIR = path.join(ROOT, "out");
-const SORULAR_PATH = path.join(ROOT, "data", "sorular.json");
+// SOURCE OF TRUTH AŞAMA 5: tek canonical kaynak.
+const SORULAR_PATH = path.join(__dirname, "..", "..", "..", "api", "data", "sorular.json");
 
 const GUNUN_SORUSU_OFFSET = 29;
 
@@ -27,8 +28,15 @@ function gunSayisi() {
   return Math.floor(Date.now() / 86_400_000);
 }
 
+// Rotasyon fiziksel array sırasına değil, stable id'ye göre sıralanmış
+// bir kopyaya göre yapılır (bkz. generate-script.mjs'teki aynı desen).
+function sorularStableSirali(sorular) {
+  return [...sorular].sort((a, b) => (a.id || "").localeCompare(b.id || ""));
+}
+
 export function gununSorusunuSec(sorular) {
-  return sorular[(gunSayisi() + GUNUN_SORUSU_OFFSET) % sorular.length];
+  const sirali = sorularStableSirali(sorular);
+  return sirali[(gunSayisi() + GUNUN_SORUSU_OFFSET) % sirali.length];
 }
 
 // soru_en içindeki sinyal kelimeyi (despite, however, must have...) amber

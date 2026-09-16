@@ -8,11 +8,12 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
 
-// RAG — gerçek soru bankası (data/sorular.json, automation/video-pipeline
-// ile aynı kaynaktan kopyalanmıştır — o pipeline extract-sorular.mjs ile
-// sitenin gerçek SAT/Sinyal Lab içeriğinden üretiyor, burada da uydurma
-// yok). Modül yüklenirken bir kere okunuyor, soğuk başlangıç dışında
-// sıcak fonksiyon çağrılarında tekrar disk I/O yok.
+// RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
+// source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
+// pipeline (automation/video-pipeline) buradan üretilir/beslenir, tersi
+// değil (bkz. scripts/sl-havuz-generator.mjs). Modül yüklenirken bir kere
+// okunuyor, soğuk başlangıç dışında sıcak fonksiyon çağrılarında tekrar
+// disk I/O yok.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let SORU_HAVUZU = [];
 try {

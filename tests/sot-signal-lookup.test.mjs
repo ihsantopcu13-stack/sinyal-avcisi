@@ -1,8 +1,15 @@
-// FAZ 2 — LEGACY_SL_HAVUZ_ADAPTER kalıcı testi.
+// SOURCE OF TRUTH — AŞAMA 7: SL_SINYAL_LOOKUP kalıcı testi.
+//
+// (Bu dosya eskiden tests/faz2-legacy-adapter.test.mjs idi ve
+// LEGACY_SL_HAVUZ_ADAPTER'ı test ediyordu — AŞAMA 4'te o yapı regex
+// tabanlı HTML parsing'den soru.sinyal alanına geçti, AŞAMA 7'de de
+// "LEGACY/GEÇİCİ" adı kaldırılıp kalıcı SL_SINYAL_LOOKUP oldu; aynı 5
+// davranış testi burada, güncel isimle devam ediyor — coverage kaybı
+// yok.)
 //
 // Bu test SAHTE bir SL_HAVUZ kopyası OLUŞTURMAZ. Gerçek index.html
-// dosyasından hem SL_HAVUZ veri dizisini hem de LEGACY_SL_HAVUZ_ADAPTER
-// IIFE kaynağını marker tabanlı çıkarım ile alır ve gerçek koda karşı
+// dosyasından hem SL_HAVUZ veri dizisini hem de SL_SINYAL_LOOKUP IIFE
+// kaynağını marker tabanlı çıkarım ile alır ve gerçek koda karşı
 // çalıştırır — böylece index.html değişirse test otomatik güncel veriyle
 // çalışır, çürümez. Sinyal normalize mantığı da gerçek attribution.js
 // modülünden (window.SinyalAttribution._normalizeSinyal) alınır, burada
@@ -49,22 +56,22 @@ kontrol("a) Gerçek SL_HAVUZ index.html'den çıkarılabiliyor ve boş değil", 
 const attributionModPath = path.join(__dirname, "..", "assets", "modules", "attribution.js");
 const SinyalAttribution = require(attributionModPath);
 
-// ---- Gerçek LEGACY_SL_HAVUZ_ADAPTER IIFE kaynağını çıkar ve çalıştır ----
-const adapterBody = extractBetween(html, "var LEGACY_SL_HAVUZ_ADAPTER=(function(){", "})();");
-const adapterFactory = new Function("SL_HAVUZ", "window", `return (function(){${adapterBody}})();`);
-const LEGACY_SL_HAVUZ_ADAPTER = adapterFactory(SL_HAVUZ, { SinyalAttribution });
+// ---- Gerçek SL_SINYAL_LOOKUP IIFE kaynağını çıkar ve çalıştır ----
+const lookupBody = extractBetween(html, "var SL_SINYAL_LOOKUP=(function(){", "})();");
+const lookupFactory = new Function("SL_HAVUZ", "window", `return (function(){${lookupBody}})();`);
+const SL_SINYAL_LOOKUP = lookupFactory(SL_HAVUZ, { SinyalAttribution });
 
 // ---- b) "despite" eşleşiyor ----
 {
-  const indeksler = LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul("despite");
-  const hepsindeDespiteVar = indeksler.length > 0 && indeksler.every((i) => (SL_HAVUZ[i].sent || "").toLowerCase().includes("despite"));
+  const indeksler = SL_SINYAL_LOOKUP.indeksleriBul("despite");
+  const hepsindeDespiteVar = indeksler.length > 0 && indeksler.every((i) => (SL_HAVUZ[i].sinyal || "").toLowerCase() === "despite");
   kontrol("b) 'despite' gerçek veride eşleşiyor", hepsindeDespiteVar, `eşleşen indeksler: ${JSON.stringify(indeksler)}`);
 }
 
 // ---- c) boşluklu sinyaller güvenli çalışıyor ("prior to", gerçek veride var) ----
 {
-  const indeksler = LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul("prior to");
-  const dogru = indeksler.length > 0 && indeksler.every((i) => (SL_HAVUZ[i].sent || "").toLowerCase().includes("prior to"));
+  const indeksler = SL_SINYAL_LOOKUP.indeksleriBul("prior to");
+  const dogru = indeksler.length > 0 && indeksler.every((i) => (SL_HAVUZ[i].sinyal || "").toLowerCase() === "prior to");
   kontrol("c) Boşluklu sinyal ('prior to') gerçek veride doğru eşleşiyor", dogru, `eşleşen indeksler: ${JSON.stringify(indeksler)}`);
 }
 
@@ -73,7 +80,7 @@ const LEGACY_SL_HAVUZ_ADAPTER = adapterFactory(SL_HAVUZ, { SinyalAttribution });
   let hataFirladi = false;
   let sonuc;
   try {
-    sonuc = LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul("bu-sinyal-hicbir-yerde-yok");
+    sonuc = SL_SINYAL_LOOKUP.indeksleriBul("bu-sinyal-hicbir-yerde-yok");
   } catch (e) {
     hataFirladi = true;
   }
@@ -87,7 +94,7 @@ const LEGACY_SL_HAVUZ_ADAPTER = adapterFactory(SL_HAVUZ, { SinyalAttribution });
   const detaylar = [];
   for (const girdi of girdiler) {
     try {
-      const r = LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul(girdi);
+      const r = SL_SINYAL_LOOKUP.indeksleriBul(girdi);
       const guvenli = Array.isArray(r);
       detaylar.push(`${JSON.stringify(girdi)}->${guvenli ? "OK" : "BEKLENMEYEN"}`);
       if (!guvenli) hepsiGuvenli = false;

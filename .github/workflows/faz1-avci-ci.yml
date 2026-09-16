@@ -40,8 +40,15 @@ jobs:
           node --check tests/faz2-attribution.test.mjs
           node --check automation/video-pipeline/scripts/_deeplink.mjs
           node --check automation/video-pipeline/tests/faz2-deeplink.test.mjs
-          node --check tests/faz2-legacy-adapter.test.mjs
+          node --check tests/sot-signal-lookup.test.mjs
           node --check tests/faz2-input-contract.test.mjs
+          node --check tests/sot-schema.test.mjs
+          node --check tests/sot-migration.test.mjs
+          node --check scripts/sl-havuz-generator.mjs
+          node --check scripts/generate-sl-havuz.mjs
+          node --check tests/sot-mirror.test.mjs
+          node --check tests/sot-lookup-analytics.test.mjs
+          node --check automation/video-pipeline/tests/sot-pipeline.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -52,8 +59,23 @@ jobs:
       - name: FAZ 2 — deep-link generator testleri
         run: node automation/video-pipeline/tests/faz2-deeplink.test.mjs
 
-      - name: FAZ 2 — legacy adapter / signal lookup testleri (gerçek index.html verisine karşı)
-        run: node tests/faz2-legacy-adapter.test.mjs
+      - name: SOURCE OF TRUTH — stable sinyal lookup testleri (gerçek index.html verisine karşı, eski adı faz2-legacy-adapter)
+        run: node tests/sot-signal-lookup.test.mjs
 
       - name: FAZ 2 — attribution input contract / sanitization testleri
         run: node tests/faz2-input-contract.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 1 canonical şema + stable ID testleri
+        run: node tests/sot-schema.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 2 59/59 kayıpsız migration testi
+        run: node tests/sot-migration.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 3 frontend generated mirror testi
+        run: node tests/sot-mirror.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 4 stable lookup + analytics testi
+        run: node tests/sot-lookup-analytics.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 5 AVCI/KLOD/video pipeline canonical kaynak testi
+        run: node automation/video-pipeline/tests/sot-pipeline.test.mjs

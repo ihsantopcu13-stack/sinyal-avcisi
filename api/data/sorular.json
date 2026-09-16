@@ -1,8 +1,9 @@
 [
   {
+    "id": "q001",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The appellate court ruled that, despite the irregularities, the verdict was by no means invalid.",
-    "sinyal": "despite",
+    "alinti": true,
     "soru_tr": "Bu metne gore mahkeme karari hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Usul hatalari karari gecersiz kildi.",
@@ -11,12 +12,18 @@
       "Karar kesinlikle gecersiz bulundu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Despite\" = zitlik, \"by no means invalid\" = kesinlikle gecersiz degil."
+    "aciklama_tr": "\"Despite\" = zitlik, \"by no means invalid\" = kesinlikle gecersiz degil.",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Tuzak: kesinlikle degil",
+    "anahtar": "invalid"
   },
   {
+    "id": "q002",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The researchers concluded that, despite the promising results, the treatment was far from guaranteed.",
-    "sinyal": "despite",
+    "alinti": true,
     "soru_tr": "Arastirmacilar tedavi hakkinda ne soylemistir?",
     "secenekler_tr": [
       "Tedavi tum hastalar icin etkilidir.",
@@ -25,12 +32,18 @@
       "Tedavi basariyla tamamlandi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from guaranteed\" = garantili degil. Gizli olumsuz tuzak!"
+    "aciklama_tr": "\"Far from guaranteed\" = garantili degil. Gizli olumsuz tuzak!",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "guaranteed"
   },
   {
+    "id": "q003",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The statute was far from unambiguous, yet the court applied it strictly.",
-    "sinyal": "yet",
+    "alinti": true,
     "soru_tr": "Kanun hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Kanun tamamen acik ve kesindir.",
@@ -39,12 +52,18 @@
       "Kanun uygulanmadi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from unambiguous\" = belirsiz + \"yet\" = zitlik. İki sinyal bir arada!"
+    "aciklama_tr": "\"Far from unambiguous\" = belirsiz + \"yet\" = zitlik. İki sinyal bir arada!",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "unambiguous"
   },
   {
+    "id": "q004",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The treatment was far from effective although it had shown promising results in trials.",
-    "sinyal": "although",
+    "alinti": true,
     "soru_tr": "Tedavi hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Denemelerde etkili bulundu.",
@@ -53,12 +72,18 @@
       "Sonuclar degerlendirilmedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from effective\" + \"although promising\" = umit verici ama etkili degil."
+    "aciklama_tr": "\"Far from effective\" + \"although promising\" = umit verici ama etkili degil.",
+    "sinyal": "although",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "far from effective",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "promising"
   },
   {
+    "id": "q005",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "Sociologists argue that stratification hardly operates independently of cultural norms.",
-    "sinyal": null,
+    "alinti": true,
     "soru_tr": "Sosyologlar tabakalasma icin ne soyler?",
     "secenekler_tr": [
       "Kulturel normlardan tamamen bagimsizdır.",
@@ -67,12 +92,18 @@
       "Sadece kentsel alanlarda gorulur."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Hardly operates independently\" = neredeyse hic bagimsiz degil."
+    "aciklama_tr": "\"Hardly operates independently\" = neredeyse hic bagimsiz degil.",
+    "sinyal": null,
+    "sinyal_ipucu": null,
+    "tuzak": "hardly",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "cultural"
   },
   {
+    "id": "q006",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The catalyst failed to accelerate the reaction even though the temperature was optimal.",
-    "sinyal": "even though",
+    "alinti": true,
     "soru_tr": "Katalizor icin ne soylenebilir?",
     "secenekler_tr": [
       "Reaksiyonu basariyla hizlandirdi.",
@@ -81,12 +112,18 @@
       "Katalizor ve sicaklik birlikte etkili oldu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Failed to\" = basaramadi + \"even though optimal\" = tezat."
+    "aciklama_tr": "\"Failed to\" = basaramadi + \"even though optimal\" = tezat.",
+    "sinyal": "even though",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "failed to",
+    "tuzak_ipucu": "Basaramadi",
+    "anahtar": "optimal"
   },
   {
+    "id": "q007",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The committee was by no means unanimous in its decision, nor did it reach a consensus.",
-    "sinyal": "nor",
+    "alinti": true,
     "soru_tr": "Komite karari hakkinda ne dogrudur?",
     "secenekler_tr": [
       "Komite oybirligi ile karar aldi.",
@@ -95,12 +132,18 @@
       "Karar ertelendi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"By no means unanimous\" + \"nor\" = ne ... ne de. Cift olumsuz-zitlik kombinasyonu!"
+    "aciklama_tr": "\"By no means unanimous\" + \"nor\" = ne ... ne de. Cift olumsuz-zitlik kombinasyonu!",
+    "sinyal": "nor",
+    "sinyal_ipucu": "Ekleyici sinyal",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Hic olmadi",
+    "anahtar": "unanimous"
   },
   {
+    "id": "q008",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Prior to the enactment of the law, companies were rarely held liable.",
-    "sinyal": "Prior to",
+    "alinti": true,
     "soru_tr": "Kanun oncesinde sirketler icin ne gercekti?",
     "secenekler_tr": [
       "Sirketler her zaman sorumlu tutulurdu.",
@@ -109,12 +152,18 @@
       "Sirketler goniullu sorumluluk aldi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Rarely\" = gizli olumsuz, neredeyse hic. \"Prior to\" = oncesinde."
+    "aciklama_tr": "\"Rarely\" = gizli olumsuz, neredeyse hic. \"Prior to\" = oncesinde.",
+    "sinyal": "Prior to",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "rarely",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "liable"
   },
   {
+    "id": "q009",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Whereas early studies suggested a strong correlation, recent findings have failed to replicate these results.",
-    "sinyal": "Whereas",
+    "alinti": true,
     "soru_tr": "Yeni bulgular hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Erken bulgulari dogruladi.",
@@ -123,12 +172,18 @@
       "Sonuclar henuz degerlendirilmedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Whereas\" = karsitlik + \"failed to replicate\" = tekrarlayamadi."
+    "aciklama_tr": "\"Whereas\" = karsitlik + \"failed to replicate\" = tekrarlayamadi.",
+    "sinyal": "Whereas",
+    "sinyal_ipucu": "Karsitlik",
+    "tuzak": "failed to",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "replicate"
   },
   {
+    "id": "q010",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The drug scarcely reduced inflammation despite being administered at the maximum dosage.",
-    "sinyal": "despite",
+    "alinti": true,
     "soru_tr": "Ilac hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Maksimum dozda cok etkili oldu.",
@@ -137,12 +192,18 @@
       "Ilac hicbir doz icin test edilmedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Scarcely\" = neredeyse hic + \"despite maximum dosage\" = doza ragmen."
+    "aciklama_tr": "\"Scarcely\" = neredeyse hic + \"despite maximum dosage\" = doza ragmen.",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "scarcely",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "maximum"
   },
   {
+    "id": "q011",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "The policy was anything but neutral; it disproportionately affected marginalized communities.",
-    "sinyal": "anything but",
+    "alinti": true,
     "soru_tr": "Politika hakkinda ne dogrudur?",
     "secenekler_tr": [
       "Tamamen tarafsizdi.",
@@ -151,12 +212,18 @@
       "Politika uygulanmadi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Anything but neutral\" = tarafsiz degil. Guclu gizli olumsuz!"
+    "aciklama_tr": "\"Anything but neutral\" = tarafsiz degil. Guclu gizli olumsuz!",
+    "sinyal": "anything but",
+    "sinyal_ipucu": "Gizli olumsuz",
+    "tuzak": "marginalized",
+    "tuzak_ipucu": "Vurgu sinyali",
+    "anahtar": "neutral"
   },
   {
+    "id": "q012",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The experiment by no means confirmed the hypothesis; on the contrary, it contradicted previous assumptions.",
-    "sinyal": "on the contrary",
+    "alinti": true,
     "soru_tr": "Deney sonuclari ne gosterdi?",
     "secenekler_tr": [
       "Hipotezi tamamen dogruladi.",
@@ -165,12 +232,18 @@
       "Sonuclar belirsizdi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"By no means confirmed\" + \"on the contrary\" = kesinlikle dogrulamadi, aksine cururdu."
+    "aciklama_tr": "\"By no means confirmed\" + \"on the contrary\" = kesinlikle dogrulamadi, aksine cururdu.",
+    "sinyal": "on the contrary",
+    "sinyal_ipucu": "Karsi sinyal",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "contradicted"
   },
   {
+    "id": "q013",
     "kategori": "Genel - YDS Metni",
     "soru_en": "No sooner had the new regulation been implemented than companies began lobbying against it.",
-    "sinyal": "No sooner had",
+    "alinti": true,
     "soru_tr": "Bu cumleye gore ne oldu?",
     "secenekler_tr": [
       "Sirketler yonetmelikten once lobi yapti.",
@@ -179,12 +252,18 @@
       "Lobi faaliyetleri başarılı oldu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"No sooner...than\" = yapar yapmaz. Devrik yapi + zaman sinyali."
+    "aciklama_tr": "\"No sooner...than\" = yapar yapmaz. Devrik yapi + zaman sinyali.",
+    "sinyal": "No sooner had",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "than",
+    "tuzak_ipucu": "Dikkat: devrik yapi",
+    "anahtar": "lobbying"
   },
   {
+    "id": "q014",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant's argument was not without merit, yet the court ultimately ruled against him.",
-    "sinyal": "yet",
+    "alinti": true,
     "soru_tr": "Savunma argumani hakkinda ne dogrudur?",
     "secenekler_tr": [
       "Tamamen degersizdi.",
@@ -193,12 +272,18 @@
       "Degerlendirilmedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Not without merit\" = cift olumsuz = degerli. \"Yet\" = ama. Klasik OSYM tuzagi!"
+    "aciklama_tr": "\"Not without merit\" = cift olumsuz = degerli. \"Yet\" = ama. Klasik OSYM tuzagi!",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zitlik",
+    "tuzak": "not without",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "merit"
   },
   {
+    "id": "q015",
     "kategori": "Genel - YDS Metni",
     "soru_en": "While proponents argue the reform is essential, critics maintain it is far from sufficient.",
-    "sinyal": "While",
+    "alinti": true,
     "soru_tr": "Elestirenler reform hakkinda ne dusunuyor?",
     "secenekler_tr": [
       "Reform yeterli ve gereklidir.",
@@ -207,12 +292,18 @@
       "Reform henuz degerlendirilmemistir."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from sufficient\" = yeterli degil. \"While\" zitlik olusturuyor."
+    "aciklama_tr": "\"Far from sufficient\" = yeterli degil. \"While\" zitlik olusturuyor.",
+    "sinyal": "While",
+    "sinyal_ipucu": "Karsitlik",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "essential"
   },
   {
+    "id": "q016",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant, notwithstanding the overwhelming evidence, pleaded not guilty.",
-    "sinyal": "notwithstanding",
+    "alinti": true,
     "soru_tr": "Bu metne gore savunma hakkinda ne dogrudur?",
     "secenekler_tr": [
       "Deliller savunuyu destekledi.",
@@ -221,12 +312,18 @@
       "Deliller yetersiz bulundu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Notwithstanding\" = -e ragmen. Guçlu delil varken sucsuz dendi."
+    "aciklama_tr": "\"Notwithstanding\" = -e ragmen. Guçlu delil varken sucsuz dendi.",
+    "sinyal": "notwithstanding",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "pleaded not guilty",
+    "tuzak_ipucu": "Tuzak: sucsuz degil",
+    "anahtar": null
   },
   {
+    "id": "q017",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "By the time the symptoms appeared, the infection had already spread to adjacent tissue.",
-    "sinyal": "By the time",
+    "alinti": true,
     "soru_tr": "Semptomlarin ortaya cikmasiyla enfeksiyon arasindaki iliski nedir?",
     "secenekler_tr": [
       "Semptomlar enfeksiyonu durdurdu.",
@@ -235,12 +332,18 @@
       "Enfeksiyon semptomlarin ardindan basladi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"By the time\" + past perfect: semptomlardan ONCE yayilma tamamlandi."
+    "aciklama_tr": "\"By the time\" + past perfect: semptomlardan ONCE yayilma tamamlandi.",
+    "sinyal": "By the time",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "had already spread",
+    "tuzak_ipucu": "Tuzak: past perfect",
+    "anahtar": null
   },
   {
+    "id": "q018",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The catalyst, rather than being consumed, facilitates the reaction without undergoing permanent change.",
-    "sinyal": "rather than",
+    "alinti": true,
     "soru_tr": "Katalizor hakkinda hangisi dogrudur?",
     "secenekler_tr": [
       "Reaksiyonda tuketilir.",
@@ -249,12 +352,18 @@
       "Kimyasal olarak donusur."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Rather than being consumed\" = tuketilmek yerine. Katalizor degismez."
+    "aciklama_tr": "\"Rather than being consumed\" = tuketilmek yerine. Katalizor degismez.",
+    "sinyal": "rather than",
+    "sinyal_ipucu": "Zitlik",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "facilitates"
   },
   {
+    "id": "q019",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "Consequently, urbanization rates declined in regions where agricultural subsidies were increased.",
-    "sinyal": "Consequently",
+    "alinti": true,
     "soru_tr": "Tarim sübvansiyonlarinin artirilmasiyla ne iliskili?",
     "secenekler_tr": [
       "Kentlesme hizlandi.",
@@ -263,12 +372,18 @@
       "Tarim uretimi düstü."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Consequently\" sonuc bildirir. \"Declined\" = azaldi. Sübvansiyon artti, kentlesme düstü."
+    "aciklama_tr": "\"Consequently\" sonuc bildirir. \"Declined\" = azaldi. Sübvansiyon artti, kentlesme düstü.",
+    "sinyal": "Consequently",
+    "sinyal_ipucu": "Sonuc sinyali",
+    "tuzak": "declined",
+    "tuzak_ipucu": "Tuzak: artis degil azalis",
+    "anahtar": null
   },
   {
+    "id": "q020",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The statute provided that any contract signed under duress shall be deemed voidable at the discretion of the aggrieved party.",
-    "sinyal": "provided that",
+    "alinti": true,
     "soru_tr": "Kanuna gore baskı altında imzalanan sozlesme icin ne soylenebilir?",
     "secenekler_tr": [
       "Sozlesme kesinlikle gecersizdir.",
@@ -277,12 +392,18 @@
       "Mahkeme sozlesmeyi kendilginden iptal eder."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Voidable\" = iptal edilebilir ama otomatik gecersiz degil. \"At discretion\" = ihtiyara bagli."
+    "aciklama_tr": "\"Voidable\" = iptal edilebilir ama otomatik gecersiz degil. \"At discretion\" = ihtiyara bagli.",
+    "sinyal": "provided that",
+    "sinyal_ipucu": "Kosul",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "voidable"
   },
   {
+    "id": "q021",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "Although the drug demonstrated efficacy in clinical trials, its long-term safety profile remained uncertain.",
-    "sinyal": "Although",
+    "alinti": true,
     "soru_tr": "Ilac hakkında hangisi dogrudur?",
     "secenekler_tr": [
       "Klinik etkisi kanitlanmamistir.",
@@ -291,12 +412,18 @@
       "Klinik deneyler tamamlanmamistir."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Although\" zitlik: etkinlik VAR ama güvenlik belirsiz. \"Efficacy\" = etkinlik."
+    "aciklama_tr": "\"Although\" zitlik: etkinlik VAR ama güvenlik belirsiz. \"Efficacy\" = etkinlik.",
+    "sinyal": "Although",
+    "sinyal_ipucu": "Zitlik",
+    "tuzak": "long-term safety profile",
+    "tuzak_ipucu": "Tuzak: etkinlik degil guvenlik",
+    "anahtar": null
   },
   {
+    "id": "q022",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "Prior to the discovery of penicillin, bacterial infections were often fatal.",
-    "sinyal": "Prior to",
+    "alinti": true,
     "soru_tr": "Penisilin kesfinden once bakteriyel enfeksiyonlar hakkinda ne soylenebilir?",
     "secenekler_tr": [
       "Kolayca tedavi ediliyordu.",
@@ -305,12 +432,18 @@
       "Etkili tedavileri mevcuttu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Prior to\" = -den once. \"Often fatal\" = cogunlukla olumcul."
+    "aciklama_tr": "\"Prior to\" = -den once. \"Often fatal\" = cogunlukla olumcul.",
+    "sinyal": "Prior to",
+    "sinyal_ipucu": "Zaman",
+    "tuzak": "often fatal",
+    "tuzak_ipucu": "Tuzak: tedavi edilebilir degil",
+    "anahtar": null
   },
   {
+    "id": "q023",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "The study found that social mobility, contrary to popular belief, has declined over the past two decades.",
-    "sinyal": "contrary to popular belief",
+    "alinti": true,
     "soru_tr": "Arastirmanin sosyal hareketlilik hakkindaki bulgulari nedir?",
     "secenekler_tr": [
       "Son yıllarda artmistir.",
@@ -319,12 +452,18 @@
       "Yalnızca gelismis ulkelerde düsmüstür."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Contrary to popular belief\" = yaygin inancanin aksine. \"Declined\" = azaldi."
+    "aciklama_tr": "\"Contrary to popular belief\" = yaygin inancanin aksine. \"Declined\" = azaldi.",
+    "sinyal": "contrary to popular belief",
+    "sinyal_ipucu": "Zitlik",
+    "tuzak": "declined",
+    "tuzak_ipucu": "Tuzak: arttı değil azaldı",
+    "anahtar": null
   },
   {
+    "id": "q024",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The study's findings were far from conclusive, yet they sparked considerable debate among scholars.",
-    "sinyal": "yet",
+    "alinti": false,
     "soru_tr": "Çalışmanın bulgularıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
       "Bulgular kesin sonuçlar ortaya koydu.",
@@ -333,12 +472,18 @@
       "Tartışma bulgulardan önce başladı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from conclusive\" = kesin değil + \"yet\" = zıtlık. Kesin değil AMA tartışma yarattı."
+    "aciklama_tr": "\"Far from conclusive\" = kesin değil + \"yet\" = zıtlık. Kesin değil AMA tartışma yarattı.",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "conclusive"
   },
   {
+    "id": "q025",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Although the experiment failed to yield the expected results, the researchers remained optimistic about future prospects.",
-    "sinyal": "Although",
+    "alinti": false,
     "soru_tr": "Araştırmacıların tutumu nedir?",
     "secenekler_tr": [
       "Başarısız deney sonrasında umutsuzluğa kapıldılar.",
@@ -347,12 +492,18 @@
       "Beklenen sonuçlara ulaştılar."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Although failed\" = zıtlık. Başarısız olsa da iyimserlikleri devam etti."
+    "aciklama_tr": "\"Although failed\" = zıtlık. Başarısız olsa da iyimserlikleri devam etti.",
+    "sinyal": "Although",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "optimistic"
   },
   {
+    "id": "q026",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The new policy was anything but popular despite the government's efforts to promote it.",
-    "sinyal": "despite",
+    "alinti": false,
     "soru_tr": "Yeni politika hakkında ne doğrudur?",
     "secenekler_tr": [
       "Politika hükümet desteğiyle popüler oldu.",
@@ -361,12 +512,18 @@
       "Hükümet politikayı tanıtmaktan vazgeçti."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Anything but popular\" = hiç popüler değil + \"despite\" = zıtlık. Çaba olmasına rağmen başarısız."
+    "aciklama_tr": "\"Anything but popular\" = hiç popüler değil + \"despite\" = zıtlık. Çaba olmasına rağmen başarısız.",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "anything but",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "popular"
   },
   {
+    "id": "q027",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The economy recovered more quickly than anticipated, even though analysts had predicted a prolonged recession.",
-    "sinyal": "even though",
+    "alinti": false,
     "soru_tr": "Ekonomik toparlanma için ne söylenebilir?",
     "secenekler_tr": [
       "Toparlanma analistlerin öngördüğü kadar yavaş oldu.",
@@ -375,12 +532,18 @@
       "Ekonomi toparlanamadı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Even though predicted recession\" = zıtlık. Durgunluk beklendi AMA hızlı toparlıandı."
+    "aciklama_tr": "\"Even though predicted recession\" = zıtlık. Durgunluk beklendi AMA hızlı toparlıandı.",
+    "sinyal": "even though",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "recession",
+    "tuzak_ipucu": "Tuzak kelime",
+    "anahtar": "recovered"
   },
   {
+    "id": "q028",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant's argument was by no means convincing, yet the jury deliberated for three days.",
-    "sinyal": "yet",
+    "alinti": false,
     "soru_tr": "Sanığın savunması hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Savunma ikna ediciydi ve jury hızla karar verdi.",
@@ -389,12 +552,18 @@
       "Jury bir gün içinde karar verdi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"By no means convincing\" = hiç ikna edici değil + \"yet\" = zıtlık."
+    "aciklama_tr": "\"By no means convincing\" = hiç ikna edici değil + \"yet\" = zıtlık.",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "convincing"
   },
   {
+    "id": "q029",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Despite the overwhelming evidence, the court was far from unanimous in its ruling.",
-    "sinyal": "Despite",
+    "alinti": false,
     "soru_tr": "Mahkemenin kararıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
       "Mahkeme kanıtlar ışığında oybirliğiyle karar verdi.",
@@ -403,12 +572,18 @@
       "Kanıtlar yetersiz bulundu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Despite overwhelming evidence\" = zıtlık + \"far from unanimous\" = oybirliği yok."
+    "aciklama_tr": "\"Despite overwhelming evidence\" = zıtlık + \"far from unanimous\" = oybirliği yok.",
+    "sinyal": "Despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "overwhelming"
   },
   {
+    "id": "q030",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The contract's terms were hardly favorable to either party, yet both sides agreed to proceed.",
-    "sinyal": "yet",
+    "alinti": false,
     "soru_tr": "Sözleşme şartları hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Şartlar her iki taraf için de çok avantajlıydı.",
@@ -417,12 +592,18 @@
       "Sözleşme müzakere aşamasında iptal edildi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Hardly favorable\" = neredeyse hiç avantajlı değil + \"yet\" = zıtlık."
+    "aciklama_tr": "\"Hardly favorable\" = neredeyse hiç avantajlı değil + \"yet\" = zıtlık.",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "hardly",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "favorable"
   },
   {
+    "id": "q031",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The clinical trial results were nowhere near as promising as initially hoped, although researchers continued the study.",
-    "sinyal": "although",
+    "alinti": false,
     "soru_tr": "Klinik araştırma sonuçları nasıl değerlendirilir?",
     "secenekler_tr": [
       "Sonuçlar başlangıçta umut edilenden çok daha iyi çıktı.",
@@ -431,12 +612,18 @@
       "Sonuçlar tam olarak beklendiği gibiydi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Nowhere near as promising\" = hiç umut verici değil + \"although\" = zıtlık."
+    "aciklama_tr": "\"Nowhere near as promising\" = hiç umut verici değil + \"although\" = zıtlık.",
+    "sinyal": "although",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "nowhere near",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "promising"
   },
   {
+    "id": "q032",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "Despite years of research, scientists have yet to find a definitive cure for the disease.",
-    "sinyal": "Despite",
+    "alinti": false,
     "soru_tr": "Hastalığın tedavisiyle ilgili ne söylenebilir?",
     "secenekler_tr": [
       "Bilim insanları kesin bir tedavi yöntemi bulmuştur.",
@@ -445,12 +632,18 @@
       "Tedavi yakın zamanda bulunacağı öngörülmektedir."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Despite years\" = zıtlık + \"yet to find\" = henüz bulunamadı."
+    "aciklama_tr": "\"Despite years\" = zıtlık + \"yet to find\" = henüz bulunamadı.",
+    "sinyal": "Despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "yet to",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "cure"
   },
   {
+    "id": "q033",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The medication proved far from harmless, even though it had passed initial safety screenings.",
-    "sinyal": "even though",
+    "alinti": false,
     "soru_tr": "İlaçla ilgili ne öğrenilmiştir?",
     "secenekler_tr": [
       "İlaç güvenlik testlerini geçtiği için zararsız olduğu kanıtlandı.",
@@ -459,12 +652,18 @@
       "Güvenlik taramaları ilaç için yapılmadı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from harmless\" = zararsız değil + \"even though passed\" = zıtlık."
+    "aciklama_tr": "\"Far from harmless\" = zararsız değil + \"even though passed\" = zıtlık.",
+    "sinyal": "even though",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "harmless"
   },
   {
+    "id": "q034",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The experiment's results were scarcely reproducible, despite the controlled laboratory conditions.",
-    "sinyal": "despite",
+    "alinti": false,
     "soru_tr": "Deneyin sonuçları için ne söylenebilir?",
     "secenekler_tr": [
       "Kontrollü koşullar sayesinde sonuçlar kolayca tekrarlanabilirdi.",
@@ -473,12 +672,18 @@
       "Sonuçlar her seferinde aynı çıktı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Scarcely reproducible\" = neredeyse tekrarlanamaz + \"despite controlled conditions\" = zıtlık."
+    "aciklama_tr": "\"Scarcely reproducible\" = neredeyse tekrarlanamaz + \"despite controlled conditions\" = zıtlık.",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "scarcely",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "reproducible"
   },
   {
+    "id": "q035",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "Although the hypothesis seemed plausible, the data failed to provide sufficient support.",
-    "sinyal": "Although",
+    "alinti": false,
     "soru_tr": "Hipotez hakkında ne doğrudur?",
     "secenekler_tr": [
       "Hipotez verilerle tamamen desteklendi.",
@@ -487,12 +692,18 @@
       "Hipotez veri toplanmadan reddedildi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Although plausible\" = zıtlık. Makul görünüyordu AMA veri destek vermedi."
+    "aciklama_tr": "\"Although plausible\" = zıtlık. Makul görünüyordu AMA veri destek vermedi.",
+    "sinyal": "Although",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "sufficient",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "plausible"
   },
   {
+    "id": "q036",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "The social program was far from achieving its intended outcomes, despite significant funding.",
-    "sinyal": "despite",
+    "alinti": false,
     "soru_tr": "Sosyal program hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Program önemli fonlarla hedeflerine ulaştı.",
@@ -501,12 +712,18 @@
       "Fon yetersizliği programın başarısını engelledi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from achieving\" = ulaşamadı + \"despite funding\" = zıtlık."
+    "aciklama_tr": "\"Far from achieving\" = ulaşamadı + \"despite funding\" = zıtlık.",
+    "sinyal": "despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "outcomes"
   },
   {
+    "id": "q037",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "Public support for the initiative was by no means guaranteed, even though surveys showed initial enthusiasm.",
-    "sinyal": "even though",
+    "alinti": false,
     "soru_tr": "Kamuoyunun girişime desteği nasıldı?",
     "secenekler_tr": [
       "Anketler büyük destek olacağını garantiledi.",
@@ -515,12 +732,18 @@
       "Anketler desteğin olmayacağını gösterdi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"By no means guaranteed\" = kesinlikle garantili değil + \"even though enthusiasm\" = zıtlık."
+    "aciklama_tr": "\"By no means guaranteed\" = kesinlikle garantili değil + \"even though enthusiasm\" = zıtlık.",
+    "sinyal": "even though",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Gizli olumsuz tuzak!",
+    "anahtar": "guaranteed"
   },
   {
+    "id": "q038",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Given the available evidence, the investigators concluded that the suspect must have been at the scene.",
-    "sinyal": null,
+    "alinti": false,
     "soru_tr": "Araştırmacıların sonucuna göre şüpheli için ne söylenebilir?",
     "secenekler_tr": [
       "Şüpheli kesinlikle olay yerinde değildi.",
@@ -529,12 +752,18 @@
       "Araştırmacılar şüpheliyi serbest bıraktı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Must have been\" = geçmişe güçlü çıkarım. Kanıtlara dayanarak bu sonuca varıldı."
+    "aciklama_tr": "\"Must have been\" = geçmişe güçlü çıkarım. Kanıtlara dayanarak bu sonuca varıldı.",
+    "sinyal": null,
+    "sinyal_ipucu": null,
+    "tuzak": "must have been",
+    "tuzak_ipucu": "Geçmişe güçlü çıkarım!",
+    "anahtar": "concluded"
   },
   {
+    "id": "q039",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The team should have consulted the experts before making such a critical decision.",
-    "sinyal": null,
+    "alinti": false,
     "soru_tr": "Bu cümleden çıkarılacak sonuç nedir?",
     "secenekler_tr": [
       "Ekip uzmanlarla danıştıktan sonra karar aldı.",
@@ -543,12 +772,18 @@
       "Ekip doğru kararı aldı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Should have consulted\" = danışmalıydı ama danışmadı. Geçmişe pişmanlık yapısı!"
+    "aciklama_tr": "\"Should have consulted\" = danışmalıydı ama danışmadı. Geçmişe pişmanlık yapısı!",
+    "sinyal": null,
+    "sinyal_ipucu": null,
+    "tuzak": "should have consulted",
+    "tuzak_ipucu": "Pişmanlık yapısı!",
+    "anahtar": "critical"
   },
   {
+    "id": "q040",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The patient's symptoms could have been misdiagnosed, as they were consistent with multiple conditions.",
-    "sinyal": null,
+    "alinti": false,
     "soru_tr": "Hastanın belirtileri hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Belirtiler kesinlikle yanlış teşhis edildi.",
@@ -557,12 +792,18 @@
       "Teşhis kesinlikle doğruydu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Could have been misdiagnosed\" = yanlış teşhis edilmiş olabilirdi. Geçmişe olasılık."
+    "aciklama_tr": "\"Could have been misdiagnosed\" = yanlış teşhis edilmiş olabilirdi. Geçmişe olasılık.",
+    "sinyal": null,
+    "sinyal_ipucu": null,
+    "tuzak": "could have been",
+    "tuzak_ipucu": "Geçmişe güçlü çıkarım!",
+    "anahtar": "consistent"
   },
   {
+    "id": "q041",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The project was severely underfunded; consequently, the team was forced to abandon several key objectives.",
-    "sinyal": "consequently",
+    "alinti": false,
     "soru_tr": "Projenin yetersiz finansmanının sonucu nedir?",
     "secenekler_tr": [
       "Ekip hedeflerine rağmen projeyi tamamladı.",
@@ -571,12 +812,18 @@
       "Hedefler revize edildi ama terk edilmedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Consequently\" = sonuç sinyali. Yetersiz fon → hedeflerin terk edilmesi."
+    "aciklama_tr": "\"Consequently\" = sonuç sinyali. Yetersiz fon → hedeflerin terk edilmesi.",
+    "sinyal": "consequently",
+    "sinyal_ipucu": "Sonuç sinyali",
+    "tuzak": "forced to",
+    "tuzak_ipucu": "Tuzak: zorunda kaldı",
+    "anahtar": "objectives"
   },
   {
+    "id": "q042",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "The population grew exponentially over the decade; as a result, housing prices reached unprecedented levels.",
-    "sinyal": "as a result",
+    "alinti": false,
     "soru_tr": "Nüfus artışının sonucu nedir?",
     "secenekler_tr": [
       "Nüfus artışı konut fiyatlarını düşürdü.",
@@ -585,12 +832,18 @@
       "Nüfus azalması konut fiyatlarını artırdı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"As a result\" = sonuç sinyali. Nüfus artışı → konut fiyatları arttı."
+    "aciklama_tr": "\"As a result\" = sonuç sinyali. Nüfus artışı → konut fiyatları arttı.",
+    "sinyal": "as a result",
+    "sinyal_ipucu": "Sonuç sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "unprecedented"
   },
   {
+    "id": "q043",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The agreement will remain valid provided that both parties fulfill their obligations within the specified timeframe.",
-    "sinyal": "provided that",
+    "alinti": false,
     "soru_tr": "Anlaşmanın geçerliliği neye bağlıdır?",
     "secenekler_tr": [
       "Anlaşma her koşulda geçerlidir.",
@@ -599,12 +852,18 @@
       "Belirtilen süre anlaşmanın geçerliliğini etkilemez."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Provided that\" = şartıyla/koşuluyla. Yükümlülük yerine getirilirse geçerli."
+    "aciklama_tr": "\"Provided that\" = şartıyla/koşuluyla. Yükümlülük yerine getirilirse geçerli.",
+    "sinyal": "provided that",
+    "sinyal_ipucu": "Koşul sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "obligations"
   },
   {
+    "id": "q044",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant will be released on condition that they comply with all restrictions imposed by the court.",
-    "sinyal": "on condition that",
+    "alinti": false,
     "soru_tr": "Sanığın serbest bırakılması ne koşula bağlıdır?",
     "secenekler_tr": [
       "Sanık koşulsuz olarak serbest bırakıldı.",
@@ -613,12 +872,18 @@
       "Sanık tüm kısıtlamaları ihlal etti."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"On condition that\" = şartıyla. Kısıtlamalara uyma koşuluyla serbest."
+    "aciklama_tr": "\"On condition that\" = şartıyla. Kısıtlamalara uyma koşuluyla serbest.",
+    "sinyal": "on condition that",
+    "sinyal_ipucu": "Koşul sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "restrictions"
   },
   {
+    "id": "q045",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The negotiations were nowhere near completion, yet both parties expressed optimism about reaching a deal.",
-    "sinyal": "yet",
+    "alinti": true,
     "soru_tr": "Müzakereler hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Müzakereler tamamlanmak üzereydi.",
@@ -627,12 +892,18 @@
       "Müzakereler resmi olarak sona erdi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Nowhere near completion\" = tamamlanmaktan çok uzak + \"yet\" = zıtlık."
+    "aciklama_tr": "\"Nowhere near completion\" = tamamlanmaktan çok uzak + \"yet\" = zıtlık.",
+    "sinyal": "yet",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "nowhere near",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "optimism"
   },
   {
+    "id": "q046",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Unless the appeal is filed within thirty days, the ruling will become final and binding.",
-    "sinyal": "Unless",
+    "alinti": true,
     "soru_tr": "Kararın kesinleşmesi neye bağlıdır?",
     "secenekler_tr": [
       "Otuz gün içinde itiraz edilmezse karar kesinleşecektir.",
@@ -641,12 +912,18 @@
       "Karar zaten kesinleşmiştir."
     ],
     "dogru_index": 0,
-    "aciklama_tr": "\"Unless\" = eğer olmazsa. İtiraz edilmezse (30 gün içinde) karar kesinleşir."
+    "aciklama_tr": "\"Unless\" = eğer olmazsa. İtiraz edilmezse (30 gün içinde) karar kesinleşir.",
+    "sinyal": "Unless",
+    "sinyal_ipucu": "Koşul sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "final and binding"
   },
   {
+    "id": "q047",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "The clinical guidelines were revised after new evidence cast doubt on the drug's long-term safety.",
-    "sinyal": "after",
+    "alinti": true,
     "soru_tr": "Klinik kılavuzların revize edilme nedeni nedir?",
     "secenekler_tr": [
       "İlacın etkinliği kanıtlandığı için.",
@@ -655,12 +932,18 @@
       "Kılavuzlar zaten güncel değildi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Cast doubt on\" = şüphe uyandırmak. Yeni kanıt güvenliği sorgulattı, bu yüzden kılavuz revize edildi."
+    "aciklama_tr": "\"Cast doubt on\" = şüphe uyandırmak. Yeni kanıt güvenliği sorgulattı, bu yüzden kılavuz revize edildi.",
+    "sinyal": "after",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "cast doubt on",
+    "tuzak_ipucu": "Tuzak: kanıtladı değil, şüphe uyandırdı",
+    "anahtar": null
   },
   {
+    "id": "q048",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "Contrary to earlier assumptions, the compound proved anything but stable at room temperature.",
-    "sinyal": "Contrary to",
+    "alinti": true,
     "soru_tr": "Bileşik hakkında ne doğrudur?",
     "secenekler_tr": [
       "Oda sıcaklığında kararlıdır.",
@@ -669,12 +952,18 @@
       "Önceki varsayımlar doğrulanmıştır."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Contrary to\" = aksine + \"anything but stable\" = hiç kararlı değil."
+    "aciklama_tr": "\"Contrary to\" = aksine + \"anything but stable\" = hiç kararlı değil.",
+    "sinyal": "Contrary to",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "anything but",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "stable"
   },
   {
+    "id": "q049",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "As a consequence of declining birth rates, several countries have revised their pension systems.",
-    "sinyal": "As a consequence of",
+    "alinti": true,
     "soru_tr": "Doğum oranlarındaki düşüşün sonucu nedir?",
     "secenekler_tr": [
       "Bazı ülkeler emeklilik sistemlerini gözden geçirdi.",
@@ -683,12 +972,18 @@
       "Ülkeler göçü tamamen durdurdu."
     ],
     "dogru_index": 0,
-    "aciklama_tr": "\"As a consequence of\" = sonucu olarak, nedensellik bildirir."
+    "aciklama_tr": "\"As a consequence of\" = sonucu olarak, nedensellik bildirir.",
+    "sinyal": "As a consequence of",
+    "sinyal_ipucu": "Sonuç sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
+    "anahtar": "revised"
   },
   {
+    "id": "q050",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The proposal, while theoretically sound, has proven next to impossible to implement in practice.",
-    "sinyal": "while",
+    "alinti": true,
     "soru_tr": "Teklif hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Uygulaması son derece kolaydır.",
@@ -697,12 +992,18 @@
       "Henüz test edilmemiştir."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Next to impossible\" = neredeyse imkansız. \"While\" zıtlık kurar: teori iyi, uygulama zor."
+    "aciklama_tr": "\"Next to impossible\" = neredeyse imkansız. \"While\" zıtlık kurar: teori iyi, uygulama zor.",
+    "sinyal": "while",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "next to impossible",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": null
   },
   {
+    "id": "q051",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Had the witness come forward earlier, the outcome of the trial might have been different.",
-    "sinyal": null,
+    "alinti": true,
     "soru_tr": "Bu cümleden ne çıkarılabilir?",
     "secenekler_tr": [
       "Tanık zamanında ifade verdi ve dava sonucu değişmedi.",
@@ -711,12 +1012,18 @@
       "Tanığın ifadesi davayı etkilemedi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Had the witness come forward\" = devrik 3. tip koşul (if düşmüş). Gerçekleşmemiş bir geçmiş varsayım."
+    "aciklama_tr": "\"Had the witness come forward\" = devrik 3. tip koşul (if düşmüş). Gerçekleşmemiş bir geçmiş varsayım.",
+    "sinyal": null,
+    "sinyal_ipucu": null,
+    "tuzak": "come forward",
+    "tuzak_ipucu": "Tuzak: devrik 3. koşul",
+    "anahtar": "outcome"
   },
   {
+    "id": "q052",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "Once the infection had been misdiagnosed, treatment was delayed by several critical weeks.",
-    "sinyal": "Once",
+    "alinti": true,
     "soru_tr": "Tedavinin gecikmesinin nedeni nedir?",
     "secenekler_tr": [
       "Hasta tedaviyi reddetti.",
@@ -725,12 +1032,18 @@
       "İlaç stokta yoktu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Once...had been misdiagnosed\" = yanlış teşhisten sonra. \"Delayed by\" = ile gecikti."
+    "aciklama_tr": "\"Once...had been misdiagnosed\" = yanlış teşhisten sonra. \"Delayed by\" = ile gecikti.",
+    "sinyal": "Once",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "delayed by",
+    "tuzak_ipucu": "Tuzak: geciken tedavi",
+    "anahtar": null
   },
   {
+    "id": "q053",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "The satellite's trajectory deviated only slightly from the projected path, a fact that nonetheless required immediate correction.",
-    "sinyal": "nonetheless",
+    "alinti": true,
     "soru_tr": "Uydunun yörüngesi hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Öngörülen yoldan çok büyük ölçüde saptı.",
@@ -739,12 +1052,18 @@
       "Düzeltmeye gerek duyulmadı."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Deviated only slightly\" = çok az saptı ama yine de düzeltme gerekti — küçük sapmanın önemi vurgulanıyor."
+    "aciklama_tr": "\"Deviated only slightly\" = çok az saptı ama yine de düzeltme gerekti — küçük sapmanın önemi vurgulanıyor.",
+    "sinyal": "nonetheless",
+    "sinyal_ipucu": "Zitlik sinyali",
+    "tuzak": "deviated only slightly",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": null
   },
   {
+    "id": "q054",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "Even though the survey sample was representative, critics claim the results were far from generalizable.",
-    "sinyal": "Even though",
+    "alinti": true,
     "soru_tr": "Eleştirmenlerin ankete yönelik itirazı nedir?",
     "secenekler_tr": [
       "Örneklem temsil edici değildi.",
@@ -753,12 +1072,18 @@
       "Sonuçlar tamamen genellenebilir bulundu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Far from generalizable\" = genellenebilir değil. \"Even though representative\" zıtlık kurar."
+    "aciklama_tr": "\"Far from generalizable\" = genellenebilir değil. \"Even though representative\" zıtlık kurar.",
+    "sinyal": "Even though",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "representative"
   },
   {
+    "id": "q055",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Not only did the merger fail to boost profits, but it also triggered a wave of layoffs.",
-    "sinyal": "Not only",
+    "alinti": true,
     "soru_tr": "Birleşmenin sonucu hakkında ne doğrudur?",
     "secenekler_tr": [
       "Kârı artırdı ve istihdamı korudu.",
@@ -767,12 +1092,18 @@
       "Birleşme iptal edildi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Not only...but also\" = hem ...hem de. İki olumsuz sonuç birlikte verilir."
+    "aciklama_tr": "\"Not only...but also\" = hem ...hem de. İki olumsuz sonuç birlikte verilir.",
+    "sinyal": "Not only",
+    "sinyal_ipucu": "Ekleyici zıtlık",
+    "tuzak": "but it also",
+    "tuzak_ipucu": "Tuzak: devrik yapı devam ediyor",
+    "anahtar": "layoffs"
   },
   {
+    "id": "q056",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The clause was drafted so as to prevent either party from unilaterally terminating the agreement.",
-    "sinyal": "so as to",
+    "alinti": true,
     "soru_tr": "Maddenin amacı nedir?",
     "secenekler_tr": [
       "Tarafların anlaşmayı istedikleri zaman feshetmesine izin vermek.",
@@ -781,12 +1112,18 @@
       "Yalnızca bir tarafa fesih hakkı tanımak."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"So as to prevent\" = önlemek amacıyla. \"Unilaterally terminating\" = tek taraflı feshetme."
+    "aciklama_tr": "\"So as to prevent\" = önlemek amacıyla. \"Unilaterally terminating\" = tek taraflı feshetme.",
+    "sinyal": "so as to",
+    "sinyal_ipucu": "Amaç sinyali",
+    "tuzak": "unilaterally terminating",
+    "tuzak_ipucu": "Tuzak: tek taraflı fesih",
+    "anahtar": null
   },
   {
+    "id": "q057",
     "kategori": "Saglik - YOKDiL Metni",
     "soru_en": "Despite its promising early results, the therapy was withheld from the general population pending further trials.",
-    "sinyal": "Despite",
+    "alinti": true,
     "soru_tr": "Tedavi neden genel nüfusa uygulanmadı?",
     "secenekler_tr": [
       "Erken sonuçlar olumsuzdu.",
@@ -795,12 +1132,18 @@
       "Denemeler tamamen durduruldu."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Withheld from\" = alıkonuldu, uygulanmadı. \"Despite promising\" zıtlık kurar, yine de bekletildi."
+    "aciklama_tr": "\"Withheld from\" = alıkonuldu, uygulanmadı. \"Despite promising\" zıtlık kurar, yine de bekletildi.",
+    "sinyal": "Despite",
+    "sinyal_ipucu": "Zıtlık sinyali",
+    "tuzak": "withheld from",
+    "tuzak_ipucu": "Gizli olumsuz",
+    "anahtar": "promising"
   },
   {
+    "id": "q058",
     "kategori": "Fen - YOKDiL Metni",
     "soru_en": "Provided that the temperature remains stable, the reaction will proceed without further intervention.",
-    "sinyal": "Provided that",
+    "alinti": true,
     "soru_tr": "Reaksiyonun devam etmesi için hangi koşul gereklidir?",
     "secenekler_tr": [
       "Sıcaklığın sürekli değişmesi.",
@@ -809,12 +1152,18 @@
       "Katalizör eklenmesi."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Provided that\" = şartıyla. Sıcaklık kararlı kalırsa reaksiyon müdahalesiz devam eder."
+    "aciklama_tr": "\"Provided that\" = şartıyla. Sıcaklık kararlı kalırsa reaksiyon müdahalesiz devam eder.",
+    "sinyal": "Provided that",
+    "sinyal_ipucu": "Koşul sinyali",
+    "tuzak": "without further intervention",
+    "tuzak_ipucu": "Tuzak: müdahalesiz",
+    "anahtar": null
   },
   {
+    "id": "q059",
     "kategori": "Sosyal - YOKDiL Metni",
     "soru_en": "Public opinion on the reform has shifted markedly since the initial announcement, with support dwindling steadily.",
-    "sinyal": "since",
+    "alinti": true,
     "soru_tr": "Kamuoyu desteği ile ilgili ne söylenebilir?",
     "secenekler_tr": [
       "İlk açıklamadan bu yana istikrarlı biçimde arttı.",
@@ -823,6 +1172,11 @@
       "Açıklamadan önce zaten düşüktü."
     ],
     "dogru_index": 1,
-    "aciklama_tr": "\"Dwindling steadily\" = istikrarlı biçimde azalan. \"Shifted markedly since\" = belirgin değişim, zamanla."
+    "aciklama_tr": "\"Dwindling steadily\" = istikrarlı biçimde azalan. \"Shifted markedly since\" = belirgin değişim, zamanla.",
+    "sinyal": "since",
+    "sinyal_ipucu": "Zaman sinyali",
+    "tuzak": "shifted markedly",
+    "tuzak_ipucu": "Tuzak: iyileşme değil kötüleşme",
+    "anahtar": "dwindling"
   }
 ]

@@ -1,6 +1,6 @@
 // ============================================================
-// ADIM 1 — sinyal-avcisi.com'daki gerçek Sinyal Lab soru havuzundan
-// (data/sorular.json, bkz. scripts/extract-sorular.mjs) günün sorusunu
+// ADIM 1 — canonical soru bankasından (api/data/sorular.json, TEK
+// source-of-truth — bkz. scripts/sl-havuz-generator.mjs) günün sorusunu
 // seçip video senaryosunu oluşturur.
 // ============================================================
 // Uydurma bir soru üretmek yerine sitedeki gerçek YDS/YÖKDİL içeriğini
@@ -24,7 +24,9 @@ import { avciOgretimUret } from "./avci-ogretim-katmani.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, "..", "out");
 const DATA_DIR = path.join(__dirname, "..", "data");
-const SORULAR_PATH = path.join(DATA_DIR, "sorular.json");
+// SOURCE OF TRUTH AŞAMA 5: tek canonical kaynak — automation/video-pipeline/
+// data/sorular.json artık kullanılmıyor (bkz. AŞAMA 8'de kaldırılacak).
+const SORULAR_PATH = path.join(__dirname, "..", "..", "..", "api", "data", "sorular.json");
 const NEEDS_REVIEW_LOG_PATH = path.join(DATA_DIR, "needs-review-log.json");
 
 const HOOK_SABLONLARI = [
@@ -53,6 +55,13 @@ function gunSayisi() {
 
 function gununSoruIndeksi(sorularUzunluk) {
   return gunSayisi() % sorularUzunluk;
+}
+
+// Rotasyon fiziksel array sırasına değil, stable id'ye (q001..q059) göre
+// sıralanmış bir kopyaya göre yapılır — dataset'e yeni soru eklenmesi/
+// sırasının değişmesi mevcut günlerin hangi soruyu gördüğünü kaydırmaz.
+export function sorularStableSirali(sorular) {
+  return [...sorular].sort((a, b) => (a.id || "").localeCompare(b.id || ""));
 }
 
 function sabloniSec(sablonlar, offset) {
@@ -166,17 +175,19 @@ async function ozetYazdir({ soruIndex, durum, sebep }) {
 }
 
 async function scriptOlustur() {
-  const sorular = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
+  const sorularHam = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
+  const sorular = sorularStableSirali(sorularHam);
   const soruIndex = gununSoruIndeksi(sorular.length);
   const soru = sorular[soruIndex];
+  const soruId = soru?.id ?? soruIndex;
 
   // VERİ KALİTE KAPISI — AVCI/şablon ayrımından ÖNCE. Kaynak veri
   // bozuksa NE AVCI NE ŞABLON çalışır: ATLANDI. (bkz. veriKalitesiSorunu)
   const veriSorunu = veriKalitesiSorunu(soru);
   if (veriSorunu) {
-    await needsReviewLogYaz(soruIndex, soru, veriSorunu, "veri_kalitesi");
-    await ozetYazdir({ soruIndex, durum: "atlandi", sebep: veriSorunu });
-    return { atlandi: true, soruIndex, sebep: veriSorunu };
+    await needsReviewLogYaz(soruId, soru, veriSorunu, "veri_kalitesi");
+    await ozetYazdir({ soruIndex: soruId, durum: "atlandi", sebep: veriSorunu });
+    return { atlandi: true, soruIndex: soruId, sebep: veriSorunu };
   }
 
   const hook = sabloniSec(HOOK_SABLONLARI, 7);
@@ -186,7 +197,7 @@ async function scriptOlustur() {
   // Flag kapalıyken davranış bugünküyle BYTE-BYTE aynı kalmalı.
   if (process.env.AVCI_OGRETIM_KATMANI !== "on") {
     const senaryo = { ...sablonSenaryo, uretimKaynagi: "sablon" };
-    await ozetYazdir({ soruIndex, durum: "sablon", sebep: "flag_kapali" });
+    await ozetYazdir({ soruIndex: soruId, durum: "sablon", sebep: "flag_kapali" });
     return senaryo;
   }
 
@@ -198,14 +209,14 @@ async function scriptOlustur() {
   }
 
   if (avciSonuc.status !== "ok") {
-    await needsReviewLogYaz(soruIndex, soru, avciSonuc.sebep, "needs_review");
-    await ozetYazdir({ soruIndex, durum: "sablon", sebep: avciSonuc.sebep });
+    await needsReviewLogYaz(soruId, soru, avciSonuc.sebep, "needs_review");
+    await ozetYazdir({ soruIndex: soruId, durum: "sablon", sebep: avciSonuc.sebep });
     // Şüpheli/eksik AVCI içeriği HİÇBİR ZAMAN buradan aşağı geçmiyor —
     // sadece log dosyasına yazıldı, senaryoya hiç karışmıyor.
     return { ...sablonSenaryo, uretimKaynagi: "sablon" };
   }
 
-  await ozetYazdir({ soruIndex, durum: "avci" });
+  await ozetYazdir({ soruIndex: soruId, durum: "avci" });
   return {
     ...sablonSenaryo, // hook/soru_en/secenekler_tr/dogru_index/aciklama_tr/kapanis_tr — indirici tüketiciler için değişmeden kalır
     uretimKaynagi: "avci",

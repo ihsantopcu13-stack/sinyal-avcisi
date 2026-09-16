@@ -22,10 +22,17 @@ const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const FPS = 30;
-const SORULAR_PATH = path.join(ROOT, "data", "sorular.json");
+// SOURCE OF TRUTH AŞAMA 5: tek canonical kaynak.
+const SORULAR_PATH = path.join(__dirname, "..", "..", "..", "api", "data", "sorular.json");
 
 function gunSayisi() {
   return Math.floor(Date.now() / 86_400_000);
+}
+
+// Rotasyon fiziksel array sırasına değil, stable id'ye göre sıralanmış
+// bir kopyaya göre yapılır (bkz. generate-script.mjs'teki aynı desen).
+function sorularStableSirali(sorular) {
+  return [...sorular].sort((a, b) => (a.id || "").localeCompare(b.id || ""));
 }
 
 function slugify(text) {
@@ -81,7 +88,8 @@ async function dersIcerigiUret(soru) {
 }
 
 export async function gunlukDersUret({ soruIndexOffset = 0 } = {}) {
-  const sorular = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
+  const sorularHam = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
+  const sorular = sorularStableSirali(sorularHam);
   const soru = sorular[(gunSayisi() + soruIndexOffset) % sorular.length];
 
   console.log("Gerçek soru:", soru.soru_en);
