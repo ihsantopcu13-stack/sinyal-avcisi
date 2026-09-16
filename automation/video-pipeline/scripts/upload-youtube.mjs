@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { google } from "googleapis";
 import { hashtagSeti, youtubeTags } from "./_seo.mjs";
+import { deepLinkUret } from "./_deeplink.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, "..", "out");
@@ -34,6 +35,14 @@ function baslikVeAciklamaOlustur(senaryo) {
   // Sinyal eki eklenince 70 karakteri aşıyorsa kelimenin ortasından
   // kesmek yerine ekisiz hook'u kullan (hook'lar zaten ~70'i geçmiyor).
   const title = genisletilmisBaslik.length <= 70 ? genisletilmisBaslik : senaryo.hook.slice(0, 70);
+  // FAZ 2 — deep-link: YouTube açıklamaları tıklanabilir link destekliyor
+  // (Instagram caption'ları desteklemiyor) — bu yüzden burada gerçek,
+  // per-video attribution mümkün. Sinyal bilgisi SOURCE OF TRUTH olan
+  // senaryo.sinyal'den geliyor, burada icat edilmiyor.
+  const contentId = `youtube_${new Date().toISOString().slice(0, 10)}`;
+  const link = senaryo.sinyal
+    ? deepLinkUret({ sinyal: senaryo.sinyal, platform: "youtube", medium: "shorts", contentId })
+    : "https://sinyal-avcisi.com/";
   const description = [
     senaryo.soru_en,
     "",
@@ -43,7 +52,7 @@ function baslikVeAciklamaOlustur(senaryo) {
     senaryo.sinyal ? `Doğru cevap: ${dogruHarf} — Sinyal kelime: ${senaryo.sinyal}` : `Doğru cevap: ${dogruHarf}`,
     senaryo.aciklama_tr,
     "",
-    "Sinyal Avcısı ile YDS/YÖKDİL'e ücretsiz hazırlan: https://sinyal-avcisi.com",
+    `Sinyal Avcısı ile YDS/YÖKDİL'e ücretsiz hazırlan: ${link}`,
     hashtagSeti(senaryo).join(" "),
   ].join("\n");
   return { title, description };
