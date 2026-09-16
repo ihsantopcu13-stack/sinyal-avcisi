@@ -43,6 +43,7 @@ jobs:
           node --check tests/faz2-legacy-adapter.test.mjs
           node --check tests/faz2-input-contract.test.mjs
           node --check tests/sot-schema.test.mjs
+          node --check tests/sot-migration.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -61,3 +62,6 @@ jobs:
 
       - name: SOURCE OF TRUTH — AŞAMA 1 canonical şema + stable ID testleri
         run: node tests/sot-schema.test.mjs
+
+      - name: SOURCE OF TRUTH — AŞAMA 2 59/59 kayıpsız migration testi
+        run: node tests/sot-migration.test.mjs
