@@ -24,12 +24,17 @@
 
 import { SINYAL_KURALLARI } from "../data/sinyal-kurallari.mjs";
 
+// SAĞ_SOL_KONTROL bilerek burada YOK: iki gerçek testte model bu etiketi
+// hiç seçmedi (yapısal tespiti kendiliğinden SİNYALİ_YAKALA içine dahil
+// etti) ve bu, cümledeki başka bir yeri "bitişikmiş" gibi sunma riski
+// taşıyordu. Yapısal kontrol artık AI'nın seçimine bırakılmıyor — kod
+// tarafından deterministik olarak ekleniyor (bkz. yapiyiKontrolEtEkle).
 export const ADIM_ENUM = [
   "GÖR",
   "FİİLİ_BUL",
   "S_V_O",
   "SİNYALİ_YAKALA",
-  "SAĞ_SOL_KONTROL",
+  "ANLAM_KARŞITLIĞI",
   "ŞIK_ELE",
   "ANLAMI_DOĞRULA",
   "DUR_ÇEVİRME",
@@ -43,9 +48,13 @@ Sana bir YDS/YÖKDİL sorusu ve BU SORUNUN ZATEN DOĞRULANMIŞ cevabı/açıklam
 
 GÖREVİN: Bu SABİT gerçekleri, 3-6 adımlık kısa, öğretici bir Reel senaryosuna dönüştürmek. Yeni bir gramer kuralı bulmak veya cevabı yeniden değerlendirmek DEĞİL.
 
+ÖNEMLİ: Sinyal kelimenin doğrudan bitişiğindeki YAPISAL kontrol (isim mi, V-ing mi, S+V mi geliyor) SENİN İŞİN DEĞİL — bunu sistem otomatik ve ayrı, sabit bir adımda zaten ekliyor. Sen SADECE anlam/pedagoji seviyesinde çalış:
+- SİNYALİ_YAKALA: sinyal kelimeyi tanı, ne anlama geldiğini doğal dille anlat. Sana verilirse SİNYALİN BİTİŞİK BAĞLAMI bir İPUÇUDUR (kesin gerçek değil) — istersen doğal bir cümle içinde değin, ama "sağında/solunda kesinlikle X var" gibi KESİN KONUM İDDİASI yapma, o zaten ayrı bir adımda garanti ediliyor.
+- ANLAM_KARŞITLIĞI: cümlenin BAŞKA bir yerindeki anlamsal karşıtlığı/kritik ifadeyi (örn. "by no means", "far from", "scarcely") ele alır. Bunu SİNYALİ_YAKALA ile karıştırma — biri sinyali tanımak, diğeri cümledeki başka bir ipucunu yakalamak.
+
 KESİN KURALLAR:
 - Sana verilen doğru şık ve açıklama SABİTTİR. DEĞİŞTİRME, sorgulama, yeni bir gerekçe İCAT ETME.
-- Adım havuzundan (GÖR, FİİLİ_BUL, S_V_O, SİNYALİ_YAKALA, SAĞ_SOL_KONTROL, ŞIK_ELE, ANLAMI_DOĞRULA, DUR_ÇEVİRME, KISA_KURAL) SORU TİPİNE UYGUN olanları seç — hepsini zorlama, 3-6 adım yeterli. Örnek: bağlaç sorusunda DUR_ÇEVİRME + SAĞ_SOL_KONTROL + ŞIK_ELE + KISA_KURAL yeterli olabilir.
+- Adım havuzundan (GÖR, FİİLİ_BUL, S_V_O, SİNYALİ_YAKALA, ANLAM_KARŞITLIĞI, ŞIK_ELE, ANLAMI_DOĞRULA, DUR_ÇEVİRME, KISA_KURAL) SORU TİPİNE UYGUN olanları seç — hepsini zorlama, 3-6 adım yeterli. Soru bir anlam/çeviri sorusuysa (paragraf + "ne söylenebilir" tarzı) ANLAM_KARŞITLIĞI'na öncelik ver.
 - Her adımın metni MAX 2 kısa cümle, sohbet gibi Türkçe, B2 altı basit kelime kullanma.
 - KISA_KURAL adımını mutlaka ekle (genelde sona yakın) — bu adıma yazacağın metin sadece bir taslak, son haliyle kod tarafından üzerine yazılacak, o yüzden kısa tut.
 - Tablo kullanma, sadece düz metin.`;
@@ -87,8 +96,31 @@ function dogruHarften(dogruIndex) {
   return HARFLER[dogruIndex] ?? null;
 }
 
-function kullaniciMesajiOlustur(soru, dogruSecenek, beklenenHarf, kural) {
+// GROUNDING İPUCU — SOURCE OF TRUTH DEĞİL. Sinyal kelimenin soru_en
+// içindeki konumunun hemen ardından gelen ~6 kelimeyi (ilk virgül/nokta'ya
+// kadar) basit bir indexOf ile çıkarır. Amaç: modelin "sinyalin sağında/
+// bitişiğinde ne var" sorusunu KENDİ TAHMİNİYLE cevaplamasını önlemek —
+// tam da önceki testte "sağında by no means invalid var" gibi cümledeki
+// başka bir yeri bitişikmiş gibi sunma hatasını önler. Bu alan sadece bir
+// İPUÇU: sinyal metinde bulunamazsa veya çıkarım anlamsızsa null döner,
+// bu durumda model SAĞ_SOL_KONTROL'ü genel sinyal_kurali'ne dayandırır —
+// pipeline'ı bloke etmez, needs_review tetiklemez.
+function yapisalBaglamCikar(soruEn, sinyal) {
+  if (!soruEn || !sinyal) return null;
+  const idx = soruEn.toLowerCase().indexOf(sinyal.toLowerCase());
+  if (idx === -1) return null;
+  const sonrasi = soruEn.slice(idx + sinyal.length);
+  const durakIdx = sonrasi.search(/[,.;]/);
+  const parca = durakIdx !== -1 ? sonrasi.slice(0, durakIdx) : sonrasi;
+  const kelimeler = parca.trim().split(/\s+/).filter(Boolean).slice(0, 6);
+  return kelimeler.length > 0 ? kelimeler.join(" ") : null;
+}
+
+function kullaniciMesajiOlustur(soru, dogruSecenek, beklenenHarf, kural, yapisalBaglam) {
   const sikSatirlari = soru.secenekler_tr.map((s, i) => `${HARFLER[i]}) ${s}`).join("\n");
+  const baglamSatiri = yapisalBaglam
+    ? `SİNYALİN BİTİŞİK BAĞLAMI (koddan çıkarılmış İPUÇU, kesin gerçek değil — SİNYALİ_YAKALA anlatımında istersen doğal bir renk olarak kullanabilirsin, ayrı bir adım/kesin konum iddiası olarak DEĞİL): "${yapisalBaglam}"`
+    : `SİNYALİN BİTİŞİK BAĞLAMI: (koddan çıkarılamadı — konum iddiasında bulunma, sadece genel SİNYAL KURALI'na dayan)`;
   return `SORU (İngilizce): ${soru.soru_en}
 SORU (Türkçe): ${soru.soru_tr}
 ŞIKLAR:
@@ -97,7 +129,8 @@ ${sikSatirlari}
 DOĞRU ŞIK (sabit, değiştirme): ${beklenenHarf}) ${dogruSecenek}
 DOĞRULANMIŞ AÇIKLAMA (sabit, sadece öğretici adımlara dök): ${soru.aciklama_tr}
 SİNYAL KELİME: ${soru.sinyal}
-SİNYAL KURALI (sabit, doğrulanmış — yeni bir kural icat etme, buna dayan): ${kural}`;
+SİNYAL KURALI (sabit, doğrulanmış — yeni bir kural icat etme, buna dayan): ${kural}
+${baglamSatiri}`;
 }
 
 /**
@@ -121,12 +154,18 @@ export async function avciOgretimUret(soru) {
     return { status: "needs_review", sebep: "soru_verisi_eksik (dogru_index/secenekler_tr/aciklama_tr)" };
   }
 
+  // yapisal_baglam SOURCE OF TRUTH DEĞİLDİR — sadece grounding ipucu
+  // (bkz. yapisalBaglamCikar). dogru_index/dogru_secenek/aciklama_tr/
+  // sinyal_kurali hâlâ tek gerçek kaynak.
+  const yapisalBaglam = yapisalBaglamCikar(soru.soru_en, soru.sinyal);
+
   const kaynak = {
     dogru_index: soru.dogru_index,
     dogru_secenek: dogruSecenek,
     aciklama_tr: soru.aciklama_tr,
     sinyal: soru.sinyal,
     sinyal_kurali: kural,
+    yapisal_baglam: yapisalBaglam,
   };
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -148,7 +187,7 @@ export async function avciOgretimUret(soru) {
         max_tokens: 700,
         temperature: 0.3,
         system: SISTEM_PROMPT,
-        messages: [{ role: "user", content: kullaniciMesajiOlustur(soru, dogruSecenek, beklenenHarf, kural) }],
+        messages: [{ role: "user", content: kullaniciMesajiOlustur(soru, dogruSecenek, beklenenHarf, kural, yapisalBaglam) }],
         tools: [TOOL],
         tool_choice: { type: "tool", name: "avci_ogretim_uret" },
       }),
@@ -186,16 +225,34 @@ export async function avciOgretimUret(soru) {
     return { status: "needs_review", sebep: "gecerli_adim_sayisi_yetersiz" };
   }
 
+  // YAPIYI_KONTROL_ET — AI'nın seçebileceği bir adım DEĞİL, kod tarafından
+  // her zaman eklenen deterministik bir adım. Metni SADECE whitelist'teki
+  // insan-onaylı sinyal_kurali'ne dayanır; soru_en'den kesilmiş/kırpılmış
+  // yapisal_baglam metni burada HİÇ alıntılanmaz (ham/kesik metin
+  // kullanıcıya doğrudan basılmaz) — böylece bu adım her zaman güvenli ve
+  // tam cümledir. SİNYALİ_YAKALA'dan hemen sonra (yoksa GÖR'den sonra,
+  // o da yoksa en başa) eklenir.
+  const yapiyiKontrolEtAdimi = {
+    adim: "YAPIYI_KONTROL_ET",
+    metin: `"${soru.sinyal}" kelimesinin hemen bitişiğine bak — ${kural}`.trim().slice(0, 260),
+  };
+  const ankorAdim = adimlarTemiz.find((a) => a.adim === "SİNYALİ_YAKALA") ? "SİNYALİ_YAKALA" : "GÖR";
+  const ankorIdx = adimlarTemiz.findIndex((a) => a.adim === ankorAdim);
+  const adimlarYapiEklenmis =
+    ankorIdx !== -1
+      ? [...adimlarTemiz.slice(0, ankorIdx + 1), yapiyiKontrolEtAdimi, ...adimlarTemiz.slice(ankorIdx + 1)]
+      : [yapiyiKontrolEtAdimi, ...adimlarTemiz];
+
   // KISA_KURAL adımı — AI ne yazmış olursa olsun SOURCE OF TRUTH ile
   // EZİLİR. Reel'de görünecek/söylenecek nihai gramer iddiası her zaman
   // insan onaylı aciklama_tr + sinyal_kurali'nden gelir, AI'ın kendi
   // cümlesinden değil. Bu, AI'ın hiçbir zaman nihai gerçek haline
   // gelmemesini garanti eden asıl mekanizmadır.
   const kisaKuralMetni = `${kural} ${soru.aciklama_tr}`.trim().slice(0, 260);
-  const kuralVarMi = adimlarTemiz.some((a) => a.adim === "KISA_KURAL");
+  const kuralVarMi = adimlarYapiEklenmis.some((a) => a.adim === "KISA_KURAL");
   const adimlarSon = kuralVarMi
-    ? adimlarTemiz.map((a) => (a.adim === "KISA_KURAL" ? { ...a, metin: kisaKuralMetni } : a))
-    : [...adimlarTemiz, { adim: "KISA_KURAL", metin: kisaKuralMetni }];
+    ? adimlarYapiEklenmis.map((a) => (a.adim === "KISA_KURAL" ? { ...a, metin: kisaKuralMetni } : a))
+    : [...adimlarYapiEklenmis, { adim: "KISA_KURAL", metin: kisaKuralMetni }];
 
   // Sadece raporlama/şeffaflık amaçlı — render/yayın akışını etkilemiyor.
   const kullanim = data?.usage

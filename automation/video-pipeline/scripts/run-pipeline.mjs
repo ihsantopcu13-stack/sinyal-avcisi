@@ -12,7 +12,19 @@ import { tiktokYayinlaBuffer } from "./upload-tiktok-buffer.mjs";
 
 async function main() {
   console.log("1/6 Günün sorusu seçiliyor (gerçek soru havuzu)...");
-  await scriptUret();
+  const scriptSonuc = await scriptUret();
+
+  // ATLANDI — kaynak veri kalite kontrolünden geçemedi (bkz.
+  // generate-script.mjs:veriKalitesiSorunu). Bu bir HATA/crash DEĞİL,
+  // bilinçli bir güvenlik kararı: audio/render/YouTube/Instagram/TikTok
+  // adımlarının hiçbiri çalıştırılmadan pipeline nazikçe sonlanır.
+  if (scriptSonuc.atlandi) {
+    console.log("\n=== PIPELINE ATLANDI (güvenlik kararı, hata değil) ===");
+    console.log(`Soru ID: ${scriptSonuc.soruIndex}`);
+    console.log(`Sebep: ${scriptSonuc.sebep}`);
+    console.log("Kaynak veri kalite kontrolünden geçemedi — audio/render/upload adımları çalıştırılmadı.");
+    return;
+  }
 
   console.log("2/6 Seslendirme üretiliyor (OpenAI TTS)...");
   await audioUret();

@@ -75,7 +75,46 @@ function sabloniSenaryoUret(soru, hook, kapanisTr) {
   };
 }
 
-async function needsReviewLogYaz(soruIndex, soru, sebep) {
+// VERİ KALİTE KAPISI — AVCI/şablon ayrımından ÖNCE, ikisinin de ortak
+// girişinde çalışır. Amaç: kaynak sorunun KENDİSİ bozuksa (boş alan,
+// geçersiz dogru_index, bozuk karakter...) ne AVCI ne de "güvenli"
+// şablon yolu bu bozuk veriyi yayınlamasın — şablon yolu da aynı ham
+// alanları (soru_tr, secenekler_tr, aciklama_tr) kullandığı için AVCI
+// hatalarına karşı olan fallback, kaynak veri hatasına karşı koruma
+// SAĞLAMAZ. Bu yüzden bu kontrol ayrı ve her ikisinden önce gelir.
+// Dönüş: sorun yoksa null, varsa insan-okunur bir sebep string'i.
+export function veriKalitesiSorunu(soru) {
+  if (!soru) return "soru_bulunamadi";
+
+  const metinAlanlari = [soru.soru_en, soru.soru_tr, soru.aciklama_tr, soru.sinyal, ...(soru.secenekler_tr ?? [])];
+  if (metinAlanlari.some((a) => typeof a === "string" && a.includes("�"))) {
+    return "bozuk_karakter (U+FFFD)";
+  }
+  if (!soru.soru_en || !soru.soru_en.trim()) return "bos_soru_en";
+  if (!soru.soru_tr || !soru.soru_tr.trim()) return "bos_soru_tr";
+  if (!soru.aciklama_tr || !soru.aciklama_tr.trim()) return "bos_aciklama_tr";
+  if (!Array.isArray(soru.secenekler_tr)) return "secenekler_tr_yok";
+  if (soru.secenekler_tr.length !== 4) return `secenekler_tr_4_eleman_degil (${soru.secenekler_tr.length})`;
+  if (soru.secenekler_tr.some((s) => typeof s !== "string" || !s.trim())) return "bos_secenek";
+  if (!Number.isInteger(soru.dogru_index) || soru.dogru_index < 0 || soru.dogru_index > 3) {
+    return `gecersiz_dogru_index (${soru.dogru_index})`;
+  }
+  if (!soru.secenekler_tr[soru.dogru_index] || !soru.secenekler_tr[soru.dogru_index].trim()) {
+    return "dogru_secenek_bulunamiyor";
+  }
+  // NOT: eksik/boş sinyal burada bloke edilmiyor. Şablon yolu sinyal
+  // olmadan da güvenle çalışıyor (narrasyonVeAltyaziSatirlariUret'te
+  // opsiyonel bir satır, hiç kırılmıyor) — bu yüzden "eksik sinyal" bir
+  // KAYNAK VERİ BOZUKLUĞU değil, sadece AVCI'nin whitelist kapısının
+  // (avci-ogretim-katmani.mjs) kendi needs_review sebebi. Bunu burada da
+  // bloke etmek, flag KAPALIYKEN bile önceden sorunsuz yayınlanan
+  // sinyal'siz sorularda YENİ bir ATLANDI regresyonu yaratıyordu — test
+  // sırasında yakalanıp düzeltildi (bkz. FAZ1 nihai rapor, Test F).
+
+  return null;
+}
+
+async function needsReviewLogYaz(soruIndex, soru, sebep, tur = "needs_review") {
   let kayitlar = [];
   try {
     kayitlar = JSON.parse(await readFile(NEEDS_REVIEW_LOG_PATH, "utf-8"));
@@ -85,9 +124,10 @@ async function needsReviewLogYaz(soruIndex, soru, sebep) {
   }
   kayitlar.push({
     tarih: new Date().toISOString(),
+    tur, // 'needs_review' (AVCI şüpheli) | 'veri_kalitesi' (kaynak veri bozuk, ATLANDI)
     soruIndex,
-    soruEn: soru.soru_en,
-    sinyal: soru.sinyal,
+    soruEn: soru?.soru_en,
+    sinyal: soru?.sinyal,
     sebep,
   });
   await mkdir(DATA_DIR, { recursive: true });
@@ -96,14 +136,16 @@ async function needsReviewLogYaz(soruIndex, soru, sebep) {
 
 // Her pipeline çalışmasında AVCI katmanının durumunu görünür şekilde
 // raporlar — hem konsola hem (varsa) GitHub Actions job summary'sine.
-// Amaç: fallback'lerin haftalarca fark edilmeden sessizce çalışmaması.
-async function ozetYazdir({ soruIndex, uretimKaynagi, sebep }) {
-  const durum = uretimKaynagi === "avci" ? "OK" : "FALLBACK";
+// Amaç: fallback'lerin/skip'lerin haftalarca fark edilmeden sessizce
+// çalışmaması. durum: 'avci' | 'sablon' | 'atlandi'.
+async function ozetYazdir({ soruIndex, durum, sebep }) {
+  const etiket = durum === "avci" ? "OK" : durum === "atlandi" ? "SKIP" : "FALLBACK";
+  const uretimKaynagiEtiket = durum === "avci" ? "AVCI" : durum === "atlandi" ? "YOK" : "ŞABLON";
   const satirlar = [
-    `AVCI: ${durum}`,
+    `AVCI: ${etiket}`,
     `Soru ID: ${soruIndex}`,
-    `Sebep: ${sebep ?? (durum === "OK" ? "-" : "flag_kapali")}`,
-    `Üretim kaynağı: ${uretimKaynagi === "avci" ? "AVCI" : "ŞABLON"}`,
+    `Sebep: ${sebep ?? (durum === "avci" ? "-" : "flag_kapali")}`,
+    `Üretim kaynağı: ${uretimKaynagiEtiket}`,
   ];
   console.log("\n=== AVCI ÖZET ===\n" + satirlar.join("\n") + "\n");
 
@@ -127,15 +169,24 @@ async function scriptOlustur() {
   const sorular = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
   const soruIndex = gununSoruIndeksi(sorular.length);
   const soru = sorular[soruIndex];
+
+  // VERİ KALİTE KAPISI — AVCI/şablon ayrımından ÖNCE. Kaynak veri
+  // bozuksa NE AVCI NE ŞABLON çalışır: ATLANDI. (bkz. veriKalitesiSorunu)
+  const veriSorunu = veriKalitesiSorunu(soru);
+  if (veriSorunu) {
+    await needsReviewLogYaz(soruIndex, soru, veriSorunu, "veri_kalitesi");
+    await ozetYazdir({ soruIndex, durum: "atlandi", sebep: veriSorunu });
+    return { atlandi: true, soruIndex, sebep: veriSorunu };
+  }
+
   const hook = sabloniSec(HOOK_SABLONLARI, 7);
   const kapanisTr = sabloniSec(KAPANIS_SABLONLARI, 13);
-
   const sablonSenaryo = sabloniSenaryoUret(soru, hook, kapanisTr);
 
   // Flag kapalıyken davranış bugünküyle BYTE-BYTE aynı kalmalı.
   if (process.env.AVCI_OGRETIM_KATMANI !== "on") {
     const senaryo = { ...sablonSenaryo, uretimKaynagi: "sablon" };
-    await ozetYazdir({ soruIndex, uretimKaynagi: "sablon", sebep: "flag_kapali" });
+    await ozetYazdir({ soruIndex, durum: "sablon", sebep: "flag_kapali" });
     return senaryo;
   }
 
@@ -147,14 +198,14 @@ async function scriptOlustur() {
   }
 
   if (avciSonuc.status !== "ok") {
-    await needsReviewLogYaz(soruIndex, soru, avciSonuc.sebep);
-    await ozetYazdir({ soruIndex, uretimKaynagi: "sablon", sebep: avciSonuc.sebep });
+    await needsReviewLogYaz(soruIndex, soru, avciSonuc.sebep, "needs_review");
+    await ozetYazdir({ soruIndex, durum: "sablon", sebep: avciSonuc.sebep });
     // Şüpheli/eksik AVCI içeriği HİÇBİR ZAMAN buradan aşağı geçmiyor —
     // sadece log dosyasına yazıldı, senaryoya hiç karışmıyor.
     return { ...sablonSenaryo, uretimKaynagi: "sablon" };
   }
 
-  await ozetYazdir({ soruIndex, uretimKaynagi: "avci" });
+  await ozetYazdir({ soruIndex, durum: "avci" });
   return {
     ...sablonSenaryo, // hook/soru_en/secenekler_tr/dogru_index/aciklama_tr/kapanis_tr — indirici tüketiciler için değişmeden kalır
     uretimKaynagi: "avci",
@@ -189,7 +240,17 @@ function narrasyonVeAltyaziSatirlariUret(senaryo) {
 }
 
 export async function scriptUret() {
-  const senaryo = await scriptOlustur();
+  const sonuc = await scriptOlustur();
+
+  // ATLANDI — kaynak veri kalite kontrolünden geçemedi. script.json bile
+  // YAZILMIYOR (out/ klasöründe eski/bayat bir dosya varsa onunla devam
+  // edilmesin) — çağıran taraf (run-pipeline.mjs) bunu kontrol edip
+  // audio/render/upload adımlarını hiç çalıştırmamalı.
+  if (sonuc.atlandi) {
+    return { atlandi: true, soruIndex: sonuc.soruIndex, sebep: sonuc.sebep };
+  }
+
+  const senaryo = sonuc;
   const satirlar = narrasyonVeAltyaziSatirlariUret(senaryo);
   const cikti = { senaryo, satirlar, narrasyon: satirlar.join(" ... ") };
 
