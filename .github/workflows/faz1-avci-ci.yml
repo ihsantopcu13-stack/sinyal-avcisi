@@ -1,0 +1,39 @@
+name: FAZ 1 — AVCI Öğretim Katmanı CI (izole, yayın YOK)
+
+# Bu workflow SADECE FAZ 1'in izole birim testlerini çalıştırır.
+# - Gerçek Anthropic/Instagram/Buffer/Vercel çağrısı YOK.
+# - TTS, Remotion render, upload script'leri hiç import edilmiyor.
+# - GitHub Secrets kullanılmıyor (aşağıda hiç `secrets.` referansı yok).
+# - Sadece pull_request (main'e) ve manuel workflow_dispatch ile çalışır
+#   — cron/schedule YOK, push tetikleyicisi YOK.
+# - contents:read dışında hiçbir izin verilmiyor.
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  faz1-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Sözdizimi doğrulaması (npm install YOK — bu testler hiçbir npm bağımlılığı gerektirmiyor)
+        run: |
+          node --check automation/video-pipeline/scripts/avci-ogretim-katmani.mjs
+          node --check automation/video-pipeline/scripts/generate-script.mjs
+          node --check automation/video-pipeline/scripts/run-pipeline.mjs
+          node --check automation/video-pipeline/data/sinyal-kurallari.mjs
+          node --check automation/video-pipeline/tests/faz1-ci-test.mjs
+
+      - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
+        run: node automation/video-pipeline/tests/faz1-ci-test.mjs
