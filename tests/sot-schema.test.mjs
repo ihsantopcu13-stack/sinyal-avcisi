@@ -88,6 +88,21 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
   kontrol("9) Pedagojik alanların tipi string ya da null", yanlisTip.length === 0, yanlisTip.join(", "));
 }
 
+// ---- alinti (İngilizce cümlenin tırnak içinde gösterilip gösterilmeyeceği) ----
+// AŞAMA 3'te frontend mirror generator'ı yazarken keşfedildi: orijinal
+// SL_HAVUZ'da 59 sorunun 38'i cümleyi literal tırnak içinde (alıntı
+// gibi) gösteriyor, 21'i (q024-q044 bandı) göstermiyor — kategoriden
+// türetilemeyen, salt sunumla ilgili bir farktır; kayıpsız temsil için
+// canonical'a eklendi (bkz. scripts/sl-havuz-generator.mjs).
+{
+  const yanlisTipliAlinti = sorular.filter((s) => typeof s.alinti !== "boolean");
+  kontrol("9b) Her soruda 'alinti' boolean alanı var", yanlisTipliAlinti.length === 0, yanlisTipliAlinti.map((s) => s.id).join(","));
+}
+{
+  const alintisiz = sorular.filter((s) => s.alinti === false);
+  kontrol("9c) alinti=false sayısı 21 (bilinen q024-q044 bandı)", alintisiz.length === 21, `bulunan: ${alintisiz.length}`);
+}
+
 // ---- bilinen 2 sinyal düzeltmesi (eski frontend hatası, canonical doğru değeri korur) ----
 {
   const q011 = sorular.find((s) => s.id === "q011");
