@@ -28,6 +28,8 @@ export const SINYAL_KURALLARI = {
   "contrary to": "\"Contrary to\" bir EDAT ifadesidir — arkasından isim/V-ing gelir, zıtlık anlamı taşır.",
   "contrary to popular belief": "\"Contrary to popular belief\" sabit bir zarf ifadesidir — yaygın inanışın aksine anlamındadır, cümlenin geri kalanı bu inanışla ZIT bir bilgi verir.",
   "on the contrary": "\"On the contrary\" bir zarf/bağlayıcıdır — önceki cümledeki fikri tam tersine çevirir, genelde noktalama (. veya ;) ile ayrılır.",
+  "nonetheless": "\"Nonetheless\" bir bağlayıcı ZARF'tır — \"buna rağmen/yine de\" anlamı verir; although gibi bağlaç veya despite gibi edat değildir.",
+  "anything but": "\"Anything but X\" idiomatik bir GİZLİ OLUMSUZLUKTUR — \"X hiç değil/X'ten çok uzak\" anlamına gelir; kelimesi kelimesine çevrilmez.",
   "although": "\"Although\" bir BAĞLAÇ'tır — arkasından S+V (tam cümle) gelir, isim/V-ing gelmez.",
   "even though": "\"Even though\" bir BAĞLAÇ'tır (although ile eşdeğer, daha vurgulu) — arkasından S+V (tam cümle) gelir.",
   "whereas": "\"Whereas\" bir BAĞLAÇ'tır — iki cümleyi zıtlık ilişkisiyle bağlar, her iki tarafta da S+V bulunur.",

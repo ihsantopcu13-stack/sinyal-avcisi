@@ -43,6 +43,43 @@ export const ADIM_ENUM = [
 
 const HARFLER = ["A", "B", "C", "D"];
 
+// YAPISAL_KONTROL_UYGULANSIN — YAPIYI_KONTROL_ET adımı artık whitelist'teki
+// HER sinyale koşulsuz eklenmiyor. Mimari denetimde (bkz. proje raporu)
+// tespit edildi: bazı sinyaller (bağlayıcı zarflar: yet/consequently/
+// therefore/thus/on the contrary; modal perfect: must/should/could/might
+// have; sabit idiomlar: contrary to popular belief) için "bitişiğine bak"
+// sorusu ya GEREKSİZ (yapı zaten sabit, kontrol edilecek değişken yok) ya
+// da YANILTICI (asıl mesele bitişik yapı değil, önceki cümleyle anlamsal
+// ilişki). Bu Set'te SADECE gerçekten yapısal bir tuzak taşıyan (isim/
+// V-ing/S+V ayrımı öğrenciye bir şey öğreten) sinyaller var. Whitelist'in
+// kendisi (SINYAL_KURALLARI) string format olarak DEĞİŞMEDİ — bu sadece
+// avci-ogretim-katmani.mjs'in dahili bir davranış anahtarı.
+const YAPISAL_KONTROL_UYGULANSIN = new Set([
+  "despite",
+  "notwithstanding",
+  "contrary to",
+  "although",
+  "even though",
+  "whereas",
+  "while",
+  "because",
+  "since",
+  "as a consequence of",
+  "by the time",
+  "prior to",
+  "once",
+  "no sooner had",
+  "unless",
+  "provided that",
+  "on condition that",
+  "as long as",
+  "rather than",
+  "not only",
+  "so as to",
+  "nor",
+  "after",
+]);
+
 const SISTEM_PROMPT = `Sen Sinyal Avcısı'nın Reel öğretim senaryosu yazarısın.
 Sana bir YDS/YÖKDİL sorusu ve BU SORUNUN ZATEN DOĞRULANMIŞ cevabı/açıklaması verilecek.
 
@@ -226,22 +263,27 @@ export async function avciOgretimUret(soru) {
   }
 
   // YAPIYI_KONTROL_ET — AI'nın seçebileceği bir adım DEĞİL, kod tarafından
-  // her zaman eklenen deterministik bir adım. Metni SADECE whitelist'teki
-  // insan-onaylı sinyal_kurali'ne dayanır; soru_en'den kesilmiş/kırpılmış
-  // yapisal_baglam metni burada HİÇ alıntılanmaz (ham/kesik metin
-  // kullanıcıya doğrudan basılmaz) — böylece bu adım her zaman güvenli ve
-  // tam cümledir. SİNYALİ_YAKALA'dan hemen sonra (yoksa GÖR'den sonra,
-  // o da yoksa en başa) eklenir.
-  const yapiyiKontrolEtAdimi = {
-    adim: "YAPIYI_KONTROL_ET",
-    metin: `"${soru.sinyal}" kelimesinin hemen bitişiğine bak — ${kural}`.trim().slice(0, 260),
-  };
-  const ankorAdim = adimlarTemiz.find((a) => a.adim === "SİNYALİ_YAKALA") ? "SİNYALİ_YAKALA" : "GÖR";
-  const ankorIdx = adimlarTemiz.findIndex((a) => a.adim === ankorAdim);
-  const adimlarYapiEklenmis =
-    ankorIdx !== -1
-      ? [...adimlarTemiz.slice(0, ankorIdx + 1), yapiyiKontrolEtAdimi, ...adimlarTemiz.slice(ankorIdx + 1)]
-      : [yapiyiKontrolEtAdimi, ...adimlarTemiz];
+  // eklenen deterministik bir adım — AMA artık KOŞULSUZ değil. Sadece
+  // sinyal YAPISAL_KONTROL_UYGULANSIN Set'indeyse eklenir (mimari denetim
+  // sonucu: bağlayıcı zarf/modal-perfect/sabit-idiom tipi sinyallerde
+  // "bitişiğine bak" sorusu gereksiz veya yanıltıcı). Eklendiğinde metni
+  // SADECE whitelist'teki insan-onaylı sinyal_kurali'ne dayanır;
+  // soru_en'den kesilmiş/kırpılmış yapisal_baglam metni burada HİÇ
+  // alıntılanmaz. SİNYALİ_YAKALA'dan hemen sonra (yoksa GÖR'den sonra, o
+  // da yoksa en başa) eklenir.
+  let adimlarYapiEklenmis = adimlarTemiz;
+  if (YAPISAL_KONTROL_UYGULANSIN.has(sinyalKey)) {
+    const yapiyiKontrolEtAdimi = {
+      adim: "YAPIYI_KONTROL_ET",
+      metin: `"${soru.sinyal}" kelimesinin hemen bitişiğine bak — ${kural}`.trim().slice(0, 260),
+    };
+    const ankorAdim = adimlarTemiz.find((a) => a.adim === "SİNYALİ_YAKALA") ? "SİNYALİ_YAKALA" : "GÖR";
+    const ankorIdx = adimlarTemiz.findIndex((a) => a.adim === ankorAdim);
+    adimlarYapiEklenmis =
+      ankorIdx !== -1
+        ? [...adimlarTemiz.slice(0, ankorIdx + 1), yapiyiKontrolEtAdimi, ...adimlarTemiz.slice(ankorIdx + 1)]
+        : [yapiyiKontrolEtAdimi, ...adimlarTemiz];
+  }
 
   // KISA_KURAL adımı — AI ne yazmış olursa olsun SOURCE OF TRUTH ile
   // EZİLİR. Reel'de görünecek/söylenecek nihai gramer iddiası her zaman
