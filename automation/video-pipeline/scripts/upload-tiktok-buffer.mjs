@@ -22,7 +22,10 @@ import path from "node:path";
 import { hashtagSeti } from "./_seo.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = path.join(__dirname, "..", "out");
+// Testler gerçek out/ dosyalarına DOKUNMADAN izole çalışabilsin diye
+// opsiyonel bir override — normal pipeline çalışmasında bu env
+// değişkeni hiç set edilmez, davranış değişmez.
+const OUT_DIR = process.env.PIPELINE_OUT_DIR_OVERRIDE || path.join(__dirname, "..", "out");
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY;
@@ -95,6 +98,18 @@ async function bufferGraphQL(query) {
   return json.data;
 }
 
+// Kalıcı config eksikliğini (TikTok kanalı hiç bağlanmamış/BUFFER_TIKTOK_
+// CHANNEL_ID hiçbir bağlı kanalla eşleşmiyor) transient/gerçek API
+// hatalarından ayırmak için özel bir tip — SADECE tiktokYayinlaBuffer()
+// bunu yakalayıp SKIPPED'e çevirir; bufferGraphQL()'den gelen network/
+// auth/500/rate-limit hataları bu sınıfa GİRMEZ, olduğu gibi fırlar.
+class ChannelNotConfiguredError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ChannelNotConfiguredError";
+  }
+}
+
 async function findTikTokChannel() {
   const accountData = await bufferGraphQL("{ account { organizations { id name } } }");
   const organizations = accountData?.account?.organizations ?? [];
@@ -115,7 +130,7 @@ async function findTikTokChannel() {
     if (tiktok) return tiktok;
   }
 
-  throw new Error("Bağlı bir TikTok kanalı bulunamadı — Buffer hesabınıza TikTok kanalının eklendiğinden emin olun.");
+  throw new ChannelNotConfiguredError("TikTok channel not configured");
 }
 
 function captionOlustur(senaryo) {
@@ -171,7 +186,18 @@ export async function tiktokYayinlaBuffer() {
   const videoUrl = await uploadReleaseAsset(release, path.join(OUT_DIR, "video.mp4"), "video.mp4");
   console.log("Video herkese açık URL (TikTok):", videoUrl);
 
-  const channel = await findTikTokChannel();
+  let channel;
+  try {
+    channel = await findTikTokChannel();
+  } catch (err) {
+    if (err instanceof ChannelNotConfiguredError) {
+      const skip = { skipped: true, reason: "TikTok channel not configured", skippedAt: new Date().toISOString() };
+      await writeFile(path.join(OUT_DIR, "tiktok-result.json"), JSON.stringify(skip, null, 2));
+      console.log("Atlandı (TikTok): TikTok channel not configured");
+      return skip;
+    }
+    throw err;
+  }
   console.log(`Bağlı TikTok kanalı: ${channel.name} (${channel.id})`);
 
   const post = await publishToBuffer(channel.id, videoUrl, caption);

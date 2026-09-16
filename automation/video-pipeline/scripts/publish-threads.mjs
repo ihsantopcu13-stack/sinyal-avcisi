@@ -13,7 +13,10 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = path.join(__dirname, "..", "out");
+// Testler gerçek out/ dosyalarına DOKUNMADAN izole çalışabilsin diye
+// opsiyonel bir override — normal pipeline çalışmasında bu env
+// değişkeni hiç set edilmez, davranış değişmez.
+const OUT_DIR = process.env.PIPELINE_OUT_DIR_OVERRIDE || path.join(__dirname, "..", "out");
 
 const BUFFER_ACCESS_TOKEN = process.env.BUFFER_ACCESS_TOKEN;
 
@@ -28,6 +31,18 @@ async function bufferGraphQL(query) {
     throw new Error(`Buffer GraphQL hatası: ${res.status} ${JSON.stringify(json.errors ?? json)}`);
   }
   return json.data;
+}
+
+// Kalıcı config eksikliğini (Threads kanalı hiç bağlanmamış) transient/
+// gerçek API hatalarından ayırmak için özel bir tip — SADECE
+// threadsYayinla() bunu yakalayıp SKIPPED'e çevirir; bufferGraphQL()'den
+// gelen network/auth/500/rate-limit hataları bu sınıfa GİRMEZ, olduğu
+// gibi fırlar.
+class ChannelNotConfiguredError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ChannelNotConfiguredError";
+  }
 }
 
 async function findThreadsChannel() {
@@ -47,7 +62,7 @@ async function findThreadsChannel() {
   // — "threads" servis adı yanlış tahmin mi, yoksa kanal gerçekten yok mu
   // tek çalıştırmada anlaşılsın.
   console.error("Bağlı kanallar:", JSON.stringify(hepsiKanallar, null, 2));
-  throw new Error("Bağlı bir Threads kanalı bulunamadı.");
+  throw new ChannelNotConfiguredError("Threads channel not configured");
 }
 
 function dueAtIso() {
@@ -82,7 +97,18 @@ export async function threadsYayinla() {
 
   const { metin } = JSON.parse(await readFile(path.join(OUT_DIR, "threads-post.json"), "utf-8"));
 
-  const channel = await findThreadsChannel();
+  let channel;
+  try {
+    channel = await findThreadsChannel();
+  } catch (err) {
+    if (err instanceof ChannelNotConfiguredError) {
+      const skip = { skipped: true, reason: "Threads channel not configured", skippedAt: new Date().toISOString() };
+      await writeFile(path.join(OUT_DIR, "threads-result.json"), JSON.stringify(skip, null, 2));
+      console.log("Atlandı (Threads): Threads channel not configured");
+      return skip;
+    }
+    throw err;
+  }
   console.log(`Bağlı Threads kanalı: ${channel.name} (${channel.id})`);
 
   const post = await publishToBuffer(channel.id, metin);
