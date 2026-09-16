@@ -6104,6 +6104,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </form>
   </div>
 </div>
+<!-- FAZ 2 — attribution modülü, ana script bloğundan ÖNCE (senkron) yüklenir
+     ki window.SinyalAttribution aşağıdaki kodlar çalışmadan önce hazır olsun. -->
+<script src="assets/modules/attribution.js"></script>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
@@ -6503,6 +6506,10 @@ function tamEkranAcKapat(modId){
   }
 }
 function dtab(el,mod){
+  // FAZ 2 — lesson_opened: "ders" niteliğindeki modüller için (S+V+O,
+  // Teknik, Dil Avcısı). Diğer mod'lar (sinyal/kelime/tuzak/sat vb.)
+  // kendi event'lerini ayrı yerlerde atıyor, burada tekrar atılmıyor.
+  if(mod==='svo'||mod==='teknik'||mod==='dilavcisi')faz2GaEvent('lesson_opened',{lesson_id:mod});
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');
   const clAcikKen=document.getElementById('mod-canliders');
   if(mod!=='canliders'&&clAcikKen&&clAcikKen.style.display==='block'&&typeof clDurdur==='function')clDurdur();
@@ -6770,6 +6777,12 @@ function dAns(btn,correct){
   const fb=document.getElementById('dm-fb');
   const nextBtn=document.getElementById('sl-next-btn');
   const soru=slCurrentSoru||SL_HAVUZ[slIdx];
+  // FAZ 2 — question_answered + answer_correct/answer_wrong. slAnswered
+  // guard'ı zaten yukarıda erken-çıkış yaptığı için bu event'ler her
+  // soru için tam olarak 1 kez atılır (duplicate riski yok).
+  var __slQidAns=SL_HAVUZ.indexOf(soru);
+  faz2GaEvent('question_answered',{question_id:__slQidAns,correct:Boolean(correct)});
+  faz2GaEvent(correct?'answer_correct':'answer_wrong',{question_id:__slQidAns});
   if(correct){
     btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('sinyal');
@@ -8004,12 +8017,92 @@ const SL_HAVUZ=[
 
 let slIdx=0,slAnswered=false,slCurrentSoru=null;
 
+// ============================================================
+// FAZ 2 — LEGACY_SL_HAVUZ_ADAPTER (GEÇİCİ, KALDIRILABİLİR)
+// ============================================================
+// SL_HAVUZ, automation/video-pipeline/data/sorular.json ile AYNI 59
+// soru ama ayrı, elle gömülü bir kopya — temiz bir "sinyal" alanı YOK,
+// sinyal kelimesi sadece <span class="s-sig"> içinde HTML olarak duruyor.
+// Gerçek source-of-truth sorular.json'dur; frontend şu an ona doğrudan
+// (bir API üzerinden) bağlı değil (mevcut statik mimari). Bu adaptör
+// SADECE bu boşluğu geçici olarak dolduruyor: SL_HAVUZ'un HTML'inden
+// sinyal bilgisini çıkarıp deep-link eşleştirmesi için kullanıyor.
+//
+// BU REGEX PARSING UYGULAMANIN DOMAIN MANTIĞI DEĞİLDİR — sadece bu
+// adaptörle sınırlıdır. Gelecekte frontend gerçek soru verisine (API/
+// fetch ile) bağlanırsa bu adaptör kaldırılıp SL_HAVUZ yerine o veri
+// kullanılabilir; index.html'in başka hiçbir yeri buna bağımlı değil.
+var LEGACY_SL_HAVUZ_ADAPTER=(function(){
+  var indeksHaritasi=null; // {normalizeSinyal(sinyal): [havuz indeksleri]}
+  function haritayiKur(){
+    indeksHaritasi={};
+    SL_HAVUZ.forEach(function(soru,i){
+      var m=/class="s-sig"[^>]*>([^<]+)</.exec(soru.sent||'');
+      if(!m)return;
+      var sinyal=window.SinyalAttribution?window.SinyalAttribution._normalizeSinyal(m[1]):m[1].trim().toLowerCase();
+      if(!sinyal)return;
+      (indeksHaritasi[sinyal]=indeksHaritasi[sinyal]||[]).push(i);
+    });
+  }
+  function indeksleriBul(sinyalNormalized){
+    if(!indeksHaritasi)haritayiKur();
+    return indeksHaritasi[sinyalNormalized]||[];
+  }
+  return {indeksleriBul:indeksleriBul};
+})();
+
+// Deep-link çözümleyici — signal param'ı varsa ilgili soruya atlamak
+// için slIdx'i (ve bir kerelik render override'ını) ayarlar. Eşleşme
+// yoksa (bilinmeyen sinyal) HİÇBİR ŞEY YAPMAZ — genel Sinyal Lab akışı
+// normal şekilde devam eder, crash olmaz (TEST 6/9).
+// Merkezi GA4 event helper — FAZ 2'nin tüm öğrenme event'leri BUNU
+// kullanır, isim/parametre şekli tek yerden kontrol edilir. gtag yoksa
+// (adblocker vb.) veya hata olursa SESSİZCE geçer, siteyi bozmaz.
+// Secret/kişisel veri gönderilmez — sadece attribution context + verilen ek alanlar.
+function faz2GaEvent(ad,ek){
+  try{
+    if(typeof gtag!=='function')return;
+    var ctx=window.SinyalAttribution?window.SinyalAttribution.context():{};
+    gtag('event',ad,Object.assign({},ctx,ek||{}));
+  }catch(e){ /* analytics asla siteyi bozmamalı */ }
+}
+
+window.__slDeepLinkSoru=null;
+function faz2DeepLinkUygula(){
+  try{
+    if(!window.SinyalAttribution)return;
+    var ctx=window.SinyalAttribution.context();
+    if(!ctx.signal)return;
+    var indeksler=LEGACY_SL_HAVUZ_ADAPTER.indeksleriBul(ctx.signal);
+    if(indeksler.length===0)return; // bilinmeyen sinyal -> güvenli fallback (genel havuz)
+    var idx=indeksler[0];
+    slIdx=idx;
+    window.__slDeepLinkSoru=SL_HAVUZ[idx];
+  }catch(e){ /* deep-link asla siteyi bozmamalı */ }
+}
+
 function slRender(){
-  const alanFiltre=curAlan||'Genel';
-  const filtreliSorular=SL_HAVUZ.filter(s=>s.eye.includes(alanFiltre)||s.eye.includes('Genel'));
-  const havuz=filtreliSorular.length>0?filtreliSorular:SL_HAVUZ;
-  const soru=havuz[slIdx%havuz.length];
+  let havuz,soru;
+  // FAZ 2 deep-link override — bir kerelik: tüketilince temizlenir ki
+  // sonraki "Sonraki soru" tıklaması normal filtreli akışa döner.
+  if(window.__slDeepLinkSoru){
+    soru=window.__slDeepLinkSoru;
+    window.__slDeepLinkSoru=null;
+    havuz=[soru];
+    slIdx=0;
+  } else {
+    const alanFiltre=curAlan||'Genel';
+    const filtreliSorular=SL_HAVUZ.filter(s=>s.eye.includes(alanFiltre)||s.eye.includes('Genel'));
+    havuz=filtreliSorular.length>0?filtreliSorular:SL_HAVUZ;
+    soru=havuz[slIdx%havuz.length];
+  }
   slCurrentSoru=soru;
+  // FAZ 2 — question_view (aynı soru tekrar render edilirse duplicate atmaz)
+  var __slQid=SL_HAVUZ.indexOf(soru);
+  if(window.__slLastViewedQid!==__slQid){
+    window.__slLastViewedQid=__slQid;
+    faz2GaEvent('question_view',{question_id:__slQid});
+  }
   const eyebrow=document.getElementById('sl-eyebrow');
   const sent=document.getElementById('sl-sent');
   const q=document.getElementById('sl-q');
@@ -8472,6 +8565,7 @@ async function* sseMetinAkisi(reader){
 }
 
 async function avciSinyalCoz(pidx,sidx){
+  faz2GaEvent('avci_analysis_opened',{question_id:pidx+'-'+sidx});
   const p=PARAGRAFLAR[pidx];
   const s=p.sorular[sidx];
   const temizMetin=p.metin.replace(/<[^>]*>/g,'');
@@ -8574,6 +8668,13 @@ function svoOrneklerHTML(d){
 function slSonraki(){
   slIdx=(slIdx+1)%SL_HAVUZ.length;
   slRender();
+}
+// FAZ 2 — attribution yakalama + deep-link çözümü, ilk render'dan ÖNCE.
+// UTM/signal yoksa capture() sessizce mevcut/null döner, davranış değişmez.
+if(window.SinyalAttribution){
+  window.SinyalAttribution.capture();
+  faz2GaEvent('landing_view',{});
+  faz2DeepLinkUygula();
 }
 // İlk render
 setTimeout(slRender,100);
