@@ -49,6 +49,8 @@ jobs:
           node --check tests/sot-mirror.test.mjs
           node --check tests/sot-lookup-analytics.test.mjs
           node --check automation/video-pipeline/tests/sot-pipeline.test.mjs
+          node --check automation/video-pipeline/scripts/publish-next-marketing-asset.mjs
+          node --check automation/video-pipeline/tests/marketing-linkedin-skip.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -79,3 +81,6 @@ jobs:
 
       - name: SOURCE OF TRUTH — AŞAMA 5 AVCI/KLOD/video pipeline canonical kaynak testi
         run: node automation/video-pipeline/tests/sot-pipeline.test.mjs
+
+      - name: Pazarlama kuyruğu — LinkedIn kanalı bağlı değilken güvenli SKIP testi
+        run: node automation/video-pipeline/tests/marketing-linkedin-skip.test.mjs

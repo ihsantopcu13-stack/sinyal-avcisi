@@ -23,7 +23,10 @@ import { MARKETING_QUEUE } from "../data/marketing-queue.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const ASSETS_DIR = path.join(ROOT, "..", "..", "assets");
-const STATE_PATH = path.join(ROOT, "data", "marketing-queue-state.json");
+// Testler gerçek production state dosyasına DOKUNMADAN izole
+// çalışabilsin diye opsiyonel bir override — normal cron çalışmasında
+// bu env değişkeni hiç set edilmez, davranış değişmez.
+const STATE_PATH = process.env.MARKETING_QUEUE_STATE_PATH || path.join(ROOT, "data", "marketing-queue-state.json");
 const RELEASE_TAG = "marketing-assets-v1";
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -162,12 +165,21 @@ async function publishInstagramStory(item) {
   return result.post;
 }
 
+// Kalıcı config eksikliğini (kanal hiç bağlanmamış) transient hatalardan
+// ayırmak için özel bir hata tipi — publishNext() SADECE bunu (ve SADECE
+// linkedin_post öğelerinde) SKIP olarak ele alır, başka hiçbir hata türü
+// veya platform bundan etkilenmez.
+class ChannelNotConfiguredError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ChannelNotConfiguredError";
+  }
+}
+
 async function publishLinkedInPost(item) {
   const channel = await findBufferChannel("linkedin");
   if (!channel) {
-    throw new Error(
-      "Bağlı bir LinkedIn kanalı bulunamadı — Buffer hesabınıza LinkedIn sayfasının/profilinin eklendiğinden emin olun."
-    );
+    throw new ChannelNotConfiguredError("LinkedIn channel not configured");
   }
 
   const mutation = `
@@ -218,21 +230,46 @@ export async function publishNext() {
   const item = MARKETING_QUEUE[state.nextIndex];
   console.log(`Yayınlanıyor (${state.nextIndex + 1}/${MARKETING_QUEUE.length}): ${item.id}`);
 
-  const post =
-    item.type === "instagram_story"
-      ? await publishInstagramStory(item)
-      : await publishLinkedInPost(item);
+  let post = null;
+  let skipReason = null;
+  try {
+    post =
+      item.type === "instagram_story"
+        ? await publishInstagramStory(item)
+        : await publishLinkedInPost(item);
+  } catch (err) {
+    // SADECE linkedin_post + "kanal hiç bağlanmamış" (kalıcı config
+    // eksikliği, transient bir hata değil) durumunda kuyruğu güvenli
+    // şekilde SKIP ile ilerlet. Başka HER TÜRLÜ hata (Instagram dahil,
+    // veya LinkedIn'in kendi createPost mutasyonundaki başka bir hata)
+    // eskisi gibi fatal kalır — state ilerlemez, throw yeniden fırlatılır,
+    // ertesi gün cron aynı öğeyi yeniden dener.
+    if (item.type === "linkedin_post" && err instanceof ChannelNotConfiguredError) {
+      skipReason = "LinkedIn channel not configured";
+    } else {
+      throw err;
+    }
+  }
 
-  console.log(`Yayınlandı: ${item.id} → Buffer post ${post.id} (${post.status}, ${post.dueAt})`);
+  if (skipReason) {
+    console.log(`Atlandı (${item.id}): ${skipReason}`);
+  } else {
+    console.log(`Yayınlandı: ${item.id} → Buffer post ${post.id} (${post.status}, ${post.dueAt})`);
+  }
 
-  // State sadece BAŞARIDA ilerletilir — bir hata olsaydı script zaten
-  // throw edip non-zero exit ile biterdi, bu satıra hiç gelinmezdi.
+  // State sadece BAŞARI veya bilinçli SKIP'te ilerletilir — gerçek bir
+  // hata olsaydı yukarıda zaten throw edilip non-zero exit ile biterdi,
+  // bu satıra hiç gelinmezdi.
   state.nextIndex += 1;
   state.history = state.history || [];
-  state.history.push({ id: item.id, type: item.type, post, publishedAt: new Date().toISOString() });
+  state.history.push(
+    skipReason
+      ? { id: item.id, type: item.type, status: "skipped", reason: skipReason, skippedAt: new Date().toISOString() }
+      : { id: item.id, type: item.type, post, publishedAt: new Date().toISOString() }
+  );
   await writeState(state);
 
-  return { item: item.id, post };
+  return skipReason ? { item: item.id, skipped: true, reason: skipReason } : { item: item.id, post };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
