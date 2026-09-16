@@ -50,6 +50,7 @@ export const SINYAL_KURALLARI = {
   "might have": "\"Might have + V3\" geçmişe yönelik ZAYIF bir olasılık ifade eder (\"...mış olabilir\").",
 
   // ZAMAN SIRASI
+  "after": "\"After\" isim/V-ing alırsa EDAT, S+V alırsa BAĞLAÇ olarak kullanılabilir; iki kullanımda da zaman sırası bildirir.",
   "by the time": "\"By the time\" bir BAĞLAÇ'tır — arkasından S+V gelir, bir eylemin başka bir zamana kadar/o zamana dek tamamlandığını bildirir.",
   "prior to": "\"Prior to\" bir EDAT'tır — arkasından isim/V-ing gelir, \"-den önce\" anlamındadır.",
   "once": "\"Once\" zaman bağlacı olarak kullanıldığında arkasından S+V gelir, \"bir kere ... olunca\" anlamındadır.",
@@ -65,4 +66,5 @@ export const SINYAL_KURALLARI = {
   "rather than": "\"Rather than\" bir karşılaştırma ifadesidir — arkasından genelde isim/V-ing gelir, bir tercih/karşıtlık bildirir.",
   "not only": "\"Not only\" cümle başında kullanıldığında DEVRİK yapı gerektirir (yardımcı fiil öne gelir) ve genelde \"but also\" ile tamamlanır.",
   "so as to": "\"So as to\" bir amaç ifadesidir (\"in order to\" ile eşdeğer) — arkasından fiilin yalın hali (V1) gelir.",
+  "nor": "\"Nor\" önceki olumsuz ifadeye devam ettiğinde devrik yapı kullanır: yardımcı fiil + özne + fiil (\"nor did it reach\" gibi).",
 };
