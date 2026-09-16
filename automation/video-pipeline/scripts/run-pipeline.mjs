@@ -66,7 +66,11 @@ async function main() {
   );
   console.log(
     "TikTok:",
-    tiktok.status === "fulfilled" ? `${tiktok.value.id} ${tiktok.value.status}` : `HATA: ${tiktok.reason?.message || tiktok.reason}`
+    tiktok.status !== "fulfilled"
+      ? `HATA: ${tiktok.reason?.message || tiktok.reason}`
+      : tiktok.value?.skipped
+        ? `SKIPPED: ${tiktok.value.reason}`
+        : `${tiktok.value.id} ${tiktok.value.status}`
   );
 
   if (youtube.status === "rejected" || instagram.status === "rejected" || tiktok.status === "rejected") {
