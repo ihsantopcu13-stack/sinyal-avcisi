@@ -100,5 +100,22 @@ function kontrol(ad, sonuc, detay) {
   kontrol("17) eski shallow desen (sadece error: e.message) youtube dalında artık YOK", !/o\.youtube = \{ error: e\.message \};/.test(src));
 }
 
+// ---- TEST: retry-failed-master-publishes.mjs artık YouTube denemelerini güvenli tempoda sınırlıyor ----
+// (2026-09-17: gerçek bir çalıştırmada reason="uploadLimitExceeded" DOĞRULANDI
+// — bu test, her çalıştırmanın en fazla MAX_YOUTUBE_ATTEMPTS_PER_RUN kadar
+// YouTube denemesi yapıp kalanını bir sonraki çalıştırmaya bıraktığını,
+// script'i İTHAL ETMEDEN (main() import anında çalışır, gerçek ağa çıkar —
+// bu yüzden burada da sadece kaynak metin statik olarak inceleniyor).
+{
+  const src = readFileSync(path.join(ROOT, "scripts", "retry-failed-master-publishes.mjs"), "utf-8");
+
+  kontrol("18) MAX_YOUTUBE_ATTEMPTS_PER_RUN sabiti tanımlı, güvenli (küçük) bir varsayılanı var", /const MAX_YOUTUBE_ATTEMPTS_PER_RUN = Number\(process\.env\.MAX_YOUTUBE_ATTEMPTS_PER_RUN \|\| ["']3["']\)/.test(src));
+  kontrol("19) YouTube döngüsü deneme sayacını sınıra karşı kontrol ediyor", /ytAttempts >= MAX_YOUTUBE_ATTEMPTS_PER_RUN/.test(src));
+  kontrol("20) sınıra ulaşınca döngüden ÇIKIYOR (break), sonsuza kadar denemiyor", /ytAttempts >= MAX_YOUTUBE_ATTEMPTS_PER_RUN\) \{[\s\S]{0,400}?break;/.test(src));
+  kontrol("21) her gerçek deneme öncesi sayaç artıyor (ytAttempts++)", /ytAttempts\+\+/.test(src));
+  kontrol("22) uploadLimitExceeded erken-çıkışı hâlâ korunuyor (sınırdan bağımsız ikinci güvenlik ağı)", /reason === ["']uploadLimitExceeded["']/.test(src) && /break;/.test(src));
+  kontrol("23) kalan bölüm sayısı çalıştırma sonunda raporlanıyor (bir sonraki gün için)", /ytPending/.test(src) && /bir sonraki çalıştırmaya/.test(src));
+}
+
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
 if (basarisiz > 0) process.exit(1);

@@ -2,6 +2,16 @@
 // MASTER VİDEO PAKETİ — out/publish-all-report.json'daki başarısız
 // YouTube/Instagram işlemlerini tekrar dener (platform limitleri
 // zamanla açıldıkça). Başarılı olanları TEKRAR yayınlamaz.
+//
+// 2026-09-17 GÜVENLİ TEMPO: gerçek bir çalıştırmada reason'ın
+// "uploadLimitExceeded" olduğu doğrulandı — bu YouTube'un GÜNLÜK,
+// kanal bazlı yükleme SAYISI limiti (Google Cloud API birim kotasından
+// AYRI). Tam sayısal sınır API'den hiç okunamıyor, bu yüzden script
+// artık her çalıştırmada YouTube'a en fazla MAX_YOUTUBE_ATTEMPTS_PER_RUN
+// (varsayılan 3) deneme yapıyor, kalanları BİR SONRAKİ çalıştırmaya
+// (gün) bırakıyor — limit gün içinde zaten dolu olsa bile ilk denemede
+// hemen durduğu için (mevcut reason kontrolü) tek çalıştırma asla çok
+// sayıda başarısız çağrı yapmıyor.
 // ============================================================
 
 import { readFile, writeFile, access } from "node:fs/promises";
@@ -19,6 +29,10 @@ const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const REPORT_PATH = path.join(ROOT, "out", "publish-all-report.json");
+// YouTube'un tam günlük yükleme sayısı sınırı API'den okunamadığı için
+// güvenli tarafta kalmak amacıyla küçük tutuluyor — gerekirse env ile
+// override edilebilir.
+const MAX_YOUTUBE_ATTEMPTS_PER_RUN = Number(process.env.MAX_YOUTUBE_ATTEMPTS_PER_RUN || "3");
 
 function youtubeClient() {
   const client = new google.auth.OAuth2(process.env.YOUTUBE_CLIENT_ID, process.env.YOUTUBE_CLIENT_SECRET);
@@ -112,26 +126,34 @@ async function main() {
   const igFailed = report.outcomes.filter((o) => o.instagram?.error);
   console.log(`Yeniden denenecek: YouTube ${ytFailed.length}, Instagram ${igFailed.length}`);
 
+  let ytAttempts = 0;
   for (const o of report.outcomes) {
+    if (!o.youtube?.error) continue;
+
+    if (ytAttempts >= MAX_YOUTUBE_ATTEMPTS_PER_RUN) {
+      const kalan = report.outcomes.filter((x) => x.youtube?.error).length;
+      console.log(`Bu çalıştırmada YouTube deneme sınırına ulaşıldı (${MAX_YOUTUBE_ATTEMPTS_PER_RUN}/${MAX_YOUTUBE_ATTEMPTS_PER_RUN}) — kalan ${kalan} bölüm bir sonraki çalıştırmaya (gün) bırakılıyor.`);
+      break;
+    }
+
     const episode = ALL_EPISODES_META.find((e) => e.epNum === o.epNum);
     const videoPath = path.join(ROOT, "out", episode.videoFile);
 
-    if (o.youtube?.error) {
-      try {
-        const r = await uploadYouTube(episode, videoPath);
-        o.youtube = r;
-        console.log(`#${o.epNum} YouTube OK -> ${r.videoUrl}`);
-      } catch (e) {
-        const info = extractYoutubeErrorInfo(e);
-        o.youtube = info;
-        console.log(`#${o.epNum} YouTube hala başarısız: ${info.error} (reason: ${info.reason ?? "bilinmiyor"}, status: ${info.status ?? "bilinmiyor"})`);
-        if (info.reason === "uploadLimitExceeded" || /exceeded/i.test(info.error)) {
-          console.log("YouTube günlük yükleme limiti hâlâ dolu, kalan YouTube denemelerini atlıyorum.");
-          break;
-        }
+    ytAttempts++;
+    try {
+      const r = await uploadYouTube(episode, videoPath);
+      o.youtube = r;
+      console.log(`#${o.epNum} YouTube OK -> ${r.videoUrl} (bu çalıştırmada deneme ${ytAttempts}/${MAX_YOUTUBE_ATTEMPTS_PER_RUN})`);
+    } catch (e) {
+      const info = extractYoutubeErrorInfo(e);
+      o.youtube = info;
+      console.log(`#${o.epNum} YouTube hala başarısız: ${info.error} (reason: ${info.reason ?? "bilinmiyor"}, status: ${info.status ?? "bilinmiyor"}, deneme ${ytAttempts}/${MAX_YOUTUBE_ATTEMPTS_PER_RUN})`);
+      if (info.reason === "uploadLimitExceeded" || /exceeded/i.test(info.error)) {
+        console.log("YouTube günlük yükleme limiti hâlâ dolu, kalan YouTube denemelerini bu çalıştırmada atlıyorum (yarın tekrar dene).");
+        break;
       }
-      await new Promise((r) => setTimeout(r, 2000));
     }
+    await new Promise((r) => setTimeout(r, 2000));
   }
 
   for (const o of report.outcomes) {
@@ -151,10 +173,14 @@ async function main() {
 
   const ytSuccess = report.outcomes.filter((o) => o.youtube && !o.youtube.error).length;
   const igSuccess = report.outcomes.filter((o) => o.instagram && !o.instagram.error).length;
+  const ytPending = report.outcomes.filter((o) => o.youtube?.error).length;
   report.ytSuccess = ytSuccess;
   report.igSuccess = igSuccess;
   await writeFile(REPORT_PATH, JSON.stringify(report, null, 2));
-  console.log(`\nGÜNCEL DURUM — YouTube: ${ytSuccess}/30, Instagram: ${igSuccess}/30`);
+  console.log(`\nGÜNCEL DURUM — YouTube: ${ytSuccess}/30 (${ytPending} bölüm hâlâ bekliyor), Instagram: ${igSuccess}/30`);
+  if (ytPending > 0) {
+    console.log(`Kalan ${ytPending} YouTube bölümü için script'i tekrar çalıştır (günde en fazla ${MAX_YOUTUBE_ATTEMPTS_PER_RUN} deneme yapar).`);
+  }
 }
 
 main().catch((err) => {
