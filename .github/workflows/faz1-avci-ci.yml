@@ -64,6 +64,10 @@ jobs:
           node --check tests/index-html-syntax.test.mjs
           node --check tests/published-content.test.mjs
           node --check tests/answer-history-sync.test.mjs
+          node --check automation/video-pipeline/scripts/_master-publish-meta.mjs
+          node --check automation/video-pipeline/scripts/publish-next-master-lesson.mjs
+          node --check automation/video-pipeline/scripts/retry-failed-master-publishes.mjs
+          node --check automation/video-pipeline/tests/youtube-error-info.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -118,3 +122,6 @@ jobs:
 
       - name: Öğrenci cevap geçmişi senkron + attribution bağlantısı testi
         run: node tests/answer-history-sync.test.mjs
+
+      - name: Master-lesson YouTube hata reason/status çıkarımı testi
+        run: node automation/video-pipeline/tests/youtube-error-info.test.mjs
