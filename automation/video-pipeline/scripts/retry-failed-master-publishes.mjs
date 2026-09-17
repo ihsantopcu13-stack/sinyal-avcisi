@@ -10,7 +10,7 @@ import { promisify } from "node:util";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ALL_EPISODES_META } from "../data/master-lessons.mjs";
-import { youtubeMeta, instagramCaption, topicName } from "./_master-publish-meta.mjs";
+import { youtubeMeta, instagramCaption, topicName, extractYoutubeErrorInfo } from "./_master-publish-meta.mjs";
 import { createReadStream, existsSync } from "node:fs";
 import { google } from "googleapis";
 
@@ -122,10 +122,11 @@ async function main() {
         o.youtube = r;
         console.log(`#${o.epNum} YouTube OK -> ${r.videoUrl}`);
       } catch (e) {
-        o.youtube = { error: e.message };
-        console.log(`#${o.epNum} YouTube hala başarısız: ${e.message}`);
-        if (/exceeded/i.test(e.message)) {
-          console.log("YouTube kotası hala dolu, kalan YouTube denemelerini atlıyorum.");
+        const info = extractYoutubeErrorInfo(e);
+        o.youtube = info;
+        console.log(`#${o.epNum} YouTube hala başarısız: ${info.error} (reason: ${info.reason ?? "bilinmiyor"}, status: ${info.status ?? "bilinmiyor"})`);
+        if (info.reason === "uploadLimitExceeded" || /exceeded/i.test(info.error)) {
+          console.log("YouTube günlük yükleme limiti hâlâ dolu, kalan YouTube denemelerini atlıyorum.");
           break;
         }
       }

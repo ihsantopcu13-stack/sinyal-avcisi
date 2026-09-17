@@ -35,6 +35,25 @@ export function youtubeMeta(lesson) {
   return { title, description, tags };
 }
 
+// 2026-09-17 "5/30 sınırı" teşhisi: publish-next-master-lesson.mjs ve
+// retry-failed-master-publishes.mjs, YouTube videos.insert başarısız
+// olduğunda sadece err.message'ı saklıyordu — ham HTTP status ve
+// reason kodu (ör. uploadLimitExceeded vs quotaExceeded) hiç
+// loglanmıyordu, bu da kök nedeni kesinleştirmeyi imkânsız kılmıştı.
+// Bu fonksiyon googleapis/gaxios hata nesnesinden SADECE
+// {error, reason, status} çıkarır — credential/secret İÇERMEZ (biz
+// buraya hiç vermiyoruz, err sadece Google'ın JSON hata gövdesinden
+// gelir).
+export function extractYoutubeErrorInfo(err) {
+  const apiError = err?.response?.data?.error;
+  const firstDetail = Array.isArray(apiError?.errors) ? apiError.errors[0] : undefined;
+  return {
+    error: typeof err?.message === "string" ? err.message : "Bilinmeyen hata",
+    reason: typeof firstDetail?.reason === "string" ? firstDetail.reason : null,
+    status: typeof err?.response?.status === "number" ? err.response.status : typeof apiError?.code === "number" ? apiError.code : null,
+  };
+}
+
 export function instagramCaption(lesson) {
   const topic = topicName(lesson);
   return [

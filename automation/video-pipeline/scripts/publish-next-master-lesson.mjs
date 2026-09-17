@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { google } from "googleapis";
 import { ALL_EPISODES_META } from "../data/master-lessons.mjs";
-import { youtubeMeta, instagramCaption } from "./_master-publish-meta.mjs";
+import { youtubeMeta, instagramCaption, extractYoutubeErrorInfo } from "./_master-publish-meta.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -163,7 +163,7 @@ export async function publishNext() {
   const result = {
     epNum: episode.epNum,
     id: episode.id,
-    youtube: ytResult.status === "fulfilled" ? ytResult.value : { error: ytResult.reason?.message },
+    youtube: ytResult.status === "fulfilled" ? ytResult.value : extractYoutubeErrorInfo(ytResult.reason),
     instagram: igResult.status === "fulfilled" ? igResult.value : { error: igResult.reason?.message },
   };
 
