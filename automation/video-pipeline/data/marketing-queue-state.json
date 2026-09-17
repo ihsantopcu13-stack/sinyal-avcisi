@@ -1,5 +1,5 @@
 {
-  "nextIndex": 3,
+  "nextIndex": 4,
   "history": [
     {
       "id": "story-1",
@@ -33,6 +33,13 @@
         "status": "scheduled"
       },
       "publishedAt": "2026-09-15T11:04:52.985Z"
+    },
+    {
+      "id": "linkedin-docentlik",
+      "type": "linkedin_post",
+      "status": "skipped",
+      "reason": "LinkedIn channel not configured",
+      "skippedAt": "2026-09-17T10:58:23.023Z"
     }
   ]
 }
