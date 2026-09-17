@@ -119,6 +119,14 @@ function sandboxKur() {
     slAnswered: false,
     sb: undefined,
     currentUser: null,
+    // 2026-09-18 response_time_ms telemetrisi: dAns() artık rtBitir()
+    // çağırıyor — bu test dosyası dAns()'ı İZOLE ettiği için gerçek
+    // rtBaslat()/rtBitir() (performance.now() tabanlı) burada YOK;
+    // sabit, deterministik bir mock yeterli (bu dosyanın amacı teşhis
+    // köprüsünü test etmek, response_time hesaplamasını DEĞİL — o ayrı
+    // bir test dosyasında (avci-response-time.test.mjs) test ediliyor).
+    _slRtBaslangic: 1000,
+    rtBitir: (baslangic) => (typeof baslangic === "number" ? 1234 : null),
   };
   sandbox.sb = {
     from: (tablo) => ({

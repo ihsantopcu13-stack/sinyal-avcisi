@@ -6569,7 +6569,7 @@ const SAT_HAVUZ=[
   {sent:'___ stringent the regulations are, companies find ways to adapt.',q:'Hangi yapi dogrudur?',opts:['However','No matter how','Even though','Despite'],ans:1,fb:'"No matter how" + sifat = ne kadar...olursa olsun.',sinyal:'no matter how'},
   {sent:'The data suggests that ___ previously assumed, the correlation is negative.',q:'Dogru yapıyı secin:',opts:['contrary to what was','despite what','although','whereas'],ans:0,fb:'"Contrary to what was assumed" = varsayilanin aksine.',sinyal:'contrary to'},
 ];
-let satMod=0,satSoruIdx=0,satAnswered=false,satDogruSayisi=0,satTimer=null,satSure=0;
+let satMod=0,satSoruIdx=0,satAnswered=false,satDogruSayisi=0,satTimer=null,satSure=0,_satRtBaslangic=null,_satRtIdx=null,_satRtAnsweredSlot=null;
 function satRender(){
   const el=document.getElementById('sat-icerik');if(!el)return;
   el.innerHTML=`<div class="sat-hero"><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px">⚡ SAT Metodu — 2 Saniyede Çöz</div><div class="sat-hero-title">Sinyal Avcı Tekniği</div><div class="sat-hero-sub">ÖSYM her soruya 3 tuzak koyar. Sinyali gör, şıkta bul, işaretle.</div></div><div class="sat-steps">${SAT_SINYALLER.map((s,i)=>`<div class="sat-step-pill ${satMod===i?'active':''}" onclick="satModSec(${i})" role="button" tabindex="0"><span class="sat-step-pill-icon">${s.icon}</span><div class="sat-step-pill-label">${s.baslik.split(' ')[0]}</div></div>`).join('')}<div class="sat-step-pill ${satMod===3?'active':''}" onclick="satModSec(3)" role="button" tabindex="0"><span class="sat-step-pill-icon">🎯</span><div class="sat-step-pill-label">Pratik</div></div></div><div id="sat-mod-icerik"></div>`;
@@ -6587,6 +6587,11 @@ function satModGoster(){
 function satPratikRender(){
   const el=document.getElementById('sat-mod-icerik');if(!el)return;
   if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}
+  // Aynı soru (idx değişmedi) henüz cevaplanmamışsa mod-sekme geçişiyle
+  // (dnav/dtab) yeniden render edilse bile QUESTION_VISIBLE zamanı
+  // SIFIRLANMAZ — sadece genuinely yeni bir soruda veya bu slot zaten
+  // cevaplanmışsa (yeniden deneme) taze bir başlangıç alınır.
+  if(_satRtIdx!==satSoruIdx||_satRtAnsweredSlot===satSoruIdx){_satRtBaslangic=rtBaslat();_satRtIdx=satSoruIdx;}
   const soru=SAT_HAVUZ[satSoruIdx];satAnswered=false;satSure=45;clearInterval(satTimer);
   el.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="dm-eye">Soru ${satSoruIdx+1}/${SAT_HAVUZ.length} — ${soru.sinyal}</div><div style="font-size:14px;font-weight:700;color:var(--signal)">✅ ${satDogruSayisi}/${satSoruIdx}</div></div><div class="sat-progress">${SAT_HAVUZ.map((_,i)=>`<div class="sat-prog-dot ${i<satSoruIdx?'done':i===satSoruIdx?'active':''}"></div>`).join('')}</div><div class="sat-timer"><span style="font-size:14px;color:var(--muted)">Süre:</span><div class="sat-timer-bar"><div class="sat-timer-fill" id="sat-tfill" style="width:100%"></div></div><div class="sat-timer-count" id="sat-tcnt">45</div></div><div class="sat-soru-sent" onmouseenter="if(!satAnswered&&window.ttsKaraoke){const c=this.textContent.replace(/[\\x27\\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">${soru.sent.replace(/(<span class="sat-highlight[^"]*"[^>]*>)(.*?)(<\/span>)/g, (m,open,word,close)=>`${open.replace('>',` onmouseenter="event.stopPropagation();ttsSpeak('${word.replace(/'/g,"\\'")}','en-US',null)">`)}${word}${close}`)}</div><div style="font-size:15px;font-weight:600;margin-bottom:8px">${soru.q}</div><div class="sat-opts" id="sat-opts">${soru.opts.map((o,i)=>`<button class="sat-opt" onclick="satAns(this,${i===soru.ans},${soru.ans})"  onmouseenter="if(window.ttsKaraoke)ttsKaraoke('${o.replace(/'/g,"\\'")}',this,null,{lang:'tr-TR',preserveMarkup:true})">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}</div><div class="sat-fb" id="sat-fb"></div><button class="sat-next-btn" id="sat-next" onclick="satSonraki()">Sonraki soru →</button>`;
   satTimer=setInterval(()=>{satSure--;const cnt=document.getElementById('sat-tcnt'),fill=document.getElementById('sat-tfill');if(cnt)cnt.textContent=satSure;if(fill)fill.style.width=(satSure/45*100)+'%';if(satSure<=0){clearInterval(satTimer);satSureDoIdi();}},1000);
@@ -6599,8 +6604,8 @@ function satPratikRender(){
     });
   },300);
 }
-function satSureDoIdi(){if(satAnswered)return;satAnswered=true;const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];if(opts[soru.ans])opts[soru.ans].classList.add('ok');const fb=document.getElementById('sat-fb');if(fb){fb.className='sat-fb err';fb.textContent='⏱ Süre doldu! Doğru: '+soru.opts[soru.ans];}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
-function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb err';fb.textContent='❌ '+soru.fb;}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
+function satSureDoIdi(){if(satAnswered)return;satAnswered=true;_satRtAnsweredSlot=satSoruIdx;const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];if(opts[soru.ans])opts[soru.ans].classList.add('ok');const fb=document.getElementById('sat-fb');if(fb){fb.className='sat-fb err';fb.textContent='⏱ Süre doldu! Doğru: '+soru.opts[soru.ans];}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
+function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;const _satRt=rtBitir(_satRtBaslangic);_satRtAnsweredSlot=satSoruIdx;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null,responseTimeMs:_satRt});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb err';fb.textContent='❌ '+soru.fb;}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null,responseTimeMs:_satRt});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
 function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}satPratikRender();}
 function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(245,166,35,.1);color:var(--signal);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
@@ -6919,6 +6924,7 @@ MASTER FORMUL: TANI > SiNYAL > YAPI > SAG/SOL > S+V+O > ELE > KRiTiK FARK > KANI
 function dAns(btn,correct){
   if(slAnswered)return;
   slAnswered=true;
+  const _slRt=rtBitir(_slRtBaslangic); // FIRST_FINAL_ANSWER — feedback/UI/kaydetmeden ÖNCE
   const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('dm-fb');
   const nextBtn=document.getElementById('sl-next-btn');
@@ -6932,13 +6938,13 @@ function dAns(btn,correct){
   if(correct){
     btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('sinyal');
-    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null});
+    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
-    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null});
+    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
     avciTeshisPaneliGoster(soru);
   }
   if(nextBtn)nextBtn.style.display='inline-block';
@@ -7485,10 +7491,17 @@ const TUZAK_HAVUZ=[
   {q:'Doğru cevabı seçin:',sent:'Scientists discovered a cure; it was announced worldwide. \'it\' refers to:',opts:['A) scientists','B) the discovery','C) the cure','D) the world'],dogru:2,fb:'Zamir avı: it → hemen önceki isim = the cure.'},
 ];
 
-let tuzakIdx=0,tuzakAnswered=false;
+let tuzakIdx=0,tuzakAnswered=false,_tuzakRtBaslangic=null,_tuzakRtIdx=null,_tuzakRtAnsweredSlot=null;
 function tuzakGetDailyIdx(){const day=Math.floor(Date.now()/(1000*60*60*24));return day%TUZAK_HAVUZ.length;}
 function tuzakRender(){
-  tuzakIdx=tuzakGetDailyIdx();tuzakAnswered=false;
+  const _ytIdx=tuzakGetDailyIdx();
+  // Tuzak günlük olarak DETERMİNİSTİK aynı idx'i döner ve bu fonksiyon
+  // her mod-sekme girişinde tekrar çağrılır (mevcut davranış) — idx
+  // değişmediyse ve bu slot henüz cevaplanmadıysa QUESTION_VISIBLE
+  // zamanı korunur; idx değiştiyse veya slot zaten cevaplanmışsa
+  // (yeniden deneme) taze başlangıç alınır.
+  if(_tuzakRtIdx!==_ytIdx||_tuzakRtAnsweredSlot===_ytIdx){_tuzakRtBaslangic=rtBaslat();_tuzakRtIdx=_ytIdx;}
+  tuzakIdx=_ytIdx;tuzakAnswered=false;
   const soru=TUZAK_HAVUZ[tuzakIdx];
   const bugun=new Date();
   const aylar=['Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
@@ -7507,19 +7520,20 @@ function tuzakRender(){
 }
 function tuzakAns(btn,correct,dogru){
   if(tuzakAnswered)return;tuzakAnswered=true;
+  const _tuzakRt=rtBitir(_tuzakRtBaslangic);_tuzakRtAnsweredSlot=tuzakIdx;
   const opts=document.querySelectorAll('#tuzak-opts-inner .tuzak-opt');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('tuzak-fb-inner'),soru=TUZAK_HAVUZ[tuzakIdx];
   if(correct){
     btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('tuzak');
-    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:btn.textContent,correctOption:opts[dogru].textContent,isCorrect:true,topic:'tuzak',signal:null});
+    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:btn.textContent,correctOption:opts[dogru].textContent,isCorrect:true,topic:'tuzak',signal:null,responseTimeMs:_tuzakRt});
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     // Hata defterine ekle
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
-    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:opts[Array.from(opts).indexOf(btn)].textContent,correctOption:opts[dogru].textContent,isCorrect:false,topic:'tuzak',signal:null});
+    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:opts[Array.from(opts).indexOf(btn)].textContent,correctOption:opts[dogru].textContent,isCorrect:false,topic:'tuzak',signal:null,responseTimeMs:_tuzakRt});
   }
   const nb=document.getElementById('tuzak-next-btn');if(nb)nb.style.display='inline-block';
   // Paylaş butonu göster
@@ -7534,7 +7548,9 @@ function tuzakPaylas(correct,soru){
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram\'a yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function tuzakSonraki(){
-  tuzakIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;tuzakAnswered=false;
+  const _ytIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;
+  if(_tuzakRtIdx!==_ytIdx||_tuzakRtAnsweredSlot===_ytIdx){_tuzakRtBaslangic=rtBaslat();_tuzakRtIdx=_ytIdx;}
+  tuzakIdx=_ytIdx;tuzakAnswered=false;
   const soru=TUZAK_HAVUZ[tuzakIdx];
   const cont=document.getElementById('tuzak-container');if(!cont)return;
   cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" onmouseenter="if(window.ttsKaraoke)ttsKaraoke('${o.replace(/'/g,"\\'")}',this,null,{lang:'tr-TR'})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn" style="display:none;background:#e1306c;color:#fff;margin-left:6px">📸 Paylaş</button>`;
@@ -8440,7 +8456,7 @@ const SL_HAVUZ=[
   {id:"q059",sinyal:"since",eye:"Sosyal - YOKDiL Metni",sent:"\"Public opinion on the reform has <span class=\"s-trap\" data-tip=\"Tuzak: iyileşme değil kötüleşme\">shifted markedly</span> <span class=\"s-sig\" data-tip=\"Zaman sinyali\">since</span> the initial announcement, with support <span class=\"s-key\">dwindling</span> steadily.\"",q:"Kamuoyu desteği ile ilgili ne söylenebilir?",opts:["İlk açıklamadan bu yana istikrarlı biçimde arttı.","İlk açıklamadan bu yana belirgin biçimde azaldı.","Hiç değişmedi.","Açıklamadan önce zaten düşüktü."],ans:1,fb:"\"Dwindling steadily\" = istikrarlı biçimde azalan. \"Shifted markedly since\" = belirgin değişim, zamanla."},
 ];
 
-let slIdx=0,slAnswered=false,slCurrentSoru=null;
+let slIdx=0,slAnswered=false,slCurrentSoru=null,_slRtBaslangic=null;
 
 // ============================================================
 // SL_SINYAL_LOOKUP — stable sinyal->indeks haritası
@@ -8569,6 +8585,7 @@ function slRender(){
   if(nextBtn)nextBtn.style.display='none';
   avciTeshisPaneliTemizle();
   slAnswered=false;
+  _slRtBaslangic=rtBaslat(); // QUESTION_VISIBLE — soru DOM'a şimdi yazıldı
   // TTS: İngilizce cümle, sonra Türkçe soru
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
   setTimeout(()=>{
@@ -8821,7 +8838,7 @@ const PARAGRAFLAR=[
   }
 ];
 
-let aktifParagraf=0,paragrafCevaplar={};
+let aktifParagraf=0,paragrafCevaplar={},_paragrafRtBaslangic=null,_paragrafRtIdx=null;
 
 function paragrafModulHTML(){
   return `<div style="max-width:780px">
@@ -8837,6 +8854,10 @@ function paragrafModulHTML(){
 }
 
 function paragrafSec(idx){
+  // Aynı pasaj (idx) tekrar seçilirse (örn. sekme tekrar tıklanırsa)
+  // henüz cevaplanmamış sorular için QUESTION_VISIBLE zamanı korunur —
+  // sadece gerçekten farklı bir pasaja geçildiğinde taze başlangıç alınır.
+  if(_paragrafRtIdx!==idx){_paragrafRtBaslangic=rtBaslat();_paragrafRtIdx=idx;}
   aktifParagraf=idx;
   PARAGRAFLAR.forEach((_,i)=>{
     const t=document.getElementById('ptab-'+i);
@@ -8876,7 +8897,8 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
   // Daha önce cevaplanmışsa engelle
   if(paragrafCevaplar[pidx+'-'+sidx]!==undefined)return;
   paragrafCevaplar[pidx+'-'+sidx]=oidx;
-  
+  const _paragrafRt=(pidx===_paragrafRtIdx)?rtBitir(_paragrafRtBaslangic):null;
+
   const p=PARAGRAFLAR[pidx];
   const s=p.sorular[sidx];
   const dogru_=s.ans;
@@ -8902,11 +8924,11 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
   
   if(dogru_mu){
     streakSoruEkle('sinyal');
-    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:true,topic:'paragraf',signal:null});
+    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:true,topic:'paragraf',signal:null,responseTimeMs:_paragrafRt});
     if(typeof konfeti==='function')konfeti();
   } else {
     hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
-    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:false,topic:'paragraf',signal:null});
+    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:false,topic:'paragraf',signal:null,responseTimeMs:_paragrafRt});
     if(typeof saShakeBtn==='function')saShakeBtn(document.getElementById('popt-'+pidx+'-'+sidx+'-'+oidx));
   }
 }
@@ -9467,6 +9489,34 @@ function hataEkle(soru,verilenCevap,dogruCevap,tip){
 }
 
 // ============================================================
+// AVCI RESPONSE_TIME_MS — HAM DAVRANIŞSAL GÖZLEM (2026-09-18)
+// ============================================================
+// SÜRE ≠ DİKKATSİZLİK. HIZ ≠ BİLGİ. YAVAŞLIK ≠ ZAYIFLIK.
+// Bu blok SADECE QUESTION_VISIBLE → FIRST_FINAL_ANSWER arası HAM süreyi
+// ölçer — hiçbir teşhis/etiket/eşik ÜRETMEZ. Katman 4 motoruna
+// (avciKokNedenAnalizEt) BAĞLANMAZ, CARELESS_PATTERN ÜRETMEZ.
+//
+// performance.now() kullanılıyor, Date.now() DEĞİL: sistem saati
+// uyku/uyanma veya NTP düzeltmesiyle geriye/ileriye atlarsa Date.now()
+// farkı negatif veya sahte-büyük çıkabilir — performance.now() monoton
+// olduğu için SÜRE (duration) ölçümünde doğru araçtır.
+//
+// "Sekme arka plana geçti" burada TARAYICI SEKMESİ/PENCERESİ görünürlüğü
+// (document.hidden) anlamına gelir — dashboard'un kendi iç mod-sekmeleri
+// (dnav/dtab) DEĞİL. Ölçüm sırasında gerçek tarayıcı sekmesi arka plana
+// geçerse güvenilmez sayılır → response_time_ms NULL (sahte hassasiyet
+// üretilmez).
+let _rtSekmeArkaplanaGecti=false;
+document.addEventListener('visibilitychange',()=>{if(document.hidden)_rtSekmeArkaplanaGecti=true;});
+function rtBaslat(){_rtSekmeArkaplanaGecti=false;return performance.now();}
+function rtBitir(baslangic){
+  if(typeof baslangic!=='number'||_rtSekmeArkaplanaGecti)return null;
+  const ms=Math.round(performance.now()-baslangic);
+  if(!Number.isFinite(ms)||ms<0)return null;
+  return ms;
+}
+
+// ============================================================
 // CEVAP GEÇMİŞİ (doğru + yanlış, birleşik) — Zayıf Alan Analizi,
 // Kişisel Çalışma Planı ve İstatistiklerim panelinin ortak veri
 // kaynağı. 2026-09-17: hataEkle'nin eski (sadece yanlış, dar alan
@@ -9493,10 +9543,13 @@ function cevapKaydet(opts){
     const isCorrect=Boolean(opts.isCorrect);
     const topic=opts.topic||null;
     const signal=opts.signal||null;
+    // HAM davranışsal gözlem — teşhis değil. Güvenilmez/eksik/negatif
+    // her durumda null (arbitrary sahte varsayılan (örn. 5000ms) YOK).
+    const responseTimeMs=(typeof opts.responseTimeMs==='number'&&Number.isFinite(opts.responseTimeMs)&&opts.responseTimeMs>=0)?Math.round(opts.responseTimeMs):null;
 
     let d=cevapGecmisiLoad();
     const idx=questionId?d.findIndex(h=>h.questionId===questionId):d.findIndex(h=>!h.questionId&&h.soru===soru);
-    const kayit={questionId,modul,soru,selectedOption,correctOption,isCorrect,topic,signal,attemptCount:idx>=0?(d[idx].attemptCount||1)+1:1,answeredAt:new Date().toISOString()};
+    const kayit={questionId,modul,soru,selectedOption,correctOption,isCorrect,topic,signal,responseTimeMs,attemptCount:idx>=0?(d[idx].attemptCount||1)+1:1,answeredAt:new Date().toISOString()};
     if(idx>=0)d.splice(idx,1);
     d.unshift(kayit);
     if(d.length>200)d=d.slice(0,200); // hata defterinden (30) daha geniş ama sınırsız değil
@@ -9549,7 +9602,7 @@ async function cevapSunucuyaSenkronla(kayit){
       p_is_correct:kayit.isCorrect,
       p_topic:kayit.topic,
       p_signal:kayit.signal,
-      p_response_time_ms:null,
+      p_response_time_ms:(typeof kayit.responseTimeMs==='number'?kayit.responseTimeMs:null),
       p_attribution_source:ctx.source||null,
       p_attribution_medium:ctx.medium||null,
       p_attribution_campaign:ctx.campaign||null,
