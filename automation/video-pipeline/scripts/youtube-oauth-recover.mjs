@@ -30,10 +30,10 @@
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import readline from "node:readline";
-import { google } from "googleapis";
 import {
   REDIRECT_URI,
   buildAuthUrl,
+  exchangeCodeForTokens,
   verifyTokenExchange,
   updateAllThreeSecrets,
   maskedOutputChunk,
@@ -127,13 +127,12 @@ async function main() {
   const clientId = await getClientId();
   const clientSecret = await getClientSecret();
 
-  const authUrl = buildAuthUrl({ clientId, clientSecret, redirectUri: REDIRECT_URI });
+  const authUrl = buildAuthUrl({ clientId, redirectUri: REDIRECT_URI });
   const code = await waitForAuthorizationCode(authUrl);
 
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, REDIRECT_URI);
   let refreshToken;
   try {
-    const { tokens } = await oauth2Client.getToken(code);
+    const tokens = await exchangeCodeForTokens({ clientId, clientSecret, redirectUri: REDIRECT_URI, code });
     if (!tokens.refresh_token) {
       console.error(
         "refresh_token dönmedi (genelde bu hesap için daha önce zaten izin verilmiş olmasından kaynaklanır)."

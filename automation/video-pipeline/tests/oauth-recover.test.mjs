@@ -49,13 +49,16 @@ const SAHTE_REFRESH_TOKEN = "1//SAHTE-REFRESH-TOKEN-asla-gercek-degil";
 
 // ---- TEST: buildAuthUrl doğru parametreleri üretiyor, secret'ı SIZDIRMIYOR ----
 {
-  const url = buildAuthUrl({ clientId: SAHTE_CLIENT_ID, clientSecret: SAHTE_CLIENT_SECRET });
+  // buildAuthUrl bilerek clientSecret PARAMETRESİ BİLE ALMIYOR — Google'ın
+  // authorize endpoint'i onu istemez. Yine de savunma amaçlı, üretilen
+  // URL'nin hiçbir yerde sahte secret string'ini içermediğini doğruluyoruz.
+  const url = buildAuthUrl({ clientId: SAHTE_CLIENT_ID });
   kontrol("4) authUrl access_type=offline içeriyor", url.includes("access_type=offline"));
   kontrol("5) authUrl prompt=consent içeriyor", url.includes("prompt=consent"));
   kontrol("6) authUrl youtube.upload scope'unu içeriyor", url.includes(encodeURIComponent("https://www.googleapis.com/auth/youtube.upload")));
   kontrol("7) authUrl client_id'yi içeriyor", url.includes(encodeURIComponent(SAHTE_CLIENT_ID)));
   kontrol("8) authUrl redirect_uri = localhost:53682", url.includes(encodeURIComponent(REDIRECT_URI)));
-  kontrol("9) authUrl client_secret'ı İÇERMİYOR (Google authorize endpoint'i istemez)", !url.includes(SAHTE_CLIENT_SECRET));
+  kontrol("9) authUrl client_secret parametresi hiç yok, sahte secret string'i de geçmiyor", !url.includes("client_secret") && !url.includes(SAHTE_CLIENT_SECRET));
 }
 
 // ---- TEST: redactGoogleError sadece bilinen kısa kodları döndürür ----
@@ -74,35 +77,32 @@ const SAHTE_REFRESH_TOKEN = "1//SAHTE-REFRESH-TOKEN-asla-gercek-degil";
 }
 
 // ---- TEST: verifyTokenExchange upload YAPMADAN başarı/başarısızlığı ayırt ediyor ----
+// (gerçek ağa hiç çıkmadan — sahte fetchImpl enjekte edilir)
 {
-  class SahteOAuth2Basarili {
-    constructor() {}
-    setCredentials() {}
-    async getAccessToken() {
-      return { token: "sahte-access-token-asla-gercek-degil" };
-    }
+  let gorulenIstek = null;
+  async function sahteFetchBasarili(url, opts) {
+    gorulenIstek = { url, body: opts.body };
+    return { ok: true, json: async () => ({ access_token: "sahte-access-token-asla-gercek-degil" }) };
   }
   const basariliSonuc = await verifyTokenExchange({
     clientId: SAHTE_CLIENT_ID,
     clientSecret: SAHTE_CLIENT_SECRET,
     refreshToken: SAHTE_REFRESH_TOKEN,
-    oauthClientImpl: SahteOAuth2Basarili,
+    fetchImpl: sahteFetchBasarili,
   });
   kontrol("16) başarılı exchange {ok:true} döner", basariliSonuc.ok === true);
   kontrol("17) başarılı sonuç sadece 'ok' alanı içerir (token/secret alanı yok)", JSON.stringify(Object.keys(basariliSonuc)) === JSON.stringify(["ok"]));
+  kontrol("17b) doğru endpoint'e (oauth2.googleapis.com/token) istek atılıyor", gorulenIstek?.url === "https://oauth2.googleapis.com/token");
+  kontrol("17c) grant_type=refresh_token gönderiliyor (upload/insert DEĞİL)", gorulenIstek?.body.includes("grant_type=refresh_token"));
 
-  class SahteOAuth2InvalidClient {
-    constructor() {}
-    setCredentials() {}
-    async getAccessToken() {
-      throw { message: "invalid_client" };
-    }
+  async function sahteFetchInvalidClient() {
+    return { ok: false, json: async () => ({ error: "invalid_client" }) };
   }
   const basarisizSonuc = await verifyTokenExchange({
     clientId: SAHTE_CLIENT_ID,
     clientSecret: SAHTE_CLIENT_SECRET,
     refreshToken: SAHTE_REFRESH_TOKEN,
-    oauthClientImpl: SahteOAuth2InvalidClient,
+    fetchImpl: sahteFetchInvalidClient,
   });
   kontrol("18) başarısız exchange invalid_client tipini döner", basarisizSonuc.ok === false && basarisizSonuc.errorType === "invalid_client");
   kontrol(

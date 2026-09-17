@@ -1,16 +1,21 @@
 // ============================================================
 // YouTube OAuth güvenli kurtarma — test edilebilir saf mantık
 // ============================================================
-// Bu modül ağ çağrısı yapmaz, stdin okumaz, hiçbir credential değerini
-// loglamaz. `youtube-oauth-recover.mjs` (interaktif CLI) bu modülü
-// kullanır; testler (`tests/oauth-recover.test.mjs`) doğrudan bunu
+// Bu modül ağ çağrısı yapmaz (fetchImpl enjekte edilmediği sürece), stdin
+// okumaz, hiçbir credential değerini loglamaz. Bilerek `googleapis`
+// paketine bağımlı DEĞİL — repo'nun izole CI'ı (.github/workflows/
+// faz1-avci-ci.yml) `npm install` çalıştırmadan `node --check` + testleri
+// yürütüyor (bkz. o dosyanın başındaki not), bu yüzden buradaki authorize
+// URL üretimi ve token endpoint çağrısı native `fetch`/`URLSearchParams`
+// ile elle yapılıyor. `youtube-oauth-recover.mjs` (interaktif CLI) bu
+// modülü kullanır; testler (`tests/oauth-recover.test.mjs`) doğrudan bunu
 // import eder — gerçek Google ağına veya terminale ihtiyaç yok.
-
-import { google } from "googleapis";
 
 export const REDIRECT_URI = "http://localhost:53682";
 export const SCOPE = ["https://www.googleapis.com/auth/youtube.upload"];
 export const REQUIRED_ENV_NAMES = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN"];
+const AUTHORIZE_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
+const TOKEN_ENDPOINT = "https://oauth2.googleapis.com/token";
 
 // Google'ın token endpoint'inin döndürebileceği bilinen, GÜVENLİ (hiçbir
 // credential içermeyen) hata kodları. Bunun dışındaki her şey (yanlışlıkla
@@ -34,30 +39,74 @@ export function redactGoogleError(err) {
 }
 
 // Authorization URL'i üretir. client_secret bu URL'nin İÇİNE hiçbir zaman
-// yazılmaz (Google'ın authorize endpoint'i onu istemez) — sadece yerel
-// OAuth2 nesnesini kurmak için kullanılır.
-export function buildAuthUrl({ clientId, clientSecret, redirectUri = REDIRECT_URI }) {
-  if (!clientId || !clientSecret) {
-    throw new Error("buildAuthUrl: clientId ve clientSecret gerekli");
+// yazılmaz (Google'ın authorize endpoint'i onu istemez, bu fonksiyon onu
+// parametre olarak dahi almaz).
+export function buildAuthUrl({ clientId, redirectUri = REDIRECT_URI } = {}) {
+  if (!clientId) {
+    throw new Error("buildAuthUrl: clientId gerekli");
   }
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
-  return oauth2Client.generateAuthUrl({
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: "code",
     access_type: "offline",
     prompt: "consent",
-    scope: SCOPE,
+    scope: SCOPE.join(" "),
   });
+  return `${AUTHORIZE_ENDPOINT}?${params.toString()}`;
+}
+
+// oauth2.googleapis.com/token'a tek bir istek — grant tipi çağırana ait.
+// fetchImpl enjekte edilebilir (testlerde gerçek ağa hiç çıkılmaz).
+async function tokenEndpointRequest(bodyParams, { fetchImpl = fetch } = {}) {
+  const res = await fetchImpl(TOKEN_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(bodyParams).toString(),
+  });
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    data = {};
+  }
+  if (!res.ok) {
+    const err = new Error(data?.error || "unknown_error");
+    err.response = { data };
+    throw err;
+  }
+  return data;
+}
+
+// Authorization code -> {access_token, refresh_token, ...} değişimi
+// (loopback callback'ten gelen `code` ile, tek seferlik).
+export async function exchangeCodeForTokens({ clientId, clientSecret, redirectUri = REDIRECT_URI, code, fetchImpl } = {}) {
+  return tokenEndpointRequest(
+    {
+      grant_type: "authorization_code",
+      code,
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri,
+    },
+    { fetchImpl }
+  );
 }
 
 // Gerçek video upload YAPMADAN sadece refresh_token -> access_token
 // değişiminin çalıştığını doğrular (Stage 3 — uploadsuz auth testi).
-// oauthClientImpl enjekte edilebilir (testlerde gerçek google.auth.OAuth2
-// yerine sahte bir constructor verilir, ağa hiç çıkılmaz).
-export async function verifyTokenExchange({ clientId, clientSecret, refreshToken, oauthClientImpl } = {}) {
-  const OAuth2Ctor = oauthClientImpl || google.auth.OAuth2;
+// fetchImpl enjekte edilebilir (testlerde gerçek ağa hiç çıkılmaz).
+export async function verifyTokenExchange({ clientId, clientSecret, refreshToken, fetchImpl } = {}) {
   try {
-    const client = new OAuth2Ctor(clientId, clientSecret);
-    client.setCredentials({ refresh_token: refreshToken });
-    await client.getAccessToken();
+    await tokenEndpointRequest(
+      {
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
+      },
+      { fetchImpl }
+    );
     return { ok: true };
   } catch (err) {
     return { ok: false, errorType: redactGoogleError(err) };
