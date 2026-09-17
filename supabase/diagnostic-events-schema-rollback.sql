@@ -1,0 +1,24 @@
+-- ============================================================
+-- ROLLBACK — supabase/diagnostic-events-schema.sql'in geri alınması
+-- ============================================================
+-- ÇALIŞTIRMA: SADECE diagnostic-events-schema.sql migration'ı
+-- ÇALIŞTIRILDIYSA ve geri alınması gerekiyorsa Supabase Dashboard →
+-- SQL Editor'de çalıştır.
+--
+-- Bu script SADECE o migration'ın oluşturduğu TEK nesneyi geri alır:
+--   - public.diagnostic_events tablosu (ona bağlı index'ler ve RLS
+--     policy'si CASCADE ile otomatik düşer — bunlar tablonun kendi
+--     bağımlı nesneleridir, BAŞKA hiçbir tabloya dokunmaz)
+-- Başka hiçbir tabloya/fonksiyona/veriye DOKUNMAZ (answer_history,
+-- record_answer, profiles, emails, testimonials, push_subscriptions,
+-- user_activity, vb. ETKİLENMEZ). diagnostic_events, answer_history'ye
+-- SADECE bir FK ile referans veriyordu — answer_history'nin KENDİSİ bu
+-- drop'tan hiç etkilenmez, hiçbir satırı silinmez/değişmez.
+--
+-- VERİ KAYBI NOTU: diagnostic_events tablosundaki TÜM SATIRLAR silinir.
+-- Bu güvenlidir çünkü bu tablo answer_history'nin YANINDA, ayrı bir HAM
+-- DAVRANIŞSAL KANIT günlüğüdür (Katman 4) — ana öğrenci geçmişi
+-- (answer_history, localStorage, Katman 1-3) bu rollback'ten HİÇ
+-- etkilenmez, sadece Katman 4'e özgü teşhis izleri kaybolur.
+
+drop table if exists public.diagnostic_events cascade;
