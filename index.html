@@ -6184,7 +6184,27 @@ function klodMotionDersKaydet(dersId){
     }
   }catch(e){}
 }
+// 2026-09-17 PRODUCTION TEŞHİSİ: _sbInit() DOMContentLoaded'da çağrılıyordu
+// ama `supabase` global'inin (cdn.jsdelivr.net'ten `defer` ile yüklenen SDK)
+// o ana kadar GERÇEKTEN hazır olduğunu VARSAYIYORDU — bir guard/retry YOKTU.
+// CDN script'i DOMContentLoaded'dan önce yüklenemezse (yavaş ağ, geçici CDN
+// sorunu, engelleyici) `supabase.createClient(...)` bir ReferenceError
+// fırlatıyor, `sb`/`currentUser` SONSUZA KADAR tanımsız kalıyor — ve bu hata
+// hiçbir yerde try/catch içinde olmadığı için sadece tarayıcının kendi genel
+// hata konsoluna düşüyor (answer-history'ye özgü bir iz bırakmıyor). Sonuç:
+// login akışları da kendi try/catch'leriyle bu hatayı sessizce yuttuğu için
+// kullanıcı "giriş yaptım" sanabiliyor, quiz localStorage'a bağlı olduğu için
+// normal çalışıyor, ama cevapSunucuyaSenkronla'daki `if(!sb)return;` hiçbir
+// log üretmeden sessizce çıkıyordu. Artık `supabase` henüz hazır değilse kısa
+// aralıklarla birkaç kez tekrar deneniyor; SDK gerçekten hiç yüklenemezse
+// (engellendi/CDN erişilemez) tek, güvenli bir teşhis logu üretilip vazgeçiliyor.
 function _sbInit(){
+  if(typeof supabase==='undefined'){
+    _sbInit._retries=(_sbInit._retries||0)+1;
+    if(_sbInit._retries<=10){setTimeout(_sbInit,300);return;}
+    console.warn('[answer-history] sync skipped: supabase client not ready');
+    return;
+  }
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   sb.auth.onAuthStateChange((event,session)=>{
     if(session){
@@ -6199,7 +6219,8 @@ function _sbInit(){
 }
 // Supabase SDK script'i artık `defer` ile yükleniyor (render-blocking'i azaltmak
 // için) — bu yüzden `supabase` global'i bu satır çalıştığında henüz hazır
-// olmayabilir. Hazırsa hemen başlat, değilse `load` olayını bekle.
+// olmayabilir. Hazırsa hemen başlat, değilse `load` olayını bekle (ve
+// _sbInit kendi içinde yukarıdaki retry ile ekstra bir güvenlik katmanı sağlar).
 if(typeof supabase!=='undefined'){_sbInit();}else{document.addEventListener('DOMContentLoaded',_sbInit);}
 function showUserMenu(u){
   const n=document.querySelector('.btn-nav');
@@ -9188,7 +9209,7 @@ function cevapKaydet(opts){
 // RPC'ye devam ediliyor, yoksa (gerçekten misafir) güvenli skip.
 async function cevapSunucuyaSenkronla(kayit){
   try{
-    if(!sb)return;
+    if(!sb){console.warn('[answer-history] sync skipped: supabase client not ready');return;}
     let user=currentUser;
     if(!user){
       let session=null;

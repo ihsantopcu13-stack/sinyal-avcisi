@@ -122,7 +122,11 @@ const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
   const senkronBody = senkronMatch ? senkronMatch[0] : "";
   kontrol("28) cevapSunucuyaSenkronla gövdesi bulundu", senkronBody.length > 0);
   kontrol("29) tüm gövde try/catch ile sarmalı", /^function cevapSunucuyaSenkronla\(kayit\)\{\s*try\{/.test(senkronBody));
-  kontrol("30) sadece sb kontrolüyle graceful skip (client yoksa)", /if\(!sb\)return;/.test(senkronBody));
+  kontrol("30) sb yoksa (client hazır değilse) graceful skip", /if\(!sb\)\{/.test(senkronBody));
+  kontrol(
+    "30a) sb yoksa artık SESSİZ DEĞİL — güvenli, tanımlı bir teşhis mesajıyla skip ediliyor (2026-09-17 production teşhisi: eskiden hiçbir iz bırakmadan çıkıyordu)",
+    /if\(!sb\)\{console\.warn\('\[answer-history\] sync skipped: supabase client not ready'\);return;\}/.test(senkronBody)
+  );
   kontrol("31) sb.rpc('record_answer', ...) çağrılıyor (RPC deseni, ham .insert() DEĞİL)", /sb\.rpc\(['"]record_answer['"]/.test(senkronBody));
   kontrol("32) window.SinyalAttribution.context() kullanıyor (attribution bağlantısı)", /window\.SinyalAttribution\.context\(\)/.test(senkronBody));
   kontrol("33) RPC hatası await ile yakalanıp sadece console.warn ile loglanıyor, throw edilmiyor", /const r=await sb\.rpc\(['"]record_answer['"]/.test(senkronBody) && /if\(r&&r\.error\)\{/.test(senkronBody) && /console\.warn/.test(senkronBody) && !/throw/.test(senkronBody));
@@ -193,6 +197,38 @@ const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
 
   kontrol("38) Sinyal Lab (dAns) gerçek stable questionId (soru.id) kullanıyor", /cevapKaydet\(\{questionId:soru\.id,modul:['"]sinyal['"]/.test(html));
   kontrol("39) Diğer 4 modül questionId GEÇMİYOR (stable id'leri yok, null bırakılıyor)", (html.match(/cevapKaydet\(\{questionId:soru\.id/g) || []).length === 2);
+}
+
+// ---- TEST: production teşhisinde bulunan _sbInit() zafiyeti — Supabase SDK
+// (cdn.jsdelivr.net, defer) DOMContentLoaded'a kadar yüklenemezse `sb` SESSİZCE
+// ve KALICI OLARAK tanımsız kalıyordu (ReferenceError try/catch'siz fırlıyordu,
+// answer-history hiçbir iz bırakmadan skip ediyordu). Artık kısa aralıklarla
+// birkaç kez retry ediliyor, tükenirse güvenli bir teşhis logu üretiliyor. ----
+{
+  kontrol("39b) production teşhisi: index.html'de sadece TEK bir cevapKaydet/cevapSunucuyaSenkronla/_sbInit tanımı var (duplicate/override YOK)", (() => {
+    const sayimlar = {
+      "function cevapKaydet\\(opts\\)": (html.match(/function cevapKaydet\(opts\)/g) || []).length,
+      "function cevapSunucuyaSenkronla\\(kayit\\)": (html.match(/function cevapSunucuyaSenkronla\(kayit\)/g) || []).length,
+      "function _sbInit\\(\\)": (html.match(/function _sbInit\(\)/g) || []).length,
+      "function dAns\\(": (html.match(/function dAns\(/g) || []).length,
+    };
+    return Object.values(sayimlar).every((n) => n === 1);
+  })());
+
+  const sbInitMatch = html.match(/function _sbInit\(\)\{[\s\S]*?\n\}/);
+  const sbInitBody = sbInitMatch ? sbInitMatch[0] : "";
+  kontrol("39c) _sbInit gövdesi bulundu", sbInitBody.length > 0);
+  kontrol(
+    "39d) supabase SDK henüz hazır değilse artık DOĞRUDAN createClient çağırıp patlamıyor — önce typeof kontrolü var",
+    /^function _sbInit\(\)\{\s*if\(typeof supabase==='undefined'\)\{/.test(sbInitBody)
+  );
+  kontrol("39e) hazır değilse sınırlı sayıda (kaçmayan bir sayaçla) kısa aralıklarla retry ediyor", /_sbInit\._retries=\(_sbInit\._retries\|\|0\)\+1;/.test(sbInitBody) && /setTimeout\(_sbInit,300\)/.test(sbInitBody));
+  kontrol("39f) retry sınırı VAR (sonsuz döngü değil)", /if\(_sbInit\._retries<=10\)\{setTimeout\(_sbInit,300\);return;\}/.test(sbInitBody));
+  kontrol(
+    "39g) retry tükenirse güvenli, tanımlı bir teşhis mesajıyla vazgeçiliyor (secret/token YOK)",
+    /console\.warn\('\[answer-history\] sync skipped: supabase client not ready'\);\s*return;/.test(sbInitBody)
+  );
+  kontrol("39h) supabase gerçekten hazırsa eski davranış AYNEN korunuyor (createClient + onAuthStateChange)", /sb=supabase\.createClient\(SUPABASE_URL,SUPABASE_KEY\);/.test(sbInitBody) && /sb\.auth\.onAuthStateChange\(/.test(sbInitBody));
 }
 
 // ---- TEST: cevapGecmisiOzet — veri yoksa UYDURMAZ, null döner ----
