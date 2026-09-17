@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { google } from "googleapis";
 import { WEEKLY_SIGNALS_QUEUE } from "../data/weekly-signals-meta.mjs";
+import { regeneratePublishedContent } from "./regenerate-published-content.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -235,6 +236,16 @@ export async function publishNext() {
   }
 
   await writeState(state);
+
+  // Site (Vercel) ↔ video-pipeline bağlantısı: her başarılı çalıştırma
+  // sonunda api/data/published-content.json'ı güncelle. Bu adım asıl
+  // yayın sonucunu ASLA etkilemez — hata verirse sadece uyarı loglanır.
+  try {
+    await regeneratePublishedContent();
+  } catch (err) {
+    console.warn("published-content.json güncellenemedi (yayın akışını etkilemez):", err.message);
+  }
+
   console.log(JSON.stringify(results, null, 2));
   return { results };
 }
