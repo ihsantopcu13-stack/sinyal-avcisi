@@ -9173,13 +9173,41 @@ function cevapKaydet(opts){
 }
 
 // Best-effort sunucu senkronu — migration çalıştırılmadıysa veya giriş
-// yapılmamışsa sessizce atlanır, cevapKaydet'in ana akışını asla
-// bloklamaz/bozmaz.
-function cevapSunucuyaSenkronla(kayit){
+// yapılmamışsa güvenli şekilde atlanır, cevapKaydet'in ana akışını asla
+// bloklamaz/bozmaz. cevapKaydet bu fonksiyonu await ETMEDEN çağırır
+// (fire-and-forget) — bu yüzden burada oluşan HİÇBİR hata (getSession,
+// RPC, beklenmeyen exception) dışarı fırlatılmaz, hepsi burada yutulur.
+//
+// 2026-09-17 AUTH RACE FIX: currentUser sadece sb.auth.onAuthStateChange
+// callback'i (asenkron) tarafından set ediliyor — sayfa yüklenir
+// yüklenmez veya session localStorage'dan henüz restore edilmemişken
+// cevap verilirse currentUser hâlâ null olabiliyordu ve eskiden bu
+// durumda RPC hiç denenmeden sessizce (hiçbir log olmadan) atlanıyordu.
+// Artık currentUser boşsa bir kez sb.auth.getSession() ile GERÇEK
+// session kontrol ediliyor; session varsa currentUser da güncellenip
+// RPC'ye devam ediliyor, yoksa (gerçekten misafir) güvenli skip.
+async function cevapSunucuyaSenkronla(kayit){
   try{
-    if(!sb||!currentUser)return;
+    if(!sb)return;
+    let user=currentUser;
+    if(!user){
+      let session=null;
+      try{
+        const { data } = await sb.auth.getSession();
+        session=data?data.session:null;
+      }catch(e){
+        console.warn('[answer-history] sync skipped: session check failed');
+        return;
+      }
+      if(!session||!session.user){
+        console.warn('[answer-history] sync skipped: no authenticated session');
+        return;
+      }
+      user=session.user;
+      currentUser=user; // sonraki cevaplarda tekrar getSession'a gerek kalmasın
+    }
     const ctx=(typeof window!=='undefined'&&window.SinyalAttribution)?window.SinyalAttribution.context():{};
-    sb.rpc('record_answer',{
+    const r=await sb.rpc('record_answer',{
       p_question_id:kayit.questionId,
       p_module:kayit.modul,
       p_soru:kayit.soru,
@@ -9193,10 +9221,15 @@ function cevapSunucuyaSenkronla(kayit){
       p_attribution_medium:ctx.medium||null,
       p_attribution_campaign:ctx.campaign||null,
       p_attribution_signal:ctx.signal||null,
-    }).then(function(r){
-      if(r&&r.error)console.warn('[cevap-gecmisi] Supabase senkron atlandı (migration çalıştırılmamış olabilir):',r.error.message);
-    }).catch(function(){});
-  }catch(e){}
+    });
+    if(r&&r.error){
+      // Sadece güvenli teşhis alanları — access/refresh token, cookie,
+      // e-posta, user id veya başka bir credential ASLA loglanmaz.
+      console.warn('[answer-history] sync failed:',{code:r.error.code||null,status:r.status||null,reason:r.error.message||null});
+    }
+  }catch(e){
+    console.warn('[answer-history] sync failed:',{code:e&&e.code||null,status:null,reason:'unexpected error'});
+  }
 }
 
 // Konu/sinyal bazlı ayrıntılı özet (attempts/correct/incorrect/accuracy/
