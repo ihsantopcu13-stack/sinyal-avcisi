@@ -1689,6 +1689,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dm-q" id="sl-q"></div>
           <div class="dm-opts" id="dm-opts"></div>
           <div class="dm-fb" id="dm-fb"></div>
+          <div id="avci-teshis-panel"></div>
           <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
@@ -6938,8 +6939,178 @@ function dAns(btn,correct){
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null});
+    avciTeshisPaneliGoster(soru);
   }
   if(nextBtn)nextBtn.style.display='inline-block';
+}
+
+// ============================================================
+// AVCI HATA KÖKÜ MOTORU — KATMAN 4 MVP (2026-09-18)
+// ============================================================
+// SADECE Sinyal Lab'da (dAns, yukarıda), yanlış cevaptan sonra
+// opsiyonel, küçük, inline bir davranışsal kanıt köprüsü. Doğru
+// cevapta bu panel HİÇ gösterilmez/çağrılmaz. Diğer 4 modüle (SAT,
+// Kelime Kartları, Tuzak, Paragraf), KLOD'a, Katman 3 hesaplamasına
+// veya answer_history/record_answer'a HİÇ dokunulmuyor.
+//
+// GÖZLEM (Seviye 1) ≠ HİPOTEZ (Seviye 2) ≠ DOĞRULAMA (Seviye 3):
+// self_report_reason öğrencinin KENDİ beyanıdır — kesin teşhis
+// DEĞİLDİR. micro_test_correct SADECE kontrollü SIGNAL_SELECT mikro
+// testinin (canonical ground-truth'a karşı) sonucudur. Bu dosyada
+// HİÇBİR yerde "SIGNAL_MISSED=true" gibi kesin bir teşhis ÜRETİLMEZ —
+// sadece ham kanıt public.diagnostic_events'e kaydedilir; yorumlama
+// AYRI, sonraki bir işin konusudur.
+//
+// answer_history_id HER ZAMAN null: record_answer() RPC'si
+// `returns void` — eklenen/güncellenen satırın id'sini client'a HİÇ
+// döndürmüyor (audit doğrulandı). Sahte/tahmini bir id üretmek
+// (örn. question_id'ye göre "muhtemelen bu satır" araması) YERİNE
+// null bırakılıp izlenebilirlik user_id + question_id ile korunuyor
+// (diagnostic_events.answer_history_id NULLABLE, composite FK zaten
+// NULL'da devre dışı kalıyor — PR #23).
+let _avciTeshisState=null;
+
+function avciSpanMetniCikar(sentHtml,sinifAdi){
+  const m=String(sentHtml||'').match(new RegExp('<span class="'+sinifAdi+'"[^>]*>([^<]*)</span>'));
+  return m?m[1]:null;
+}
+// Doğru sinyali ÖNCEDEN renkli/vurgulu göstermeden (mevcut Sinyal Lab
+// render'ı soru.sent içinde .s-sig ile ZATEN vurguluyor — bu yüzden
+// adaylar o span'lerden DÜZ METİN olarak çıkarılır, canlı .s-sig/
+// .s-trap CSS sınıfları hiçbir adaya uygulanmaz), cümledeki GERÇEK
+// kelime/phrase parçalarından 3-4 aday üretir. Kaynak sırayla: doğru
+// sinyal (.s-sig), tuzak (.s-trap), anahtar (.s-key) — üçü de mevcut
+// SL_HAVUZ üretiminden (sl-havuz-generator.mjs) GELEN, gerçek canonical
+// verisidir. Yetmezse SINYAL_PING_KELIMELER listesindeki cümlede
+// GERÇEKTEN geçen diğer sinyal kelimeleri eklenir. LLM/AI/fuzzy tahmin
+// YOK. Güvenilir 3 aday bulunamazsa null döner — bu durumda mikro test
+// o soru için HİÇ gösterilmez (sahte test üretilmez).
+function avciSinyalAdaylariUret(soru){
+  const dogruMetin=avciSpanMetniCikar(soru.sent,'s-sig');
+  if(!dogruMetin)return null;
+  const adaylar=new Map();
+  adaylar.set(dogruMetin.toLowerCase(),dogruMetin);
+  const tuzakMetin=avciSpanMetniCikar(soru.sent,'s-trap');
+  if(tuzakMetin)adaylar.set(tuzakMetin.toLowerCase(),tuzakMetin);
+  const anahtarMetin=avciSpanMetniCikar(soru.sent,'s-key');
+  if(anahtarMetin)adaylar.set(anahtarMetin.toLowerCase(),anahtarMetin);
+  if(adaylar.size<3){
+    const duzMetin=String(soru.sent||'').replace(/<[^>]*>/g,'');
+    for(const kelime of SINYAL_PING_KELIMELER){
+      if(adaylar.size>=4)break;
+      const kucuk=kelime.toLowerCase();
+      if(adaylar.has(kucuk))continue;
+      const idx=duzMetin.toLowerCase().indexOf(kucuk);
+      if(idx===-1)continue;
+      adaylar.set(kucuk,duzMetin.slice(idx,idx+kelime.length));
+    }
+  }
+  if(adaylar.size<3)return null;
+  const liste=Array.from(adaylar.values());
+  for(let i=liste.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [liste[i],liste[j]]=[liste[j],liste[i]];
+  }
+  return{dogru:dogruMetin,adaylar:liste};
+}
+// Ground-truth karşılaştırması — SADECE trim/case/çevresel noktalama.
+// Semantic similarity/fuzzy/LLM YOK.
+function avciSinyalNormalize(s){
+  return String(s||'').trim().toLowerCase().replace(/^[.,;:!?"'’“”()[\]]+|[.,;:!?"'’“”()[\]]+$/g,'');
+}
+// Best-effort yazma — sb/currentUser yoksa veya hata olursa GÜVENLİ
+// şekilde atlanır, quiz'i ASLA bozmaz, sonsuz retry YOK. service_role
+// KULLANILMIYOR — mevcut authenticated/anonymous session (RLS +
+// composite FK, PR #23) ile doğrudan insert (push_subscriptions/
+// user_activity ile AYNI desen — basit append için RPC gerekmiyor,
+// user_id RLS'in with check'iyle auth.uid()'e karşı zaten doğrulanıyor).
+async function avciTeshisKaydet(kayit){
+  try{
+    if(!sb||!currentUser)return;
+    const{error}=await sb.from('diagnostic_events').insert({
+      user_id:currentUser.id,
+      answer_history_id:null,
+      question_id:kayit.questionId||null,
+      self_report_reason:kayit.selfReportReason||null,
+      micro_test_type:kayit.microTestType||null,
+      micro_test_selected:kayit.microTestSelected||null,
+      micro_test_correct:kayit.microTestCorrect===undefined?null:kayit.microTestCorrect,
+    });
+    if(error)console.warn('[avci-teshis] kayıt atlandı:',{code:error.code||null,status:error.status||null,reason:error.message||null});
+  }catch(e){
+    console.warn('[avci-teshis] kayıt atlandı:',{code:null,status:null,reason:'unexpected error'});
+  }
+}
+function avciTeshisPaneliTemizle(){
+  const el=document.getElementById('avci-teshis-panel');
+  if(el)el.innerHTML='';
+  _avciTeshisState=null;
+}
+// Tek diagnostic_events satırı — self_report VE/VEYA micro_test aynı
+// satırda. İkisi de boşsa (öğrenci her iki adımı da atladıysa) HİÇBİR
+// satır yazılmaz (anlamsız/boş kanıt üretilmez). gonderildi bayrağı
+// çift tıklamada duplicate satır oluşmasını engeller.
+function avciTeshisGonder(){
+  if(!_avciTeshisState||_avciTeshisState.gonderildi){avciTeshisPaneliTemizle();return;}
+  const{questionId,selfReportReason,microTestType,microTestSelected,microTestCorrect}=_avciTeshisState;
+  if(selfReportReason==null&&microTestType==null){avciTeshisPaneliTemizle();return;}
+  _avciTeshisState.gonderildi=true;
+  avciTeshisKaydet({questionId,selfReportReason,microTestType,microTestSelected,microTestCorrect});
+  avciTeshisPaneliTemizle();
+}
+function avciTeshisAdimBGoster(){
+  const st=_avciTeshisState;
+  if(!st)return;
+  const el=document.getElementById('avci-teshis-panel');
+  if(!el)return;
+  const bilgi=avciSinyalAdaylariUret(st.soru);
+  if(!bilgi){avciTeshisGonder();return;}
+  st.adaylar=bilgi.adaylar;st.dogruMetin=bilgi.dogru;
+  el.innerHTML=`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+      <div style="font-size:13px;font-weight:700;color:var(--signal);margin-bottom:8px">Şimdi cümledeki sinyali bul.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${bilgi.adaylar.map((a,i)=>`<button onclick="avciTeshisAdimBSecim(${i})" style="background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:6px 12px;font-size:13px;color:var(--ink);cursor:pointer;font-family:'IBM Plex Sans',sans-serif">${_hgEscape(a)}</button>`).join('')}
+        <button onclick="avciTeshisGonder()" style="background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;font-family:'IBM Plex Sans',sans-serif">Atla →</button>
+      </div>
+    </div>`;
+}
+function avciTeshisAdimBSecim(i){
+  const st=_avciTeshisState;
+  if(!st||!st.adaylar)return;
+  const secilen=st.adaylar[i];
+  if(secilen===undefined)return;
+  st.microTestType='SIGNAL_SELECT';
+  st.microTestSelected=secilen;
+  st.microTestCorrect=avciSinyalNormalize(secilen)===avciSinyalNormalize(st.dogruMetin);
+  avciTeshisGonder();
+}
+function avciTeshisAdimASecim(sebep){
+  if(_avciTeshisState)_avciTeshisState.selfReportReason=sebep;
+  avciTeshisAdimBGoster();
+}
+// self_report_reason chip'leri sadece HİPOTEZ üretir — "kesin hata"
+// ifadesi YOK, nötr bir soru cümlesi kullanılıyor.
+function avciTeshisPaneliGoster(soru){
+  const el=document.getElementById('avci-teshis-panel');
+  if(!el)return;
+  _avciTeshisState={soru:soru,questionId:soru.id,selfReportReason:null,microTestType:null,microTestSelected:null,microTestCorrect:null,gonderildi:false};
+  const secenekler=[
+    ['Kelimeyi bilmiyordum','VOCAB_BLOCK'],
+    ['Sinyali fark etmedim','SIGNAL_MISSED'],
+    ['Kuralı hatırlamadım','RULE_UNKNOWN'],
+    ['İki şık arasında kaldım','TWO_OPTIONS'],
+    ['Emin değildim / tahmin ettim','GUESSED'],
+  ];
+  el.innerHTML=`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+      <div style="font-size:13px;font-weight:700;color:var(--signal);margin-bottom:4px">🏹 Bir noktayı kontrol edelim</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Bu şıkkı seçmende en etkili olan neydi?</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${secenekler.map(([etiket,kod])=>`<button onclick="avciTeshisAdimASecim('${kod}')" style="background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:6px 12px;font-size:13px;color:var(--ink);cursor:pointer;font-family:'IBM Plex Sans',sans-serif">${etiket}</button>`).join('')}
+        <button onclick="avciTeshisAdimBGoster()" style="background:transparent;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;font-family:'IBM Plex Sans',sans-serif">Atla →</button>
+      </div>
+    </div>`;
 }
 
 // KELIME KARTLARI SM-2
@@ -8293,6 +8464,7 @@ function slRender(){
   if(opts)opts.innerHTML=soru.opts.map((o,i)=>`<button class="dmo" onclick="dAns(this,${i===soru.ans})" >${o}</button>`).join('');
   if(fb){fb.textContent='';fb.className='dm-fb';}
   if(nextBtn)nextBtn.style.display='none';
+  avciTeshisPaneliTemizle();
   slAnswered=false;
   // TTS: İngilizce cümle, sonra Türkçe soru
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
