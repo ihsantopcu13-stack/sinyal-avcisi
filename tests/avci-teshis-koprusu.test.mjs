@@ -457,6 +457,103 @@ function adaylariCikarHtml(panelHtml) {
   kontrol("46) o TEK satırda hem self_report_reason hem micro_test_type dolu", t.insertCagrilari[0]?.payload?.self_report_reason === "SIGNAL_MISSED" && t.insertCagrilari[0]?.payload?.micro_test_type === "SIGNAL_SELECT");
 }
 
+// ============================================================
+// 2026-09-18 HOTFIX REGRESYONU — PARTIAL EVENT LOSS
+// ============================================================
+// Audit ile kanıtlanan kopma noktası: sinyal İÇEREN bir soruda (SORU_
+// TEK_SINYAL) öğrenci Adım A'yı (self-report) tamamlayıp Adım B'yi
+// (SIGNAL_SELECT) HİÇ ele almadan "Sonraki soru"ya geçerse (slRender()
+// reset bloğu → avciTeshisPaneliTemizle()), self-report GÖZLEMİ
+// eskiden sessizce kayboluyordu (insert=0). Artık best-effort
+// kaydediliyor olmalı (insert=1, micro_test_* NULL kalarak — Adım B
+// hiç yapılmadığı için UYDURULMUYOR).
+
+// ---- A tamamlandı → B terk edildi (sonraki soruya geçiş simülasyonu) → 1 PARTIAL event ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-1" };
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimASecim("SIGNAL_MISSED"); // Adım B otomatik gösterilir (sinyal VAR), henüz KAYDEDİLMEZ
+  kontrol("50) Adım A sonrası, Adım B'ye dokunulmadan HENÜZ insert çağrılmadı (Adım B bekleniyor)", t.insertCagrilari.length === 0);
+  // Kullanıcı Adım B'yi HİÇ ele almadan sonraki soruya geçiyor — slRender()'ın
+  // reset bloğunun yaptığı TEK şey budur.
+  t.context.avciTeshisPaneliTemizle();
+  await t.bekle();
+  kontrol("51) HOTFIX: terk edilen Adım A artık KAYBOLMUYOR — TAM OLARAK 1 event yazıldı", t.insertCagrilari.length === 1);
+  kontrol("52) self_report_reason KORUNDU", t.insertCagrilari[0]?.payload?.self_report_reason === "SIGNAL_MISSED");
+  kontrol("53) micro_test_type/selected/correct NULL kaldı (Adım B hiç yapılmadı, UYDURULMADI)", t.insertCagrilari[0]?.payload?.micro_test_type === null && t.insertCagrilari[0]?.payload?.micro_test_selected === null && t.insertCagrilari[0]?.payload?.micro_test_correct === null);
+  kontrol("54) answer_history_id yine null, question_id korunuyor", t.insertCagrilari[0]?.payload?.answer_history_id === null && t.insertCagrilari[0]?.payload?.question_id === SORU_TEK_SINYAL.id);
+}
+
+// ---- A atlandı → B tamamlandı → 1 event (self_report_reason NULL, micro_test_* dolu) ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-2" };
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimBGoster(); // Adım A'daki "Atla →" — selfReportReason HİÇ set edilmeden Adım B'ye geçiliyor
+  const adaylar = adaylariCikarHtml(t.panelEl.innerHTML);
+  const dogru = adaylar.find((a) => a.metin.toLowerCase() === "despite");
+  t.context.avciTeshisAdimBSecim(dogru.idx);
+  await t.bekle();
+  kontrol("55) Adım A atlanıp Adım B tamamlanınca TAM 1 event yazılıyor", t.insertCagrilari.length === 1);
+  kontrol("56) self_report_reason NULL, micro_test_type SIGNAL_SELECT dolu", t.insertCagrilari[0]?.payload?.self_report_reason === null && t.insertCagrilari[0]?.payload?.micro_test_type === "SIGNAL_SELECT");
+}
+
+// ---- A + B ikisi de atlandı (sinyal VAR soruda) → 0 event ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-3" };
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimBGoster(); // Adım A "Atla"
+  t.context.avciTeshisGonder(); // Adım B "Atla"
+  await t.bekle();
+  kontrol("57) sinyal VAR soruda bile Adım A+B ikisi de atlanırsa 0 event (anlamsız satır YOK)", t.insertCagrilari.length === 0);
+}
+
+// ---- Hızlı çift tıklama (aynı Adım B seçimi/Atla'sı iki kez tetiklenirse) → 1 event ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-4" };
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimASecim("GUESSED");
+  const adaylar = adaylariCikarHtml(t.panelEl.innerHTML);
+  t.context.avciTeshisAdimBSecim(adaylar[0].idx);
+  t.context.avciTeshisAdimBSecim(adaylar[0].idx); // çift tıklama simülasyonu — panel zaten temizlenmiş olsa da fonksiyon tekrar çağrılıyor
+  await t.bekle();
+  kontrol("58) hızlı çift tıklamada İKİNCİ bir event OLUŞMUYOR", t.insertCagrilari.length === 1);
+}
+
+// ---- Sonraki soruya hızlı/çift geçiş → maksimum 1 event ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-5" };
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimASecim("TWO_OPTIONS");
+  t.context.avciTeshisPaneliTemizle(); // sonraki soru
+  t.context.avciTeshisPaneliTemizle(); // aynı reset bloğu bir sebeple ikinci kez tetiklenirse (örn. çift tıklama)
+  await t.bekle();
+  kontrol("59) sonraki soruya hızlı/çift geçişte de MAKSİMUM 1 event", t.insertCagrilari.length === 1);
+}
+
+// ---- Network failure quiz'i engellemiyor (hotfix yolunda da) ----
+{
+  const t = sandboxKur();
+  t.context.currentUser = { id: "user-hotfix-6" };
+  t.setInsertImpl(async () => {
+    throw new Error("simulated network failure");
+  });
+  dAnsCagir(t, SORU_TEK_SINYAL, 0, false);
+  t.context.avciTeshisAdimASecim("RULE_UNKNOWN");
+  let firlatilanHata = null;
+  try {
+    t.context.avciTeshisPaneliTemizle();
+    await t.bekle();
+  } catch (e) {
+    firlatilanHata = e;
+  }
+  kontrol("60) HOTFIX yolunda network hatası da dışarı FIRLAMIYOR (quiz bozulmuyor)", firlatilanHata === null);
+}
+
 // ---- 25) mobil/inline yapısal kontrol — modal/popup/fixed-overlay YOK ----
 {
   const t = sandboxKur();

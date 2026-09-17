@@ -7041,21 +7041,41 @@ async function avciTeshisKaydet(kayit){
     console.warn('[avci-teshis] kayıt atlandı:',{code:null,status:null,reason:'unexpected error'});
   }
 }
+// 2026-09-18 HOTFIX — PARTIAL EVENT LOSS: sinyal içeren sorularda
+// (canonical'ın ~%91'i) öğrenci Adım A'yı (self-report) tamamlayıp
+// Adım B'yi (SIGNAL_SELECT) HİÇ ele almadan ("Sonraki soru"ya basıp)
+// slRender()'ın reset bloğu üzerinden buraya ulaşırsa, state ESKİDEN
+// hiçbir kontrol yapılmadan sıfırlanıyordu — self-report GÖZLEMİ
+// (Seviye 1) sessizce kayboluyordu. Artık: state hâlâ GÖNDERİLMEMİŞ ve
+// EN AZ bir gerçek veri (self_report_reason VEYA micro_test_type)
+// içeriyorsa, sıfırlamadan ÖNCE mevcut KISMİ olay best-effort
+// kaydedilir — henüz oluşmamış alanlar (örn. Adım B hiç yapılmamışsa
+// micro_test_*) NULL kalır, UYDURULMAZ.
+//
+// DUPLICATE/RACE GÜVENLİĞİ: "gonderildi" bayrağı avciTeshisKaydet()'in
+// ASYNC sonucunu değil, BU SENKRON çağrıyı işaretler — JS single-
+// threaded olduğu için aynı interaction'ın (çift tıklama, hızlı soru
+// geçişi) ikinci bir avciTeshisPaneliTemizle()/avciTeshisGonder()
+// çağrısı bu bayrağı (veya artık null olan _avciTeshisState'i) HER
+// ZAMAN senkron olarak görür — insert'in await'i bitmesini beklemeye
+// gerek yoktur, ikinci çağrı satır oluşturmadan önce zaten engellenir.
+// Tamamlanmış akışlarda (Adım B de yapılmış/atlanmışsa) bu fonksiyon
+// zaten avciTeshisGonder() üzerinden ÇAĞRILDIĞI İÇİN davranış AYNI —
+// çift insert riski yok.
 function avciTeshisPaneliTemizle(){
+  const st=_avciTeshisState;
+  if(st&&!st.gonderildi&&(st.selfReportReason!=null||st.microTestType!=null)){
+    st.gonderildi=true;
+    avciTeshisKaydet({questionId:st.questionId,selfReportReason:st.selfReportReason,microTestType:st.microTestType,microTestSelected:st.microTestSelected,microTestCorrect:st.microTestCorrect});
+  }
   const el=document.getElementById('avci-teshis-panel');
   if(el)el.innerHTML='';
   _avciTeshisState=null;
 }
-// Tek diagnostic_events satırı — self_report VE/VEYA micro_test aynı
-// satırda. İkisi de boşsa (öğrenci her iki adımı da atladıysa) HİÇBİR
-// satır yazılmaz (anlamsız/boş kanıt üretilmez). gonderildi bayrağı
-// çift tıklamada duplicate satır oluşmasını engeller.
+// Adım B tamamlandığında/atlandığında çağrılır — yukarıdaki
+// avciTeshisPaneliTemizle() ile AYNI kaydetme/temizleme mantığını
+// kullanır (tek, paylaşılan finalize yolu — iki ayrı kopya YOK).
 function avciTeshisGonder(){
-  if(!_avciTeshisState||_avciTeshisState.gonderildi){avciTeshisPaneliTemizle();return;}
-  const{questionId,selfReportReason,microTestType,microTestSelected,microTestCorrect}=_avciTeshisState;
-  if(selfReportReason==null&&microTestType==null){avciTeshisPaneliTemizle();return;}
-  _avciTeshisState.gonderildi=true;
-  avciTeshisKaydet({questionId,selfReportReason,microTestType,microTestSelected,microTestCorrect});
   avciTeshisPaneliTemizle();
 }
 function avciTeshisAdimBGoster(){
