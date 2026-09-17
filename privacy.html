@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gizlilik Politikası — Sinyal Avcısı</title>
+<meta name="description" content="Sinyal Avcısı gizlilik politikası: hangi veriler toplanır, nasıl kullanılır, hangi üçüncü taraf hizmetler devrede.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sinyal-avcisi.com/privacy">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#f5a623">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#ece7da;--paper:#0d1b3e;--signal:#f5a623;--surface:#12161f;--border:rgba(245,166,35,.16);--muted:#8b93a3}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.7;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:48px 5vw 80px}
+.back{display:inline-block;color:var(--signal);text-decoration:none;font-size:14px;font-weight:600;margin-bottom:24px}
+.back:hover{text-decoration:underline}
+h1{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(26px,5vw,36px);margin-bottom:8px}
+.updated{color:var(--muted);font-size:14px;margin-bottom:36px}
+h2{font-family:'IBM Plex Serif',serif;font-weight:600;font-size:clamp(18px,3vw,21px);margin:32px 0 12px;color:var(--signal)}
+p,li{font-size:16px;margin-bottom:12px}
+ul{padding-left:22px;margin-bottom:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:20px 0;font-size:15px;color:var(--muted)}
+footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-size:14px;color:var(--muted)}
+footer a{color:var(--signal);text-decoration:none}
+footer a:hover{text-decoration:underline}
+a.contact{color:var(--signal);text-decoration:none}
+@media(max-width:480px){.wrap{padding:32px 5vw 64px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/">← Sinyal Avcısı'na dön</a>
+  <h1>Gizlilik Politikası</h1>
+  <p class="updated">Son güncelleme: 17 Eylül 2026</p>
+
+  <p>Bu metin, genel bilgilendirme amacıyla hazırlanmıştır ve Sinyal Avcısı'nı ("platform", "biz") kullanırken hangi verilerin toplanabileceğini, nasıl kullanıldığını ve hangi üçüncü taraf hizmetlerin devrede olduğunu açıklar.</p>
+
+  <h2>Sinyal Avcısı nedir</h2>
+  <p>Sinyal Avcısı, YDS ve YÖKDİL sınavlarına hazırlanan öğrenciler için tamamen ücretsiz bir eğitim platformudur. Kayıt olmadan da kullanılabilir; kayıt tamamen isteğe bağlıdır ve platformun hiçbir bölümü için ödeme, abonelik veya kredi kartı bilgisi istenmez.</p>
+
+  <h2>Hangi veriler toplanabilir</h2>
+  <p>Toplanan veriler, platformu nasıl kullandığınıza göre değişir:</p>
+  <ul>
+    <li><strong>Hesap oluşturursanız:</strong> e-posta adresiniz ve (tercih ederseniz) e-posta/şifre kombinasyonunuz Supabase üzerinden saklanır. "Google ile giriş yap" seçeneğini kullanırsanız, Google hesabınızın Supabase Auth aracılığıyla paylaştığı temel profil bilgileri (ad, e-posta adresi) kimlik doğrulama amacıyla alınır — bu, sadece platforma giriş yapmanız için kullanılır.</li>
+    <li><strong>Ücretsiz e-kitap indirirseniz:</strong> e-posta adresiniz, e-kitabı göndermek amacıyla kaydedilir.</li>
+    <li><strong>İlerleme verileri:</strong> streak, XP, tamamlanan konular ve hata defteri gibi bilgiler — giriş yaptıysanız hesabınızla ilişkilendirilerek, giriş yapmadıysanız sadece kendi tarayıcınızda (bkz. "Yerel depolama" altında) saklanır.</li>
+    <li><strong>Bildirim izni verirseniz:</strong> tarayıcınızın oluşturduğu push bildirim abonelik bilgisi (bir bağlantı adresi ve şifreleme anahtarları) sadece size bildirim gönderebilmek için saklanır.</li>
+    <li><strong>Yorum/testimonial gönderirseniz:</strong> giriş yapmış bir kullanıcı olarak yazdığınız metin, bir onay sürecinden sonra ana sayfada herkese görünür hâle gelebilir.</li>
+  </ul>
+
+  <h2>Teknik ve analitik veriler</h2>
+  <p>Platformu nasıl kullandığınızı anlamak için Google Analytics (GA4) kullanılır — sayfa görüntülemeleri ve site içi etkileşimler ölçülür. Bu veriler bireysel kimliğinizi hedeflemek için değil, platformu geliştirmek için kullanılır.</p>
+
+  <h2>UTM / kampanya bilgisi (attribution)</h2>
+  <p>Instagram, YouTube gibi kanallardan bir bağlantıyla geldiyseniz, bağlantıdaki kampanya bilgisi (örn. hangi platform, hangi içerik) tarayıcınızın oturum belleğinde (sessionStorage) tutulur. Bu bilgi sadece hangi içeriğin işe yaradığını ölçmek için kullanılır ve kişisel bir veri olarak sunucuya kaydedilmez.</p>
+
+  <h2>Yerel depolama (localStorage / sessionStorage)</h2>
+  <p>Giriş yapmadan kullanıyorsanız ilerlemeniz (streak, XP, tercihler) tamamen kendi tarayıcınızda saklanır — bu bilgi cihazınızdan çıkmaz, bizim sunucularımıza gönderilmez. Tarayıcı verilerinizi temizlerseniz bu ilerleme kaybolur.</p>
+
+  <h2>Üçüncü taraf hizmetler</h2>
+  <ul>
+    <li><strong>Supabase:</strong> veritabanı, kimlik doğrulama ve dosya depolama altyapısı.</li>
+    <li><strong>Google Analytics:</strong> anonim/toplu kullanım ölçümü.</li>
+    <li><strong>Resend:</strong> e-kitap ve bildirim e-postalarının gönderimi.</li>
+    <li><strong>Anthropic Claude API (KLOD):</strong> platformdaki AI mentor KLOD'a yazdığınız soru metni, size bir açıklama üretmek amacıyla işlenir; bu metin hesap bilginizle ilişkilendirilmeden işlenir.</li>
+  </ul>
+
+  <div class="card">
+    <strong>Google/YouTube hakkında netlik:</strong> Sinyal Avcısı'nın kendi YouTube kanalına içerik yayınlaması, platform sahibinin arka planda yürüttüğü bir yayıncılık operasyonudur ve ziyaretçilerin/kullanıcıların Google hesaplarına platform tarafından hiçbir şekilde erişilmez. Bunun tek istisnası, sizin kendi isteğinizle "Google ile giriş yap" özelliğini kullanmanızdır — bu durumda da yukarıda açıklandığı gibi sadece temel kimlik doğrulama bilgisi alınır.
+  </div>
+
+  <h2>Veri güvenliği</h2>
+  <p>Kullanıcı verileri Supabase üzerinde satır seviyesinde erişim kontrolü (Row Level Security) ile korunur — her kullanıcı yalnızca kendi verisine erişebilir. Yönetimsel işlemler (örn. yorum onayı) ayrı ve sınırlı bir yetkilendirme ile yapılır.</p>
+
+  <h2>Veri saklama</h2>
+  <p>Hesap verileriniz, hesabınızı kullandığınız veya sildiğiniz süre boyunca saklanır. Silme talebinizi ilettiğinizde makul bir süre içinde işleme alınır.</p>
+
+  <h2>Haklarınız</h2>
+  <p>Verilerinize erişim, düzeltme veya silinmesini talep etmek için aşağıdaki iletişim adresinden bize yazabilirsiniz. Bu metin, geçerli mevzuata (örn. KVKK, GDPR) hukuken doğrulanmış bir uyum beyanı niteliğinde değildir; genel bilgilendirme amaçlıdır.</p>
+
+  <h2>Politika değişiklikleri</h2>
+  <p>Bu politika zaman zaman güncellenebilir. Güncellemeler bu sayfada "son güncelleme" tarihiyle yayınlanır.</p>
+
+  <h2>İletişim</h2>
+  <p>Sorularınız için: <a class="contact" href="mailto:destek@sinyal-avcisi.com">destek@sinyal-avcisi.com</a></p>
+
+  <footer>
+    <a href="/terms">Kullanım Şartları</a> · <a href="/">Ana sayfa</a>
+  </footer>
+</div>
+</body>
+</html>
