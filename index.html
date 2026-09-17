@@ -5883,6 +5883,14 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
             <div class="ist-hafta-ozet">Bu hafta <b id="ist-hafta-soru">0</b> soru çözdün, <b id="ist-hafta-xp">0</b> XP kazandın.</div>
             <div id="ist-hafta-bar" class="ist-hafta-bar"></div>
           </div>
+
+          <!-- Cevap geçmişi (doğru+yanlış birleşik) — veri yoksa gizli kalır, UYDURMA yok -->
+          <div class="ist-panel" id="ist-cevap-gecmisi-panel" style="display:none">
+            <div class="ist-panel-baslik">🎯 Zayıf Alan & Son Cevaplar</div>
+            <div id="ist-zayif-konu" style="font-size:14px;margin-bottom:12px"></div>
+            <div id="ist-son-cevaplar"></div>
+            <div id="ist-attribution-kaynak" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -6493,7 +6501,7 @@ function satPratikRender(){
   },300);
 }
 function satSureDoIdi(){if(satAnswered)return;satAnswered=true;const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];if(opts[soru.ans])opts[soru.ans].classList.add('ok');const fb=document.getElementById('sat-fb');if(fb){fb.className='sat-fb err';fb.textContent='⏱ Süre doldu! Doğru: '+soru.opts[soru.ans];}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
-function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb err';fb.textContent='❌ '+soru.fb;}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
+function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb err';fb.textContent='❌ '+soru.fb;}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
 function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}satPratikRender();}
 function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(245,166,35,.1);color:var(--signal);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
@@ -6795,11 +6803,13 @@ function dAns(btn,correct){
   if(correct){
     btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('sinyal');
+    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null});
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
+    cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null});
   }
   if(nextBtn)nextBtn.style.display='inline-block';
 }
@@ -6897,10 +6907,12 @@ function kkAnswer(q){
     if(kkCurrent.rep===0)kkCurrent.interval=1;else if(kkCurrent.rep===1)kkCurrent.interval=6;else kkCurrent.interval=Math.round(kkCurrent.interval*kkCurrent.ef);
     kkCurrent.rep++;kkCurrent.ef=Math.max(1.3,kkCurrent.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));
     streakSoruEkle('kelime');
+    cevapKaydet({modul:'kelime',soru:kkCurrent.en,selectedOption:null,correctOption:kkCurrent.tr,isCorrect:true,topic:'kelime',signal:null});
   } else {
     kkCurrent.rep=0;kkCurrent.interval=1;
     // Zor diyince hata defterine ekle
     hataEkle(kkCurrent.en, '(Hatırlamadım)', kkCurrent.tr, 'kelime');
+    cevapKaydet({modul:'kelime',soru:kkCurrent.en,selectedOption:'(Hatırlamadım)',correctOption:kkCurrent.tr,isCorrect:false,topic:'kelime',signal:null});
   }
   kkCurrent.due=Date.now()+kkCurrent.interval*24*60*60*1000;
   kkSave();kkUpdateDashCard();setTimeout(kkShow,150);
@@ -7098,12 +7110,14 @@ function tuzakAns(btn,correct,dogru){
   if(correct){
     btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
     streakSoruEkle('tuzak');
+    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:btn.textContent,correctOption:opts[dogru].textContent,isCorrect:true,topic:'tuzak',signal:null});
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     // Hata defterine ekle
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
+    cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:opts[Array.from(opts).indexOf(btn)].textContent,correctOption:opts[dogru].textContent,isCorrect:false,topic:'tuzak',signal:null});
   }
   const nb=document.getElementById('tuzak-next-btn');if(nb)nb.style.display='inline-block';
   // Paylaş butonu göster
@@ -8485,9 +8499,11 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
   
   if(dogru_mu){
     streakSoruEkle('sinyal');
+    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:true,topic:'paragraf',signal:null});
     if(typeof konfeti==='function')konfeti();
   } else {
     hataEkle(s.q,'Yanlış şık',s.opts[dogru_],'sinyal');
+    cevapKaydet({modul:'paragraf',soru:s.q,selectedOption:s.opts[oidx],correctOption:s.opts[dogru_],isCorrect:false,topic:'paragraf',signal:null});
     if(typeof saShakeBtn==='function')saShakeBtn(document.getElementById('popt-'+pidx+'-'+sidx+'-'+oidx));
   }
 }
@@ -9033,32 +9049,107 @@ function hataEkle(soru,verilenCevap,dogruCevap,tip){
   sd.tipYanlis=sd.tipYanlis||{};
   sd.tipYanlis[tip]=(sd.tipYanlis[tip]||0)+1;
   streakSave(sd);
-  hataSunucuyaSenkronla(soru,verilenCevap,dogruCevap,tip);
 }
-// Yanlış cevabın sunucu tarafı best-effort senkronu (bkz. supabase/
-// answer-history-schema.sql). localStorage (hataSave, yukarıda) HER ZAMAN
-// ana kaynaktır — migration çalıştırılmadıysa veya giriş yapılmamışsa
-// sessizce atlanır, hataEkle'nin ana akışını asla bloklamaz/bozmaz
-// (bkz. klodMotionDersKaydet ile aynı desen).
-function hataSunucuyaSenkronla(soru,verilenCevap,dogruCevap,tip){
+
+// ============================================================
+// CEVAP GEÇMİŞİ (doğru + yanlış, birleşik) — Zayıf Alan Analizi,
+// Kişisel Çalışma Planı ve İstatistiklerim panelinin ortak veri
+// kaynağı. 2026-09-17: hataEkle'nin eski (sadece yanlış, dar alan
+// setli) sunucu senkronunu (hataSunucuyaSenkronla) devralıp
+// genişletiyor — o fonksiyon kaldırıldı, hataEkle artık tekrar SADECE
+// local (orijinal davranışı). localStorage HER ZAMAN ana kaynaktır;
+// giriş yapılmışsa best-effort Supabase'e de senkronlanır (bkz.
+// supabase/answer-history-schema.sql, record_answer RPC'si) — sunucu
+// erişilemezse quiz ASLA bozulmaz (klodMotionDersKaydet ile aynı desen).
+// ============================================================
+function cevapGecmisiLoad(){try{return JSON.parse(localStorage.getItem('sa_cevap_gecmisi')||'[]');}catch(e){return[];}}
+function cevapGecmisiSave(d){try{localStorage.setItem('sa_cevap_gecmisi',JSON.stringify(d));}catch(e){}}
+
+// questionId: sadece Sinyal Lab'da (SL_HAVUZ) var — diğer modüllerde
+// null. questionId varsa ona göre, yoksa soru metnine göre (hataEkle
+// ile AYNI desen) dedup edilir; tekrar denemede attemptCount artar.
+function cevapKaydet(opts){
+  try{
+    const questionId=opts.questionId||null;
+    const modul=opts.modul||'diger';
+    const soru=String(opts.soru||'').slice(0,300);
+    const selectedOption=opts.selectedOption!=null?String(opts.selectedOption).slice(0,200):null;
+    const correctOption=opts.correctOption!=null?String(opts.correctOption).slice(0,200):null;
+    const isCorrect=Boolean(opts.isCorrect);
+    const topic=opts.topic||null;
+    const signal=opts.signal||null;
+
+    let d=cevapGecmisiLoad();
+    const idx=questionId?d.findIndex(h=>h.questionId===questionId):d.findIndex(h=>!h.questionId&&h.soru===soru);
+    const kayit={questionId,modul,soru,selectedOption,correctOption,isCorrect,topic,signal,attemptCount:idx>=0?(d[idx].attemptCount||1)+1:1,answeredAt:new Date().toISOString()};
+    if(idx>=0)d.splice(idx,1);
+    d.unshift(kayit);
+    if(d.length>200)d=d.slice(0,200); // hata defterinden (30) daha geniş ama sınırsız değil
+    cevapGecmisiSave(d);
+    cevapSunucuyaSenkronla(kayit);
+  }catch(e){}
+}
+
+// Best-effort sunucu senkronu — migration çalıştırılmadıysa veya giriş
+// yapılmamışsa sessizce atlanır, cevapKaydet'in ana akışını asla
+// bloklamaz/bozmaz.
+function cevapSunucuyaSenkronla(kayit){
   try{
     if(!sb||!currentUser)return;
     const ctx=(typeof window!=='undefined'&&window.SinyalAttribution)?window.SinyalAttribution.context():{};
-    sb.from('answer_history').insert({
-      user_id:currentUser.id,
-      soru:String(soru||'').slice(0,500),
-      verilen_cevap:String(verilenCevap||'').slice(0,200),
-      dogru_cevap:String(dogruCevap||'').slice(0,200),
-      tip:String(tip||'').slice(0,50),
-      attribution_source:ctx.source||null,
-      attribution_medium:ctx.medium||null,
-      attribution_campaign:ctx.campaign||null,
-      attribution_signal:ctx.signal||null,
+    sb.rpc('record_answer',{
+      p_question_id:kayit.questionId,
+      p_module:kayit.modul,
+      p_soru:kayit.soru,
+      p_selected_option:kayit.selectedOption,
+      p_correct_option:kayit.correctOption,
+      p_is_correct:kayit.isCorrect,
+      p_topic:kayit.topic,
+      p_signal:kayit.signal,
+      p_response_time_ms:null,
+      p_attribution_source:ctx.source||null,
+      p_attribution_medium:ctx.medium||null,
+      p_attribution_campaign:ctx.campaign||null,
+      p_attribution_signal:ctx.signal||null,
     }).then(function(r){
-      if(r&&r.error)console.warn('[answer-history] Supabase senkron atlandı (migration çalıştırılmamış olabilir):',r.error.message);
+      if(r&&r.error)console.warn('[cevap-gecmisi] Supabase senkron atlandı (migration çalıştırılmamış olabilir):',r.error.message);
     }).catch(function(){});
   }catch(e){}
 }
+
+// Konu/sinyal bazlı ayrıntılı özet (attempts/correct/incorrect/accuracy/
+// recent_accuracy) — İstatistiklerim panelinde ve (aşağıda tanımlı)
+// sinavZayifAlanAnalizi'nin isabetli-seçim dalında kullanılır. Veri
+// yoksa UYDURMAZ — null döner.
+function cevapGecmisiOzet(){
+  const d=cevapGecmisiLoad();
+  if(!d.length)return null;
+  const konular={};
+  d.forEach(k=>{
+    const anahtar=k.signal||k.topic||k.modul||'diger';
+    konular[anahtar]=konular[anahtar]||{konu:anahtar,attempts:0,correct:0,incorrect:0};
+    konular[anahtar].attempts++;
+    if(k.isCorrect)konular[anahtar].correct++;else konular[anahtar].incorrect++;
+  });
+  const liste=Object.values(konular).map(k=>Object.assign({},k,{accuracy:k.attempts?Math.round(k.correct/k.attempts*100):0}));
+  const enZayifSirali=liste.slice().sort((a,b)=>a.accuracy-b.accuracy);
+  const enHataliSirali=liste.slice().sort((a,b)=>b.incorrect-a.incorrect);
+  const son20=d.slice(0,20);
+  const sonDogru=son20.filter(k=>k.isCorrect).length;
+  const toplamDogru=d.filter(k=>k.isCorrect).length;
+  return{
+    toplamCevap:d.length,
+    toplamDogru,
+    toplamYanlis:d.length-toplamDogru,
+    genelDogruluk:d.length?Math.round(toplamDogru/d.length*100):0,
+    recentAccuracy:son20.length?Math.round(sonDogru/son20.length*100):null,
+    konular:liste,
+    enZayifKonu:enZayifSirali[0]||null,
+    enHataliSinyal:enHataliSirali.find(k=>k.incorrect>0)||null,
+    sonCevaplar:d.slice(0,10),
+  };
+}
+
 function hataCountGuncelle(){
   const d=hataLoad();
   // Tab badge güncelle
@@ -10482,6 +10573,23 @@ const SP_ZAYIF_GOREV={
   'paragraf':{etiket:'Paragraf Soruları',gorev:'📖 2 paragraf sorusu çöz (SAT metodu)',mod:'paragraf'}
 };
 function sinavZayifAlanAnalizi(){
+  // 2026-09-17: cevapGecmisiOzet() (doğru+yanlış birleşik, sinyal bazlı
+  // gerçek accuracy) varsa VE yeterli veri içeriyorsa, hataLoad()'un kaba
+  // "en çok yanlış" sayımından daha isabetli bir seçim yapar — en DÜŞÜK
+  // accuracy'li sinyalleri önceliklendirir. Dönen ŞEKİL AYNI kalır
+  // ({kaynak,liste:[{etiket,gorev,mod,adet}]}) — sinavPlanimOlustur'da
+  // HİÇBİR değişiklik gerekmez. Yeterli veri yoksa (aşağıdaki) ESKİ
+  // davranışa aynen düşer.
+  const cgOzet=(typeof cevapGecmisiOzet==='function')?cevapGecmisiOzet():null;
+  if(cgOzet&&cgOzet.toplamCevap>=3){
+    const zayifSinyaller=cgOzet.konular.filter(k=>k.incorrect>0).sort((a,b)=>a.accuracy-b.accuracy).slice(0,3);
+    if(zayifSinyaller.length){
+      return{kaynak:'gercek',liste:zayifSinyaller.map(k=>{
+        const kod=hataKategoriSinifla(k.konu,'').kod;
+        return Object.assign({},(SP_ZAYIF_GOREV[kod]||SP_ZAYIF_GOREV['hk-dikkat']),{adet:k.incorrect,accuracy:k.accuracy,attempts:k.attempts});
+      })};
+    }
+  }
   const hatalar=hataLoad();
   if(hatalar.length>=3){
     const sayac={};
@@ -11287,6 +11395,42 @@ function istatistikRender(){
         <div class="ist-hafta-gun-lbl" style="${g.bugunMu?'color:#7c3aed;font-weight:700':''}">${g.lbl}</div>
       </div>
     `).join('');
+  }
+
+  // Cevap geçmişi (doğru+yanlış birleşik) — en zayıf konu, son cevaplar,
+  // attribution kaynağı. Veri yoksa panel gizli kalır (UYDURMA yok).
+  const cgOzet=(typeof cevapGecmisiOzet==='function')?cevapGecmisiOzet():null;
+  const cgPanel=document.getElementById('ist-cevap-gecmisi-panel');
+  if(cgPanel){
+    if(!cgOzet){
+      cgPanel.style.display='none';
+    } else {
+      cgPanel.style.display='block';
+      const zayifEl=document.getElementById('ist-zayif-konu');
+      if(zayifEl){
+        const ez=cgOzet.enZayifKonu;
+        const eh=cgOzet.enHataliSinyal;
+        zayifEl.innerHTML=[
+          `<div>Toplam <b>${cgOzet.toplamCevap}</b> cevap · <b>${cgOzet.genelDogruluk}%</b> genel doğruluk${cgOzet.recentAccuracy!==null?' · son 20\'de <b>'+cgOzet.recentAccuracy+'%</b>':''}</div>`,
+          ez?`<div style="margin-top:4px">🔻 En zayıf konu: <b>${ez.konu}</b> — ${ez.accuracy}% (${ez.attempts} deneme)</div>`:'',
+          (eh&&eh!==ez)?`<div style="margin-top:4px">⚠️ En çok hata yapılan sinyal: <b>${eh.konu}</b> (${eh.incorrect} yanlış)</div>`:'',
+        ].join('');
+      }
+      const sonEl=document.getElementById('ist-son-cevaplar');
+      if(sonEl){
+        sonEl.innerHTML=cgOzet.sonCevaplar.slice(0,5).map(k=>`
+          <div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:13px;border-bottom:1px solid var(--border)">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(k.signal||k.topic||k.modul||'').toString().slice(0,40)}</span>
+            <span style="color:${k.isCorrect?'#16a34a':'var(--trap)'};flex-shrink:0">${k.isCorrect?'✅':'❌'}</span>
+          </div>
+        `).join('');
+      }
+      const attrEl=document.getElementById('ist-attribution-kaynak');
+      if(attrEl){
+        const ctx=(typeof window!=='undefined'&&window.SinyalAttribution)?window.SinyalAttribution.context():null;
+        attrEl.textContent=(ctx&&ctx.source)?('Bu oturumun kaynağı: '+ctx.source+(ctx.campaign?(' / '+ctx.campaign):'')):'';
+      }
+    }
   }
 }
 

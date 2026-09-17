@@ -63,6 +63,25 @@ export default async function handler(req, res) {
   };
 
   const icerikler = {
+    hosgeldin: `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f8f7f3">
+        <div style="background:#fff;border-radius:20px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+          <div style="font-family:'Georgia',serif;font-size:28px;color:#1a4fd6;margin-bottom:8px">Sinyal <span style="color:#0c0e14">Avcısı</span></div>
+          <hr style="border:none;border-top:2px solid #1a4fd6;margin:16px 0 24px">
+          <h2 style="font-size:22px;color:#0c0e14;margin-bottom:12px">Aramıza hoş geldin! 🎯</h2>
+          <p style="font-size:16px;color:#6b7280;line-height:1.7;margin-bottom:24px">
+            YDS/YÖKDİL hazırlığına tek kuruş ödemeden başladın. Sinyal Lab, Kelime Kartları ve KLOD AI mentor hep hazır — istediğin an devam edebilirsin.
+          </p>
+          <a href="https://sinyal-avcisi.com/#dashboard" style="display:inline-block;background:#1a4fd6;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;margin-bottom:24px">
+            🚀 Panele Git →
+          </a>
+          <p style="font-size:13px;color:#9ca3af;line-height:1.6">
+            Sinyal Avcısı · YDS & YÖKDİL Hazırlık Platformu<br>
+            Gelirin bir kısmı yetim çocukların eğitimi için bağışlanmaktadır ❤️
+          </p>
+        </div>
+      </div>
+    `,
     ekitap: `
       <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#f8f7f3">
         <div style="background:#fff;border-radius:20px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,.08)">
