@@ -122,11 +122,60 @@ const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
   const senkronBody = senkronMatch ? senkronMatch[0] : "";
   kontrol("28) cevapSunucuyaSenkronla gövdesi bulundu", senkronBody.length > 0);
   kontrol("29) tüm gövde try/catch ile sarmalı", /^function cevapSunucuyaSenkronla\(kayit\)\{\s*try\{/.test(senkronBody));
-  kontrol("30) sb/currentUser kontrolü yapılmadan senkron denenmiyor", /if\(!sb\|\|!currentUser\)return;/.test(senkronBody));
+  kontrol("30) sadece sb kontrolüyle graceful skip (client yoksa)", /if\(!sb\)return;/.test(senkronBody));
   kontrol("31) sb.rpc('record_answer', ...) çağrılıyor (RPC deseni, ham .insert() DEĞİL)", /sb\.rpc\(['"]record_answer['"]/.test(senkronBody));
   kontrol("32) window.SinyalAttribution.context() kullanıyor (attribution bağlantısı)", /window\.SinyalAttribution\.context\(\)/.test(senkronBody));
-  kontrol("33) Supabase hatası sadece console.warn ile loglanıyor, throw edilmiyor", /\.then\(function\(r\)\{[\s\S]*console\.warn/.test(senkronBody) && !/throw/.test(senkronBody));
-  kontrol("34) network hatası .catch ile sessizce yutuluyor", /\.catch\(function\(\)\{\}\)/.test(senkronBody));
+  kontrol("33) RPC hatası await ile yakalanıp sadece console.warn ile loglanıyor, throw edilmiyor", /const r=await sb\.rpc\(['"]record_answer['"]/.test(senkronBody) && /if\(r&&r\.error\)\{/.test(senkronBody) && /console\.warn/.test(senkronBody) && !/throw/.test(senkronBody));
+  kontrol("34) eski sessiz-yutan .catch(function(){}) deseni KALDIRILDI (regresyon kilidi)", !/\.catch\(function\(\)\{\}\)/.test(senkronBody));
+
+  // 2026-09-17 AUTH RACE FIX — currentUser sadece onAuthStateChange'de
+  // (asenkron) set edildiği için, sayfa açılır açılmaz/hızlı cevapta
+  // hâlâ null olabiliyordu ve eskiden RPC hiç denenmeden, hiçbir log
+  // olmadan sessizce atlanıyordu. Artık currentUser boşsa BİR KEZ
+  // sb.auth.getSession() ile gerçek session kontrol ediliyor.
+  kontrol("30b) fonksiyon async (getSession'ı await edebilmek için)", /async function cevapSunucuyaSenkronla\(kayit\)\{/.test(html));
+  kontrol("30c) currentUser doluysa DOĞRUDAN kullanılıyor (gereksiz getSession çağrısı yok)", /let user=currentUser;/.test(senkronBody));
+  kontrol("30d) currentUser boşsa BİR KEZ sb.auth.getSession() ile fallback kontrol ediliyor", /if\(!user\)\{[\s\S]*?await sb\.auth\.getSession\(\)/.test(senkronBody));
+  kontrol(
+    "30e) getSession sonucu GERÇEK session'da user varsa currentUser güncellenip devam ediliyor (sonraki cevaplarda race kapanıyor)",
+    /if\(!session\|\|!session\.user\)\{/.test(senkronBody) && /user=session\.user;/.test(senkronBody) && /currentUser=user;/.test(senkronBody)
+  );
+  kontrol(
+    "30f) session yoksa (gerçek misafir) güvenli, tanımlı bir mesajla skip ediliyor — RPC HİÇ çağrılmıyor",
+    /console\.warn\('\[answer-history\] sync skipped: no authenticated session'\)/.test(senkronBody)
+  );
+  {
+    // Guest-skip mesajının RPC çağrısından ÖNCE (kod akışında daha erken)
+    // geldiğini doğrula — yani gerçekten RPC'ye hiç ulaşılmadan return ediliyor.
+    const guestSkipIdx = senkronBody.indexOf("no authenticated session");
+    const rpcIdx = senkronBody.indexOf("sb.rpc('record_answer'");
+    kontrol("30g) guest-skip mesajı RPC çağrısından ÖNCE geliyor (RPC'ye hiç ulaşılmıyor)", guestSkipIdx !== -1 && rpcIdx !== -1 && guestSkipIdx < rpcIdx);
+  }
+  kontrol(
+    "30h) getSession'ın kendisi hata verirse (network/exception) KENDİ try/catch'i içinde güvenli mesajla yakalanıp return ediliyor — dışarı fırlatılmıyor",
+    /try\{\s*const \{ data \} = await sb\.auth\.getSession\(\);[\s\S]*?\}catch\(e\)\{\s*console\.warn\('\[answer-history\] sync skipped: session check failed'\);\s*return;\s*\}/.test(senkronBody)
+  );
+  kontrol(
+    "33b) RPC hata logu SADECE güvenli alanları içeriyor (code/status/reason) — session/token/email/id YOK",
+    /console\.warn\('\[answer-history\] sync failed:',\{code:r\.error\.code\|\|null,status:r\.status\|\|null,reason:r\.error\.message\|\|null\}\)/.test(senkronBody)
+  );
+  kontrol(
+    "34b) dış catch de güvenli (session/token/email/id İÇERMEYEN) bir mesajla loglanıyor, dışarı rethrow YOK",
+    /\}catch\(e\)\{\s*console\.warn\('\[answer-history\] sync failed:',\{code:e&&e\.code\|\|null,status:null,reason:'unexpected error'\}\);\s*\}\s*\}$/.test(senkronBody)
+  );
+  kontrol(
+    "34c) senkronBody içinde access_token/refresh_token/email/user nesnesinin tamamı HİÇBİR yerde loglanmıyor (mesaj METNİNDE 'session' kelimesi geçmesi sorun değil — sadece gerçek token/credential referansları yasak)",
+    !/access_token|refresh_token|\.email\b|JSON\.stringify\((session|user|r|e)\)|console\.(warn|log|error)\([^)]*,\s*(session|user|currentUser)\s*[,)]/.test(senkronBody)
+  );
+  kontrol(
+    "34d) cevapKaydet çağrı noktası HÂLÂ await ETMİYOR (fire-and-forget) — async dönüşüm quiz akışını bloklamıyor",
+    /cevapSunucuyaSenkronla\(kayit\);/.test(html) && !/await cevapSunucuyaSenkronla\(kayit\)/.test(html)
+  );
+  kontrol("34e) cevapKaydet KENDİSİ async DEĞİL (senkron quiz akışı korunuyor)", /^function cevapKaydet\(opts\)\{/m.test(html) && !/async function cevapKaydet/.test(html));
+  kontrol(
+    "34f) RPC'ye giden 13 p_* parametre seti DEĞİŞMEDİ (regresyon kilidi)",
+    ["p_question_id", "p_module", "p_soru", "p_selected_option", "p_correct_option", "p_is_correct", "p_topic", "p_signal", "p_response_time_ms", "p_attribution_source", "p_attribution_medium", "p_attribution_campaign", "p_attribution_signal"].every((k) => senkronBody.includes(k + ":"))
+  );
 }
 
 // ---- TEST: tüm 5 quiz modülü hem DOĞRU hem YANLIŞ cevabı kaydediyor ----
