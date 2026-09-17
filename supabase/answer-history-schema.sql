@@ -71,6 +71,22 @@ create unique index if not exists answer_history_user_question_idx
   on public.answer_history(user_id, question_id)
   where question_id is not null;
 
+-- 2026-09-17 KATMAN 4 hazırlığı: public.diagnostic_events (bkz.
+-- supabase/diagnostic-events-schema.sql) answer_history'ye COMPOSITE
+-- bir FK ile referans veriyor — (answer_history_id, user_id)
+-- references answer_history(id, user_id). Postgres, çok-kolonlu bir
+-- FK'nın referans verdiği kolonlar üzerinde AYRI bir UNIQUE/PK
+-- gerektirir; id zaten primary key olduğu için (id,user_id) mantıken
+-- ZATEN benzersizdir (id tek başına benzersizken bir üst kümesi de
+-- benzersizdir) — ama Postgres bunu OTOMATİK çıkarsamaz, açık bir
+-- unique index şart. Bu index SADECE bu amaç için var; mevcut hiçbir
+-- sorguyu/RLS'i/RPC'yi (record_answer, upsert hedefi olan yukarıdaki
+-- answer_history_user_question_idx dahil) DEĞİŞTİRMEZ — saf ekleme,
+-- mevcut veride ihlal riski YOK (id zaten benzersiz olduğu için bu
+-- constraint mevcut satırlarla otomatik sağlanır).
+create unique index if not exists answer_history_id_user_id_key
+  on public.answer_history(id, user_id);
+
 -- Client doğrudan INSERT/UPDATE yerine bu RPC'yi çağırır (bkz.
 -- index.html cevapSunucuyaSenkronla() → sb.rpc('record_answer', {...})) —
 -- update_lesson_progress RPC'siyle AYNI desen. SECURITY INVOKER: RLS
