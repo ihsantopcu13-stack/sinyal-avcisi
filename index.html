@@ -1724,7 +1724,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         <div class="dmod" id="mod-avci" style="display:none">
   <div class="dm-eye">🏹 AVCI MASTER SİSTEMİ — YDS/YÖKDİL Strateji Rehberi</div>
   <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px">
-    
+    <div id="avci-zayif-alanlarim"></div>
+
     <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:10px;padding:14px;color:#fff;margin-bottom:4px">
       <div style="font-family:'IBM Plex Serif',serif;font-size:16px;color:#e8d5a3;margin-bottom:6px">🏹 AVCI MASTER ANA PRENSİBİ</div>
       <div style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.8">
@@ -6678,7 +6679,7 @@ function dtab(el,mod){
     }
     return;
   }
-  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci'){};if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
 }
 function dnav(el){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
@@ -9320,6 +9321,116 @@ function cevapGecmisiOzet(){
     enHataliSinyal:enHataliSirali.find(k=>k.incorrect>0)||null,
     sonCevaplar:d.slice(0,10),
   };
+}
+
+// ============================================================
+// AVCI ÖĞRENME HAFIZASI — FAZ 1 ÇEKİRDEK (2026-09-17)
+// ============================================================
+// cevapGecmisiOzet()'ten FARKLI: bu, localStorage'ı DEĞİL, doğrudan
+// Supabase public.answer_history'yi (RLS ile SADECE auth.uid()'nin
+// KENDİ satırları, anonim veya gerçek fark etmez) okuyup "🏹 Avcı
+// Master" panelinde küçük bir "🎯 ZAYIF ALANLARIM" bölümü besler.
+// record_answer/cevapKaydet/RLS/schema'ya HİÇ dokunulmuyor — bu SADECE
+// mevcut, zaten yazılan veriyi OKUYAN yeni, ayrı bir katman.
+//
+// Gruplama anahtarı cevapGecmisiOzet ile AYNI desen: signal varsa o
+// (Sinyal Lab'ın granüler dilbilgisi sinyali, örn. "despite"), yoksa
+// topic (diğer 4 modülde sadece modül adını taşıyan sabit bir etiket)
+// — icat edilmiş bir taksonomi YOK, sadece var olan iki sütun.
+//
+// Skor deterministik ve açıklanabilir (LLM/AI YOK):
+//   weaknessScore = yanlışOranı + tekrarFaktörü + yakınZamanFaktörü
+//   - yanlışOranı: yanlış/toplam (0-1)
+//   - tekrarFaktörü: min(yanlış,5)/5 (0-1) — art arda/çok sayıda yanlış
+//   - yakınZamanFaktörü: son yanlış 7 gün içindeyse 1, 30 gün içindeyse
+//     0.3, daha eskiyse 0 — "yakın zamanda hâlâ hata yapıyor musun?"
+// Skor >=1.5 Yüksek, >=0.7 Orta, aksi halde Düşük. En az 2 cevap
+// olmayan gruplar (tek şanslı/şanssız cevapla erken yargı) gösterilmez.
+
+function avciZayifAlanlariHesapla(satirlar){
+  const gruplar={};
+  const simdi=Date.now();
+  for(const r of (satirlar||[])){
+    const anahtar=String(r.signal||r.topic||'').trim();
+    if(!anahtar)continue;
+    if(!gruplar[anahtar])gruplar[anahtar]={anahtar,toplam:0,yanlis:0,dogru:0,sonHataZamani:null};
+    const g=gruplar[anahtar];
+    g.toplam++;
+    if(r.is_correct){
+      g.dogru++;
+    }else{
+      g.yanlis++;
+      const t=r.answered_at?new Date(r.answered_at).getTime():null;
+      if(t&&(!g.sonHataZamani||t>g.sonHataZamani))g.sonHataZamani=t;
+    }
+  }
+  return Object.values(gruplar)
+    .filter(g=>g.toplam>=2)
+    .map(g=>{
+      const yanlisOrani=g.yanlis/g.toplam;
+      const tekrarFaktoru=Math.min(g.yanlis,5)/5;
+      let yakinZamanFaktoru=0;
+      if(g.sonHataZamani){
+        const gunFarki=(simdi-g.sonHataZamani)/(1000*60*60*24);
+        if(gunFarki<=7)yakinZamanFaktoru=1;else if(gunFarki<=30)yakinZamanFaktoru=0.3;
+      }
+      const skor=yanlisOrani+tekrarFaktoru+yakinZamanFaktoru;
+      const seviye=skor>=1.5?'Yüksek':skor>=0.7?'Orta':'Düşük';
+      return{anahtar:g.anahtar,toplam:g.toplam,yanlis:g.yanlis,dogru:g.dogru,skor,seviye};
+    })
+    .sort((a,b)=>b.skor-a.skor)
+    .slice(0,5);
+}
+function avciZayifEtiketBicimlendir(s){
+  return String(s).split(' ').filter(Boolean).map(w=>w.charAt(0).toLocaleUpperCase('tr')+w.slice(1)).join(' ');
+}
+function avciZayifAlanlarimBosState(){
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+    <div style="font-size:15px;font-weight:700;color:var(--signal);margin-bottom:6px">🎯 ZAYIF ALANLARIM</div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.6">Henüz yeterli cevap yok.<br>AVCI seni tanıdıkça zayıf alanların burada görünecek.</div>
+  </div>`;
+}
+function avciZayifAlanlarimHTML(gruplar){
+  if(!gruplar||!gruplar.length)return avciZayifAlanlarimBosState();
+  const renkler={'Yüksek':'var(--trap)','Orta':'var(--signal)','Düşük':'#22c55e'};
+  const satirlar=gruplar.map((g,i)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;${i>0?'border-top:1px solid var(--border)':''}">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink)">${i+1}. ${_hgEscape(avciZayifEtiketBicimlendir(g.anahtar))}</div>
+        <div style="font-size:12px;color:var(--muted)">${g.toplam} cevap • ${g.yanlis} yanlış</div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:${renkler[g.seviye]};white-space:nowrap">Zayıflık: ${g.seviye}</div>
+    </div>`).join('');
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px">
+    <div style="font-size:15px;font-weight:700;color:var(--signal);margin-bottom:6px">🎯 ZAYIF ALANLARIM</div>
+    ${satirlar}
+  </div>`;
+}
+// Best-effort — sb/currentUser yoksa (misafir, henüz auth hazır değil vb.)
+// veya sorgu/ağ hatası olursa GÜVENLİ boş-durum gösterilir, hiçbir hata
+// fırlatılmaz, panelin geri kalanı (statik AVCI rehberi) asla bozulmaz.
+// Sadece GEREKLİ 3 kolon (+answered_at) çekiliyor, tüm tablo değil;
+// RLS zaten auth.uid()=user_id ile başka kullanıcının satırını hiç
+// döndürmez — service role kullanılmıyor, RLS bypass edilmiyor.
+async function avciZayifAlanlarimRender(){
+  const el=document.getElementById('avci-zayif-alanlarim');
+  if(!el)return;
+  el.innerHTML=avciZayifAlanlarimBosState();
+  try{
+    if(!sb||!currentUser)return;
+    const{data,error}=await sb
+      .from('answer_history')
+      .select('signal,topic,is_correct,answered_at')
+      .order('answered_at',{ascending:false})
+      .limit(500);
+    if(error){
+      console.warn('[avci-zayif-alan] yükleme atlandı:',{code:error.code||null,status:error.status||null,reason:error.message||null});
+      return;
+    }
+    el.innerHTML=avciZayifAlanlarimHTML(avciZayifAlanlariHesapla(data));
+  }catch(e){
+    console.warn('[avci-zayif-alan] yükleme atlandı:',{code:null,status:null,reason:'unexpected error'});
+  }
 }
 
 function hataCountGuncelle(){
