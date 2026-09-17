@@ -9406,12 +9406,105 @@ function avciZayifAlanlarimHTML(gruplar){
     ${satirlar}
   </div>`;
 }
+// ============================================================
+// AVCI ÖĞRENCİ MODELİ — KATMAN 3 (2026-09-17)
+// ============================================================
+// Katman 1 (avciZayifAlanlariHesapla/avciZayifAlanlarimHTML, PR #21)
+// HİÇ DEĞİŞMEDİ — bu SADECE aynı ham answer_history satırlarından
+// (ikinci bir sorgu ATMADAN, aynı `data`'dan) daha zengin, açılır bir
+// "Öğrenci Profili" detayı üreten EK bir katman.
+//
+// HAM OLAY → HESAPLANMIŞ PROFİL: ham satırlar hiçbir yerde atılmıyor/
+// özetlenip unutulmuyor — bu fonksiyon HER ÇAĞRIDA answer_history'nin
+// güncel satırlarından SIFIRDAN yeniden hesaplanır (kalıcı/aggregate
+// bir "profil" tablosu YOK, migration YOK).
+//
+// Denetim sonucu (2026-09-17): 14 olası ölçüden gerçekten mevcut olan
+// tek şey doğru/yanlış + zaman damgası (+response_time_ms kolonu var
+// ama ŞU AN hiçbir modül gerçek süre göndermiyor — hep null). Bu yüzden:
+//   - BİLGİ/TANIMA: longTermAccuracy/recentAccuracy ile temsil ediliyor
+//     (çoktan seçmeli doğru/yanlış TEK ayırt edici sinyal — 2 ayrı
+//     boyutmuş gibi UYDURULMUYOR, birleşik "doğruluk kanıtı" olarak
+//     raporlanıyor).
+//   - REFLEKS: SADECE response_time_ms gerçekten dolu satır varsa
+//     hesaplanır; tek bir satırda bile yoksa null ("veri yok") — asla
+//     0/varsayım üretilmez.
+//   - UYGULAMA / GEREKÇE: hiçbir modülde bunları ayırt edecek bir olay
+//     (hint/answer_change/elimination/reasoning) ÜRETİLMİYOR (mimari
+//     olarak imkansız — tüm modüller ilk tıklamada seçenekleri kilitliyor,
+//     serbest metin/gerekçe girişi yok) — bu yüzden SABİT 'VERİ_YOK'.
+// Kanıt güveni: <2 cevap YETERSİZ_KANIT, 2-4 DÜŞÜK_KANIT, 5+ YETERLİ_KANIT
+// — profilEtiketi (GÜÇLÜ/GELİŞİYOR/ÇALIŞILACAK) SADECE kanıt yeterliyken
+// atanır, aksi halde YETERSİZ_KANIT olarak kalır. Root-cause/neden-analizi
+// YOK (Katman 4+ sınırı) — sadece GÖZLEMLENEN performans/kanıt miktarı.
+function avciOgrenciModeliHesapla(satirlar){
+  const KANIT_ESIGI_DUSUK=2,KANIT_ESIGI_YETERLI=5,SON_N=5;
+  const gruplar={};
+  for(const r of (satirlar||[])){
+    const anahtar=String(r.signal||r.topic||'').trim();
+    if(!anahtar)continue;
+    if(!gruplar[anahtar])gruplar[anahtar]=[];
+    gruplar[anahtar].push(r);
+  }
+  return Object.entries(gruplar).map(([anahtar,olaylarHam])=>{
+    const olaylar=olaylarHam.slice().sort((a,b)=>new Date(b.answered_at||0)-new Date(a.answered_at||0));
+    const toplam=olaylar.length;
+    const dogruSayisi=olaylar.filter(o=>o.is_correct).length;
+    const sonGorulme=olaylar[0]?.answered_at||null;
+    const kanitGuveni=toplam<KANIT_ESIGI_DUSUK?'YETERSİZ_KANIT':toplam<KANIT_ESIGI_YETERLI?'DÜŞÜK_KANIT':'YETERLİ_KANIT';
+    const sonN=olaylar.slice(0,SON_N);
+    const recentAccuracy=sonN.length?Math.round(sonN.filter(o=>o.is_correct).length/sonN.length*100):null;
+    const longTermAccuracy=toplam?Math.round(dogruSayisi/toplam*100):null;
+    const zamanliOlaylar=olaylar.filter(o=>typeof o.response_time_ms==='number'&&o.response_time_ms>0);
+    const reflex=zamanliOlaylar.length?{ortalamaSureMs:Math.round(zamanliOlaylar.reduce((s,o)=>s+o.response_time_ms,0)/zamanliOlaylar.length),kanitSayisi:zamanliOlaylar.length}:null;
+    let profilEtiketi='YETERSİZ_KANIT';
+    if(kanitGuveni!=='YETERSİZ_KANIT'){
+      profilEtiketi=longTermAccuracy>=80?'GÜÇLÜ':longTermAccuracy>=50?'GELİŞİYOR':'ÇALIŞILACAK';
+    }
+    return{anahtar,evidenceCount:toplam,lastSeen:sonGorulme,kanitGuveni,recentAccuracy,longTermAccuracy,reflex,uygulama:'VERİ_YOK',gerekce:'VERİ_YOK',profilEtiketi};
+  }).sort((a,b)=>b.evidenceCount-a.evidenceCount).slice(0,10);
+}
+function avciOgrenciProfiliHTML(profiller){
+  if(!profiller||!profiller.length)return'';
+  const etiketRenk={'GÜÇLÜ':'#22c55e','GELİŞİYOR':'var(--signal)','ÇALIŞILACAK':'var(--trap)','YETERSİZ_KANIT':'var(--muted)'};
+  const satirlar=profiller.map(p=>{
+    const tarihStr=p.lastSeen?new Date(p.lastSeen).toLocaleDateString('tr-TR'):'—';
+    const reflexStr=p.reflex?Math.round(p.reflex.ortalamaSureMs/1000)+'sn':'veri yok';
+    return`<tr>
+      <td style="padding:6px 8px;font-size:12px;color:var(--ink);text-align:left">${_hgEscape(avciZayifEtiketBicimlendir(p.anahtar))}</td>
+      <td style="padding:6px 8px;font-size:12px;color:var(--muted);text-align:center">${p.evidenceCount}</td>
+      <td style="padding:6px 8px;font-size:12px;color:var(--muted);text-align:center">${tarihStr}</td>
+      <td style="padding:6px 8px;font-size:12px;color:var(--muted);text-align:center">${p.longTermAccuracy!=null?p.longTermAccuracy+'%':'—'}</td>
+      <td style="padding:6px 8px;font-size:12px;color:var(--muted);text-align:center">${p.recentAccuracy!=null?p.recentAccuracy+'%':'—'}</td>
+      <td style="padding:6px 8px;font-size:12px;color:var(--muted);text-align:center">${reflexStr}</td>
+      <td style="padding:6px 8px;font-size:11px;font-weight:700;text-align:center;color:${etiketRenk[p.profilEtiketi]}">${p.profilEtiketi.replace('_',' ')}</td>
+    </tr>`;
+  }).join('');
+  return`<details style="margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px">
+    <summary style="cursor:pointer;font-size:13px;font-weight:700;color:var(--signal)">📊 Detaylı Öğrenci Profili</summary>
+    <div style="overflow-x:auto;margin-top:8px">
+    <table style="width:100%;border-collapse:collapse;font-family:'IBM Plex Sans',sans-serif;min-width:480px">
+      <thead><tr style="border-bottom:1px solid var(--border)">
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted);text-align:left">SİNYAL</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">KANIT</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">SON GÖRÜLME</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">GENEL</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">SON 5</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">REFLEKS</th>
+        <th style="padding:6px 8px;font-size:10px;color:var(--muted)">PROFİL</th>
+      </tr></thead>
+      <tbody>${satirlar}</tbody>
+    </table>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5">UYGULAMA ve GEREKÇE boyutları için henüz bir ölçüm kaynağı yok — bu sürümde gösterilmiyor.</div>
+  </details>`;
+}
 // Best-effort — sb/currentUser yoksa (misafir, henüz auth hazır değil vb.)
 // veya sorgu/ağ hatası olursa GÜVENLİ boş-durum gösterilir, hiçbir hata
 // fırlatılmaz, panelin geri kalanı (statik AVCI rehberi) asla bozulmaz.
-// Sadece GEREKLİ 3 kolon (+answered_at) çekiliyor, tüm tablo değil;
-// RLS zaten auth.uid()=user_id ile başka kullanıcının satırını hiç
-// döndürmez — service role kullanılmıyor, RLS bypass edilmiyor.
+// Sadece GEREKLİ kolonlar çekiliyor, tüm tablo değil; RLS zaten
+// auth.uid()=user_id ile başka kullanıcının satırını hiç döndürmez —
+// service role kullanılmıyor, RLS bypass edilmiyor.
 async function avciZayifAlanlarimRender(){
   const el=document.getElementById('avci-zayif-alanlarim');
   if(!el)return;
@@ -9420,14 +9513,18 @@ async function avciZayifAlanlarimRender(){
     if(!sb||!currentUser)return;
     const{data,error}=await sb
       .from('answer_history')
-      .select('signal,topic,is_correct,answered_at')
+      .select('signal,topic,is_correct,answered_at,response_time_ms')
       .order('answered_at',{ascending:false})
       .limit(500);
     if(error){
       console.warn('[avci-zayif-alan] yükleme atlandı:',{code:error.code||null,status:error.status||null,reason:error.message||null});
       return;
     }
-    el.innerHTML=avciZayifAlanlarimHTML(avciZayifAlanlariHesapla(data));
+    // Katman 1 (Zayıf Alanlarım) ve Katman 3 (Öğrenci Profili) AYNI
+    // sorgudan gelen ham satırlardan bağımsız bağımsız hesaplanır — ek
+    // network isteği YOK, PR #21'deki limit(500) yeterli (client-side
+    // hesaplama ≤500 satırda önemsiz maliyetli).
+    el.innerHTML=avciZayifAlanlarimHTML(avciZayifAlanlariHesapla(data))+avciOgrenciProfiliHTML(avciOgrenciModeliHesapla(data));
   }catch(e){
     console.warn('[avci-zayif-alan] yükleme atlandı:',{code:null,status:null,reason:'unexpected error'});
   }
