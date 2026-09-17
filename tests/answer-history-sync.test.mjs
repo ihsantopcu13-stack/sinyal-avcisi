@@ -48,6 +48,49 @@ function kontrol(ad, sonuc, detay) {
   kontrol("12) question_id dolu satırlarda benzersizlik (upsert+attempt_count artışı) için unique index var", /create unique index if not exists answer_history_user_question_idx/.test(sql) && /where question_id is not null/.test(sql));
   kontrol("13) attempt_count çakışmada artıyor (public\\.answer_history\\.attempt_count \\+ 1)", /attempt_count = public\.answer_history\.attempt_count \+ 1/.test(sql));
   kontrol("14) EXECUTE yetkisi sadece authenticated'e veriliyor (anon değil)", /grant execute on function public\.record_answer[\s\S]*?to authenticated/.test(sql));
+
+  // 2026-09-17 denetiminde bulunan savunma-derinliği eksikliği: PostgreSQL
+  // yeni fonksiyonlara varsayılan olarak PUBLIC'e EXECUTE veriyor — bu
+  // yüzden REVOKE FROM PUBLIC, GRANT TO authenticated'DEN ÖNCE gelmeli
+  // (update_lesson_progress RPC'siyle AYNI desen).
+  const revokeIdx = sql.indexOf("revoke execute on function public.record_answer");
+  const grantIdx = sql.indexOf("grant execute on function public.record_answer");
+  kontrol("14b) REVOKE EXECUTE ... FROM PUBLIC satırı mevcut", revokeIdx !== -1);
+  kontrol("14c) REVOKE, GRANT'ten ÖNCE geliyor (sıra önemli)", revokeIdx !== -1 && grantIdx !== -1 && revokeIdx < grantIdx);
+  kontrol("14d) REVOKE'un imzası GRANT'inkiyle BİREBİR aynı (13 parametre, aynı sırada)", (() => {
+    const revokeBlok = sql.slice(revokeIdx, sql.indexOf(";", revokeIdx));
+    const grantBlok = sql.slice(grantIdx, sql.indexOf(";", grantIdx));
+    const imzaCikar = (b) => (b.match(/\(([\s\S]*?)\)\s*(from|to)/)?.[1] || "").replace(/\s+/g, " ").trim();
+    const revokeImza = imzaCikar(revokeBlok);
+    const grantImza = imzaCikar(grantBlok);
+    return revokeImza.length > 0 && revokeImza === grantImza;
+  })());
+  kontrol("14e) REVOKE 'from public' hedefliyor", /revoke execute on function public\.record_answer[\s\S]*?from public/.test(sql));
+}
+
+// ---- TEST: rollback dosyası — SADECE bu migration'ın 2 nesnesini geri alıyor ----
+{
+  const rollbackPath = path.join(ROOT, "supabase", "answer-history-schema-rollback.sql");
+  kontrol("14f) rollback dosyası mevcut", existsSync(rollbackPath));
+  const rb = existsSync(rollbackPath) ? readFileSync(rollbackPath, "utf-8") : "";
+  kontrol("14g) record_answer fonksiyonunu (tam imzayla) geri alıyor", /drop function if exists public\.record_answer\(/.test(rb));
+  kontrol("14h) answer_history tablosunu geri alıyor", /drop table if exists public\.answer_history cascade/.test(rb));
+  kontrol("14i) IF EXISTS koruması var (idempotent — dosya zaten geri alınmışsa hata vermez)", /drop function if exists/.test(rb) && /drop table if exists/.test(rb));
+  {
+    // Yorum satırlarını (-- ile başlayan) at — sadece GERÇEK SQL kodunda
+    // başka tablo adı geçip geçmediğini kontrol et (açıklama metninde
+    // "profiles, emails, ... ETKİLENMEZ" gibi doğal bir şekilde geçmesi
+    // yanlış pozitif üretmesin).
+    const sadeceKod = rb
+      .split("\n")
+      .filter((satir) => !satir.trim().startsWith("--"))
+      .join("\n");
+    kontrol(
+      "14j) BAŞKA HİÇBİR tabloya/nesneye dokunmuyor (gerçek SQL kodunda profiles/emails/testimonials/push_subscriptions/user_activity adı geçmiyor)",
+      !["profiles", "emails", "testimonials", "push_subscriptions", "user_activity", "leaderboard", "dilavcisi"].some((t) => new RegExp(`\\b${t}\\b`).test(sadeceKod))
+    );
+  }
+  kontrol("14k) rollback dosyasında sadece 2 DROP ifadesi var (fazlası yok)", (rb.match(/^drop /gm) || []).length === 2);
 }
 
 const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");

@@ -132,6 +132,16 @@ begin
 end;
 $$;
 
+-- Savunma derinliği: PostgreSQL yeni fonksiyonlara varsayılan olarak
+-- PUBLIC'e EXECUTE veriyor (dolayısıyla anon da çağırabilirdi — gerçek
+-- veri riski yoktu çünkü auth.uid() NULL döner, NOT NULL user_id kısıtı
+-- ve RLS zaten engellerdi, ama bu fazladan bir katmanı gereksiz yere
+-- açık bırakıyordu). update_lesson_progress RPC'siyle AYNI desen:
+-- önce PUBLIC'ten tamamen kaldır, sonra SADECE authenticated'e ver.
+revoke execute on function public.record_answer(
+  text, text, text, text, text, boolean, text, text, int, text, text, text, text
+) from public;
+
 grant execute on function public.record_answer(
   text, text, text, text, text, boolean, text, text, int, text, text, text, text
 ) to authenticated;
