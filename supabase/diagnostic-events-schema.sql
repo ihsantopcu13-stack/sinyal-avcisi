@@ -41,35 +41,51 @@
 -- true/false olur; test hiç yapılmadıysa NULL kalır — asla varsayılan
 -- bir true/false ÜRETİLMEZ (Katman 4 tasarım ilkesi: "sahte veri yok").
 --
--- answer_history_id: public.answer_history(id)'ye referans veriyor
--- (ON DELETE CASCADE — o cevap silinirse teşhis izi de anlamsızlaşır).
+-- answer_history_id: public.answer_history(id)'ye COMPOSITE bir FK ile
+-- referans veriyor (ON DELETE CASCADE — o cevap silinirse teşhis izi
+-- de anlamsızlaşır).
 --
--- BİLİNEN SINIRLAMA (bu turda bilinçli olarak ÇÖZÜLMEDİ — raporda
--- ayrıca belirtildi): düz bir FK, referans verilen answer_history
--- satırının user_id'sinin BU diagnostic_events satırının user_id'siyle
--- AYNI olduğunu DB seviyesinde garanti ETMEZ (Postgres FK'ları CHECK
--- constraint içinde alt sorgu çalıştıramaz; bunu DB seviyesinde
--- garanti etmenin standart yolu ya composite FK — answer_history'de
--- UNIQUE(id,user_id) gerektirir, o tabloya dokunmak anlamına gelir —
--- ya da bir trigger'dır). answer_history tablosuna bu turda HİÇ
--- dokunmamak için bu iyileştirme bilinçli olarak ERTELENDİ.
+-- 2026-09-17 MERGE ÖNCESİ DENETİM — CROSS-USER BÜTÜNLÜĞÜ: İlk taslakta
+-- (bu dosyanın önceki sürümü) düz bir `references answer_history(id)`
+-- kullanılmıştı — bu, referans verilen answer_history satırının
+-- user_id'sinin BU diagnostic_events satırının user_id'siyle AYNI
+-- olduğunu DB seviyesinde GARANTİ ETMİYORDU (Postgres tek-kolonlu FK'lar
+-- CHECK içinde alt sorgu çalıştıramaz). Bu, "gelecekteki bir RPC bunu
+-- doğrular" varsayımıyla ERTELENMİŞTİ — AMA bu güvenilir bir çözüm
+-- DEĞİLDİR: aşağıdaki RLS policy'si "for all" olduğu için authenticated
+-- (anonim dahil) bir kullanıcı bu tabloya DOĞRUDAN `insert` yapabilir —
+-- yani herhangi bir gelecekteki RPC'nin kontrolü, client RPC'yi
+-- ATLAYIP doğrudan tabloya yazarsa TAMAMEN BYPASS EDİLEBİLİR. Sadece
+-- client/RPC tarafı doğrulaması bu yüzden GÜVENLİK ÇÖZÜMÜ olarak kabul
+-- EDİLMEDİ.
 --
--- Gerçek güvenlik sınırı — "başka kullanıcının diagnostic_events
--- SATIRINI okuyamama/yazamama" — zaten aşağıdaki RLS ile TAM olarak
--- sağlanıyor. Eksik olan SADECE "referans verilen answer_history
--- satırı gerçekten BENİM mi" çapraz-tutarlılığı; veri SIZINTISI değil,
--- olası bir YANLIŞ İLİŞKİLENDİRME riski (RLS answer_history'nin
--- İÇERİĞİNİ zaten koruyor). Bu, gelecekte bu tabloya yazacak RPC'nin —
--- record_answer'ın "user_id'yi asla client'tan almama, hep auth.uid()
--- kullanma" deseniyle AYNI şekilde — INSERT'ten önce sunucu tarafında
--- `exists(select 1 from answer_history where id=p_answer_history_id
--- and user_id=auth.uid())` kontrolü yapmasıyla kapatılacak; client bu
--- tabloya HİÇBİR ZAMAN doğrudan/güvenilir şekilde yazamayacak.
+-- ÇÖZÜM: composite FK — (answer_history_id, user_id) references
+-- answer_history(id, user_id). Bu, Postgres'in KENDİSİNİN, yazma yolu
+-- ne olursa olsun (RPC, doğrudan insert, ileride yazılacak başka bir
+-- kod yolu), user_id ile answer_history_id'nin AYNI satıra ait
+-- olduğunu HER ZAMAN, KOŞULSUZ olarak zorlamasını sağlar — bypass
+-- edilemez, çünkü client'ın erişebildiği hiçbir yol Postgres'in kendi
+-- constraint kontrolünü atlayamaz. answer_history_id NULL olduğunda
+-- (MATCH SIMPLE varsayılanı — Postgres çoklu-kolon FK'larda referans
+-- veren kolonlardan HERHANGİ BİRİ NULL ise kontrolü atlar) bu kontrol
+-- devre dışı kalır — yani "bu teşhis olayı hiçbir cevaba bağlı değil"
+-- durumu (answer_history_id nullable, DEĞİŞMEDİ) sorunsuz çalışmaya
+-- devam eder; SADECE answer_history_id DOLU olduğunda user_id ile
+-- eşleşmesi zorunlu hale gelir.
+--
+-- BUNUN GEREKTİRDİĞİ TEK EK: answer_history tablosunda (id,user_id)
+-- üzerinde bir UNIQUE index (bkz. supabase/answer-history-schema.sql
+-- — answer_history_id_user_id_key) — Postgres çok-kolonlu FK'ların
+-- referans verdiği kolonlar üzerinde açık bir UNIQUE/PK ister. Bu SAF
+-- EKLEMEDİR: answer_history'nin id'si zaten primary key (tek başına
+-- benzersiz) olduğu için (id,user_id) de otomatik olarak benzersizdir
+-- — mevcut hiçbir satırla çakışma/ihlal riski YOK, mevcut hiçbir
+-- sorguyu/RLS'i/RPC'yi (record_answer dahil) DEĞİŞTİRMEZ.
 
 create table if not exists public.diagnostic_events (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
-  answer_history_id uuid references public.answer_history(id) on delete cascade,
+  answer_history_id uuid,
   question_id text,
   self_report_reason text check (
     self_report_reason is null or self_report_reason in (
@@ -83,7 +99,13 @@ create table if not exists public.diagnostic_events (
   ),
   micro_test_selected text,
   micro_test_correct boolean,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  -- COMPOSITE FK — answer_history_id NULL olduğunda (MATCH SIMPLE
+  -- varsayılanı) devre dışı kalır; dolu olduğunda answer_history'deki
+  -- AYNI satırın user_id'siyle eşleşmesini KOŞULSUZ zorunlu kılar.
+  foreign key (answer_history_id, user_id)
+    references public.answer_history(id, user_id)
+    on delete cascade
 );
 
 alter table public.diagnostic_events enable row level security;
