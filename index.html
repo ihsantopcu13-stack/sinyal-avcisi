@@ -7133,6 +7133,89 @@ function avciTeshisPaneliGoster(soru){
     </div>`;
 }
 
+// ============================================================
+// AVCI HATA KÖKÜ MOTORU — KONTROLLÜ INFERENCE ENGINE (2026-09-18)
+// ============================================================
+// SAF, DETERMİNİSTİK, LLM'SİZ bir okuma-katmanı fonksiyonu — ham
+// diagnostic_events satırlarını GÖZLEM(Seviye 1)/HİPOTEZ(Seviye 2)/
+// DESTEKLENEN_HİPOTEZ(Seviye 2.5, hâlâ "kesin teşhis" DEĞİL) olarak
+// ayırır. Ham satırları HİÇ DEĞİŞTİRMEZ, yeni bir tablo/kolon
+// oluşturmaz — sadece mevcut satırlardan HER ÇAĞRIDA yeniden hesaplanan
+// bir özet döndürür (Katman 1/3 ile AYNI ilke).
+//
+// BU FONKSİYON ŞU AN HİÇBİR UI'A BAĞLANMADI — sadece tanımlı ve test
+// edilmiş, hiçbir render/sorgu yolundan ÇAĞRILMIYOR. Neden: production'da
+// şu an gerçek diagnostic_events kaydı yok (PR #25 henüz gerçek kullanıcı
+// etkileşimi almadı) — bu koşulda eklenecek bir UI bölümü kalıcı olarak
+// "YETERSİZ_KANIT" gösterirdi ve mevcut Katman 3 panelinin (zaten yoğun)
+// üzerine anlamsız bir karmaşıklık eklerdi. Gerçek veri birikince, bu
+// SAF fonksiyon (davranışı DEĞİŞTİRMEDEN) bir okuma sorgusuna ve küçük
+// bir <details> bölümüne bağlanabilir — bu, AYRI bir sonraki iştir.
+//
+// KANIT MATRİSİ (audit, 2026-09-18): 14 kök-neden etiketinden SADECE 3'ü
+// (VOCAB_BLOCK, SIGNAL_MISSED, RULE_UNKNOWN) self_report_reason CHECK
+// listesiyle BİREBİR eşleşiyor — bunlar HYPOTHESIS_ONLY (self-report,
+// tek başına kesin değil). SIGNAL_MISSED ek olarak SIGNAL_SELECT
+// kontrollü mikro testiyle (micro_test_correct) AYNI yönde
+// doğrulanabiliyorsa DESTEKLENEN_HİPOTEZ'e yükselir — bu bile "kesin
+// teşhis" DEĞİLDİR. Diğer 11 etiket (VERB_NOT_FOUND, NOUN_AS_VERB,
+// VING_AS_MAIN_VERB, CLAUSE_NOT_RECOGNIZED, NOUN_PHRASE_NOT_RECOGNIZED,
+// RULE_CONFUSED, MEANING_TRAP, OPTION_ELIMINATION_ERROR, REFERENCE_ERROR,
+// TENSE_RELATION_ERROR, CARELESS_PATTERN) UNSUPPORTED'tır — bu motorda
+// HİÇ ÜRETİLMEZ (CARELESS_PATTERN response_time_ms olmadan, diğerleri
+// canonical'da/etkileşimde ayırt edici veri olmadığı için).
+const AVCI_DESTEKLENEN_KOK_NEDENLER=['VOCAB_BLOCK','SIGNAL_MISSED','RULE_UNKNOWN'];
+// diagnosticEventleri: answer_history ile AYNI RLS-korumalı sorgudan
+// (auth.uid()=user_id) gelen ham satırlar — bu fonksiyon HİÇBİR
+// Supabase çağrısı yapmaz, sadece verilen diziyi işler. opts.
+// beklenenUserId verilirse (defense-in-depth — RLS'e ek, tek başına
+// güvenlik sınırı DEĞİL), o kullanıcıya ait olmayan satırlar sessizce
+// dışlanır — "başka kullanıcının event'i karışmasın" garantisi kod
+// seviyesinde de sağlanır.
+function avciKokNedenAnalizEt(diagnosticEventleri,opts){
+  const beklenenUserId=opts&&opts.beklenenUserId;
+  const gorulenId=new Set();
+  const olaylar=(diagnosticEventleri||[]).filter(o=>{
+    if(!o)return false;
+    if(beklenenUserId&&o.user_id&&o.user_id!==beklenenUserId)return false;
+    const kimlik=o.id!=null?o.id:JSON.stringify(o);
+    if(gorulenId.has(kimlik))return false; // gerçek event identity ile duplicate şişirmesi engellenir
+    gorulenId.add(kimlik);
+    return true;
+  });
+  const observations=olaylar.map(o=>({
+    id:o.id??null,
+    questionId:o.question_id??null,
+    selfReportReason:o.self_report_reason??null,
+    microTestType:o.micro_test_type??null,
+    microTestSelected:o.micro_test_selected??null,
+    microTestCorrect:o.micro_test_correct??null,
+    createdAt:o.created_at??null,
+  }));
+  if(observations.length===0){
+    return{observations:[],hypotheses:[],verifiedEvidence:[],evidenceCount:0,status:'YETERSIZ_KANIT'};
+  }
+  const hypotheses=[];
+  const verifiedEvidence=[];
+  for(const obs of observations){
+    if(!obs.selfReportReason||!AVCI_DESTEKLENEN_KOK_NEDENLER.includes(obs.selfReportReason))continue;
+    const ayniYonSinyalTesti=obs.microTestType==='SIGNAL_SELECT';
+    const dogrulandi=obs.selfReportReason==='SIGNAL_MISSED'&&ayniYonSinyalTesti&&obs.microTestCorrect===false;
+    const celisen=obs.selfReportReason==='SIGNAL_MISSED'&&ayniYonSinyalTesti&&obs.microTestCorrect===true;
+    if(dogrulandi){
+      verifiedEvidence.push({label:obs.selfReportReason,questionId:obs.questionId,eventId:obs.id,reason:'self-report + kontrollü SIGNAL_SELECT testi AYNI yönde (öğrenci sinyali testte de bulamadı)'});
+    }else if(!celisen){
+      hypotheses.push({label:obs.selfReportReason,questionId:obs.questionId,eventId:obs.id,reason:'sadece öz-bildirim — davranışsal doğrulama yok'});
+    }
+    // celisen ise (self-report "sinyali kaçırdım" derken kontrollü testte
+    // doğru bulmuşsa): NE hipotez NE kanıt listesine eklenir — çelişkili
+    // bir "hipotezi" aktif gibi sunmak yanıltıcı olurdu. Ham gözlem
+    // (observations) yine de HİÇ dokunulmadan durur.
+  }
+  const status=verifiedEvidence.length>0?'DESTEKLENEN_HIPOTEZ':hypotheses.length>0?'HIPOTEZ':'YETERSIZ_KANIT';
+  return{observations,hypotheses,verifiedEvidence,evidenceCount:observations.length,status};
+}
+
 // KELIME KARTLARI SM-2
 const kkData=[
   {en:'liability',tr:'sorumluluk / yukumluluk',ex:'"Strict liability requires no proof of intent."'},
