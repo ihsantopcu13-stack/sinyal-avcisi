@@ -55,6 +55,7 @@ jobs:
           node --check automation/video-pipeline/tests/threads-channel-skip.test.mjs
           node --check automation/video-pipeline/scripts/upload-tiktok-buffer.mjs
           node --check automation/video-pipeline/tests/tiktok-channel-skip.test.mjs
+          node --check tests/legal-pages.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -94,3 +95,6 @@ jobs:
 
       - name: TikTok — kanal yapılandırılmamışken güvenli SKIP testi
         run: node automation/video-pipeline/tests/tiktok-channel-skip.test.mjs
+
+      - name: OAuth branding — gizlilik/kullanım şartları sayfaları testi
+        run: node tests/legal-pages.test.mjs
