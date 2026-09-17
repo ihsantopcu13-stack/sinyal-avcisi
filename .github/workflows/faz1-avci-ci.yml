@@ -66,6 +66,7 @@ jobs:
           node --check tests/answer-history-sync.test.mjs
           node --check tests/answer-history-execution.test.mjs
           node --check tests/anonymous-auth.test.mjs
+          node --check tests/avci-zayif-alanlarim.test.mjs
           node --check automation/video-pipeline/scripts/_master-publish-meta.mjs
           node --check automation/video-pipeline/scripts/publish-next-master-lesson.mjs
           node --check automation/video-pipeline/scripts/retry-failed-master-publishes.mjs
@@ -132,6 +133,9 @@ jobs:
 
       - name: Anonymous auth — sessiz misafir oturumu gerçek çalıştırma (vm) testi
         run: node tests/anonymous-auth.test.mjs
+
+      - name: AVCI Öğrenme Hafızası — zayıf alan skoru gerçek çalıştırma (vm) testi
+        run: node tests/avci-zayif-alanlarim.test.mjs
 
       - name: Master-lesson YouTube hata reason/status çıkarımı testi
         run: node automation/video-pipeline/tests/youtube-error-info.test.mjs
