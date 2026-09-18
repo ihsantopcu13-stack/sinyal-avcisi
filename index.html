@@ -7065,6 +7065,44 @@ function avciSonrakiSoruKomutuMu(metin){
   return AVCI_SONRAKI_SORU_KOMUTLARI.includes(normalize(metin));
 }
 
+// ============================================================
+// KATMAN 5I — CANONICAL SIGNAL-TARGETED PRACTICE: DETERMINISTIK KOMUT
+// EŞLEŞTİRİCİ + CANONICAL SEÇİM (2026-09-18)
+// ============================================================
+// SADECE tam, sabit ifadelerle eşleşir — fuzzy/substring/semantic matching
+// YOK, LLM'e HİÇ SORULMAZ (5H ile AYNI ilke, AYRI/bağımsız komut listesi —
+// 5H ile ÇAKIŞMAZ). Aktif sorunun canonical sinyaline (slCurrentSoru.
+// sinyal) ait BAŞKA bir canonical soru, mevcut SL_SINYAL_LOOKUP haritasından
+// (deep-link çözümleyicisi için ZATEN var olan, canonical SL_HAVUZ üzerinde
+// kurulu) aranır — yeni bir soru ÜRETİLMEZ, yeni bir seçim algoritması
+// YAZILMADI, sadece mevcut haritanın sorgulanması. Seçim deterministiktir:
+// mevcut sorunun ham SL_HAVUZ indeksinden SONRAKİ ilk aday (yoksa listedeki
+// ilk aday, wrap-around) — rastgelelik YOK. Eşleşen aday YOKSA state
+// mutasyonu YAPILMAZ, sadece deterministik bir bilgi mesajı gösterilir.
+// Geçiş, deep-link çözümleyicisinin ZATEN kullandığı AYNI mekanizmayla
+// (window.__slDeepLinkSoru + slRender()) yapılır — bu, slIdx'in curAlan
+// filtresine göre farklı bir alt küme üzerinde çalıştığı durumlarda bile
+// (bkz. slRender) DOĞRU canonical soruyu garanti eder.
+const AVCI_SINYAL_PRATIK_KOMUTLARI=[
+  'bu sinyalden başka soru sor','bu sinyalden bir soru daha','aynı sinyalden başka soru','aynı sinyalden bir soru daha','bu sinyali tekrar çalışalım',
+];
+function avciSinyalPratikKomutuMu(metin){
+  if(typeof metin!=='string')return false;
+  const normalize=(s)=>s.trim().toLocaleLowerCase('tr-TR').replace(/[.!?…]+$/,'').trim();
+  return AVCI_SINYAL_PRATIK_KOMUTLARI.includes(normalize(metin));
+}
+function avciAyniSinyaldenPratikSorusuBul(){
+  if(!slCurrentSoru||!slCurrentSoru.sinyal)return null;
+  const sinyalNorm=window.SinyalAttribution?window.SinyalAttribution._normalizeSinyal(slCurrentSoru.sinyal):String(slCurrentSoru.sinyal).trim().toLowerCase();
+  if(!sinyalNorm)return null;
+  const adaylar=SL_SINYAL_LOOKUP.indeksleriBul(sinyalNorm).filter(i=>SL_HAVUZ[i]&&SL_HAVUZ[i].id!==slCurrentSoru.id);
+  if(adaylar.length===0)return null;
+  const suankiRawIdx=SL_HAVUZ.findIndex(s=>s.id===slCurrentSoru.id);
+  const sirali=adaylar.slice().sort((a,b)=>a-b);
+  const sonraki=sirali.find(i=>i>suankiRawIdx);
+  return sonraki!==undefined?sonraki:sirali[0];
+}
+
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
@@ -7085,6 +7123,34 @@ async function dnavChat(){
     dnavHistory.push({role:'user',content:val});
     if(typeof slSonraki==='function')slSonraki();
     const cevap='Yeni soruya geçtik.';
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    dnavHistory.push({role:'assistant',content:cevap});
+    inp.disabled=false;inp.focus();
+    return;
+  }
+
+  // KATMAN 5I — CANONICAL SIGNAL-TARGETED PRACTICE BRIDGE: öğrencinin
+  // AÇIK/deterministik "bu sinyalden başka soru" komutu, Sinyal Lab
+  // GERÇEKTEN aktifken, LLM'e HİÇ SORULMADAN aktif sorunun canonical
+  // sinyaline ait BAŞKA bir canonical soruya (varsa) geçer — mevcut
+  // window.__slDeepLinkSoru + slRender() mekanizması (deep-link ile AYNI)
+  // reuse edilir, yeni bir render/seçim fonksiyonu YAZILMADI. Eşleşen
+  // aday yoksa state mutasyonu YAPILMAZ, sadece bilgilendirici bir mesaj
+  // gösterilir. Sinyal Lab aktif DEĞİLSE bu blok hiçbir şey yapmaz — komut
+  // normal (fail-open) bir chat mesajı gibi aşağıdaki akışa devam eder.
+  if(avciSinyalPratikKomutuMu(val)&&_aktifSoruModulu==='sinyal_lab'){
+    dnavHistory.push({role:'user',content:val});
+    const adayRawIdx=avciAyniSinyaldenPratikSorusuBul();
+    let cevap;
+    if(adayRawIdx!==null&&typeof slRender==='function'){
+      slIdx=adayRawIdx;
+      window.__slDeepLinkSoru=SL_HAVUZ[adayRawIdx];
+      slRender();
+      cevap='Aynı sinyalden başka bir soruya geçtik.';
+    } else {
+      cevap='Bu sinyal için başka canonical pratik sorusu bulunamadı.';
+    }
     const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
