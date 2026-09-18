@@ -268,6 +268,12 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
       _aktifSoruModulu: null,
       avciSonrakiSoruKomutuMu: () => false,
       avciSinyalPratikKomutuMu: () => false,
+      // TURN CONTROLLER — bu dosyanın kapsamı DIŞINDA, sadece auth header
+      // davranışı test ediliyor; gerçek dnavChat() artık dnavTurnState'i
+      // ve dnavTurNesil'i okuyup yazıyor, bu yüzden sandbox'ta tanımlı
+      // olması ZORUNLU (gerçek koddaki gibi başlangıç değerleriyle).
+      dnavTurnState: 'IDLE',
+      dnavTurNesil: 0,
       sb: sbImpl,
       fetch: async (url, opts) => {
         fetchCagrilari.push({ url, opts });
