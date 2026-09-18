@@ -7356,9 +7356,16 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // ile korunuyor: ⏹ Dur ile bu tur zaten geçersiz kılınmışsa (yeni bir
     // tur başlamış olabilir), bu GECİKMELİ callback artık dnavTurnState'e
     // DOKUNMAZ - stale bir turun state'i sonradan bozması engellenir.
-    if(benimTurNesil===dnavTurNesil)dnavTurnState='SPEAKING';
+    // TURN HANDOFF CUE — YENİ state YOK, mevcut dnavTurnState'in AYNI
+    // (zaten generation-guarded) atama noktalarına SADECE bir görsel
+    // güncelleme (dnavMicGorselGuncelle) eklendi: AVCI konuşmaya
+    // başladığında mic butonunun tooltip'i "kesmek için bas" der (Tap-to-
+    // Interrupt'ın GERÇEKTEN ne yaptığını açıklar), konuşma bitip sıra
+    // öğrenciye geçtiğinde (IDLE) tooltip normale döner. DOM/mantık/board/
+    // history/current question'a DOKUNULMAZ, fail-open (micBtn yoksa no-op).
+    if(benimTurNesil===dnavTurNesil){dnavTurnState='SPEAKING';dnavMicGorselGuncelle();}
     let _dnavSpeakingBitmis=false;
-    const _dnavSpeakingBitir=()=>{if(_dnavSpeakingBitmis)return;_dnavSpeakingBitmis=true;if(benimTurNesil===dnavTurNesil)dnavTurnState='IDLE';};
+    const _dnavSpeakingBitir=()=>{if(_dnavSpeakingBitmis)return;_dnavSpeakingBitmis=true;if(benimTurNesil===dnavTurNesil){dnavTurnState='IDLE';dnavMicGorselGuncelle();}};
     if(typeof ttsSpeak==='function'){
       try{
         const _ttsSonuc=ttsSpeak(temizCevap,null,_dnavSpeakingBitir);
@@ -13232,6 +13239,24 @@ function dnavAvciSustur(){
   if(window.speechSynthesis)speechSynthesis.cancel();
   if(pAudio)pAudio.pause();
   dnavTurnState='IDLE';
+  dnavMicGorselGuncelle();
+}
+
+// ============================================================
+// TURN HANDOFF CUE (2026-09-18) — YENİ state YOK, mevcut dnavTurnState'i
+// SADECE OKUYUP mic butonunun tooltip'ini güncelliyor. AVCI konuşurken
+// (SPEAKING) mic'in ARTIK "kesmek için bas" anlamına geldiğini AÇIKÇA
+// söylüyor (Tap-to-Interrupt'ın gerçek davranışı); konuşma bitip sıra
+// öğrenciye geçtiğinde (IDLE) normale döner. Fail-open: micBtn DOM'da
+// yoksa (KLOD sekmesi henüz render edilmemiş) sessizce hiçbir şey yapmaz.
+function dnavMicGorselGuncelle(){
+  const micBtn=document.getElementById('dnav-mic-btn');
+  if(!micBtn)return;
+  if(dnavTurnState==='SPEAKING'){
+    micBtn.title='AVCI konuşuyor — kesmek için bas';
+  } else if(dnavTurnState==='IDLE'){
+    micBtn.title='Sesle söyle';
+  }
 }
 </script>
 <!-- HOŞ GELDİN KARŞILAMA ANİMASYONU -->

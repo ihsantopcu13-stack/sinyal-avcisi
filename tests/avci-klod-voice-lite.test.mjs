@@ -283,6 +283,11 @@ function sandboxKur({ srVarMi = true } = {}) {
     ttsSpeak: (text) => Promise.reject(new Error("simüle edilmiş TTS hatası")),
     dnavTurNesil: 1,
     dnavTurnState: 'THINKING',
+    // TURN HANDOFF CUE (sonraki katman, bu dosyanın kapsamı DIŞINDA) —
+    // TTS_CALL_BLOK artık SPEAKING geçişinde dnavMicGorselGuncelle()'ı da
+    // çağırıyor; bu izole probe'ta sadece ReferenceError'ı önlemek için
+    // no-op olarak sağlanıyor.
+    dnavMicGorselGuncelle: () => {},
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(TTS_PROBE_SRC, context, { filename: "index.html (5K tts probe)" });

@@ -68,7 +68,10 @@ const MIC_FN_KOD = MIC_FN.split("\n").filter((s) => !s.trim().startsWith("//")).
   kontrol("S14) dnavAvciSustur TAM OLARAK 1 kez tanımlı, DEĞİŞMEDİ (ttsNesil++/dnavTurNesil++/pAudio.pause/state=IDLE)", (html.match(/function dnavAvciSustur\(\)\{/g) || []).length === 1 && /function dnavAvciSustur\(\)\{\s*\n\s*ttsNesil\+\+;\s*\n\s*dnavTurNesil\+\+;/.test(html));
   kontrol("S15) dnav-stop-btn (⏹ Dur) HÂLÂ mevcut, DEĞİŞMEDİ", /id="dnav-stop-btn"[^>]*onclick="dnavAvciSustur\(\)"/.test(KLOD_TAB_BLOK));
   kontrol("S16) re-entrancy guard (dnavChat) DEĞİŞMEDİ", /if\(dnavTurnState!=='IDLE'\)return;\s*\n\s*dnavTurnState='THINKING';/.test(DNAVCHAT_FN));
-  kontrol("S17) dnavTurNesil (stale-turn koruması) DEĞİŞMEDİ", /const benimTurNesil=\+\+dnavTurNesil;/.test(DNAVCHAT_FN) && /if\(benimTurNesil===dnavTurNesil\)dnavTurnState='SPEAKING';/.test(DNAVCHAT_FN));
+  // NOT (Turn Handoff Cue, sonraki katman): SPEAKING ataması artık AYNI
+  // guard İÇİNDE dnavMicGorselGuncelle() da çağırıyor - guard'ın KENDİSİ
+  // DEĞİŞMEDİ, sadece ayraç içine bir görsel-güncelleme çağrısı eklendi.
+  kontrol("S17) dnavTurNesil (stale-turn koruması) DEĞİŞMEDİ", /const benimTurNesil=\+\+dnavTurNesil;/.test(DNAVCHAT_FN) && /if\(benimTurNesil===dnavTurNesil\)\{dnavTurnState='SPEAKING';/.test(DNAVCHAT_FN));
   kontrol("S18) 5H matcher (avciSonrakiSoruKomutuMu) DEĞİŞMEDİ", (html.match(/function avciSonrakiSoruKomutuMu\(metin\)\{/g) || []).length === 1);
   kontrol("S19) 5I matcher (avciSinyalPratikKomutuMu) DEĞİŞMEDİ", (html.match(/function avciSinyalPratikKomutuMu\(metin\)\{/g) || []).length === 1);
   kontrol("S20) 5J explicit reteach kontratı KORUNUYOR", /AVCI BASAMAK YENIDEN OGRETIMI \(EXPLICIT ADIM\) KURALI \(ZORUNLU\)/.test(html));
