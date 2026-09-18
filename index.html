@@ -6860,9 +6860,22 @@ async function dnavChat(){
   body.appendChild(tp);body.scrollTop=body.scrollHeight;
   dnavHistory.push({role:'user',content:val});
   try{
+    // KATMAN 5 MVP-1 — AUTH FOUNDATION: varsa geçerli Supabase session
+    // token'ı Authorization header'ı olarak eklenir. sb hazır değilse/
+    // getSession başarısız olursa (misafir, henüz auth hazır değil, ağ
+    // hatası) SESSİZCE header'sız devam edilir — "zorunlu kayıt yok"
+    // ilkesi ve mevcut anonim/misafir deneyimi (bkz. _sbAnonBaslat)
+    // ASLA bozulmaz, hiçbir sahte kimlik üretilmez.
+    let _dnavToken=null;
+    try{
+      if(sb){
+        const{data}=await sb.auth.getSession();
+        _dnavToken=(data&&data.session&&data.session.access_token)||null;
+      }
+    }catch(e){_dnavToken=null;}
     const res=await fetch('/api/klod',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:Object.assign({'Content-Type':'application/json'},_dnavToken?{'Authorization':'Bearer '+_dnavToken}:{}),
       body:JSON.stringify({
         messages:dnavHistory,
         mode:'chat',

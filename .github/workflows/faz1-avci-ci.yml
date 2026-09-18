@@ -77,6 +77,8 @@ jobs:
           node --check automation/video-pipeline/tests/youtube-error-info.test.mjs
           node --check api/mail.mjs
           node --check tests/mail-dryrun.test.mjs
+          node --check api/klod.mjs
+          node --check tests/avci-klod-auth.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -158,3 +160,6 @@ jobs:
 
       - name: api/mail.mjs mock/dry-run testi (gerçek e-posta gönderilmez)
         run: node tests/mail-dryrun.test.mjs
+
+      - name: KATMAN 5 MVP-1 — KLOD auth foundation testi (gerçek Supabase/Anthropic ağı yok, mock)
+        run: node tests/avci-klod-auth.test.mjs

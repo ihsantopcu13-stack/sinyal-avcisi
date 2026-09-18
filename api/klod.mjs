@@ -35,6 +35,49 @@ function ilgiliSorulariBul(kullaniciMesaji, limit = 2) {
     .slice(0, limit);
 }
 
+// ============================================================
+// KATMAN 5 MVP-1 — KLOD AUTH FOUNDATION (2026-09-18)
+// ============================================================
+// Kişisel context (soru/öğrenci/teşhis) HENÜZ eklenmedi — bu SADECE
+// gelecekteki context işi için önkoşul olan kimlik doğrulama temelidir.
+// Client (dnavChat) varsa geçerli Supabase session token'ını
+// `Authorization: Bearer <token>` ile gönderir; burada admin-users.mjs
+// ile AYNI desenle (GET {SUPABASE_URL}/auth/v1/user, anon key + kullanıcı
+// token'ı) doğrulanır. service_role GEREKMİYOR/KULLANILMIYOR — sadece
+// token'ın GEÇERLİ bir Supabase session'a ait olduğu teyit ediliyor.
+//
+// KRİTİK: Doğrulama BAŞARISIZ olursa (header yok/bozuk/token geçersiz/
+// süresi dolmuş/ağ hatası) istek REDDEDİLMEZ — "zorunlu kayıt yok"
+// ilkesi ve mevcut misafir/anonim deneyim (bkz. index.html
+// _sbAnonBaslat) ASLA bozulmaz; sadece doğrulanmamış (auth.verified:
+// false) sayılır. Bu turda doğrulanmış identity (user.id) hiçbir
+// prompt/context'e eklenmiyor — sadece yanıtta PII içermeyen bir
+// boolean çift olarak (`auth.verified`/`auth.anonymous`) dönüyor,
+// gelecekteki context işi için altyapı. Client'ın gönderebileceği
+// herhangi bir user_id/email/role alanı (req.body'de zaten hiç
+// okunmuyor) ASLA güvenilmez — kimlik SADECE bu sunucu-taraflı
+// doğrulamadan gelir.
+const SUPABASE_URL_AUTH = 'https://scqczkyiyshmczzmlshl.supabase.co';
+const SUPABASE_ANON_KEY_AUTH = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+
+async function klodDogrulanmisKullaniciAl(authHeader) {
+  if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7).trim();
+  if (!token) return null;
+  try {
+    const userRes = await fetch(`${SUPABASE_URL_AUTH}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_ANON_KEY_AUTH, Authorization: `Bearer ${token}` },
+    });
+    if (!userRes.ok) return null;
+    const user = await userRes.json();
+    return user && user.id ? { id: user.id, isAnonymous: Boolean(user.is_anonymous) } : null;
+  } catch (e) {
+    // Token DEĞERİ hiçbir zaman loglanmaz — sadece genel bir teşhis nedeni.
+    console.warn('[klod-auth] token verification skipped:', { reason: 'unexpected error' });
+    return null;
+  }
+}
+
 // 1. SYSTEM PROMPT — Tutarlı karakter tanımı
 const KLOD_SYSTEM_PROMPT = `Sen KLOD'sun — Sinyal Avcısı platformunun YDS/YÖKDİL AI öğretmenisin.
 
@@ -246,6 +289,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Geçersiz istek' });
   }
 
+  // KATMAN 5 MVP-1 — best-effort kimlik doğrulama (bkz. yukarıdaki blok).
+  // Başarısız/eksik olması isteği ASLA engellemez.
+  const verifiedUser = await klodDogrulanmisKullaniciAl(req.headers.authorization);
+
   // 20. TOKEN COUNTING — Limit kontrolü
   const estimatedTokens = estimateTokens(messages);
   if (estimatedTokens > 150000) {
@@ -419,7 +466,11 @@ export default async function handler(req, res) {
       tool_results: toolResults,
       token_info: tokenInfo,
       message_type: msgType,
-      temperature_used: temperature
+      temperature_used: temperature,
+      // KATMAN 5 MVP-1 — PII YOK, sadece doğrulama sonucu (id/email/role
+      // asla dönmüyor). Şimdilik hiçbir context/davranış bu alana bağlı
+      // değil — gelecekteki context işi için altyapı.
+      auth: { verified: Boolean(verifiedUser), anonymous: verifiedUser ? verifiedUser.isAnonymous : null }
     });
 
   } catch (error) {
