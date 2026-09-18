@@ -87,6 +87,7 @@ jobs:
           node --check tests/avci-klod-mini-check.test.mjs
           node --check tests/avci-klod-next-question.test.mjs
           node --check tests/avci-klod-signal-practice.test.mjs
+          node --check tests/avci-klod-explicit-reteach.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -195,3 +196,6 @@ jobs:
 
       - name: KATMAN 5I — canonical signal-targeted practice deterministic bridge (gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
         run: node tests/avci-klod-signal-practice.test.mjs
+
+      - name: KATMAN 5J — explicit AVCI step reteach sözleşmesi (teacher prompt + 5B/5C/5E regresyon spot-check, gerçek ağ yok)
+        run: node tests/avci-klod-explicit-reteach.test.mjs
