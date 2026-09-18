@@ -400,7 +400,13 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
   kontrol("29) server context.correct_answer/context.is_correct alanlarını GERÇEK KODDA (yorum hariç) HİÇ OKUMUYOR", !/context\.correct_answer/.test(srcKodSatirlari) && !/context\.is_correct/.test(srcKodSatirlari));
   kontrol("30) server sadece answered===true ise correct_answer/selected_answer/is_correct ÜRETİYOR", /if \(dogrulanmis\.answered\) \{/.test(src));
   kontrol("31) context injection `system` override'ından BAĞIMSIZ (dnavChat'in kendi system'i varken de çalışır)", /const dogrulanmisBaglam = klodSinyalLabBaglamiDogrula\(req\.body\.context\);/.test(src) && !/if \(!system[\s\S]{0,50}klodSinyalLabBaglamiDogrula/.test(src));
-  kontrol("32) STUDENT MODEL/WEAK AREA/ANSWER HISTORY/DIAGNOSTIC bu dosyada context ile HİÇ bağlanmadı", !/answer_history|diagnostic_events|avciOgrenciModeli|avciZayifAlan/.test(src));
+  // NOT (Katman 5C, 2026-09-18): answer_history/avciOgrenciModeli artık
+  // BİLİNÇLİ OLARAK bu dosyada var (bkz. tests/avci-klod-student-context.
+  // test.mjs) — bu, 5B'nin (SADECE Sinyal Lab current-question context)
+  // kapsam kilidiydi; Katman 4 diagnostic bağlantısı (asıl kalıcı yasak)
+  // HÂLÂ burada kontrol ediliyor, sadece o zamanki answer_history/
+  // avciOgrenciModeli/avciZayifAlan ifadeleri kaldırıldı.
+  kontrol("32) DIAGNOSTIC (Katman 4) bu dosyada GERÇEK KODDA (yorum hariç) context ile HİÇ bağlanmadı", !/diagnostic_events/.test(src.split("\n").filter((satir) => !satir.trim().startsWith("//")).join("\n")));
   kontrol("33) mevcut KLOD_SYSTEM_PROMPT/SINYAL_ANALIZ_SYSTEM_PROMPT/rateLimit/klodDogrulanmisKullaniciAl DEĞİŞMEDİ", (src.match(/const KLOD_SYSTEM_PROMPT = /g) || []).length === 1 && (src.match(/const SINYAL_ANALIZ_SYSTEM_PROMPT = /g) || []).length === 1 && /rateLimit\(req, \{ key: 'klod', limit: 15, windowMs: 60_000 \}\)/.test(src) && (src.match(/async function klodDogrulanmisKullaniciAl\(authHeader\)/g) || []).length === 1);
 }
 

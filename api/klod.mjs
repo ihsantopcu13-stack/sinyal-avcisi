@@ -120,12 +120,143 @@ async function klodDogrulanmisKullaniciAl(authHeader) {
     });
     if (!userRes.ok) return null;
     const user = await userRes.json();
-    return user && user.id ? { id: user.id, isAnonymous: Boolean(user.is_anonymous) } : null;
+    // KATMAN 5C: `token` alanı SADECE server'ın kendi izleyen REST okuması
+    // (answer_history, RLS auth.uid()=user_id) için tutulur — hiçbir zaman
+    // response'a/prompt'a/loglara yazılmaz (bkz. klodOgrenciKanitiniAl).
+    return user && user.id ? { id: user.id, isAnonymous: Boolean(user.is_anonymous), token } : null;
   } catch (e) {
     // Token DEĞERİ hiçbir zaman loglanmaz — sadece genel bir teşhis nedeni.
     console.warn('[klod-auth] token verification skipped:', { reason: 'unexpected error' });
     return null;
   }
+}
+
+// ============================================================
+// KATMAN 5C — SERVER-SIDE STUDENT MODEL CONTEXT (2026-09-18)
+// ============================================================
+// index.html'deki avciOgrenciModeliHesapla() (Katman 3, PR #21+) ile
+// BİREBİR AYNI formül — FORMÜL DEĞİŞTİRİLMEDİ, sadece server'da tekrar
+// çalıştırılabilir hale getirmek için buraya taşındı (bkz.
+// tests/avci-klod-student-context.test.mjs — client/server parity testi
+// AYNI fixture üzerinde AYNI sonucu doğrular). Amaç: client'ın kendi
+// hesapladığı "başarı oranım %95" gibi bir özeti OLDUĞU GİBİ /api/klod'a
+// göndermesine güvenmemek (5B'de correct_answer için kapattığımız AYNI
+// sınıf risk) — server, doğrulanmış kullanıcının KENDİ token'ıyla RLS
+// korumalı answer_history'yi kendisi okuyup AYNI formülü kendisi
+// hesaplar. Client'tan gelen HERHANGİ bir "student context" iddiası HİÇ
+// OKUNMAZ/kullanılmaz (req.body'de böyle bir alan zaten HİÇ okunmuyor).
+//
+// service_role KULLANILMIYOR — sadece anon/publishable key + kullanıcının
+// kendi doğrulanmış Bearer token'ı. RLS (`answer_history_own`,
+// auth.uid()=user_id) kullanıcı izolasyonunu zaten sağlıyor — admin-
+// users.mjs'nin service_role'ü SADECE admin panelinde (RLS'i kasıtlı
+// bypass etmesi GEREKEN tek yer) kullandığı deseninin AKSİNE, burada
+// hiç gerekmiyor: her kullanıcı zaten SADECE kendi satırını istiyor.
+//
+// AUTH VERIFIED=false (verifiedUser null) ise bu fonksiyon HİÇ
+// çağrılmaz/DB sorgusu ATILMAZ (bkz. handler). REST 401/403/timeout/ağ
+// hatası → SESSİZCE null, chat ASLA bloklanmaz — 5A/5B ile AYNI fail-
+// open felsefesi.
+async function klodOgrenciKanitiniAl(verifiedUser) {
+  if (!verifiedUser || !verifiedUser.token) return null;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL_AUTH}/rest/v1/answer_history?select=signal,topic,is_correct,answered_at,response_time_ms&order=answered_at.desc&limit=500`,
+      { headers: { apikey: SUPABASE_ANON_KEY_AUTH, Authorization: `Bearer ${verifiedUser.token}` } }
+    );
+    if (!res.ok) return null;
+    const rows = await res.json();
+    return Array.isArray(rows) ? rows : null;
+  } catch (e) {
+    console.warn('[klod-student-context] answer_history read skipped:', { reason: 'unexpected error' });
+    return null;
+  }
+}
+
+// index.html'deki avciOgrenciModeliHesapla()'nın İÇ formülü (KANIT_ESIGI_
+// DUSUK/YETERLI=2/5, SON_N=5, kanitGuveni/recentAccuracy/longTermAccuracy/
+// reflex/profilEtiketi) — BİREBİR AYNI, tek satırı bile değişmedi. Ayrı
+// bir yardımcıya çıkarılmasının SEBEBİ: hem "gruplanmış" (signal/topic
+// bazlı, weak_evidence için — klodOgrenciModeliHesapla) hem "tek grup"
+// (TÜM satırlar birlikte, overall için) modda ÇAĞRILABİLMESİ — hesabın
+// KENDİSİ hiç değişmedi, sadece iki yerden çağrılabilir hale getirildi.
+function klodGrupIstatistigi(olaylarHam) {
+  const KANIT_ESIGI_DUSUK = 2, KANIT_ESIGI_YETERLI = 5, SON_N = 5;
+  const olaylar = olaylarHam.slice().sort((a, b) => new Date(b.answered_at || 0) - new Date(a.answered_at || 0));
+  const toplam = olaylar.length;
+  const dogruSayisi = olaylar.filter((o) => o.is_correct).length;
+  const sonGorulme = olaylar[0]?.answered_at || null;
+  const kanitGuveni = toplam < KANIT_ESIGI_DUSUK ? 'YETERSİZ_KANIT' : toplam < KANIT_ESIGI_YETERLI ? 'DÜŞÜK_KANIT' : 'YETERLİ_KANIT';
+  const sonN = olaylar.slice(0, SON_N);
+  const recentAccuracy = sonN.length ? Math.round((sonN.filter((o) => o.is_correct).length / sonN.length) * 100) : null;
+  const longTermAccuracy = toplam ? Math.round((dogruSayisi / toplam) * 100) : null;
+  const zamanliOlaylar = olaylar.filter((o) => typeof o.response_time_ms === 'number' && o.response_time_ms > 0);
+  const reflex = zamanliOlaylar.length ? { ortalamaSureMs: Math.round(zamanliOlaylar.reduce((s, o) => s + o.response_time_ms, 0) / zamanliOlaylar.length), kanitSayisi: zamanliOlaylar.length } : null;
+  let profilEtiketi = 'YETERSİZ_KANIT';
+  if (kanitGuveni !== 'YETERSİZ_KANIT') {
+    profilEtiketi = longTermAccuracy >= 80 ? 'GÜÇLÜ' : longTermAccuracy >= 50 ? 'GELİŞİYOR' : 'ÇALIŞILACAK';
+  }
+  // uygulama/gerekce: client'taki (index.html) fonksiyonla BİREBİR aynı
+  // sabit 'VERİ_YOK' alanları — tam parity için korunuyor (bkz. parity
+  // testi), ama klodStudentContextOlustur bunları LLM'e giden objeye HİÇ
+  // kopyalamıyor (cherry-pick, spread değil) — sızıntı riski yok.
+  return { evidenceCount: toplam, lastSeen: sonGorulme, kanitGuveni, recentAccuracy, longTermAccuracy, reflex, uygulama: 'VERİ_YOK', gerekce: 'VERİ_YOK', profilEtiketi };
+}
+
+// index.html'deki avciOgrenciModeliHesapla() ile BİREBİR AYNI gruplama +
+// evidenceCount'a göre sıralama + slice(0,10) — client/server parity
+// testi bunu index.html'in GERÇEK kaynağıyla karşılaştırıyor.
+function klodOgrenciModeliHesapla(satirlar) {
+  const gruplar = {};
+  for (const r of (satirlar || [])) {
+    const anahtar = String(r.signal || r.topic || '').trim();
+    if (!anahtar) continue;
+    if (!gruplar[anahtar]) gruplar[anahtar] = [];
+    gruplar[anahtar].push(r);
+  }
+  return Object.entries(gruplar)
+    .map(([anahtar, olaylarHam]) => ({ anahtar, ...klodGrupIstatistigi(olaylarHam) }))
+    .sort((a, b) => b.evidenceCount - a.evidenceCount)
+    .slice(0, 10);
+}
+
+// KATMAN 5C — LLM'e giden STUDENT_CONTEXT'i inşa eder. SADECE İZİNLİ
+// alanlar: overall (evidence_count/accuracy/recent_accuracy/evidence_
+// confidence), reflex (SADECE gerçek kanıt varsa — yoksa alan hiç
+// eklenmez), weak_evidence (EN FAZLA 3, SADECE kanitGuveni!=='YETERSİZ_
+// KANIT' olan gruplardan, en düşük accuracy önce — "YETERSİZ_KANIT ≠
+// zayıf" ilkesi gereği kanıtı yetersiz bir konuyu ASLA "zayıf alan" gibi
+// GÖSTERMİYORUZ). user_id/email/profile/raw satır/timestamp listesi/
+// bireysel cevaplar/knowledge-recognition-application-reasoning tahmini/
+// diagnostic_events/Katman 4 hypothesis/kişilik etiketi (profilEtiketi
+// dahil) KESİNLİKLE BURADA YOK.
+function klodStudentContextOlustur(satirlar) {
+  const genel = klodGrupIstatistigi(satirlar || []);
+  const gruplanmis = klodOgrenciModeliHesapla(satirlar);
+  const zayifKanitlar = gruplanmis
+    .filter((g) => g.kanitGuveni !== 'YETERSİZ_KANIT')
+    .sort((a, b) => a.longTermAccuracy - b.longTermAccuracy)
+    .slice(0, 3)
+    .map((g) => ({
+      konu: String(g.anahtar).slice(0, 60),
+      evidence_count: g.evidenceCount,
+      accuracy: g.longTermAccuracy,
+      evidence_confidence: g.kanitGuveni,
+    }));
+
+  const context = {
+    overall: {
+      evidence_count: genel.evidenceCount,
+      accuracy: genel.longTermAccuracy,
+      recent_accuracy: genel.recentAccuracy,
+      evidence_confidence: genel.kanitGuveni,
+    },
+    weak_evidence: zayifKanitlar,
+  };
+  if (genel.reflex) {
+    context.reflex = { ortalama_sure_ms: genel.reflex.ortalamaSureMs, kanit_sayisi: genel.reflex.kanitSayisi };
+  }
+  return context;
 }
 
 // 1. SYSTEM PROMPT — Tutarlı karakter tanımı
@@ -422,6 +553,21 @@ export default async function handler(req, res) {
     });
   }
 
+  // KATMAN 5C — SERVER-SIDE STUDENT MODEL CONTEXT: SADECE auth.verified
+  // (verifiedUser) varsa DB'ye gidiyor — doğrulanmamış istekte HİÇBİR
+  // sorgu atılmaz, STUDENT_CONTEXT hiç üretilmez. `system` override'ından
+  // BAĞIMSIZ eklenir (5B ile AYNI gerekçe). Doğrulama/hesaplama TAMAMEN
+  // yukarıdaki klodOgrenciKanitiniAl/klodStudentContextOlustur'da; burada
+  // sadece sonucu (varsa) prompt'a yazıyoruz.
+  const ogrenciSatirlari = await klodOgrenciKanitiniAl(verifiedUser);
+  const studentContext = ogrenciSatirlari ? klodStudentContextOlustur(ogrenciSatirlari) : null;
+  if (studentContext) {
+    systemContent.push({
+      type: 'text',
+      text: `ÖĞRENCİ KANIT ÖZETİ (öğrencinin GEÇMİŞ performansından türetilmiş, doğrulanmış bir aggregate — isim/e-posta/kimlik bilgisi İÇERMEZ, sadece sayısal kanıt):\n${JSON.stringify(studentContext)}\n\nGÜVENLİ KULLANIM KURALLARI (ZORUNLU):\n- YETERSİZ_KANIT = zayıf öğrenci DEĞİLDİR, sadece henüz az veri var demektir.\n- Az kanıtla (evidence_count düşükken) kesin bir öğrenci özelliği/karakteri SÖYLEME.\n- response_time/reflex ASLA dikkatsizlik/tembellik olarak yorumlanmaz — sadece süre bilgisidir.\n- NULL/veri yok durumunu başarısızlık SAYMA — "henüz yeterli veri yok" de.\n- Öğrenci hakkında kişilik/zeka/öğrenme kapasitesi ÇIKARIMI YAPMA.\n- Kök-neden (root-cause) teşhisi YAPMA — bu veri sadece GÖZLEMLENEN performans, neden DEĞİL.\n- Bir teşhis/tanı motorundan (Katman 4) bahsetme, öyle bir şey yokmuş gibi davran.\n- Veriye dayanmayan hiçbir kişiselleştirme yapma.\nDil örnekleri: "Son kayıtlarında...", "Mevcut kanıta göre...", "Bu konuda henüz yeterli veri yok..." gibi kanıta dayalı, nötr ifadeler kullan.`,
+    });
+  }
+
   // 8. PROMPT CHAINING — Mod bazlı zincir
   let finalMessages = calibratedMessages;
   
@@ -543,3 +689,9 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Sunucu hatası', message: error.message });
   }
 }
+
+// Test-only named export'lar (Vercel SADECE default export'u kullanır,
+// bu satır runtime davranışını DEĞİŞTİRMEZ) — client/server parity
+// testinin saf fonksiyonları doğrudan çağırabilmesi için, bkz.
+// tests/avci-klod-student-context.test.mjs.
+export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi };

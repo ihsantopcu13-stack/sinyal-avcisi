@@ -80,6 +80,7 @@ jobs:
           node --check api/klod.mjs
           node --check tests/avci-klod-auth.test.mjs
           node --check tests/avci-klod-context.test.mjs
+          node --check tests/avci-klod-student-context.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -167,3 +168,6 @@ jobs:
 
       - name: KATMAN 5B — Sinyal Lab current question context testi (gerçek vm çalıştırma + server mock, gerçek ağ yok)
         run: node tests/avci-klod-context.test.mjs
+
+      - name: KATMAN 5C — server-side student model context testi (client/server parity + server mock, gerçek ağ yok)
+        run: node tests/avci-klod-student-context.test.mjs
