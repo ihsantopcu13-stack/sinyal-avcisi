@@ -132,6 +132,10 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .s-key{background:#2a2810;color:#92400e;padding:2px 7px;border-radius:6px;font-weight:700;display:inline-block}
 .s-key.pulse{animation:keyPulse 1s ease}
 @keyframes keyPulse{0%{background:#2a2810;box-shadow:none}50%{background:rgba(146,64,14,.2);box-shadow:0 0 0 4px rgba(146,64,14,.1)}100%{background:#2a2810;box-shadow:none}}
+/* KATMAN 5E — AKILLI TAHTA: KLOD'un board_actions ile tetiklediği görsel öğeler. Hepsi textContent ile doldurulur, LLM metni asla HTML olarak yorumlanmaz. */
+mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radius:4px;padding:0 2px;font-weight:700}
+.avci-board-satir{animation:sigPulse .6s ease}
+#dm-opts .dmo.avci-board-elenmis{opacity:.4;text-decoration:line-through;pointer-events:none}
 .s-sig[data-tip]:hover::after,.s-trap[data-tip]:hover::after,.s-key[data-tip]:hover::after{
   content:attr(data-tip);
   position:absolute;
@@ -1690,6 +1694,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           <div class="dm-opts" id="dm-opts"></div>
           <div class="dm-fb" id="dm-fb"></div>
           <div id="avci-teshis-panel"></div>
+          <div id="avci-board-panel" style="display:flex;flex-direction:column;gap:6px;margin-top:8px"></div>
           <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
@@ -6897,6 +6902,148 @@ function avciAktifSinyalLabBaglamiAl(){
   return baglam;
 }
 
+// ============================================================
+// KATMAN 5E — AKILLI TAHTA ALLOWLIST DISPATCHER (2026-09-18)
+// ============================================================
+// SADECE server'ın (api/klod.mjs, klodBoardActionlariDogrula) ZATEN
+// canonical veriye karşı doğruladığı, sabit tipte, kısa metin alanlı
+// action'ları işler. LLM'in hiçbir alanı BURADA innerHTML/eval/
+// Function/CSS selector/DOM path olarak KULLANILMAZ — her action SADECE
+// ÖNCEDEN VAR OLAN, bilinen DOM elemanlarını (#sl-sent, #dm-opts .dmo[i],
+// #avci-board-panel) seçip class toggle veya textContent ataması yapar.
+// Bilinmeyen/malformed action SESSİZCE yok sayılır — chat cevabı
+// bundan HİÇ ETKİLENMEZ (fail-open, 5B/5C ile AYNI felsefe).
+let _avciBoardTemizlenecekler=[];
+function avciBoardTemizle(){
+  for(const el of _avciBoardTemizlenecekler){
+    if(!el)continue;
+    if(el.classList&&el.classList.contains('avci-board-elenmis')){el.classList.remove('avci-board-elenmis');continue;}
+    if(el.tagName==='MARK'&&el.parentNode){
+      // vurguyu düz metne geri döndür — orijinal .s-sig/.s-trap etiketleri zaten mark'ın DIŞINDA, bozulmaz
+      const metin=document.createTextNode(el.textContent);
+      el.parentNode.replaceChild(metin,el);
+      continue;
+    }
+    if(el.parentNode)el.remove();
+  }
+  _avciBoardTemizlenecekler=[];
+  const panel=document.getElementById('avci-board-panel');
+  if(panel)panel.textContent='';
+}
+function avciBoardSatirEkle(baslik,metin){
+  const panel=document.getElementById('avci-board-panel');
+  if(!panel||typeof metin!=='string'||!metin.trim())return;
+  const satir=document.createElement('div');
+  satir.className='avci-board-satir';
+  satir.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--ink)';
+  const etiket=document.createElement('b');
+  etiket.style.color='var(--signal)';
+  etiket.textContent=baslik+': '; // textContent — LLM metni ASLA HTML olarak yorumlanmaz
+  satir.appendChild(etiket);
+  const govde=document.createElement('span');
+  govde.textContent=metin;
+  satir.appendChild(govde);
+  panel.appendChild(satir);
+  _avciBoardTemizlenecekler.push(satir);
+}
+function avciBoardVurgula(metin){
+  const sent=document.getElementById('sl-sent');
+  if(!sent||typeof metin!=='string'||!metin.trim())return;
+  // Güvenli text-node bazlı vurgu: innerHTML string-replace YOK. Sadece
+  // METİN düğümlerini TreeWalker ile tarayıp eşleşen kısmı yeni bir
+  // <mark> düğümüyle sarıyoruz — mevcut .s-sig/.s-trap/.s-key span'leri
+  // BOZULMUYOR (onların İÇİNDEKİ metin düğümleri de taranır ama kendi
+  // etiketleri yeniden yazılmaz, sadece eşleşen metin parçası sarılır).
+  const aranan=metin.trim().toLowerCase();
+  const walker=document.createTreeWalker(sent,NodeFilter.SHOW_TEXT);
+  let node,hedef=null;
+  while((node=walker.nextNode())){
+    const idx=node.nodeValue.toLowerCase().indexOf(aranan);
+    if(idx!==-1){hedef={node,idx};break;}
+  }
+  if(!hedef)return;
+  const orta=hedef.node.splitText(hedef.idx);
+  orta.splitText(aranan.length);
+  const mark=document.createElement('mark');
+  mark.className='avci-board-vurgu';
+  mark.textContent=orta.nodeValue;
+  orta.parentNode.replaceChild(mark,orta);
+  _avciBoardTemizlenecekler.push(mark);
+}
+function avciBoardActionUygula(action){
+  if(!action||typeof action!=='object'||typeof action.type!=='string')return;
+  switch(action.type){
+    case 'HIGHLIGHT_SIGNAL':{
+      const sent=document.getElementById('sl-sent');
+      if(!sent||typeof action.text!=='string')return;
+      sent.querySelectorAll('.s-sig').forEach(el=>{
+        if(el.textContent.trim().toLowerCase()===action.text.trim().toLowerCase()){
+          el.classList.add('pulse'); // mevcut Sinyal Radar pulse mekanizması yeniden kullanılıyor
+          setTimeout(()=>el.classList.remove('pulse'),1000);
+        }
+      });
+      break;
+    }
+    case 'HIGHLIGHT_VERB':
+      avciBoardVurgula(action.text);
+      break;
+    case 'SHOW_SVO':{
+      const panel=document.getElementById('avci-board-panel');
+      if(!panel)return;
+      const satir=document.createElement('div');
+      satir.className='avci-board-satir';
+      satir.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:14px;color:var(--ink);display:flex;gap:14px;flex-wrap:wrap';
+      let doldu=false;
+      for(const [harf,deger] of[['S',action.subject],['V',action.verb],['O',action.object]]){
+        if(typeof deger!=='string'||!deger.trim())continue;
+        doldu=true;
+        const kutu=document.createElement('span');
+        const etiket=document.createElement('b');
+        etiket.style.color='var(--signal)';
+        etiket.textContent=harf+': ';
+        kutu.appendChild(etiket);
+        const govde=document.createElement('span');
+        govde.textContent=deger;
+        kutu.appendChild(govde);
+        satir.appendChild(kutu);
+      }
+      if(doldu){panel.appendChild(satir);_avciBoardTemizlenecekler.push(satir);}
+      break;
+    }
+    case 'SHOW_LEFT_RIGHT':{
+      const parcalar=[];
+      if(typeof action.left==='string'&&action.left.trim())parcalar.push('SOL: '+action.left.trim());
+      if(typeof action.right==='string'&&action.right.trim())parcalar.push('SAĞ: '+action.right.trim());
+      if(parcalar.length)avciBoardSatirEkle('SAĞ/SOL',parcalar.join('  —  '));
+      break;
+    }
+    case 'SHOW_HINT':
+      avciBoardSatirEkle('🏹 AVCI İPUCU',action.text);
+      break;
+    case 'SHOW_AVCI_REFLEX':
+      avciBoardSatirEkle('⚡ AVCI REFLEKSİ',action.text);
+      break;
+    case 'ELIMINATE_OPTION':{
+      const opts=document.querySelectorAll('#dm-opts .dmo');
+      const idx=action.option_index;
+      if(typeof idx==='number'&&Number.isInteger(idx)&&opts[idx]){
+        opts[idx].classList.add('avci-board-elenmis');
+        _avciBoardTemizlenecekler.push(opts[idx]);
+      }
+      break;
+    }
+    case 'CLEAR_BOARD':
+      avciBoardTemizle();
+      break;
+    default:
+      return; // bilinmeyen action — sessizce yok say (allowlist dışı)
+  }
+}
+function avciBoardActionlariUygula(actions){
+  if(!Array.isArray(actions))return;
+  for(const action of actions.slice(0,3))avciBoardActionUygula(action);
+}
+
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
@@ -6996,12 +7143,21 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     });
     const data=await res.json();
     tp.remove();
-    const cevap=data.content?.[0]?.text||data.error||'Bir hata oluştu.';
+    // KATMAN 5E — data.content artık (board_actions için tool_use
+    // çağrılmışsa) metin dışında bloklar da içerebilir; index 0'ın HER
+    // ZAMAN metin olduğunu VARSAYMAK yerine gerçek metin bloğunu ARIYORUZ
+    // (sendChat()'in zaten kullandığı GÜVENLİ desenin aynısı).
+    const cevap=data.content?.find(b=>b.type==='text')?.text||data.error||'Bir hata oluştu.';
     const km=document.createElement('div');km.className='msg k';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
     km.innerHTML=renderMD(temizCevap);
     body.appendChild(km);body.scrollTop=body.scrollHeight;
+    // KATMAN 5E — AKILLI TAHTA: server'ın ZATEN canonical veriye karşı
+    // doğruladığı board_actions varsa uygula. Yoksa/malformed ise
+    // avciBoardActionlariUygula sessizce hiçbir şey yapmaz — chat
+    // cevabı yukarıda ZATEN gösterildi, board bundan bağımsız (fail-open).
+    try{avciBoardActionlariUygula(data.board_actions);}catch(e){}
     // Token bilgisi (geliştirici modu)
     if(data.token_info&&localStorage.getItem('sa_dev')==='1'){
       const ti=document.createElement('div');
@@ -8695,6 +8851,7 @@ function slRender(){
   avciTeshisPaneliTemizle();
   slAnswered=false;
   _slSelectedAnswerText=null;_slSelectedAnswerCorrect=null; // KATMAN 5B — yeni soru, önceki seçim temizlenir
+  if(typeof avciBoardTemizle==='function')avciBoardTemizle(); // KATMAN 5E — önceki sorunun tahta vurgusu/paneli yeni soruya sızmaz
   _slRtBaslangic=rtBaslat(); // QUESTION_VISIBLE — soru DOM'a şimdi yazıldı
   // TTS: İngilizce cümle, sonra Türkçe soru
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
