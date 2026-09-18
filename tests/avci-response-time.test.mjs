@@ -57,7 +57,12 @@ const REFLEKS = slice("function avciOgrenciModeliHesapla(satirlar){", "function 
   kontrol("S3) cevapKaydet finite/>=0 sanitize ediyor, sahte varsayılan (5000 gibi) YOK", /Number\.isFinite\(opts\.responseTimeMs\)&&opts\.responseTimeMs>=0/.test(html) && !/responseTimeMs.*5000/.test(html));
   kontrol("S4) cevapSunucuyaSenkronla artık p_response_time_ms:null SABİT DEĞİL — kayit.responseTimeMs gönderiyor", !/p_response_time_ms:null,/.test(html) && /p_response_time_ms:\(typeof kayit\.responseTimeMs/.test(html));
 
-  kontrol("S5) SİNYAL LAB — slRender rtBaslat() çağırıyor, dAns rtBitir() çağırıyor (feedback/kaydetmeden ÖNCE)", /slAnswered=false;\s*\n\s*_slRtBaslangic=rtBaslat\(\)/.test(html) && /slAnswered=true;\s*\n\s*const _slRt=rtBitir\(_slRtBaslangic\);/.test(html));
+  // KATMAN 5B (2026-09-18): slAnswered=false/true ile rtBaslat/rtBitir
+  // arasına seçilen-cevap state satırı eklendi (bkz. avci-klod-context.
+  // test.mjs) — sıralama/davranış AYNI, sadece aralarında 1 satır var;
+  // regex bunu tolere edecek şekilde genişletildi (hâlâ "hemen ardından"
+  // sınırını [\s\S]{0,120} ile koruyor, fonksiyonun geri kalanına sızmıyor).
+  kontrol("S5) SİNYAL LAB — slRender rtBaslat() çağırıyor, dAns rtBitir() çağırıyor (feedback/kaydetmeden ÖNCE)", /slAnswered=false;[\s\S]{0,250}?_slRtBaslangic=rtBaslat\(\)/.test(html) && /slAnswered=true;[\s\S]{0,250}?const _slRt=rtBitir\(_slRtBaslangic\);/.test(html));
   kontrol("S6) SİNYAL LAB — her iki dal (doğru/yanlış) da responseTimeMs:_slRt gönderiyor", (html.match(/responseTimeMs:_slRt\}/g) || []).length === 2);
 
   kontrol("S7) SAT — satPratikRender'da idx-değişti-veya-cevaplanmış guard'ı var", /_satRtIdx!==satSoruIdx\|\|_satRtAnsweredSlot===satSoruIdx/.test(html));

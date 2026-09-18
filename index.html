@@ -6626,7 +6626,19 @@ function tamEkranAcKapat(modId){
     el.requestFullscreen().catch(()=>{});
   }
 }
+// KATMAN 5B — AKTİF SORU MODÜLÜ TRACKER: 'sinyal_lab' | null. Sadece
+// dtab()/dnav() tarafından, gerçek navigasyon olaylarına göre güncellenir
+// (bkz. her iki fonksiyonun içindeki yorumlar). dnavChat() her çağrıda bu
+// değişkeni CANLI okur — cache/snapshot YOK.
+let _aktifSoruModulu=null;
 function dtab(el,mod){
+  // KATMAN 5B — AKTİF SORU MODÜLÜ TRACKER (2026-09-18): dnavChat()'in
+  // Sinyal Lab context'ini SADECE gerçekten Sinyal Lab görünürken
+  // göndermesi için tek, merkezi güncelleme noktası. mod!=='sinyal' olan
+  // HER geçiş (kelime/tuzak/sat/paragraf/svo/teknik/dilavcisi/canliders/
+  // hatalar/avci/sinavplanim/puananaliz) tracker'ı temizler — böylece
+  // Sinyal Lab'dan çıkıldığında eski/stale context asla KLOD'a sızmaz.
+  _aktifSoruModulu=(mod==='sinyal')?'sinyal_lab':null;
   // FAZ 2 — lesson_opened: "ders" niteliğindeki modüller için (S+V+O,
   // Teknik, Dil Avcısı). Diğer mod'lar (sinyal/kelime/tuzak/sat vb.)
   // kendi event'lerini ayrı yerlerde atıyor, burada tekrar atılmıyor.
@@ -6698,6 +6710,8 @@ function dnav(el){
   const skKartEl=document.getElementById('sk-kart');if(skKartEl)skKartEl.style.display='none';
   const bugunKartEl=document.getElementById('bugun-kart');if(bugunKartEl)bugunKartEl.style.display='none';
   if(txt.includes('Dashboard')){
+    // KATMAN 5B — Dashboard varsayılan olarak Sinyal Lab'ı gösterir (dtab[0] aktif)
+    _aktifSoruModulu='sinyal_lab';
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
@@ -6705,13 +6719,20 @@ function dnav(el){
     setTimeout(takvimOlustur,300);
     if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
   } else if(txt.includes('Raporlar')){
+    // KATMAN 5B — mod-sinyal'in içeriği Raporlar HTML'iyle DEĞİŞTİRİLİYOR,
+    // artık gerçek bir Sinyal Lab sorusu görünmüyor — tracker temizlenir.
+    _aktifSoruModulu=null;
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     main.querySelector('.dash-tabs').style.display='none';
     t.innerHTML=raporlarHTML();
   } else if(txt.includes('Sinyal Lab')){
+    _aktifSoruModulu='sinyal_lab';
     main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';
     document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
   } else if(txt.includes('KLOD')){
+    // KATMAN 5B — BİLİNÇLİ OLARAK tracker'a DOKUNULMUYOR: öğrenci Sinyal
+    // Lab'dan "bu soruyu KLOD'a sorayım" diyerek gelmiş olabilir, o context
+    // KLOD sekmesine geçince de geçerliliğini korumalı.
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     t.innerHTML=`
       <div class="klod-topbar">
@@ -6756,15 +6777,20 @@ function dnav(el){
       </div>
     `;
   } else if(txt.includes('Kelime')){
+    _aktifSoruModulu=null;
     document.getElementById('mod-kelime').style.display='block';kkShow();
-  } else if(txt.includes('SAT')){  
+  } else if(txt.includes('SAT')){
+   _aktifSoruModulu=null;
    document.getElementById('mod-sat').style.display='block';satRender();
   } else if(txt.includes('Gunluk')||txt.includes('Tuzak')){
+    _aktifSoruModulu=null;
     document.getElementById('mod-tuzak').style.display='block';tuzakRender();
   } else if(txt.includes('Ses')){
+    _aktifSoruModulu=null;
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;display:flex;justify-content:space-between;align-items:center" role="button" tabindex="0"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
   } else if(txt.includes('Rapor')){
+    _aktifSoruModulu=null;
     const t=document.getElementById('mod-sinyal');t.style.display='block';
     const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
     t.innerHTML=`<div class="dm-eye">📈 RAPORLAR — XP & LİDERLİK</div>
@@ -6836,6 +6862,41 @@ function mobilNavKapat(){
   document.getElementById('mbnSheet')?.classList.remove('acik');
 }
 
+// ============================================================
+// KATMAN 5B — SİNYAL LAB CURRENT QUESTION CONTEXT ASSEMBLER (2026-09-18)
+// ============================================================
+// SADECE Sinyal Lab gerçekten aktifken (_aktifSoruModulu==='sinyal_lab',
+// bkz. dtab/dnav) ve SADECE dnavChat() her çağrıldığında YENİDEN çalışır —
+// hiçbir yerde cache/snapshot TUTULMAZ, bu yüzden bayat (stale) bir soruya
+// ait context asla gönderilemez. Bu, client'ın kendi iddiasıdır — GERÇEK
+// güven sınırı api/klod.mjs'deki server-side canonical doğrulamadadır
+// (client burada ne gönderirse göndersin, server question_id ile kendi
+// kopyasından doğrular/türetir, correct_answer/is_correct'i asla client'tan
+// okumaz). CEVAP ÖNCESİ correct_answer/explanation/trap metadata HİÇ bu
+// objeye KONMAZ (prompt talimatına güvenmek yerine alan seviyesinde
+// çıkarma). STUDENT MODEL/WEAK AREA/ANSWER HISTORY/DIAGNOSTIC/user_id/
+// email BURADA DA HİÇ YOK — sadece paylaşılan canonical soru içeriği +
+// öğrencinin bu tek soruya verdiği anlık cevap.
+function avciAktifSinyalLabBaglamiAl(){
+  if(_aktifSoruModulu!=='sinyal_lab'||!slCurrentSoru)return null;
+  const soru=slCurrentSoru;
+  const duzMetin=(t)=>String(t||'').replace(/<[^>]*>/g,'').trim();
+  const baglam={
+    module:'sinyal_lab',
+    question_id:soru.id||null,
+    question_text:(duzMetin(soru.sent)+'\n\nSORU: '+duzMetin(soru.q)).slice(0,600),
+    options:Array.isArray(soru.opts)?soru.opts.slice(0,4).map(o=>duzMetin(o).slice(0,200)):[],
+    signal:soru.sinyal?String(soru.sinyal).slice(0,50):null,
+    answered:Boolean(slAnswered),
+  };
+  if(slAnswered&&_slSelectedAnswerText!=null){
+    baglam.selected_answer=duzMetin(_slSelectedAnswerText).slice(0,200);
+    baglam.correct_answer=Array.isArray(soru.opts)?duzMetin(soru.opts[soru.ans]).slice(0,200):null;
+    baglam.is_correct=Boolean(_slSelectedAnswerCorrect);
+  }
+  return baglam;
+}
+
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
@@ -6873,6 +6934,12 @@ async function dnavChat(){
         _dnavToken=(data&&data.session&&data.session.access_token)||null;
       }
     }catch(e){_dnavToken=null;}
+    // KATMAN 5B — CURRENT QUESTION CONTEXT: SADECE Sinyal Lab aktifken
+    // (bkz. avciAktifSinyalLabBaglamiAl yorumu), canlı okunur. SAT/Tuzak/
+    // Paragraf için BİLİNÇLİ OLARAK context üretilmiyor (bu turun kapsamı
+    // dışı) — diğer modüller aktifken bu null döner, context alanı hiç
+    // eklenmez, davranış context-öncesiyle BİREBİR aynı kalır.
+    const _aktifBaglam=avciAktifSinyalLabBaglamiAl();
     const res=await fetch('/api/klod',{
       method:'POST',
       headers:Object.assign({'Content-Type':'application/json'},_dnavToken?{'Authorization':'Bearer '+_dnavToken}:{}),
@@ -6880,6 +6947,7 @@ async function dnavChat(){
         messages:dnavHistory,
         mode:'chat',
         use_tools:false,
+        context:_aktifBaglam,
         system:`Sen KLOD'sun - Sinyal Avcisi platformunun YDS/YOKDiL AI ogretmenisin ve AVCI MASTER SiSTEMiSiN. Turkce konus.
 
 AVCI MASTER ANA PRENSiBi - Her soru icin su sirayi kullan:
@@ -6937,6 +7005,7 @@ MASTER FORMUL: TANI > SiNYAL > YAPI > SAG/SOL > S+V+O > ELE > KRiTiK FARK > KANI
 function dAns(btn,correct){
   if(slAnswered)return;
   slAnswered=true;
+  _slSelectedAnswerText=btn.textContent;_slSelectedAnswerCorrect=Boolean(correct); // KATMAN 5B — guard'ın hemen ardından, çift tıklama bunu değiştiremez
   const _slRt=rtBitir(_slRtBaslangic); // FIRST_FINAL_ANSWER — feedback/UI/kaydetmeden ÖNCE
   const opts=document.querySelectorAll('#dm-opts .dmo');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('dm-fb');
@@ -8470,6 +8539,13 @@ const SL_HAVUZ=[
 ];
 
 let slIdx=0,slAnswered=false,slCurrentSoru=null,_slRtBaslangic=null;
+// KATMAN 5B — SEÇİLEN CEVAP STATE (2026-09-18): SADECE client/UI-session
+// state'i, DB'ye HİÇ yazılmaz (answer_history zaten cevapKaydet ile ayrı
+// akışta kaydediliyor — bu değişkenler SADECE dnavChat context assembler'ı
+// için tutulur). İlk final cevapta (dAns, aşağıda) bir kez set edilir, her
+// yeni soru render'ında (slRender) sıfırlanır — stale/çift tıklama sızıntısı
+// yok (slAnswered guard'ı zaten dAns'i tek seferle sınırlıyor).
+let _slSelectedAnswerText=null,_slSelectedAnswerCorrect=null;
 
 // ============================================================
 // SL_SINYAL_LOOKUP — stable sinyal->indeks haritası
@@ -8598,6 +8674,7 @@ function slRender(){
   if(nextBtn)nextBtn.style.display='none';
   avciTeshisPaneliTemizle();
   slAnswered=false;
+  _slSelectedAnswerText=null;_slSelectedAnswerCorrect=null; // KATMAN 5B — yeni soru, önceki seçim temizlenir
   _slRtBaslangic=rtBaslat(); // QUESTION_VISIBLE — soru DOM'a şimdi yazıldı
   // TTS: İngilizce cümle, sonra Türkçe soru
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');

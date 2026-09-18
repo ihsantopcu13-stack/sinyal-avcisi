@@ -256,6 +256,9 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
       dnavHistory: [],
       KB: [],
       renderMD: (t) => t,
+      // KATMAN 5B (context assembler) bu dosyanın kapsamı DIŞINDA — burada
+      // sadece auth header davranışı test ediliyor, context her zaman null.
+      avciAktifSinyalLabBaglamiAl: () => null,
       sb: sbImpl,
       fetch: async (url, opts) => {
         fetchCagrilari.push({ url, opts });
