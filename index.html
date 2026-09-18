@@ -6777,10 +6777,16 @@ function dnav(el){
         </div>
         <div class="klod-input-row">
           <input class="chat-in klod-input" id="dnav-in" placeholder="Takıldığın soruyu, kelimeyi veya cümleyi yaz…" onkeydown="if(event.key==='Enter')dnavChat()" aria-label="Soru yaz">
+          <button id="dnav-mic-btn" type="button" onclick="dnavKlodSesTaniBaslat()" title="Sesle söyle" style="background:#0a0c1480;color:#22d3ee;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">🎤</button>
           <button class="chat-send klod-send" onclick="dnavChat()">Gönder →</button>
         </div>
       </div>
     `;
+    // KATMAN 5K — VOICE-LITE fail-open: mic butonu bu innerHTML DOM'a
+    // yazıldıktan HEMEN SONRA var oluyor (KLOD sekmesi lazy-render
+    // edildiği için sayfa yüklenirken henüz yok) - SR yoksa burada
+    // gizlenir, written AVCI (klavye) hiç etkilenmez.
+    (function(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const micBtn=document.getElementById('dnav-mic-btn');if(!SR&&micBtn)micBtn.style.display='none';})();
   } else if(txt.includes('Kelime')){
     _aktifSoruModulu=null;
     document.getElementById('mod-kelime').style.display='block';kkShow();
@@ -7295,6 +7301,17 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
     km.innerHTML=renderMD(temizCevap);
     body.appendChild(km);body.scrollTop=body.scrollHeight;
+    // KATMAN 5K — VOICE-LITE: metin cevabı ZATEN render edildi (yukarıda),
+    // şimdi AYNI güvenli/final metni (temizCevap - board action JSON'u
+    // DEĞİL, öğrenciye gösterilen <düşünce> etiketleri temizlenmiş metin)
+    // mevcut TTS motoruyla (ttsSpeak, dil otomatik algılanır) fire-and-
+    // forget seslendiriyoruz - await EDİLMİYOR, ne dnavChat'in akışını ne
+    // de chat render'ını BLOKLAMAZ. TTS başarısız olursa (motor yok/ağ
+    // hatası) written AVCI hiç etkilenmeden calismaya devam eder (fail-
+    // open, mevcut konusmaGonder/ttsSpeakEleven deseniyle AYNI ilke).
+    if(typeof ttsSpeak==='function'){
+      try{const _ttsSonuc=ttsSpeak(temizCevap,null,null);if(_ttsSonuc&&typeof _ttsSonuc.catch==='function')_ttsSonuc.catch(()=>{});}catch(e){}
+    }
     // KATMAN 5E — AKILLI TAHTA: server'ın ZATEN canonical veriye karşı
     // doğruladığı board_actions varsa uygula. Yoksa/malformed ise
     // avciBoardActionlariUygula sessizce hiçbir şey yapmaz — chat
@@ -13093,6 +13110,25 @@ let dilaRecognition=null;
 function dilaSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dila-mic-btn');const input=document.getElementById('dila-input');if(!dilaRecognition){dilaRecognition=new SR();dilaRecognition.lang='tr-TR';dilaRecognition.interimResults=false;dilaRecognition.maxAlternatives=1;dilaRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dilaRecognition.onend=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#c084fc';};dilaRecognition.onerror=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#c084fc';};}
 micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';micBtn.style.color='#1a0a2e';try{dilaRecognition.start();}catch(e){}}
 (function(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const micBtn=document.getElementById('dila-mic-btn');if(!SR&&micBtn)micBtn.style.display='none';})();
+
+// ============================================================
+// KATMAN 5K — AVCI VOICE-LITE: PUSH-TO-TALK STT (2026-09-18)
+// ============================================================
+// Mevcut konusmaSesTaniBaslat()/dilaSesTaniBaslat() deseninin BİREBİR
+// AYNISI - SADECE hedef input (dnav-in) ve varsayılan dil (tr-TR)
+// farklı. onresult SADECE input.value'yu doldurur - dnavChat()'i,
+// Enter'ı veya Gonder'i OTOMATİK TETİKLEMEZ; ogrenci transcript'i
+// ONCE GORUR, isterse duzeltir, ANCAK KENDISI Gonder/Enter yaptığında
+// mevcut dnavChat() (5A-5J'nin TAMAMI DAHIL, DEGISMEDEN) calisir. Bu,
+// "yanlis transcript -> yanlis degerlendirme" riskini YAPISAL OLARAK
+// engelleyen guvenlik ozelligidir (auto-send YOK). SR yoksa (tarayici
+// desteklemiyor) mic butonu SESSIZCE gizlenir - written AVCI (klavye
+// ile yazma) hicbir zaman etkilenmez (fail-open, mevcut desenle AYNI).
+let dnavRecognition=null;
+function dnavKlodSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dnav-mic-btn');const input=document.getElementById('dnav-in');if(!input)return;if(!dnavRecognition){dnavRecognition=new SR();dnavRecognition.lang='tr-TR';dnavRecognition.interimResults=false;dnavRecognition.maxAlternatives=1;dnavRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dnavRecognition.onend=function(){if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};dnavRecognition.onerror=function(){if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};}
+  if(micBtn){micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';}
+  try{dnavRecognition.start();}catch(e){}
+}
 </script>
 <!-- HOŞ GELDİN KARŞILAMA ANİMASYONU -->
 <div id="hosgeldin-overlay" class="hg-overlay" onclick="hosgeldinKapat()" role="button" tabindex="0">
