@@ -86,6 +86,159 @@ function klodSinyalLabBaglamiDogrula(context) {
 }
 
 // ============================================================
+// KATMAN 5E — CANLI AVCI HOCA <-> AKILLI TAHTA KÖPRÜSÜ (2026-09-18)
+// ============================================================
+// LLM'e ASLA arbitrary JavaScript/HTML/CSS selector/DOM path/eval/
+// innerHTML payload/URL/SQL üretme YETKİSİ verilmez. Tool_use şeması
+// (BOARD_ACTION_TOOL) SADECE sabit bir action adı + kısa, düz metin
+// alanları kabul eder — ama şemaya bile KÖRÜ KÖRÜNE güvenilmez: her
+// action burada (klodBoardActionlariDogrula) YENİDEN, canonical veriye
+// karşı doğrulanır (defense-in-depth, 5B'nin "client'a güvenme, kendi
+// canonical kopyandan doğrula" ilkesiyle AYNI).
+//
+// Aktif Sinyal Lab sorusu yoksa (dogrulanmisBaglam null) board_actions
+// HER ZAMAN boş dizidir — board sadece GERÇEKTEN görünen bir soru
+// üzerinde çalışabilir, hayali/varsayımsal bir soru üzerinde ASLA.
+//
+// ELIMINATE_OPTION ve SHOW_AVCI_REFLEX: dogrulanmisBaglam.answered
+// KESİNLİKLE true olmalı, aksi halde SUNUCU TARAFINDA DROP edilir —
+// 5B'nin answer-leak kilidi board seviyesine BİREBİR taşınıyor (cevap
+// öncesi hiçbir action doğru cevabı elemeyle/göstererek sızdıramaz).
+const BOARD_ACTION_ALLOWLIST = new Set([
+  'HIGHLIGHT_VERB', 'SHOW_SVO', 'HIGHLIGHT_SIGNAL', 'SHOW_LEFT_RIGHT',
+  'SHOW_HINT', 'SHOW_AVCI_REFLEX', 'CLEAR_BOARD', 'ELIMINATE_OPTION',
+]);
+
+const BOARD_ACTION_TOOL = {
+  name: 'avci_board_actions',
+  description: "Aktif Sinyal Lab sorusu ekranda görünürken, o AN anlattığın AVCI adımını GÖRSEL olarak desteklemek için tahtada küçük, yapılandırılmış hareketler öner. SADECE gerçekten öğretici bir andaysa çağır — her mesajda çağırman GEREKMEZ. TEK seferde EN FAZLA 2-3 küçük hareket öner (7 adımı bir kerede doldurma, Socratic tek-adım kuralına uy). ELIMINATE_OPTION ve SHOW_AVCI_REFLEX SADECE öğrenci soruyu zaten cevapladıysa anlamlıdır.",
+  input_schema: {
+    type: 'object',
+    properties: {
+      actions: {
+        type: 'array',
+        maxItems: 3,
+        items: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              enum: Array.from(BOARD_ACTION_ALLOWLIST),
+              description: 'Yapılacak tahta hareketi.',
+            },
+            text: { type: 'string', description: 'HIGHLIGHT_VERB/HIGHLIGHT_SIGNAL: aktif cümlede GERÇEKTEN geçen kelime/ifade (uydurma). SHOW_HINT/SHOW_AVCI_REFLEX: kısa, düz metin (HTML/kod YOK).' },
+            subject: { type: 'string', description: 'SHOW_SVO: cümlede GERÇEKTEN geçen özne metni.' },
+            verb: { type: 'string', description: 'SHOW_SVO: cümlede GERÇEKTEN geçen fiil metni.' },
+            object: { type: 'string', description: 'SHOW_SVO: cümlede GERÇEKTEN geçen nesne metni.' },
+            left: { type: 'string', description: 'SHOW_LEFT_RIGHT: cümlede GERÇEKTEN geçen sol taraf metni.' },
+            right: { type: 'string', description: 'SHOW_LEFT_RIGHT: cümlede GERÇEKTEN geçen sağ taraf metni.' },
+            option_index: { type: 'integer', description: 'ELIMINATE_OPTION: elenecek şıkkın 0 tabanlı indexi. SADECE öğrenci zaten cevapladıysa kullan.' },
+          },
+          required: ['type'],
+        },
+      },
+    },
+    required: ['actions'],
+  },
+};
+
+function klodDuzMetinKirp(s, maxLen) {
+  if (typeof s !== 'string') return null;
+  const temiz = s.replace(/[<>]/g, '').trim(); // HTML/etiket parçacıkları defense-in-depth olarak burada da kırpılır (client zaten textContent kullanıyor)
+  if (!temiz) return null;
+  return temiz.slice(0, maxLen);
+}
+function klodAltDizeMi(aday, kaynakMetin) {
+  if (typeof aday !== 'string' || !aday.trim()) return false;
+  return String(kaynakMetin || '').toLowerCase().includes(aday.trim().toLowerCase());
+}
+
+// dogrulanmisBaglam: yukarıdaki klodSinyalLabBaglamiDogrula()'nın SONUCU
+// (zaten canonical'a göre doğrulanmış). canonical: AYNI question_id için
+// SORU_HAVUZU'ndaki ham kayıt (soru_en/sinyal/dogru_index/secenekler_tr
+// gibi ELIMINATE_OPTION/HIGHLIGHT_SIGNAL doğrulaması için gereken ek
+// alanlara erişmek için ayrıca geçiriliyor — dogrulanmisBaglam bilerek
+// bunları LLM'e giden haliyle TUTMUYOR).
+function klodBoardActionlariDogrula(rawActions, dogrulanmisBaglam, canonical) {
+  if (!dogrulanmisBaglam || !canonical || !Array.isArray(rawActions)) return [];
+  const aktifCumle = String(canonical.soru_en || '');
+  const sonuc = [];
+  for (const raw of rawActions.slice(0, 3)) {
+    if (!raw || typeof raw !== 'object' || typeof raw.type !== 'string') continue;
+    if (!BOARD_ACTION_ALLOWLIST.has(raw.type)) continue; // bilinmeyen action → DROP
+
+    if (raw.type === 'CLEAR_BOARD') {
+      sonuc.push({ type: 'CLEAR_BOARD' });
+      continue;
+    }
+
+    if (raw.type === 'HIGHLIGHT_SIGNAL') {
+      const metin = klodDuzMetinKirp(raw.text, 60);
+      const canonicalSinyal = canonical.sinyal ? String(canonical.sinyal).trim().toLowerCase() : null;
+      if (metin && canonicalSinyal && metin.toLowerCase() === canonicalSinyal) {
+        sonuc.push({ type: 'HIGHLIGHT_SIGNAL', text: metin });
+      } // canonical sinyalle eşleşmiyorsa (sahte/uydurma sinyal) sessizce DROP
+      continue;
+    }
+
+    if (raw.type === 'HIGHLIGHT_VERB') {
+      const metin = klodDuzMetinKirp(raw.text, 60);
+      if (metin && klodAltDizeMi(metin, aktifCumle)) {
+        sonuc.push({ type: 'HIGHLIGHT_VERB', text: metin });
+      } // aktif cümlenin gerçek bir alt dizesi değilse (uydurma metin) DROP
+      continue;
+    }
+
+    if (raw.type === 'SHOW_SVO') {
+      const s = raw.subject !== undefined ? klodDuzMetinKirp(raw.subject, 80) : null;
+      const v = raw.verb !== undefined ? klodDuzMetinKirp(raw.verb, 80) : null;
+      const o = raw.object !== undefined ? klodDuzMetinKirp(raw.object, 80) : null;
+      // sağlanan HER parça aktif cümlenin gerçek bir alt dizesi olmalı;
+      // biri bile uydurmaysa (cümlede yoksa) TÜM action reddedilir.
+      const gecerli = (s === null || klodAltDizeMi(s, aktifCumle)) && (v === null || klodAltDizeMi(v, aktifCumle)) && (o === null || klodAltDizeMi(o, aktifCumle));
+      if (gecerli && (s || v || o)) {
+        sonuc.push({ type: 'SHOW_SVO', subject: s, verb: v, object: o });
+      }
+      continue;
+    }
+
+    if (raw.type === 'SHOW_LEFT_RIGHT') {
+      const sol = raw.left !== undefined ? klodDuzMetinKirp(raw.left, 80) : null;
+      const sag = raw.right !== undefined ? klodDuzMetinKirp(raw.right, 80) : null;
+      const gecerli = (sol === null || klodAltDizeMi(sol, aktifCumle)) && (sag === null || klodAltDizeMi(sag, aktifCumle));
+      if (gecerli && (sol || sag)) {
+        sonuc.push({ type: 'SHOW_LEFT_RIGHT', left: sol, right: sag });
+      }
+      continue;
+    }
+
+    if (raw.type === 'SHOW_HINT') {
+      const metin = klodDuzMetinKirp(raw.text, 300);
+      if (metin) sonuc.push({ type: 'SHOW_HINT', text: metin });
+      continue;
+    }
+
+    if (raw.type === 'SHOW_AVCI_REFLEX') {
+      if (dogrulanmisBaglam.answered !== true) continue; // cevap öncesi KESİNLİKLE DROP
+      const metin = klodDuzMetinKirp(raw.text, 400);
+      if (metin) sonuc.push({ type: 'SHOW_AVCI_REFLEX', text: metin });
+      continue;
+    }
+
+    if (raw.type === 'ELIMINATE_OPTION') {
+      if (dogrulanmisBaglam.answered !== true) continue; // BEFORE ANSWER → SUNUCU TARAFINDA KESİNLİKLE DROP
+      const idx = Number.isInteger(raw.option_index) ? raw.option_index : null;
+      const secenekSayisi = Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.length : 0;
+      if (idx !== null && idx >= 0 && idx < secenekSayisi && idx !== canonical.dogru_index) {
+        sonuc.push({ type: 'ELIMINATE_OPTION', option_index: idx });
+      } // geçersiz index VEYA gerçek doğru cevabı elemeye çalışıyorsa DROP
+      continue;
+    }
+  }
+  return sonuc;
+}
+
+// ============================================================
 // KATMAN 5 MVP-1 — KLOD AUTH FOUNDATION (2026-09-18)
 // ============================================================
 // Kişisel context (soru/öğrenci/teşhis) HENÜZ eklenmedi — bu SADECE
@@ -606,8 +759,16 @@ export default async function handler(req, res) {
 
     // 16. TOOL USE — Gerektiğinde araç ekle (sinyal_analiz serbest metin
     // olarak stream ediliyor, tool kullanmıyor — bkz. SINYAL_ANALIZ_SYSTEM_PROMPT)
-    if (use_tools && mode !== 'sinyal_analiz') {
-      requestBody.tools = TOOLS;
+    // KATMAN 5E: board_actions tool'u SADECE mode==='chat' (dashboard KLOD
+    // akışı) için, `use_tools`'tan BAĞIMSIZ ekleniyor — dnavChat() her
+    // zaman use_tools:false gönderiyor ama board köprüsü onun ÜZERİNE,
+    // ayrı bir mekanizma. sendChat() (mode YOK) ve sinyal_analiz
+    // ETKİLENMİYOR.
+    const araclar = [];
+    if (use_tools && mode !== 'sinyal_analiz') araclar.push(...TOOLS);
+    if (mode === 'chat') araclar.push(BOARD_ACTION_TOOL);
+    if (araclar.length) {
+      requestBody.tools = araclar;
       requestBody.tool_choice = { type: "auto" };
     }
 
@@ -660,6 +821,22 @@ export default async function handler(req, res) {
     const textContent = data.content?.find(b => b.type === 'text')?.text || '';
     const parsed = parseXMLOutput(textContent);
 
+    // KATMAN 5E — board_actions: LLM'in avci_board_actions tool_use ile
+    // ürettiği ham veri (varsa) canonical'a karşı doğrulanıp sanitize
+    // edilir. Parse/tool bulunamama/malformed HER durumda [] döner —
+    // bu turda hiçbir zaman handler'ı bloklamaz/hata fırlatmaz (fail-open,
+    // metin cevabı yukarıda ZATEN hazırlandı).
+    let boardActions = [];
+    try {
+      const boardToolUse = data.content?.find(b => b.type === 'tool_use' && b.name === 'avci_board_actions');
+      if (boardToolUse) {
+        const canonicalForBoard = dogrulanmisBaglam ? SORU_HAVUZU.find((s) => s.id === dogrulanmisBaglam.question_id) : null;
+        boardActions = klodBoardActionlariDogrula(boardToolUse.input?.actions, dogrulanmisBaglam, canonicalForBoard);
+      }
+    } catch (e) {
+      boardActions = [];
+    }
+
     // Token kullanım raporu ekle
     const tokenInfo = {
       input_tokens: data.usage?.input_tokens || 0,
@@ -681,7 +858,11 @@ export default async function handler(req, res) {
       // KATMAN 5 MVP-1 — PII YOK, sadece doğrulama sonucu (id/email/role
       // asla dönmüyor). Şimdilik hiçbir context/davranış bu alana bağlı
       // değil — gelecekteki context işi için altyapı.
-      auth: { verified: Boolean(verifiedUser), anonymous: verifiedUser ? verifiedUser.isAnonymous : null }
+      auth: { verified: Boolean(verifiedUser), anonymous: verifiedUser ? verifiedUser.isAnonymous : null },
+      // KATMAN 5E — mevcut text reply kontratı (content[0]/parsed/vs.)
+      // DEĞİŞMEDEN, geriye uyumlu, ADDITIVE bir alan. Client bu alanı
+      // okumazsa (eski davranış) hiçbir şey değişmez.
+      board_actions: boardActions,
     });
 
   } catch (error) {
@@ -694,4 +875,4 @@ export default async function handler(req, res) {
 // bu satır runtime davranışını DEĞİŞTİRMEZ) — client/server parity
 // testinin saf fonksiyonları doğrudan çağırabilmesi için, bkz.
 // tests/avci-klod-student-context.test.mjs.
-export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi };
+export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi, klodBoardActionlariDogrula, klodSinyalLabBaglamiDogrula, BOARD_ACTION_ALLOWLIST };
