@@ -32,7 +32,10 @@ function kontrol(ad, sonuc, detay) {
   console.log(`[${sonuc ? "PASS" : "FAIL"}] ${ad}${detay !== undefined ? " — " + detay : ""}`);
 }
 
-const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+// CRLF/LF normalize: Windows checkout CRLF verirken, Linux CI (git
+// autocrlf farkı) LF verebiliyor — tüm marker'ları TEK bir satır sonu
+// biçimine (\n) göre yazabilmek için burada normalize ediyoruz.
+const html = readFileSync(path.join(ROOT, "index.html"), "utf-8").replace(/\r\n/g, "\n");
 
 function slice(startMarker, endMarker, fromIdx) {
   const s = html.indexOf(startMarker, fromIdx || 0);
@@ -53,7 +56,7 @@ function slice(startMarker, endMarker, fromIdx) {
     return !/_aktifSoruModulu/.test(klodDali);
   })());
   kontrol("S5) dnav() Kelime/SAT/Tuzak/Ses/Rapor/Raporlar dallarının HEPSİ tracker'ı null yapıyor (6 dal)", (() => {
-    const dnavGovde = slice("function dnav(el){", "\r\n}\r\n", html.indexOf("function dnav(el){"));
+    const dnavGovde = slice("function dnav(el){", "\n}\n", html.indexOf("function dnav(el){"));
     return (dnavGovde.match(/_aktifSoruModulu=null;/g) || []).length === 6;
   })());
   kontrol("S6) avciAktifSinyalLabBaglamiAl TAM OLARAK 1 kez tanımlı", (html.match(/function avciAktifSinyalLabBaglamiAl\(\)\{/g) || []).length === 1);
