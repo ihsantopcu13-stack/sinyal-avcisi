@@ -91,6 +91,7 @@ jobs:
           node --check tests/avci-klod-voice-lite.test.mjs
           node --check tests/avci-turn-controller.test.mjs
           node --check tests/avci-tap-to-interrupt.test.mjs
+          node --check tests/avci-turn-handoff-cue.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -211,3 +212,6 @@ jobs:
 
       - name: AVCI Tap-to-Interrupt MVP — SPEAKING sırasında mic ile kesinti (gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
         run: node tests/avci-tap-to-interrupt.test.mjs
+
+      - name: AVCI Turn Handoff Cue — mic tooltip ile görsel sıra bildirimi (gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
+        run: node tests/avci-turn-handoff-cue.test.mjs

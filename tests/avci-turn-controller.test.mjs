@@ -60,8 +60,12 @@ const FULL_SRC = STATE_DECL + "\n" + DNAVCHAT_FN + "\n" + VOICE_FN_SRC + "\n" + 
   kontrol("S2) dnavTurNesil (nesil sayacı) TAM OLARAK 1 kez tanımlı", (html.match(/let dnavTurNesil=0;/g) || []).length === 1);
   kontrol("S3) dnavChat() SADECE IDLE'dan THINKING'e geçebiliyor (re-entrancy guard)", /if\(dnavTurnState!=='IDLE'\)return;\s*\n\s*dnavTurnState='THINKING';/.test(DNAVCHAT_FN));
   kontrol("S4) her dnavChat çağrısı kendi nesil numarasını alıyor", /const benimTurNesil=\+\+dnavTurNesil;/.test(DNAVCHAT_FN));
-  kontrol("S5) SPEAKING geçişi benimTurNesil===dnavTurNesil ile korunuyor", /if\(benimTurNesil===dnavTurNesil\)dnavTurnState='SPEAKING';/.test(DNAVCHAT_FN));
-  kontrol("S6) _dnavSpeakingBitir IDLE dönüşü de AYNI korumaya tabi", /if\(benimTurNesil===dnavTurNesil\)dnavTurnState='IDLE';\};/.test(DNAVCHAT_FN));
+  // NOT (Turn Handoff Cue, sonraki katman): SPEAKING/IDLE atamaları artık
+  // AYNI generation-guard İÇİNDE dnavMicGorselGuncelle() da çağırıyor
+  // (tooltip güncellemesi) - guard'ın KENDİSİ (benimTurNesil===dnavTurNesil)
+  // DEĞİŞMEDİ, sadece ayraç içine bir görsel-güncelleme çağrısı eklendi.
+  kontrol("S5) SPEAKING geçişi benimTurNesil===dnavTurNesil ile korunuyor", /if\(benimTurNesil===dnavTurNesil\)\{dnavTurnState='SPEAKING';/.test(DNAVCHAT_FN));
+  kontrol("S6) _dnavSpeakingBitir IDLE dönüşü de AYNI korumaya tabi", /if\(benimTurNesil===dnavTurNesil\)\{dnavTurnState='IDLE';/.test(DNAVCHAT_FN));
   kontrol("S7) catch (network/API hata) bloğu da AYNI korumaya tabi", /if\(benimTurNesil===dnavTurNesil\)dnavTurnState='IDLE';\s*\n\s*\}/.test(DNAVCHAT_FN));
   kontrol("S8) dnav-stop-btn (⏹ Dur) HTML'de mevcut, dnavAvciSustur()'a bağlı", /id="dnav-stop-btn"[^>]*onclick="dnavAvciSustur\(\)"/.test(KLOD_TAB_BLOK));
   kontrol("S9) dnavAvciSustur TAM OLARAK 1 kez tanımlı", (html.match(/function dnavAvciSustur\(\)\{/g) || []).length === 1);
@@ -69,7 +73,7 @@ const FULL_SRC = STATE_DECL + "\n" + DNAVCHAT_FN + "\n" + VOICE_FN_SRC + "\n" + 
   kontrol("S11) dnavAvciSustur mevcut pAudio.pause() deseni reuse ediyor", /if\(pAudio\)pAudio\.pause\(\);/.test(VOICE_FN_SRC));
   kontrol("S12) dnavAvciSustur mevcut speechSynthesis.cancel() deseni reuse ediyor", /if\(window\.speechSynthesis\)speechSynthesis\.cancel\(\);/.test(VOICE_FN_SRC));
   kontrol("S13) dnavAvciSustur kendi dnavTurNesil'ini de ilerletiyor (stale callback koruması)", /function dnavAvciSustur\(\)\{[\s\S]{0,60}dnavTurNesil\+\+;/.test(VOICE_FN_SRC));
-  kontrol("S14) dnavAvciSustur state'i IDLE'a çekiyor", /function dnavAvciSustur\(\)\{[\s\S]*?dnavTurnState='IDLE';\s*\n\}/.test(VOICE_FN_SRC));
+  kontrol("S14) dnavAvciSustur state'i IDLE'a çekiyor", /function dnavAvciSustur\(\)\{[\s\S]*?dnavTurnState='IDLE';\s*\n/.test(VOICE_FN_SRC));
   kontrol("S15) dnavAvciSustur YENİ bir ses motoru/API içermiyor (new Audio/MediaRecorder/AudioContext/getUserMedia yok)", (() => {
     const fn = html.slice(html.indexOf("function dnavAvciSustur(){"), html.indexOf("function dnavAvciSustur(){") + 400);
     return !/new Audio\(|MediaRecorder|AudioContext|getUserMedia/.test(fn);
