@@ -259,6 +259,13 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
       // KATMAN 5B (context assembler) bu dosyanın kapsamı DIŞINDA — burada
       // sadece auth header davranışı test ediliyor, context her zaman null.
       avciAktifSinyalLabBaglamiAl: () => null,
+      // KATMAN 5H (canonical next-question köprüsü) bu dosyanın kapsamı
+      // DIŞINDA — burada SADECE auth header davranışı test ediliyor, komut
+      // hiçbir zaman eşleşmiyor (sabit "test mesajı" girdisi) ve
+      // _aktifSoruModulu hiç 'sinyal_lab' olmuyor, dnavChat() normal (auth
+      // odaklı) akışına HİÇ etkilenmeden devam ediyor.
+      _aktifSoruModulu: null,
+      avciSonrakiSoruKomutuMu: () => false,
       sb: sbImpl,
       fetch: async (url, opts) => {
         fetchCagrilari.push({ url, opts });

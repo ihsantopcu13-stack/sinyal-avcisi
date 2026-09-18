@@ -7044,6 +7044,27 @@ function avciBoardActionlariUygula(actions){
   for(const action of actions.slice(0,3))avciBoardActionUygula(action);
 }
 
+// ============================================================
+// KATMAN 5H — CANONICAL NEXT QUESTION: DETERMINISTIC COMMAND MATCHER (2026-09-18)
+// ============================================================
+// SADECE tam, sabit ifadelerle eşleşir — fuzzy/substring/semantic matching
+// YOK. LLM bu kararı HİÇBİR ŞEKİLDE vermez; state mutasyonu (slSonraki())
+// SADECE bu deterministik string karşılaştırmasına bağlıdır (bkz. dnavChat
+// çağırım yeri, aşağıda) — hiçbir Anthropic/API çağrısına ihtiyaç duymaz.
+// Türkçe büyük/küçük harf (İ/I/ı/i dahil) 'tr-TR' locale ile normalize
+// edilir, sondaki basit noktalama (./!/?/…) kırpılır — ANCAK ifadenin
+// GÖVDESİ (iç boşluklar/virgül dahil) DEĞİŞTİRİLMEZ, böylece alakasız/
+// yakın ama farklı cümleler ("sonraki soruya geçmeden önce bir şey
+// sorabilir miyim" gibi) YANLIŞ POZİTİF tetiklemez.
+const AVCI_SONRAKI_SORU_KOMUTLARI=[
+  'sonraki soruya geç','sonraki soru','başka soru sor','devam, yeni soru','bir sonraki soruyu aç',
+];
+function avciSonrakiSoruKomutuMu(metin){
+  if(typeof metin!=='string')return false;
+  const normalize=(s)=>s.trim().toLocaleLowerCase('tr-TR').replace(/[.!?…]+$/,'').trim();
+  return AVCI_SONRAKI_SORU_KOMUTLARI.includes(normalize(metin));
+}
+
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
@@ -7051,7 +7072,26 @@ async function dnavChat(){
   const body=document.getElementById('dnav-chat');
   const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
   inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
-  
+
+  // KATMAN 5H — CANONICAL NEXT QUESTION BRIDGE: öğrencinin AÇIK/deterministik
+  // "sonraki soru" komutu, Sinyal Lab GERÇEKTEN aktifken (_aktifSoruModulu),
+  // LLM'e HİÇ SORULMADAN mevcut slSonraki()'yi tetikler — state mutasyonu
+  // (yeni soru/board/answered reset) TAMAMEN mevcut slIdx/SL_HAVUZ/slRender/
+  // avciBoardTemizle mekanizmasından gelir, burada YENİ bir seçim algoritması
+  // YOK. Sinyal Lab aktif DEĞİLSE bu blok hiçbir şey yapmaz — komut normal
+  // (fail-open) bir chat mesajı gibi aşağıdaki akışa devam eder, böylece
+  // diğer modüllerin davranışı HİÇ değişmez.
+  if(avciSonrakiSoruKomutuMu(val)&&_aktifSoruModulu==='sinyal_lab'){
+    dnavHistory.push({role:'user',content:val});
+    if(typeof slSonraki==='function')slSonraki();
+    const cevap='Yeni soruya geçtik.';
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    dnavHistory.push({role:'assistant',content:cevap});
+    inp.disabled=false;inp.focus();
+    return;
+  }
+
   // 20. TOKEN COUNTING — Uyarı
   const totalChars=dnavHistory.reduce((s,m)=>s+(m.content?.length||0),0);
   const estTokens=Math.ceil(totalChars/4);
