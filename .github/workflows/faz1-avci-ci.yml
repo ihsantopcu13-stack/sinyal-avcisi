@@ -70,6 +70,7 @@ jobs:
           node --check tests/diagnostic-events-schema.test.mjs
           node --check tests/avci-teshis-koprusu.test.mjs
           node --check tests/avci-kok-neden-motoru.test.mjs
+          node --check tests/avci-response-time.test.mjs
           node --check automation/video-pipeline/scripts/_master-publish-meta.mjs
           node --check automation/video-pipeline/scripts/publish-next-master-lesson.mjs
           node --check automation/video-pipeline/scripts/retry-failed-master-publishes.mjs
@@ -148,6 +149,9 @@ jobs:
 
       - name: AVCI Hata Kökü Motoru (Katman 4) — kontrollü inference engine gerçek çalıştırma (vm) testi
         run: node tests/avci-kok-neden-motoru.test.mjs
+
+      - name: AVCI Katman 3/4 — response_time_ms ham davranışsal kanıt gerçek çalıştırma (vm) testi
+        run: node tests/avci-response-time.test.mjs
 
       - name: Master-lesson YouTube hata reason/status çıkarımı testi
         run: node automation/video-pipeline/tests/youtube-error-info.test.mjs
