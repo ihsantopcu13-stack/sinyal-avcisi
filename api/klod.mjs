@@ -111,7 +111,7 @@ const BOARD_ACTION_ALLOWLIST = new Set([
 
 const BOARD_ACTION_TOOL = {
   name: 'avci_board_actions',
-  description: "Aktif Sinyal Lab sorusu ekranda görünürken, o AN anlattığın AVCI adımını GÖRSEL olarak desteklemek için tahtada küçük, yapılandırılmış hareketler öner. SADECE gerçekten öğretici bir andaysa çağır — her mesajda çağırman GEREKMEZ. TEK seferde EN FAZLA 2-3 küçük hareket öner (7 adımı bir kerede doldurma, Socratic tek-adım kuralına uy). ELIMINATE_OPTION ve SHOW_AVCI_REFLEX SADECE öğrenci soruyu zaten cevapladıysa anlamlıdır.",
+  description: "Aktif Sinyal Lab sorusu ekranda görünürken, o AN anlattığın AVCI adımını GÖRSEL olarak desteklemek için tahtada küçük, yapılandırılmış hareketler öner. SADECE gerçekten öğretici bir andaysa çağır — her mesajda çağırman GEREKMEZ. TEK seferde EN FAZLA 2-3 küçük hareket öner (7 adımı bir kerede doldurma, Socratic tek-adım kuralına uy). ZORUNLU ZAMANLAMA KURALI: öğrenciden bir bilgiyi (fiil/S+V+O/sinyal/sağ-sol) bulmasını SEN İSTEDİĞİN aynı mesajda, o bilginin cevabını gösteren HIGHLIGHT_VERB/SHOW_SVO/HIGHLIGHT_SIGNAL/SHOW_LEFT_RIGHT'ı ASLA çağırma — sormakla aynı anda cevabı göstermek demektir. Bu dört action SADECE öğrenci o adımda en az bir GERÇEK deneme yaptıktan SONRA (doğrulamak/düzeltmek için) veya öğrenci açıkça çözüm istediğinde (çözüm modu) kullanılabilir. ELIMINATE_OPTION ve SHOW_AVCI_REFLEX SADECE öğrenci soruyu zaten cevapladıysa anlamlıdır.",
   input_schema: {
     type: 'object',
     properties: {
