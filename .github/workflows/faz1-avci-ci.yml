@@ -85,6 +85,7 @@ jobs:
           node --check tests/avci-klod-board-bridge.test.mjs
           node --check tests/avci-klod-lesson-timing.test.mjs
           node --check tests/avci-klod-mini-check.test.mjs
+          node --check tests/avci-klod-next-question.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -187,3 +188,6 @@ jobs:
 
       - name: KATMAN 5G — mini kontrol (mini check) sözleşmesi (teacher prompt + 5B/5C/5E regresyon spot-check, gerçek ağ yok)
         run: node tests/avci-klod-mini-check.test.mjs
+
+      - name: KATMAN 5H — canonical next-question deterministic command bridge (gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
+        run: node tests/avci-klod-next-question.test.mjs
