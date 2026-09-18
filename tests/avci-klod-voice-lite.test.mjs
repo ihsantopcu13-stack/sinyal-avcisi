@@ -130,7 +130,14 @@ const DNAVCHAT_SRC = slice("async function dnavChat(){", "function dAns(btn,corr
   kontrol("40) WebSocket bu katmanda HİÇ kullanılmadı", !/WebSocket/.test(VOICE_FN_SRC) && !/WebSocket/.test(TTS_CALL_BLOK));
   kontrol("41) WebRTC/RTCPeerConnection bu katmanda HİÇ kullanılmadı", !/RTCPeerConnection|WebRTC/.test(VOICE_FN_SRC) && !/RTCPeerConnection|WebRTC/.test(TTS_CALL_BLOK));
   kontrol("42) 'realtime' (canlı akış) altyapısı bu katmanda HİÇ eklenmedi", !/realtime/i.test(VOICE_FN_SRC) && !/realtime/i.test(TTS_CALL_BLOK));
-  kontrol("43) VAD (voice-activity-detection)/barge-in/interruption bu katmanda HİÇ eklenmedi", !/\bVAD\b|barge-in|interruption/i.test(VOICE_FN_SRC));
+  // NOT (Tap-to-Interrupt, sonraki katman): mic fonksiyonunun YORUMLARI
+  // artık "Bu Full Barge-in DEĞİL" gibi AÇIKLAYICI/OLUMSUZ referanslar
+  // içeriyor (bkz. tests/avci-tap-to-interrupt.test.mjs — o katman kendi
+  // kapsamını orada kanıtlıyor) - burada SADECE GERÇEK KOD satırlarını
+  // (yorum hariç) test ediyoruz ki bu negatif-örnek yorumu yanlış-pozitif
+  // üretmesin.
+  const VOICE_FN_SRC_KOD = VOICE_FN_SRC.split("\n").filter((s) => !s.trim().startsWith("//")).join("\n");
+  kontrol("43) VAD (voice-activity-detection)/gerçek barge-in/interruption motoru bu katmanda HİÇ eklenmedi (gerçek kod satırları)", !/\bVAD\b|barge-in|interruption/i.test(VOICE_FN_SRC_KOD));
   kontrol("44) ham ses (audio blob/base64) yükleme kodu YOK", !/audio\/webm|audio\/wav|Blob\(/.test(VOICE_FN_SRC));
   kontrol("45) bu katmanda yeni bir secret/API key literal'i EKLENMEDİ", !/sk-|AIza|AKIA/.test(VOICE_FN_SRC) && !/sk-|AIza|AKIA/.test(TTS_CALL_BLOK));
   kontrol("46) api/klod.mjs'de service_role hâlâ YOK (5K bunu değiştirmedi)", (() => {
@@ -186,6 +193,13 @@ function sandboxKur({ srVarMi = true } = {}) {
     document: { getElementById: (id) => els[id] || null },
     window: srVarMi ? { SpeechRecognition: FakeSpeechRecognition } : {},
     dnavChat: () => { dnavChatCagrilari.count++; },
+    // TAP-TO-INTERRUPT (bu dosyanın kapsamı DIŞINDA — bkz. tests/avci-tap-
+    // to-interrupt.test.mjs) — dnavKlodSesTaniBaslat() artık bu ikisini
+    // okuyor/çağırıyor; bu testte state hep 'IDLE' kalıyor, bu yüzden
+    // dnavAvciSustur hiç tetiklenmiyor (sadece ReferenceError'ı önlemek
+    // için tanımlı).
+    dnavTurnState: "IDLE",
+    dnavAvciSustur: () => {},
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(VOICE_FN_SRC, context, { filename: "index.html (5K voice-lite fn)" });
