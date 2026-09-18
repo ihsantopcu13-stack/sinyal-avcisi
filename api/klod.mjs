@@ -36,6 +36,56 @@ function ilgiliSorulariBul(kullaniciMesaji, limit = 2) {
 }
 
 // ============================================================
+// KATMAN 5B — SİNYAL LAB CURRENT QUESTION CONTEXT (2026-09-18)
+// ============================================================
+// STUDENT MODEL/WEAK AREA/ANSWER HISTORY/DIAGNOSTIC/user_id/email HİÇ
+// eklenmedi — bu SADECE paylaşılan canonical soru içeriği + öğrencinin
+// bu TEK soruya verdiği anlık cevap. Client'ın gönderdiği hiçbir alana
+// (özellikle correct_answer/is_correct'e) KÖRÜ KÖRÜNE güvenilmez:
+// question_id ile SORU_HAVUZU'ndaki (RAG için zaten yüklü, frontend'deki
+// SL_HAVUZ ile AYNI canonical source, bkz. scripts/sl-havuz-generator.mjs)
+// KENDİ kopyasından doğrulanır/türetilir. Bilinmeyen question_id veya
+// malformed context (yanlış tip/şekil) SESSİZCE null döner — çağıran
+// (handler) bunu mevcut context'siz KLOD davranışına dönerek ele alır,
+// hiçbir hata/uyarı kullanıcıya sızmaz.
+//
+// CEVAP ÖNCESİ (context.answered !== true): correct_answer/is_correct
+// asla üretilmez — LLM'e giden context'te bu alanlar hiç YOKTUR (prompt
+// talimatına güvenmek yerine alan seviyesinde çıkarma). CEVAP SONRASI:
+// correct_answer SADECE server'ın kendi canonical kopyasından türetilir;
+// client'ın context.correct_answer/context.is_correct alanları HİÇ
+// OKUNMAZ — sahte/manipüle edilmiş bir "doğru cevap" iddiası canonical'ı
+// değiştiremez. is_correct de client'a güvenilmeden, sadece client'ın
+// (salt bir OLGU olarak) bildirdiği selected_answer metni ile server'ın
+// kendi doğru cevabı karşılaştırılarak server'da yeniden hesaplanır.
+function klodSinyalLabBaglamiDogrula(context) {
+  if (!context || typeof context !== 'object' || Array.isArray(context)) return null;
+  if (context.module !== 'sinyal_lab') return null;
+  if (typeof context.question_id !== 'string' || !context.question_id) return null;
+  const canonical = SORU_HAVUZU.find((s) => s.id === context.question_id);
+  if (!canonical) return null; // bilinmeyen question_id → context sessizce atılır
+
+  const dogrulanmis = {
+    module: 'sinyal_lab',
+    question_id: canonical.id,
+    question_text: `${String(canonical.soru_en || '')}\n\nSORU: ${String(canonical.soru_tr || '')}`.slice(0, 600),
+    options: Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.slice(0, 4).map((o) => String(o).slice(0, 200)) : [],
+    signal: canonical.sinyal ? String(canonical.sinyal).slice(0, 50) : null,
+    answered: context.answered === true,
+  };
+
+  if (dogrulanmis.answered) {
+    const dogruMetin = Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr[canonical.dogru_index] : null;
+    const secilenMetin = typeof context.selected_answer === 'string' ? context.selected_answer.slice(0, 200).trim() : null;
+    dogrulanmis.correct_answer = dogruMetin ? String(dogruMetin).slice(0, 200) : null;
+    dogrulanmis.selected_answer = secilenMetin;
+    dogrulanmis.is_correct = secilenMetin !== null && dogruMetin !== null ? secilenMetin === String(dogruMetin).trim() : null;
+  }
+
+  return dogrulanmis;
+}
+
+// ============================================================
 // KATMAN 5 MVP-1 — KLOD AUTH FOUNDATION (2026-09-18)
 // ============================================================
 // Kişisel context (soru/öğrenci/teşhis) HENÜZ eklenmedi — bu SADECE
@@ -355,6 +405,21 @@ export default async function handler(req, res) {
         text: `Aşağıdaki örnek(ler) Sinyal Avcısı platformunun GERÇEK soru bankasından, senin bilgi tabanının bir parçası olarak veriliyor. Amaç birebir alıntılamak değil — açıklamanın bu örneklerle TUTARLI ve DOĞRU olması. "Erişimim yok" / "platform veritabanına bağlı değilim" deme; bu bilgi zaten sende var, kendi bilgin gibi kullan. Öğrenci örnek cümleyi birebir isterse, ÖSYM telif hassasiyeti nedeniyle birebir alıntılamak yerine aynı yapıyı KENDİ örneğinle göster:\n${ornekMetni}`,
       });
     }
+  }
+
+  // KATMAN 5B — SİNYAL LAB CURRENT QUESTION CONTEXT: RAG bloğunun aksine
+  // `system` override'ından BAĞIMSIZ eklenir (dnavChat HER ZAMAN kendi
+  // system'ini gönderiyor — RAG'ın `!system` şartını burada uygulamak bu
+  // context'i asla göndermemek anlamına gelirdi). Ayrı, cache'lenmeyen bir
+  // ek blok olarak eklenir — ana (cache'lenen) system prompt'a KARIŞMAZ.
+  // Doğrulama/türetme TAMAMEN yukarıdaki klodSinyalLabBaglamiDogrula()'da;
+  // burada sadece sonucu (varsa) prompt'a yazıyoruz.
+  const dogrulanmisBaglam = klodSinyalLabBaglamiDogrula(req.body.context);
+  if (dogrulanmisBaglam) {
+    systemContent.push({
+      type: 'text',
+      text: `AKTİF SORU BAĞLAMI (öğrenci şu an Sinyal Lab'da bu soruya bakıyor — bu bir teşhis/kimlik verisi DEĞİLDİR, sadece paylaşılan canonical soru içeriğidir, öğrencinin kimliği/geçmişi/zayıf alanları hakkında HİÇBİR bilgi içermez):\n${JSON.stringify(dogrulanmisBaglam)}\n\nBu bağlamı öğrencinin "bu soruda", "niye B değil", "burada X neden olmaz" gibi referanslarını çözmek için kullan. ${dogrulanmisBaglam.answered ? 'Öğrenci bu soruyu ZATEN CEVAPLADI, doğru cevabı ve doğru/yanlış olduğunu biliyorsun — buna göre açıklayabilirsin.' : 'Öğrenci bu soruyu HENÜZ CEVAPLAMADI — doğru cevap SANA DA GÖNDERİLMEDİ, bilmiyorsun. Doğrudan söyleme, ipucuyla düşündürerek yönlendir.'}`,
+    });
   }
 
   // 8. PROMPT CHAINING — Mod bazlı zincir
