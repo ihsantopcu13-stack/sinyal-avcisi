@@ -6778,6 +6778,7 @@ function dnav(el){
         <div class="klod-input-row">
           <input class="chat-in klod-input" id="dnav-in" placeholder="Takıldığın soruyu, kelimeyi veya cümleyi yaz…" onkeydown="if(event.key==='Enter')dnavChat()" aria-label="Soru yaz">
           <button id="dnav-mic-btn" type="button" onclick="dnavKlodSesTaniBaslat()" title="Sesle söyle" style="background:#0a0c1480;color:#22d3ee;border:1px solid #22d3ee30;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">🎤</button>
+          <button id="dnav-stop-btn" type="button" onclick="dnavAvciSustur()" title="AVCI'yı sustur" style="background:#0a0c1480;color:#f5a623;border:1px solid #f5a62330;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;flex-shrink:0">⏹</button>
           <button class="chat-send klod-send" onclick="dnavChat()">Gönder →</button>
         </div>
       </div>
@@ -6835,6 +6836,25 @@ function dnav(el){
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
+// ============================================================
+// AVCI TURN CONTROLLER — EPHEMERAL CONVERSATION-TURN STATE (2026-09-18)
+// ============================================================
+// Client-only, sayfa-ömürlü değişken — KALICI/DB/localStorage/
+// sessionStorage/server state DEĞİL, sadece "şu an ne yapıyoruz" bilgisini
+// tutar. Amaç: aynı anda iki dnavChat() isteğinin çakışmasını (race
+// condition) engellemek ve AVCI'nin konuşmasının (TTS) ne zaman bittiğini
+// bilerek turu kapatmak — FULL LIVE VOICE DEĞİL: otomatik mikrofon
+// yeniden başlatma, sürekli dinleme veya otomatik gönderim EKLENMEDİ.
+// Geçerli değerler SADECE: IDLE, LISTENING, THINKING, SPEAKING.
+let dnavTurnState='IDLE';
+// dnavTurNesil: ttsNesil ile AYNI, önceden kanıtlanmış "nesil sayacı"
+// deseni — ama TTS ses seviyesinde DEĞİL, tur (turn) seviyesinde. Her
+// dnavChat() çağrısı kendi nesil numarasını alır; SADECE o an geçerli
+// (en güncel) nesil dnavTurnState'i değiştirebilir. Bu, ⏹ Dur ile
+// durdurulmuş/bayatlamış (stale) bir turun, TTS fetch'i gecikmeli
+// sonuçlandığında, ARADAN YENİ BİR TUR BAŞLAMIŞSA o yeni turun state'ini
+// (SPEAKING'i) yanlışlıkla IDLE'a ÇEKMESİNİ engeller.
+let dnavTurNesil=0;
 
 // ─── MOBİL ALT NAVİGASYON — sidebar gruplarını mobilde açılır liste olarak gösterir ───
 const MBN_GRUP_BASLIK={pratik:'🎯 Pratik',analiz:'📊 Analiz Et',planla:'📅 Planla',ogren:'📖 Öğren'};
@@ -7112,6 +7132,19 @@ function avciAyniSinyaldenPratikSorusuBul(){
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
   if(!inp||!inp.value.trim())return;
+  // TURN CONTROLLER — RE-ENTRANCY GUARD: SADECE IDLE'dan THINKING'e
+  // geçilebilir. Öğrenci hızlı çift tıklama/Enter yaparsa veya AVCI zaten
+  // düşünüyor/konuşuyorken yeni bir istek tetiklenmeye çalışılırsa,
+  // bu ikinci çağrı SESSİZCE reddedilir - ikinci bir /api/klod isteği asla
+  // başlamaz, çift AVCI cevabı ASLA oluşmaz. 5H/5I'nin deterministik komut
+  // yollarını ETKİLEMEZ - onlar da bu AYNI giriş noktasından geçtiği için
+  // guard'a otomatik olarak tabidir, ayrıca bir değişiklik GEREKMEZ.
+  if(dnavTurnState!=='IDLE')return;
+  dnavTurnState='THINKING';
+  // Bu turun kendi nesil numarası - ⏹ Dur (dnavAvciSustur) bu sayacı
+  // ilerletirse, bu turun GECİKMELİ (stale) callback'leri artık
+  // dnavTurnState'i DEĞİŞTİREMEZ (bkz. dnavTurNesil tanımı, yukarıda).
+  const benimTurNesil=++dnavTurNesil;
   const val=inp.value.trim();
   const body=document.getElementById('dnav-chat');
   const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
@@ -7133,6 +7166,7 @@ async function dnavChat(){
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
     inp.disabled=false;inp.focus();
+    dnavTurnState='IDLE';
     return;
   }
 
@@ -7161,6 +7195,7 @@ async function dnavChat(){
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
     inp.disabled=false;inp.focus();
+    dnavTurnState='IDLE';
     return;
   }
 
@@ -7309,8 +7344,32 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // de chat render'ını BLOKLAMAZ. TTS başarısız olursa (motor yok/ağ
     // hatası) written AVCI hiç etkilenmeden calismaya devam eder (fail-
     // open, mevcut konusmaGonder/ttsSpeakEleven deseniyle AYNI ilke).
+    //
+    // TURN CONTROLLER — SPEAKING: ttsSpeak'in KENDİSİ hiç değiştirilmedi;
+    // sadece mevcut onEnd callback + dönüş sözleşmesi (başarıda pAudio,
+    // erken çıkışlarda undefined) DIŞARIDAN sarılıyor. _dnavSpeakingBitir
+    // TEK SEFERLİK bir guard'la (DEADLOCK YOK) HER olası yoldan (gerçek
+    // TTS bitişi/onEnd, sesin hiç başlamadığı erken dönüşler, reddedilen
+    // promise, ttsSpeak fonksiyon değilse/senkron hata) SPEAKING'i IDLE'a
+    // döndürüyor - AUTO MICROPHONE RESTART YOK, sadece state güvenli
+    // şekilde kapanıyor. HER İKİ mutasyon da benimTurNesil===dnavTurNesil
+    // ile korunuyor: ⏹ Dur ile bu tur zaten geçersiz kılınmışsa (yeni bir
+    // tur başlamış olabilir), bu GECİKMELİ callback artık dnavTurnState'e
+    // DOKUNMAZ - stale bir turun state'i sonradan bozması engellenir.
+    if(benimTurNesil===dnavTurNesil)dnavTurnState='SPEAKING';
+    let _dnavSpeakingBitmis=false;
+    const _dnavSpeakingBitir=()=>{if(_dnavSpeakingBitmis)return;_dnavSpeakingBitmis=true;if(benimTurNesil===dnavTurNesil)dnavTurnState='IDLE';};
     if(typeof ttsSpeak==='function'){
-      try{const _ttsSonuc=ttsSpeak(temizCevap,null,null);if(_ttsSonuc&&typeof _ttsSonuc.catch==='function')_ttsSonuc.catch(()=>{});}catch(e){}
+      try{
+        const _ttsSonuc=ttsSpeak(temizCevap,null,_dnavSpeakingBitir);
+        if(_ttsSonuc&&typeof _ttsSonuc.then==='function'){
+          _ttsSonuc.then((sonuc)=>{if(!sonuc)_dnavSpeakingBitir();}).catch(_dnavSpeakingBitir);
+        } else {
+          _dnavSpeakingBitir();
+        }
+      }catch(e){_dnavSpeakingBitir();}
+    } else {
+      _dnavSpeakingBitir();
     }
     // KATMAN 5E — AKILLI TAHTA: server'ın ZATEN canonical veriye karşı
     // doğruladığı board_actions varsa uygula. Yoksa/malformed ise
@@ -7334,6 +7393,10 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
+    // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi (written
+    // fallback zaten gösterildi), tur burada biter - DEADLOCK YOK. Yine
+    // benimTurNesil ile korunuyor (bkz. SPEAKING bloğundaki AYNI gerekçe).
+    if(benimTurNesil===dnavTurNesil)dnavTurnState='IDLE';
   }
   inp.disabled=false;inp.focus();
 }
@@ -13125,9 +13188,36 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
 // desteklemiyor) mic butonu SESSIZCE gizlenir - written AVCI (klavye
 // ile yazma) hicbir zaman etkilenmez (fail-open, mevcut desenle AYNI).
 let dnavRecognition=null;
-function dnavKlodSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dnav-mic-btn');const input=document.getElementById('dnav-in');if(!input)return;if(!dnavRecognition){dnavRecognition=new SR();dnavRecognition.lang='tr-TR';dnavRecognition.interimResults=false;dnavRecognition.maxAlternatives=1;dnavRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dnavRecognition.onend=function(){if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};dnavRecognition.onerror=function(){if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};}
+function dnavKlodSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dnav-mic-btn');const input=document.getElementById('dnav-in');if(!input)return;if(!dnavRecognition){dnavRecognition=new SR();dnavRecognition.lang='tr-TR';dnavRecognition.interimResults=false;dnavRecognition.maxAlternatives=1;dnavRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dnavRecognition.onend=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};dnavRecognition.onerror=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};}
   if(micBtn){micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';}
-  try{dnavRecognition.start();}catch(e){}
+  // TURN CONTROLLER — LISTENING: SADECE start() GERÇEKTEN başarılı olursa
+  // (tarayıcı zaten dinliyorsa start() throw eder, mevcut try/catch bunu
+  // sessizce yutar) state LISTENING'e geçer; recognition onend/onerror
+  // (yukarıda) HER durumda IDLE'a döndürür - DEADLOCK YOK. Transcript
+  // sadece dnav-in'e yazılır, AUTO-SEND/AUTO microphone-restart YOK.
+  try{dnavRecognition.start();dnavTurnState='LISTENING';}catch(e){}
+}
+
+// ============================================================
+// AVCI TURN CONTROLLER — ⏹ DUR (STOP) (2026-09-18)
+// ============================================================
+// SADECE aktif AVCI TTS'ini durdurur - mevcut clDurdur() (Canlı Ders
+// durdurma) ile BİREBİR AYNI, önceden kanıtlanmış deseni reuse eder:
+// ttsNesil++ (devam eden/henüz çözülmemiş TTS fetch'lerini geçersiz kılar
+// - stale ses state'i sonradan bozamaz), speechSynthesis.cancel() (Web
+// Speech API fallback'ini keser), pAudio.pause() (o an çalan sesi durdurur
+// - pAudio TTS/ses-kursu player arasında paylaşılan, HER ZAMAN pause()
+// edilmesi güvenli bir referans). YENİ bir ses motoru/API YAZILMADI. Turu
+// güvenli şekilde kapatmak için state IDLE'a çekilir; dnavTurNesil de
+// ilerletilir ki durdurulan turun GECİKMELİ TTS callback'i (varsa) daha
+// sonra gelip bu IDLE'ı veya sıradaki YENİ turu bozamasın (bkz. dnavChat
+// içindeki benimTurNesil===dnavTurNesil korumaları).
+function dnavAvciSustur(){
+  ttsNesil++;
+  dnavTurNesil++;
+  if(window.speechSynthesis)speechSynthesis.cancel();
+  if(pAudio)pAudio.pause();
+  dnavTurnState='IDLE';
 }
 </script>
 <!-- HOŞ GELDİN KARŞILAMA ANİMASYONU -->

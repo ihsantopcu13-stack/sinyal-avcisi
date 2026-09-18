@@ -89,6 +89,7 @@ jobs:
           node --check tests/avci-klod-signal-practice.test.mjs
           node --check tests/avci-klod-explicit-reteach.test.mjs
           node --check tests/avci-klod-voice-lite.test.mjs
+          node --check tests/avci-turn-controller.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -203,3 +204,6 @@ jobs:
 
       - name: KATMAN 5K — AVCI voice-lite (push-to-talk STT + mevcut TTS reuse, gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
         run: node tests/avci-klod-voice-lite.test.mjs
+
+      - name: AVCI Turn Controller MVP — ephemeral turn state + re-entrancy guard + Dur butonu (gerçek vm çalıştırma, api/klod.mjs değişmedi, gerçek ağ yok)
+        run: node tests/avci-turn-controller.test.mjs

@@ -66,7 +66,13 @@ const DNAVCHAT_SRC = slice("async function dnavChat(){", "function dAns(btn,corr
 // TTS — statik yapı
 // ============================================================
 {
-  kontrol("16) mevcut ttsSpeak() reuse ediliyor (yeni bir TTS fonksiyonu YAZILMADI)", /ttsSpeak\(temizCevap,null,null\)/.test(TTS_CALL_BLOK));
+  // NOT (AVCI Turn Controller, 2026-09-18): 5K'nın çağrı imzası
+  // ttsSpeak(temizCevap,null,null) idi; Turn Controller onEnd'i (üçüncü
+  // parametre) mevcut _dnavSpeakingBitir callback'ine BAĞLADI (SPEAKING'i
+  // IDLE'a döndürmek için, bkz. tests/avci-turn-controller.test.mjs) —
+  // ttsSpeak()'in KENDİSİ hâlâ AYNI, sadece çağıran taraftan üçüncü
+  // argüman artık null değil bir callback.
+  kontrol("16) mevcut ttsSpeak() reuse ediliyor (yeni bir TTS fonksiyonu YAZILMADI)", /ttsSpeak\(temizCevap,null,_dnavSpeakingBitir\)/.test(TTS_CALL_BLOK));
   kontrol("17) yeni bir TTS provider/fonksiyon TANIMLANMADI (bu blokta function tanımı YOK)", !/function\s+tts/.test(TTS_CALL_BLOK));
   kontrol("18) bu blokta yeni bir fetch()/endpoint çağrısı YOK (mevcut /api/tts, /api/tts-eleven zaten ttsSpeak içinde)", !/fetch\(/.test(TTS_CALL_BLOK));
   kontrol("19) yeni TTS endpoint dosyası oluşturulmadı (api/tts.mjs ve api/tts-eleven.mjs hâlâ mevcut, başka yeni tts-* dosyası yok)", (() => {
@@ -74,10 +80,10 @@ const DNAVCHAT_SRC = slice("async function dnavChat(){", "function dAns(btn,corr
     const ttsFiles = files.filter((f) => f.includes("tts"));
     return ttsFiles.length === 2 && ttsFiles.includes("tts.mjs") && ttsFiles.includes("tts-eleven.mjs");
   })());
-  kontrol("20) metin ÖNCE render ediliyor, TTS SONRA çağrılıyor (kaynak sırası)", html.indexOf("km.innerHTML=renderMD(temizCevap);") < html.indexOf("ttsSpeak(temizCevap,null,null)"));
+  kontrol("20) metin ÖNCE render ediliyor, TTS SONRA çağrılıyor (kaynak sırası)", html.indexOf("km.innerHTML=renderMD(temizCevap);") < html.indexOf("ttsSpeak(temizCevap,null,_dnavSpeakingBitir)"));
   kontrol("21) TTS çağrısı await EDİLMİYOR (fire-and-forget)", !/await\s+ttsSpeak\(temizCevap/.test(DNAVCHAT_SRC));
-  kontrol("22) TTS çağrısı try/catch ile sarılmış (senkron hata chat'i bloklamaz)", /try\{const _ttsSonuc=ttsSpeak\(temizCevap,null,null\);/.test(TTS_CALL_BLOK));
-  kontrol("23) TTS promise'ine .catch() bağlanmış (asenkron ret de yakalanır, unhandled rejection YOK)", /_ttsSonuc\.catch\(\(\)=>\{\}\)/.test(TTS_CALL_BLOK));
+  kontrol("22) TTS çağrısı try/catch ile sarılmış (senkron hata chat'i bloklamaz)", /try\{[\s\S]{0,20}const _ttsSonuc=ttsSpeak\(temizCevap,null,_dnavSpeakingBitir\);/.test(TTS_CALL_BLOK));
+  kontrol("23) TTS promise'ine .catch() bağlanmış (asenkron ret de yakalanır, unhandled rejection YOK)", /\.catch\(_dnavSpeakingBitir\)/.test(TTS_CALL_BLOK));
   kontrol("24) TTS çağrısı temizCevap (öğrenciye gösterilen GÜVENLİ final metin) kullanıyor — board_actions/JSON DEĞİL", /ttsSpeak\(temizCevap/.test(TTS_CALL_BLOK) && !/board_actions/.test(TTS_CALL_BLOK) && !/JSON\.stringify/.test(TTS_CALL_BLOK));
 }
 
@@ -251,11 +257,18 @@ function sandboxKur({ srVarMi = true } = {}) {
 // ttsSpeak ile (unhandled rejection ÜRETMEDİĞİNİ kanıtlıyor)
 // ============================================================
 {
-  const TTS_PROBE_SRC = `function __ttsProbe(temizCevap){\n${TTS_CALL_BLOK}\n}`;
+  // NOT (AVCI Turn Controller, 2026-09-18): TTS_CALL_BLOK artık dışarıdan
+  // gelen benimTurNesil/dnavTurNesil/dnavTurnState'e referans veriyor -
+  // probe fonksiyonuna bunları sağlıyoruz (benimTurNesil===dnavTurNesil
+  // eşleşsin diye ikisi de aynı değerle, ki guard PASS olsun ve gerçek
+  // davranış test edilsin).
+  const TTS_PROBE_SRC = `function __ttsProbe(temizCevap){\nconst benimTurNesil=dnavTurNesil;\n${TTS_CALL_BLOK}\n}`;
   let reddedenPromiseYakalandiMi = false;
   const sandbox = {
     console: { warn: () => {}, log: () => {}, error: () => {} },
     ttsSpeak: (text) => Promise.reject(new Error("simüle edilmiş TTS hatası")),
+    dnavTurNesil: 1,
+    dnavTurnState: 'THINKING',
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(TTS_PROBE_SRC, context, { filename: "index.html (5K tts probe)" });
