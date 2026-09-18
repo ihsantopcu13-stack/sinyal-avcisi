@@ -13188,7 +13188,21 @@ micBtn.style.animation='pulse 1s infinite';micBtn.style.background='#c084fc';mic
 // desteklemiyor) mic butonu SESSIZCE gizlenir - written AVCI (klavye
 // ile yazma) hicbir zaman etkilenmez (fail-open, mevcut desenle AYNI).
 let dnavRecognition=null;
-function dnavKlodSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dnav-mic-btn');const input=document.getElementById('dnav-in');if(!input)return;if(!dnavRecognition){dnavRecognition=new SR();dnavRecognition.lang='tr-TR';dnavRecognition.interimResults=false;dnavRecognition.maxAlternatives=1;dnavRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dnavRecognition.onend=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};dnavRecognition.onerror=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};}
+function dnavKlodSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('dnav-mic-btn');const input=document.getElementById('dnav-in');if(!input)return;
+  // TAP-TO-INTERRUPT (2026-09-18) — Bu Full Barge-in DEĞİL: öğrenci
+  // FİZİKSEL OLARAK mic butonuna basmalı, hiçbir otomatik/sürekli dinleme
+  // YOK. AVCI DÜŞÜNÜRKEN (THINKING) mic'e basılırsa HİÇBİR ŞEY yapma -
+  // henüz konuşulan bir ses YOK, yeni bir istek/tur karışıklığı olmasın.
+  // AVCI KONUŞURKEN (SPEAKING) mic'e basılırsa, dinlemeye başlamadan ÖNCE
+  // mevcut, önceden kanıtlanmış ⏹ Dur mekanizmasını (dnavAvciSustur) AYNEN
+  // reuse ederek TTS'i durdur + ttsNesil/dnavTurNesil'i ilerlet (stale
+  // callback artık ne bu turu ne sonraki YENİ turu bozabilir) - YENİ bir
+  // ses motoru/state machine YAZILMADI, sadece mevcut iki fonksiyon
+  // SIRALANDI. Bu senkron çağrı .start()'tan ÖNCE TAMAMLANDIĞI için TTS
+  // invalidation'ı STT başlamadan HER ZAMAN biter.
+  if(dnavTurnState==='THINKING')return;
+  if(dnavTurnState==='SPEAKING')dnavAvciSustur();
+  if(!dnavRecognition){dnavRecognition=new SR();dnavRecognition.lang='tr-TR';dnavRecognition.interimResults=false;dnavRecognition.maxAlternatives=1;dnavRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};dnavRecognition.onend=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};dnavRecognition.onerror=function(){dnavTurnState='IDLE';if(micBtn){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';}};}
   if(micBtn){micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';}
   // TURN CONTROLLER — LISTENING: SADECE start() GERÇEKTEN başarılı olursa
   // (tarayıcı zaten dinliyorsa start() throw eder, mevcut try/catch bunu
