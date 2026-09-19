@@ -95,6 +95,7 @@ jobs:
           node --check tests/avci-lesson-closure-summary.test.mjs
           node --check tests/avci-controlled-step-back.test.mjs
           node --check tests/avci-step-back-recovery.test.mjs
+          node --check tests/avci-open-question-check.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -227,3 +228,6 @@ jobs:
 
       - name: AVCI Step-Back Recovery Bridge — geri adım sonrası asıl mikro-soruya dönüş prompt sözleşmesi (api/klod.mjs değişmedi, gerçek ağ yok)
         run: node tests/avci-step-back-recovery.test.mjs
+
+      - name: AVCI Open-Question Check — "Anladim, devam." açık soru kontrolü prompt sözleşmesi (api/klod.mjs değişmedi, gerçek ağ yok)
+        run: node tests/avci-open-question-check.test.mjs
