@@ -606,6 +606,106 @@ async function visionAnaliz(imageBase64, mediaType, soru) {
   };
 }
 
+// ============================================================
+// AVCI — İPUCU CEVAP-SIZINTISI ARKA KORUMASI (KATMAN 5 FINAL SINAV / TURBO #8)
+// ============================================================
+// Gerçek model doğrulamasında (2/2 temiz koşu) AVCI'nin, prompt'taki "soru
+// cümlesini yeniden yazma/kalın gösterme" yasağına rağmen, öğrencinin kısa
+// bir cevap denemesine verdiği ipucu/geri adım mesajlarında soru cümlesinin
+// bir parçasını (çoğu kez CEVABI içeren kısmı) kalın alıntı olarak tekrar
+// yazdığı kanıtlandı. Prompt tek başına yetmediği için bu DETERMINISTIK,
+// FAIL-OPEN bir arka korumadır: SADECE mode==='chat' (dnavChat), stream
+// OLMAYAN, doğrulanmış aktif Sinyal Lab sorusu CEVAPLANMAMIŞKEN, önceki
+// asistan mesajı açık bir soruyla bittiğinde ve öğrenci mesajı kısa bir
+// cevap denemesi olduğunda (açık çözüm/anlamadım/özetle/devam/soru işareti
+// vb. istekleri HARİÇ) çalışır. Yanıttaki, soru cümlesinden BİREBİR kopyalanmış
+// 2+ kelimelik dizileri "…" ile değiştirir — öğrencinin KENDİ yazdığı ifadeler
+// (onay mesajlarında geri söylenenler) ve tek kelimelik anmalar DOKUNULMAZ.
+// Herhangi bir hata → orijinal metin aynen döner (yanıt ASLA bloklanmaz).
+function klodKatla(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/ı/g, 'i')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+}
+
+const KLOD_IPUCU_ISTISNA_DESENI = /cozum|pes ettim|acikla|anlamadim|tekrar anlat|bastan|ozetle|yaptik|calistik|mini soru|test et|sonraki|bugunluk|anladim|devam|\?/;
+
+function klodIpucuYanitiMi(messages, dogrulanmisBaglam) {
+  try {
+    if (!dogrulanmisBaglam || dogrulanmisBaglam.answered) return false;
+    if (!Array.isArray(messages) || messages.length < 3) return false;
+    const son = messages[messages.length - 1];
+    const onceki = messages[messages.length - 2];
+    if (!son || son.role !== 'user' || typeof son.content !== 'string') return false;
+    if (!onceki || onceki.role !== 'assistant' || typeof onceki.content !== 'string') return false;
+    if (!/\?[\s*_"')\]]*$/.test(onceki.content.trim())) return false;
+    const sonMetin = son.content.trim();
+    if (!sonMetin || sonMetin.split(/\s+/).length > 8) return false;
+    if (KLOD_IPUCU_ISTISNA_DESENI.test(klodKatla(sonMetin))) return false;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const KLOD_KELIME_DESENI = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
+const KLOD_YUMUSAK_AYIRAC = /^[ \t*_"'“”‘’.,;:…()[\]—–-]{0,8}$/;
+
+function klodSoruIfadesiSizintisiniTemizle(yanit, soruEn, ogrenciMetni) {
+  try {
+    if (typeof yanit !== 'string' || !yanit || typeof soruEn !== 'string' || !soruEn) return yanit;
+    const soruKelimeleri = (soruEn.match(KLOD_KELIME_DESENI) || []).map(klodKatla);
+    if (soruKelimeleri.length < 2) return yanit;
+    const jetonlar = [];
+    for (const m of yanit.matchAll(KLOD_KELIME_DESENI)) {
+      jetonlar.push({ t: klodKatla(m[0]), s: m.index, e: m.index + m[0].length });
+    }
+    const ogrenciKelimeleri = ` ${((ogrenciMetni || '').match(KLOD_KELIME_DESENI) || []).map(klodKatla).join(' ')} `;
+    const aralar = [];
+    for (let i = 0; i < jetonlar.length;) {
+      let enUzun = 0;
+      for (let j = 0; j < soruKelimeleri.length; j++) {
+        let L = 0;
+        while (
+          i + L < jetonlar.length && j + L < soruKelimeleri.length &&
+          jetonlar[i + L].t === soruKelimeleri[j + L] &&
+          (L === 0 || KLOD_YUMUSAK_AYIRAC.test(yanit.slice(jetonlar[i + L - 1].e, jetonlar[i + L].s)))
+        ) L++;
+        if (L > enUzun) enUzun = L;
+      }
+      if (enUzun >= 2) {
+        const dizi = ` ${jetonlar.slice(i, i + enUzun).map((x) => x.t).join(' ')} `;
+        if (!ogrenciKelimeleri.includes(dizi)) {
+          let bas = jetonlar[i].s;
+          let son = jetonlar[i + enUzun - 1].e;
+          // Aralık içinde tek kalan (eşsiz) ** varsa eşini de kapsa — yetim kalın işareti bırakma.
+          if (((yanit.slice(bas, son).match(/\*\*/g) || []).length) % 2 === 1) {
+            if (yanit.startsWith('**', son)) son += 2;
+            else if (bas >= 2 && yanit.slice(bas - 2, bas) === '**') bas -= 2;
+          }
+          aralar.push([bas, son]);
+        }
+        i += enUzun;
+      } else {
+        i += 1;
+      }
+    }
+    if (aralar.length === 0) return yanit;
+    let sonuc = yanit;
+    for (let k = aralar.length - 1; k >= 0; k--) {
+      sonuc = sonuc.slice(0, aralar[k][0]) + '…' + sonuc.slice(aralar[k][1]);
+    }
+    return sonuc
+      .replace(/…\.+/g, '…')
+      .replace(/…(\s*…)+/g, '…')
+      .replace(/\*\*\s*(["“”'‘’]?\s*…\s*["“”'‘’]?)\s*\*\*/g, '$1');
+  } catch (e) {
+    return yanit;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -750,7 +850,7 @@ export default async function handler(req, res) {
 
     const requestBody = {
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: mode === 'soru_uret' ? 512 : mode === 'sinyal_analiz' ? 400 : 350,
+      max_tokens: mode === 'soru_uret' ? 512 : mode === 'sinyal_analiz' ? 400 : mode === 'chat' ? 700 : 350,
       temperature,
       system: systemContent,
       messages: finalMessages,
@@ -807,7 +907,25 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    
+
+    // TURBO #8 — ipucu cevap-sızıntısı arka koruması (bkz. yukarıdaki blok).
+    // Fail-open: hata/uygunsuzluk → yanıt AYNEN döner.
+    let ipucuKorumaUygulandi = false;
+    if (mode === 'chat' && Array.isArray(data.content) && klodIpucuYanitiMi(messages, dogrulanmisBaglam)) {
+      try {
+        const canonicalSoru = SORU_HAVUZU.find((s) => s.id === dogrulanmisBaglam.question_id);
+        const ogrenciMetni = messages[messages.length - 1].content;
+        for (const blok of data.content) {
+          if (blok && blok.type === 'text' && typeof blok.text === 'string') {
+            const temiz = klodSoruIfadesiSizintisiniTemizle(blok.text, canonicalSoru?.soru_en, ogrenciMetni);
+            if (temiz !== blok.text) { blok.text = temiz; ipucuKorumaUygulandi = true; }
+          }
+        }
+      } catch (e) {
+        ipucuKorumaUygulandi = false;
+      }
+    }
+
     // 10. EVALUATION — Tool use sonuçlarını işle
     let toolResults = null;
     if (data.content) {
@@ -863,6 +981,8 @@ export default async function handler(req, res) {
       // DEĞİŞMEDEN, geriye uyumlu, ADDITIVE bir alan. Client bu alanı
       // okumazsa (eski davranış) hiçbir şey değişmez.
       board_actions: boardActions,
+      // TURBO #8 — ADDITIVE: arka koruma yanıtı değiştirdi mi (gözlemlenebilirlik).
+      hint_leak_guard: ipucuKorumaUygulandi,
     });
 
   } catch (error) {
@@ -875,4 +995,4 @@ export default async function handler(req, res) {
 // bu satır runtime davranışını DEĞİŞTİRMEZ) — client/server parity
 // testinin saf fonksiyonları doğrudan çağırabilmesi için, bkz.
 // tests/avci-klod-student-context.test.mjs.
-export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi, klodBoardActionlariDogrula, klodSinyalLabBaglamiDogrula, BOARD_ACTION_ALLOWLIST };
+export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi, klodBoardActionlariDogrula, klodSinyalLabBaglamiDogrula, BOARD_ACTION_ALLOWLIST, klodIpucuYanitiMi, klodSoruIfadesiSizintisiniTemizle };
