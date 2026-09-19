@@ -92,6 +92,7 @@ jobs:
           node --check tests/avci-turn-controller.test.mjs
           node --check tests/avci-tap-to-interrupt.test.mjs
           node --check tests/avci-turn-handoff-cue.test.mjs
+          node --check tests/canli-ders-avci-hoca.test.mjs
           node --check tests/avci-lesson-closure-summary.test.mjs
           node --check tests/avci-controlled-step-back.test.mjs
           node --check tests/avci-step-back-recovery.test.mjs
@@ -239,3 +240,6 @@ jobs:
 
       - name: AVCI Post-Solution Single Check — çözüm sonrası tek kontrol sorusu prompt sözleşmesi (api/klod.mjs değişmedi, gerçek ağ yok)
         run: node tests/avci-post-solution-check.test.mjs
+
+      - name: CANLI DERS ↔ AVCI HOCA köprüsü — gerçek dnavChat + köprü (vm), yeni endpoint/model YOK, gerçek ağ yok
+        run: node tests/canli-ders-avci-hoca.test.mjs

@@ -911,6 +911,10 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .cl-secenek:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32)}
 .cl-secenek:disabled{cursor:default}
 .cl-secenek.cl-dogru{background:rgba(16,185,129,.22);border-color:#10b981;color:#a7f3d0}
+.cl-hoca{margin-top:16px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.25)}
+.cl-hoca-chat{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto;margin-top:12px}
+.cl-hoca-giris{display:flex;gap:8px;margin-top:10px}
+.cl-hoca-giris .chat-in{flex:1;min-width:0}
 .cl-secenek.cl-yanlis{background:rgba(220,38,38,.22);border-color:#dc2626;color:#fecaca}
 .cl-kontrol{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .cl-btn{font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;padding:11px 20px;border-radius:9px;cursor:pointer;border:none;transition:all .15s}
@@ -8758,6 +8762,14 @@ function clModulHTML(){
           <div class="tahta-lbl">❓ YDS SORUSU</div>
           <div class="tahta-metin" id="cl-metin-soru"></div>
           <div class="cl-secenekler" id="cl-secenekler"></div>
+          <div class="cl-hoca" id="cl-hoca" style="display:none">
+            <button class="cl-btn cl-btn-primary" id="cl-hoca-baslat" onclick="clHocaBaslat()">🎓 AVCI Hoca ile birlikte çöz</button>
+            <div class="cl-hoca-chat" id="cl-hoca-chat" style="display:none"></div>
+            <div class="cl-hoca-giris" id="cl-hoca-giris" style="display:none">
+              <input class="chat-in" id="cl-hoca-in" placeholder="Cevabını yaz…" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();clHocaGonder();}">
+              <button class="cl-btn cl-btn-primary" id="cl-hoca-gonder" onclick="clHocaGonder()">Gönder</button>
+            </div>
+          </div>
         </div>
         <div class="tahta-blok" id="cl-blok-cevap" style="display:none">
           <div class="tahta-lbl">✅ CEVAP VE AÇIKLAMA</div>
@@ -8873,6 +8885,7 @@ function clOynatKonu(idx){
   ['aciklama','ornek','soru','cevap'].forEach(s=>{const b=document.getElementById('cl-blok-'+s);if(b)b.style.display='none';});
   ['cl-metin-aciklama','cl-metin-ornek','cl-metin-ornek-tr','cl-metin-soru','cl-metin-cevap'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent='';});
   const sec=document.getElementById('cl-secenekler');if(sec)sec.innerHTML='';
+  if(typeof clHocaSifirla==='function')clHocaSifirla();
   clAsamaAciklama(k);
   clScrollIcerigeGetir();
 }
@@ -8895,6 +8908,7 @@ function clAsamaSoru(k){
     sinyalPingVurgula(document.getElementById('cl-metin-soru'));
     const wrap=document.getElementById('cl-secenekler');
     wrap.innerHTML=k.secenekler.map((s,i)=>`<button class="cl-secenek" onclick="clCevapSec(${i})">${String.fromCharCode(65+i)}) ${s}</button>`).join('');
+    if(typeof clHocaGoster==='function')clHocaGoster();
   });
   ttsSpeak(k.soru,'en-US',null,clHookMouth);
 }
@@ -8915,6 +8929,79 @@ function clCevapSec(i){
 }
 function clTekrarAnlat(){clOynatKonu(clIdx);}
 function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
+
+// ==== CANLI DERS ↔ AVCI HOCA (KATMAN 5) KÖPRÜSÜ ====
+// Canlı Ders'in yeşil tahta anlatımı/sorusu AYNEN kalır. Öğrenci, soru aşamasında İSTERSE
+// ("AVCI Hoca ile birlikte çöz" - kendisi tetikler; otomatik model çağrısı YOK) yazılı diyaloğu
+// Canlı Ders ekranından ayrılmadan yürütür. Mesajlar MEVCUT Katman 5 öğretmen yolundan geçer
+// (dnavChat -> /api/klod mode:'chat'): yeni endpoint/model/prompt/state YOK, dnavChat DEĞİŞMEDİ.
+// dnavChat'in zaten render ettiği cevap düğümü (.msg.k) MutationObserver ile buraya yansıtılır.
+// V1 kapsamı: yazılı diyalog. Board action YOK (canonical Sinyal Lab context'i olmadığı için
+// sunucu zaten []); sesli girdi YOK (Voice-Lite KLOD ekranında); cevabın seslendirilmesi dnavChat'in
+// mevcut TTS'i. Canlı Ders'in kendi seçenek butonları (clCevapSec) eski davranışıyla AYNEN çalışır.
+let clHocaBekliyor=false,clHocaObs=null;
+function clHocaSoruMetni(k){
+  return 'Canlı Ders sorusu (yeşil tahtada):\n'+k.soru+'\n'+k.secenekler.map((s,i)=>String.fromCharCode(65+i)+') '+s).join('\n');
+}
+function clHocaGoster(){const w=document.getElementById('cl-hoca');if(w)w.style.display='block';}
+function clHocaSifirla(){
+  clHocaBekliyor=false;
+  const w=document.getElementById('cl-hoca'),c=document.getElementById('cl-hoca-chat'),g=document.getElementById('cl-hoca-giris'),b=document.getElementById('cl-hoca-baslat'),i=document.getElementById('cl-hoca-in');
+  if(w)w.style.display='none';
+  if(c){c.innerHTML='';c.style.display='none';}
+  if(g)g.style.display='none';
+  if(b)b.style.display='inline-block';
+  if(i){i.value='';i.disabled=false;}
+}
+function clHocaBalon(tur,icerik,html){
+  const c=document.getElementById('cl-hoca-chat');if(!c)return;
+  const d=document.createElement('div');d.className='msg '+tur;
+  if(html)d.innerHTML=icerik;else d.textContent=icerik;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+function clHocaYanitGoster(n){
+  if(!clHocaBekliyor||!n||n.className!=='msg k')return;
+  if(String(n.innerHTML||'').indexOf('chat-typing')>=0)return;
+  clHocaBekliyor=false;
+  clHocaBalon('k',n.innerHTML||'',true);
+  const i=document.getElementById('cl-hoca-in');if(i){i.disabled=false;if(i.focus)i.focus();}
+}
+function clHocaBagla(){
+  if(clHocaObs||typeof MutationObserver==='undefined')return;
+  const h=document.getElementById('dnav-chat');if(!h)return;
+  clHocaObs=new MutationObserver(function(kayitlar){
+    kayitlar.forEach(function(r){Array.prototype.forEach.call(r.addedNodes||[],clHocaYanitGoster);});
+  });
+  clHocaObs.observe(h,{childList:true});
+}
+function clHocaIlet(gorunen,gonderilen){
+  const dIn=document.getElementById('dnav-in'),i=document.getElementById('cl-hoca-in');
+  if(!dIn||typeof dnavChat!=='function'){clHocaBalon('k','AVCI Hoca şu an kullanılamıyor.',false);return false;}
+  if(typeof dnavTurnState!=='undefined'&&dnavTurnState!=='IDLE'){clHocaBalon('k','AVCI Hoca şu an konuşuyor/düşünüyor — biraz bekle ya da ⏹ Dur\'a basıp tekrar dene.',false);return false;}
+  clHocaBagla();
+  clHocaBalon('u',gorunen,false);
+  clHocaBekliyor=true;
+  if(i){i.value='';i.disabled=true;}
+  dIn.value=gonderilen;
+  dnavChat();
+  if(typeof dnavTurnState!=='undefined'&&dnavTurnState==='IDLE'){clHocaBekliyor=false;if(i)i.disabled=false;}
+  setTimeout(function(){if(clHocaBekliyor){clHocaBekliyor=false;if(i)i.disabled=false;}},90000);
+  return true;
+}
+function clHocaBaslat(){
+  const k=CL_KONULAR[clIdx];if(!k)return;
+  const c=document.getElementById('cl-hoca-chat'),g=document.getElementById('cl-hoca-giris'),b=document.getElementById('cl-hoca-baslat');
+  if(c)c.style.display='flex';
+  if(g)g.style.display='flex';
+  if(b)b.style.display='none';
+  clHocaIlet('Bu soruyu birlikte çözelim.',clHocaSoruMetni(k)+'\n\nBu soruyu birlikte çözelim.');
+}
+function clHocaGonder(){
+  const i=document.getElementById('cl-hoca-in');if(!i)return;
+  const v=i.value.trim();if(!v)return;
+  clHocaIlet(v,v);
+}
+// ==== /CANLI DERS ↔ AVCI HOCA (KATMAN 5) KÖPRÜSÜ ====
 
 let gsTimer=null;
 function sinavGeriSayim(){
