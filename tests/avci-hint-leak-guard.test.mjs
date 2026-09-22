@@ -104,12 +104,16 @@ async function cagir(body, yanitMetni) {
   anthropicMock(yanitMetni);
   const res = sahteRes();
   await handler(sahteReq(body), res);
-  return { res, istek: isteklerim[0] };
+  // Ana (öğretmen) istek: system'i DİZİ olan. Pedagoji kontrolcüsünün küçük hakem
+  // çağrıları (string system) ayrı istektir ve önce gidebilir.
+  return { res, istek: isteklerim.find((b) => Array.isArray(b.system)) };
 }
 
 try {
   {
-    const { res, istek } = await cagir({ messages: orta("trials"), mode: "chat", use_tools: false, context: BAGLAM, system: "S" }, SIZINTI_2);
+    // Tek-çağrı pedagoji kontrolcüsü: cevap denemesi turunda model hüküm işareti verir. '[[V=C]]'
+    // (doğru) => model metni AYNEN geçer ve verbatim guard bu metne uygulanır (guard'ın kendi sözleşmesi).
+    const { res, istek } = await cagir({ messages: orta("trials"), mode: "chat", use_tools: false, context: BAGLAM, system: "S" }, "[[V=C]]\n" + SIZINTI_2);
     const metin = res._json?.content?.[0]?.text || "";
     kontrol("17) HANDLER chat + cevaplanmamış aktif soru + kısa deneme: sızıntı SIZDIRILMIYOR, hint_leak_guard=true, orijinal alanlar (content/board_actions/usage) yerinde", res._status === 200 && !/far from effective/i.test(metin) && metin.includes("…") && res._json.hint_leak_guard === true && Array.isArray(res._json.board_actions) && res._json.stop_reason === "end_turn", JSON.stringify(metin));
     kontrol("18) HANDLER chat modu max_tokens = 700", istek && istek.max_tokens === 700);
@@ -145,9 +149,9 @@ try {
 // ============================================================
 {
   const src = readFileSync(path.join(ROOT, "api", "klod.mjs"), "utf-8").replace(/\r\n/g, "\n");
-  kontrol("24) guard SADECE mode==='chat' + Array.isArray(data.content) + klodIpucuYanitiMi kapısıyla çağrılıyor, try/catch FAIL-OPEN", /if \(mode === 'chat' && Array\.isArray\(data\.content\) && klodIpucuYanitiMi\(messages, dogrulanmisBaglam\)\)/.test(src) && /ipucuKorumaUygulandi = false;\n      }/.test(src));
+  kontrol("24) guard SADECE mode==='chat' + Array.isArray(data.content) + klodIpucuYanitiMi kapısıyla çağrılıyor, try/catch FAIL-OPEN", /if \(mode === 'chat' && !pedagojiSonuc\.kontrollu && Array\.isArray\(data\.content\) && klodIpucuYanitiMi\(messages, dogrulanmisBaglam\)\)/.test(src) && /ipucuKorumaUygulandi = false;\n      }/.test(src));
   kontrol("25) yeni ağ/provider/DB YOK: api.anthropic.com çağrısı hâlâ TEK, model AYNI, yeni fetch/supabase/eval/Function YOK", (src.match(/api\.anthropic\.com/g) || []).length === 1 && /model: 'claude-haiku-4-5-20251001',/.test(src) && !/eval\(|new Function\(|child_process/.test(src));
-  kontrol("26) yanıt sözleşmesi ADDITIVE: mevcut alanlar duruyor, sadece hint_leak_guard eklendi", /\.\.\.data,\n      parsed,/.test(src) && /board_actions: boardActions,\n      \/\/ TURBO #8 — ADDITIVE/.test(src) && (src.match(/hint_leak_guard/g) || []).length === 1);
+  kontrol("26) yanıt sözleşmesi ADDITIVE: mevcut alanlar duruyor, sadece hint_leak_guard eklendi", /\.\.\.data,\n      parsed,/.test(src) && /board_actions: pedagojiSonuc\.kontrollu \? \[\] : boardActions,\n      \/\/ TURBO #8 — ADDITIVE/.test(src) && (src.match(/hint_leak_guard/g) || []).length === 1);
 }
 
 console.log(`\n${toplam - basarisiz}/${toplam} kontrol geçti`);
