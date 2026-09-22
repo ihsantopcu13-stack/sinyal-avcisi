@@ -9,14 +9,36 @@
 // RLS politikalarıyla korunuyor. Kişisel veri YOK.
 // ============================================================
 
-const SUPABASE_URL  = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+import { randomBytes } from 'crypto';
 
-// Güvenli random kurtarma kodu: AVCI-XXXX-XXXX (harf+rakam, karıştırma yok)
+// Y1 — In-memory rate limiting: aynı IP'den 60 istek/dakika
+const _rl = new Map();
+function rateLimitCheck(ip) {
+  const now = Date.now();
+  const window = 60_000;
+  const limit = 60;
+  let entry = _rl.get(ip);
+  if (!entry || now - entry.start > window) {
+    entry = { start: now, count: 0 };
+    _rl.set(ip, entry);
+  }
+  entry.count++;
+  // Harita temizliği: 1000'den fazla girdi varsa süresi dolmuşları sil
+  if (_rl.size > 1000) {
+    for (const [k, v] of _rl) { if (now - v.start > window) _rl.delete(k); }
+  }
+  return entry.count > limit;
+}
+
+const SUPABASE_URL  = 'https://scqczkyiyshmczzmlshl.supabase.co';
+const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+
+// K4 — Kriptografik random kurtarma kodu: AVCI-XXXX-XXXX
 function kurtarmaKoduUret() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // O/0, I/1 karışmasın
-  const blok = (n) => Array.from({length: n}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-  return `AVCI-${blok(4)}-${blok(4)}`;
+  const bytes = randomBytes(8);
+  const blok = (offset, n) => Array.from({length: n}, (_,i) => chars[bytes[offset+i] % chars.length]).join('');
+  return `AVCI-${blok(0,4)}-${blok(4,4)}`;
 }
 
 // Supabase REST isteği
@@ -37,10 +59,16 @@ async function sb(path, opts = {}) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://sinyal-avcisi.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // Y1 — Rate limit kontrolü
+  const clientIp = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  if (rateLimitCheck(clientIp)) {
+    return res.status(429).json({ error: 'Çok fazla istek, bir dakika bekleyin.' });
+  }
 
   // ── GET: profil getir ──────────────────────────────────────
   if (req.method === 'GET') {
