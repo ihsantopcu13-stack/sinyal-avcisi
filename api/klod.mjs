@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
+import { costGuard } from './_costGuard.mjs';
 import * as Pedagoji from './_avciPedagogy.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
@@ -804,6 +805,12 @@ export default async function handler(req, res) {
   if (!rl.allowed) {
     res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
     return res.status(429).json({ error: 'Çok fazla istek gönderdiniz. Biraz sonra tekrar deneyin.' });
+  }
+
+  // COST GUARD — günlük limit kontrolü
+  const cg = await costGuard(req, false /* anonim */);
+  if (cg.blocked) {
+    return res.status(cg.status).json(cg.json);
   }
 
   const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
