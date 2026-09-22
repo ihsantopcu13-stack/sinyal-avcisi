@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+// K1 — XSS sanitizer: LLM/AI çıktılarını innerHTML'e yazmadan önce sar
+(function(){
+  window._safeHTML = function(str) {
+    return String(str||'')
+      .replace(/<script[\s\S]*?<\/script>/gi,'')
+      .replace(/on\w+\s*=\s*["'][^"']*["']/gi,'')
+      .replace(/javascript\s*:/gi,'')
+      .replace(/<iframe[\s\S]*?>/gi,'')
+      .replace(/<object[\s\S]*?>/gi,'')
+      .replace(/<embed[\s\S]*?>/gi,'');
+  };
+})();
+</script>
 <title>Sinyal Avcısı — YDS & YÖKDİL Hazırlığı | Tek Kuruş Ödemeden</title>
 <meta name="description" content="YDS ve YÖKDİL hazırlığında tek kuruş ödemeden öğren. Sürekli büyüyen soru bankası, AI mentor KLOD, ses kursu — tamamen ücretsiz. Kayıt bile istemez.">
 <meta name="robots" content="index, follow">
@@ -81,6 +95,8 @@
   --km-formula-bg:#0a1628;
 }
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+/* D2 — Focus visible: erişilebilirlik */
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
 .section-title{font-family:'IBM Plex Serif',serif;font-size:clamp(28px,3vw,46px);letter-spacing:-.03em;line-height:1.12;color:var(--ink)}
 nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,19,.97);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(226,224,216,.8);display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
@@ -314,7 +330,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .dk-val{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .dk-sub{font-size:15px;color:var(--muted)}
 .dk-bar{height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin:5px 0}
-.dk-fill{height:100%;background:var(--signal);border-radius:2px;width:40%}
+.dk-fill{height:100%;background:var(--signal);border-radius:2px;width:0%}
 .dk-action{font-size:15px;font-weight:600;color:var(--signal);margin-top:5px;cursor:pointer}
 .dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .dtab{font-size:16px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0}
@@ -1211,6 +1227,32 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   }
 }
 </script>
+<script>
+// Y4 — Global error boundary: sayfa çökmeden minimal banner göster
+(function(){
+  var _errShown = false;
+  function _showErrBanner(msg) {
+    if (_errShown) return;
+    _errShown = true;
+    try {
+      var b = document.createElement('div');
+      b.id = 'sa-err-banner';
+      b.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#7f1d1d;color:#fecaca;font-size:13px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;font-family:IBM Plex Sans,sans-serif';
+      b.innerHTML = '<span>⚠️ Bir hata oluştu, sayfa yenilenmedi. Sorun devam ederse sayfayı yenileyin.</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fecaca;font-size:18px;cursor:pointer;padding:0 4px">×</button>';
+      document.body ? document.body.appendChild(b) : document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(b); });
+    } catch(e) {}
+  }
+  window.onerror = function(msg, src, line, col, err) {
+    console.error('[SA]', msg, src+':'+line, err);
+    _showErrBanner(msg);
+    return false;
+  };
+  window.addEventListener('unhandledrejection', function(e) {
+    console.error('[SA] Unhandled rejection:', e.reason);
+    _showErrBanner(e.reason);
+  });
+})();
+</script>
 </head>
 <body class="dark-mode">
 <!-- PWA Banner -->
@@ -1676,9 +1718,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         </div>
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
-          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">12 / 30 tamamlandi</div></div>
+          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandi</div></div>
           <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da calis →</div></div>
-          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">Hedef: 85 — +12 puan kaldi</div></div>
+          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">yaklaşık — Hedef: 85</div></div>
           <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
         </div>
         <div class="dash-tabs">
@@ -7432,7 +7474,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     const km=document.createElement('div');km.className='msg k';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
-    km.innerHTML=renderMD(temizCevap);
+    km.innerHTML=_safeHTML(renderMD(temizCevap));
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     // KATMAN 5K — VOICE-LITE: metin cevabı ZATEN render edildi (yukarıda),
     // şimdi AYNI güvenli/final metni (temizCevap - board action JSON'u
@@ -8202,7 +8244,7 @@ async function sendChat(){
     const data=await res.json();
     const cevap=data.content?.find(b=>b.type==='text')?.text||'Bir hata oluştu, tekrar dene.';
     tp.remove();
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=renderMD(cevap);body.appendChild(km);body.scrollTop=body.scrollHeight;
+    const km=document.createElement('div');km.className='msg k';km.innerHTML=_safeHTML(renderMD(cevap));body.appendChild(km);body.scrollTop=body.scrollHeight;
     chatHistory.push({role:'assistant',content:cevap});
     // TTS — KLOD cevabını sesli oku
     const sesMetin=cevap.replace(/\*\*?|`|---+/g,'').replace(/\n/g,' ').trim();
@@ -11048,7 +11090,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 });
 
 let exitShown=false;
-document.addEventListener('mouseleave',(e)=>{if(e.clientY<=0&&!exitShown&&!localStorage.getItem('exitSeen')){exitShown=true;localStorage.setItem('exitSeen','1');const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}});
+document.addEventListener('mouseleave',(e)=>{try{if(e.clientY<=0&&!exitShown&&!localStorage.getItem('exitSeen')){exitShown=true;localStorage.setItem('exitSeen','1');const p=document.getElementById('exit-popup');if(p)p.style.display='flex';}}catch(e){}});
 
 function exitKapat(){document.getElementById('exit-popup').style.display='none';}
 
@@ -11434,7 +11476,7 @@ const MINI_QUIZ_DATA=[
 ];
 function miniQuizGoster(){
   const bugun=new Date().toDateString();
-  if(localStorage.getItem('sa_mini_quiz_son')===bugun)return;
+  try{if(localStorage.getItem('sa_mini_quiz_son')===bugun)return;}catch(e){}
   setTimeout(()=>{
     const sorular=[...MINI_QUIZ_DATA].sort(()=>Math.random()-0.5).slice(0,3);
     let idx=0,dogru=0;
@@ -11458,7 +11500,7 @@ function miniQuizGoster(){
       });
     }
     function bitis(){
-      localStorage.setItem('sa_mini_quiz_son',bugun);
+      try{localStorage.setItem('sa_mini_quiz_son',bugun);}catch(e){}
       overlay.innerHTML='<div style="background:var(--surface);border-radius:20px;max-width:360px;width:100%;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:12px">'+(dogru===3?'🏆':dogru===2?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:22px;margin-bottom:8px">'+dogru+'/3 Doğru</div><p style="font-size:15px;color:var(--muted);margin-bottom:20px">Yarın tekrar gel!</p><button onclick="document.getElementById(mini-quiz-overlay).style.display=none" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Harika!</button></div>';
       if(typeof xpKazan==='function')xpKazan('tuzak',1);
     }
@@ -13464,7 +13506,7 @@ async function konusmaGonder() {
     const data = await res.json();
     const cevap = data?.content?.[0]?.text || data?.message || 'Bağlantı hatası, tekrar dene.';
     document.getElementById('konusma-yukleniyor')?.remove();
-    alan.innerHTML += `<div style="margin-top:10px"><span style="color:#22d3ee">DILA:</span> ${cevap.replace(/\n/g, '<br>')}</div>`;
+    alan.innerHTML += `<div style="margin-top:10px"><span style="color:#22d3ee">DILA:</span> ${_safeHTML(cevap.replace(/\n/g, '<br>'))}</div>`;
     alan.scrollTop = alan.scrollHeight;
     konusmaGecmisi.push({rol: 'dila', icerik: cevap});
     // Konuşma simülatörünü gerçek bir "speaking" pratiğine dönüştürmek için
@@ -13489,7 +13531,7 @@ function ingDersAc(el){const detay=el.querySelector('.ing-ders-detay');const che
 
 function ingPratikKlod(konu,gorev){const chatIn=document.getElementById('chat-in');if(chatIn){chatIn.value=`${konu} konusunda pratik yapmak istiyorum. Görev: "${gorev}" — Türkçe açıkla, İngilizce örnekler ver.`;}document.querySelector('.dn-item[onclick*="klod"]')?.click()||dtab(document.querySelector('.dtab[onclick*="sinyal"]'),'sinyal');}
 
-async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#15803d">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=metin.replace(/\n/g,'<br>');xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
+async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#15803d">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=_safeHTML(metin.replace(/\n/g,'<br>'));xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
 let konusmaRecognition=null;
 function konusmaSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('konusma-mic-btn');const input=document.getElementById('konusma-input');if(!konusmaRecognition){konusmaRecognition=new SR();konusmaRecognition.lang='en-US';konusmaRecognition.interimResults=false;konusmaRecognition.maxAlternatives=1;konusmaRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};konusmaRecognition.onend=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};konusmaRecognition.onerror=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};}
   micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';
