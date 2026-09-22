@@ -13,7 +13,7 @@
 // ============================================================
 
 const SUPABASE_URL  = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 
 // Limitler
 const LIMIT_ANON = 30;      // anonim kullanıcı günlük limit
