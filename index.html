@@ -1400,11 +1400,11 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </div>
     <div style="margin-top:28px;padding:18px 22px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.18);border-radius:14px;max-width:500px">
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--signal);text-transform:uppercase;margin-bottom:12px">🆕 İlk kez mi geldin? Buradan başla:</div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <button onclick="goTo('dna-testi-modul')" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">1️⃣ DNA Testini Yap</button>
-        <span style="color:var(--muted);font-size:14px">→</span>
-        <button onclick="goTo('aoy-container')" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">2️⃣ 3 Sinyal Öğren</button>
-        <span style="color:var(--muted);font-size:14px">→</span>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto">
+        <button onclick="goTo('dashboard');setTimeout(()=>{const el=document.getElementById('dna-testi-modul');if(el)el.scrollIntoView({behavior:'smooth'})},400)" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">1️⃣ DNA Testini Yap</button>
+        <span style="color:var(--muted);font-size:14px;flex-shrink:0">→</span>
+        <button onclick="goTo('dashboard');setTimeout(()=>{const el=document.getElementById('aoy-container');if(el)el.scrollIntoView({behavior:'smooth'})},400)" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">2️⃣ 3 Sinyal Öğren</button>
+        <span style="color:var(--muted);font-size:14px;flex-shrink:0">→</span>
         <button onclick="goTo('dashboard')" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">3️⃣ İlk Soruyu Çöz</button>
       </div>
     </div>
