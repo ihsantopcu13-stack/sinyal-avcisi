@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ücretsiz Sinyal Rehberi & AVCI Teşhisi — Sinyal Avcısı</title>
+  <meta name="description" content="YDS/YÖKDİL'de soruyu tamamen çevirmeden sinyalleri yakala. 5 soruluk ücretsiz AVCI teşhisini çöz, zayıf noktanı bul.">
+  <meta property="og:title" content="Ücretsiz Sinyal Rehberi — Sinyal Avcısı">
+  <meta property="og:description" content="ÖSYM sorularında tekrar tekrar kullanılan kritik dil sinyallerini öğren ve 5 soruluk ücretsiz AVCI teşhisini çöz.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/ucretsiz-rehber">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- GA4 — mevcut measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --surface: #13161f;
+      --border: #1e2233;
+      --signal: #f5a623;
+      --signal-dim: rgba(245,166,35,.15);
+      --text: #ece7da;
+      --muted: #7a8399;
+      --green: #22c55e;
+      --red: #ef4444;
+      --blue: #4f8ef7;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--signal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,14,20,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-weight: 800; font-size: 15px; color: var(--signal); }
+    .nav-back { font-size: 13px; color: var(--muted); }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 640px; margin: 0 auto; padding: 0 16px 80px; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--signal-dim);
+      border: 1px solid rgba(245,166,35,.3);
+      color: var(--signal);
+      font-size: 12px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 20px; letter-spacing: .05em;
+    }
+    .hero h1 {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 800; line-height: 1.25;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { color: var(--signal); font-style: normal; }
+    .hero p {
+      color: var(--muted); font-size: 15px;
+      max-width: 480px; margin: 0 auto 28px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--signal);
+      color: #0c0e14;
+      font-weight: 800; font-size: 15px;
+      padding: 14px 32px; border-radius: 12px;
+      border: none; cursor: pointer;
+      transition: opacity .15s;
+    }
+    .btn-primary:hover { opacity: .9; text-decoration: none; }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent;
+      color: var(--muted); font-size: 13px;
+      padding: 8px 16px; border-radius: 8px;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: border-color .15s;
+    }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-size: 13px; font-weight: 700; letter-spacing: .08em;
+      color: var(--muted); text-transform: uppercase;
+      margin: 40px 0 16px;
+    }
+
+    /* ── SINYAL CARDS ── */
+    .sinyal-grid {
+      display: grid; gap: 12px;
+    }
+    .sinyal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .sinyal-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sinyal-badge {
+      background: var(--signal-dim);
+      border: 1px solid rgba(245,166,35,.3);
+      color: var(--signal);
+      font-size: 13px; font-weight: 700;
+      padding: 3px 10px; border-radius: 20px;
+      font-family: monospace;
+    }
+    .sinyal-tip {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted); letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .sinyal-kural {
+      font-size: 14px; color: var(--text);
+      margin-bottom: 8px;
+    }
+    .sinyal-gorus {
+      font-size: 12px; color: var(--signal);
+      font-weight: 700; margin-bottom: 8px;
+    }
+    .sinyal-ornek {
+      font-size: 13px; color: var(--muted);
+      background: rgba(255,255,255,.04);
+      border-left: 3px solid var(--signal-dim);
+      padding: 8px 12px; border-radius: 0 6px 6px 0;
+      font-style: italic;
+    }
+    .sinyal-ornek strong { color: var(--signal); font-style: normal; }
+
+    /* ── DIVIDER CTA ── */
+    .divider-cta {
+      background: linear-gradient(135deg, rgba(245,166,35,.1), rgba(245,166,35,.04));
+      border: 1px solid rgba(245,166,35,.25);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      margin: 40px 0 0;
+    }
+    .divider-cta h2 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .divider-cta p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+
+    /* ── TEŞHİS ── */
+    #teshis-bolum { margin-top: 8px; }
+    .teshis-soru-kart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+    }
+    .teshis-ilerleme {
+      display: flex; gap: 6px; margin-bottom: 16px;
+    }
+    .teshis-adim {
+      height: 4px; border-radius: 2px; flex: 1;
+      background: var(--border); transition: background .3s;
+    }
+    .teshis-adim.aktif { background: var(--signal); }
+    .teshis-adim.tamam { background: var(--green); }
+    .teshis-sinyal-etiket {
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .teshis-sent {
+      font-size: 15px; line-height: 1.7;
+      margin-bottom: 16px; color: var(--text);
+    }
+    .teshis-soru {
+      font-size: 14px; font-weight: 600;
+      margin-bottom: 14px; color: var(--text);
+    }
+    .teshis-opts { display: grid; gap: 8px; }
+    .teshis-opt {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px;
+      font-size: 14px; cursor: pointer;
+      text-align: left; color: var(--text);
+      transition: border-color .15s, background .15s;
+    }
+    .teshis-opt:hover { border-color: var(--signal); background: var(--signal-dim); }
+    .teshis-opt.dogru { border-color: var(--green); background: rgba(34,197,94,.12); color: var(--green); }
+    .teshis-opt.yanlis { border-color: var(--red); background: rgba(239,68,68,.12); color: var(--red); }
+    .teshis-opt.pas { opacity: .5; cursor: default; }
+    .teshis-fb {
+      font-size: 13px; margin-top: 12px;
+      padding: 10px 12px; border-radius: 8px;
+      display: none;
+    }
+    .teshis-fb.ok { background: rgba(34,197,94,.1); color: var(--green); display: block; }
+    .teshis-fb.err { background: rgba(239,68,68,.1); color: var(--red); display: block; }
+    .teshis-ileri {
+      margin-top: 16px; width: 100%;
+      display: none;
+    }
+
+    /* ── SONUÇ ── */
+    #teshis-sonuc { display: none; }
+    .sonuc-kart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 20px;
+    }
+    .sonuc-puan {
+      text-align: center; margin-bottom: 24px;
+    }
+    .sonuc-puan-rakam {
+      font-size: 48px; font-weight: 800; color: var(--signal);
+      line-height: 1;
+    }
+    .sonuc-puan-alt { font-size: 14px; color: var(--muted); margin-top: 4px; }
+    .sonuc-etiket { font-size: 12px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .sinyal-satir {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .sinyal-satir:last-child { border-bottom: none; }
+    .sinyal-satir-isim { font-size: 14px; font-weight: 600; }
+    .sinyal-durum {
+      font-size: 12px; font-weight: 700;
+      padding: 3px 8px; border-radius: 20px;
+    }
+    .sd-guclu { background: rgba(34,197,94,.15); color: var(--green); }
+    .sd-orta { background: rgba(79,142,247,.15); color: var(--blue); }
+    .sd-calis { background: rgba(245,166,35,.15); color: var(--signal); }
+    .sd-oncelik { background: rgba(239,68,68,.15); color: var(--red); }
+    .avci-secti {
+      background: linear-gradient(135deg, rgba(245,166,35,.12), rgba(245,166,35,.04));
+      border: 1px solid rgba(245,166,35,.3);
+      border-radius: 12px; padding: 18px;
+      margin: 20px 0;
+    }
+    .avci-secti-etiket { font-size: 12px; font-weight: 700; color: var(--signal);
+      letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .avci-secti-sinyal { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .avci-secti-acik { font-size: 13px; color: var(--muted); }
+    .sonuc-aksiyon { margin-top: 20px; display: grid; gap: 10px; }
+    .btn-sonuc {
+      width: 100%; padding: 14px;
+      border-radius: 12px; border: none;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; text-align: center;
+      display: block;
+    }
+    .btn-sonuc-ana {
+      background: var(--signal); color: #0c0e14;
+    }
+    .btn-sonuc-ikincil {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-sonuc:hover { opacity: .9; text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    footer a { color: var(--muted); }
+
+    /* util */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo">🏹 Sinyal Avcısı</span>
+  <a class="nav-back" href="https://sinyal-avcisi.com">Ana Sayfaya Dön →</a>
+</nav>
+
+<main class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">ÜCRETSİZ REHBER + TEŞHİS</div>
+    <h1>YDS/YÖKDİL'de Soruyu Tamamen Çevirmeden<br><em>Sinyalleri Yakala.</em></h1>
+    <p>ÖSYM sorularında tekrar tekrar kullanılan kritik dil sinyallerini öğren ve 5 soruluk ücretsiz AVCI teşhisini çöz.</p>
+    <button class="btn-primary" onclick="rehbereGit()">ÜCRETSİZ BAŞLA</button>
+  </section>
+
+  <!-- SİNYAL REHBERİ -->
+  <section id="rehber-bolum" class="hidden">
+    <p class="section-title">📡 SİNYAL REHBERİ</p>
+    <div class="sinyal-grid" id="sinyal-grid"></div>
+
+    <!-- Teşhise geçiş -->
+    <div class="divider-cta" id="teshis-cta">
+      <h2>5 SORUDA ZAYIF NOKTANI BUL</h2>
+      <p>Rehberi gördün. Şimdi hangi sinyal ailesinde zorlandığını öğren.</p>
+      <button class="btn-primary" onclick="teshisBaslat()">TEŞHİSİ BAŞLAT →</button>
+    </div>
+  </section>
+
+  <!-- TEŞHİS -->
+  <section id="teshis-bolum" class="hidden">
+    <p class="section-title">🎯 5 SORULUK AVCI TEŞHİSİ</p>
+    <div class="teshis-soru-kart">
+      <div class="teshis-ilerleme" id="t-progress"></div>
+      <div class="teshis-sinyal-etiket" id="t-sinyal-etiket"></div>
+      <div class="teshis-sent" id="t-sent"></div>
+      <div class="teshis-soru" id="t-soru"></div>
+      <div class="teshis-opts" id="t-opts"></div>
+      <div class="teshis-fb" id="t-fb"></div>
+      <button class="btn-primary teshis-ileri" id="t-ileri" onclick="teshisIleri()">Devam →</button>
+    </div>
+  </section>
+
+  <!-- SONUÇ -->
+  <section id="teshis-sonuc">
+    <p class="section-title">📊 TEŞHİS SONUCU</p>
+    <div class="sonuc-kart">
+      <div class="sonuc-puan">
+        <div class="sonuc-puan-rakam" id="s-puan"></div>
+        <div class="sonuc-puan-alt">5 soruda doğru</div>
+      </div>
+      <div class="sonuc-etiket">SİNYAL DURUMU</div>
+      <div id="s-sinyal-tablosu"></div>
+      <div class="avci-secti" id="s-avci-secti"></div>
+      <div class="sonuc-aksiyon" id="s-aksiyonlar"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    <a href="/privacy">Gizlilik</a> · <a href="/terms">Kullanım Koşulları</a> · <a href="https://sinyal-avcisi.com">sinyal-avcisi.com</a>
+  </p>
+  <p style="margin-top:6px">© 2025 Sinyal Avcısı — Ücretsiz YDS/YÖKDİL hazırlık platformu.</p>
+</footer>
+
+<!-- Attribution modülü — UTM sessionStorage'a yazar, index.html ile AYNI modül -->
+<script src="/assets/modules/attribution.js"></script>
+
+<script>
+// ============================================================
+// AVCI FUNNEL — ÜCRETSIZ REHBER & TEŞHİS
+// ============================================================
+// Tüm state: sayfa-local değişkenler + localStorage (funnel ilerleme)
+// LLM çağrısı: YOK — tüm scoring deterministik
+// GA4: faz2GaEvent() benzeri helper, mevcut G-PM25HTL46K
+// ============================================================
+
+(function(){
+'use strict';
+
+// ── GA4 helper (index.html'deki faz2GaEvent ile aynı imza) ──
+function gaEv(ad, ek){
+  try{
+    if(typeof gtag!=='function') return;
+    var ctx = (window.SinyalAttribution && window.SinyalAttribution.context)
+              ? window.SinyalAttribution.context() : {};
+    gtag('event', ad, Object.assign({}, ctx, ek||{}));
+  }catch(e){}
+}
+
+// ── UTM koru ──
+if(window.SinyalAttribution && window.SinyalAttribution.capture){
+  window.SinyalAttribution.capture();
+}
+
+// ── Funnel localStorage (sadece ilerleme, kişisel veri yok) ──
+var FUNNEL_KEY = 'sa_funnel_rehber_v1';
+function funnelOku(){ try{ return JSON.parse(localStorage.getItem(FUNNEL_KEY)||'{}'); }catch(e){ return {}; } }
+function funnelYaz(d){ try{ localStorage.setItem(FUNNEL_KEY, JSON.stringify(d)); }catch(e){} }
+function funnelSet(k,v){ var d=funnelOku(); d[k]=v; funnelYaz(d); }
+
+// ── Sinyal Rehberi Verisi ──
+// Mevcut AVCI whitelist'ten — yeni AI çağrısı YOK
+var SINYAL_REHBER = [
+  {
+    sinyal: 'although / even though',
+    tip: 'ZIT BAĞLAÇ',
+    kural: 'Cümleyi iki parçaya böler. Sol ve sağ taraf ANLAM OLARAK birbirinin ZIDDIdır. Her iki tarafta S+V yapısı arar.',
+    gorus: 'GÖRÜNCE DÜŞÜN: "Buna rağmen X olmadı mı?"',
+    ornek: '"<strong>Although</strong> the treatment was expensive, it showed <strong>no significant improvement</strong>." → Zıtlık: pahalı ↔ etkisiz'
+  },
+  {
+    sinyal: 'despite / in spite of',
+    tip: 'ZIT EDAT',
+    kural: 'Arkasından NOUN veya V-ing gelir (cümle değil). Sol taraf ile sağ taraf anlam olarak zıt olmalı. "Despite + çok iyi koşullar → kötü sonuç" kalıbı.',
+    gorus: 'GÖRÜNCE DÜŞÜN: "Despite\'ın ardı isim mi?" + Zıtlık var mı?',
+    ornek: '"<strong>Despite</strong> the promising results, the drug was <strong>far from guaranteed</strong>." → Zıtlık: umut verici ↔ garantili değil'
+  },
+  {
+    sinyal: 'yet / however / nevertheless',
+    tip: 'ZIT BAĞLAÇ (VİRGÜL)',
+    kural: 'Virgülle cümle içinde ZIT anlamı bağlar. "X iyi, yet Y kötü" → contrast. Noktalı virgül + however = iki cümle arasında zıtlık.',
+    gorus: 'GÖRÜNCE DÜŞÜN: Sol-sağ zıt mı? Doğru cevap her iki tarafı da içeriyor mu?',
+    ornek: '"The statute was far from unambiguous, <strong>yet</strong> the court applied it without hesitation." → Zıtlık: belirsiz ↔ tereddütsüz uygulandı'
+  },
+  {
+    sinyal: 'provided that / on condition that',
+    tip: 'KOŞUL',
+    kural: 'Arkasından tam bir cümle gelir. ŞART + SONUÇ yapısı. Sol taraf gerçekleşmeden sağ taraf olmaz. IF ile değiştirilebilir.',
+    gorus: 'GÖRÜNCE DÜŞÜN: Hangi şart? Şart yerine gelse ne olur?',
+    ornek: '"The agreement will stand <strong>provided that</strong> both parties comply with the terms." → Şart: uyum → Sonuç: geçerli'
+  },
+  {
+    sinyal: 'far from / by no means / anything but',
+    tip: 'GİZLİ OLUMSUZ',
+    kural: 'TUZAK sinyali! Görünürde olumlu kelime + gizli olumsuz = NEGATİF anlam. "far from perfect" = mükemmel DEĞİL. "by no means easy" = kolay DEĞİL.',
+    gorus: 'GÖRÜNCE DÜŞÜN: Sonraki kelimeyi tersine çevir! "far from X" = X değil.',
+    ornek: '"The results were <strong>far from</strong> conclusive." → "far from conclusive" = kesin SONUCA ULAŞILAMADI'
+  },
+  {
+    sinyal: 'must have / should have / could have',
+    tip: 'MODAL + HAVE V3',
+    kural: 'GEÇMIŞE ÇIKARIM. must have = kesin çıkarım (99%), should have = eleştiri/pişmanlık, could have = olasılık. Hepsi V3 alır.',
+    gorus: 'GÖRÜNCE DÜŞÜN: Zaman → geçmiş. must = kesin, should = keşke, could = olabilirdi.',
+    ornek: '"She <strong>must have forgotten</strong> to submit the report." → "must have V3" = geçmişe güçlü çıkarım (zorunluluk DEĞİL)'
+  },
+  {
+    sinyal: 'who / which / that (relative)',
+    tip: 'RELATIVE CLAUSE',
+    kural: 'Önceki ismi tanımlar. WHO = kişi, WHICH = şey, THAT = ikisi de. Cümleyi kapatıp referans özelliğine bak. WHICH virgüllü gelirse "ek bilgi" verir.',
+    gorus: 'GÖRÜNCE DÜŞÜN: Bağlandığı isim kim/ne? O isim hakkında ne söylüyor?',
+    ornek: '"The study, <strong>which</strong> lasted three years, revealed unexpected patterns." → which = çalışma (ek bilgi)'
+  },
+  {
+    sinyal: 'A number of / The number of',
+    tip: 'ÖZNE-FİİL UYUMU TUZAĞI',
+    kural: '"A number of" = ÇOK SAYIDA → çoğul fiil. "The number of" = SAYI (tekil kavram) → tekil fiil. ÖSYM\'nin klasik tuzağı.',
+    gorus: 'GÖRÜNCE DÜŞÜN: "a" mı "the" mi? A = çoğul fiil, The = tekil fiil.',
+    ornek: '"<strong>A number of</strong> students <u>were</u> absent." (çoğul) vs "<strong>The number of</strong> students <u>was</u> significant." (tekil)'
+  }
+];
+
+// ── TEŞHİS SORULARI ──
+// Mevcut SL_HAVUZ'dan seçilmiş, 5 farklı sinyal kategorisi
+// HTML span'ları temizlenmiş, düz metin
+var TESHIS_SORULARI = [
+  {
+    id: 'tq01',
+    sinyal: 'despite',
+    sinyal_ailesi: 'ZIT EDAT',
+    q: 'Bu metne göre tedavi hakkında ne söylenebilir?',
+    sent: '"The researchers concluded that, despite the promising results, the treatment was far from guaranteed."',
+    opts: [
+      'Tedavi tüm hastalar için etkilidir.',
+      'Tedavi umut verici ama garantili değildir.',
+      'Sonuçlar yetersiz kaldı.',
+      'Tedavi başarıyla tamamlandı.'
+    ],
+    ans: 1,
+    fb: '"Despite" = zıtlık. "Far from guaranteed" = garantili değil. Gizli olumsuz tuzak!'
+  },
+  {
+    id: 'tq02',
+    sinyal: 'although',
+    sinyal_ailesi: 'ZIT BAĞLAÇ',
+    q: 'Bu cümleye göre yasa hakkında ne söylenebilir?',
+    sent: '"Although the law was intended to protect consumers, it inadvertently created new barriers for small businesses."',
+    opts: [
+      'Yasa küçük işletmeleri destekledi.',
+      'Yasa tüketicileri korumayı amaçladı ancak küçük işletmeler için engel oluşturdu.',
+      'Yasa tamamen etkisiz kaldı.',
+      'Küçük işletmeler yasadan faydalandı.'
+    ],
+    ans: 1,
+    fb: '"Although" = zıtlık sinyali. Sol: tüketicileri koruma amacı ↔ Sağ: küçük işletmelere engel. Her iki taraf da doğru cevapta olmalı.'
+  },
+  {
+    id: 'tq03',
+    sinyal: 'far from',
+    sinyal_ailesi: 'GİZLİ OLUMSUZ',
+    q: 'Mahkeme kararı hakkında ne söylenebilir?',
+    sent: '"The appellate court ruled that, despite the irregularities, the verdict was by no means invalid."',
+    opts: [
+      'Usul hataları kararı geçersiz kıldı.',
+      'Usul hatalarına rağmen karar geçerliliğini korudu.',
+      'Mahkeme yeniden yargılama istedi.',
+      'Karar kesinlikle geçersiz bulundu.'
+    ],
+    ans: 1,
+    fb: '"Despite" = zıtlık, "by no means invalid" = kesinlikle geçersiz DEĞİL. Gizli olumsuz!'
+  },
+  {
+    id: 'tq04',
+    sinyal: 'must have',
+    sinyal_ailesi: 'MODAL PERFECT',
+    q: 'Bu cümle ne ifade eder?',
+    sent: '"She must have forgotten to submit the report before the deadline."',
+    opts: [
+      'Raporu kesinlikle göndermedi.',
+      'Raporu göndermeyi unutmuş olmalı.',
+      'Raporu göndermesi zorunluydu.',
+      'Raporu göndermeyecek.'
+    ],
+    ans: 1,
+    fb: '"Must have + V3" = geçmişe güçlü çıkarım (zorunluluk DEĞİL). "Kesin olarak geçmişte öyle oldu" anlamı.'
+  },
+  {
+    id: 'tq05',
+    sinyal: 'yet',
+    sinyal_ailesi: 'ZIT BAĞLAÇ',
+    q: 'Yasa hakkında ne söylenebilir?',
+    sent: '"The statute was far from unambiguous, yet the court applied it without hesitation."',
+    opts: [
+      'Yasa açık olduğu için mahkeme uyguladı.',
+      'Yasa belirsiz olmasına rağmen mahkeme tereddütsüz uyguladı.',
+      'Mahkeme yasayı uygulamayı reddetti.',
+      'Yasa açıkça tanımlıydı ve kolayca uygulandı.'
+    ],
+    ans: 1,
+    fb: '"Far from unambiguous" = belirsiz. "Yet" = zıtlık. Belirsiz ↔ tereddütsüz uygulama.'
+  }
+];
+
+// ── STATE ──
+var _tIdx = 0;
+var _cevaplar = []; // {soruIdx, dogru:bool, sinyal, sinyal_ailesi}
+var _cevaplandimi = false;
+
+// ── YARDIMCI ──
+function qs(sel){ return document.querySelector(sel); }
+function show(sel){ qs(sel).classList.remove('hidden'); }
+function hide(sel){ qs(sel).classList.add('hidden'); }
+
+// ── 1. ADIM: Rehbere Kaydır ──
+window.rehbereGit = function(){
+  // UTM koru — sayfa zaten doğru URL'de, sadece anchor
+  funnelSet('guide_started', Date.now());
+  gaEv('guide_started', {});
+  renderRehber();
+  show('#rehber-bolum');
+  document.getElementById('rehber-bolum').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+// ── 2. SİNYAL REHBERİ RENDER ──
+function renderRehber(){
+  var grid = qs('#sinyal-grid');
+  if(grid.children.length > 0) return; // zaten render edilmiş
+  SINYAL_REHBER.forEach(function(s){
+    var el = document.createElement('div');
+    el.className = 'sinyal-card';
+    el.innerHTML = [
+      '<div class="sinyal-header">',
+        '<span class="sinyal-badge">'+escHtml(s.sinyal)+'</span>',
+        '<span class="sinyal-tip">'+escHtml(s.tip)+'</span>',
+      '</div>',
+      '<div class="sinyal-kural">'+escHtml(s.kural)+'</div>',
+      '<div class="sinyal-gorus">'+escHtml(s.gorus)+'</div>',
+      '<div class="sinyal-ornek">'+s.ornek+'</div>'
+    ].join('');
+    grid.appendChild(el);
+  });
+  gaEv('guide_completed', {});
+  funnelSet('guide_completed', Date.now());
+}
+
+// ── 3. TEŞHİS BAŞLAT ──
+window.teshisBaslat = function(){
+  _tIdx = 0;
+  _cevaplar = [];
+  _cevaplandimi = false;
+  funnelSet('diagnostic_started', Date.now());
+  gaEv('diagnostic_started', {});
+  hide('#rehber-bolum');
+  show('#teshis-bolum');
+  document.getElementById('teshis-bolum').scrollIntoView({behavior:'smooth',block:'start'});
+  teshisSoruRender();
+};
+
+// ── 4. SORU RENDER ──
+function teshisSoruRender(){
+  var s = TESHIS_SORULARI[_tIdx];
+  _cevaplandimi = false;
+
+  // İlerleme çubuğu
+  var prog = qs('#t-progress');
+  prog.innerHTML = '';
+  TESHIS_SORULARI.forEach(function(_, i){
+    var d = document.createElement('div');
+    d.className = 'teshis-adim' +
+      (i < _tIdx ? ' tamam' : i === _tIdx ? ' aktif' : '');
+    prog.appendChild(d);
+  });
+
+  qs('#t-sinyal-etiket').textContent = 'SİNYAL: ' + s.sinyal.toUpperCase() + ' — ' + s.sinyal_ailesi;
+  qs('#t-sent').textContent = s.sent;
+  qs('#t-soru').textContent = s.q;
+
+  var opts = qs('#t-opts');
+  opts.innerHTML = '';
+  s.opts.forEach(function(o, i){
+    var btn = document.createElement('button');
+    btn.className = 'teshis-opt';
+    btn.textContent = String.fromCharCode(65+i) + ') ' + o;
+    btn.onclick = function(){ teshisCevapla(i, btn); };
+    opts.appendChild(btn);
+  });
+
+  var fb = qs('#t-fb');
+  fb.className = 'teshis-fb';
+  fb.textContent = '';
+
+  qs('#t-ileri').style.display = 'none';
+  document.getElementById('teshis-bolum').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── 5. CEVAP ──
+function teshisCevapla(secilen, btn){
+  if(_cevaplandimi) return;
+  _cevaplandimi = true;
+  var s = TESHIS_SORULARI[_tIdx];
+  var dogru = secilen === s.ans;
+
+  // Şıkları kilitle
+  var tümOpts = qs('#t-opts').querySelectorAll('.teshis-opt');
+  tümOpts.forEach(function(b, i){
+    b.disabled = true;
+    if(i === s.ans) b.classList.add('dogru');
+    else if(i === secilen && !dogru) b.classList.add('yanlis');
+    else b.classList.add('pas');
+  });
+
+  // Geri bildirim
+  var fb = qs('#t-fb');
+  fb.textContent = (dogru ? '✅ ' : '❌ ') + s.fb;
+  fb.className = 'teshis-fb ' + (dogru ? 'ok' : 'err');
+
+  // Kaydet
+  _cevaplar.push({ soruIdx: _tIdx, dogru: dogru, sinyal: s.sinyal, sinyal_ailesi: s.sinyal_ailesi });
+
+  // GA4 event
+  gaEv('diagnostic_answered', {
+    question_id: s.id,
+    signal: s.sinyal,
+    correct: dogru
+  });
+
+  // İleri butonu
+  var ileri = qs('#t-ileri');
+  ileri.style.display = 'block';
+  ileri.textContent = _tIdx < TESHIS_SORULARI.length - 1 ? 'Sonraki Soru →' : 'Sonuçları Gör →';
+}
+
+// ── 6. İLERİ ──
+window.teshisIleri = function(){
+  _tIdx++;
+  if(_tIdx < TESHIS_SORULARI.length){
+    teshisSoruRender();
+  } else {
+    teshisSonuc();
+  }
+};
+
+// ── 7. SONUÇ MOTORU — deterministic, LLM yok ──
+function teshisSonuc(){
+  funnelSet('diagnostic_completed', Date.now());
+  gaEv('diagnostic_completed', {});
+
+  var dogru = _cevaplar.filter(function(c){ return c.dogru; }).length;
+
+  // Sinyal durumu haritası
+  var sinyalDurum = {};
+  _cevaplar.forEach(function(c){
+    sinyalDurum[c.sinyal_ailesi] = c.dogru ? 'guclu' : 'zayif';
+  });
+
+  // Zayıf sinyaller
+  var zayiflar = _cevaplar.filter(function(c){ return !c.dogru; });
+  var gucluler = _cevaplar.filter(function(c){ return c.dogru; });
+
+  // En zayıf sinyal (ilk yanlış)
+  var enZayif = zayiflar.length > 0 ? zayiflar[0] : null;
+
+  // Weak signal event
+  if(enZayif){
+    gaEv('weak_signal_detected', { signal: enZayif.sinyal, sinyal_ailesi: enZayif.sinyal_ailesi });
+    funnelSet('weak_signal', enZayif.sinyal);
+  }
+
+  // Render
+  hide('#teshis-bolum');
+  var sonuc = qs('#teshis-sonuc');
+  sonuc.style.display = 'block';
+
+  qs('#s-puan').textContent = dogru + '/5';
+
+  // Sinyal tablosu
+  var tablo = qs('#s-sinyal-tablosu');
+  tablo.innerHTML = '';
+  _cevaplar.forEach(function(c){
+    var puan = c.dogru ? dogru : 0;
+    var durum = c.dogru ? 'GÜÇLÜ' : (zayiflar.length === 1 ? 'ÇALIŞ' : 'ÖNCELİKLİ ÇALIŞ');
+    var cls = c.dogru ? 'sd-guclu' : (zayiflar.length === 1 ? 'sd-calis' : 'sd-oncelik');
+    if(c.dogru && gucluler.length > 1 && gucluler[0] !== c){
+      durum = 'GÜÇLÜ'; cls = 'sd-guclu';
+    }
+    var row = document.createElement('div');
+    row.className = 'sinyal-satir';
+    row.innerHTML = '<span class="sinyal-satir-isim">' + escHtml(c.sinyal.toUpperCase()) + '<br><small style="color:var(--muted);font-weight:400">' + escHtml(c.sinyal_ailesi) + '</small></span>' +
+      '<span class="sinyal-durum ' + cls + '">' + durum + '</span>';
+    tablo.appendChild(row);
+  });
+
+  // AVCI seçti
+  var avciBlok = qs('#s-avci-secti');
+  if(enZayif){
+    avciBlok.innerHTML = '<div class="avci-secti-etiket">AVCI SENİN İÇİN ŞUNU SEÇTİ</div>' +
+      '<div class="avci-secti-sinyal">' + escHtml(enZayif.sinyal.toUpperCase()) + '</div>' +
+      '<div class="avci-secti-acik">Bu sinyal ailesinde pratik yapman sana en çok katkıyı sağlar. Aşağıdan AVCI dersini aç.</div>';
+  } else {
+    avciBlok.innerHTML = '<div class="avci-secti-etiket">TEBRIKLER!</div>' +
+      '<div class="avci-secti-sinyal">5/5 DOĞRU</div>' +
+      '<div class="avci-secti-acik">Temel sinyallere hakimsin. Sinyal Avcısı\'nda ileri seviye sorularla devam et.</div>';
+  }
+
+  // Aksiyonlar
+  var aks = qs('#s-aksiyonlar');
+  var mainUrl = 'https://sinyal-avcisi.com';
+  if(enZayif){
+    // AVCI dersi deep-link: signal parametresi
+    var utm = (window.SinyalAttribution && window.SinyalAttribution.get()) || {};
+    var qs2 = new URLSearchParams();
+    qs2.set('signal', enZayif.sinyal);
+    if(utm.utm_source) qs2.set('utm_source', utm.utm_source);
+    if(utm.utm_medium) qs2.set('utm_medium', utm.utm_medium);
+    if(utm.utm_campaign) qs2.set('utm_campaign', utm.utm_campaign);
+    mainUrl = 'https://sinyal-avcisi.com?' + qs2.toString() + '#sinyal-lab';
+  }
+  aks.innerHTML = [
+    '<a class="btn-sonuc btn-sonuc-ana" href="' + escAttr(mainUrl) + '" onclick="kisiselDersAc()">',
+      enZayif ? '🏹 ' + enZayif.sinyal.toUpperCase() + ' DERSİNİ AÇ' : '🏹 SİNYAL LAB\'I AÇ',
+    '</a>',
+    '<a class="btn-sonuc btn-sonuc-ikincil" href="https://sinyal-avcisi.com">',
+      '→ Tüm platforma git',
+    '</a>'
+  ].join('');
+
+  sonuc.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── 8. KİŞİSEL DERS AÇILINCA EVENT ──
+window.kisiselDersAc = function(){
+  gaEv('personal_lesson_started', { signal: funnelOku().weak_signal || '' });
+  funnelSet('personal_lesson_started', Date.now());
+};
+
+// ── YARDIMCI: XSS güvenli HTML escape ──
+function escHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s){
+  return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
+
+// ── İLK YÜKLEMEde: return_visit kontrolü ──
+(function(){
+  var d = funnelOku();
+  if(d.diagnostic_completed){
+    gaEv('return_visit', {});
+  }
+  // landing event
+  gaEv('guide_landing_view', {});
+  funnelSet('last_visit', Date.now());
+})();
+
+})(); // IIFE sonu
+</script>
+
+</body>
+</html>
