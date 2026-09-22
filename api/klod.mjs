@@ -263,7 +263,7 @@ function klodBoardActionlariDogrula(rawActions, dogrulanmisBaglam, canonical) {
 // okunmuyor) ASLA güvenilmez — kimlik SADECE bu sunucu-taraflı
 // doğrulamadan gelir.
 const SUPABASE_URL_AUTH = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON_KEY_AUTH = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+const SUPABASE_ANON_KEY_AUTH = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 
 async function klodDogrulanmisKullaniciAl(authHeader) {
   if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) return null;
