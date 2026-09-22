@@ -1280,9 +1280,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
     <span onclick="if(typeof ahkGit==='function')ahkGit()" style="color:#5b8fff;font-weight:700" role="button" tabindex="0">🃏 AHA Kartları</span>
   </div>
-  <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px" title="Ara (Ctrl+K)">🔍</button>
+  <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Ara (Ctrl+K)">🔍</button>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
-<button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
+<button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
 <button class="btn-nav" onclick="goTo('dashboard')" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
@@ -1398,15 +1398,13 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <button class="btn-primary" onclick="goTo('dashboard')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Hemen Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
       <button class="btn-ghost" onclick="openModal('Ücretsiz Hesap','0')" style="font-size:14px;color:rgba(236,231,218,.5)">📊 Kaydol — ilerlemeni kaydet</button>
     </div>
-    <div style="margin-top:28px;padding:18px 22px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.18);border-radius:14px;max-width:500px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--signal);text-transform:uppercase;margin-bottom:12px">🆕 İlk kez mi geldin? Buradan başla:</div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto">
-        <button onclick="goTo('dashboard');setTimeout(()=>{const el=document.getElementById('dna-testi-modul');if(el)el.scrollIntoView({behavior:'smooth'})},400)" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">1️⃣ DNA Testini Yap</button>
-        <span style="color:var(--muted);font-size:14px;flex-shrink:0">→</span>
-        <button onclick="goTo('dashboard');setTimeout(()=>{const el=document.getElementById('aoy-container');if(el)el.scrollIntoView({behavior:'smooth'})},400)" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">2️⃣ 3 Sinyal Öğren</button>
-        <span style="color:var(--muted);font-size:14px;flex-shrink:0">→</span>
-        <button onclick="goTo('dashboard')" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">3️⃣ İlk Soruyu Çöz</button>
-      </div>
+    <div style="margin-top:20px;padding:14px 18px;background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.18);border-radius:12px;max-width:500px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">🆕 <strong style="color:var(--ink)">İlk kez mi geldin?</strong> Sana uygun başlangıç noktasını bulalım:</div>
+      <button onclick="goTo('dashboard')" style="width:100%;background:linear-gradient(135deg,rgba(245,166,35,.15),rgba(124,58,237,.1));border:1px solid rgba(245,166,35,.35);border-radius:10px;padding:12px 18px;font-size:14px;font-weight:700;color:var(--signal);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;text-align:left;display:flex;align-items:center;justify-content:space-between">
+        <span>🎯 Nereden başlayacağını göster</span>
+        <span style="font-size:18px">→</span>
+      </button>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted);text-align:center">KLOD — YDS sorularını Türkçe anlatan AI öğretmenin — seni karşılayacak</div>
     </div>
     <div class="hero-badges">
       <span class="hero-badge">Kayıt zorunlu değil</span>
