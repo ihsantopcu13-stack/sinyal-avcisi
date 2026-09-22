@@ -1178,5 +1178,485 @@
     "tuzak": "shifted markedly",
     "tuzak_ipucu": "Tuzak: iyileşme değil kötüleşme",
     "anahtar": "dwindling"
+  },
+  {
+    "id": "q060",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Neither the manager nor the employees were informed about the restructuring plan before it was announced.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre çalışanlar hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Yalnızca çalışanlar bilgilendirildi.",
+      "Yalnızca yönetici bilgilendirildi.",
+      "Ne yönetici ne de çalışanlar önceden bilgilendirildi.",
+      "Çalışanlar planı duyurulmadan önce öğrendi."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Neither...nor = ikisi de değil. Hem yönetici hem çalışanlar bilgilendirilmedi.",
+    "sinyal": "nor",
+    "sinyal_ipucu": "Olumsuz çift bağlaç",
+    "tuzak": "neither",
+    "tuzak_ipucu": "Proximity rule: fiil employees'a (çoğul) göre çekimlendi",
+    "anahtar": "neither"
+  },
+  {
+    "id": "q061",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Either the director or the board members have to approve the budget before the project can commence.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre proje başlamadan önce ne gereklidir?",
+    "secenekler_tr": [
+      "Hem direktör hem de yönetim kurulu onaylamalıdır.",
+      "Direktör veya yönetim kurulu onaylamalıdır.",
+      "Bütçe onaysız başlayabilir.",
+      "Proje zaten başlamıştır."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "Either...or = ya...ya da. İkisinden birinin onayı yeterlidir.",
+    "sinyal": "either",
+    "sinyal_ipucu": "Seçenekli bağlaç",
+    "tuzak": "have to",
+    "tuzak_ipucu": "Fiil board members'a (çoğul) göre çekimlendi — proximity rule",
+    "anahtar": "either"
+  },
+  {
+    "id": "q062",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Neither the research findings nor the clinical data support the hypothesis that the new compound is safer than existing treatments.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre yeni bileşik için ne söylenebilir?",
+    "secenekler_tr": [
+      "Araştırma bulgular hipotezi destekliyor.",
+      "Klinik veriler hipotezi destekliyor.",
+      "Ne bulgular ne veriler hipotezi destekliyor.",
+      "Hipotez zaten doğrulanmış durumda."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Neither...nor her iki özneyi de olumsuzlar. Fiil data (çoğul) ile uyumlu: support.",
+    "sinyal": "nor",
+    "sinyal_ipucu": "Olumsuz çift bağlaç — proximity rule",
+    "tuzak": "neither",
+    "tuzak_ipucu": "Tuzak: neither görünce ikisi de var sanma — tam tersi",
+    "anahtar": "neither nor"
+  },
+  {
+    "id": "q063",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Not only did the new policy reduce operational costs, but it also improved employee satisfaction significantly.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre yeni politikanın etkisi nedir?",
+    "secenekler_tr": [
+      "Yalnızca maliyetleri düşürdü.",
+      "Yalnızca çalışan memnuniyetini artırdı.",
+      "Hem maliyetleri düşürdü hem de memnuniyeti artırdı.",
+      "Politikanın hiçbir etkisi olmadı."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Not only...but also = hem...hem de. İki olumlu sonuç birden.",
+    "sinyal": "Not only",
+    "sinyal_ipucu": "Devrik yapı: Not only + did + özne",
+    "tuzak": "did",
+    "tuzak_ipucu": "Tuzak: not only cümle başında olunca yardımcı fiil öne çıkar (devrik yapı)",
+    "anahtar": "not only"
+  },
+  {
+    "id": "q064",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Not only is she the youngest professor in the department, but she has also published more papers than anyone else.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre profesör hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Yalnızca en genç profesördür.",
+      "Yalnızca en çok makale yayımlamıştır.",
+      "Hem en gençtir hem de en çok makale yayımlamıştır.",
+      "Diğerlerinden daha az makale yayımlamıştır."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Not only...but also iki niteliği birleştirir. Devrik yapı: Not only is she...",
+    "sinyal": "Not only",
+    "sinyal_ipucu": "Devrik yapı: Not only + is + özne",
+    "tuzak": "is",
+    "tuzak_ipucu": "Tuzak: soru gibi görünür ama soru değil — devrik bildirim cümlesi",
+    "anahtar": "not only but also"
+  },
+  {
+    "id": "q065",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Not only does the treatment eliminate the symptoms, but it also addresses the underlying cause of the disease.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre tedavi hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Yalnızca semptomları giderir.",
+      "Yalnızca hastalığın kaynağını ele alır.",
+      "Hem semptomları giderir hem de kaynağa müdahale eder.",
+      "Tedavi henüz semptomları gideremiyor."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Not only...but also = çift olumlu etki. does devrik yapıyı gösterir.",
+    "sinyal": "Not only",
+    "sinyal_ipucu": "Devrik yapı: Not only + does + özne",
+    "tuzak": "does",
+    "tuzak_ipucu": "Tuzak: does görünce soru sansın diye kurulmuş tuzak",
+    "anahtar": "not only"
+  },
+  {
+    "id": "q066",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "No sooner had the conference begun than the fire alarm disrupted the proceedings.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre konferansta ne oldu?",
+    "secenekler_tr": [
+      "Konferans sorunsuz tamamlandı.",
+      "Yangın alarmı konferans başlar başlamaz çaldı.",
+      "Konferans yangın alarmından önce bitti.",
+      "Yangın alarmı konferanstan çok sonra çaldı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "No sooner had + V3 than = -ir -mez. Konferans başar başlamaz alarm çaldı.",
+    "sinyal": "No sooner had",
+    "sinyal_ipucu": "Devrik yapı: No sooner had + özne + V3 + than",
+    "tuzak": "than",
+    "tuzak_ipucu": "Tuzak: no sooner...when YANLIŞ — doğrusu than",
+    "anahtar": "no sooner had"
+  },
+  {
+    "id": "q067",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Hardly had the scientists published their findings when a rival team announced a contradictory discovery.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre ne oldu?",
+    "secenekler_tr": [
+      "Bilim insanları rakip takımla iş birliği yaptı.",
+      "Bulgular yayımlanır yayımlanmaz rakip takım çelişkili bir keşif duyurdu.",
+      "Rakip takım bulgular yayımlanmadan önce duyurdu.",
+      "Keşifler birbiriyle uyumluydu."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "Hardly had + V3 when = -ir -mez. Yayım yapılır yapılmaz rakip duyuru geldi.",
+    "sinyal": "hardly",
+    "sinyal_ipucu": "Devrik yapı: Hardly had + özne + V3 + when",
+    "tuzak": "when",
+    "tuzak_ipucu": "Tuzak: hardly...than YANLIŞ — hardly/scarcely → when; no sooner → than",
+    "anahtar": "hardly"
+  },
+  {
+    "id": "q068",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Contrary to the initial projections, the economic recovery proved to be far more rapid than anticipated.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre ekonomik toparlanma hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "İlk projeksiyonlarla örtüştü.",
+      "Beklenenden çok daha yavaş gerçekleşti.",
+      "İlk projeksiyonların aksine beklenenden hızlı gerçekleşti.",
+      "Projeksiyonlar toparlanmayı doğru tahmin etti."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Contrary to = -e aykırı olarak, aksine. Noun/gerund ister (initial projections).",
+    "sinyal": "Contrary to",
+    "sinyal_ipucu": "Contrary to + noun/gerund — S+V gelmez",
+    "tuzak": "contrary to",
+    "tuzak_ipucu": "Tuzak: contrary to sonrası S+V gelirse yanlış",
+    "anahtar": "contrary to"
+  },
+  {
+    "id": "q069",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "As long as the funding remains available, the research team will continue its work on renewable energy sources.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre araştırma ne zaman devam edecek?",
+    "secenekler_tr": [
+      "Fon kesildiğinde devam edecek.",
+      "Fon mevcut olduğu sürece devam edecek.",
+      "Araştırma zaten tamamlandı.",
+      "Fon durumundan bağımsız olarak devam edecek."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "As long as = olduğu sürece (koşul bağlacı). Funds mevcut → araştırma devam.",
+    "sinyal": "as long as",
+    "sinyal_ipucu": "Koşul bağlacı: as long as = provided that",
+    "tuzak": "remains",
+    "tuzak_ipucu": "Tuzak: as long as sonrası Present Simple — will remain DEĞİL",
+    "anahtar": "as long as"
+  },
+  {
+    "id": "q070",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "As long as employees adhere to the safety protocols, workplace accidents can be significantly reduced.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre iş kazaları ne zaman azalır?",
+    "secenekler_tr": [
+      "Güvenlik protokolleri kaldırılırsa azalır.",
+      "Çalışanlar protokollere uyduğu sürece azalır.",
+      "Kazalar azaltılamaz.",
+      "Yalnızca yöneticiler protokollere uyarsa azalır."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "As long as koşul: çalışanlar uyarsa → kazalar azalır.",
+    "sinyal": "as long as",
+    "sinyal_ipucu": "Koşul: as long as + Present Simple",
+    "tuzak": "adhere",
+    "tuzak_ipucu": "Tuzak: will adhere YANLIŞ — koşul cümlelerinde Present Simple",
+    "anahtar": "as long as"
+  },
+  {
+    "id": "q071",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "As far as the committee is concerned, the proposal meets all the necessary criteria for approval.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre komite öneri hakkında ne düşünüyor?",
+    "secenekler_tr": [
+      "Öneri kriterleri karşılamıyor.",
+      "Komite öneriyi reddetmiştir.",
+      "Komitenin görüşüne göre öneri tüm kriterleri karşılıyor.",
+      "Komite henüz karar vermemiştir."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "As far as...is concerned = -e göre, bakış açısından. Fikir sınırlama ifadesi.",
+    "sinyal": "As far as",
+    "sinyal_ipucu": "As far as X is concerned = X'in görüşüne göre",
+    "tuzak": "as far as",
+    "tuzak_ipucu": "Tuzak: as long as ile karıştırma — as far as fikir sınırlar, as long as koşul koyar",
+    "anahtar": "as far as"
+  },
+  {
+    "id": "q072",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "As long as the patient takes the prescribed medication regularly, a full recovery is expected within three months.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre tam iyileşme için ne gereklidir?",
+    "secenekler_tr": [
+      "İlaç kullanımı gerekmez.",
+      "Hastanın düzenli ilaç kullanması gerekir.",
+      "İyileşme üç aydan uzun sürecek.",
+      "İlaçlar etkisizdir."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "As long as = koşul. İlaç düzenli alınırsa → iyileşme bekleniyor.",
+    "sinyal": "as long as",
+    "sinyal_ipucu": "Koşul bağlacı",
+    "tuzak": "takes",
+    "tuzak_ipucu": "Koşul cümlesi: takes (Present Simple) — will take değil",
+    "anahtar": "as long as"
+  },
+  {
+    "id": "q073",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The government reduced import tariffs so that domestic manufacturers could access cheaper raw materials.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre gümrük tarifeleri neden indirildi?",
+    "secenekler_tr": [
+      "Yabancı üreticilere avantaj sağlamak için.",
+      "Yerli üreticilerin ucuz hammaddeye erişmesini sağlamak için.",
+      "İhracatı kısıtlamak için.",
+      "Enflasyonu artırmak için."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "So that = amaç bağlacı → S+V ister; could ile amaç ifade edilir.",
+    "sinyal": "so that",
+    "sinyal_ipucu": "Amaç bağlacı: so that + could/can/would",
+    "tuzak": "so that",
+    "tuzak_ipucu": "Tuzak: so...that = sonuç (derece); so that = amaç — ikisini karıştırma",
+    "anahtar": "so that"
+  },
+  {
+    "id": "q074",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The researchers simplified their methodology in order to make the study replicable by independent laboratories.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre araştırmacılar neden yöntemi sadeleştirdi?",
+    "secenekler_tr": [
+      "Araştırmanın maliyetini düşürmek için.",
+      "Bağımsız laboratuvarların çalışmayı tekrarlayabilmesi için.",
+      "Sonuçları gizlemek için.",
+      "Daha fazla katılımcı çekmek için."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "In order to = amaç; arkasından bare infinitive (make) gelir.",
+    "sinyal": "in order to",
+    "sinyal_ipucu": "Amaç: in order to + V (yalın)",
+    "tuzak": "to make",
+    "tuzak_ipucu": "Tuzak: in order to making YANLIŞ — bare infinitive zorunlu",
+    "anahtar": "in order to"
+  },
+  {
+    "id": "q075",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The company updated its privacy policy so that users would have greater control over their personal data.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre gizlilik politikası neden güncellendi?",
+    "secenekler_tr": [
+      "Kullanıcı verilerini toplamak için.",
+      "Kullanıcıların veriler üzerinde daha fazla kontrol sahibi olması için.",
+      "Yasal yükümlülükten kaçınmak için.",
+      "Veri depolamayı azaltmak için."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "So that + would = geçmişte amaç. Kullanıcılara kontrol vermek hedeflendi.",
+    "sinyal": "so that",
+    "sinyal_ipucu": "Amaç: so that + would (geçmiş bağlam)",
+    "tuzak": "would",
+    "tuzak_ipucu": "Tuzak: would görünce sonuç sanma — so that bağlacı amaç gösteriyor",
+    "anahtar": "so that"
+  },
+  {
+    "id": "q076",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Rather than investing in expensive equipment, the startup decided to outsource its manufacturing operations.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre girişim ne yaptı?",
+    "secenekler_tr": [
+      "Pahalı ekipman satın aldı.",
+      "Üretimi dışarıya yaptırmayı tercih etti.",
+      "Hem ekipman aldı hem de dışarıya yaptırdı.",
+      "Üretime hiç başlamadı."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "Rather than = -mek yerine, tercih olarak. Ekipman almak yerine outsource seçildi.",
+    "sinyal": "rather than",
+    "sinyal_ipucu": "Tercih/karşıtlık: rather than + V-ing",
+    "tuzak": "investing",
+    "tuzak_ipucu": "Tuzak: paralel yapı — rather than invest veya rather than investing (her ikisi de doğru)",
+    "anahtar": "rather than"
+  },
+  {
+    "id": "q077",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The scientist chose to publish preliminary results rather than wait for the final confirmation of her hypothesis.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre bilim insanı ne yapmayı tercih etti?",
+    "secenekler_tr": [
+      "Hipotezi doğrulanana kadar bekledi.",
+      "Ön sonuçları yayımlamak yerine bekledi.",
+      "Hipotezi doğrulanmadan ön sonuçları yayımladı.",
+      "Hiçbir şey yayımlamadı."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Rather than wait = beklemek yerine. Ön sonuçları yayımlamayı tercih etti.",
+    "sinyal": "rather than",
+    "sinyal_ipucu": "Tercih: chose to X rather than Y",
+    "tuzak": "wait",
+    "tuzak_ipucu": "Paralel yapı: chose to publish / rather than wait (ikisi de bare infinitive)",
+    "anahtar": "rather than"
+  },
+  {
+    "id": "q078",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Instead of expanding to new markets, the company focused on strengthening its position in existing ones.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre şirket ne yapmayı tercih etti?",
+    "secenekler_tr": [
+      "Yeni pazarlara açıldı.",
+      "Mevcut pazarlardaki konumunu güçlendirmeye odaklandı.",
+      "Hem genişledi hem de konumunu güçlendirdi.",
+      "Piyasadan çekildi."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "Instead of = -mek yerine + V-ing. Yeni pazar yerine mevcut pazar güçlendirildi.",
+    "sinyal": "instead of",
+    "sinyal_ipucu": "Instead of + V-ing (gerund)",
+    "tuzak": "expanding",
+    "tuzak_ipucu": "Tuzak: instead of expand YANLIŞ — gerund zorunlu",
+    "anahtar": "instead of"
+  },
+  {
+    "id": "q079",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "By no means should the experimental results be interpreted as conclusive without further peer review.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre deneysel sonuçlar hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Sonuçlar kesin olarak kabul edilmelidir.",
+      "Sonuçlar ek hakem değerlendirmesi olmadan kesin yorumlanmamalıdır.",
+      "Hakem değerlendirmesi gerekli değildir.",
+      "Sonuçlar zaten doğrulanmıştır."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "By no means = kesinlikle...değil + devrik yapı: should özne öne çıkar.",
+    "sinyal": "By no means",
+    "sinyal_ipucu": "Devrik yapı: By no means + should + özne",
+    "tuzak": "should",
+    "tuzak_ipucu": "Tuzak: devrik yapıyı gözden kaçırma — soru gibi görünür ama soru değil",
+    "anahtar": "by no means"
+  },
+  {
+    "id": "q080",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The success of the pilot project is by no means a guarantee that the full-scale implementation will proceed smoothly.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre pilot projenin başarısı hakkında ne doğrudur?",
+    "secenekler_tr": [
+      "Tam ölçekli uygulamanın sorunsuz gideceğini garanti eder.",
+      "Tam ölçekli uygulamanın başarısını garanti etmez.",
+      "Tam ölçekli uygulama iptal edilmiştir.",
+      "Pilot proje başarısız olmuştur."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "By no means = kesinlikle değil. Pilot başarı → tam uygulama başarısını garantilemez.",
+    "sinyal": "by no means",
+    "sinyal_ipucu": "Olumsuz pekiştirme: by no means = certainly not",
+    "tuzak": "by no means",
+    "tuzak_ipucu": "Tuzak: by no means görünce aynı cümlede ikinci olumsuz ekleme — çift olumsuz yanlış",
+    "anahtar": "by no means"
+  },
+  {
+    "id": "q081",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "Far from being a burden, the regulations introduced by the new administration actually stimulated innovation in the sector.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre yeni düzenlemeler sektörü nasıl etkiledi?",
+    "secenekler_tr": [
+      "Sektörü olumsuz etkiledi.",
+      "İnovasyonu engelledi.",
+      "Yük olmak bir yana, inovasyonu teşvik etti.",
+      "Sektörde herhangi bir değişikliğe yol açmadı."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Far from = -den uzak, aksine. Yük olmak yerine inovasyonu tetikledi.",
+    "sinyal": "far from",
+    "sinyal_ipucu": "Far from + V-ing/noun — olumsuz anlam taşır",
+    "tuzak": "far from",
+    "tuzak_ipucu": "Tuzak: far from sonrası S+V gelirse yanlış — noun/gerund gelir",
+    "anahtar": "far from"
+  },
+  {
+    "id": "q082",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "By no means did the committee intend to exclude minority voices from the decision-making process.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre komitenin niyeti neydi?",
+    "secenekler_tr": [
+      "Azınlık seslerini dışlamayı amaçladı.",
+      "Azınlık seslerini dışlamak gibi bir niyeti kesinlikle yoktu.",
+      "Karar süreci yalnızca azınlıklara açıktı.",
+      "Komite karar sürecini iptal etti."
+    ],
+    "dogru_index": 1,
+    "aciklama_tr": "By no means did = devrik yapı + kesinlikle değil niyeti. Dışlama amacı yoktu.",
+    "sinyal": "By no means",
+    "sinyal_ipucu": "Devrik yapı: By no means + did + özne",
+    "tuzak": "did",
+    "tuzak_ipucu": "Tuzak: devrik yapı soru değil, olumsuz vurgu",
+    "anahtar": "by no means"
+  },
+  {
+    "id": "q083",
+    "kategori": "Dilbilgisi - YDS",
+    "soru_en": "The architect should have consulted the structural engineer before submitting the final design to the client.",
+    "alinti": false,
+    "soru_tr": "Bu cümleye göre mimar hakkında ne söylenebilir?",
+    "secenekler_tr": [
+      "Mimar yapısal mühendise danıştı.",
+      "Mimar danışmak zorundaydı ve danıştı.",
+      "Mimar danışması gerekirdi ama danışmadı.",
+      "Mimar müşteriyle iletişime geçmedi."
+    ],
+    "dogru_index": 2,
+    "aciklama_tr": "Should have + V3 = yapması gerekirdi ama yapmadı. Geçmişe yönelik pişmanlık/eleştiri.",
+    "sinyal": "should have",
+    "sinyal_ipucu": "Modal perfect: should have V3 = gerekirdi ama yapılmadı",
+    "tuzak": "should have",
+    "tuzak_ipucu": "Tuzak: must have V3 = kesin çıkarım; should have V3 = eleştiri/pişmanlık",
+    "anahtar": "should have"
   }
 ]
