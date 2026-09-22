@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
+import * as Pedagoji from './_avciPedagogy.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
 // source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
@@ -706,6 +707,94 @@ function klodSoruIfadesiSizintisiniTemizle(yanit, soruEn, ogrenciMetni) {
   }
 }
 
+// ============================================================
+// AVCI PEDAGOJI KONTROLCUSU — handler köprüsü (bkz. _avciPedagogy.mjs)
+// ============================================================
+// TEK ÇAĞRI: öğretmen çağrısı dışında model çağrısı YOK. Yanıt ÖNCESİ: durumu
+// doğrula; öğrenci cevap denemesiyse (mevcut klodIpucuYanitiMi kapısı) önceki
+// duruma göre hüküm-işareti yönergesini system'e ekle. Yanıt SONRASI: işareti
+// ayıkla (görünür yanıta/board'a asla sızmaz), geçişi kod uygular, yanıtı
+// duruma göre KUR. Fail-open: hata => kontrolcü yok. Çözüm isteği /
+// cevaplanmış soru => durum DÜŞER (tuzağa düşürme YOK).
+function klodPedagojiHazirla(body, messages, baglam, systemContent) {
+  const bos = { aktif: false, mod: null, yeniDurum: null };
+  try {
+    if (!baglam || baglam.answered) return bos;
+    const qid = baglam.question_id;
+    const son = Array.isArray(messages) ? messages[messages.length - 1] : null;
+    const sonMetin = son && typeof son.content === 'string' ? son.content : '';
+    if (Pedagoji.cozumIstegiMi(sonMetin)) return bos;
+    const gecerli = Pedagoji.durumuDogrula(body && body.controller_state, { qid, messages });
+    const n = messages.length + 1;
+    const tasi = (d) => (d ? { ...d, n } : null);
+    if (!klodIpucuYanitiMi(messages, baglam)) return { aktif: false, mod: null, yeniDurum: tasi(gecerli) };
+    const pending = Pedagoji.soruCumlesiCikar(messages[messages.length - 2].content);
+    const canonical = SORU_HAVUZU.find((s) => s.id === qid);
+    if (!pending || !canonical) return { aktif: false, mod: null, yeniDurum: tasi(gecerli) };
+    systemContent.push({ type: 'text', text: Pedagoji.dogrulamaYonergesi(gecerli ? gecerli.faz : null) });
+    return { aktif: true, mod: null, yeniDurum: tasi(gecerli), gecerli, pending, cumle: canonical.soru_en, ogrenciMetni: sonMetin, qid, n, tohum: messages.length };
+  } catch (e) {
+    return bos;
+  }
+}
+
+const KLOD_ISARET_TEMIZLE = /\[{1,2}\s*V\s*=?\s*[A-Za-z]{0,8}\s*\]{0,2}/g;
+
+function klodPedagojiUygula(pedagoji, data) {
+  const sonuc = { mod: pedagoji.mod, yeniDurum: pedagoji.yeniDurum, yedek: false, kontrollu: false };
+  try {
+    if (!Array.isArray(data.content)) return sonuc;
+    // 1) Her chat yanıtında işareti AYIKLA (metin + tool_use girdisi): görünür yanıta/board'a sızmasın.
+    const hukumler = [];
+    let bozuk = false;
+    let modelMetni = '';
+    let ilkMetin = null;
+    for (const blok of data.content) {
+      if (!blok) continue;
+      if (blok.type === 'text' && typeof blok.text === 'string') {
+        const a = Pedagoji.isaretiAyikla(blok.text);
+        blok.text = a.temiz;
+        hukumler.push(...a.hukumler);
+        if (a.bozuk) bozuk = true;
+        modelMetni += (modelMetni ? '\n' : '') + a.temiz;
+        if (ilkMetin === null) ilkMetin = blok;
+      } else if (blok.type === 'tool_use' && blok.input) {
+        try { blok.input = JSON.parse(JSON.stringify(blok.input).replace(KLOD_ISARET_TEMIZLE, '')); } catch (e) { /* girdi bozuksa olduğu gibi */ }
+      }
+    }
+    if (!pedagoji.aktif) return sonuc;
+    // 2) Hüküm -> deterministik geçiş -> yanıtı duruma göre KUR.
+    const hukum = Pedagoji.nihaiHukum(hukumler, bozuk);
+    const k = Pedagoji.yanitiKur({
+      gecerli: pedagoji.gecerli,
+      hukum,
+      pending: pedagoji.pending,
+      modelMetni,
+      ogrenciMetni: pedagoji.ogrenciMetni,
+      tohum: pedagoji.tohum,
+      verbatimIhlalMi: (q) => klodSoruIfadesiSizintisiniTemizle(q, pedagoji.cumle, pedagoji.ogrenciMetni) !== q,
+    });
+    sonuc.mod = k.mod;
+    sonuc.yedek = k.yedek;
+    sonuc.yeniDurum = k.yeni
+      ? { v: Pedagoji.PEDAGOJI_SURUM, qid: pedagoji.qid, faz: k.yeni.faz, orig: k.yeni.orig, n: pedagoji.n }
+      : null;
+    sonuc.kontrollu = k.mod !== 'ADVANCE';
+    // Pending soru çıkarılamadığı için HOLD şablonu kurulamadıysa (metin null): model metni işaretsiz geçer.
+    if (k.metin !== null && ilkMetin) {
+      ilkMetin.text = k.metin;
+      for (const blok of data.content) {
+        if (blok && blok !== ilkMetin && blok.type === 'text') blok.text = '';
+      }
+    } else if (k.metin === null) {
+      sonuc.kontrollu = false;
+    }
+  } catch (e) {
+    // fail-open: yanıt bloklanmaz
+  }
+  return sonuc;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -821,6 +910,12 @@ export default async function handler(req, res) {
     });
   }
 
+  // TURBO #8-B — pedagoji kontrolcüsü (SADECE chat + stream değil + doğrulanmış aktif soru).
+  let pedagoji = { aktif: false, mod: null, yeniDurum: null };
+  if (mode === 'chat' && req.body.stream !== true) {
+    pedagoji = klodPedagojiHazirla(req.body, messages, dogrulanmisBaglam, systemContent);
+  }
+
   // 8. PROMPT CHAINING — Mod bazlı zincir
   let finalMessages = calibratedMessages;
   
@@ -908,10 +1003,17 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // TURBO #8-B — pedagoji kontrolcüsü (TEK çağrı): hüküm işaretini ayıkla, geçişi uygula,
+    // yanıtı duruma göre kur. Kontrolcü kurduysa aşağıdaki verbatim guard ATLANIR (sunucunun
+    // geri eklediği ASIL soru bozulmasın; STEP_BACK sorusu zaten verbatim için doğrulandı).
+    const pedagojiSonuc = mode === 'chat'
+      ? klodPedagojiUygula(pedagoji, data)
+      : { mod: null, yeniDurum: null, yedek: false, kontrollu: false };
+
     // TURBO #8 — ipucu cevap-sızıntısı arka koruması (bkz. yukarıdaki blok).
     // Fail-open: hata/uygunsuzluk → yanıt AYNEN döner.
     let ipucuKorumaUygulandi = false;
-    if (mode === 'chat' && Array.isArray(data.content) && klodIpucuYanitiMi(messages, dogrulanmisBaglam)) {
+    if (mode === 'chat' && !pedagojiSonuc.kontrollu && Array.isArray(data.content) && klodIpucuYanitiMi(messages, dogrulanmisBaglam)) {
       try {
         const canonicalSoru = SORU_HAVUZU.find((s) => s.id === dogrulanmisBaglam.question_id);
         const ogrenciMetni = messages[messages.length - 1].content;
@@ -980,9 +1082,15 @@ export default async function handler(req, res) {
       // KATMAN 5E — mevcut text reply kontratı (content[0]/parsed/vs.)
       // DEĞİŞMEDEN, geriye uyumlu, ADDITIVE bir alan. Client bu alanı
       // okumazsa (eski davranış) hiçbir şey değişmez.
-      board_actions: boardActions,
+      // TURBO #8-B: kontrollü (ipucu/geri adım/toparlanma/teklif/bekleme) turlarda board action YOK
+      // (cevabı gösteren tahta hamlesi, sunucunun kurduğu yanıtla çelişmesin).
+      board_actions: pedagojiSonuc.kontrollu ? [] : boardActions,
       // TURBO #8 — ADDITIVE: arka koruma yanıtı değiştirdi mi (gözlemlenebilirlik).
       hint_leak_guard: ipucuKorumaUygulandi,
+      // TURBO #8-B — ADDITIVE: pedagoji kontrolcüsü durumu (istemci bir sonraki istekte geri gönderir).
+      controller_state: pedagojiSonuc.yeniDurum || null,
+      pedagogy_mode: pedagojiSonuc.mod || null,
+      pedagogy_fallback: pedagojiSonuc.yedek,
     });
 
   } catch (error) {
