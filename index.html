@@ -1405,16 +1405,17 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
   <script>
     // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
-    // (29 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
+    // (26 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
     // (o fonksiyon dosyanın çok ilerisinde tanımlı) kendi başına hesaplar.
     // Hedef tarih değişirse ikisini birlikte güncelle.
     (function(){
       var el=document.getElementById('hero-geri-sayim');
       if(!el)return;
       var now=new Date();
-      var hedef=new Date(now.getFullYear(),10,29);
-      if(hedef<now)hedef=new Date(now.getFullYear()+1,10,29);
-      var gun=Math.max(0,Math.ceil((hedef-now)/(1000*60*60*24)));
+      var bugun=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+      var hedef=new Date(now.getFullYear(),10,26);
+      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,26); // sınav günü 0 gösterir, ertesi gün seneye geçer
+      var gun=Math.max(0,Math.round((hedef-bugun)/(1000*60*60*24)));
       el.textContent=gun;
     })();
   </script>
@@ -12073,8 +12074,8 @@ const SP_MOTIVASYON=[
 ];
 function sinavPlanimVarsayilanTarih(){
   const now=new Date();
-  let hedef=new Date(now.getFullYear(),10,29); // Kasım = ay index 10
-  if(hedef<now)hedef=new Date(now.getFullYear()+1,10,29);
+  let hedef=new Date(now.getFullYear(),10,26); // Kasım = ay index 10
+  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,26);
   const ay=String(hedef.getMonth()+1).padStart(2,'0');
   const gun=String(hedef.getDate()).padStart(2,'0');
   return hedef.getFullYear()+'-'+ay+'-'+gun;
