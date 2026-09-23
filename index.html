@@ -1253,6 +1253,15 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   });
 })();
 </script>
+<script>
+// Yeni ziyaretçi: ilk adım (seviye testi) yapılmadı ve hiç soru çözülmediyse
+// mobil alt menü gizlenir — ilk ekranda tek bir yol ("Seviyemi Öğren") kalsın.
+try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.getItem('sa_streak')||'{}');if(!_iaK&&!(_iaS.toplamSoru>0))document.documentElement.classList.add('yeni-ziyaretci');}catch(e){}
+</script>
+<style>
+html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
+@media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
+</style>
 </head>
 <body class="dark-mode">
 <!-- PWA Banner -->
@@ -1284,7 +1293,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
-<button class="btn-nav" onclick="goTo('dashboard')" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
+<button class="btn-nav" onclick="basla()" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 
@@ -1329,18 +1338,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   </div>
 </div>
 
-<!-- TRUST BAR -->
-<div style="background:linear-gradient(90deg,#0c0e14,#1a1f35);padding:10px 5vw;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;border-bottom:1px solid rgba(245,166,35,.3)">
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🔒 SSL Güvenli</span>
-  <span style="color:rgba(255,255,255,.2)">|</span>
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🆓 Tamamen Ücretsiz</span>
-  <span style="color:rgba(255,255,255,.2)">|</span>
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🚫 Kredi Kartı İstenmez</span>
-  <span style="color:rgba(255,255,255,.2)">|</span>
-  <span style="font-size:15px;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:6px">🇹🇷 Türkiye'den Hizmet</span>
-</div>
 <!-- STREAK BAR -->
-<div class="streak-bar" id="streak-bar">
+<div class="streak-bar" id="streak-bar" style="display:none">
   <span class="streak-fire">🔥</span>
   <div>
     <div class="streak-count" id="streak-sayi">0</div>
@@ -1360,7 +1359,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
   <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
-  <a onclick="goTo('dashboard');closeMenu()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
+  <a onclick="closeMenu();basla()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
   <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
@@ -1377,50 +1376,29 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <span class="hero-float-word" style="left:38%;top:94%;animation-delay:1s;animation-duration:9.5s">must have</span>
   </div>
   <div>
-    <div style="margin-bottom:24px">
-      <span style="background:linear-gradient(135deg,#2e2410,#4a3a10);color:#92400e;font-size:14px;font-weight:800;padding:8px 20px;border-radius:30px;letter-spacing:.06em;display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(180,120,0,.25);animation:badgePulse 2.5s ease-in-out infinite;box-sizing:border-box">
+    <div style="margin-bottom:18px">
+      <span style="background:linear-gradient(135deg,#2e2410,#4a3a10);color:#fbbf24;font-size:13px;font-weight:800;padding:7px 16px;border-radius:30px;letter-spacing:.06em;display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:8px;box-sizing:border-box">
         <span style="width:8px;height:8px;background:#e97316;border-radius:50%;animation:pulse 1.5s ease infinite;flex-shrink:0"></span>
-        🇹🇷 TEK KURUŞ ÖDEMEDEN — ŞU AN TAMAMEN ÜCRETSİZ
+        YDS &amp; YÖKDİL · ŞU AN TAMAMEN ÜCRETSİZ
       </span>
     </div>
-    <style>
-    @keyframes badgePulse{0%,100%{box-shadow:0 4px 20px rgba(180,120,0,.25)}50%{box-shadow:0 6px 28px rgba(180,120,0,.5),0 0 0 6px rgba(253,230,138,.2)}}
-    </style>
-    <h1 style="font-size:clamp(32px,4vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:16px 0 20px">YDS'de hedefine ulaşmak için tek ihtiyacın doğru strateji.<br><em style="color:#f5a623;font-style:normal">Parayı biz hallettik.</em></h1>
-    <p class="hero-sub" style="font-size:18px;line-height:1.7;max-width:520px">YDS ve YÖKDİL için aylarca para ödemek zorunda değilsin. <strong>Tek kuruş ödemeden</strong> — sürekli büyüyen soru bankası, AI mentor, ses kursu — hepsi senin. <em style="color:var(--signal)">Şu an tamamen ücretsiz.</em></p>
-    <div style="max-width:500px;margin:-6px 0 22px;padding:14px 18px;background:rgba(245,166,35,.05);border:1px solid rgba(245,166,35,.16);border-radius:10px">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--signal);text-transform:uppercase;margin-bottom:6px">Neden Ücretsiz?</div>
-      <p style="font-size:14px;line-height:1.7;color:var(--muted);margin:0">
-        Kurucumuz yıllarca aynı sınava giren arkadaşlarının bu yüzden yıllarını kaybettiğini gördü. Onlar için para değil, doğru strateji eksikti. Bu platformu o döngüyü bitirmek için kurdu — kayıt bile istemeden, şu an tamamen ücretsiz.
-      </p>
-    </div>
+    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em style="color:#f5a623;font-style:normal">2 dakikada seviyeni öğren.</em></h1>
+    <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px">5 kısa soru çöz; seviyeni, zayıf noktanı ve sana özel <strong>bugünkü görevini</strong> gör. Kayıt yok, kredi kartı yok.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="goTo('dashboard')" style="font-size:16px;padding:16px 36px;border-radius:12px">🎯 Hemen Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
-         </div>
-    <div style="margin-top:14px;font-size:13px;color:var(--muted);max-width:500px">
-      🆕 İlk kez mi geldin? KLOD — YDS sorularını Türkçe anlatan AI öğretmenin — seni karşılayıp sana uygun başlangıç noktasını gösterecek. İlerlemeni sonra da kaydedebilirsin, kayıt şart değil.
+      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Seviyemi Öğren — Ücretsiz <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
     </div>
-    <div class="hero-badges">
-      <span class="hero-badge">Kayıt zorunlu değil</span>
-      <span class="hero-badge">Kredi kartı yok</span>
-      <span class="hero-badge">Şu an tamamen ücretsiz</span>
-    </div>
-    <div style="display:flex;gap:28px;flex-wrap:wrap;margin-top:22px;padding-top:20px;border-top:1px solid rgba(236,231,218,.1)">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:22px" aria-hidden="true">🎯</span>
-        <div>
-          <div id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:19px;color:var(--signal);line-height:1.1">—</div>
-          <div style="font-size:12px;color:var(--muted)">Kasım YDS/YÖKDİL'e kalan gün</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:22px" aria-hidden="true">📖</span>
-        <div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:19px;color:var(--ink);line-height:1.1">2.400+</div>
-          <div style="font-size:12px;color:var(--muted)">e-kitap indirildi</div>
-        </div>
-      </div>
-    </div>
+    <ol class="hero-adimlar" aria-label="Nasıl başlarsın">
+      <li><span>1</span>5 soruluk hızlı test</li>
+      <li><span>2</span>Seviyen ve zayıf noktan</li>
+      <li><span>3</span>Bugünkü görevin</li>
+    </ol>
+    <div style="margin-top:18px;font-size:13px;color:var(--muted)">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı</div>
+    <style>
+      .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
+      .hero-adimlar li{display:flex;align-items:center;gap:8px}
+      .hero-adimlar li span{width:22px;height:22px;border-radius:50%;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.5);color:var(--signal);font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+    </style>
+  </div>
   </div>
   <script>
     // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
@@ -1479,45 +1457,23 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     })();
   </script>
   <div id="demo" class="demo-card">
-    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gercek OSYM Cumlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
-    <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsKaraoke){const c=this.textContent.replace(/[\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
+    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gerçek ÖSYM Cümlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
+    <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsKaraoke){const c=this.textContent.replace(/[\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">"The researchers concluded that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
     <div class="demo-legend">
       <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
       <div class="leg"><div class="leg-dot" style="background:#2a1414;border:1px solid var(--trap)"></div>Tuzak</div>
       <div class="leg"><div class="leg-dot" style="background:#2a2810;border:1px solid #d97706"></div>Kilit kelime</div>
     </div>
     <div class="demo-quiz">
-      <div class="demo-q" id="dq" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.textContent,this,null,{lang:'tr-TR',preserveMarkup:true})">Bu cumleye gore arastirmacilar ne sonucuna vardi?</div>
+      <div class="demo-q" id="dq" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.textContent,this,null,{lang:'tr-TR',preserveMarkup:true})">Bu cümleye göre araştırmacılar ne sonuca vardı?</div>
       <div class="demo-opts" id="dopts">
-        <button class="dopt" onclick="demoAns(this,false)">Tedavi tum hastalar icin etkilidir.</button>
-        <button class="dopt" onclick="demoAns(this,true)">Tedavi umit verici ama garantili degildir.</button>
-        <button class="dopt" onclick="demoAns(this,false)">Sonuclar yetersiz kaldi.</button>
-        <button class="dopt" onclick="demoAns(this,false)">Tedavi basariyla tamamlandi.</button>
+        <button class="dopt" onclick="demoAns(this,false)">Tedavi tüm hastalar için etkilidir.</button>
+        <button class="dopt" onclick="demoAns(this,true)">Tedavi ümit verici ama garantili değildir.</button>
+        <button class="dopt" onclick="demoAns(this,false)">Sonuçlar yetersiz kaldı.</button>
+        <button class="dopt" onclick="demoAns(this,false)">Tedavi başarıyla tamamlandı.</button>
       </div>
       <div class="demo-fb" id="dfb"></div>
       <button class="demo-next-btn" id="dnext" onclick="demoNext()">Sonraki alan →</button>
-    </div>
-  </div>
-</section>
-<section style="background:linear-gradient(135deg,#1a1f35,#0c0e14);padding:40px 5vw;border-bottom:1px solid rgba(255,255,255,.08)">
-  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px">
-    <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#e8d5a3;margin-bottom:8px">Sınava Geri Sayım</div>
-      <div style="font-family:'IBM Plex Serif',serif;font-size:22px;color:#f7f6f2">Sınav tarihin ne zaman?</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <input type="date" id="sinav-tarih-input" style="border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:10px 14px;background:rgba(255,255,255,.08);color:#f7f6f2;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;cursor:pointer" aria-label="Sınav tarihi">
-      <button onclick="sinavGeriSayim()" style="background:#f5a623;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Başlat</button>
-    </div>
-    <div id="geri-sayim-display" style="display:none;text-align:center">
-      <div style="display:flex;gap:16px;justify-content:center">
-        <div><div id="gs-gun" style="font-family:'IBM Plex Serif',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:14px;color:rgba(236,231,218,.4);margin-top:2px">Gun</div></div>
-        <div style="font-family:'IBM Plex Serif',serif;font-size:42px;color:rgba(236,231,218,.2);line-height:1">:</div>
-        <div><div id="gs-saat" style="font-family:'IBM Plex Serif',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:14px;color:rgba(236,231,218,.4);margin-top:2px">Saat</div></div>
-        <div style="font-family:'IBM Plex Serif',serif;font-size:42px;color:rgba(236,231,218,.2);line-height:1">:</div>
-        <div><div id="gs-dak" style="font-family:'IBM Plex Serif',serif;font-size:42px;color:#e8d5a3;line-height:1">0</div><div style="font-size:14px;color:rgba(236,231,218,.4);margin-top:2px">Dakika</div></div>
-      </div>
-      <div id="gs-mesaj" style="font-size:15px;color:rgba(236,231,218,.5);margin-top:10px"></div>
     </div>
   </div>
 </section>
@@ -1528,9 +1484,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="stat-div"></div>
       <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Gramer konusu</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num" data-count="87" data-prefix="%">%87</div><div class="stat-lbl">Net artis orani</div></div>
+      <div><div class="stat-num">7/24</div><div class="stat-lbl">KLOD AI öğretmen</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num" data-count="90">90</div><div class="stat-lbl">Gunde sonuc</div></div>
+      <div><div class="stat-num">0 TL</div><div class="stat-lbl">Ücret</div></div>
     </div>
     <div class="yorumlar" id="yorumlar-track"></div>
     <div style="text-align:center;margin-top:20px">
@@ -1538,42 +1494,15 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </div>
   </div>
 </section>
-<section class="hedef">
-  <div class="hedef-inner">
-    <div class="eyebrow" style="color:var(--contrast)">Platformumuz Kimin İçin?</div>
-    <div class="section-title" style="color:var(--ink)">YDS veya YÖKDİL sınavına hazırlanan herkes</div>
-    <div class="hedef-grid">
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🎓</div><div class="hedef-name">Akademisyenler</div><div class="hedef-desc">Docentlik ve uluslararasi yayin icin YDS/YOKDiL zorunlulugu olan arastirmacilar.</div><div class="hedef-tag">YDS - YOKDiL Sosyal/Fen/Saglik</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">⚖️</div><div class="hedef-name">Hukukcular</div><div class="hedef-desc">YDS zorunlulugu olan avukat, hakim ve hukuk akademisyeni.</div><div class="hedef-tag">YDS - Alan: Hukuk</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🩺</div><div class="hedef-name">Saglik Profesyonelleri</div><div class="hedef-desc">YOKDiL Saglik sinavina hazirlanan doktor, hemsire ve saglik akademisyeni.</div><div class="hedef-tag">YOKDiL Saglik</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">📊</div><div class="hedef-name">Sosyal Bilimciler</div><div class="hedef-desc">YOKDiL Sosyal sinavina hazirlanan sosyolog, psikolog ve egitimci.</div><div class="hedef-tag">YOKDiL Sosyal</div></div>
-      <div class="hedef-card"><div style="font-size:26px;margin-bottom:10px">🔬</div><div class="hedef-name">Fen & Muhendislik</div><div class="hedef-desc">YOKDiL Fen sinavina hazirlanan muhendis, fizikci ve biyolog.</div><div class="hedef-tag">YOKDiL Fen</div></div>
-      <div class="hedef-card" style="background:rgba(245,166,35,.15);border-color:var(--signal)"><div style="font-size:26px;margin-bottom:10px">🎯</div><div class="hedef-name">Genel YDS/YOKDiL Adayi</div><div class="hedef-desc">OSYM tuzaklarini taniyarak net artisini gerceklestirmek isteyen her aday.</div><div class="hedef-tag">YDS - YOKDiL (tum branşlar)</div></div>
-    </div>
-  </div>
-</section>
-<section class="alan">
-  <div class="eyebrow" style="color:var(--contrast)">Kişiselleştir</div>
-  <div class="section-title">Alanını seç, platform sana göre ayarlansın</div>
-  <p class="alan-sub">Demo cümlesi, kelime bankası ve metin örnekleri alanına göre değişir.</p>
-  <div class="alan-cards">
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Hukuk','⚖️')" role="button" tabindex="0"><div class="alan-icon">⚖️</div><div class="alan-name">Hukuk</div><div class="alan-desc">jurisdiction, liability, statute</div><div class="alan-preview" id="prev-Hukuk">Hukuki metin sorulari - Appellate, statute, liability - YDS Hukuk tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Sosyal','📊')" role="button" tabindex="0"><div class="alan-icon">📊</div><div class="alan-name">Sosyal Bilimler</div><div class="alan-desc">stratification, discourse, paradigm</div><div class="alan-preview" id="prev-Sosyal">Sosyoloji metinleri - Hegemony, discourse, paradigm - YOKDiL Sosyal tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Fen','🔬')" role="button" tabindex="0"><div class="alan-icon">🔬</div><div class="alan-name">Fen & Muhendislik</div><div class="alan-desc">hypothesis, catalyst, empirical</div><div class="alan-preview" id="prev-Fen">Bilimsel arastirma metinleri - Catalyst, synthesis, empirical - YOKDiL Fen tuzak analizi</div></div>
-    <div class="alan-card" onclick="setAlanVeGoster(this,'Saglik','🩺')" role="button" tabindex="0"><div class="alan-icon">🩺</div><div class="alan-name">Saglik</div><div class="alan-desc">diagnosis, prognosis, etiology</div><div class="alan-preview" id="prev-Saglik">Klinik arastirma metinleri - Diagnosis, prognosis, etiology - YOKDiL Saglik tuzak analizi</div></div>
-    <div class="alan-card active" onclick="setAlanVeGoster(this,'Genel','🎯')" role="button" tabindex="0"><div class="alan-icon">🎯</div><div class="alan-name">YDS Genel</div><div class="alan-desc">akademik metin, ceviri, cloze</div><div class="alan-preview show" id="prev-Genel">Karma akademik metinler - Tum gramer yapilari - YDS & YOKDiL tuzak analizi</div></div>
-  </div>
-  <div id="alan-kelime-strip" style="margin-top:28px;text-align:center;min-height:28px"><span id="alan-kelime" style="font-family:IBM Plex Mono,monospace;font-size:15px;color:var(--contrast);letter-spacing:.08em"></span></div>
-</section>
 <section id="nasil" class="nasil">
   <div class="nasil-inner">
     <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasıl Çalışır?</div><div class="section-title">Gelişinin ilk gününden sınav sabahına</div></div>
     <div>
-      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Gel, alanını seç</div><div class="step-desc">Siteye giriyorsun. Hukuk, Sosyal, Fen, Sağlık — bir tıkla seçiyorsun.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Tamamen ücretsiz</span><span class="stag">Şu an ücretsiz</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Sinyal Lab'a gir</div><div class="step-desc">Sana ÖSYM formatında bir metin geliyor. Bağlaçlar mavi, tuzak ifadeler kırmızı, kilit kelimeler sarı.</div><div class="step-tags"><span class="stag">Sinyal baglaci</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Turkce aciklama</span><span class="stag">S+V+O haritasi</span><span class="stag">OSYM tuzak analizi</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hiz</span><span class="stag">Gunluk tuzak</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalık rapor kartın geliyor</div><div class="step-desc">Kaç soru çözdün, hangi yapıda hata yaptın, tahmini puanın ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story gorseli</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Seviyeni öğren</div><div class="step-desc">"Seviyemi Öğren" butonuna bas, sınavını seç, 5 kısa soru çöz. Seviyeni ve zayıf noktanı hemen gör.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kayıt yok</span><span class="stag">Tamamen ücretsiz</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Bugünkü görevini yap</div><div class="step-desc">Test sonucuna göre sana tek bir görev veriyoruz. ÖSYM formatındaki sorularda bağlaçlar, tuzak ifadeler ve kilit kelimeler renkli işaretli.</div><div class="step-tags"><span class="stag">Sinyal bağlacı</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Türkçe açıklama</span><span class="stag">S+V+O haritası</span><span class="stag">ÖSYM tuzak analizi</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hız</span><span class="stag">Günlük tuzak</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalık rapor kartın geliyor</div><div class="step-desc">Kaç soru çözdün, hangi yapıda hata yaptın, tahmini puanın ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story görseli</span></div></div></div>
     </div>
   </div>
 </section>
@@ -1581,34 +1510,34 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   <div class="ekitap-inner">
     <div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ücretsiz E-Kitap</div>
-      <h2>30 Gunluk Metin Fetih Kilavuzu</h2>
-      <p class="ekitap-desc">37 sayfalik PDF rehber. Sinyal metodolojisinin tum adimlari, baglac haritalari, modal perfect rehberi ve gunluk calisma plani.</p>
-      <ul class="ekitap-list"><li>Baglac sinyal haritalari</li><li>Modal perfect tuzak rehberi</li><li>30 gunluk calisma plani</li><li>OSYM en sik tuzak listesi</li></ul>
+      <h2>30 Günlük Metin Fetih Kılavuzu</h2>
+      <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
+      <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
       <form onsubmit="ekitapIndir(event)" class="ekitap-form">
         <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
-        <button class="ekitap-submit" type="submit">Ucretsiz Indir</button>
+        <button class="ekitap-submit" type="submit">Ücretsiz İndir</button>
       </form>
-      <div class="ekitap-note" id="ekitap-note">2.400+ kisi indirdi - Spam yok - Istediginde cik</div>
+      <div class="ekitap-note" id="ekitap-note">2.400+ kişi indirdi · Spam yok · İstediğinde çık</div>
     </div>
     <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
   </div>
 </section>
 <section id="klod" class="klod">
   <div>
-    <div class="eyebrow" style="color:var(--signal)">AI Ogretmen</div>
+    <div class="eyebrow" style="color:var(--signal)">AI Öğretmen</div>
     <div class="section-title">KLOD cevap vermez — düşündürür</div>
     <p class="klod-desc">Çoğu AI "doğru cevap B'dir" der. KLOD neden yanlış düşündüğünü bulur ve oradan öğretir.</p>
-    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cumlede S+V+O haritasi ve tuzak isaretlemesi</span><div class="klod-feat-detail">despite = zitlik sinyali / far from = gizli olumsuz / must have = gecmis cikarim</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayif yapi teshisi</b><span>Modal, baglac, kosul - hangi yapida hata yapiyorsun?</span><div class="klod-feat-detail">Yanlis cevaplarin analizi yapilir ve zayif yapin raporlanir.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cümlede S+V+O haritası ve tuzak işaretlemesi</span><div class="klod-feat-detail">despite = zıtlık sinyali / far from = gizli olumsuz / must have = geçmiş çıkarım</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayıf yapı teşhisi</b><span>Modal, bağlaç, koşul — hangi yapıda hata yapıyorsun?</span><div class="klod-feat-detail">Yanlış cevapların analiz edilir ve zayıf yapın raporlanır.</div></div></div>
     <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
   </div>
   <div class="chat-ui">
-    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcisi AI Ogretmeni · Cevrimici</div></div></div>
+    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcısı AI Öğretmeni · Çevrimiçi</div></div></div>
     <div class="chat-body" id="chat-body">
-      <div class="msg k">Merhaba! Sana bir OSYM cumlesi gostereyim. "must have left" ne anlama geliyor?</div>
+      <div class="msg k">Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?</div>
       <div class="msg k">"She must have left before the meeting started."</div>
     </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabini yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
+    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabını yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
   </div>
 </section>
 <section id="ses" class="ses">
@@ -1618,9 +1547,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div class="section-title" style="color:var(--ink)">Beyin sesten öğrenir</div>
       <p class="ses-desc">19 YDS/YÖKDİL gramer konusu — otobüste, yürüyüşte, yatmadan önce.</p>
       <div class="ses-modes">
-        <div class="ses-mode active" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Ogret Modu</div><div class="ses-mode-desc">Turkce kural - Ingilizce ornek - Turkce ceviri</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formul + hizli ornek tekrari</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, secenekler, cevap aciklanir</div></div></div>
+        <div class="ses-mode active" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Öğret Modu</div><div class="ses-mode-desc">Türkçe kural · İngilizce örnek · Türkçe çeviri</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formül + hızlı örnek tekrarı</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, seçenekler, cevap açıklanır</div></div></div>
       </div>
     </div>
     <div class="player">
@@ -1647,9 +1576,9 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
 <section id="dashboard" class="dash">
   <div class="dash-inner">
     <div class="dash-header">
-      <div class="eyebrow" style="color:var(--signal)">Canlı Önizleme</div>
-      <div class="section-title">Platforma giriş yap ve çalışmaya başla</div>
-      <p style="font-size:14px;color:var(--muted);margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6">Her gün sana özel soru rotası, tekrar edilecek kelimeler ve sinyal analizi hazır bekliyor.</p>
+      <div class="eyebrow" style="color:var(--signal)">Çalışma Alanın</div>
+      <div class="section-title">Bugünkü görevin hazır</div>
+      <p style="font-size:14px;color:var(--muted);margin-top:10px;max-width:460px;margin-left:auto;margin-right:auto;line-height:1.6">Aşağıdaki <b>"Bugün"</b> kartındaki göreve başla. Kayıt gerekmez — ilerlemen bu cihazda saklanır.</p>
     </div>
     <div class="dash-ui">
       <div class="dash-sb">
@@ -1702,7 +1631,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
           </div>
 
         </div>
-        <div class="dash-alan"><div class="dash-alan-lbl">Alanin</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
+        <div class="dash-alan"><div class="dash-alan-lbl">Alanın</div><div class="dash-alan-val" id="dash-alan">🎯 Genel</div></div>
       </div>
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
@@ -1720,8 +1649,8 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
         </div>
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
-          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Gunluk Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandi</div></div>
-          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayif Yapi</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da calis →</div></div>
+          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandi</div></div>
+          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da calis →</div></div>
           <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">yaklaşık — Hedef: 85</div></div>
           <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
         </div>
@@ -6018,6 +5947,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div style="font-size:15px;color:rgba(236,231,218,.5);margin-top:12px">Metroda, kuyrukta, kahve molasında — bir dakikan varsa bir tuzak öğrenecek vaktin var.</div>
     </div>
 
+    <div id="medya-icerik" class="medya-kapali">
     <!-- Video Kartları -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:48px" id="medya-grid"></div>
 
@@ -6042,6 +5972,20 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <div style="font-family:'IBM Plex Serif',serif;font-size:22px;color:#ece7da;margin-bottom:16px">Kulak Aşinalığı</div>
       <div id="podcast-liste" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
+    </div>
+    <div style="text-align:center;margin-top:18px">
+      <button id="medya-ac-btn" onclick="medyaTumunuGoster()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#ece7da;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🎬 Tüm videoları ve podcast'leri göster ↓</button>
+    </div>
+    <style>
+      #medya-icerik.medya-kapali{max-height:560px;overflow:hidden;position:relative}
+      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#1e1b4b);pointer-events:none}
+    </style>
+    <script>
+      function medyaTumunuGoster(){
+        const ic=document.getElementById('medya-icerik');if(ic)ic.classList.remove('medya-kapali');
+        const b=document.getElementById('medya-ac-btn');if(b)b.remove();
+      }
+    </script>
   </div>
 </section>
 
@@ -6097,7 +6041,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     </table>
   </div>
   <div style="text-align:center;margin-top:32px">
-    <button onclick="openModal('Ücretsiz Hesap','0')" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;box-shadow:0 6px 24px rgba(245,166,35,.3)">
+    <button onclick="basla()" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;box-shadow:0 6px 24px rgba(245,166,35,.3)">
       🎯 Hemen Başla — Kayıt Bile İstemez
     </button>
   </div>
@@ -6137,7 +6081,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
       <span class="hayir-etiket">🌱 Şu an tamamen ücretsiz</span>
     </div>
     <div style="margin-top:36px">
-      <button onclick="goTo('dashboard')" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#ece7da;border-radius:12px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;backdrop-filter:blur(8px)">
+      <button onclick="basla()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#ece7da;border-radius:12px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;backdrop-filter:blur(8px)">
         🎯 Hemen Başla — Tek Kuruş Ödemeden
       </button>
     </div>
@@ -6202,7 +6146,7 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
     <p style="font-size:16px;color:var(--ink);margin-bottom:8px;line-height:1.7">Başka platformlara para vermeden önce şunu bil:</p>
     <p style="font-size:18px;font-weight:700;color:#f5a623;margin-bottom:20px;line-height:1.6">Buradaki her şey <br>tek kuruş ödemeden senin.</p>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
-      <button onclick="exitKapat();goTo('dashboard')" style="background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🚀 Hemen Başla — Ücretsiz</button>
+      <button onclick="exitKapat();basla()" style="background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🚀 Hemen Başla — Ücretsiz</button>
       <button onclick="exitKapat()" style="background:none;border:none;font-size:14px;color:var(--muted);cursor:pointer;font-family:IBM Plex Sans,sans-serif;padding:6px">Tamam, daha sonra gelirim</button>
     </div>
   </div>
@@ -6344,7 +6288,7 @@ function showUserMenu(u){
   setTimeout(()=>goTo('dashboard'),300);
   if(typeof bildirimBtnGuncelle==='function')bildirimBtnGuncelle();
 }
-function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>goTo('dashboard');n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>basla();n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
 
 // ─── HOŞ GELDİN KARŞILAMA ANİMASYONU — girişte tetiklenir ──────────────────
 let _hgKapatTimer=null,_hgYaziTimer=null;
@@ -6522,11 +6466,11 @@ function setAlanVeGoster(el,alan,icon){
 }
 
 const ALAN={
-  Genel:{lbl:'Gercek OSYM Cumlesi - Genel',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."',q:'Bu cumleye gore arastirmacilar ne sonucuna vardi?',opts:['Tedavi tum hastalar icin etkilidir.','Tedavi umit verici ama garantili degildir.','Sonuclar yetersiz kaldi.','Tedavi basariyla tamamlandi.'],ans:1,exp:'Dogru! "Despite" zitlik + "far from guaranteed" = garantili degil.'},
-  Hukuk:{lbl:'Gercek OSYM Cumlesi - Hukuk',sent:'"The appellate court held that, <span class="s-sig" data-tip="Zitlik sinyali">despite</span> the procedural errors, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle degil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu cumleye gore mahkeme karari icin ne soylenebilir?',opts:['Usul hatalari karari gecersiz kildi.','Usul hatalarina ragmen karar gecerlidir.','Mahkeme yeniden yargilama istedi.','Karar temyize tasindi.'],ans:1,exp:'Dogru! "Despite" zitlik + "by no means invalid" = kesinlikle gecersiz degil.'},
-  Sosyal:{lbl:'Gercek OSYM Cumlesi - Sosyal',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Tuzak: neredeyse hic degil">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalasmayı nasil aciklar?',opts:['Tabakalasma kulturel normlardan bagimsizdır.','Tabakalasma kulturel normlarla yakindan iliskilidir.','Tabakalasma onemsenmeyen bir kavramdir.','Tabakalasma yalnizca ekonomik faktörlere baglidir.'],ans:1,exp:'Dogru! "Hardly operates independently" = neredeyse bagimsiz degil.'},
-  Fen:{lbl:'Gercek OSYM Cumlesi - Fen',sent:'"The catalyst <span class="s-trap" data-tip="Tuzak: basaramadi">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zitlik sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Bu cumleye gore katalizor icin ne soylenebilir?',opts:['Katalizor reaksiyonu basariyla hizlandirdi.','Sicaklik optimum olsa da katalizor basarisiz oldu.','Sicaklik cok dusuktu.','Katalizor ve sicaklik birlikte etkili oldu.'],ans:1,exp:'Dogru! "Failed to accelerate" = basaramadi + "even though optimal" = tezat.'},
-  Saglik:{lbl:'Gercek OSYM Cumlesi - Saglik',sent:'"The treatment was <span class="s-trap" data-tip="Tuzak: etkili degil">far from effective</span> <span class="s-sig" data-tip="Zitlik sinyali">although</span> it had shown <span class="s-key">promising</span> results."',q:'Bu cumleye gore tedavi hakkinda ne soylenebilir?',opts:['Tedavi denemelerde de etkili bulundu.','Umit verici sonuclara ragmen tedavi etkili olmadi.','Tedavi klinik denemelerde basarisiz oldu.','Sonuclar henuz degerlendirilmedi.'],ans:1,exp:'Dogru! "Far from effective" = etkili degil + "although promising" = tezat.'}
+  Genel:{lbl:'Gerçek ÖSYM Cümlesi - Genel',sent:'"The researchers concluded that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."',q:'Bu cümleye göre araştırmacılar ne sonuca vardı?',opts:['Tedavi tüm hastalar için etkilidir.','Tedavi ümit verici ama garantili değildir.','Sonuçlar yetersiz kaldı.','Tedavi başarıyla tamamlandı.'],ans:1,exp:'Doğru! "Despite" zıtlık + "far from guaranteed" = garantili değil.'},
+  Hukuk:{lbl:'Gerçek ÖSYM Cümlesi - Hukuk',sent:'"The appellate court held that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the procedural errors, the verdict was <span class="s-trap" data-tip="Tuzak: kesinlikle değil">by no means</span> <span class="s-key">invalid</span>."',q:'Bu cümleye göre mahkeme kararı için ne söylenebilir?',opts:['Usul hataları kararı geçersiz kıldı.','Usul hatalarına rağmen karar geçerlidir.','Mahkeme yeniden yargılama istedi.','Karar temyize taşındı.'],ans:1,exp:'Doğru! "Despite" zıtlık + "by no means invalid" = kesinlikle geçersiz değil.'},
+  Sosyal:{lbl:'Gerçek ÖSYM Cümlesi - Sosyal',sent:'"Sociologists argue that stratification <span class="s-trap" data-tip="Tuzak: neredeyse hiç değil">hardly</span> operates independently of <span class="s-key">cultural</span> norms."',q:'Sosyologlar tabakalaşmayı nasıl açıklar?',opts:['Tabakalaşma kültürel normlardan bağımsızdır.','Tabakalaşma kültürel normlarla yakından ilişkilidir.','Tabakalaşma önemsenmeyen bir kavramdır.','Tabakalaşma yalnızca ekonomik faktörlere bağlıdır.'],ans:1,exp:'Doğru! "Hardly operates independently" = neredeyse bağımsız değil.'},
+  Fen:{lbl:'Gerçek ÖSYM Cümlesi - Fen',sent:'"The catalyst <span class="s-trap" data-tip="Tuzak: başaramadı">failed to</span> accelerate the reaction <span class="s-sig" data-tip="Zıtlık sinyali">even though</span> the temperature was <span class="s-key">optimal</span>."',q:'Bu cümleye göre katalizör için ne söylenebilir?',opts:['Katalizör reaksiyonu başarıyla hızlandırdı.','Sıcaklık optimum olsa da katalizör başarısız oldu.','Sıcaklık çok düşüktü.','Katalizör ve sıcaklık birlikte etkili oldu.'],ans:1,exp:'Doğru! "Failed to accelerate" = başaramadı + "even though optimal" = tezat.'},
+  Saglik:{lbl:'Gerçek ÖSYM Cümlesi - Sağlık',sent:'"The treatment was <span class="s-trap" data-tip="Tuzak: etkili değil">far from effective</span> <span class="s-sig" data-tip="Zıtlık sinyali">although</span> it had shown <span class="s-key">promising</span> results."',q:'Bu cümleye göre tedavi hakkında ne söylenebilir?',opts:['Tedavi denemelerde de etkili bulundu.','Ümit verici sonuçlara rağmen tedavi etkili olmadı.','Tedavi klinik denemelerde başarısız oldu.','Sonuçlar henüz değerlendirilmedi.'],ans:1,exp:'Doğru! "Far from effective" = etkili değil + "although promising" = tezat.'}
 };
 let demoAnswered=false;
 const alanOrder=['Hukuk','Sosyal','Fen','Saglik','Genel'];let demoIdx=4;
@@ -6535,7 +6479,7 @@ function demoAns(btn,correct){
   const opts=document.querySelectorAll('#dopts .dopt');opts.forEach(o=>o.disabled=true);
   const d=ALAN[curAlan];const fb=document.getElementById('dfb');
   if(correct){btn.classList.add('ok');fb.className='demo-fb ok';fb.textContent='✅ '+d.exp;if(typeof konfeti==='function')konfeti();}
-  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='❌ Yanlis. '+d.exp;if(typeof saShakeBtn==='function')saShakeBtn(btn);}
+  else{btn.classList.add('err');opts[d.ans].classList.add('ok');fb.className='demo-fb err';fb.textContent='❌ Yanlış. '+d.exp.replace(/^Doğru! /,'');if(typeof saShakeBtn==='function')saShakeBtn(btn);}
   document.getElementById('dnext').style.display='inline';
 }
 function demoNext(){
@@ -9796,6 +9740,9 @@ function streakRender(d){
   const sayiEl=document.getElementById('streak-sayi');
   const haftaEl=document.getElementById('streak-bu-hafta');
   if(sayiEl)sayiEl.textContent=d.streak||0;
+  // Hiç soru çözmemiş yeni ziyaretçiye "1 günlük seri / 0 soru" göstermiyoruz.
+  const barEl=document.getElementById('streak-bar');
+  if(barEl)barEl.style.display=(d.toplamSoru>0)?'':'none';
   if(haftaEl)haftaEl.textContent=(d.buHaftaSoru||0)+' soru';
   rozetRender(d);
 }
@@ -10205,6 +10152,7 @@ function streakSoruEkle(tip){
   const gunAnahtari=new Date().toISOString().split('T')[0];
   d.gunler=d.gunler||{};
   d.gunler[gunAnahtari]=(d.gunler[gunAnahtari]||0)+1;
+  document.documentElement.classList.remove('yeni-ziyaretci');
   rozetKontrol(d);streakSave(d);streakRender(d);xpKazan(tip,d.streak||1);
   setTimeout(puanGuncelle,100);
   if(typeof gunlukHedefGuncelle==='function')gunlukHedefGuncelle();
@@ -12451,7 +12399,7 @@ function bugunKartiRender(){
     <div class="bugun-eyebrow">📡 BUGÜN</div>
     <div class="bugun-baslik">Bugün şunu yap: <b>${gorev.etiket} çöz</b></div>
     <div class="bugun-alt">${tamamlanan.length}/${SP_CHECKLIST_ITEMS.length} görev tamamlandı — sırada bu var.</div>
-    <button class="bugun-cta" onclick="bugunGorevGit('${gorev.dnAra}')">🚀 Hemen Başla →</button>
+    <button class="bugun-cta" onclick="bugunGorevGit('${gorev.dnAra}')">🚀 Göreve Başla →</button>
     <div class="bugun-dots">${dotsHTML}</div>
   `;
 }
@@ -13631,6 +13579,185 @@ function dnavMicGorselGuncelle(){
     <div class="hg-alt" id="hg-alt"></div>
   </div>
 </div>
+
+<!-- İLK ADIM — 2 dakikalık seviye testi (yeni ziyaretçi akışı) -->
+<style>
+  .ia-overlay{display:none;position:fixed;inset:0;z-index:5000;background:rgba(6,8,14,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px}
+  .ia-overlay.acik{display:flex}
+  .ia-kutu{position:relative;width:100%;max-width:520px;max-height:calc(100vh - 32px);overflow-y:auto;background:#12161f;border:1px solid rgba(245,166,35,.3);border-radius:18px;padding:26px 22px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:#ece7da;font-family:'IBM Plex Sans',sans-serif}
+  .ia-kapat{position:absolute;top:10px;right:10px;background:none;border:none;color:#8b93a3;font-size:22px;cursor:pointer;padding:6px 10px;line-height:1}
+  .ia-kapat:hover{color:#ece7da}
+  .ia-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;color:#f5a623;text-transform:uppercase;margin-bottom:8px}
+  .ia-baslik{font-size:21px;font-weight:700;line-height:1.35;margin:0 0 6px}
+  .ia-alt{font-size:14px;color:#a8b0bf;line-height:1.6;margin:0 0 16px}
+  .ia-ilerleme{height:5px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin-bottom:16px}
+  .ia-ilerleme div{height:100%;background:#f5a623;border-radius:4px;transition:width .3s}
+  .ia-secenekler{display:flex;flex-direction:column;gap:8px}
+  .ia-sec{text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:12px 14px;font-size:15px;color:#ece7da;cursor:pointer;font-family:inherit;line-height:1.4;transition:background .15s,border-color .15s}
+  .ia-sec:hover:not(:disabled){background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.5)}
+  .ia-sec:disabled{cursor:default}
+  .ia-sec.dogru{background:rgba(16,185,129,.15);border-color:#10b981}
+  .ia-sec.yanlis{background:rgba(239,68,68,.14);border-color:#ef4444}
+  .ia-soru{font-size:16px;line-height:1.6;margin:0 0 14px;font-weight:600}
+  .ia-fb{font-size:14px;line-height:1.6;margin-top:12px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.05)}
+  .ia-btn{display:block;width:100%;margin-top:14px;background:linear-gradient(135deg,#f5a623,#e08a00);color:#1a1205;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit}
+  .ia-link{display:block;width:100%;margin-top:10px;background:none;border:none;color:#a8b0bf;font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline;padding:6px}
+  .ia-seviye{font-size:28px;font-weight:800;margin:4px 0 2px}
+  .ia-seviye b{color:#f5a623}
+  .ia-gorev{margin-top:16px;padding:14px 16px;border-radius:12px;background:linear-gradient(150deg,rgba(245,166,35,.14),rgba(245,166,35,.04));border:1px solid rgba(245,166,35,.4)}
+  .ia-gorev-etiket{font-size:11px;font-weight:700;letter-spacing:.1em;color:#f5a623;margin-bottom:4px}
+  .ia-gorev-baslik{font-size:18px;font-weight:700}
+</style>
+<div class="ia-overlay" id="ia-overlay" onclick="if(event.target===this)iaKapat()" role="dialog" aria-modal="true" aria-label="Seviye testi">
+  <div class="ia-kutu">
+    <button class="ia-kapat" onclick="iaKapat()" aria-label="Kapat">✕</button>
+    <div id="ia-icerik"></div>
+  </div>
+</div>
+<script>
+// ─── İLK ADIM — 2 dakikalık seviye testi ───────────────────────────────────
+// Sitedeki tüm "Başla" butonları basla()'ya gider. Test daha önce yapılmadıysa
+// bu pencere açılır: sınav/alan seçimi → 5 soru → seviye + zayıf nokta +
+// "Bugün şunu yap" görevi. Test yapılmışsa doğrudan Dashboard'a gidilir.
+// Sonuç localStorage'da 'sa_ilk_adim' anahtarında saklanır (kayıt gerekmez).
+const IA_ALANLAR=[
+  {key:'Genel',ikon:'🎯',ad:'YDS (Genel)'},
+  {key:'Sosyal',ikon:'📊',ad:'YÖKDİL Sosyal'},
+  {key:'Fen',ikon:'🔬',ad:'YÖKDİL Fen'},
+  {key:'Saglik',ikon:'🩺',ad:'YÖKDİL Sağlık'},
+  {key:'Hukuk',ikon:'⚖️',ad:'YDS — Hukuk'}
+];
+// gorev: SP_CHECKLIST_ITEMS içindeki key — yanlış yapılan ilk sorunun görevi önerilir.
+const IA_SORULAR=[
+  {konu:'kelime bilgisi',gorev:'kelime',soru:'The new policy was designed to ------- the negative effects of inflation on low-income families.',opts:['mitigate','exaggerate','postpone','imitate','abandon'],ans:0,exp:'"mitigate" = hafifletmek. Politika, enflasyonun olumsuz etkilerini hafifletmek için tasarlandı.'},
+  {konu:'bağlaçlar',gorev:'sinyallab',soru:'------- the experiment was carefully planned, the results were far from conclusive.',opts:['Because','Although','Unless','So that','As long as'],ans:1,exp:'İki cümle arasında zıtlık var (dikkatle planlandı ↔ sonuç kesin değil) → "Although".'},
+  {konu:'gizli olumsuz tuzaklar',gorev:'tuzak',soru:'"The committee\'s report was anything but clear." — Rapor hakkında ne söylenebilir?',opts:['Rapor çok açıktı.','Rapor hiç de açık değildi.','Rapor kısmen açıktı.','Raporda her konu vardı.','Rapor zamanında yayımlandı.'],ans:1,exp:'"anything but" = "kesinlikle … değil". ÖSYM\'nin en sevdiği gizli olumsuz tuzaklardan biri.'},
+  {konu:'modal yapılar',gorev:'sinyallab',soru:'The lights in his office are off, so he ------- home already.',opts:['must have gone','should go','can go','will have to go','would go'],ans:0,exp:'Geçmişe dair güçlü tahmin → "must have + V3" (gitmiş olmalı).'},
+  {konu:'zamanlar',gorev:'sinyallab',soru:'By the time the ambulance arrived, the patient -------.',opts:['already recovers','has already recovered','had already recovered','will recover','is recovering'],ans:2,exp:'"By the time + geçmiş zaman" → daha önce olan eylem Past Perfect: "had already recovered".'}
+];
+const IA_SEVIYELER=['Başlangıç','Orta','İleri'];
+let iaDurum={alan:'Genel',idx:0,dogru:0,yanlislar:[],cevaplandi:false};
+
+function iaSonucOku(){try{return JSON.parse(localStorage.getItem('sa_ilk_adim')||'null');}catch(e){return null;}}
+function basla(){
+  if(iaSonucOku()){goTo('dashboard');return;}
+  iaAc();
+}
+function iaAc(){
+  iaDurum={alan:'Genel',idx:0,dogru:0,yanlislar:[],cevaplandi:false};
+  iaAlanRender();
+  document.getElementById('ia-overlay').classList.add('acik');
+}
+function iaKapat(){document.getElementById('ia-overlay').classList.remove('acik');}
+function iaAtla(){
+  iaKapat();
+  document.documentElement.classList.remove('yeni-ziyaretci');
+  goTo('dashboard');
+}
+function iaAlanRender(){
+  document.getElementById('ia-icerik').innerHTML=`
+    <div class="ia-eyebrow">Adım 1 / 3 · 2 dakika</div>
+    <div class="ia-baslik">Hangi sınava hazırlanıyorsun?</div>
+    <p class="ia-alt">Sorular ve örnek metinler alanına göre ayarlanır. Sonra değiştirebilirsin.</p>
+    <div class="ia-secenekler">
+      ${IA_ALANLAR.map(a=>`<button class="ia-sec" onclick="iaAlanSec('${a.key}')">${a.ikon} ${a.ad}</button>`).join('')}
+    </div>
+    <button class="ia-link" onclick="iaAtla()">Testi atla, doğrudan çalışmaya geç</button>`;
+}
+function iaAlanSec(key){
+  iaDurum.alan=key;
+  iaSoruRender();
+}
+function iaSoruRender(){
+  const q=IA_SORULAR[iaDurum.idx];
+  iaDurum.cevaplandi=false;
+  document.getElementById('ia-icerik').innerHTML=`
+    <div class="ia-eyebrow">Adım 2 / 3 · Soru ${iaDurum.idx+1} / ${IA_SORULAR.length}</div>
+    <div class="ia-ilerleme"><div style="width:${(iaDurum.idx/IA_SORULAR.length)*100}%"></div></div>
+    <p class="ia-soru">${q.soru}</p>
+    <div class="ia-secenekler" id="ia-secenekler">
+      ${q.opts.map((o,i)=>`<button class="ia-sec" onclick="iaCevap(${i})">${'ABCDE'[i]}) ${o}</button>`).join('')}
+    </div>
+    <div id="ia-fb-alan"></div>`;
+}
+function iaCevap(i){
+  if(iaDurum.cevaplandi)return;
+  iaDurum.cevaplandi=true;
+  const q=IA_SORULAR[iaDurum.idx];
+  const btnlar=document.querySelectorAll('#ia-secenekler .ia-sec');
+  btnlar.forEach(b=>b.disabled=true);
+  btnlar[q.ans].classList.add('dogru');
+  const dogru=i===q.ans;
+  if(dogru)iaDurum.dogru++;
+  else{btnlar[i].classList.add('yanlis');iaDurum.yanlislar.push(q);}
+  const son=iaDurum.idx===IA_SORULAR.length-1;
+  document.getElementById('ia-fb-alan').innerHTML=`
+    <div class="ia-fb">${dogru?'✅ Doğru! ':'❌ Doğru cevap: <b>'+'ABCDE'[q.ans]+'</b>. '}${q.exp}</div>
+    <button class="ia-btn" onclick="iaSonraki()">${son?'Sonucumu Gör →':'Sonraki Soru →'}</button>`;
+}
+function iaSonraki(){
+  if(iaDurum.idx<IA_SORULAR.length-1){iaDurum.idx++;iaSoruRender();return;}
+  iaSonucRender();
+}
+function iaGorevBul(){
+  const liste=(typeof SP_CHECKLIST_ITEMS!=='undefined')?SP_CHECKLIST_ITEMS:[];
+  let key=iaDurum.yanlislar.length?iaDurum.yanlislar[0].gorev:null;
+  if(!key&&typeof sinavChecklistYukle==='function'){
+    const v=sinavChecklistYukle();
+    const kalan=liste.find(i=>!v.items[i.key]);
+    if(kalan)key=kalan.key;
+  }
+  return liste.find(i=>i.key===key)||liste[0]||{etiket:'5 sinyal lab sorusu',dnAra:'Sinyal Lab'};
+}
+function iaSonucRender(){
+  const d=iaDurum.dogru,n=IA_SORULAR.length;
+  const seviye=d<=1?1:(d<=3?2:3);
+  const gorev=iaGorevBul();
+  const alan=IA_ALANLAR.find(a=>a.key===iaDurum.alan)||IA_ALANLAR[0];
+  try{localStorage.setItem('sa_ilk_adim',JSON.stringify({tarih:new Date().toISOString(),alan:alan.key,dogru:d,toplam:n,seviye,zayif:iaDurum.yanlislar.map(q=>q.konu)}));}catch(e){}
+  iaAlanUygula(alan);
+  if(typeof adaptifState!=='undefined'){adaptifState.seviye=seviye;if(typeof adaptifBadgeGuncelle==='function')adaptifBadgeGuncelle();}
+  document.documentElement.classList.remove('yeni-ziyaretci');
+  iaHeroButonGuncelle();
+  const zayifMetin=iaDurum.yanlislar.length
+    ?`Geliştirmen gereken konu: <b>${iaDurum.yanlislar[0].konu}</b>. Endişelenme — düzenli pratikle birkaç günde oturur.`
+    :'Harika, hepsi doğru! Bugünkü planınla bu seviyeyi koruyalım.';
+  document.getElementById('ia-icerik').innerHTML=`
+    <div class="ia-eyebrow">Adım 3 / 3 · Sonucun</div>
+    <div class="ia-ilerleme"><div style="width:100%"></div></div>
+    <div class="ia-seviye">Seviyen: <b>${IA_SEVIYELER[seviye-1]}</b></div>
+    <p class="ia-alt" style="margin-bottom:6px">${n} sorudan ${d} doğru · ${alan.ikon} ${alan.ad}</p>
+    <p class="ia-alt">${zayifMetin}</p>
+    <div class="ia-gorev">
+      <div class="ia-gorev-etiket">📡 BUGÜN ŞUNU YAP</div>
+      <div class="ia-gorev-baslik">${gorev.etiket} çöz</div>
+    </div>
+    <button class="ia-btn" onclick="iaGoreveBasla('${gorev.dnAra}')">🚀 Göreve Başla →</button>
+    <button class="ia-link" onclick="iaHesapAc()">💾 İlerlemen kaybolmasın — ücretsiz hesap aç (isteğe bağlı)</button>`;
+}
+function iaAlanUygula(alan){
+  if(typeof curAlan!=='undefined')curAlan=alan.key;
+  const dv=document.getElementById('dash-alan');if(dv)dv.textContent=alan.ikon+' '+alan.ad;
+}
+function iaGoreveBasla(dnAra){
+  iaKapat();
+  if(typeof bugunGorevGit==='function')bugunGorevGit(dnAra);else goTo('dashboard');
+}
+function iaHesapAc(){
+  iaKapat();
+  if(typeof openModal==='function')openModal('Ücretsiz Hesap','0');
+}
+function iaHeroButonGuncelle(){
+  const b=document.getElementById('hero-basla-btn');
+  if(b&&iaSonucOku())b.innerHTML='📡 Bugünkü Görevime Git <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span>';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('ia-overlay');if(o&&o.classList.contains('acik'))iaKapat();}});
+(function(){
+  iaHeroButonGuncelle();
+  const kayit=iaSonucOku();
+  if(kayit){const a=IA_ALANLAR.find(x=>x.key===kayit.alan);if(a)iaAlanUygula(a);}
+})();
+</script>
 
 <!-- MOBİL ALT NAVİGASYON -->
 <nav class="mobile-bottom-nav" id="mobileBottomNav">
