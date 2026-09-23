@@ -221,7 +221,10 @@ def build_cards_video(cards, audio_clip, output_path: str, font: str):
 
     video = CompositeVideoClip(layers, size=(WIDTH, HEIGHT)).with_audio(audio_clip)
     print(f"Video render ediliyor -> {output_path}")
-    video.write_videofile(output_path, fps=FPS, codec="libx264", audio_codec="aac")
+    video.write_videofile(
+        output_path, fps=FPS, codec="libx264", audio_codec="aac",
+        ffmpeg_params=["-movflags", "+faststart", "-pix_fmt", "yuv420p"],
+    )
 
 
 def pop_scale(t):
@@ -274,7 +277,10 @@ def build_video(words, audio_path: str, output_path: str, font: str):
 
     video = CompositeVideoClip(layers, size=(WIDTH, HEIGHT)).with_audio(audio)
     print(f"Video render ediliyor -> {output_path}")
-    video.write_videofile(output_path, fps=FPS, codec="libx264", audio_codec="aac")
+    video.write_videofile(
+        output_path, fps=FPS, codec="libx264", audio_codec="aac",
+        ffmpeg_params=["-movflags", "+faststart", "-pix_fmt", "yuv420p"],
+    )
 
 
 def main():
