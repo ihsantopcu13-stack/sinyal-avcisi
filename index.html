@@ -1281,6 +1281,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     Sinyal <b>Avcısı</b>
   </div>
   <div class="nav-links">
+    <span onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:700">🎯 Hedef Programı</span>
     <span onclick="goTo('nasil')" role="button" tabindex="0">Nasıl Çalışır?</span>
     <span onclick="goTo('klod')" role="button" tabindex="0">KLOD</span>
     <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
@@ -1354,6 +1355,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </div>
 <div class="mmenu" id="mmenu">
   <a onclick="toggleMenu();globalAramaAc()">🔍 Ara</a>
+  <a onclick="closeMenu();hpAc()" style="color:var(--signal);font-weight:700">🎯 Hedef Programım</a>
   <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
   <a onclick="closeMenuGoTo('klod')">KLOD</a>
   <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
@@ -1392,7 +1394,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <li><span>2</span>Seviyen ve zayıf noktan</li>
       <li><span>3</span>Bugünkü görevin</li>
     </ol>
-    <div style="margin-top:18px;font-size:13px;color:var(--muted)">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı</div>
+    <div style="margin-top:14px;font-size:14px;color:var(--ink)">📅 Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
+    <div style="margin-top:10px;font-size:13px;color:var(--muted)">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı</div>
     <style>
       .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
       .hero-adimlar li{display:flex;align-items:center;gap:8px}
@@ -1588,6 +1591,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
           <!-- BÖLÜM 1: BUGÜN -->
           <div class="dn-item active" onclick="dnav(this)" role="button" tabindex="0">☀️ Bugün</div>
+          <div class="dn-item" onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:800">🎯 Hedef Programım</div>
 
           <!-- BÖLÜM 2: ÇALIŞ -->
           <div class="dn-group" data-grup="calis">
@@ -6181,6 +6185,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <!-- FAZ 2 — attribution modülü, ana script bloğundan ÖNCE (senkron) yüklenir
      ki window.SinyalAttribution aşağıdaki kodlar çalışmadan önce hazır olsun. -->
 <script src="assets/modules/attribution.js"></script>
+<script src="assets/modules/hedef-program.js?v=20260923" defer></script>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
@@ -11532,8 +11537,10 @@ function sinavSimulatoruAc(){
     clearInterval(timerInterval);
     let d=0,y=0,b=0;
     sorular.forEach((s,i)=>{if(cevaplar[i]===null)b++;else if(cevaplar[i]===s.dogru)d++;else y++;});
-    const net=d-y*0.25,puan=Math.round((net/sorular.length)*100);
-    overlay.innerHTML='<div style="max-width:600px;margin:60px auto;padding:5vw;text-align:center"><div style="font-size:64px;margin-bottom:20px">'+(puan>=70?'🏆':puan>=50?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:32px;margin-bottom:8px">Sınav Tamamlandı!</div><div style="font-size:48px;font-weight:700;color:var(--signal);margin-bottom:24px">'+puan+' Puan</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px"><div style="background:#0f2418;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#16a34a">'+d+'</div><div style="font-size:14px;color:var(--muted)">Doğru</div></div><div style="background:#2a1414;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--trap)">'+y+'</div><div style="font-size:14px;color:var(--muted)">Yanlış</div></div><div style="background:#1a1d27;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--muted)">'+b+'</div><div style="font-size:14px;color:var(--muted)">Boş</div></div><div style="background:var(--sl);border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--signal)">'+net.toFixed(1)+'</div><div style="font-size:14px;color:var(--muted)">Net</div></div></div><button onclick="this.parentElement.parentElement.remove()" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Platforma Dön</button></div>';
+    // YDS/YÖKDİL: yanlış doğruyu GÖTÜRMEZ — puan = doğru oranı × 100
+    const puan=Math.round((d/sorular.length)*100);
+    if(typeof hpDenemeKaydet==='function')hpDenemeKaydet(d,sorular.length);
+    overlay.innerHTML='<div style="max-width:600px;margin:60px auto;padding:5vw;text-align:center"><div style="font-size:64px;margin-bottom:20px">'+(puan>=70?'🏆':puan>=50?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:32px;margin-bottom:8px">Sınav Tamamlandı!</div><div style="font-size:48px;font-weight:700;color:var(--signal);margin-bottom:24px">'+puan+' Puan</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px"><div style="background:#0f2418;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#16a34a">'+d+'</div><div style="font-size:14px;color:var(--muted)">Doğru</div></div><div style="background:#2a1414;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--trap)">'+y+'</div><div style="font-size:14px;color:var(--muted)">Yanlış</div></div><div style="background:#1a1d27;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--muted)">'+b+'</div><div style="font-size:14px;color:var(--muted)">Boş</div></div><div style="background:var(--sl);border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--signal)">'+Math.round(d*80/sorular.length)+'</div><div style="font-size:14px;color:var(--muted)">80 üzerinden doğru</div></div></div><button onclick="this.parentElement.parentElement.remove()" style="background:var(--signal);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Platforma Dön</button></div>';
     if(typeof xpKazan==='function')xpKazan('sat',3);
   }
   overlay.querySelector('#btn-bitir').onclick=bitir;
@@ -12073,7 +12080,7 @@ function sinavPlanimVarsayilanTarih(){
   return hedef.getFullYear()+'-'+ay+'-'+gun;
 }
 function spVarsayilanAyar(){
-  return{dogru:17,yanlis:63,hedefPuan:65,tarih:sinavPlanimVarsayilanTarih()};
+  return{dogru:17,yanlis:63,hedefPuan:60,tarih:sinavPlanimVarsayilanTarih()};
 }
 function spAyarYukle(){
   try{
@@ -12084,8 +12091,9 @@ function spAyarYukle(){
 }
 function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
   const hedefTarih=new Date(tarihStr+'T23:59:59');
-  const toplamSoru=(dogru+yanlis)||80;
-  const mevcutPuan=Math.round((dogru/toplamSoru)*10000)/100;
+  // YDS/YÖKDİL: 80 soru, her doğru 1,25 puan, yanlış doğruyu GÖTÜRMEZ (boşlar da 80'in içinde).
+  const toplamSoru=80;
+  const mevcutPuan=Math.round(dogru*1.25*100)/100;
   const simdi=new Date();
   const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
   const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
@@ -12093,10 +12101,9 @@ function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
   const gerekliNetArtis=puanFarki>0?Math.ceil(puanFarki/puanBasiDogru):0;
   const gunlukSoruHedefi=puanFarki<=0?15:Math.min(80,Math.max(15,Math.ceil((gerekliNetArtis*3.5)/kalanGun)));
   const gerekliDogruBosStrateji=Math.min(toplamSoru,Math.max(0,Math.ceil((hedefPuan/100)*toplamSoru)));
-  const puanKaybiYanlis=Math.round(yanlis*0.25*100)/100;
   const aciliyetRenk=kalanGun<14?'#dc2626':kalanGun<30?'#d97706':'#059669';
   const aciliyetMetin=kalanGun<14?'🔴 Kritik':kalanGun<30?'🟡 Yoğun':'🟢 Rahat';
-  return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,puanKaybiYanlis,aciliyetRenk,aciliyetMetin};
+  return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,aciliyetRenk,aciliyetMetin};
 }
 
 // Haftalık müfredat fazları — "kişisel çalışma programı"
@@ -12314,9 +12321,9 @@ function sinavPlanimOlustur(){
     <div class="sp-strateji">
       <div class="sp-strateji-baslik">🚨 Acil Strateji Notu</div>
       <div class="sp-strateji-metin">
-        YDS'de yanlış cevap <b>−0.25 puan</b> götürür. <b>${dogru+yanlis>0?yanlis:63} yanlış</b> = <b>−${v.puanKaybiYanlis} puan</b> kayıp.<br>
-        Strateji: <b>Emin olmadığın soruyu boş bırak!</b><br>
-        <span style="color:#34d399;font-weight:800">${v.gerekliDogruBosStrateji} doğru + 0 yanlış = ${hedefPuan} puan</span>
+        YDS/YÖKDİL'de <b>yanlış doğruyu götürmez</b>; her doğru <b>1,25 puan</b>.<br>
+        Strateji: <b>Hiçbir soruyu boş bırakma</b> — boş = kesin 0, tahmin = %20 şans.<br>
+        <span style="color:#34d399;font-weight:800">${hedefPuan} puan = ${v.gerekliDogruBosStrateji} doğru</span>
       </div>
     </div>
     <div class="sp-grid" style="margin-top:16px">
@@ -12327,7 +12334,7 @@ function sinavPlanimOlustur(){
     </div>
     <div style="margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <span class="adaptif-badge" style="background:${v.aciliyetRenk}20;color:${v.aciliyetRenk}">${v.aciliyetMetin} · ${v.kalanGun} gün kaldı</span>
-      <span style="font-size:12px;color:var(--muted)">${hedefPuan} puana ulaşmak için ~${v.gerekliDogruBosStrateji} doğru gerekiyor (yaklaşık ${v.gerekliNetArtis} net artışı)</span>
+      <span style="font-size:12px;color:var(--muted)">${hedefPuan} puana ulaşmak için ~${v.gerekliDogruBosStrateji} doğru gerekiyor (yaklaşık ${v.gerekliNetArtis} doğru artışı)</span>
     </div>
     <div style="margin-top:16px">
       <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">🎯 Zayıf Alanların ${zayif.kaynak==='tahmini'?'<span style=\'font-size:10px;font-weight:600;color:var(--muted);text-transform:none\'>(tahmini — henüz pratik verisi yok)</span>':''}</div>
@@ -12405,6 +12412,17 @@ function sinavKurtarmaKartaGit(){
 function bugunKartiRender(){
   const kartEl=document.getElementById('bugun-kart');
   if(!kartEl)return;
+  const hp=(typeof hpBugunOzet==='function')?hpBugunOzet():null;
+  if(hp&&hp.d){
+    const tamam=hp.biten===hp.toplam;
+    kartEl.classList.toggle('tamamlandi',tamam);
+    kartEl.innerHTML=`
+      <div class="bugun-eyebrow">🎯 HEDEF PROGRAMI · GÜN ${hp.d}/${hp.v.toplamGun}</div>
+      <div class="bugun-baslik">${tamam?'Bugünün programını bitirdin! 🎉':(hp.tip==='deneme'?'Bugün <b>deneme günü</b>':'Bugün <b>'+(hp.toplam-hp.biten)+' görevin</b> var')}</div>
+      <div class="bugun-alt">${hp.biten}/${hp.toplam} görev tamam · Hedef: ${hp.v.sonPuan} → ${hp.v.hedefPuan} puan · ${hp.v.kalanGun} gün kaldı</div>
+      <button class="bugun-cta" onclick="hpAc('bugun')">${tamam?'📈 İlerlememe Bak →':'🚀 Programıma Git →'}</button>`;
+    return;
+  }
   const checklistVeri=sinavChecklistYukle();
   const tamamlanan=SP_CHECKLIST_ITEMS.filter(i=>checklistVeri.items[i.key]);
   const kalan=SP_CHECKLIST_ITEMS.filter(i=>!checklistVeri.items[i.key]);
@@ -12516,8 +12534,9 @@ function paSeciliHedef(){
 }
 // YDS puanlama: Net = Doğru − Yanlış/4, Puan = Net × 100/80
 function paHesapla(dogru,yanlis,hedefPuan,tarihStr){
-  const net=Math.max(0,dogru-yanlis/4);
-  const mevcutPuan=Math.round((net*100/80)*100)/100;
+  // YDS/YÖKDİL: yanlış doğruyu GÖTÜRMEZ — puan = doğru × 1,25
+  const net=dogru;
+  const mevcutPuan=Math.round(dogru*1.25*100)/100;
   const hedefTarih=new Date(tarihStr+'T23:59:59');
   const simdi=new Date();
   const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
@@ -12526,11 +12545,7 @@ function paHesapla(dogru,yanlis,hedefPuan,tarihStr){
   const gerekliNet=Math.min(80,hedefPuan*80/100);
   const gerekliDogru=Math.max(0,Math.ceil(gerekliNet));
   const ekDogruGerekli=Math.max(0,gerekliDogru-dogru);
-  let yanlisAzaltYuzde=0;
-  if(yanlis>0){
-    const izinliYanlis=Math.max(0,(dogru-gerekliNet)*4);
-    yanlisAzaltYuzde=Math.min(100,Math.max(0,Math.round((1-Math.min(yanlis,izinliYanlis)/yanlis)*100)));
-  }
+  const yanlisAzaltYuzde=0; // eski ceza varsayımından kalma alan — artık kullanılmıyor
   return{dogru,yanlis,hedefPuan,tarihStr,net:Math.round(net*100)/100,mevcutPuan,kalanGun,kalanHafta,puanFarki,gerekliDogru,ekDogruGerekli,yanlisAzaltYuzde};
 }
 function paYorum(puan){
@@ -12603,7 +12618,7 @@ function puanAnaliziOlustur(){
     </div>
     <div class="sp-grid" style="margin-top:10px">
       <div class="sp-stat"><div class="sp-stat-val">+${v.ekDogruGerekli}</div><div class="sp-stat-lbl">Ek Doğru Gerekli</div></div>
-      <div class="sp-stat"><div class="sp-stat-val">%${v.yanlisAzaltYuzde}</div><div class="sp-stat-lbl">Azaltılacak Yanlış</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">0</div><div class="sp-stat-lbl">Boş Bırakılacak Soru</div></div>
     </div>
     <div class="pa-yorum"><b>${paYorum(v.mevcutPuan)}</b></div>
     <div style="margin-top:16px">
@@ -13667,6 +13682,7 @@ let iaDurum={alan:'Genel',idx:0,dogru:0,yanlislar:[],cevaplandi:false};
 
 function iaSonucOku(){try{return JSON.parse(localStorage.getItem('sa_ilk_adim')||'null');}catch(e){return null;}}
 function basla(){
+  if(typeof hpVarMi==='function'&&hpVarMi()){hpAc('bugun');return;}
   if(iaSonucOku()){goTo('dashboard');return;}
   iaAc();
 }
@@ -13760,6 +13776,7 @@ function iaSonucRender(){
       <div class="ia-gorev-baslik">${gorev.etiket} çöz</div>
     </div>
     <button class="ia-btn" onclick="iaGoreveBasla('${gorev.dnAra}')">🚀 Göreve Başla →</button>
+    <button class="ia-btn" style="background:rgba(255,255,255,.08);color:#ece7da;border:1px solid rgba(245,166,35,.45);margin-top:10px" onclick="iaKapat();if(typeof hpAc==='function')hpAc()">📅 Sınav tarihim ve hedef puanım var → Programımı kur</button>
     <button class="ia-link" onclick="iaHesapAc()">💾 İlerlemen kaybolmasın — ücretsiz hesap aç (isteğe bağlı)</button>`;
 }
 function iaAlanUygula(alan){
@@ -13776,7 +13793,7 @@ function iaHesapAc(){
 }
 function iaHeroButonGuncelle(){
   const b=document.getElementById('hero-basla-btn');
-  if(b&&iaSonucOku())b.innerHTML='📡 Bugünkü Görevime Git <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span>';
+  if(b&&(iaSonucOku()||(typeof hpVarMi==='function'&&hpVarMi())))b.innerHTML='📡 Bugünkü Görevime Git <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span>';
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('ia-overlay');if(o&&o.classList.contains('acik'))iaKapat();}});
 (function(){
@@ -14218,7 +14235,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.ge
         'Bir okuma parçasına ortalama 2 dakika ayır (skimming + genel anlam).',
         'Soru başına ortalama 1 dakika hedefle.',
         'Bir soruda 4 dakikayı geçtiysen, en mantıklı gördüğün seçeneği işaretle ve GEÇ.',
-        'Sınav sonunda vaktin kalırsa işaretlediğin sorulara geri dön — YDS\'de yanlış -0.25 götürür ama tamamen boş bırakmak yerine, elemeden sonra kalan tek seçeneği işaretlemek daha mantıklıdır.'
+        'Sınav sonunda işaretlediğin sorulara geri dön ve boş kalan HİÇBİR soru bırakma — YDS/YÖKDİL\'de yanlış doğruyu götürmez; elemeden sonra kalan seçeneklerden birini mutlaka işaretle.'
       ],
       ornek:'80 soruluk sınavda soru başına ortalama 1 dakikadan az düşer — bir soruya 4 dakikadan fazla harcamak diğer 3-4 soruyu feda etmek demektir.'
     },
