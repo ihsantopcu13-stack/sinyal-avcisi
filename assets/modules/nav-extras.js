@@ -3,11 +3,11 @@
   const ARAMA_MODULLER=[
     {ad:'Dashboard',anahtar:'Dashboard',ikon:'📊'},
     {ad:'Sinyal Lab',anahtar:'Sinyal Lab',ikon:'🔬'},
-    {ad:'Günlük Tuzak',anahtar:'Gunluk Tuzak',ikon:'🎯'},
+    {ad:'Günlük Tuzak',anahtar:'Günlük Tuzak',ikon:'🎯'},
     {ad:'SAT Metodu',anahtar:'SAT Metodu',ikon:'⚡'},
     {ad:'Paragraf',anahtar:'Paragraf',ikon:'📖'},
     {ad:'S+V+O',anahtar:'S+V+O',ikon:'📐'},
-    {ad:'Kelime Kartları',anahtar:'Kelime Kartlari',ikon:'🃏'},
+    {ad:'Kelime Kartları',anahtar:'Kelime Kartları',ikon:'🃏'},
     {ad:'Avcı Master',anahtar:'Avcı Master',ikon:'🏹'},
     {ad:'Raporlar',anahtar:'Raporlar',ikon:'📈'},
     {ad:'Hata Defteri',anahtar:'Hata Defteri',ikon:'📝'},

@@ -83,21 +83,21 @@ const soruNonetheless = {
   aciklama_tr: "test-aciklama-nonetheless",
 };
 
-// ---- 1) 59 soru veri kalite taraması ----
+// ---- 1) 83 soru veri kalite taraması (banka 59 → 83'e genişledi, commit e4acff0) ----
 {
   const sorunlu = sorular.filter((s) => generateScriptMod.veriKalitesiSorunu(s));
   kontrol(
-    "1) 59 soru veri kalite taraması (0 sorunlu bekleniyor)",
-    sorular.length === 59 && sorunlu.length === 0,
+    "1) 83 soru veri kalite taraması (0 sorunlu bekleniyor)",
+    sorular.length === 83 && sorunlu.length === 0,
     `toplam=${sorular.length} sorunlu=${sorunlu.length}`
   );
 }
 
-// ---- 2) 54 sinyalli / 5 null ----
+// ---- 2) 83 sinyalli / 0 null (eski 5 null sinyal 5d79a5e ile dolduruldu) ----
 {
   const sinyalli = sorular.filter((s) => (s.sinyal || "").trim()).length;
   const nullSinyal = sorular.length - sinyalli;
-  kontrol("2) sinyalli/null soru sayısı (54/5 bekleniyor)", sinyalli === 54 && nullSinyal === 5, `sinyalli=${sinyalli} null=${nullSinyal}`);
+  kontrol("2) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli === 83 && nullSinyal === 0, `sinyalli=${sinyalli} null=${nullSinyal}`);
 }
 
 // ---- 3) 54/54 whitelist kapsamı ----
