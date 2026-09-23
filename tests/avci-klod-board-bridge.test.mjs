@@ -51,7 +51,7 @@ const CANONICAL_Q1 = {
   kontrol("S5) service_role GERÇEK KODDA (yorum hariç) HİÇ YOK", !/SERVICE_ROLE/i.test(srcKodSatirlari) && !/\bserviceRoleKey\b/.test(srcKodSatirlari));
   kontrol("S6) eval/new Function GERÇEK KODDA hiç kullanılmıyor", !/\beval\(/.test(srcKodSatirlari) && !/new Function\(/.test(srcKodSatirlari));
   kontrol("S7) board tool'u SADECE mode==='chat' için ekleniyor (sendChat/sinyal_analiz etkilenmiyor)", /if \(mode === 'chat'\) araclar\.push\(BOARD_ACTION_TOOL\);/.test(src));
-  kontrol("S8) mevcut text reply kontratı (data.content/parsed/tool_results) DEĞİŞMEDEN korunuyor, board_actions ADDITIVE", /\.\.\.data,\s*\n\s*parsed,/.test(src) && /board_actions: boardActions,/.test(src));
+  kontrol("S8) mevcut text reply kontratı (data.content/parsed/tool_results) DEĞİŞMEDEN korunuyor, board_actions ADDITIVE", /\.\.\.data,\s*\n\s*parsed,/.test(src) && /board_actions: (?:pedagojiSonuc\.kontrollu \? \[\] : )?boardActions,/.test(src)); // TURBO #8-B: kontrollü turlarda bilinçli olarak []
   kontrol("S9) tool şeması actions dizisini en fazla 3 ile sınırlıyor (maxItems)", /maxItems: 3/.test(src));
 }
 

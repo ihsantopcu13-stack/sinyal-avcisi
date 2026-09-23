@@ -45,13 +45,15 @@ async function sbFetch(path, opts = {}) {
 }
 
 // anon_id'den profil bul, sayacı artır, limit kontrolü yap
-async function checkAndIncrement(anonId, isAuth) {
+async function checkAndIncrement(anonId, isAuth, ip) {
   const gun = bugun();
   const limit = isAuth ? LIMIT_AUTH : LIMIT_ANON;
 
   if (!anonId) {
-    // anon_id yoksa in-memory fallback
-    return fallbackCheck('unknown', limit);
+    // anon_id yoksa (localStorage kapalı/gizli mod) in-memory fallback — IP başına.
+    // Eskiden tüm bu kullanıcılar TEK bir 'unknown' sayacını paylaşıyordu:
+    // birinin 30 sorusu, o instance'taki herkesi günün geri kalanında kilitliyordu.
+    return fallbackCheck('ip:' + ip, limit);
   }
 
   try {
@@ -115,6 +117,15 @@ function fallbackCheck(key, limit) {
   };
 }
 
+// İstemci IP'si — _rateLimit.mjs ile aynı çıkarım
+function istemciIp(req) {
+  try {
+    return String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+  } catch (_) {
+    return 'unknown';
+  }
+}
+
 // Request'ten anon_id çıkar (header veya body)
 export function getAnonId(req) {
   try {
@@ -130,7 +141,7 @@ export function getAnonId(req) {
 // Ana export — klod.mjs bunu çağırır
 export async function costGuard(req, isAuth = false) {
   const anonId = getAnonId(req);
-  const result = await checkAndIncrement(anonId, isAuth);
+  const result = await checkAndIncrement(anonId, isAuth, istemciIp(req));
 
   if (!result.allowed) {
     return {

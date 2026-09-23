@@ -69,4 +69,20 @@ export const SINYAL_KURALLARI = {
   "not only": "\"Not only\" cümle başında kullanıldığında DEVRİK yapı gerektirir (yardımcı fiil öne gelir) ve genelde \"but also\" ile tamamlanır.",
   "so as to": "\"So as to\" bir amaç ifadesidir (\"in order to\" ile eşdeğer) — arkasından fiilin yalın hali (V1) gelir.",
   "nor": "\"Nor\" önceki olumsuz ifadeye devam ettiğinde devrik yapı kullanır: yardımcı fiil + özne + fiil (\"nor did it reach\" gibi).",
+
+  // 2026-09-23 — q060-q083 genişlemesiyle gelen sinyaller (site sahibi onayladı)
+  // GİZLİ OLUMSUZ / DEVRİK
+  "hardly": "\"Hardly\" GİZLİ bir OLUMSUZLUKTUR — \"neredeyse hiç\" anlamı verir; cümlede \"not\" olmasa da anlam olumsuzdur. Cümle başında \"Hardly had + S + V3 ... when\" devrik yapısıyla \"... olur olmaz\" anlamına gelir (than DEĞİL, when kullanılır).",
+  "by no means": "\"By no means\" \"kesinlikle ... değil\" anlamında GÜÇLÜ bir OLUMSUZLUKTUR — cümleye ikinci bir \"not\" eklenmez. Cümle başına gelirse DEVRİK yapı gerektirir (\"By no means should/did + S + V\").",
+  "far from": "\"Far from\" \"... olmaktan çok uzak / hiç de ... değil\" anlamında GİZLİ bir OLUMSUZLUKTUR — arkasından isim, sıfat veya V-ing gelir, S+V gelmez (\"far from being a burden\").",
+  "had": "Cümle başındaki \"Had + S + V3\" \"if\" düşürülmüş DEVRİK 3. tip koşuldur (\"If S had V3\" ile eşdeğer) — geçmişte GERÇEKLEŞMEMİŞ bir durumu anlatır; sonuç tarafında would/could/might have + V3 gelir.",
+
+  // AMAÇ / TERCİH
+  "so that": "\"So that\" bir AMAÇ bağlacıdır (\"... sın diye\") — arkasından S+V gelir, genelde can/could/will/would gibi bir modal içerir. Derece-sonuç bildiren \"so + sıfat + that\" yapısıyla karıştırma.",
+  "in order to": "\"In order to\" bir AMAÇ ifadesidir — arkasından fiilin yalın hali (V1) gelir, V-ing gelmez (\"in order to make\" doğru, \"in order to making\" YANLIŞ).",
+  "instead of": "\"Instead of\" bir EDAT ifadesidir (\"... yerine\") — arkasından isim veya V-ing gelir, fiilin yalın hali gelmez (\"instead of expanding\").",
+
+  // DİĞER BAĞLAÇLAR
+  "either": "\"Either ... or\" \"ya ... ya da\" anlamlı ikili bağlaçtır — iki seçenekten biri. Fiil, \"or\"dan sonraki (fiile YAKIN olan) özneye göre çekimlenir (proximity rule).",
+  "as far as": "\"As far as X is concerned\" sabit bir ifadedir — \"X açısından / X'e göre\" anlamında bakış açısını SINIRLAR; koşul bildiren \"as long as\" ile karıştırma.",
 };
