@@ -302,7 +302,7 @@ function getBaglamObj(capturedRequest) {
   const res = sahteRes();
   await handler(sahteReq({ messages: [{ role: "user", content: "niye yanlış?" }], context: { module: "sinyal_lab", question_id: "q001", answered: true, selected_answer: "Usul hatalari karari gecersiz kildi." } }, { ip: "20.0.0.2" }), res);
   const baglam = getBaglamObj(m.capturedRequests[0]);
-  kontrol("21) after answer → correct_answer VAR ve canonical (dogru_index=1)", baglam.correct_answer === "Usul hatalarina ragmen karar gecerlilligini korodu.");
+  kontrol("21) after answer → correct_answer VAR ve canonical (dogru_index=1)", baglam.correct_answer === "Usul hatalarına rağmen karar geçerliliğini korudu.");
   kontrol("21b) after answer → selected_answer VAR ve client'ın bildirdiği gibi", baglam.selected_answer === "Usul hatalari karari gecersiz kildi.");
   kontrol("21c) after answer → is_correct SERVER TARAFINDAN doğru hesaplanmış (yanlış şık seçildi → false)", baglam.is_correct === false);
   fetchMockTemizle();
@@ -315,7 +315,7 @@ function getBaglamObj(capturedRequest) {
   const res = sahteRes();
   await handler(sahteReq({ messages: [{ role: "user", content: "test" }], context: { module: "sinyal_lab", question_id: "q001", answered: true, selected_answer: "Usul hatalari karari gecersiz kildi.", correct_answer: "SAHTE UYDURMA CEVAP", is_correct: true } }, { ip: "20.0.0.3" }), res);
   const baglam = getBaglamObj(m.capturedRequests[0]);
-  kontrol("22) client'ın uydurma correct_answer alanı HİÇ YANSIMIYOR — gerçek canonical cevap kullanılıyor", baglam.correct_answer === "Usul hatalarina ragmen karar gecerlilligini korodu." && baglam.correct_answer !== "SAHTE UYDURMA CEVAP");
+  kontrol("22) client'ın uydurma correct_answer alanı HİÇ YANSIMIYOR — gerçek canonical cevap kullanılıyor", baglam.correct_answer === "Usul hatalarına rağmen karar geçerliliğini korudu." && baglam.correct_answer !== "SAHTE UYDURMA CEVAP");
   kontrol("22b) server KENDİ hesapladığı is_correct'i kullanıyor (yanlış şık seçilmiş → false), client'ın is_correct:true İDDİASI YOK SAYILDI", baglam.is_correct === false);
   fetchMockTemizle();
 }

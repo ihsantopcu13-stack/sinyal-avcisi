@@ -22,12 +22,13 @@ function kontrol(ad, sonuc, detay) {
 const canonicalPath = path.join(__dirname, "..", "api", "data", "sorular.json");
 const sorular = JSON.parse(readFileSync(canonicalPath, "utf-8"));
 
-kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk: ${sorular.length}`);
+// 2026-09: soru bankası 59 → 83 soruya genişletildi (q060-q083, commit e4acff0).
+kontrol("1) Canonical dosya 83 soru içeriyor", sorular.length === 83, `uzunluk: ${sorular.length}`);
 
 // ---- stable id format + uniqueness + sıralılık ----
 {
   const idFormatUyumsuz = sorular.filter((s) => !/^q\d{3}$/.test(s.id));
-  kontrol("2) Tüm id'ler qNNN formatında (q001-q059)", idFormatUyumsuz.length === 0, `uyumsuz: ${idFormatUyumsuz.map((s) => s.id).join(", ") || "yok"}`);
+  kontrol("2) Tüm id'ler qNNN formatında (q001-q083)", idFormatUyumsuz.length === 0, `uyumsuz: ${idFormatUyumsuz.map((s) => s.id).join(", ") || "yok"}`);
 }
 {
   const idler = sorular.map((s) => s.id);
@@ -37,7 +38,7 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 {
   const beklenen = sorular.map((_, i) => `q${String(i + 1).padStart(3, "0")}`);
   const hepsiEslesiyor = sorular.every((s, i) => s.id === beklenen[i]);
-  kontrol("4) Id'ler mevcut array sırasıyla q001..q059 olarak atanmış", hepsiEslesiyor);
+  kontrol("4) Id'ler mevcut array sırasıyla q001..q083 olarak atanmış", hepsiEslesiyor);
 }
 
 // ---- zorunlu alanlar ----
@@ -59,7 +60,8 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 {
   const sinyalli = sorular.filter((s) => typeof s.sinyal === "string" && s.sinyal.length > 0);
   const sinyalsiz = sorular.filter((s) => s.sinyal === null);
-  kontrol("5b) sinyalli/null soru sayısı (54/5 bekleniyor)", sinyalli.length === 54 && sinyalsiz.length === 5, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
+  // 5d79a5e ile eski 5 null sinyal (q005/q038/q039/q040/q051) dolduruldu; yeni 24 sorunun hepsi sinyalli.
+  kontrol("5b) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli.length === 83 && sinyalsiz.length === 0, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
 }
 {
   const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || s.secenekler_tr.length !== 4 || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
@@ -100,7 +102,7 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 }
 {
   const alintisiz = sorular.filter((s) => s.alinti === false);
-  kontrol("9c) alinti=false sayısı 21 (bilinen q024-q044 bandı)", alintisiz.length === 21, `bulunan: ${alintisiz.length}`);
+  kontrol("9c) alinti=false sayısı 45 (bilinen q024-q044 + q060-q083 bantları)", alintisiz.length === 45, `bulunan: ${alintisiz.length}`);
 }
 
 // ---- bilinen 2 sinyal düzeltmesi (eski frontend hatası, canonical doğru değeri korur) ----

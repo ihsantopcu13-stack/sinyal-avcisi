@@ -53,7 +53,8 @@ const canonical = JSON.parse(readFileSync(canonicalPath, "utf-8"));
 
 const BILINEN_SINYAL_FARKI = new Set(["q011", "q053"]);
 
-kontrol("a) Canonical ve frontend uzunluğu eşit (59/59)", canonical.length === 59 && SL_HAVUZ.length === 59, `canonical=${canonical.length} frontend=${SL_HAVUZ.length}`);
+// Soru bankası 83 soruya genişledi; frontend generated mirror olduğundan uzunluklar birebir eşit olmalı.
+kontrol(`a) Canonical ve frontend uzunluğu eşit (${canonical.length}/${SL_HAVUZ.length})`, canonical.length === 83 && SL_HAVUZ.length === canonical.length, `canonical=${canonical.length} frontend=${SL_HAVUZ.length}`);
 
 let uyusanSoru = 0;
 const uyusmazlikDetaylari = [];
@@ -75,8 +76,13 @@ for (let i = 0; i < canonical.length; i++) {
   if (c.aciklama_tr !== f.fb) sorunlar.push("aciklama_tr");
 
   if (!BILINEN_SINYAL_FARKI.has(c.id)) {
+    // Sinyal tuzakla aynı/iç içeyse generator tek bir s-trap span üretir
+    // (bkz. scripts/sl-havuz-generator.mjs) — o durumda sinyal metni tuzak span'ının içindedir.
     const sig = extractSpan(f.sent, "s-sig");
-    if (c.sinyal !== sig.text) sorunlar.push(`sinyal (canonical="${c.sinyal}" frontend="${sig.text}")`);
+    const trap = extractSpan(f.sent, "s-trap");
+    // Generator eşleşmeyi büyük/küçük harf duyarsız yapar ve cümledeki orijinal harf biçimini korur ("Either").
+    const sinyalGorunur = (c.sinyal ?? null) === sig.text || (c.sinyal && sig.text && c.sinyal.toLowerCase() === sig.text.toLowerCase()) || (c.sinyal && trap.text && trap.text.toLowerCase().includes(c.sinyal.toLowerCase()));
+    if (!sinyalGorunur) sorunlar.push(`sinyal (canonical="${c.sinyal}" frontend="${sig.text}")`);
   }
 
   if (sorunlar.length === 0) {
@@ -86,7 +92,7 @@ for (let i = 0; i < canonical.length; i++) {
   }
 }
 
-kontrol("b) 59/59 soru veri kaybı olmadan doğrulandı (bilinen 2 sinyal farkı hariç)", uyusanSoru === 59, uyusmazlikDetaylari.join(" | ") || "tam eşleşme");
+kontrol(`b) ${uyusanSoru}/${canonical.length} soru veri kaybı olmadan doğrulandı (bilinen 2 sinyal farkı hariç)`, uyusanSoru === canonical.length, uyusmazlikDetaylari.join(" | ") || "tam eşleşme");
 
 // NOT: q011/q053'ün frontend'de DOĞRU canonical sinyale sahip olduğunun
 // zorunlu kılınması bu testin işi değil — bu, AŞAMA 3'ün ürettiği
