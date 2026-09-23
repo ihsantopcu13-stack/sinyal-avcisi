@@ -100,7 +100,7 @@ const soruNonetheless = {
   kontrol("2) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli === 83 && nullSinyal === 0, `sinyalli=${sinyalli} null=${nullSinyal}`);
 }
 
-// ---- 3) 54/54 whitelist kapsamı ----
+// ---- 3) 83/83 whitelist kapsamı ----
 {
   let destekli = 0;
   let disi = 0;
@@ -110,7 +110,8 @@ const soruNonetheless = {
     if (sinyalKurallariMod.SINYAL_KURALLARI[key]) destekli++;
     else disi++;
   });
-  kontrol("3) whitelist kapsamı (54/54 bekleniyor, 0 dışı)", destekli === 54 && disi === 0, `destekli=${destekli} disi=${disi}`);
+  // 2026-09-23: q060-q083 sinyalleri (hardly, had, either, as far as, so that, in order to, instead of, by no means, far from) onaylanıp eklendi.
+  kontrol("3) whitelist kapsamı (83/83 bekleniyor, 0 dışı)", destekli === 83 && disi === 0, `destekli=${destekli} disi=${disi}`);
 }
 
 // ---- 4) Flag OFF regresyon (gerçek scriptUret, gün rotasyonundan bağımsız iddialar) ----
