@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
 import { costGuard } from './_costGuard.mjs';
+import { originIzinliMi, klodGovdesiniDogrula, toplamKarakter, SINIRLAR } from './_requestGuard.mjs';
 import * as Pedagoji from './_avciPedagogy.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
@@ -801,10 +802,29 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // İSTEK KORUMASI — başka sitelerden (tarayıcı üzerinden) kullanımı engelle
+  if (!originIzinliMi(req.headers.origin)) {
+    return res.status(403).json({ error: 'İzin verilmeyen kaynak' });
+  }
+
   const rl = rateLimit(req, { key: 'klod', limit: 15, windowMs: 60_000 });
   if (!rl.allowed) {
     res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
     return res.status(429).json({ error: 'Çok fazla istek gönderdiniz. Biraz sonra tekrar deneyin.' });
+  }
+  // IP başına günlük tavan (best-effort, instance başına) — costGuard'ın
+  // anon_id'si istemciden geldiği için değiştirilerek aşılabiliyor.
+  const rlGun = rateLimit(req, { key: 'klod-gun', limit: 400, windowMs: 24 * 60 * 60_000 });
+  if (!rlGun.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rlGun.retryAfterMs / 1000));
+    return res.status(429).json({ error: 'Günlük istek sınırına ulaşıldı. Yarın tekrar deneyin.' });
+  }
+
+  // Boyut / biçim sınırları — model çağrısından ve costGuard'ın sayaç
+  // artırımından ÖNCE (geçersiz istek kullanıcının günlük hakkını yemesin).
+  const gecersiz = klodGovdesiniDogrula(req.body);
+  if (gecersiz) {
+    return res.status(400).json({ error: gecersiz });
   }
 
   // COST GUARD — günlük limit kontrolü
@@ -814,10 +834,6 @@ export default async function handler(req, res) {
   }
 
   const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
-
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Geçersiz istek' });
-  }
 
   // KATMAN 5 MVP-1 — best-effort kimlik doğrulama (bkz. yukarıdaki blok).
   // Başarısız/eksik olması isteği ASLA engellemez.
@@ -847,6 +863,11 @@ export default async function handler(req, res) {
   // 13. LONG CONTEXT — Geçmiş mesajları akıllıca kırp
   const maxMessages = estimatedTokens > 50000 ? 6 : 20;
   const trimmedMessages = processedMessages.slice(-maxMessages);
+  // Modele GİDECEK kısmın toplam boyutu (kırpmadan SONRA — uzun sohbetler
+  // eskisi gibi çalışsın, sadece tek istekte aşırı büyük girdi reddedilsin)
+  if (toplamKarakter(trimmedMessages) > SINIRLAR.toplamKarakter) {
+    return res.status(400).json({ error: 'Konuşma çok uzadı', message: 'Yeni bir sohbet başlatın' });
+  }
 
   // 12. MULTISHOT CALIBRATION — İyi/kötü örnek ekle
   const calibratedMessages = mode === 'soru_uret' 
@@ -986,7 +1007,8 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const err = await response.text();
       console.error('Anthropic API error:', err);
-      return res.status(500).json({ error: 'API hatası', detail: err });
+      // Ayrıntı yalnızca sunucu log'unda — istemciye iç hata metni gönderilmez
+      return res.status(500).json({ error: 'API hatası' });
     }
 
     // 18. STREAMING yanıtı
@@ -1102,7 +1124,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Handler error:', error);
-    return res.status(500).json({ error: 'Sunucu hatası', message: error.message });
+    return res.status(500).json({ error: 'Sunucu hatası' });
   }
 }
 
