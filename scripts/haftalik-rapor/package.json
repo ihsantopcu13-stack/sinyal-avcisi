@@ -1,0 +1,16 @@
+{
+  "name": "sinyal-avcisi-haftalik-rapor",
+  "private": true,
+  "description": "Haftalık kullanıcı raporu — Supabase'den sadece sayım okur, Gmail ile e-posta gönderir",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "rapor": "node index.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.1",
+    "nodemailer": "^10.0.10"
+  }
+}
