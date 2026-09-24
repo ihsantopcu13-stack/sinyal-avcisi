@@ -2040,6 +2040,11 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- İNGİLİZCE KURSU -->
         <div class="dmod" id="mod-dilavcisi" style="display:none">
+          <!-- YOL KUTUSU — Hedef Programı'ndaki tek yola yönlendirir (program yoksa hedef kurma ekranı açılır) -->
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 14px;background:rgba(245,166,35,.08);border:1.5px solid rgba(245,166,35,.55);border-radius:16px;padding:14px 16px;margin-bottom:18px">
+            <div style="font-size:15px;font-weight:700;color:#ece7da;line-height:1.4">🧭 Nereden başlayacağını bilmiyor musun?</div>
+            <button type="button" data-hp-action="yola-git" style="background:linear-gradient(135deg,#f5a623,#e08a00);color:#1a1205;border:none;border-radius:10px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;white-space:nowrap">Yoluma git →</button>
+          </div>
 
           <!-- HERO BANNER -->
           <div style="background:linear-gradient(135deg,#1a0a2e,#2e0a3e,#0a0c14);border-radius:20px;padding:32px 26px;margin-bottom:18px;position:relative;overflow:hidden">
@@ -6186,7 +6191,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <!-- FAZ 2 — attribution modülü, ana script bloğundan ÖNCE (senkron) yüklenir
      ki window.SinyalAttribution aşağıdaki kodlar çalışmadan önce hazır olsun. -->
 <script src="assets/modules/attribution.js"></script>
-<script src="assets/modules/hedef-program.js?v=20260924" defer></script>
+<script src="assets/modules/hedef-program.js?v=20260925" defer></script>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
