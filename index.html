@@ -4,16 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
-// K1 — XSS sanitizer: LLM/AI çıktılarını innerHTML'e yazmadan önce sar
+// K1 — XSS sanitizer: LLM/AI çıktılarını innerHTML'e yazmadan önce sar.
+// Eski sürüm düzenli ifadeyle kara liste uyguluyordu ve atlatılabiliyordu
+// (örn. tırnaksız <img src=x onerror=...>). Bu sürüm HTML'i tarayıcının kendi
+// ayrıştırıcısıyla <template> içinde (etkisiz: script çalışmaz, resim yüklenmez)
+// ayrıştırır; tehlikeli etiketleri, on* olaylarını ve javascript:/data: gibi
+// bağlantıları siler. renderMD'nin ürettiği biçimlendirme (div/b/i/code/table,
+// satır içi style) aynen korunur → görünüm değişmez.
 (function(){
+  var YASAK_ETIKET={SCRIPT:1,STYLE:1,IFRAME:1,FRAME:1,FRAMESET:1,OBJECT:1,EMBED:1,APPLET:1,LINK:1,META:1,BASE:1,
+    FORM:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1,OPTION:1,NOSCRIPT:1,TEMPLATE:1,SVG:1,MATH:1};
+  var URL_OZNITELIK={href:1,src:1,'xlink:href':1,action:1,formaction:1,background:1,poster:1,data:1,srcset:1,ping:1};
+  function temizle(kok){
+    var el=kok.firstElementChild;
+    while(el){
+      var sonraki=el.nextElementSibling;
+      if(YASAK_ETIKET[el.tagName.toUpperCase()]){ el.remove(); el=sonraki; continue; }
+      for(var i=el.attributes.length-1;i>=0;i--){
+        var ad=el.attributes[i].name.toLowerCase(), deger=el.attributes[i].value;
+        var normal=deger.replace(/[\u0000- \u007f-\u009f]/g,'').toLowerCase();
+        if(ad.indexOf('on')===0 || ad==='srcdoc' || ad==='id' || ad==='name' ||
+           (URL_OZNITELIK[ad] && /^(javascript|vbscript|data|file):/.test(normal))){
+          el.removeAttribute(el.attributes[i].name);
+        }
+      }
+      temizle(el);
+      el=sonraki;
+    }
+  }
   window._safeHTML = function(str) {
-    return String(str||'')
-      .replace(/<script[\s\S]*?<\/script>/gi,'')
-      .replace(/on\w+\s*=\s*["'][^"']*["']/gi,'')
-      .replace(/javascript\s*:/gi,'')
-      .replace(/<iframe[\s\S]*?>/gi,'')
-      .replace(/<object[\s\S]*?>/gi,'')
-      .replace(/<embed[\s\S]*?>/gi,'');
+    var html=String(str||'');
+    try{
+      var t=document.createElement('template');
+      if(!('content' in t)) throw 0;
+      t.innerHTML=html;
+      temizle(t.content);
+      return t.innerHTML;
+    }catch(_){
+      // <template> desteklemeyen çok eski tarayıcı: her şeyi düz metin olarak göster
+      return html.replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+    }
   };
 })();
 </script>
@@ -7494,7 +7524,8 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // API erişimi yoksa akıllı fallback
     const m=val.toLowerCase();let cevap='';
     for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30)+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
+    // val kullanıcı girdisi → HTML olarak kaçışlanır; KB cevapları sabit metin (<b> içerir)
+    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
     const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
@@ -13487,7 +13518,8 @@ async function konusmaGonder() {
   const mesaj = input.value;
   input.value = '';
   konusmaGecmisi.push({rol: 'user', icerik: mesaj});
-  alan.innerHTML += `<div style="margin-top:10px"><span style="color:#a78bfa">Sen:</span> ${mesaj}</div>`;
+  const mesajEsc = mesaj.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); // kullanıcı girdisi: düz metin
+  alan.innerHTML += `<div style="margin-top:10px"><span style="color:#a78bfa">Sen:</span> ${mesajEsc}</div>`;
   alan.innerHTML += `<div id="konusma-yukleniyor" style="margin-top:10px;color:#22d3ee">DILA yazıyor...</div>`;
   alan.scrollTop = alan.scrollHeight;
   try {
