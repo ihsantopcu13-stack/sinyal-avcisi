@@ -98,43 +98,63 @@ function hedefDagilimi(hedefDogru){
   return BOLUMLER.map(b=>Object.assign({},b,{hedef:Math.min(b.adet,Math.max(1,Math.round(b.hedef60*oran)))}));
 }
 
-// ---------- program üretimi ----------
-const FAZLAR=[
-  {no:1,ad:'Temel: Kelime + Dilbilgisi',renk:'#38bdf8',ozet:'Puanın en hızlı arttığı yer: kelime ve dilbilgisi soruları. Her gün 1 dilbilgisi dersi + kelime + tuzak soruları.'},
-  {no:2,ad:'Soru Tipleri: Cloze, Cümle Tamamlama, Çeviri',renk:'#a78bfa',ozet:'Öğrendiğin yapıları ÖSYM soru tiplerine uygula: bağlam, sinyal kelimeler, cümle iskeleti.'},
-  {no:3,ad:'Okuma + Deneme',renk:'#f5a623',ozet:'20 soruluk okuma bölümü ve paragraf soruları. Haftada bir tam deneme, her denemeden sonra hata analizi.'},
-  {no:4,ad:'Son Hafta: Tekrar + Sınav Provası',renk:'#34d399',ozet:'Yeni konu yok. Hata defteri, kelime tekrarı, zayıf alanlar ve sınav günü provası.'}
+// ---------- 🧭 TEK YOL: 22 AHA kartı, 4 aşama ----------
+// Kartların İÇERİĞİ index.html'deki #aha-karti-modul'de durur; burada sadece
+// SIRA tutulur (kart no = kartın üzerindeki numara). En hızlı puan getirenler önde.
+const ASAMALAR=[
+  {no:1,ad:'Sinyaller, çeviri, temel gramer',kartlar:[1,2,3,4,22,9,10,11,12,6]},
+  {no:2,ad:'Cümle tamamlama + paragraf',kartlar:[13,15,8,7,5,16,20,17]},
+  {no:3,ad:'Okuma',kartlar:[14,19,21]},
+  {no:4,ad:'Deneme + tekrar',kartlar:[18],ekler:[['simTam','📝 Tam deneme'],['hata','📝 Hata Defteri tekrarı']]}
 ];
-const DERS_ROTA={
-  1:['fiilAvi','trigger','modal','passive','gerund','srt','bebek','canliDers'],
-  2:['baglam','osym','cumleAnaliz','kelimeStrateji','soruTipi','sat'],
-  3:['reading','skim','diseksiyon','anlama','simOkuma'],
-  4:['radar','hata']
+const KART_SIRASI=ASAMALAR.reduce((a,s)=>a.concat(s.kartlar),[]);
+// "O konudan 5 soru": SL_HAVUZ'daki sinyal alanıyla eşleşen sorular (küçük harf).
+// Eşleşme 5'ten azsa havuzun geri kalanından tamamlanır.
+const KART_SINYAL={
+  1:['although','despite','even though','notwithstanding'],
+  2:['as a consequence of','as a result','consequently','since'],
+  3:['yet','nonetheless','on the contrary','whereas'],
+  4:['consequently','as a result','so that','so as to','in order to'],
+  6:['since','prior to','no sooner had','had'],
+  7:['by the time','prior to','no sooner had','once','after'],
+  8:['must have','should have','could have'],
+  13:['nonetheless','yet','even though'],
+  14:['yet'],
+  15:['despite','notwithstanding','although','even though'],
+  19:['while','whereas'],
+  20:['so as to','in order to','so that','rather than','instead of'],
+  21:['by no means','far from','anything but','hardly','contrary to','contrary to popular belief'],
+  22:['unless','provided that','as long as','on condition that']
 };
+const HAFTA_HEDEF=5; // haftada 5 gün
+const BUGUN_ADIMLARI=[
+  {id:'aha',ikon:'🃏',baslik:'Sıradaki AHA kartı',detay:'Kartı çevir, formülü ve örneği oku.',dk:5,ic:'aha'},
+  {id:'soru',ikon:'✍️',baslik:'O konudan 5 soru',detay:'Her sorudan sonra açıklamayı oku.',dk:10,ic:'soru'},
+  {id:'tekrar',ikon:'🔁',baslik:'5 dk tekrar',detay:'Bugünkü ve önceki kartların üzerinden geç.',dk:5,ic:'tekrar'}
+];
+function bitenKartlar(p){return KART_SIRASI.filter(n=>p.ahaBiten&&p.ahaBiten[n]);}
+function siradakiKart(p){return KART_SIRASI.find(n=>!(p.ahaBiten&&p.ahaBiten[n]))||null;}
+function bugunKarti(p){const k=p.gunKart&&p.gunKart[bugunStr()];return k||siradakiKart(p);}
+// Kartın metnini sayfadaki orijinal karttan olduğu gibi okur (içeriğe dokunmaz).
+function kartOku(no){
+  const kok=document.getElementById('aha-karti-modul');
+  const kart=kok&&[...kok.querySelectorAll('.ahk-card')].find(k=>{const n=k.querySelector('.ahk-card-num');return n&&n.textContent.trim()===String(no);});
+  if(!kart)return{no,baslik:'AHA Kartı '+no,formul:'',ornek:''};
+  const q=s=>{const e=kart.querySelector(s);return e?e.innerHTML:'';};
+  return{no,baslik:kart.querySelector('.ahk-card-title').textContent,formul:q('.ahk-card-formula'),ornek:q('.ahk-card-example')};
+}
+function kartAsamasi(no){return ASAMALAR.find(a=>a.kartlar.includes(no))||ASAMALAR[3];}
 
-function fazSinirlari(N){
-  const son=Math.max(1,Math.min(7,Math.round(N*0.1)));
-  const R=Math.max(0,N-son);
-  const f1=Math.round(R*0.4),f2=Math.round(R*0.3);
-  return{f1,f2:f1+f2,f3:R,son:N};
-}
-function gunFazi(d,N){
-  const s=fazSinirlari(N);
-  if(d<=s.f1)return 1;if(d<=s.f2)return 2;if(d<=s.f3)return 3;return 4;
-}
 function gorev(id,mat,baslik,detay,dk){const m=M[mat];return{id,mat,ikon:m?m.ikon:'✅',baslik,detay:detay||'',dk};}
 
 function gunGorevleri(p,d){
   const N=p.toplamGun;
-  const faz=gunFazi(d,N);
-  const uzun=p.gunlukDk>=120, cokUzun=p.gunlukDk>=180;
-  const rota=DERS_ROTA[faz];
-  const ders=M[rota[(d-1)%rota.length]];
-  const dersId=rota[(d-1)%rota.length];
+  const uzun=p.gunlukDk>=120;
+  const t=gunEkle(p.baslangic,d-1);
   const denemeGunu=(d%7===0)&&d<N;
   const sonGun=d===N;
   if(sonGun){
-    return{faz,tip:'son',gorevler:[
+    return{tip:'son',gorevler:[
       gorev('hata','hata','Hata Defteri\'ne son kez göz at','Sadece tekrar — yeni konu çalışma.',20),
       gorev('kelime','kelimeKart','20 kelime kartı (hafif tekrar)','',15),
       {id:'strateji',mat:null,ikon:'🧭',baslik:'Sınav günü stratejisini oku','detay':'Bu programın "Sınav Günü" sekmesi. Sonra erken uyu.',dk:10,ic:'strateji'}
@@ -146,38 +166,17 @@ function gunGorevleri(p,d){
       {id:'puan',mat:null,ikon:'📈',baslik:'Deneme sonucunu programa işle','detay':'Simülatör bitince otomatik kaydedilir; başka bir deneme çözdüysen "İlerleme" sekmesinden elle ekle.',dk:2,ic:'ilerleme'},
       gorev('hata','hata','Denemedeki yanlışları Hata Defteri\'nde incele','Her yanlış için: neden yanlış yaptım? Hangi sinyali kaçırdım?',20)
     ];
-    return{faz,tip:'deneme',gorevler:g};
+    return{tip:'deneme',gorevler:g};
   }
-  const g=[];
-  if(faz===1){
-    g.push(gorev('kelime','kelimeKart','30 kelime kartı','Bilmediklerini "Hatırlamadım" işaretle — sistem tekrar getirir.',20));
-    g.push(gorev('ders',dersId,'Günün dersi: '+ders.ad,'Dersi bitir, sonunda mini testi çöz.',25));
-    g.push(gorev('tuzak','tuzak','10 tuzak sorusu','Dilbilgisi tuzakları — ÖSYM\'nin en sık kurduğu yapılar.',15));
-    if(uzun)g.push(gorev('banka','kelimeBanka','20 yeni akademik kelime','500 Akademik Kelime Bankası\'ndan sıradaki 20 kelime.',20));
-    if(uzun)g.push(gorev('sinyal','sinyalLab','5 Sinyal Lab sorusu','Bağlaç ve tuzak kelimeleri renkli işaretli sorular.',10));
-    if(cokUzun)g.push(gorev('klod','klod','Günün dersini KLOD\'a anlat','"Bugün şunu öğrendim, doğru mu?" diye yaz — anlatabiliyorsan öğrenmişsin.',15));
-  }else if(faz===2){
-    g.push(gorev('kelime','kelimeKart','20 kelime kartı','',15));
-    g.push(gorev('ders',dersId,'Günün strateji dersi: '+ders.ad,'',25));
-    g.push(gorev('sinyal','sinyalLab','10 Sinyal Lab sorusu','Cümle tamamlama + çeviri sorularının temeli.',20));
-    if(uzun)g.push(gorev('paragraf','paragraf','2 paragraf sorusu','',15));
-    if(uzun)g.push(gorev('svo','svo','S+V+O: 3 cümlenin iskeletini çıkar','Çeviri sorularında doğru şıkkı iskeletten bulursun.',15));
-    if(cokUzun)g.push(gorev('hata','hata','Hata Defteri tekrarı','',15));
-  }else if(faz===3){
-    g.push(gorev('kelime','kelimeKart','20 kelime kartı','',15));
-    g.push(gorev('ders',dersId,'Günün okuma çalışması: '+ders.ad,'',25));
-    g.push(gorev('paragraf','paragraf','3 paragraf sorusu','Önce soruyu oku, sonra parçada ara (scanning).',20));
-    if(uzun)g.push(gorev('tuzak','tuzak','10 tuzak sorusu (tekrar)','Dilbilgisini unutmamak için.',15));
-    if(uzun)g.push(gorev('simokuma','simOkuma','Okuma denemesi: 15 soru / 45 dk','',45));
-    if(cokUzun)g.push(gorev('hata','hata','Hata Defteri tekrarı','',15));
-  }else{
-    g.push(gorev('hata','hata','Hata Defteri tekrarı','En çok yanlış yaptığın 10 soruyu yeniden çöz.',25));
-    g.push(gorev('kelime','kelimeKart','30 kelime kartı (tekrar)','',20));
-    g.push(gorev('radar','radar','Zayıf Alan Radarı\'ndaki 1 konuyu kapat','',20));
-    if(uzun)g.push(gorev('tuzak','tuzak','10 tuzak sorusu','',15));
-    if(uzun)g.push(gorev('paragraf','paragraf','2 paragraf sorusu','',15));
-  }
-  return{faz,tip:'normal',gorevler:g};
+  // Normal gün: AHA kartı → 5 soru → 5 dk tekrar (o gün bir kart başlatıldıysa
+  // ya da hâlâ kart varsa). 22 kart bittiyse Aşama 4: deneme + tekrar.
+  if((p.gunKart&&p.gunKart[t])||siradakiKart(p))return{tip:'normal',gorevler:BUGUN_ADIMLARI};
+  const g=[
+    gorev('hata','hata','Hata Defteri tekrarı','En çok yanlış yaptığın 10 soruyu yeniden çöz.',25),
+    gorev('radar','radar','Zayıf Alan Radarı\'ndaki 1 konuyu kapat','',20)
+  ];
+  if(uzun)g.push(gorev('paragraf','paragraf','2 paragraf sorusu','',15));
+  return{tip:'tekrar',gorevler:g};
 }
 
 // ---------- durum ----------
@@ -194,19 +193,38 @@ function programHesapla(p){
   return Object.assign({},p,{toplamGun,gunNo,kalanGun,mevcutDogru,hedefDogru,fark:Math.max(0,hedefDogru-mevcutDogru),denemeler,sonDeneme,beklenenPuan});
 }
 function tamamOku(p,tarih){return (p.tamam&&p.tamam[tarih])||{};}
+// Tek doğruluk kaynağı: bir günün "tamam" sayılması. Pill (Programa dön x/y),
+// Bugün kartı, seri ve haftalık sayaç hepsi bunu kullanır.
+function gunTamamMi(v,p,d){
+  const t=gunEkle(p.baslangic,d-1);const ok=tamamOku(p,t);
+  return gunGorevleri(v,d).gorevler.every(x=>ok[x.id]);
+}
 function tamamSayac(p){
   // tamamlanan gün (o günün tüm görevleri bitti) + güncel seri
   let tamGun=0,seri=0;const v=programHesapla(p);
   const son=Math.min(v.gunNo,v.toplamGun);
-  for(let d=1;d<=son;d++){
-    const t=gunEkle(p.baslangic,d-1);const g=gunGorevleri(v,d).gorevler;const ok=tamamOku(p,t);
-    if(g.every(x=>ok[x.id]))tamGun++;
-  }
+  for(let d=1;d<=son;d++)if(gunTamamMi(v,p,d))tamGun++;
   for(let d=son;d>=1;d--){
-    const t=gunEkle(p.baslangic,d-1);const g=gunGorevleri(v,d).gorevler;const ok=tamamOku(p,t);
-    if(g.every(x=>ok[x.id]))seri++;else if(d<son)break;
+    if(gunTamamMi(v,p,d))seri++;else if(d<son)break;
   }
   return{tamGun,seri};
+}
+// Bu hafta (Pazartesi→bugün) tamamlanan gün sayısı
+function haftaSayaci(v,p){
+  const bugun=bugunStr();const gd=strGun(bugun).getDay();
+  const pzt=gunEkle(bugun,-((gd+6)%7));
+  let n=0;
+  for(let t=pzt;t<=bugun;t=gunEkle(t,1)){
+    const d=gunFarki(p.baslangic,t)+1;
+    if(d>=1&&d<=v.toplamGun&&gunTamamMi(v,p,d))n++;
+  }
+  return n;
+}
+// Bugünün 3 adımı bittiyse kartı "tamamlandı" yap
+function kartiKapat(p){
+  const t=bugunStr();const no=p.gunKart&&p.gunKart[t];if(!no)return;
+  const ok=tamamOku(p,t);
+  if(BUGUN_ADIMLARI.every(x=>ok[x.id])){p.ahaBiten=p.ahaBiten||{};if(!p.ahaBiten[no])p.ahaBiten[no]=t;}
 }
 
 // ---------- modül açma ----------
@@ -294,6 +312,70 @@ const CSS=`
 .hp-adim b.n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(245,166,35,.15);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-size:12px}
 #hp-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:840;background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 @media(max-width:900px){#hp-pill{bottom:76px}}
+.hp-bolum{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:#a8b0bf;text-transform:uppercase;margin:22px 2px 8px}
+.hp-hedef-cumle{font-size:20px;font-weight:800;line-height:1.4}
+.hp-hedef-cumle b{color:#fbbf24;font-family:'IBM Plex Mono',monospace}
+.hp-gorev-kart{border:1.5px solid rgba(245,166,35,.55);background:linear-gradient(160deg,rgba(245,166,35,.1),rgba(255,255,255,.02))}
+.hp-adimlar{list-style:none;margin:12px 0 14px;padding:0}
+.hp-adim2{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
+.hp-adim2:first-child{border-top:none}
+.hp-ekadim{display:flex;align-items:center;gap:12px;width:100%;margin:-4px 0 14px;padding:10px 12px;border:1px dashed rgba(255,255,255,.22);border-radius:12px;background:none;color:inherit;text-align:left;cursor:pointer;font-family:inherit;font-size:14px}
+.hp-ekadim .hp-ek-ad{flex:1;font-weight:700}
+.hp-ekadim small{display:block;font-weight:400;font-size:12px;color:#a8b0bf}
+.hp-ekadim.bitti{opacity:.6}
+.hp-adim2 .hp-no{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid rgba(255,255,255,.25);color:#a8b0bf;background:none;padding:0;font-family:inherit}
+.hp-adim2.sira .hp-no{border-color:#f5a623;color:#fbbf24}
+.hp-adim2.bitti .hp-no{background:#10b981;border-color:#10b981;color:#fff}
+.hp-adim2.bitti .hp-g-baslik{text-decoration:line-through;opacity:.6}
+button.hp-no{cursor:pointer}
+.hp-geri{background:none;border:none;color:#a8b0bf;font-size:14px;font-weight:600;cursor:pointer;padding:6px 0 12px;font-family:inherit}
+.hp-cizgi-bar{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:14px;font-weight:700;margin-bottom:8px}
+.hp-cizgi-bar span{font-size:12.5px;color:#a8b0bf;font-weight:600}
+.hp-yol{position:relative;padding-left:4px}
+.hp-asama{position:relative;padding-left:30px;padding-bottom:6px}
+.hp-asama::before{content:'';position:absolute;left:13px;top:30px;bottom:-6px;width:2px;background:rgba(255,255,255,.12)}
+.hp-asama:last-child::before{display:none}
+.hp-asama.bitti::before{background:#10b981}
+.hp-asama-bas{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:inherit;text-align:left;padding:6px 0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:800}
+.hp-asama-bas .hp-asama-no{position:absolute;left:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;background:#1b1f2a;border:2px solid rgba(255,255,255,.25);color:#a8b0bf}
+.hp-asama.aktif .hp-asama-no{border-color:#f5a623;color:#fbbf24}
+.hp-asama.bitti .hp-asama-no{background:#10b981;border-color:#10b981;color:#fff}
+.hp-asama.kilit .hp-asama-bas{color:#8b93a3}
+.hp-asama-bas .hp-say{margin-left:auto;font-size:12px;font-weight:600;color:#a8b0bf;font-family:'IBM Plex Mono',monospace}
+.hp-asama-ic{display:none;padding:2px 0 8px}
+.hp-asama.acik .hp-asama-ic{display:block}
+.hp-dugum{display:flex;align-items:center;gap:10px;padding:9px 10px;margin-top:6px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:14px}
+.hp-dugum .hp-d-ad{flex:1;min-width:0;line-height:1.35}
+.hp-dugum .hp-d-ad small{display:block;font-size:11px;color:#a8b0bf;font-family:'IBM Plex Mono',monospace}
+.hp-dugum .hp-d-ik{width:22px;text-align:center;flex-shrink:0}
+.hp-dugum.bitti .hp-d-ik{color:#34d399;font-weight:800}
+.hp-dugum.sira{border-color:#f5a623;background:rgba(245,166,35,.1);box-shadow:0 0 0 3px rgba(245,166,35,.12)}
+.hp-dugum.gelecek{opacity:.5}
+.hp-link{background:none;border:none;color:#7dd3fc;font-size:12.5px;cursor:pointer;padding:4px 2px;font-family:inherit;text-decoration:underline;flex-shrink:0}
+.hp-ekler{border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.02);margin-top:22px}
+.hp-ekler summary{cursor:pointer;padding:14px 16px;font-weight:700;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:8px}
+.hp-ekler summary::-webkit-details-marker{display:none}
+.hp-ekler summary::after{content:'▾';margin-left:auto;color:#a8b0bf;transition:transform .2s}
+.hp-ekler[open] summary::after{transform:rotate(180deg)}
+.hp-ekler-ic{padding:0 12px 12px}
+.hp-ekler-ic h4{margin:10px 4px 2px;font-size:11px;color:#a8b0bf;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.hp-aha{border-radius:16px;min-height:190px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;cursor:pointer;width:100%;font-family:inherit;color:inherit;border:1.5px solid #5b8fff;background:rgba(91,143,255,.08)}
+.hp-aha.cevrik{border-color:#34d399;background:rgba(52,211,153,.07)}
+.hp-aha .hp-aha-no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#a8b0bf;letter-spacing:.08em}
+.hp-aha .hp-aha-baslik{font-size:20px;font-weight:800;line-height:1.3}
+.hp-aha .hp-aha-formul{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#34d399;line-height:1.6}
+.hp-aha .hp-aha-ornek{font-size:13.5px;color:#cbd2dd;line-height:1.6}
+.hp-aha .hp-on{display:contents}
+.hp-aha .hp-arka{display:none}
+.hp-aha.cevrik .hp-on{display:none}
+.hp-aha.cevrik .hp-arka{display:flex;flex-direction:column;gap:10px}
+.hp-soru-cumle{font-size:15px;line-height:1.8;margin:6px 0 10px}
+.hp-sik{display:block;width:100%;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:inherit;border-radius:10px;padding:12px;margin-top:8px;font-size:14.5px;line-height:1.45;cursor:pointer;font-family:inherit}
+.hp-sik.dogru{border-color:#10b981;background:rgba(16,185,129,.15)}
+.hp-sik.yanlis{border-color:#f87171;background:rgba(248,113,113,.12)}
+.hp-sik:disabled{cursor:default;color:inherit;opacity:1}
+.hp-sure{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:#fbbf24;text-align:center;margin:4px 0 10px}
+.hp-tekrar-liste .hp-aha{min-height:130px;margin-top:10px}
 `;
 function cssEkle(){if(document.getElementById('hp-css'))return;const s=document.createElement('style');s.id='hp-css';s.textContent=CSS;document.head.appendChild(s);}
 function overlayKur(){
@@ -301,26 +383,23 @@ function overlayKur(){
   let o=document.getElementById('hp-overlay');
   if(o)return o;
   o=document.createElement('div');o.id='hp-overlay';o.setAttribute('role','dialog');o.setAttribute('aria-label','Hedef Programı');
-  o.innerHTML=`<div class="hp-ust"><div class="hp-ust-ic"><div class="hp-baslik">🎯 Hedef Programım</div><button class="hp-kapat" onclick="hpKapat()">✕ Kapat</button></div><div class="hp-sekmeler" id="hp-sekmeler"></div></div><div class="hp-govde" id="hp-govde"></div>`;
+  o.innerHTML=`<div class="hp-ust"><div class="hp-ust-ic"><div class="hp-baslik">🎯 Hedef Programım</div><button class="hp-kapat" onclick="hpKapat()">✕ Kapat</button></div></div><div class="hp-govde" id="hp-govde"></div>`;
   document.body.appendChild(o);
+  olayBagla(o);
   return o;
 }
-const SEKMELER=[['bugun','☀️ Bugün'],['harita','🗺️ Hedef Haritası'],['plan','📅 Program'],['ilerleme','📈 İlerleme'],['materyal','📚 Materyaller'],['strateji','🧭 Sınav Günü'],['ayar','⚙️ Ayarlar']];
-function sekmeCiz(){
-  const s=document.getElementById('hp-sekmeler');if(!s)return;
-  const p=lsOku();
-  s.style.display=p?'flex':'none';
-  s.innerHTML=SEKMELER.map(([k,a])=>`<button class="hp-sekme${k===aktifSekme?' aktif':''}" onclick="hpSekme('${k}')">${a}</button>`).join('');
-}
-function ciz(){
-  overlayKur();sekmeCiz();
+// Sekme çubuğu yok: ana ekran tek yol (bugun). Diğer ekranlar "Ek araçlar"dan
+// açılır ve en üstte "← Yoluma dön" taşır.
+function ciz(scrollKoru){
+  overlayKur();sureDurdur();
   const g=document.getElementById('hp-govde');const p=lsOku();
   if(!p){g.innerHTML=kurulumHTML(null);kurulumBagla();return;}
   const v=programHesapla(p);
-  const r={bugun:bugunHTML,harita:haritaHTML,plan:planHTML,ilerleme:ilerlemeHTML,materyal:materyalHTML,strateji:stratejiHTML,ayar:()=>kurulumHTML(p)}[aktifSekme]||bugunHTML;
-  g.innerHTML=r(v,p);
+  const r={bugun:yolHTML,aha:ahaAdimHTML,soru:soruAdimHTML,tekrar:tekrarAdimHTML,harita:haritaHTML,plan:planHTML,ilerleme:ilerlemeHTML,materyal:materyalHTML,strateji:stratejiHTML,ayar:()=>kurulumHTML(p)}[aktifSekme]||yolHTML;
+  g.innerHTML=(aktifSekme==='bugun'?'':'<button class="hp-geri" data-hp-action="geri">← Yoluma dön</button>')+r(v,p);
   if(aktifSekme==='ayar')kurulumBagla();
-  g.scrollTop=0;
+  if(aktifSekme==='tekrar')sureBaslat();
+  const o=document.getElementById('hp-overlay');if(o&&!scrollKoru)o.scrollTop=0;
 }
 
 // ----- kurulum -----
@@ -366,7 +445,7 @@ window.hpKaydet=function(){
   // tarih değiştiyse program bugünden yeniden başlar (tamamlanan kayıtlar korunur)
   if(eski&&eski.tarih!==tarih)p.baslangic=bugunStr();
   lsYaz(p);
-  aktifSekme=eski?'bugun':'harita';
+  aktifSekme='bugun';
   ciz();pillGuncelle();heroGuncelle();
   if(typeof bugunKartiRender==='function')bugunKartiRender();
 };
@@ -385,39 +464,216 @@ function durumMesaji(v){
   if(f>-7)return{r:'#fbbf24',m:`🟡 Plana çok yakınsın (${v.sonDeneme.puan} / beklenen ${v.beklenenPuan}). Görevleri aksatmazsan kapanır.`};
   return{r:'#f87171',m:`🔴 Planın ${Math.round(-f)} puan gerisindesin. Paniğe gerek yok: "Hedef Haritası"ndaki en kolay bölümlere (kelime, dilbilgisi, çeviri) ağırlık ver.`};
 }
-function bugunHTML(v,p){
+// ===== TEK YOL — ana ekran =====
+// 1 Hedef kutusu · 2 Bugünün görevi (sayfadaki TEK turuncu buton) · 3 Yol haritası
+// · 4 İlerleme çubuğu · 5 Ek araçlar (kapalı akordeon)
+let acikAsama=null; // kullanıcı başka bir aşamayı açtıysa (bellekte)
+function hedefCumlesi(v){
+  const hafta=Math.max(1,v.kalanGun/7);
+  const haftalik=Math.ceil(v.fark/hafta);
+  const son=v.fark<=0?'Hedef puanı zaten yakalıyorsun, bu seviyeyi koru.':v.kalanGun<7?`Bu hafta ~${v.fark} yeni doğru gerek.`:`Haftada ~${haftalik} yeni doğru yeter.`;
+  return `<b>${v.sonPuan}</b> → <b>${v.hedefPuan}</b> · ${v.kalanGun} gün · ${son}`;
+}
+function yolHTML(v,p){
   if(v.kalanGun<=0){
-    return `<div class="hp-kart"><div class="hp-eyebrow">${v.kalanGun===0?'Bugün sınav günü':'Sınav geçti'}</div><div class="hp-h">${v.kalanGun===0?'Başarılar! Hiçbir soruyu boş bırakma. 🍀':'Sınavın nasıl geçti?'}</div><p class="hp-muted">${v.kalanGun===0?'Sınav Günü sekmesindeki zaman planını bir kez daha oku.':'Yeni sınav tarihin varsa Ayarlar\'dan programını güncelle.'}</p><button class="hp-btn" onclick="hpSekme('${v.kalanGun===0?'strateji':'ayar'}')">${v.kalanGun===0?'🧭 Sınav Günü Stratejisi':'⚙️ Yeni tarih gir'}</button></div>`;
+    return `<div class="hp-kart"><div class="hp-eyebrow">${v.kalanGun===0?'Bugün sınav günü':'Sınav geçti'}</div><div class="hp-h">${v.kalanGun===0?'Başarılar! Hiçbir soruyu boş bırakma. 🍀':'Sınavın nasıl geçti?'}</div><p class="hp-muted">${v.kalanGun===0?'Sınav günü zaman planını bir kez daha oku.':'Yeni sınav tarihin varsa programını güncelle.'}</p><button class="hp-btn" data-hp-action="sekme" data-k="${v.kalanGun===0?'strateji':'ayar'}">${v.kalanGun===0?'🧭 Sınav Günü Stratejisi':'⚙️ Yeni tarih gir'}</button></div>`;
   }
-  const d=Math.max(1,Math.min(v.gunNo,v.toplamGun));
-  const gg=gunGorevleri(v,d);const faz=FAZLAR[gg.faz-1];
-  const t=bugunStr();const ok=tamamOku(p,t);
-  const biten=gg.gorevler.filter(x=>ok[x.id]).length;
-  const sayac=tamamSayac(p);const dm=durumMesaji(v);
-  const toplamDk=gg.gorevler.reduce((a,x)=>a+(x.dk||0),0);
+  const dm=v.sonDeneme?durumMesaji(v):null;
   return `
   <div class="hp-kart">
-    <div class="hp-eyebrow">Gün ${d} / ${v.toplamGun} · ${tarihYaz(t,true)}</div>
-    <div class="hp-h">${gg.tip==='deneme'?'📝 Bugün deneme günü':gg.tip==='son'?'🌙 Sınavdan önceki son gün':'Bugünkü görevlerin'}</div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px">
-      <span style="font-size:12px;font-weight:700;color:${faz.renk};background:${faz.renk}1f;border:1px solid ${faz.renk}66;border-radius:8px;padding:3px 8px">Faz ${faz.no}: ${faz.ad}</span>
-      <span class="hp-muted" style="font-size:12px">≈ ${toplamDk} dk</span>
-    </div>
-    <div class="hp-bar"><div style="width:${Math.round(biten/gg.gorevler.length*100)}%"></div></div>
-    <div class="hp-muted" style="font-size:12px;margin-top:5px">${biten}/${gg.gorevler.length} görev tamam${biten===gg.gorevler.length?' — 🎉 bugünü bitirdin!':''}</div>
-    ${gg.gorevler.map(x=>gorevHTML(x,ok[x.id],t)).join('')}
+    <div class="hp-eyebrow">Hedefin</div>
+    <div class="hp-hedef-cumle">${hedefCumlesi(v)}</div>
+    <div class="hp-muted" style="font-size:12.5px;margin-top:6px">80 soru, her doğru 1,25 puan: ${v.mevcutDogru} → ${v.hedefDogru} doğru (+${v.fark}).</div>
+    ${dm?`<div class="hp-muted" style="font-size:12.5px;margin-top:6px;color:${dm.r}">${dm.m}</div>`:''}
   </div>
-  <div class="hp-statlar" style="margin-bottom:12px">
-    <div class="hp-stat"><b>${v.kalanGun}</b><span>gün kaldı</span></div>
-    <div class="hp-stat"><b>${v.sonPuan}→${v.hedefPuan}</b><span>puan hedefi</span></div>
-    <div class="hp-stat"><b>+${v.fark}</b><span>doğru gerekiyor</span></div>
-    <div class="hp-stat"><b>${sayac.seri}</b><span>gün seri 🔥</span></div>
+  ${gorevKartiHTML(v,p)}
+  <div class="hp-bolum">Yol haritası</div>
+  ${yolHaritasiHTML(p)}
+  ${ilerlemeCubuguHTML(v,p)}
+  ${eklerHTML()}`;
+}
+function gorevKartiHTML(v,p){
+  const d=Math.max(1,Math.min(v.gunNo,v.toplamGun));
+  const gg=gunGorevleri(v,d);
+  const t=bugunStr();const ok=tamamOku(p,t);
+  const sira=gg.gorevler.find(x=>!ok[x.id]);
+  const kart=gg.tip==='normal'?kartOku(bugunKarti(p)):null;
+  const baslik=kart?`AHA ${kart.no} · ${esc(kart.baslik)}`:gg.tip==='deneme'?'📝 Deneme günü':gg.tip==='son'?'🌙 Sınavdan önceki son gün':'🔁 Deneme + tekrar';
+  const adimlar=gg.gorevler.map((x,i)=>{
+    const bitti=!!ok[x.id];const dis=!x.ic||!['aha','soru','tekrar'].includes(x.ic);
+    const no=dis?`<button class="hp-no" data-hp-action="isaretle" data-t="${t}" data-id="${x.id}" aria-label="${bitti?'İşareti kaldır':'Tamamlandı olarak işaretle'}">${bitti?'✓':i+1}</button>`:`<span class="hp-no">${bitti?'✓':i+1}</span>`;
+    return `<li class="hp-adim2${bitti?' bitti':x===sira?' sira':''}">${no}<div class="hp-g-ic"><div class="hp-g-baslik">${x.ikon} ${esc(x.baslik)}</div><div class="hp-g-detay">${esc(x.detay||'')}${x.dk?(x.detay?' · ':'')+'~'+x.dk+' dk':''}</div></div></li>`;
+  }).join('');
+  const dk=gg.gorevler.reduce((a,x)=>a+(x.dk||0),0);
+  return `
+  <div class="hp-bolum">Bugünün görevi</div>
+  <div class="hp-kart hp-gorev-kart">
+    <div class="hp-eyebrow">Gün ${d} / ${v.toplamGun} · ≈ ${dk} dk</div>
+    <div class="hp-h">${baslik}</div>
+    <ol class="hp-adimlar">${adimlar}</ol>
+    ${ekKelimeHTML(ok)}
+    ${sira?`<button class="hp-btn" data-hp-action="basla">Başla</button>`:`<div class="hp-uyari">🎉 Bugünü bitirdin. ${gg.tip==='normal'&&siradakiKart(p)?`Yarın: <b>AHA ${siradakiKart(p)} · ${esc(kartOku(siradakiKart(p)).baslik)}</b>`:'Yarın görüşürüz.'}</div>`}
+  </div>`;
+}
+// İsteğe bağlı ek adım: sayaca (pill / x/3 / haftalık gün) DAHİL DEĞİL —
+// gunGorevleri listesinde yok, sadece tamam[t].kelime10 ile ✓ gösterilir.
+function ekKelimeHTML(ok){
+  const bitti=!!ok.kelime10;
+  return `<button class="hp-ekadim${bitti?' bitti':''}" data-hp-action="kelime10"><span style="font-size:18px">${bitti?'✓':'🃏'}</span><span class="hp-ek-ad">+ 10 kelime (5 dk)<small>İsteğe bağlı · Kelime Kartları açılır</small></span><span style="color:#a8b0bf">→</span></button>`;
+}
+function yolHaritasiHTML(p){
+  const bugunNo=bugunKarti(p);
+  const bugunBitti=!!(bugunNo&&p.ahaBiten&&p.ahaBiten[bugunNo]);
+  const hedefNo=bugunBitti?siradakiKart(p):bugunNo;
+  const aktif=hedefNo?kartAsamasi(hedefNo).no:4;
+  const acik=acikAsama||aktif;
+  return `<div class="hp-yol">${ASAMALAR.map(a=>{
+    const biten=a.kartlar.filter(n=>p.ahaBiten&&p.ahaBiten[n]).length;
+    const tamam=biten===a.kartlar.length&&a.no<aktif;
+    const kilit=a.no>aktif;
+    const dugumler=a.kartlar.map(n=>{
+      const k=kartOku(n);const bitti=!!(p.ahaBiten&&p.ahaBiten[n]);const sira=n===hedefNo&&!bitti;
+      const cls=bitti?'bitti':sira?'sira':'gelecek';
+      const ik=bitti?'✓':sira?'●':'🔒';
+      const aks=bitti?'tekrar et':sira?'':'yine de aç';
+      return `<div class="hp-dugum ${cls}"><span class="hp-d-ik">${ik}</span><span class="hp-d-ad"><small>AHA ${n}</small>${esc(k.baslik)}${sira?` <span style="color:#fbbf24;font-size:12px;font-weight:700">· ${bugunBitti?'yarın':'bugün'}</span>`:''}</span>${aks?`<button class="hp-link" data-hp-action="kart" data-no="${n}">${aks}</button>`:''}</div>`;
+    }).join('')+(a.ekler||[]).map(([k,ad])=>`<div class="hp-dugum${kilit?' gelecek':''}"><span class="hp-d-ik">${kilit?'🔒':'○'}</span><span class="hp-d-ad">${ad}</span><button class="hp-link" data-hp-action="materyal" data-k="${k}">${kilit?'yine de aç':'aç'}</button></div>`).join('');
+    return `<div class="hp-asama${a.no===acik?' acik':''}${tamam?' bitti':''}${a.no===aktif?' aktif':''}${kilit?' kilit':''}">
+      <button class="hp-asama-bas" data-hp-action="asama" data-no="${a.no}" aria-expanded="${a.no===acik}"><span class="hp-asama-no">${tamam?'✓':kilit?'🔒':a.no}</span>Aşama ${a.no} · ${a.ad}<span class="hp-say">${biten}/${a.kartlar.length}</span></button>
+      <div class="hp-asama-ic">${dugumler}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+function ilerlemeCubuguHTML(v,p){
+  const kart=bitenKartlar(p).length,hafta=haftaSayaci(v,p);
+  return `<div class="hp-kart" style="margin-top:14px">
+    <div class="hp-cizgi-bar">${kart}/${KART_SIRASI.length} kart<span>bu hafta ${hafta}/${HAFTA_HEDEF} gün</span></div>
+    <div class="hp-bar"><div style="width:${Math.round(kart/KART_SIRASI.length*100)}%"></div></div>
+  </div>`;
+}
+function eklerHTML(){
+  const mat=(k,ad)=>`<button class="hp-mat" data-hp-action="materyal" data-k="${k}"><span style="font-size:18px">${M[k].ikon}</span><span style="flex:1">${ad||M[k].ad}</span><span style="color:#a8b0bf">→</span></button>`;
+  const sek=(k,ik,ad)=>`<button class="hp-mat" data-hp-action="sekme" data-k="${k}"><span style="font-size:18px">${ik}</span><span style="flex:1">${ad}</span><span style="color:#a8b0bf">→</span></button>`;
+  return `<details class="hp-ekler"><summary>🧰 Ek araçlar</summary><div class="hp-ekler-ic">
+    <h4>Serbest çalışma</h4>
+    ${mat('fiilAvi','DNA Testi — Fiil Avı')}${mat('sinyalLab','Serbest soru pratiği (Sinyal Lab)')}${mat('aha','Tüm AHA kartları (ızgara)')}${mat('kelimeKart','Kelime kartları')}
+    <h4>Program</h4>
+    ${sek('plan','📅','Gün gün program')}${sek('harita','🗺️','Hangi bölümden kaç doğru?')}${sek('ilerleme','📈','Deneme sonucu ekle + grafik')}${sek('materyal','📚','Tüm materyaller')}${sek('strateji','🧭','Sınav günü stratejisi')}${sek('ayar','⚙️','Puan / tarih ayarları')}
+  </div></details>`;
+}
+
+// ===== Adım ekranları (kart → 5 soru → 5 dk tekrar) =====
+let onizleme=null; // "yine de aç"/"tekrar et" ile açılan kart no
+function ahaKutuHTML(k,cevrik){
+  return `<button class="hp-aha${cevrik?' cevrik':''}" data-hp-action="cevir" aria-label="Kartı çevir">
+    <span class="hp-on"><span class="hp-aha-no">AHA ${k.no}</span><span class="hp-aha-baslik">${esc(k.baslik)}</span><span class="hp-muted" style="font-size:12px">Çevirmek için dokun ↻</span></span>
+    <span class="hp-arka"><span class="hp-aha-no">AHA ${k.no} · ${esc(k.baslik)}</span><span class="hp-aha-formul">${k.formul}</span><span class="hp-aha-ornek">${k.ornek}</span></span>
+  </button>`;
+}
+function ahaAdimHTML(v,p){
+  if(onizleme){
+    const k=kartOku(onizleme);
+    return `<div class="hp-eyebrow">Önizleme · ${esc(kartAsamasi(onizleme).ad)}</div>${ahaKutuHTML(k,false)}<p class="hp-muted" style="font-size:12.5px">Bu kart yol haritanı değiştirmez; bugünün görevi aynı kalır.</p>`;
+  }
+  const k=kartOku(bugunKarti(p));
+  return `<div class="hp-eyebrow">Adım 1 / 3 · AHA kartı</div>${ahaKutuHTML(k,false)}
+  <p class="hp-muted" style="font-size:12.5px">Formülü ve örneği okuduktan sonra devam et.</p>
+  <button class="hp-btn" data-hp-action="adim-bitti" data-id="aha">Anladım → 5 soruya geç</button>`;
+}
+let quiz=null; // {no,sorular:[havuz idx],i,dogru,secim}
+function havuzGetir(){try{return (typeof SL_HAVUZ!=='undefined'&&Array.isArray(SL_HAVUZ))?SL_HAVUZ:[];}catch(e){return [];}}
+function kartSorulari(no){
+  const havuz=havuzGetir();const anahtar=KART_SINYAL[no]||[];
+  const eslesen=[],diger=[];
+  havuz.forEach((s,i)=>{(anahtar.includes(String(s.sinyal||'').toLowerCase())?eslesen:diger).push(i);});
+  const kay=diger.length?(no*7)%diger.length:0; // dolgu her kartta farklı yerden başlasın
+  return eslesen.concat(diger.slice(kay),diger.slice(0,kay)).slice(0,5);
+}
+function soruAdimHTML(v,p){
+  const no=bugunKarti(p);
+  if(!quiz||quiz.no!==no)quiz={no,sorular:kartSorulari(no),i:0,dogru:0,secim:null};
+  const havuz=havuzGetir();
+  if(!quiz.sorular.length){
+    return `<div class="hp-eyebrow">Adım 2 / 3 · 5 soru</div><div class="hp-kart"><p class="hp-muted" style="margin:0 0 10px">Sorular şu an yüklenemedi. Sinyal Lab'da bu konudan 5 soru çöz, sonra buraya dönüp işaretle.</p><button class="hp-btn2" data-hp-action="materyal" data-k="sinyalLab">🔬 Sinyal Lab'ı aç</button></div><button class="hp-btn" data-hp-action="adim-bitti" data-id="soru">5 soruyu çözdüm ✓</button>`;
+  }
+  if(quiz.i>=quiz.sorular.length){
+    return `<div class="hp-eyebrow">Adım 2 / 3 · Sonuç</div><div class="hp-kart" style="text-align:center"><div class="hp-h">${quiz.sorular.length} soruda ${quiz.dogru} doğru</div><p class="hp-muted" style="margin:0">${quiz.dogru>=4?'Harika, bu kural oturmuş.':'Tekrarda bu kartın üzerinden bir kez daha geç.'}</p></div><button class="hp-btn" data-hp-action="adim-bitti" data-id="soru">5 dk tekrara geç</button>`;
+  }
+  const s=havuz[quiz.sorular[quiz.i]];const cev=quiz.secim!==null;
+  return `<div class="hp-eyebrow">Adım 2 / 3 · Soru ${quiz.i+1} / ${quiz.sorular.length} · AHA ${no}</div>
+  <div class="hp-kart">
+    <div class="hp-soru-cumle">${s.sent}</div>
+    <div style="font-weight:700;font-size:14.5px">${esc(s.q)}</div>
+    ${s.opts.map((o,j)=>`<button class="hp-sik${cev&&j===s.ans?' dogru':''}${cev&&j===quiz.secim&&j!==s.ans?' yanlis':''}" data-hp-action="cevap" data-j="${j}"${cev?' disabled':''}>${String.fromCharCode(65+j)}) ${esc(o)}</button>`).join('')}
+    ${cev?`<div class="hp-uyari" style="margin-top:12px">${quiz.secim===s.ans?'✅ Doğru.':'❌ Doğrusu '+String.fromCharCode(65+s.ans)+'.'} ${esc(s.fb||'')}</div>`:''}
   </div>
-  <div class="hp-kart" style="border-color:${dm.r}55"><div class="hp-muted" style="color:${dm.r}">${dm.m}</div></div>
-  <div class="hp-uyari">💡 <b>Unutma:</b> YDS/YÖKDİL'de yanlış doğruyu götürmez. Sınavda <b>hiçbir soruyu boş bırakma</b>: boş = kesin 0, tahmin = %20 şans.</div>`;
+  ${cev?`<button class="hp-btn" data-hp-action="sonraki-soru">${quiz.i+1<quiz.sorular.length?'Sonraki soru →':'Sonucu gör'}</button>`:''}`;
+}
+let sureId=null,sureBitis=0;
+function sureDurdur(){if(sureId){clearInterval(sureId);sureId=null;}}
+function sureBaslat(){
+  sureDurdur();sureBitis=Date.now()+5*60*1000;
+  const yaz=()=>{const el=document.getElementById('hp-sure');if(!el){sureDurdur();return;}
+    const k=Math.max(0,Math.round((sureBitis-Date.now())/1000));
+    el.textContent=k>0?`${Math.floor(k/60)}:${String(k%60).padStart(2,'0')}`:'Süre doldu ✓';if(!k)sureDurdur();};
+  yaz();sureId=setInterval(yaz,1000);
+}
+function tekrarAdimHTML(v,p){
+  const no=bugunKarti(p);
+  const onceki=bitenKartlar(p).filter(n=>n!==no).slice(-4).reverse();
+  const liste=[no].concat(onceki);
+  return `<div class="hp-eyebrow">Adım 3 / 3 · 5 dk tekrar</div>
+  <div class="hp-sure" id="hp-sure">5:00</div>
+  <p class="hp-muted" style="font-size:12.5px;margin:0">Her kartın önce başlığına bak, formülü hatırlamaya çalış, sonra çevirip kontrol et.</p>
+  <div class="hp-tekrar-liste">${liste.map(n=>ahaKutuHTML(kartOku(n),false)).join('')}</div>
+  <button class="hp-btn" style="margin-top:14px" data-hp-action="adim-bitti" data-id="tekrar">Tekrarı bitirdim ✓</button>`;
+}
+function adimBitir(id){
+  const p=lsOku();if(!p)return;const t=bugunStr();
+  p.tamam=p.tamam||{};p.tamam[t]=p.tamam[t]||{};p.tamam[t][id]=true;
+  kartiKapat(p);lsYaz(p);
+  if(id==='aha')aktifSekme='soru';else if(id==='soru'){aktifSekme='tekrar';quiz=null;}else aktifSekme='bugun';
+  ciz();pillGuncelle();
+  if(typeof bugunKartiRender==='function')bugunKartiRender();
+}
+function basla(){
+  const p=lsOku();if(!p)return;const v=programHesapla(p);
+  const d=Math.max(1,Math.min(v.gunNo,v.toplamGun));
+  const gg=gunGorevleri(v,d);const ok=tamamOku(p,bugunStr());
+  const x=gg.gorevler.find(g=>!ok[g.id]);if(!x)return;
+  if(x.ic==='aha'||x.ic==='soru'||x.ic==='tekrar'){
+    // Bugünün kartını sabitle: tamamlandıktan sonra da gün aynı kartı göstersin
+    const t=bugunStr();p.gunKart=p.gunKart||{};
+    if(!p.gunKart[t]){const n=siradakiKart(p);if(n){p.gunKart[t]=n;lsYaz(p);}}
+    onizleme=null;aktifSekme=x.ic;ciz();return;
+  }
+  if(x.ic){aktifSekme=x.ic;ciz();return;}
+  materyalAc(x.mat);
+}
+// Tek olay dinleyicisi (data-hp-action) — iOS Safari'de inline onclick yerine
+// delegasyon; butonlar gerçek <button> olduğu için dokunma güvenilir.
+function olayBagla(o){
+  o.addEventListener('click',function(e){
+    const el=e.target.closest('[data-hp-action]');if(!el||!o.contains(el))return;
+    const a=el.dataset.hpAction;
+    if(a==='basla')basla();
+    else if(a==='geri'){onizleme=null;aktifSekme='bugun';ciz();}
+    else if(a==='sekme'){aktifSekme=el.dataset.k;ciz();}
+    else if(a==='materyal')materyalAc(el.dataset.k);
+    else if(a==='asama'){const n=Number(el.dataset.no);const kutu=el.parentElement;const ac=!kutu.classList.contains('acik');
+      o.querySelectorAll('.hp-asama.acik').forEach(x=>{x.classList.remove('acik');x.firstElementChild.setAttribute('aria-expanded','false');});
+      if(ac){kutu.classList.add('acik');el.setAttribute('aria-expanded','true');}acikAsama=ac?n:-1;}
+    else if(a==='kart'){onizleme=Number(el.dataset.no);aktifSekme='aha';ciz();}
+    else if(a==='cevir')el.classList.toggle('cevrik');
+    else if(a==='adim-bitti')adimBitir(el.dataset.id);
+    else if(a==='cevap'){if(quiz&&quiz.secim===null){quiz.secim=Number(el.dataset.j);const s=havuzGetir()[quiz.sorular[quiz.i]];if(s&&quiz.secim===s.ans)quiz.dogru++;ciz(true);}}
+    else if(a==='sonraki-soru'){if(quiz){quiz.i++;quiz.secim=null;ciz();}}
+    else if(a==='isaretle')hpIsaretle(el.dataset.t,el.dataset.id);
+    else if(a==='kelime10'){const p=lsOku();if(p){const t=bugunStr();p.tamam=p.tamam||{};p.tamam[t]=p.tamam[t]||{};p.tamam[t].kelime10=true;lsYaz(p);}materyalAc('kelimeKart');}
+  });
 }
 function gorevHTML(x,bitti,tarih){
-  const basla=x.ic?`hpSekme('${x.ic}')`:`hpMateryal('${x.mat}')`;
+  const basla=['aha','soru','tekrar'].includes(x.ic)?`hpSekme('bugun')`:x.ic?`hpSekme('${x.ic}')`:`hpMateryal('${x.mat}')`;
   return `<div class="hp-gorev${bitti?' bitti':''}">
     <button class="hp-check" aria-label="Tamamlandı olarak işaretle" onclick="hpIsaretle('${tarih}','${x.id}')">${bitti?'✓':''}</button>
     <div class="hp-g-ic"><div class="hp-g-baslik">${x.ikon} ${esc(x.baslik)}</div>${x.detay?`<div class="hp-g-detay">${esc(x.detay)}${x.dk?' · ~'+x.dk+' dk':''}</div>`:(x.dk?`<div class="hp-g-detay">~${x.dk} dk</div>`:'')}</div>
@@ -428,7 +684,7 @@ window.hpIsaretle=function(tarih,id){
   const p=lsOku();if(!p)return;
   p.tamam=p.tamam||{};p.tamam[tarih]=p.tamam[tarih]||{};
   p.tamam[tarih][id]=!p.tamam[tarih][id];
-  lsYaz(p);ciz();pillGuncelle();
+  kartiKapat(p);lsYaz(p);ciz();pillGuncelle();
   if(typeof bugunKartiRender==='function')bugunKartiRender();
 };
 window.hpMateryal=function(k){materyalAc(k);};
@@ -459,19 +715,18 @@ function haritaHTML(v){
 }
 
 // ----- program (takvim) -----
+const GUN_RENK={normal:'#38bdf8',deneme:'#f5a623',tekrar:'#34d399',son:'#a78bfa'};
 function planHTML(v,p){
-  const s=fazSinirlari(v.toplamGun);
   const bugunNo=Math.min(v.gunNo,v.toplamGun);
   let html=`<div class="hp-kart"><div class="hp-eyebrow">${v.toplamGun} günlük program</div><div class="hp-h">${tarihYaz(p.baslangic)} → ${tarihYaz(p.tarih)} (sınav)</div>
-  ${FAZLAR.map(f=>{const bas=f.no===1?1:f.no===2?s.f1+1:f.no===3?s.f2+1:s.f3+1;const son=f.no===1?s.f1:f.no===2?s.f2:f.no===3?s.f3:s.son;if(son<bas)return'';return`<div class="hp-adim"><b class="n" style="background:${f.renk}22;color:${f.renk}">${f.no}</b><div><b>${f.ad}</b> <span class="hp-muted" style="font-size:12px">· Gün ${bas}–${son}</span><div class="hp-muted" style="font-size:12.5px">${f.ozet}</div></div></div>`;}).join('')}
-  <div class="hp-muted" style="font-size:12px;margin-top:10px">📝 Her 7. gün deneme günüdür.</div></div><div class="hp-kart" style="padding:8px">`;
+  <div class="hp-muted" style="font-size:12.5px"><span style="color:${GUN_RENK.normal}">●</span> Normal gün: 1 AHA kartı → 5 soru → 5 dk tekrar · <span style="color:${GUN_RENK.deneme}">●</span> Her 7. gün deneme · <span style="color:${GUN_RENK.tekrar}">●</span> 22 kart bitince deneme + tekrar</div></div><div class="hp-kart" style="padding:8px">`;
   for(let d=1;d<=v.toplamGun;d++){
     const t=gunEkle(p.baslangic,d-1);const gg=gunGorevleri(v,d);const ok=tamamOku(p,t);
     const biten=gg.gorevler.filter(x=>ok[x.id]).length,tum=gg.gorevler.length;
-    const f=FAZLAR[gg.faz-1];
     const durum=biten===tum?'✅':(d<bugunNo?(biten?`${biten}/${tum}`:'—'):(d===bugunNo?`${biten}/${tum}`:''));
-    const ozet=gg.tip==='deneme'?'📝 Deneme günü':gg.tip==='son'?'🌙 Hafif tekrar':(gg.gorevler.find(x=>x.id==='ders')||gg.gorevler[0]).baslik.replace(/^Günün (dersi|strateji dersi|okuma çalışması): /,'');
-    html+=`<div class="hp-gun${d===bugunNo?' bugun':''}" onclick="${d===bugunNo?"hpSekme('bugun')":`hpGunGoster(${d})`}"><span class="hp-gun-no">G${d}</span><span class="hp-gun-dot" style="background:${f.renk}"></span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tarihYaz(t)} · ${esc(ozet)}</span><span style="font-size:12px;color:#a8b0bf">${durum}</span></div>`;
+    const gk=p.gunKart&&p.gunKart[t];
+    const ozet=gg.tip==='deneme'?'📝 Deneme günü':gg.tip==='son'?'🌙 Hafif tekrar':gg.tip==='tekrar'?'🔁 Deneme + tekrar':gk?`🃏 AHA ${gk} · ${kartOku(gk).baslik}`:'🃏 AHA kartı + 5 soru + tekrar';
+    html+=`<div class="hp-gun${d===bugunNo?' bugun':''}" onclick="${d===bugunNo?"hpSekme('bugun')":`hpGunGoster(${d})`}"><span class="hp-gun-no">G${d}</span><span class="hp-gun-dot" style="background:${GUN_RENK[gg.tip]}"></span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tarihYaz(t)} · ${esc(ozet)}</span><span style="font-size:12px;color:#a8b0bf">${durum}</span></div>`;
   }
   html+=`<div class="hp-gun" style="cursor:default"><span class="hp-gun-no">🎯</span><span class="hp-gun-dot" style="background:#f87171"></span><span style="flex:1"><b>${tarihYaz(p.tarih,true)} · SINAV</b></span></div></div>`;
   return html;
@@ -479,7 +734,7 @@ function planHTML(v,p){
 window.hpGunGoster=function(d){
   const p=lsOku();if(!p)return;const v=programHesapla(p);
   const t=gunEkle(p.baslangic,d-1);const gg=gunGorevleri(v,d);const ok=tamamOku(p,t);
-  document.getElementById('hp-govde').innerHTML=`<div class="hp-kart"><div class="hp-eyebrow">Gün ${d} · ${tarihYaz(t,true)}</div><div class="hp-h">${gg.tip==='deneme'?'📝 Deneme günü':'Görevler'}</div>${gg.gorevler.map(x=>gorevHTML(x,ok[x.id],t)).join('')}</div><button class="hp-btn2" onclick="hpSekme('plan')">← Programa dön</button>`;
+  document.getElementById('hp-govde').innerHTML=`<button class="hp-geri" data-hp-action="sekme" data-k="plan">← Programa dön</button><div class="hp-kart"><div class="hp-eyebrow">Gün ${d} · ${tarihYaz(t,true)}</div><div class="hp-h">${gg.tip==='deneme'?'📝 Deneme günü':'Görevler'}</div>${gg.gorevler.map(x=>gorevHTML(x,ok[x.id],t)).join('')}</div>`;
 };
 
 // ----- ilerleme -----
@@ -601,7 +856,7 @@ window.hpAc=function(sekme){
 };
 window.hpKapat=function(sessiz){
   const o=document.getElementById('hp-overlay');if(o)o.classList.remove('acik');
-  pillGuncelle();
+  sureDurdur();pillGuncelle();
 };
 window.hpSekme=function(k){aktifSekme=k;ciz();};
 window.hpVarMi=function(){return !!lsOku();};
