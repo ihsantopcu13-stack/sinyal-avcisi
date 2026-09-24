@@ -253,8 +253,11 @@ function materyalAc(key){
 
 // ---------- UI ----------
 let aktifSekme='bugun';
+// z-index 10000: kurtarma kodu kutusu (#ap-banner, 9999) ve diğer sayfa pop-up'larının
+// ÜSTÜNDE kalır; program kapanınca onlar yine görünür. Üstünde kalması gereken tek
+// bildirim: hata banner'ı (#sa-err-banner, 10001).
 const CSS=`
-#hp-overlay{position:fixed;inset:0;z-index:4500;background:var(--paper,#0c0e14);color:var(--ink,#ece7da);overflow-y:auto;font-family:'IBM Plex Sans',sans-serif;display:none}
+#hp-overlay{position:fixed;inset:0;z-index:10000;background:var(--paper,#0c0e14);color:var(--ink,#ece7da);overflow-y:auto;font-family:'IBM Plex Sans',sans-serif;display:none}
 #hp-overlay.acik{display:block}
 .hp-ust{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,#0c0e14 85%,rgba(12,14,20,0));padding:14px 16px 10px}
 .hp-ust-ic{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px}
