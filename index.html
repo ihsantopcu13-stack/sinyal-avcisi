@@ -11121,38 +11121,143 @@ const WA_NUMARA = '905324720860';
 // Panel içeriği artık client'tan Supabase'e direkt sorgu atmıyor; giriş yapmış
 // kullanıcının oturum token'ı /api/admin-users'a gönderiliyor, orada Supabase Auth
 // ile doğrulanıp ADMIN_EMAILS allowlist'ine göre yetkilendiriliyor.
+//
+// Akış: oturum yoksa YA DA oturum anonimse (site her ziyaretçiye arka planda
+// anonim oturum açar) ayrı "Admin Girişi" formu gösterilir (e-posta + şifre,
+// signInWithPassword). Giriş başarılı olunca panel sayfa yenilenmeden açılır.
+// Tüm akış try/catch içinde: hata olursa genel kırmızı bant yerine formda Türkçe
+// mesaj gösterilir, ayrıntı konsola [SA-ADMIN] önekiyle yazılır.
 async function adminPanelKontrol() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('admin') !== '1') return;
-  adminPanelAcGiris();
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') !== '1') return;
+    await adminPanelAcGiris();
+  } catch (e) {
+    console.error('[SA-ADMIN] beklenmeyen hata:', e);
+    adminGirisFormuGoster('Admin paneli açılamadı. Sayfayı yenileyip tekrar dene.');
+  }
 }
 
 var _admToken = null;
-async function adminPanelAcGiris() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) {
-    alert('Admin paneline erişmek için önce giriş yapmalısın.');
-    openModal('Giriş Yap', '');
-    return;
-  }
 
-  let kullanicilar = [];
+// sb (Supabase istemcisi) _sbInit'te CDN yüklenince oluşur; hazır değilse kısa süre bekle
+function adminSbBekle(ms = 5000) {
+  return new Promise((resolve, reject) => {
+    const bas = Date.now();
+    (function dene() {
+      if (typeof sb !== 'undefined' && sb && sb.auth) return resolve(sb);
+      if (Date.now() - bas > ms) return reject(new Error('Supabase istemcisi hazır değil'));
+      setTimeout(dene, 150);
+    })();
+  });
+}
+
+async function adminPanelAcGiris() {
   try {
-    const res = await fetch('/api/admin-users', {
+    const istemci = await adminSbBekle();
+    const { data, error } = await istemci.auth.getSession();
+    if (error) throw error;
+    const session = data && data.session;
+    if (!session || !session.user || session.user.is_anonymous) {
+      adminGirisFormuGoster();
+      return;
+    }
+    await adminPaneliYukle(session);
+  } catch (e) {
+    console.error('[SA-ADMIN] oturum kontrolü başarısız:', e);
+    adminGirisFormuGoster('Oturum kontrol edilemedi. Bağlantını kontrol edip tekrar dene.');
+  }
+}
+
+// Oturum token'ıyla kullanıcı listesini çek; yetki sunucuda (ADMIN_EMAILS) kontrol edilir
+async function adminPaneliYukle(session) {
+  let res;
+  try {
+    res = await fetch('/api/admin-users', {
       headers: { 'Authorization': 'Bearer ' + session.access_token }
     });
-    if (res.status === 401) { alert('Oturum geçersiz, tekrar giriş yap.'); return; }
-    if (res.status === 403) { alert('Bu hesabın admin yetkisi yok.'); return; }
-    if (!res.ok) { alert('Panel yüklenemedi.'); return; }
-    const data = await res.json();
-    kullanicilar = data.users || [];
   } catch (e) {
-    alert('Bağlantı hatası, tekrar dene.');
+    console.error('[SA-ADMIN] /api/admin-users isteği başarısız:', e);
+    adminGirisFormuGoster('Bağlantı hatası, tekrar dene.');
     return;
   }
-
+  if (res.status === 401) { adminGirisFormuGoster('Oturum geçersiz ya da süresi dolmuş. Tekrar giriş yap.'); return; }
+  if (res.status === 403) { adminGirisFormuGoster('Bu hesabın admin yetkisi yok. Admin hesabıyla giriş yap.'); return; }
+  if (!res.ok) {
+    console.error('[SA-ADMIN] /api/admin-users durum kodu:', res.status);
+    adminGirisFormuGoster('Panel yüklenemedi (sunucu hatası ' + res.status + ').');
+    return;
+  }
+  let kullanicilar = [];
+  try {
+    const data = await res.json();
+    kullanicilar = (data && data.users) || [];
+  } catch (e) {
+    console.error('[SA-ADMIN] cevap okunamadı:', e);
+    adminGirisFormuGoster('Panel yüklenemedi (geçersiz cevap).');
+    return;
+  }
+  adminGirisFormuKapat();
   _admToken = session.access_token;
   adminPanelAc(kullanicilar);
+}
+
+// ── Ayrı, basit "Admin Girişi" formu (kayıt formundan bağımsız) ──
+function adminGirisFormuKapat() {
+  const el = document.getElementById('admin-giris');
+  if (el) el.remove();
+}
+function adminGirisFormuGoster(mesaj) {
+  let kutu = document.getElementById('admin-giris');
+  if (!kutu) {
+    kutu = document.createElement('div');
+    kutu.id = 'admin-giris';
+    kutu.setAttribute('role', 'dialog');
+    kutu.setAttribute('aria-label', 'Admin Girişi');
+    kutu.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(10,12,20,.96);display:flex;align-items:center;justify-content:center;padding:16px;font-family:IBM Plex Sans,sans-serif';
+    kutu.innerHTML = `
+      <form id="admin-giris-form" novalidate style="width:100%;max-width:360px;background:#1a1d27;border:1px solid #232836;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f8ef7;letter-spacing:.12em">🔐 ADMİN GİRİŞİ</div>
+        <input id="admin-giris-email" type="email" autocomplete="username" placeholder="E-posta" required aria-label="E-posta" style="background:#0a0c10;border:1px solid #232836;border-radius:10px;padding:12px;font-size:16px;color:#ece7da;font-family:inherit">
+        <input id="admin-giris-sifre" type="password" autocomplete="current-password" placeholder="Şifre" required aria-label="Şifre" style="background:#0a0c10;border:1px solid #232836;border-radius:10px;padding:12px;font-size:16px;color:#ece7da;font-family:inherit">
+        <div id="admin-giris-mesaj" role="alert" style="min-height:18px;font-size:13px;color:#f87171;line-height:1.4"></div>
+        <button id="admin-giris-btn" type="submit" style="background:#4f8ef7;color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">Giriş yap</button>
+        <button type="button" id="admin-giris-kapat" style="background:none;border:none;color:#8b93a3;font-size:13px;cursor:pointer;font-family:inherit">Kapat</button>
+      </form>`;
+    document.body.appendChild(kutu);
+    kutu.querySelector('#admin-giris-kapat').addEventListener('click', adminGirisFormuKapat);
+    kutu.querySelector('#admin-giris-form').addEventListener('submit', adminGirisGonder);
+  }
+  kutu.querySelector('#admin-giris-mesaj').textContent = mesaj || '';
+  const btn = kutu.querySelector('#admin-giris-btn');
+  btn.disabled = false; btn.textContent = 'Giriş yap';
+  kutu.querySelector('#admin-giris-email').focus();
+}
+
+async function adminGirisGonder(e) {
+  e.preventDefault();
+  const email = document.getElementById('admin-giris-email').value.trim();
+  const sifre = document.getElementById('admin-giris-sifre').value;
+  const mesaj = document.getElementById('admin-giris-mesaj');
+  const btn = document.getElementById('admin-giris-btn');
+  if (!email || !sifre) { mesaj.textContent = 'E-posta ve şifreyi gir.'; return; }
+  btn.disabled = true; btn.textContent = 'Giriş yapılıyor...'; mesaj.textContent = '';
+  try {
+    const istemci = await adminSbBekle();
+    const { data, error } = await istemci.auth.signInWithPassword({ email, password: sifre });
+    if (error || !data || !data.session) {
+      console.error('[SA-ADMIN] giriş başarısız:', error);
+      const onaysiz = error && /confirm/i.test(error.message || '');
+      mesaj.textContent = onaysiz ? 'E-posta adresi henüz onaylanmamış.' : 'E-posta veya şifre hatalı.';
+      btn.disabled = false; btn.textContent = 'Giriş yap';
+      return;
+    }
+    await adminPaneliYukle(data.session);
+  } catch (err) {
+    console.error('[SA-ADMIN] giriş sırasında hata:', err);
+    mesaj.textContent = 'Giriş yapılamadı. Bağlantını kontrol edip tekrar dene.';
+    btn.disabled = false; btn.textContent = 'Giriş yap';
+  }
 }
 
 function adminPanelAc(kullanicilar) {
