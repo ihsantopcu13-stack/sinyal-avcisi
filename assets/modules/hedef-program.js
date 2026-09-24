@@ -885,6 +885,12 @@ function heroGuncelle(){
   if(p&&btn)btn.innerHTML='📡 Bugünkü Görevime Git <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span>';
   if(p&&el){const k=gunFarki(bugunStr(),p.tarih);if(k>=0){el.textContent=k;const ust=el.parentElement;if(ust&&ust.firstChild&&ust.firstChild.nodeType===3)ust.firstChild.textContent='🎯 Sınavına ';if(ust&&ust.lastChild&&ust.lastChild.nodeType===3)ust.lastChild.textContent=' gün kaldı';}}
 }
+// Overlay DIŞINDAKİ yönlendirmeler (örn. Dil Avcısı'ndaki "Yoluma git" kutusu).
+// hpAc: program varsa tek yolu, yoksa hedef kurma ekranını açar.
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-hp-action="yola-git"]');
+  if(el){e.preventDefault();hpAc('bugun');}
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('hp-overlay');if(o&&o.classList.contains('acik'))hpKapat();}});
 function baslat(){pillGuncelle();heroGuncelle();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',baslat);else baslat();
