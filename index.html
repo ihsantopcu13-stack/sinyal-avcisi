@@ -7524,8 +7524,9 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // API erişimi yoksa akıllı fallback
     const m=val.toLowerCase();let cevap='';
     for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30)+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=_safeHTML(cevap); // cevap kullanıcı girdisi (val) içerebilir
+    // val kullanıcı girdisi → HTML olarak kaçışlanır; KB cevapları sabit metin (<b> içerir)
+    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
+    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     dnavHistory.push({role:'assistant',content:cevap});
     // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi (written
