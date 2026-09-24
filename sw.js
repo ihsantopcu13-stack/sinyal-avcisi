@@ -1,4 +1,6 @@
-const CACHE_NAME = 'sinyal-avcisi-v2';
+// v3: SW artık yalnızca sitenin kendi origin'indeki GET isteklerini yönetiyor
+// (bkz. fetch). Ad değişince activate'teki temizlik eski v2 önbelleğini siler.
+const CACHE_NAME = 'sinyal-avcisi-v3';
 const CACHE_URLS = ['/', '/index.html'];
 
 self.addEventListener('install', e => {
@@ -21,6 +23,12 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const req = e.request;
+  // Başka alan adlarına (CDN, Google Fonts, Supabase…) ve GET olmayan isteklere
+  // HİÇ karışma: tarayıcı bunları normal yoldan, sayfanın CSP'siyle yapsın.
+  // Eskiden SW bunları kendisi fetch ediyordu; sw.js'e uygulanan CSP'nin
+  // connect-src listesinde cdn.jsdelivr.net / fonts olmadığı için istekler
+  // ERR_FAILED oluyor, ikinci ziyarette Supabase hiç yüklenmiyordu.
+  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
   const isHtmlNav = req.mode === 'navigate' ||
     (req.method === 'GET' && (req.headers.get('accept') || '').includes('text/html'));
 

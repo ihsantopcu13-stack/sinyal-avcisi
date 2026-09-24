@@ -11912,7 +11912,37 @@ window.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}
+if('serviceWorker' in navigator){
+  // Sayfa açılırken zaten bir SW kontrolündeyse ziyaretçi geri dönen biridir
+  // (ilk ziyarette controller yoktur → aşağıdaki yenileme hiç devreye girmez).
+  const _swEskiKontrol=!!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  // Aynı adresle register() güncelleme kontrolü TETİKLEMİYOR (eski SW kontrolündeyken
+  // promise'i de gecikebiliyor). Geri dönen ziyaretçide sayfa yüklenince mevcut kaydı
+  // açıkça update() et → yeni sw.js hemen kurulur (skipWaiting + clients.claim).
+  if(_swEskiKontrol){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.getRegistration()
+        .then(r=>{if(r&&r.update)return r.update();})
+        .catch(()=>{});
+    },{once:true});
+  }
+  // Eski SW bu sayfa yüklenirken Supabase CDN isteğini bozmuş olabilir. Yeni SW
+  // kontrolü alınca (skipWaiting + clients.claim), sayfa TAMAMEN yüklendikten
+  // sonra Supabase hâlâ yoksa sayfayı oturum başına EN FAZLA BİR KEZ yenile.
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(!_swEskiKontrol)return;
+    const kontrol=()=>{
+      try{
+        if(typeof supabase!=='undefined')return;
+        if(sessionStorage.getItem('sa_sw_yenilendi'))return;
+        sessionStorage.setItem('sa_sw_yenilendi','1');
+        location.reload();
+      }catch(_){}
+    };
+    if(document.readyState==='complete')kontrol();else window.addEventListener('load',kontrol,{once:true});
+  });
+}
 
 // ===== YENİ ÖZELLİKLER JS =====
 
