@@ -5,8 +5,9 @@
 // GET  /api/anon-profile?recovery=AVCI-xxx  → kurtarma kodu ile getir
 // POST /api/anon-profile                    → profil oluştur/güncelle
 //
-// GÜVENLİK: service_role key KULLANILMIYOR.
-// RLS politikalarıyla korunuyor. Kişisel veri YOK.
+// GÜVENLİK: Tabloya YALNIZCA sunucu fonksiyonları erişir, SUPABASE_SERVICE_ROLE_KEY
+// ile (tarayıcıya asla gönderilmez). anon_profiles'ta anon/authenticated rollerinin
+// hiçbir yetkisi yok (supabase/anon-profiles-rls.sql). Kişisel veri YOK.
 // ============================================================
 
 import { randomBytes } from 'crypto';
@@ -31,7 +32,11 @@ function rateLimitCheck(ip) {
 }
 
 const SUPABASE_URL  = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+// Anahtar tanımlı değilse (örn. Preview ortamı) eski herkese açık anahtara düşer —
+// RLS sıkılaştırıldıktan sonra bu yedek ÇALIŞMAZ; hangisinin kullanıldığı log'da görünür.
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+  || process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+console.log('[anon-profile] Supabase anahtarı:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'service_role' : 'anon (YEDEK)');
 
 // K4 — Kriptografik random kurtarma kodu: AVCI-XXXX-XXXX
 function kurtarmaKoduUret() {
@@ -46,7 +51,8 @@ async function sb(path, opts = {}) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
     ...opts,
     headers: {
-      'apikey': SUPABASE_ANON,
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
       'Content-Type': 'application/json',
       'Prefer': opts.prefer || 'return=representation',
       ...(opts.headers || {}),

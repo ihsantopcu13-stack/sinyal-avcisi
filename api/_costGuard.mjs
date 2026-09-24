@@ -13,7 +13,11 @@
 // ============================================================
 
 const SUPABASE_URL  = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+// anon_profiles'a yalnızca sunucu erişir (supabase/anon-profiles-rls.sql) → service_role.
+// Tanımlı değilse eski herkese açık anahtara düşer (RLS sonrası çalışmaz; log'a bakın).
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+  || process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+console.log('[costGuard] Supabase anahtarı:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'service_role' : 'anon (YEDEK)');
 
 // Limitler
 const LIMIT_ANON = 30;      // anonim kullanıcı günlük limit
@@ -31,7 +35,8 @@ async function sbFetch(path, opts = {}) {
     const res = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
       ...opts,
       headers: {
-        'apikey': SUPABASE_ANON,
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
         'Content-Type': 'application/json',
         'Prefer': 'return=representation',
         ...(opts.headers || {}),
