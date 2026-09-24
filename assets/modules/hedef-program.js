@@ -319,6 +319,10 @@ const CSS=`
 .hp-adimlar{list-style:none;margin:12px 0 14px;padding:0}
 .hp-adim2{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
 .hp-adim2:first-child{border-top:none}
+.hp-ekadim{display:flex;align-items:center;gap:12px;width:100%;margin:-4px 0 14px;padding:10px 12px;border:1px dashed rgba(255,255,255,.22);border-radius:12px;background:none;color:inherit;text-align:left;cursor:pointer;font-family:inherit;font-size:14px}
+.hp-ekadim .hp-ek-ad{flex:1;font-weight:700}
+.hp-ekadim small{display:block;font-weight:400;font-size:12px;color:#a8b0bf}
+.hp-ekadim.bitti{opacity:.6}
 .hp-adim2 .hp-no{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid rgba(255,255,255,.25);color:#a8b0bf;background:none;padding:0;font-family:inherit}
 .hp-adim2.sira .hp-no{border-color:#f5a623;color:#fbbf24}
 .hp-adim2.bitti .hp-no{background:#10b981;border-color:#10b981;color:#fff}
@@ -507,8 +511,15 @@ function gorevKartiHTML(v,p){
     <div class="hp-eyebrow">Gün ${d} / ${v.toplamGun} · ≈ ${dk} dk</div>
     <div class="hp-h">${baslik}</div>
     <ol class="hp-adimlar">${adimlar}</ol>
+    ${ekKelimeHTML(ok)}
     ${sira?`<button class="hp-btn" data-hp-action="basla">Başla</button>`:`<div class="hp-uyari">🎉 Bugünü bitirdin. ${gg.tip==='normal'&&siradakiKart(p)?`Yarın: <b>AHA ${siradakiKart(p)} · ${esc(kartOku(siradakiKart(p)).baslik)}</b>`:'Yarın görüşürüz.'}</div>`}
   </div>`;
+}
+// İsteğe bağlı ek adım: sayaca (pill / x/3 / haftalık gün) DAHİL DEĞİL —
+// gunGorevleri listesinde yok, sadece tamam[t].kelime10 ile ✓ gösterilir.
+function ekKelimeHTML(ok){
+  const bitti=!!ok.kelime10;
+  return `<button class="hp-ekadim${bitti?' bitti':''}" data-hp-action="kelime10"><span style="font-size:18px">${bitti?'✓':'🃏'}</span><span class="hp-ek-ad">+ 10 kelime (5 dk)<small>İsteğe bağlı · Kelime Kartları açılır</small></span><span style="color:#a8b0bf">→</span></button>`;
 }
 function yolHaritasiHTML(p){
   const bugunNo=bugunKarti(p);
@@ -545,7 +556,7 @@ function eklerHTML(){
   const sek=(k,ik,ad)=>`<button class="hp-mat" data-hp-action="sekme" data-k="${k}"><span style="font-size:18px">${ik}</span><span style="flex:1">${ad}</span><span style="color:#a8b0bf">→</span></button>`;
   return `<details class="hp-ekler"><summary>🧰 Ek araçlar</summary><div class="hp-ekler-ic">
     <h4>Serbest çalışma</h4>
-    ${mat('fiilAvi','DNA Testi — Fiil Avı')}${mat('sinyalLab','Serbest soru pratiği (Sinyal Lab)')}${mat('aha','Tüm AHA kartları (ızgara)')}
+    ${mat('fiilAvi','DNA Testi — Fiil Avı')}${mat('sinyalLab','Serbest soru pratiği (Sinyal Lab)')}${mat('aha','Tüm AHA kartları (ızgara)')}${mat('kelimeKart','Kelime kartları')}
     <h4>Program</h4>
     ${sek('plan','📅','Gün gün program')}${sek('harita','🗺️','Hangi bölümden kaç doğru?')}${sek('ilerleme','📈','Deneme sonucu ekle + grafik')}${sek('materyal','📚','Tüm materyaller')}${sek('strateji','🧭','Sınav günü stratejisi')}${sek('ayar','⚙️','Puan / tarih ayarları')}
   </div></details>`;
@@ -658,6 +669,7 @@ function olayBagla(o){
     else if(a==='cevap'){if(quiz&&quiz.secim===null){quiz.secim=Number(el.dataset.j);const s=havuzGetir()[quiz.sorular[quiz.i]];if(s&&quiz.secim===s.ans)quiz.dogru++;ciz(true);}}
     else if(a==='sonraki-soru'){if(quiz){quiz.i++;quiz.secim=null;ciz();}}
     else if(a==='isaretle')hpIsaretle(el.dataset.t,el.dataset.id);
+    else if(a==='kelime10'){const p=lsOku();if(p){const t=bugunStr();p.tamam=p.tamam||{};p.tamam[t]=p.tamam[t]||{};p.tamam[t].kelime10=true;lsYaz(p);}materyalAc('kelimeKart');}
   });
 }
 function gorevHTML(x,bitti,tarih){
