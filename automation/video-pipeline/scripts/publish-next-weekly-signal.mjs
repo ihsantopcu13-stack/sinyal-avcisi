@@ -1,21 +1,19 @@
 // ============================================================
 // HAFTALIK SİNYAL VİDEOLARI — sıradaki videoyu (ya da PUBLISH_COUNT ile
-// birden fazlasını) YouTube + Instagram + Facebook'a yayınlar. Günlük GitHub Actions
+// birden fazlasını) Instagram + Facebook'a (Buffer) yayınlar. Günlük GitHub Actions
 // cron'u (weekly-signals-publish.yml) bunu çalıştırır, state'i ilerletir
 // — böylece 14 video hepsi birden değil, düzenli bir takvimde yayınlanır.
 //
 // Video kaynağı: bu repodaki weekly-signals-v1 Release'ine asset olarak
 // yüklenmiş MP4'ler (bkz. scripts/upload-weekly-signals-to-release.mjs).
 //
-// Gerekli env: YOUTUBE_CLIENT_ID/SECRET/REFRESH_TOKEN, BUFFER_ACCESS_TOKEN,
-// GITHUB_TOKEN, GITHUB_REPOSITORY
+// Gerekli env: BUFFER_ACCESS_TOKEN, GITHUB_TOKEN, GITHUB_REPOSITORY
+// (YouTube kanalı silindi — YouTube yüklemesi 2026-09-25'te kaldırıldı)
 // ============================================================
 
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { createReadStream, existsSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { google } from "googleapis";
 import { WEEKLY_SIGNALS_QUEUE } from "../data/weekly-signals-meta.mjs";
 import { regeneratePublishedContent } from "./regenerate-published-content.mjs";
 
@@ -52,49 +50,11 @@ async function writeState(state) {
   await writeFile(STATE_PATH, JSON.stringify(state, null, 2));
 }
 
-async function resolveVideoPath(videoFile) {
-  const localPath = path.join(ROOT, "out", videoFile);
-  if (existsSync(localPath)) return localPath;
-
-  const release = await (await ghApi(`/releases/tags/${RELEASE_TAG}`)).json();
-  const asset = (release.assets || []).find((a) => a.name === videoFile);
-  if (!asset) throw new Error(`Release asset bulunamadı: ${videoFile}`);
-  const res = await fetch(asset.browser_download_url, {
-    headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/octet-stream" },
-  });
-  const buf = Buffer.from(await res.arrayBuffer());
-  const tmpDir = path.join(ROOT, "out");
-  await mkdir(tmpDir, { recursive: true });
-  await writeFile(localPath, buf);
-  return localPath;
-}
-
 async function getReleaseAssetUrl(videoFile) {
   const release = await (await ghApi(`/releases/tags/${RELEASE_TAG}`)).json();
   const asset = (release.assets || []).find((a) => a.name === videoFile);
   if (!asset) throw new Error(`Release asset bulunamadı (Instagram için): ${videoFile}`);
   return asset.browser_download_url;
-}
-
-function youtubeClient() {
-  const { YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN } = process.env;
-  const client = new google.auth.OAuth2(YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET);
-  client.setCredentials({ refresh_token: YOUTUBE_REFRESH_TOKEN });
-  return google.youtube({ version: "v3", auth: client });
-}
-
-async function uploadYouTube(item, videoPath) {
-  const { title, description, tags } = item.youtube;
-  const youtube = youtubeClient();
-  const res = await youtube.videos.insert({
-    part: "snippet,status",
-    requestBody: {
-      snippet: { title, description, tags, categoryId: "27" },
-      status: { privacyStatus: "public", selfDeclaredMadeForKids: false },
-    },
-    media: { body: createReadStream(videoPath) },
-  });
-  return { videoId: res.data.id, videoUrl: `https://youtube.com/shorts/${res.data.id}` };
 }
 
 async function bufferGraphQL(query) {
@@ -156,11 +116,9 @@ async function uploadFacebook(item, videoUrl) {
 
 async function publishOne(item) {
   console.log(`Yayınlanıyor: ${item.id} (${item.videoFile})`);
-  const videoPath = await resolveVideoPath(item.videoFile);
   const videoUrl = await getReleaseAssetUrl(item.videoFile);
 
-  const [ytResult, igResult, fbResult] = await Promise.allSettled([
-    uploadYouTube(item, videoPath),
+  const [igResult, fbResult] = await Promise.allSettled([
     uploadInstagram(item, videoUrl),
     uploadFacebook(item, videoUrl),
   ]);
@@ -168,7 +126,6 @@ async function publishOne(item) {
   return {
     id: item.id,
     videoFile: item.videoFile,
-    youtube: ytResult.status === "fulfilled" ? ytResult.value : { error: ytResult.reason?.message },
     instagram: igResult.status === "fulfilled" ? igResult.value : { error: igResult.reason?.message },
     facebook: fbResult.status === "fulfilled" ? fbResult.value : { error: fbResult.reason?.message },
   };
@@ -177,7 +134,7 @@ async function publishOne(item) {
 // Ana kuyruk state'i ilerlemiş olsa bile, tek seferlik bir platform hatası
 // yüzünden atlanmış öğeleri yeniden denemek için: data/facebook-retry.json
 // içine ["gun-tur", ...] id listesi konursa, bu id'ler için SADECE Facebook'a
-// yeniden post atılır (YouTube/Instagram'a dokunulmaz, state ilerletilmez),
+// yeniden post atılır (Instagram'a dokunulmaz, state ilerletilmez),
 // sonra dosya boşaltılır.
 const FB_RETRY_PATH = path.join(ROOT, "data", "facebook-retry.json");
 
