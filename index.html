@@ -953,6 +953,10 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
 .tahta-lbl{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8fd9b6;margin-bottom:6px;opacity:.85}
 .tahta-metin{font-family:'Caveat',cursive;font-weight:600;color:#f4f1e8;font-size:26px;line-height:1.55;white-space:pre-wrap;word-break:break-word;min-height:1.55em}
 .tahta-metin-tr{font-family:'Caveat',cursive;font-weight:500;color:#c9e8d8;font-size:20px;line-height:1.5;margin-top:2px;opacity:.9;white-space:pre-wrap}
+/* Okunabilirlik: uzun Türkçe metinler (açıklama/soru/cevap/çeviri) sade yazıyla; kısa İngilizce örnek cümle tebeşir yazısıyla kalır */
+#cl-metin-aciklama,#cl-metin-soru,#cl-metin-cevap{font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:19px;line-height:1.7;letter-spacing:.005em;max-width:68ch;text-shadow:0 0 1px rgba(244,241,232,.25)}
+#cl-metin-ornek{font-size:30px;line-height:1.4}
+.tahta-metin-tr{font-family:'IBM Plex Sans',sans-serif;font-style:italic;font-size:16px;line-height:1.6}
 .tahta-metin.cl-cursor::after{content:'';display:inline-block;width:3px;height:1em;background:#f4f1e8;margin-left:2px;vertical-align:text-bottom;animation:clBlink .85s steps(1) infinite}
 @keyframes clBlink{50%{opacity:0}}
 .cl-secenekler{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
@@ -971,15 +975,18 @@ body.dark-mode .sp-hafta{border-bottom-color:#2a2d3a}
   .cl-ogretmen{width:120px;left:-6px;bottom:8px}
   .tahta-icerik{padding-left:158px}
   .tahta-metin{font-size:19px}
-  .tahta-metin-tr{font-size:16px}
+  .tahta-metin-tr{font-size:15px}
+  #cl-metin-aciklama,#cl-metin-soru,#cl-metin-cevap{font-size:16px;line-height:1.65}
+  #cl-metin-ornek{font-size:23px}
+  .cl-ogretmen{position:relative;left:auto;bottom:auto;width:76px;margin:0 0 10px}
+  .tahta-icerik{padding-left:0}
   .cl-secenekler{grid-template-columns:1fr}
   .cl-kontrol{flex-direction:column}
   .cl-btn{width:100%}
 }
 @media(max-width:380px){
   .tahta-wrap{min-height:250px}
-  .cl-ogretmen{width:90px}
-  .tahta-icerik{padding-left:118px}
+  .cl-ogretmen{width:64px}
 }
 
 /* SİNYAL PİNG — radar ping + kontak günlüğü (Sinyal Lab + Canlı Ders) */
@@ -8689,7 +8696,7 @@ pUpdate();
 const CL_KONULAR=[
   {
     baslik:'despite / although',
-    aciklama:"«despite» ve «in spite of» kendinden sonra bir İSİM ya da İSİM-FİİL (gerund) alır, asla özne+fiil içeren bir CÜMLE alamaz. «although», «even though» ve «though» ise tam tersine kendinden sonra mutlaka özne+fiil içeren bir CÜMLE alır. YDS'de bu ikisi sürekli karıştırılır: boşluktan hemen sonra gelen ifade sade bir isim tamlaması mı, yoksa özne+fiil mi — buna bakarak karar verirsin.",
+    aciklama:"«despite» ve «in spite of» kendinden sonra bir İSİM ya da İSİM-FİİL (gerund) alır, asla özne+fiil içeren bir CÜMLE alamaz. «although», «even though» ve «though» ise tam tersine kendinden sonra mutlaka özne+fiil içeren bir CÜMLE alır. YDS'de bu ikisi sürekli karıştırılır: boşluktan hemen sonra gelen ifade sade bir isim tamlaması mı, yoksa özne+fiil mi — buna bakarak karar verirsin. TUZAK: «despite the fact that» ve «in spite of the fact that» ise CÜMLE alır; «the fact that» cümleyi isme çevirir.",
     ornekEn:"Despite his lack of experience, he managed to complete the project successfully.",
     ornekTr:"Deneyim eksikliğine rağmen, projeyi başarıyla tamamlamayı başardı.",
     soru:"______ the traffic was terrible, we arrived at the airport right on time.",
@@ -8709,7 +8716,7 @@ const CL_KONULAR=[
   },
   {
     baslik:'must have / should have',
-    aciklama:"«must have + V3» geçmişte olmuş bir olay hakkında GÜÇLÜ BİR ÇIKARIM/TAHMİN ifade eder — «...olmuş olmalı» anlamına gelir, kanıta dayalı bir tahmindir. «should have + V3» ise geçmişte yapılması GEREKİP DE YAPILMAYAN bir eylemi anlatır — pişmanlık ya da eleştiri taşır, «...yapmalıydı ama yapmadı» anlamına gelir.",
+    aciklama:"«must have + V3» geçmişte olmuş bir olay hakkında GÜÇLÜ BİR ÇIKARIM/TAHMİN ifade eder — «...olmuş olmalı» anlamına gelir, kanıta dayalı bir tahmindir. «should have + V3» ise geçmişte yapılması GEREKİP DE YAPILMAYAN bir eylemi anlatır — pişmanlık ya da eleştiri taşır, «...yapmalıydı ama yapmadı» anlamına gelir. TUZAK: «can't / couldn't have + V3» = «...olmuş olamaz» (güçlü olumsuz çıkarım); «needn't have + V3» = «gerek yoktu ama yaptı».",
     ornekEn:"She must have missed the bus; that's why she is late. You should have called me before coming.",
     ornekTr:"Otobüsü kaçırmış olmalı; bu yüzden geç kaldı. Gelmeden önce beni aramalıydın (ama aramadın).",
     soru:"He failed the exam even though he studied hard. He ______ a better strategy.",
@@ -8719,7 +8726,7 @@ const CL_KONULAR=[
   },
   {
     baslik:'far from / anything but',
-    aciklama:"«far from» ve «anything but» ikisi de kendinden sonra gelen sıfat ya da isme GÜÇLÜ BİR OLUMSUZLUK katar; «hiç ... değil, tam tersine» anlamı taşırlar. Yani «far from happy» = «hiç mutlu değil», «anything but easy» = «hiç kolay değil, her şey olabilir ama kolay değil» demektir.",
+    aciklama:"«far from» ve «anything but» ikisi de kendinden sonra gelen sıfat ya da isme GÜÇLÜ BİR OLUMSUZLUK katar; «hiç ... değil, tam tersine» anlamı taşırlar. Yani «far from happy» = «hiç mutlu değil», «anything but easy» = «hiç kolay değil, her şey olabilir ama kolay değil» demektir. TUZAK: «nothing but» = «sadece, ...den başka bir şey değil»; olumsuz anlam taşımaz, «anything but» ile karıştırma.",
     ornekEn:"Despite the positive reports, the negotiations were far from successful.",
     ornekTr:"Olumlu raporlara rağmen, müzakereler hiç başarılı değildi.",
     soru:"Despite the positive reports, the economic situation is ______ stable.",
@@ -8739,13 +8746,13 @@ const CL_KONULAR=[
   },
   {
     baslik:'Relative Clause (who/which/that)',
-    aciklama:"«who» insan, «which» nesne/hayvan, «that» ise her ikisi için kullanılabilir — ANCAK virgüllü (non-defining) relative clause'larda «that» KULLANILAMAZ, sadece «who/which» kullanılır. Virgülsüz (defining) relative clause kişiyi/nesneyi tanımlamak için ZORUNLU bilgi taşır; virgüllü (non-defining) ise çıkarılabilir EK bilgi taşır — YDS'de bu virgül farkı doğru şıkkı belirler.",
+    aciklama:"«who» insan, «which» nesne/hayvan, «that» ise her ikisi için kullanılabilir — ANCAK virgüllü (non-defining) relative clause'larda «that» KULLANILAMAZ, sadece «who/which» kullanılır. Virgülsüz (defining) relative clause kişiyi/nesneyi tanımlamak için ZORUNLU bilgi taşır; virgüllü (non-defining) ise çıkarılabilir EK bilgi taşır — YDS'de bu virgül farkı doğru şıkkı belirler. TUZAK: Edattan sonra «that» gelmez: «the method by which...», «the city in which...». Sahiplik için «whose» kullanılır.",
     ornekEn:"The scientist who discovered the vaccine won a Nobel Prize. My brother, who lives in Berlin, is a doctor.",
     ornekTr:"Aşıyı keşfeden bilim insanı Nobel Ödülü kazandı. Berlin'de yaşayan kardeşim doktor.",
     soru:"The report, ______ was published last week, revealed alarming statistics.",
     secenekler:["that","which","who","whom"],
     cevap:1,
-    cevapAciklama:"Boşluktan önce VİRGÜL var, yani bu bir non-defining (virgüllü) relative clause. Virgüllü yapılarda «that» kullanılamaz. Özne «the report» (nesne) olduğu için «which» doğru cevaptır."
+    cevapAciklama:"Boşluktan önce VİRGÜL var, yani bu bir non-defining (virgüllü) relative clause. Virgüllü yapılarda «that» kullanılamaz. Önceki isim «the report» cansız bir şey olduğu için «which» doğru cevaptır."
   },
   {
     baslik:'Passive Voice (Edilgen Çatı)',
@@ -8759,7 +8766,7 @@ const CL_KONULAR=[
   },
   {
     baslik:'If Clause (Koşul Cümleleri)',
-    aciklama:"Type 1 (gerçek/olası): If + Present, will + V1. Type 2 (hayali/şimdiki): If + Past, would + V1 — şu an gerçek olmayan durum. Type 3 (geçmişe pişmanlık): If + Past Perfect, would have + V3 — geçmişte gerçekleşmemiş durum. YDS'nin favori tuzağı MIXED CONDITIONAL'dır: «If + Past Perfect, would + V1» — geçmişteki bir durumun ŞİMDİKİ sonucunu anlatır.",
+    aciklama:"Type 1 (gerçek/olası): If + Present, will + V1. Type 2 (hayali/şimdiki): If + Past, would + V1 — şu an gerçek olmayan durum. Type 3 (geçmişe pişmanlık): If + Past Perfect, would have + V3 — geçmişte gerçekleşmemiş durum. YDS'nin favori tuzağı MIXED CONDITIONAL'dır: «If + Past Perfect, would + V1» — geçmişteki bir durumun ŞİMDİKİ sonucunu anlatır. TUZAK: «if» düşürülüp devrik yapı kurulabilir: «Had the committee approved...» = «If the committee had approved...»; ayrıca «Were I you...», «Should you need...».",
     ornekEn:"If she had studied medicine, she would be a doctor now.",
     ornekTr:"Eğer tıp okusaydı, şimdi doktor olurdu.",
     soru:"If the committee ______ the proposal earlier, the project would already be underway.",
@@ -8769,11 +8776,11 @@ const CL_KONULAR=[
   },
   {
     baslik:'Skimming (Hızlı Tarama)',
-    aciklama:"Skimming; paragrafın İLK ve SON cümlesini okuyarak, her paragrafın ilk kelimesine göz gezdirerek metnin ANA FİKRİNİ hızlıca yakalama tekniğidir. Detaylara takılmadan 45-60 saniyede metnin ne anlattığını çıkarmayı hedefler — YDS'de zaman yönetiminin can damarıdır.",
-    ornekEn:"The researchers concluded that early intervention significantly reduces long-term complications.",
-    ornekTr:"Araştırmacılar, erken müdahalenin uzun vadeli komplikasyonları önemli ölçüde azalttığı sonucuna vardı.",
+    aciklama:"Skimming; paragrafın İLK ve SON cümlesini okuyup aradaki cümlelere yalnızca göz gezdirerek metnin ANA FİKRİNİ hızlıca yakalama tekniğidir. Detaylara takılmadan 45-60 saniyede metnin ne anlattığını çıkarmayı hedefler — YDS'de zaman yönetiminin can damarıdır.",
+    ornekEn:"Recent studies show that sleep plays a crucial role in memory.",
+    ornekTr:"Son çalışmalar, uykunun hafızada kritik bir rol oynadığını gösteriyor.",
     soru:"YDS'de bir paragrafın ana fikrini hızlıca bulmak için hangi strateji kullanılır?",
-    secenekler:["Skimming — ilk ve son cümleye bakmak","Her kelimeyi sözlükten çevirmek","Scanning — sadece sayıları aramak","Paragrafı sondan başa okumak"],
+    secenekler:["Skimming — ilk ve son cümleye bakmak","Her kelimeyi sözlükten çevirmek","Scanning — sadece sayıları aramak","Sadece son paragrafı okumak"],
     cevap:0,
     cevapAciklama:"Skimming, paragrafın ilk cümlesinde (genellikle topic sentence) ve son cümlesinde (genellikle özet/sonuç) metnin ana fikrinin gizli olduğu varsayımına dayanır. Her kelimeyi çevirmeye çalışmak zaman kaybettirir ve YDS'nin süre baskısında en büyük tuzaktır."
   },
@@ -8793,7 +8800,7 @@ const CL_KONULAR=[
     ornekEn:"Overall, the evidence strongly suggests that urban green spaces improve residents' mental well-being.",
     ornekTr:"Genel olarak, kanıtlar kentsel yeşil alanların sakinlerin ruh sağlığını iyileştirdiğini güçlü biçimde göstermektedir.",
     soru:"Bir paragrafın ana fikri sorulduğunda önce nereye bakılmalıdır?",
-    secenekler:["Paragrafın ilk cümlesine (topic sentence)","Paragrafın ortasındaki bir örneğe","Sadece son kelimeye","Yazarın imzasına"],
+    secenekler:["Paragrafın ilk cümlesine (topic sentence)","Paragrafın ortasındaki bir örneğe","En uzun cümleye","İçinde sayı geçen cümleye"],
     cevap:0,
     cevapAciklama:"Akademik İngilizce metinlerde standart yapı, paragrafın ilk cümlesinde ana fikri (topic sentence) verip geri kalan cümlelerde bu fikri örnekler/kanıtlarla desteklemektir. Bu yüzden ana fikir sorularında ilk bakılacak yer paragrafın ilk cümlesidir."
   },
@@ -8803,17 +8810,17 @@ const CL_KONULAR=[
     ornekEn:"The treatment was far from efficacious, despite the doctors' initial optimism.",
     ornekTr:"Doktorların başlangıçtaki iyimserliğine rağmen, tedavi hiç de etkili değildi.",
     soru:"\"The treatment was far from efficacious\" cümlesinde \"efficacious\" kelimesinin anlamı nasıl çıkarılır?",
-    secenekler:["\"far from\" olumsuzluk sinyalinden — efficacious olumlu bir sıfattır ama burada değildir","Kelimeyi ezbere bilerek","Cümlenin sonundaki noktadan","Paragrafın başlığından"],
+    secenekler:["\"far from\" olumsuzluk sinyalinden — efficacious olumlu bir sıfattır ama burada değildir","Kelimeyi ezbere bilerek","\"-ous\" ekinden, olumsuz bir sıfat olduğunu anlayarak","«treatment» ile eş anlamlı olduğunu düşünerek"],
     cevap:0,
     cevapAciklama:"\"far from\" kalıbı güçlü bir OLUMSUZLUK sinyalidir («hiç ... değil»). Bilmesen bile «efficacious»ın olumlu bir sıfat (etkili/başarılı) olduğunu, ama «far from» ile olumsuzlandığını bağlamdan çıkarabilirsin — kelimeyi ezbere bilmene gerek kalmaz."
   },
   {
     baslik:'YDS Paragraf Soru Tipleri',
-    aciklama:"YDS paragraf sorularında 3 temel tip vardır: (1) Ana Fikir (main idea) — paragrafın geneli sorulur, (2) Detay (detail) — metinde AÇIKÇA yazan bir bilgi sorulur, (3) Çıkarım (inference) — metinde doğrudan yazmayan ama mantıksal olarak ÇIKARILABİLECEK bir sonuç sorulur. Her tip için farklı okuma stratejisi gerekir: detay için scanning, çıkarım için satır aralarını okuma.",
+    aciklama:"Okuma parçası sorularında en sık 3 tip çıkar: (1) Ana Fikir (main idea) — paragrafın geneli sorulur, (2) Detay (detail) — metinde AÇIKÇA yazan bir bilgi sorulur, (3) Çıkarım (inference) — metinde doğrudan yazmayan ama mantıksal olarak ÇIKARILABİLECEK bir sonuç sorulur. Her tip için farklı okuma stratejisi gerekir: detay için scanning, çıkarım için satır aralarını okuma. Bunların dışında YDS'de cümle tamamlama, paragraf tamamlama, anlamı bozan cümle, yakın anlam ve diyalog soruları da vardır.",
     ornekEn:"It can be inferred from the passage that the author is skeptical about the long-term effectiveness of the policy.",
     ornekTr:"Metinden, yazarın politikanın uzun vadeli etkinliği konusunda şüpheci olduğu çıkarılabilir.",
     soru:"\"It can be inferred from the passage that...\" ile başlayan bir soruda cevap paragrafta açıkça yazar mı?",
-    secenekler:["Hayır, satır aralarından mantıksal olarak çıkarılır","Evet, kelimesi kelimesine paragrafta yazar","Cevap sorunun kendi içinde gizlidir, paragrafla ilgisi yoktur","Cevap her zaman paragrafın son cümlesidir"],
+    secenekler:["Hayır, satır aralarından mantıksal olarak çıkarılır","Evet, kelimesi kelimesine paragrafta yazar","Cevap, paragraftaki sayısal bir bilgidir","Cevap her zaman paragrafın son cümlesidir"],
     cevap:0,
     cevapAciklama:"«Infer» (çıkarım) soruları, metinde DOĞRUDAN yazmayan ama verilen bilgilerden mantıksal olarak ulaşılabilecek bir sonucu sorar. Bu yüzden cevabı kelimesi kelimesine paragrafta aramak yanlıştır — yazarın ima ettiği, ancak açıkça söylemediği anlamı bulman gerekir."
   }
@@ -8907,21 +8914,38 @@ function clHookMouth(source){
 }
 function clDurdur(){
   clearInterval(clTypeTimer);
+  if(clYazDurum)clYazDurum.bitti=true; // konu değişince eski metni tamamlama, sadece bırak
   ttsNesil++; // devam eden (henüz cözülmemis) TTS fetch'lerini gecersiz kil — eski ses yeni konunun uzerine binmesin
   if(window.speechSynthesis)speechSynthesis.cancel();
   if(pAudio)pAudio.pause();
   document.querySelectorAll('audio').forEach(a=>{ if(a!==pAudio && !a.paused)a.pause(); }); // arka planda calan baska bir ses/muzik varsa (podcast, arka plan muzigi vb.) onu da durdur
   clStopMouth();
 }
+// Ses, yazma animasyonundan önce biterse bir sonraki aşama yarım kalan metni
+// kesiyordu (ör. örnek cümle "...the project suc" diye kalıyor, Türkçe çevirisi
+// hiç yazılmıyordu). Artık yeni yazma başlamadan önce yarım kalan metin
+// anında tamamlanır ve onun devamı (çeviri gibi) da yazılır.
+let clYazDurum=null;
+function clYazBitir(){
+  let guard=0;
+  while(clYazDurum&&!clYazDurum.bitti&&guard++<5){
+    const d=clYazDurum;d.bitti=true;clearInterval(clTypeTimer);
+    d.el.textContent=d.text;d.el.classList.remove('cl-cursor');
+    if(d.callback)d.callback();
+  }
+}
 function clYaz(elId,text,hiz,callback){
   const el=document.getElementById(elId);
   if(!el)return;
+  clYazBitir();
   clearInterval(clTypeTimer);
   el.textContent='';el.classList.add('cl-cursor');
+  const durum={el,text,callback,bitti:false};clYazDurum=durum;
   let i=0;
   clTypeTimer=setInterval(()=>{
+    if(durum.bitti){clearInterval(clTypeTimer);return;}
     el.textContent+=text[i];i++;
-    if(i>=text.length){clearInterval(clTypeTimer);el.classList.remove('cl-cursor');if(callback)callback();}
+    if(i>=text.length){durum.bitti=true;clearInterval(clTypeTimer);el.classList.remove('cl-cursor');if(callback)callback();}
   },hiz);
 }
 // Konu değişince (özellikle bir önceki konu Soru+Cevap ile uzunken yeni konu
