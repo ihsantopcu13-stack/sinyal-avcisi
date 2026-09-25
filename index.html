@@ -1693,10 +1693,10 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         </div>
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
-          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandı</div></div>
+          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandı</div><div class="dk-action" onclick="dashKartGit('Sinyal Lab')" role="button" tabindex="0">Soru çöz →</div></div>
           <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val" id="dk-zayif-val">—</div><div class="dk-sub" id="dk-zayif-sub">Yükleniyor...</div><div class="dk-action" id="dk-zayif-act" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da çalış →</div></div>
           <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl" id="dk-puan-lbl">Puanın</div><div class="dk-val">—</div><div class="dk-sub">Yükleniyor...</div><div class="dk-action" id="dk-puan-act" style="display:none" onclick="dashPuanAnalizAc()" role="button" tabindex="0">Puanını hesapla →</div></div>
-          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
+          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div><div class="dk-action" onclick="dashKartGit('Kelime Kartları')" role="button" tabindex="0">Kartları çalış →</div></div>
         </div>
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')" role="button" tabindex="0">Sinyal Lab</div>
@@ -10924,6 +10924,12 @@ async function aktiviteSenkronla(streak){
 // ── Günlük hedef takibi ve tamamlanma bildirimi ─────────────────────────────
 const GUNLUK_HEDEF_SORU=30;
 // Panel kartları (Zayıf Yapı + Puan): sabit/uydurma değer yerine kullanıcının gerçek verisi
+// Panel kartlarındaki eylem bağlantıları: soldaki menüden ilgili bölümü açar
+function dashKartGit(etiket){
+  const it=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes(etiket));
+  if(it)it.click();
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function dashPuanAnalizAc(){
   const it=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Puan Analizörü'));
   if(it)it.click();
@@ -10949,11 +10955,11 @@ function dashKartlariGuncelle(){
         const a=spAyarYukle(),v=spHesaplaVerileri(a.dogru,a.yanlis,a.hedefPuan,a.tarih);
         pv.textContent=String(v.mevcutPuan).replace('.',',');
         ps.textContent=v.puanFarki>0?`Hedef: ${a.hedefPuan} — +${String(v.puanFarki).replace('.',',')} puan kaldı`:'🎉 Hedef puanına ulaştın!';
-        if(pa)pa.style.display='none';
+        if(pa){pa.textContent='Planı güncelle →';pa.onclick=function(){dashKartGit('Acil Kurtarma');};pa.style.display='';}
       }else{
         pv.textContent='—';
         ps.textContent='Henüz puan bilgisi girilmedi';
-        if(pa)pa.style.display='';
+        if(pa){pa.textContent='Puanını hesapla →';pa.onclick=dashPuanAnalizAc;pa.style.display='';}
       }
     }
   }catch(e){console.warn('[dashKartlari]',e);}
