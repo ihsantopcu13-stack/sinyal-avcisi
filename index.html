@@ -786,7 +786,10 @@ body.dark-mode .micro-lesson-card .micro-baslik{color:#e8eaf0!important}
 .sp-stat-lbl{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
 .sp-stat.vurgu .sp-stat-val{color:var(--signal)}
 .sp-stat.uyari .sp-stat-val{color:#dc2626}
-.sp-zayif-chip{display:inline-flex;align-items:center;gap:6px;background:#2a1414;color:#dc2626;border:1px solid #fecaca;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;margin:3px 6px 3px 0}
+.sp-zayif-chip{display:inline-flex;align-items:center;gap:6px;background:#2a1414;color:#dc2626;border:1px solid #fecaca;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;margin:3px 6px 3px 0;cursor:pointer;font-family:inherit}
+.sp-zayif-chip:hover{filter:brightness(1.25)}
+.sp-zayif-gorev{background:none;border:none;padding:4px 0;text-align:left;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
+.sp-zayif-gorev:hover{color:var(--ink)}
 body.dark-mode .sp-zayif-chip{background:#2a1010;border-color:#7f1d1d;color:#fca5a5}
 .sp-motiv{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:14px;font-weight:600;line-height:1.6;background:linear-gradient(135deg,#0f172a,#1e1b4b);color:#ece7da}
 .sp-hafta{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #2a2d45}
@@ -12255,17 +12258,18 @@ function spVarsayilanAyar(){
 function spAyarYukle(){
   try{
     const v=JSON.parse(localStorage.getItem('sa_sp_ayar'));
+    if(v&&v.tarih&&/-11-26$/.test(v.tarih))v.tarih=v.tarih.replace(/-11-26$/,'-11-22'); // eski yanlış varsayılan
     if(v&&v.dogru!=null&&v.yanlis!=null&&v.hedefPuan!=null&&v.tarih)return v;
   }catch(e){}
   return spVarsayilanAyar();
 }
 function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
-  const hedefTarih=new Date(tarihStr+'T23:59:59');
+  const hedefTarih=new Date(tarihStr+'T00:00:00');
   // YDS/YÖKDİL: 80 soru, her doğru 1,25 puan, yanlış doğruyu GÖTÜRMEZ (boşlar da 80'in içinde).
   const toplamSoru=80;
   const mevcutPuan=Math.round(dogru*1.25*100)/100;
-  const simdi=new Date();
-  const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
+  const simdi=new Date();const bugun0=new Date(simdi.getFullYear(),simdi.getMonth(),simdi.getDate());
+  const kalanGun=Math.max(1,Math.round((hedefTarih-bugun0)/(1000*60*60*24)));
   const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
   const puanBasiDogru=100/toplamSoru;
   const gerekliNetArtis=puanFarki>0?Math.ceil(puanFarki/puanBasiDogru):0;
@@ -12292,6 +12296,14 @@ const SP_ZAYIF_GOREV={
   'hk-dikkat':{etiket:'Dikkat Hataları',gorev:'🐢 1 metni satır satır oku, anahtar kelimeleri işaretle',mod:'paragraf'},
   'paragraf':{etiket:'Paragraf Soruları',gorev:'📖 2 paragraf sorusu çöz (SAT metodu)',mod:'paragraf'}
 };
+// Zayıf alan etiketine/görevine tıklanınca ilgili panel sekmesini açar.
+function spZayifGit(mod){
+  const etiket={canliders:'Canlı Ders',sinyal:'Sinyal Lab',kelime:'Kelime Kartları',paragraf:'Paragraf'}[mod];
+  const item=etiket&&[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.replace(/\s+/g,' ').trim().endsWith(etiket));
+  if(!item)return;
+  item.click();
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function sinavZayifAlanAnalizi(){
   // 2026-09-17: cevapGecmisiOzet() (doğru+yanlış birleşik, sinyal bazlı
   // gerçek accuracy) varsa VE yeterli veri içeriyorsa, hataLoad()'un kaba
@@ -12508,9 +12520,9 @@ function sinavPlanimOlustur(){
     </div>
     <div style="margin-top:16px">
       <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">🎯 Zayıf Alanların ${zayif.kaynak==='tahmini'?'<span style=\'font-size:10px;font-weight:600;color:var(--muted);text-transform:none\'>(tahmini — henüz pratik verisi yok)</span>':''}</div>
-      <div>${zayif.liste.map(z=>`<span class="sp-zayif-chip">⚠️ ${z.etiket}</span>`).join('')}</div>
+      <div>${zayif.liste.map(z=>`<button type="button" class="sp-zayif-chip" onclick="spZayifGit('${z.mod}')" title="Bu konuya git">⚠️ ${z.etiket} →</button>`).join('')}</div>
       <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
-        ${zayif.liste.map(z=>`<div style="font-size:12px;color:var(--muted)">${z.gorev}</div>`).join('')}
+        ${zayif.liste.map(z=>`<button type="button" class="sp-zayif-gorev" onclick="spZayifGit('${z.mod}')">${z.gorev} <span style="color:var(--signal);font-weight:700">Başla →</span></button>`).join('')}
       </div>
     </div>
     <div class="sp-checklist">
@@ -12680,6 +12692,7 @@ function paVarsayilanAyar(){
 function paAyarYukle(){
   try{
     const v=JSON.parse(localStorage.getItem('sa_pa_ayar'));
+    if(v&&v.tarih&&/-11-26$/.test(v.tarih))v.tarih=v.tarih.replace(/-11-26$/,'-11-22'); // eski yanlış varsayılan
     if(v&&v.dogru!=null&&v.yanlis!=null&&v.hedefPuan!=null&&v.tarih)return v;
   }catch(e){}
   return paVarsayilanAyar();
@@ -12707,9 +12720,9 @@ function paHesapla(dogru,yanlis,hedefPuan,tarihStr){
   // YDS/YÖKDİL: yanlış doğruyu GÖTÜRMEZ — puan = doğru × 1,25
   const net=dogru;
   const mevcutPuan=Math.round(dogru*1.25*100)/100;
-  const hedefTarih=new Date(tarihStr+'T23:59:59');
-  const simdi=new Date();
-  const kalanGun=Math.max(1,Math.ceil((hedefTarih-simdi)/(1000*60*60*24)));
+  const hedefTarih=new Date(tarihStr+'T00:00:00');
+  const simdi=new Date();const bugun0=new Date(simdi.getFullYear(),simdi.getMonth(),simdi.getDate());
+  const kalanGun=Math.max(1,Math.round((hedefTarih-bugun0)/(1000*60*60*24)));
   const kalanHafta=Math.max(1,Math.ceil(kalanGun/7));
   const puanFarki=Math.max(0,Math.round((hedefPuan-mevcutPuan)*100)/100);
   const gerekliNet=Math.min(80,hedefPuan*80/100);
