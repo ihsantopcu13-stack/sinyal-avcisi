@@ -1435,7 +1435,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
   <script>
     // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
-    // (26 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
+    // (22 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
     // (o fonksiyon dosyanın çok ilerisinde tanımlı) kendi başına hesaplar.
     // Hedef tarih değişirse ikisini birlikte güncelle.
     (function(){
@@ -1443,8 +1443,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       if(!el)return;
       var now=new Date();
       var bugun=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-      var hedef=new Date(now.getFullYear(),10,26);
-      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,26); // sınav günü 0 gösterir, ertesi gün seneye geçer
+      var hedef=new Date(now.getFullYear(),10,22);
+      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,22); // sınav günü 0 gösterir, ertesi gün seneye geçer
       var gun=Math.max(0,Math.round((hedef-bugun)/(1000*60*60*24)));
       el.textContent=gun;
     })();
@@ -1515,8 +1515,6 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section class="sosyal">
   <div class="sosyal-inner">
     <div class="stats">
-      <div><div class="stat-num" data-count="2400" data-suffix="+">2.400+</div><div class="stat-lbl">E-kitap indirme</div></div>
-      <div class="stat-div"></div>
       <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Gramer konusu</div></div>
       <div class="stat-div"></div>
       <div><div class="stat-num">7/24</div><div class="stat-lbl">KLOD AI öğretmen</div></div>
@@ -1552,7 +1550,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
         <button class="ekitap-submit" type="submit">Ücretsiz İndir</button>
       </form>
-      <div class="ekitap-note" id="ekitap-note">2.400+ kişi indirdi · Spam yok · İstediğinde çık</div>
+      <div class="ekitap-note" id="ekitap-note">Spam yok · İstediğinde çık</div>
     </div>
     <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
   </div>
@@ -6221,7 +6219,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <!-- FAZ 2 — attribution modülü, ana script bloğundan ÖNCE (senkron) yüklenir
      ki window.SinyalAttribution aşağıdaki kodlar çalışmadan önce hazır olsun. -->
 <script src="assets/modules/attribution.js"></script>
-<script src="assets/modules/hedef-program.js?v=20260926" defer></script>
+<script src="assets/modules/hedef-program.js?v=20260927" defer></script>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
@@ -12245,8 +12243,8 @@ const SP_MOTIVASYON=[
 ];
 function sinavPlanimVarsayilanTarih(){
   const now=new Date();
-  let hedef=new Date(now.getFullYear(),10,26); // Kasım = ay index 10
-  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,26);
+  let hedef=new Date(now.getFullYear(),10,22); // Kasım = ay index 10
+  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,22);
   const ay=String(hedef.getMonth()+1).padStart(2,'0');
   const gun=String(hedef.getDate()).padStart(2,'0');
   return hedef.getFullYear()+'-'+ay+'-'+gun;
