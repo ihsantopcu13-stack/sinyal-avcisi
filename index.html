@@ -10958,7 +10958,7 @@ function dashKartlariGuncelle(){
     }
   }catch(e){console.warn('[dashKartlari]',e);}
 }
-document.addEventListener('DOMContentLoaded',()=>setTimeout(dashKartlariGuncelle,300));
+document.addEventListener('DOMContentLoaded',()=>setTimeout(gunlukHedefGuncelle,300)); // günlük hedef + diğer kartlar (sayfa ilk açılışta)
 function gunlukHedefGuncelle(){
   dashKartlariGuncelle();
   const streak=streakLoad();
