@@ -29,7 +29,9 @@ const AYLAR=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağusto
 const GUNLER=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
 function tarihYaz(s,gunAdi){const d=strGun(s);return d.getDate()+' '+AYLAR[d.getMonth()]+(gunAdi?' '+GUNLER[d.getDay()]:'');}
 function varsayilanTarih(){
-  return window.saSinavTarihi(); // tek kaynak: index.html <head> → SA_SINAV_TARIHI
+  const now=new Date();let h=new Date(now.getFullYear(),10,22); // YDS/2 — 22 Kasım
+  if(h<new Date(now.getFullYear(),now.getMonth(),now.getDate()))h=new Date(now.getFullYear()+1,10,22);
+  return gunStr(h);
 }
 function puanDogru(p){return Math.round(p/PUAN_BASI);}
 function dogruPuan(d){return Math.round(d*PUAN_BASI*100)/100;}
