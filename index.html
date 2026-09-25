@@ -1694,8 +1694,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
           <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandı</div></div>
-          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val">Modal Perfect</div><div class="dk-sub">must/should/can't + have V3</div><div class="dk-action" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da çalış →</div></div>
-          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl">Puan Tahmini</div><div class="dk-val">73</div><div class="dk-sub">yaklaşık — Hedef: 85</div></div>
+          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val" id="dk-zayif-val">—</div><div class="dk-sub" id="dk-zayif-sub">Yükleniyor...</div><div class="dk-action" id="dk-zayif-act" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da çalış →</div></div>
+          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl" id="dk-puan-lbl">Puanın</div><div class="dk-val">—</div><div class="dk-sub">Yükleniyor...</div><div class="dk-action" id="dk-puan-act" style="display:none" onclick="dashPuanAnalizAc()" role="button" tabindex="0">Puanını hesapla →</div></div>
           <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div></div>
         </div>
         <div class="dash-tabs">
@@ -2035,7 +2035,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
               <div class="sp-field"><label>Hedef puan</label><input type="number" id="sp-hedefpuan" min="0" max="100" step="0.5" value="65" aria-label="Hedef puan"></div>
               <div class="sp-field"><label>Sınav tarihi</label><input type="date" id="sp-tarih" aria-label="Sınav tarihi"></div>
             </div>
-            <button onclick="sinavPlanimOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 Planımı Oluştur →</button>
+            <button onclick="sinavPlanimOlustur(true)" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 Planımı Oluştur →</button>
           </div>
           <div id="sp-icerik" style="margin-top:16px"></div>
         </div>
@@ -10223,15 +10223,9 @@ function puanHesapla(){
 }
 
 function puanGuncelle(){
-  const puan=puanHesapla();
-  const hedef=85;
-  const dk=document.querySelector('.dk.green .dk-val');
-  const dkSub=document.querySelector('.dk.green .dk-sub');
-  if(dk)dk.textContent=puan;
-  if(dkSub){
-    const fark=hedef-puan;
-    dkSub.textContent=fark>0?`Hedef: ${hedef} — +${fark} puan kaldı`:`🎉 Hedef aşıldı! Harika!`;
-  }
+  puanHesapla(); // tahminPuan kaydı başka yerlerde kullanılıyor; karta artık yazılmıyor
+  // Kart, kullanıcının gerçek plan verisini gösterir (bkz. dashKartlariGuncelle)
+  if(typeof dashKartlariGuncelle==='function')dashKartlariGuncelle();
 }
 
 function streakSoruEkle(tip){
@@ -10929,24 +10923,64 @@ async function aktiviteSenkronla(streak){
 
 // ── Günlük hedef takibi ve tamamlanma bildirimi ─────────────────────────────
 const GUNLUK_HEDEF_SORU=30;
+// Panel kartları (Zayıf Yapı + Puan): sabit/uydurma değer yerine kullanıcının gerçek verisi
+function dashPuanAnalizAc(){
+  const it=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Puan Analizörü'));
+  if(it)it.click();
+  document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function dashKartlariGuncelle(){
+  try{
+    // Zayıf Yapı — Acil Kurtarma Planı ile aynı analiz
+    const zv=document.getElementById('dk-zayif-val'),zs=document.getElementById('dk-zayif-sub'),za=document.getElementById('dk-zayif-act');
+    if(zv&&typeof sinavZayifAlanAnalizi==='function'){
+      const z=sinavZayifAlanAnalizi(),ilk=z&&z.liste&&z.liste[0];
+      if(ilk){
+        const m=String(ilk.etiket).match(/^(.*?)\s*\((.*)\)\s*$/);
+        zv.textContent=m?m[1]:ilk.etiket;
+        zs.textContent=(m?m[2]:'')+(z.kaynak==='tahmini'?(m?' · ':'')+'tahmini — henüz yeterli pratik yok':'');
+        if(za&&typeof spZayifGit==='function'){za.textContent='Bu konuya çalış →';za.onclick=function(){spZayifGit(ilk.mod);};}
+      }
+    }
+    // Puan — kaydedilmiş sınav planındaki gerçek rakamlar
+    const pk=document.querySelector('.dk.green'),pv=pk&&pk.querySelector('.dk-val'),ps=pk&&pk.querySelector('.dk-sub'),pa=document.getElementById('dk-puan-act');
+    if(pv&&ps){
+      if(typeof spAyarVarMi==='function'&&spAyarVarMi()){
+        const a=spAyarYukle(),v=spHesaplaVerileri(a.dogru,a.yanlis,a.hedefPuan,a.tarih);
+        pv.textContent=String(v.mevcutPuan).replace('.',',');
+        ps.textContent=v.puanFarki>0?`Hedef: ${a.hedefPuan} — +${String(v.puanFarki).replace('.',',')} puan kaldı`:'🎉 Hedef puanına ulaştın!';
+        if(pa)pa.style.display='none';
+      }else{
+        pv.textContent='—';
+        ps.textContent='Henüz puan bilgisi girilmedi';
+        if(pa)pa.style.display='';
+      }
+    }
+  }catch(e){console.warn('[dashKartlari]',e);}
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(dashKartlariGuncelle,300));
 function gunlukHedefGuncelle(){
+  dashKartlariGuncelle();
   const streak=streakLoad();
   const bugunKey=new Date().toISOString().split('T')[0];
   const bugunSoru=(streak.gunler&&streak.gunler[bugunKey])||0;
-  const yuzde=Math.min(100,Math.round((bugunSoru/GUNLUK_HEDEF_SORU)*100));
+  // Sınav planı kurulduysa plandaki günlük hedef kullanılır (Acil Kurtarma Planı ile aynı sayı)
+  let HEDEF=GUNLUK_HEDEF_SORU;
+  try{if(typeof spAyarVarMi==='function'&&spAyarVarMi()){const a=spAyarYukle();const v=spHesaplaVerileri(a.dogru,a.yanlis,a.hedefPuan,a.tarih);if(v&&v.gunlukSoruHedefi>0)HEDEF=v.gunlukSoruHedefi;}}catch(e){}
+  const yuzde=Math.min(100,Math.round((bugunSoru/HEDEF)*100));
 
   const val=document.querySelector('.dk.blue .dk-val');
   const fill=document.querySelector('.dk.blue .dk-fill');
   const sub=document.querySelector('.dk.blue .dk-sub');
-  if(val)val.textContent=GUNLUK_HEDEF_SORU+' soru';
+  if(val)val.textContent=HEDEF+' soru';
   if(fill)fill.style.width=yuzde+'%';
-  if(sub)sub.textContent=bugunSoru+' / '+GUNLUK_HEDEF_SORU+' tamamlandi';
+  if(sub)sub.textContent=bugunSoru+' / '+HEDEF+' tamamlandı';
 
   // Hedef bugün ilk kez tamamlandıysa bildirim gönder (günde 1 kez)
-  if(bugunSoru>=GUNLUK_HEDEF_SORU&&streak.hedefBildirimGunu!==bugunKey){
+  if(bugunSoru>=HEDEF&&streak.hedefBildirimGunu!==bugunKey){
     streak.hedefBildirimGunu=bugunKey;
     streakSave(streak);
-    yerelBildirimGoster('🎯 Günlük hedefini tamamladın!',GUNLUK_HEDEF_SORU+' soru çözdün — harika gidiyorsun, yarın da bekleriz.','sinyal-avcisi-hedef');
+    yerelBildirimGoster('🎯 Günlük hedefini tamamladın!',HEDEF+' soru çözdün — harika gidiyorsun, yarın da bekleriz.','sinyal-avcisi-hedef');
   }
 }
 
@@ -12480,7 +12514,7 @@ function sinavPlanimRender(){
   dEl.value=ayar.dogru;yEl.value=ayar.yanlis;hEl.value=ayar.hedefPuan;tEl.value=ayar.tarih;
   sinavPlanimOlustur();
 }
-function sinavPlanimOlustur(){
+function sinavPlanimOlustur(kaydet){
   const icerikEl=document.getElementById('sp-icerik');
   if(!icerikEl)return;
   const dogru=Math.max(0,parseInt(document.getElementById('sp-dogru').value)||0);
@@ -12488,7 +12522,13 @@ function sinavPlanimOlustur(){
   const hedefPuan=Math.min(100,Math.max(0,parseFloat(document.getElementById('sp-hedefpuan').value)||65));
   const tarihEl=document.getElementById('sp-tarih');
   const tarihStr=tarihEl.value||sinavPlanimVarsayilanTarih();
-  localStorage.setItem('sa_sp_ayar',JSON.stringify({dogru,yanlis,hedefPuan,tarih:tarihStr}));
+  // Sadece kullanıcı "Planımı Oluştur"a bastığında kaydet — sekmeyi açmak örnek
+  // değerleri (17 doğru → 60) kullanıcının gerçek puanıymış gibi kaydediyordu.
+  if(kaydet===true){
+    localStorage.setItem('sa_sp_ayar',JSON.stringify({dogru,yanlis,hedefPuan,tarih:tarihStr}));
+    if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,0);
+    if(typeof sinavKurtarmaKartRender==='function')setTimeout(sinavKurtarmaKartRender,0);
+  }
 
   const v=spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr);
   const zayif=sinavZayifAlanAnalizi();
@@ -12595,7 +12635,7 @@ function sinavKurtarmaKartRender(){
   const yuzde=Math.round((checklistTamamlanan/SP_CHECKLIST_ITEMS.length)*100);
   kartEl.innerHTML=`
     <div class="sk-kart-baslik">🚨 Acil Kurtarma Planı</div>
-    <div class="sk-kart-alt">${v.mevcutPuan} → ${v.hedefPuan} puan · ${v.tarihStr.split('-').reverse().join('.')}'a kadar</div>
+    <div class="sk-kart-alt">${(typeof spAyarVarMi==='function'&&!spAyarVarMi())?'Örnek plan — kendi puanını girmek için Devam Et\'e bas · ':''}${v.mevcutPuan} → ${v.hedefPuan} puan · ${v.tarihStr.split('-').reverse().join('.')}'a kadar</div>
     <div class="sk-grid">
       <div class="sk-stat"><div class="sk-stat-val">${v.kalanGun}</div><div class="sk-stat-lbl">Gün Kaldı</div></div>
       <div class="sk-stat"><div class="sk-stat-val">${v.gerekliDogruBosStrateji}</div><div class="sk-stat-lbl">Gerekli Doğru</div></div>
