@@ -267,17 +267,17 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .step-desc{font-size:16px;color:var(--ink);line-height:1.7;margin-bottom:14px}
 .step-tags{display:flex;gap:7px;flex-wrap:wrap}
 .stag{font-size:15px;font-weight:600;background:var(--sl);color:var(--signal);padding:5px 14px;border-radius:20px;letter-spacing:.01em;border:1px solid rgba(245,166,35,.15)}
-.ekitap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 5vw;color:var(--ink)}
+.ekitap{background:var(--signal);padding:72px 5vw;color:#fff}
 .ekitap-inner{max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .ekitap h2{font-family:'IBM Plex Serif',serif;font-size:clamp(24px,3vw,38px);line-height:1.2;margin-bottom:14px}
-.ekitap-desc{font-size:16px;color:rgba(236,231,218,.82);line-height:1.7;margin-bottom:22px}
+.ekitap-desc{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:22px}
 .ekitap-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.ekitap-list li{font-size:16px;color:var(--ink);display:flex;gap:8px}
-.ekitap-list li::before{content:'→';color:var(--signal);flex-shrink:0}
+.ekitap-list li{font-size:15px;color:rgba(255,255,255,.85);display:flex;gap:8px}
+.ekitap-list li::before{content:'→';color:var(--contrast);flex-shrink:0}
 .ekitap-form{display:flex;gap:8px;flex-wrap:wrap}
-.ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--ink);outline:none;min-height:48px}
-.ekitap-submit{background:var(--signal);color:#0c0e14;min-height:48px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
-.ekitap-note{font-size:14px;color:rgba(236,231,218,.7);margin-top:8px}
+.ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:rgba(255,255,255,.15);color:#fff;outline:none}
+.ekitap-submit{background:var(--surface);color:var(--signal);font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
+.ekitap-note{font-size:15px;color:rgba(255,255,255,.5);margin-top:8px}
 .ekitap-mockup{display:flex;justify-content:center}
 .ekitap-mockup img{width:100%;max-width:320px;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12)}
 .klod{padding:80px 5vw;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
@@ -1292,14 +1292,6 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<style id="adim1-dokunma">
-/* Adım 1 — dokunma alanları en az 44px (MASTER §23, §31) */
-.dopt{min-height:44px}
-.hamburger{min-width:44px;min-height:44px}
-.nav-links span{display:inline-flex;align-items:center;min-height:44px}
-.hero-sub strong{color:var(--ink)}
-#hero a[onclick="hpAc()"]{padding:12px 0}
-</style>
 </head>
 <body class="dark-mode">
 <!-- PWA Banner -->
@@ -1422,10 +1414,10 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         YDS &amp; YÖKDİL · ŞU AN TAMAMEN ÜCRETSİZ
       </span>
     </div>
-    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">İngilizceyi çevirmeye çalışma.<br><em style="color:#f5a623;font-style:normal">Sinyali yakala.</em></h1>
-    <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px"><strong>Fiili bul. Yapıyı gör. Sinyali yakala. Şıkları ele.</strong><br>5 kısa soruyla seviyeni, zayıf noktanı ve bugünkü görevini gör. Kayıt yok, ücret yok.</p>
+    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em style="color:#f5a623;font-style:normal">2 dakikada seviyeni öğren.</em></h1>
+    <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px">5 kısa soru çöz; seviyeni, zayıf noktanı ve sana özel <strong>bugünkü görevini</strong> gör. Kayıt yok, kredi kartı yok.</p>
     <div class="hero-btns">
-      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Avcı'ya Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
+      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Seviyemi Öğren — Ücretsiz <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
     </div>
     <ol class="hero-adimlar" aria-label="Nasıl başlarsın">
       <li><span>1</span>5 soruluk hızlı test</li>
@@ -1443,7 +1435,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
   <script>
     // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
-    // (22 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
+    // (26 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
     // (o fonksiyon dosyanın çok ilerisinde tanımlı) kendi başına hesaplar.
     // Hedef tarih değişirse ikisini birlikte güncelle.
     (function(){
@@ -1451,10 +1443,9 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       if(!el)return;
       var now=new Date();
       var bugun=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-      var hedef=new Date(now.getFullYear(),10,22,23,59,59);
-      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,22,23,59,59); // sınav gününün ertesi günü seneye geçer
-      // Acil Kurtarma / Hedef Programı ile aynı kural: sınav günü sonuna kadar, yukarı yuvarla
-      var gun=Math.max(1,Math.ceil((hedef-now)/(1000*60*60*24)));
+      var hedef=new Date(now.getFullYear(),10,26);
+      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,26); // sınav günü 0 gösterir, ertesi gün seneye geçer
+      var gun=Math.max(0,Math.round((hedef-bugun)/(1000*60*60*24)));
       el.textContent=gun;
     })();
   </script>
@@ -1524,6 +1515,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section class="sosyal">
   <div class="sosyal-inner">
     <div class="stats">
+      <div><div class="stat-num" data-count="2400" data-suffix="+">2.400+</div><div class="stat-lbl">E-kitap indirme</div></div>
+      <div class="stat-div"></div>
       <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Gramer konusu</div></div>
       <div class="stat-div"></div>
       <div><div class="stat-num">7/24</div><div class="stat-lbl">KLOD AI öğretmen</div></div>
@@ -1551,7 +1544,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section id="ekitap" class="ekitap">
   <div class="ekitap-inner">
     <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:14px">Ücretsiz E-Kitap</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:14px">Ücretsiz E-Kitap</div>
       <h2>30 Günlük Metin Fetih Kılavuzu</h2>
       <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
       <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
@@ -1559,7 +1552,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
         <button class="ekitap-submit" type="submit">Ücretsiz İndir</button>
       </form>
-      <div class="ekitap-note" id="ekitap-note">Ücretsiz · Spam yok · İstediğinde çık</div>
+      <div class="ekitap-note" id="ekitap-note">2.400+ kişi indirdi · Spam yok · İstediğinde çık</div>
     </div>
     <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
   </div>
@@ -6228,7 +6221,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <!-- FAZ 2 — attribution modülü, ana script bloğundan ÖNCE (senkron) yüklenir
      ki window.SinyalAttribution aşağıdaki kodlar çalışmadan önce hazır olsun. -->
 <script src="assets/modules/attribution.js"></script>
-<script src="assets/modules/hedef-program.js?v=20260927" defer></script>
+<script src="assets/modules/hedef-program.js?v=20260926" defer></script>
 <script>
 var SUPABASE_URL='https://scqczkyiyshmczzmlshl.supabase.co';
 var SUPABASE_KEY='sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
@@ -12252,8 +12245,8 @@ const SP_MOTIVASYON=[
 ];
 function sinavPlanimVarsayilanTarih(){
   const now=new Date();
-  let hedef=new Date(now.getFullYear(),10,22); // YDS/2 — 22 Kasım (Kasım = ay index 10)
-  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,22);
+  let hedef=new Date(now.getFullYear(),10,26); // Kasım = ay index 10
+  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,26);
   const ay=String(hedef.getMonth()+1).padStart(2,'0');
   const gun=String(hedef.getDate()).padStart(2,'0');
   return hedef.getFullYear()+'-'+ay+'-'+gun;
