@@ -1,6 +1,52 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+<script>
+/* ── TEK SINAV TARİHİ KAYNAĞI ─────────────────────────────────────────
+   Varsayılan sınav tarihi YALNIZCA burada tanımlıdır (YYYY-AA-GG).
+   Hero sayacı, Acil Kurtarma, Sınav Planım, Puan Analizörü ve
+   Hedef Programı varsayılanları buradan okur. Tarih değişirse sadece
+   bu satırı güncelle. */
+window.SA_SINAV_TARIHI='2026-11-22';
+/* Varsayılan sınav tarihi; tarih geçtiyse (eski davranış korunarak) ertesi yılın aynı günü. */
+window.saSinavTarihi=function(){
+  var p=window.SA_SINAV_TARIHI.split('-').map(Number),n=new Date(),bugun=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  var y=p[0];if(new Date(y,p[1]-1,p[2])<bugun)y=n.getFullYear()+(new Date(n.getFullYear(),p[1]-1,p[2])<bugun?1:0);
+  return y+'-'+String(p[1]).padStart(2,'0')+'-'+String(p[2]).padStart(2,'0');
+};
+/* Kullanıcıya GÖSTERİLEN gün sayısı: standart takvim farkı (bugün → sınav günü).
+   Planlama motorunun kendi kalanGun hesabı (bugün + sınav günü dahil) ayrıdır ve değişmedi. */
+window.saTakvimGunFarki=function(tarihStr){
+  var p=String(tarihStr).slice(0,10).split('-').map(Number),n=new Date();
+  var bugun=new Date(n.getFullYear(),n.getMonth(),n.getDate()),hedef=new Date(p[0],p[1]-1,p[2]);
+  return Math.round((hedef-bugun)/864e5);
+};
+/* ── KATLANIR BÖLÜMLER (Ana sayfa 3. adım) ─────────────────────────────
+   #dashboard, #klod, #ses, #ekitap, #medya: DOM'da ve çalışır durumda kalır,
+   ana sayfada kapalı gelir. Mevcut kodun herhangi bir scrollIntoView() / goTo()
+   çağrısı kapalı bir bölümün içini hedeflerse bölüm önce açılır — hiçbir
+   modül fonksiyonu değişmedi. */
+window.saBolumAc=function(el){
+  if(!el||!el.classList||!el.classList.contains('sa-kapali'))return;
+  el.classList.remove('sa-kapali');
+  document.querySelectorAll('[aria-controls="'+el.id+'"]').forEach(function(b){b.setAttribute('aria-expanded','true');});
+};
+window.saBolumGoster=function(id){var el=document.getElementById(id);if(!el)return;window.saBolumAc(el);el.scrollIntoView({behavior:'smooth',block:'start'});};
+window.saPanelAc=function(){window.saBolumGoster('dashboard');};
+(function(){
+  var orj=Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView=function(){
+    var k=this.closest?this.closest('.sa-kapali[data-sa-katli]'):null;
+    if(k)window.saBolumAc(k);
+    return orj.apply(this,arguments);
+  };
+})();
+/* Metin içinde geçen varsayılan tarih de aynı kaynaktan yazılır. */
+document.addEventListener('DOMContentLoaded',function(){
+  var p=window.SA_SINAV_TARIHI.split('-').map(Number),ay=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  document.querySelectorAll('[data-sa-sinav-yazi]').forEach(function(e){e.textContent=p[2]+' '+ay[p[1]-1]+' '+p[0];});
+});
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
@@ -87,18 +133,37 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;min-width:0}
 :root{
-  /* Core — Gece Nöbeti */
-  --ink:#ece7da;
+  /* ── SİNYAL AVCISI RENK TOKEN'LARI (MASTER §5) ─────────────────────
+     Renklerin anlamı sabittir: SARI = SİNYAL · KIRMIZI = TUZAK/HATA ·
+     YEŞİL = DOĞRU/ÇÖZÜM · BEYAZ/GRİ = NORMAL BİLGİ. Yeni kod yalnız
+     bu --sa-* token'larını kullanır; eski değişkenler aşağıda bunlara bağlı. */
+  --sa-sinyal:#f5a623;
+  --sa-sinyal-zemin:rgba(245,166,35,.12);
+  --sa-tuzak:#ef4444;
+  --sa-tuzak-metin:#f87171;
+  --sa-tuzak-zemin:rgba(239,68,68,.10);
+  --sa-dogru:#22c55e;
+  --sa-dogru-metin:#4ade80;
+  --sa-dogru-zemin:rgba(34,197,94,.10);
+  --sa-antrasit:#0c0e14;
+  --sa-surface:#12161f;
+  --sa-surface-2:#1a1d27;
+  --sa-border:rgba(236,231,218,.12);
+  --sa-metin:#ece7da;
+  --sa-metin-2:#8b93a3;
+  --sa-cta-metin:#0c0e14;
+  /* Core — Gece Nöbeti (eski adlar → token'lara bağlı, değerler aynı) */
+  --ink:var(--sa-metin);
   --paper:#0d1b3e;
-  --signal:#f5a623;
+  --signal:var(--sa-sinyal);
   --signal-light:rgba(245,166,35,.14);
   --signal-dark:#c9791a;
   --sl:rgba(245,166,35,.10);
-  --trap:#ef4444;
+  --trap:var(--sa-tuzak);
   --contrast:#d4b483;
-  --muted:#8b93a3;
+  --muted:var(--sa-metin-2);
   --border:rgba(245,166,35,.16);
-  --surface:#12161f;
+  --surface:var(--sa-surface);
   /* Shadows */
   --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
   --shadow-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.04);
@@ -143,7 +208,6 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
 .hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
-.hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
 .hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 40%,rgba(10,13,19,.35),rgba(10,13,19,.88) 65%)}
 .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--signal)}
@@ -513,7 +577,6 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
   .dash-karts{grid-template-columns:1fr 1fr}
   .ekitap-inner{grid-template-columns:1fr}.ekitap-mockup{display:none}
   footer{grid-template-columns:1fr}
-  .hero-bg-video{display:none}
   body{padding-bottom:64px}
 }
 
@@ -666,14 +729,14 @@ html.a11y-buyuk-yazi{zoom:1.2}
    DARK MODE
    ============================================================ */
 body.dark-mode{
-  --ink:#ece7da;
+  --ink:var(--sa-metin);
   --paper:#0d1b3e;
   --border:rgba(245,166,35,.16);
-  --muted:#8b93a3;
+  --muted:var(--sa-metin-2);
   --sl:rgba(245,166,35,.10);
-  --signal:#f5a623;
+  --signal:var(--sa-sinyal);
   --signal-dark:#c9791a;
-  --surface:#12161f;
+  --surface:var(--sa-surface);
   background:var(--paper);
   color:var(--ink);
 }
@@ -1157,13 +1220,6 @@ body.dark-mode .micro-lesson-card{background:#1a1d27}
    soru kartı hover efektleri, dark/light mode geçişi
    ============================================================ */
 .hero{position:relative}
-.hero>div:not(.hero-floaters){position:relative;z-index:1}
-.hero-floaters{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.hero-float-q{position:absolute;font-family:'IBM Plex Serif',serif;color:var(--signal);opacity:.1;font-weight:700;user-select:none;animation-name:heroFloat;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
-.hero-float-word{position:absolute;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--trap);background:#2a1414;padding:4px 10px;border-radius:20px;opacity:.4;user-select:none;animation-name:heroFloat;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
-body.dark-mode .hero-float-word{background:#3a1414;color:#f87171}
-@keyframes heroFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(6deg)}}
-
 /* Streak ateşi */
 .streak-fire{display:inline-block;animation:fireFlicker 1.6s ease-in-out infinite;transform-origin:center bottom}
 @keyframes fireFlicker{0%,100%{transform:scale(1) rotate(-3deg)}25%{transform:scale(1.08) rotate(2deg)}50%{transform:scale(.94) rotate(-2deg)}75%{transform:scale(1.05) rotate(3deg)}}
@@ -1299,6 +1355,166 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 .nav-links span{display:inline-flex;align-items:center;min-height:44px}
 .hero-sub strong{color:var(--ink)}
 #hero a[onclick="hpAc()"]{padding:12px 0}
+/* Adım 2 — güvenli token dönüşümü: birincil CTA'lar düz sinyal sarısı + okunur koyu metin
+   (beyaz/sarı 2.0:1 idi → koyu/sarı ≈10:1). Fonksiyonlar değişmedi. */
+.btn-primary{background:var(--sa-sinyal);color:var(--sa-cta-metin)}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(245,166,35,.3)}
+.btn-nav{color:var(--sa-cta-metin)}
+.modal-submit{color:var(--sa-cta-metin)}
+.ekitap-submit{color:var(--sa-cta-metin)}
+</style>
+<style id="sa-adim3">
+/* ═══ ANA SAYFA 3. ADIM ═══ Renk = anlam: --sa-sinyal (sinyal/birincil CTA) · --sa-tuzak (hata) · --sa-dogru (doğru) · nötr */
+/* Katlanır bölüm: layout hesaplanır (width korunur), görünmez + odaklanamaz */
+.sa-kapali[data-sa-katli]{height:0!important;min-height:0!important;padding-top:0!important;padding-bottom:0!important;margin-top:0!important;margin-bottom:0!important;overflow:hidden!important;visibility:hidden!important;border:0!important}
+
+/* HERO */
+.sa-hero{min-height:auto;padding:128px 5vw 72px;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:48px;align-items:center;overflow:visible;position:relative}
+.sa-hero::before{inset:0 calc(50% - 50vw);background:var(--sa-antrasit)}
+.sa-hero-rozet{display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;border-radius:30px;border:1px solid var(--sa-border);color:var(--sa-metin-2);font-size:13px;font-weight:700;letter-spacing:.06em;margin-bottom:22px}
+.sa-hero-baslik{font-family:'IBM Plex Serif',serif;font-size:clamp(31px,3.5vw,52px);font-weight:700;letter-spacing:-.025em;line-height:1.12;margin:0 0 20px;color:var(--sa-metin)}
+.sa-hero-baslik .sa-satir{display:block;text-wrap:balance}
+.sa-hero-baslik em{font-style:normal;color:var(--sa-sinyal)}
+@media (min-width:1024px){.sa-hero-baslik .sa-satir{white-space:nowrap}}
+.sa-hero-destek{font-size:17px;line-height:1.65;max-width:560px;margin-bottom:26px;color:var(--sa-metin-2)}
+.sa-hero-destek strong{color:var(--sa-metin);font-weight:700}
+#hero-basla-btn{font-size:17px;padding:0 30px;min-height:56px;border-radius:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+#hero-basla-btn span{animation:none!important}
+.sa-ikincil{min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--sa-border);background:transparent;color:var(--sa-metin);font:600 16px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.sa-ikincil:hover{border-color:var(--sa-metin-2)}
+.sa-hero .hero-adimlar{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--sa-metin-2)}
+.sa-hero .hero-adimlar li{display:flex;align-items:center;gap:8px}
+.sa-hero .hero-adimlar li span{width:22px;height:22px;border-radius:50%;border:1px solid var(--sa-border);color:var(--sa-metin);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.sa-hero-hedef{margin-top:16px;font-size:14px;color:var(--sa-metin-2)}
+.sa-hero-hedef a{color:var(--sa-metin);font-weight:700;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:12px 0;min-height:44px}
+.sa-hero-sayac{margin-top:2px;font-size:13px;color:var(--sa-metin-2)}
+.sa-hero-sayac b{font-family:'IBM Plex Mono',monospace;color:var(--sa-metin)}
+.sa-hero-svo{margin:0;border:1px solid var(--sa-border);border-radius:16px;padding:22px 22px 18px;background:var(--sa-surface)}
+.sa-hero-svo figcaption{font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--sa-metin-2);margin-bottom:16px}
+.svo-cumle{display:flex;flex-wrap:wrap;gap:12px 10px;align-items:flex-start}
+.svo-p{display:inline-flex;flex-direction:column;gap:6px}
+.svo-k{font-size:20px;font-weight:600;color:var(--sa-metin);padding-bottom:6px;border-bottom:2px solid var(--sa-border)}
+.svo-v .svo-k{border-bottom-color:var(--sa-metin);font-weight:800}
+.svo-e{font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;color:var(--sa-metin-2)}
+.svo-v .svo-e{color:var(--sa-metin)}
+.svo-not{font-size:14px;color:var(--sa-metin-2);margin-top:16px;line-height:1.55}
+.svo-not b{color:var(--sa-metin)}
+@media (max-width:899px){.sa-hero{grid-template-columns:minmax(0,1fr);padding:96px 5vw 48px;gap:28px}.sa-hero-svo{display:none}}
+@media (max-width:600px){.sa-hero{padding:84px 5vw 40px}.sa-hero .hero-btns{flex-direction:column;align-items:stretch}#hero-basla-btn,.sa-ikincil{width:100%}}
+
+/* ORTAK BÖLÜM */
+.sa-bolum{padding:72px 5vw}
+.sa-ic{max-width:1080px;margin:0 auto}
+.sa-ic-dar{max-width:640px}
+.sa-eyebrow{color:var(--sa-metin-2)!important;font-size:13px}
+.sa-h2{margin-bottom:18px;text-wrap:balance}
+.sa-h2-kucuk{font-size:clamp(24px,2.4vw,34px)}
+.sa-p{font-size:17px;line-height:1.7;color:var(--sa-metin-2);max-width:680px}
+@media (max-width:600px){.sa-bolum{padding:52px 5vw}}
+
+/* PROBLEM */
+.sa-problem{border-top:1px solid var(--sa-border)}
+.sa-karsi{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;max-width:760px}
+.sa-karsi-k{border:1px solid var(--sa-border);border-radius:12px;padding:14px 16px}
+.sa-karsi-bas{font:700 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--sa-metin-2);margin-bottom:6px}
+.sa-karsi-k p{font-size:15px;line-height:1.55;color:var(--sa-metin-2)}
+.sa-karsi-avci{border-color:var(--sa-metin-2)}
+.sa-karsi-avci .sa-karsi-bas,.sa-karsi-avci p{color:var(--sa-metin)}
+@media (max-width:600px){.sa-karsi{grid-template-columns:1fr}}
+
+/* NASIL ÇALIŞIR — AVCI ÇÖZÜM ZİNCİRİ */
+.sa-zincir{list-style:none;padding:0;margin:26px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0}
+.sa-z{position:relative;padding:16px 16px 0 0;display:flex;flex-direction:column;gap:6px;border-top:2px solid var(--sa-border)}
+.sa-z::before{content:'';position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--sa-antrasit);border:2px solid var(--sa-metin-2)}
+.sa-z-no{font:700 12px 'IBM Plex Mono',monospace;color:var(--sa-metin-2);letter-spacing:.08em}
+.sa-z-ad{font-size:16px;font-weight:800;color:var(--sa-metin);letter-spacing:.02em}
+.sa-z-ac{font-size:14px;line-height:1.5;color:var(--sa-metin-2)}
+.sa-sinyal-k{display:inline-block;background:var(--sa-sinyal-zemin);color:var(--sa-sinyal);font-weight:700;padding:0 6px;border-radius:5px;margin:2px 2px 0 0}
+.sa-isaret-yanlis{color:var(--sa-tuzak-metin);font-weight:800}
+.sa-isaret-dogru{color:var(--sa-dogru-metin);font-weight:800}
+@media (max-width:1023px){
+  .sa-zincir{grid-template-columns:1fr;gap:0}
+  .sa-z{border-top:0;border-left:2px solid var(--sa-border);padding:0 0 18px 22px;margin-left:6px}
+  .sa-z:last-child{padding-bottom:0}
+  .sa-z::before{top:2px;left:-7px}
+  .sa-z{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:baseline}
+  .sa-z-ac{grid-column:1 / -1}
+}
+
+/* DEMO — çözülünce sıkışık görünüm (mobilde ~1000px → daha kısa) */
+.sa-demo-bolum .demo-card{padding:24px}
+.sv-cozuldu .sv-ipucu-satir{display:none}
+.sv-cozuldu .sv-opts{gap:6px}
+.sv-cozuldu .sv-opt{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 10px;min-height:44px;padding:8px 12px}
+.sv-cozuldu .sv-opt-ust{width:auto}
+.sv-cozuldu .sv-isaret{margin-left:0;order:-1}
+.sv-cozuldu .sv-neden{font-size:14px}
+.sv-zincir{flex-direction:row!important;flex-wrap:wrap;align-items:center;gap:6px 0!important}
+.sv-z{min-height:34px!important;padding-left:0!important}
+.sv-z:not(:last-child)::after{content:'→'!important;position:static!important;width:auto!important;height:auto!important;background:none!important;color:var(--sa-metin-2);margin:0 8px;font-weight:700}
+@media (max-width:600px){.sa-demo-bolum .demo-card{padding:18px}.sv-son-eylem .sv-cta{width:100%}.sv-z{font-size:15px}.sv-z:not(:last-child)::after{margin:0 6px!important}}
+
+/* KAZANIM */
+.sa-kazanim-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:26px 0 28px}
+.sa-kazanim{border-top:2px solid var(--sa-border);padding-top:14px}
+.sa-kazanim h3{font-size:18px;font-weight:800;color:var(--sa-metin);margin-bottom:6px}
+.sa-kazanim p{font-size:15px;line-height:1.55;color:var(--sa-metin-2)}
+.sa-refleks-imza{max-width:560px}
+@media (max-width:767px){.sa-kazanim-grid{grid-template-columns:1fr;gap:18px}}
+
+/* BUGÜNKÜ AVCI ANTRENMANI */
+.sa-antrenman{border:1px solid var(--sa-sinyal);border-radius:16px;padding:24px;background:var(--sa-surface);max-width:640px}
+.sa-antrenman-bas{font:700 13px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--sa-sinyal);margin-bottom:10px}
+.sa-antrenman-olcu{display:flex;gap:10px;font-size:26px;font-weight:800;color:var(--sa-metin);margin-bottom:8px}
+.sa-antrenman p{font-size:16px;color:var(--sa-metin-2);margin-bottom:18px;line-height:1.55}
+.sa-antrenman-cta{min-height:52px;padding:0 26px;font-weight:700;border-radius:12px}
+@media (max-width:600px){.sa-antrenman-cta{width:100%}}
+
+/* KÜTÜPHANE */
+.sa-kut-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.sa-kut{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:88px;padding:14px 16px;border-radius:12px;border:1px solid var(--sa-border);background:transparent;color:var(--sa-metin);text-align:left;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.sa-kut b{font-size:16px;font-weight:800}
+.sa-kut span{font-size:14px;line-height:1.45;color:var(--sa-metin-2)}
+.sa-kut:hover{border-color:var(--sa-metin-2)}
+.sa-kut[aria-expanded="true"]{border-color:var(--sa-metin)}
+@media (max-width:899px){.sa-kut-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.sa-kut-grid{grid-template-columns:1fr}.sa-kut{min-height:64px}}
+.sa-medya{padding:72px 5vw;background:var(--sa-antrasit);position:relative}
+
+/* MENÜ */
+.nav-links span{padding:0 10px;min-width:44px;justify-content:center;color:var(--sa-metin-2)}
+.nav-links span:hover{color:var(--sa-metin)}
+.btn-nav{min-height:44px}
+.hamburger{min-width:44px;min-height:44px}
+.nav-logo{min-height:44px}
+.mmenu{inset:60px 0 auto 0!important;max-height:calc(100vh - 60px);overflow-y:auto}
+.mmenu a{min-height:48px;display:flex;align-items:center}
+.mmenu a.mmenu-cta{justify-content:center;background:var(--sa-sinyal);color:var(--sa-cta-metin)!important;border-radius:10px;border:0;margin:10px 0 6px;font-weight:700}
+.mmenu-ikincil{border-top:1px solid var(--sa-border);margin-top:6px;padding-top:4px}
+.mmenu-ikincil a{font-size:14px;color:var(--sa-metin-2)!important;font-weight:500!important;border-bottom:0!important;min-height:44px;margin:0!important}
+.mmenu a:last-child{color:var(--sa-metin-2)}
+footer .footer-links span,footer .footer-links a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px}
+footer .footer-logo{flex-shrink:0;white-space:nowrap}
+footer .footer-links{flex-wrap:wrap}
+.hayir-section button{min-height:48px}
+
+/* AVCI ANTRENMANI oturumu (Günlük Tuzak içinde) */
+.sa-ant-ust{border:1px solid var(--sa-sinyal);border-radius:12px;padding:10px 14px;margin:6px 0 14px;background:var(--sa-surface)}
+.sa-ant-satir{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:15px;color:var(--sa-metin)}
+.sa-ant-satir b{color:var(--sa-sinyal);font-weight:700}
+.sa-ant-d{color:var(--sa-dogru-metin)}.sa-ant-y{color:var(--sa-tuzak-metin)}
+.sa-ant-bar{height:6px;border-radius:6px;background:var(--sa-border);margin-top:8px;overflow:hidden}
+.sa-ant-bar div{height:100%;background:var(--sa-sinyal);transition:width .25s}
+.sa-ant-ozet{border:1px solid var(--sa-border);border-radius:12px;padding:16px;margin-top:16px;background:var(--sa-surface)}
+.sa-ant-ozet-bas{font-weight:800;color:var(--sa-dogru-metin);margin-bottom:6px;font-size:17px}
+.sa-ant-ozet p{color:var(--sa-metin);margin-bottom:12px}
+.sa-ant-btnlar{display:flex;flex-wrap:wrap;gap:8px}
+.sa-ant-btnlar button{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--sa-border);background:transparent;color:var(--sa-metin);font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer}
+.sa-ant-btnlar button:first-child{background:var(--sa-sinyal);color:var(--sa-cta-metin);border:0}
+
+/* PANEL — renk semantiği (fonksiyonlar değişmedi): yeşil sidebar ve kırmızı "acil" gradienti nötr */
+.dash-sb{background:var(--sa-surface-2)!important;border-right:1px solid var(--sa-border)}
+.sk-kart{background:var(--sa-surface-2)!important;border:1px solid var(--sa-border);box-shadow:none!important}
 </style>
 </head>
 <body class="dark-mode">
@@ -1318,21 +1534,16 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </svg>
     Sinyal <b>Avcısı</b>
   </div>
-  <div class="nav-links">
-    <span onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:700">🎯 Hedef Programı</span>
+  <div class="nav-links" data-sade="1">
     <span onclick="goTo('nasil')" role="button" tabindex="0">Nasıl Çalışır?</span>
-    <span onclick="goTo('klod')" role="button" tabindex="0">KLOD</span>
-    <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
-    <span onclick="goTo('ekitap')" role="button" tabindex="0">E-Kitap</span>
+    <span onclick="sinavSimulatoruAc()" role="button" tabindex="0">Deneme</span>
     <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
-    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
-    <span onclick="if(typeof ahkGit==='function')ahkGit()" style="color:#5b8fff;font-weight:700" role="button" tabindex="0">🃏 AHA Kartları</span>
   </div>
   <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Ara (Ctrl+K)">🔍</button>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
-<button class="btn-nav" onclick="basla()" style="background:linear-gradient(135deg,var(--signal),#7c3aed)">🎯 Hemen Başla</button>
+<button class="btn-nav" onclick="basla()" style="background:var(--sa-sinyal)">🎯 Avcı'ya Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 
@@ -1392,70 +1603,49 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="streak-badges" id="streak-badges"></div>
 </div>
 <div class="mmenu" id="mmenu">
-  <a onclick="toggleMenu();globalAramaAc()">🔍 Ara</a>
-  <a onclick="closeMenu();hpAc()" style="color:var(--signal);font-weight:700">🎯 Hedef Programım</a>
-  <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
-  <a onclick="closeMenuGoTo('klod')">KLOD</a>
-  <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
-  <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
-  <a onclick="closeMenuGoTo('sss')">SSS</a>
-  <a onclick="closeMenu();basla()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
-</div>
-<section id="hero" class="hero">
-  <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
-    <source src="assets/hero-bg.mp4" type="video/mp4">
-  </video>
-  <div class="hero-floaters" aria-hidden="true">
-    <span class="hero-float-q" style="left:2%;top:3%;font-size:40px;animation-delay:0s;animation-duration:7s">?</span>
-    <span class="hero-float-q" style="left:93%;top:5%;font-size:46px;animation-delay:1.2s;animation-duration:9s">?</span>
-    <span class="hero-float-q" style="left:6%;top:13%;font-size:28px;animation-delay:.6s;animation-duration:8s">?</span>
-    <span class="hero-float-q" style="left:90%;top:91%;font-size:36px;animation-delay:2s;animation-duration:10s">?</span>
-    <span class="hero-float-q" style="left:47%;top:2%;font-size:22px;animation-delay:1.6s;animation-duration:7.5s">?</span>
-    <span class="hero-float-word" style="left:2%;top:8%;animation-delay:.4s;animation-duration:9s">despite</span>
-    <span class="hero-float-word" style="left:76%;top:93%;animation-delay:1.8s;animation-duration:8.5s">however</span>
-    <span class="hero-float-word" style="left:38%;top:94%;animation-delay:1s;animation-duration:9.5s">must have</span>
+  <a role="button" tabindex="0" onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
+  <a role="button" tabindex="0" onclick="closeMenu();sinavSimulatoruAc()">Deneme</a>
+  <a role="button" tabindex="0" onclick="closeMenuGoTo('sss')">SSS</a>
+  <a role="button" tabindex="0" class="mmenu-cta" onclick="closeMenu();basla()">🎯 Avcı'ya Başla</a>
+  <div class="mmenu-ikincil" aria-label="Diğer">
+    <a role="button" tabindex="0" onclick="closeMenu();hpAc()">Hedef Programım</a>
+    <a role="button" tabindex="0" onclick="closeMenuGoTo('kutuphane')">Kütüphane · KLOD, Ses Kurs, E-Kitap, Medya</a>
+    <a role="button" tabindex="0" onclick="toggleMenu();globalAramaAc()">Ara</a>
   </div>
-  <div>
-    <div style="margin-bottom:18px">
-      <span style="background:linear-gradient(135deg,#2e2410,#4a3a10);color:#fbbf24;font-size:13px;font-weight:800;padding:7px 16px;border-radius:30px;letter-spacing:.06em;display:inline-flex;flex-wrap:wrap;max-width:100%;align-items:center;gap:8px;box-sizing:border-box">
-        <span style="width:8px;height:8px;background:#e97316;border-radius:50%;animation:pulse 1.5s ease infinite;flex-shrink:0"></span>
-        YDS &amp; YÖKDİL · ŞU AN TAMAMEN ÜCRETSİZ
-      </span>
-    </div>
-    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">İngilizceyi çevirmeye çalışma.<br><em style="color:#f5a623;font-style:normal">Sinyali yakala.</em></h1>
-    <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px"><strong>Fiili bul. Yapıyı gör. Sinyali yakala. Şıkları ele.</strong><br>5 kısa soruyla seviyeni, zayıf noktanı ve bugünkü görevini gör. Kayıt yok, ücret yok.</p>
+</div>
+<section id="hero" class="hero sa-hero">
+  <div class="sa-hero-metin">
+    <div class="sa-hero-rozet">YDS &amp; YÖKDİL · ŞU AN TAMAMEN ÜCRETSİZ</div>
+    <h1 class="sa-hero-baslik"><span class="sa-satir">İngilizceyi Çevirmeye Çalışma.</span> <em class="sa-satir">Sinyali Yakala.</em></h1>
+    <p class="hero-sub sa-hero-destek"><strong>Fiili bul. Yapıyı gör. Sinyali yakala. Şıkları ele.</strong><br>5 kısa soruyla seviyeni, zayıf noktanı ve bugünkü görevini gör. Kayıt yok, ücret yok.</p>
     <div class="hero-btns">
-      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Avcı'ya Başla <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
+      <button class="btn-primary" id="hero-basla-btn" onclick="basla()">🎯 Avcı'ya Başla <span aria-hidden="true">→</span></button>
+      <button type="button" class="sa-ikincil" onclick="goTo('demo-bolum')">Önce 1 soru dene ↓</button>
     </div>
-    <ol class="hero-adimlar" aria-label="Nasıl başlarsın">
+    <ol class="hero-adimlar" aria-label="Avcı'ya Başla'ya basınca">
       <li><span>1</span>5 soruluk hızlı test</li>
       <li><span>2</span>Seviyen ve zayıf noktan</li>
       <li><span>3</span>Bugünkü görevin</li>
     </ol>
-    <div style="margin-top:14px;font-size:14px;color:var(--ink)">📅 Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
-    <div style="margin-top:10px;font-size:13px;color:var(--muted)">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı</div>
-    <style>
-      .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
-      .hero-adimlar li{display:flex;align-items:center;gap:8px}
-      .hero-adimlar li span{width:22px;height:22px;border-radius:50%;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.5);color:var(--signal);font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-    </style>
+    <div class="sa-hero-hedef">📅 Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()">Hedef Programını kur →</a></div>
+    <div class="sa-hero-sayac">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim">—</b> gün kaldı</div>
   </div>
-  </div>
+  <figure class="sa-hero-svo" aria-label="Örnek: Researchers examine social problems. Özne Researchers, fiil examine, nesne social problems.">
+    <figcaption>Çevirmeden önce iskeleti gör</figcaption>
+    <div class="svo-cumle" lang="en" aria-hidden="true">
+      <span class="svo-p"><span class="svo-k">Researchers</span><span class="svo-e">S · özne</span></span>
+      <span class="svo-p svo-v"><span class="svo-k">examine</span><span class="svo-e">V · fiil</span></span>
+      <span class="svo-p"><span class="svo-k">social problems.</span><span class="svo-e">O · nesne</span></span>
+    </div>
+    <p class="svo-not">Önce fiili bul: <b lang="en">examine</b>. Solu özne, sağı nesne. Cümle artık çözülmeye hazır.</p>
+  </figure>
   <script>
-    // Hero geri sayımı — sinavPlanimVarsayilanTarih() ile AYNI hedef tarihi
-    // (22 Kasım) kullanır; bu script hero'nun hemen ardında çalıştığı için
-    // (o fonksiyon dosyanın çok ilerisinde tanımlı) kendi başına hesaplar.
-    // Hedef tarih değişirse ikisini birlikte güncelle.
+    // Hero geri sayımı — varsayılan tarih <head>'deki SA_SINAV_TARIHI'nden gelir.
     (function(){
       var el=document.getElementById('hero-geri-sayim');
       if(!el)return;
-      var now=new Date();
-      var bugun=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-      var hedef=new Date(now.getFullYear(),10,22,23,59,59);
-      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,22,23,59,59); // sınav gününün ertesi günü seneye geçer
-      // Acil Kurtarma / Hedef Programı ile aynı kural: sınav günü sonuna kadar, yukarı yuvarla
-      var gun=Math.max(1,Math.ceil((hedef-now)/(1000*60*60*24)));
-      el.textContent=gun;
+      // Tarih ve gün hesabı <head>'deki tek kaynaktan (SA_SINAV_TARIHI / saTakvimGunFarki).
+      el.textContent=Math.max(0,window.saTakvimGunFarki(window.saSinavTarihi()));
     })();
   </script>
   <script>
@@ -1500,122 +1690,210 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         .forEach(function(ad){stubOlustur(ad,NAVEXTRAS,'nav-extras');});
     })();
   </script>
-  <div id="demo" class="demo-card">
-    <div class="demo-top"><span class="demo-lbl" id="dlbl">Gerçek ÖSYM Cümlesi - Genel</span><span class="badge-live" style="animation:pulse 2s ease infinite">🔴 Canlı</span></div>
-    <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsKaraoke){const c=this.textContent.replace(/[\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">"The researchers concluded that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
-    <div class="demo-legend">
-      <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
-      <div class="leg"><div class="leg-dot" style="background:#2a1414;border:1px solid var(--trap)"></div>Tuzak</div>
-      <div class="leg"><div class="leg-dot" style="background:#2a2810;border:1px solid #d97706"></div>Kilit kelime</div>
+</section>
+<section id="problem" class="sa-bolum sa-problem" aria-labelledby="problem-baslik">
+  <div class="sa-ic">
+    <div class="eyebrow sa-eyebrow">Sorun</div>
+    <h2 class="section-title sa-h2" id="problem-baslik">Uzun cümleyi tamamen çevirmeye çalışma.<br>Önce nereye bakacağını öğren.</h2>
+    <p class="sa-p">Sınav sorusunda boşluğun etrafındaki yapı, nereye bakman gerektiğini söyler: Fiil nerede? Boşluğun sağında isim mi var, cümle mi? Bunu gören öğrenci şıkları çevirmeden eler.</p>
+    <div class="sa-karsi">
+      <div class="sa-karsi-k"><div class="sa-karsi-bas">Çeviren öğrenci</div><p>Her kelimeyi çevirir, anlamı tahmin eder, süre biter.</p></div>
+      <div class="sa-karsi-k sa-karsi-avci"><div class="sa-karsi-bas">Avcı</div><p>Fiili bulur, sinyale bakar, yapıya uymayan şıkkı eler.</p></div>
     </div>
-    <div class="demo-quiz">
-      <div class="demo-q" id="dq" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.textContent,this,null,{lang:'tr-TR',preserveMarkup:true})">Bu cümleye göre araştırmacılar ne sonuca vardı?</div>
-      <div class="demo-opts" id="dopts">
-        <button class="dopt" onclick="demoAns(this,false)">Tedavi tüm hastalar için etkilidir.</button>
-        <button class="dopt" onclick="demoAns(this,true)">Tedavi ümit verici ama garantili değildir.</button>
-        <button class="dopt" onclick="demoAns(this,false)">Sonuçlar yetersiz kaldı.</button>
-        <button class="dopt" onclick="demoAns(this,false)">Tedavi başarıyla tamamlandı.</button>
+  </div>
+</section>
+<section id="nasil" class="sa-bolum sa-nasil" aria-labelledby="nasil-baslik">
+  <div class="sa-ic">
+    <div class="eyebrow sa-eyebrow">Nasıl çalışır?</div>
+    <h2 class="section-title sa-h2" id="nasil-baslik">AVCI çözüm zinciri</h2>
+    <ol class="sa-zincir">
+      <li class="sa-z"><span class="sa-z-no">01</span><b class="sa-z-ad">FİİLİ BUL</b><span class="sa-z-ac">Cümlenin çekimli fiilini işaretle.</span></li>
+      <li class="sa-z"><span class="sa-z-no">02</span><b class="sa-z-ad">S + V + O</b><span class="sa-z-ac">Kim, ne yapıyor, neyi? İskeleti çıkar.</span></li>
+      <li class="sa-z"><span class="sa-z-no">03</span><b class="sa-z-ad">SİNYALİ YAKALA</b><span class="sa-z-ac">Bağlacı, edatı, kalıbı gör: <span class="sa-sinyal-k" lang="en">despite</span> <span class="sa-sinyal-k" lang="en">although</span> <span class="sa-sinyal-k" lang="en">of</span></span></li>
+      <li class="sa-z"><span class="sa-z-no">04</span><b class="sa-z-ad">SAĞ / SOL KONTROL</b><span class="sa-z-ac">Boşluğun sağında isim mi var, cümle mi?</span></li>
+      <li class="sa-z"><span class="sa-z-no">05</span><b class="sa-z-ad">ŞIKLARI ELE</b><span class="sa-z-ac">Yapıya uymayanı çevirmeden sil. <span class="sa-isaret-yanlis" aria-label="elenir">✕</span></span></li>
+      <li class="sa-z"><span class="sa-z-no">06</span><b class="sa-z-ad">ANLAMLA DOĞRULA</b><span class="sa-z-ac">Kalan şıkkı en son anlamla kontrol et. <span class="sa-isaret-dogru" aria-label="doğru">✓</span></span></li>
+    </ol>
+  </div>
+</section>
+<section id="demo-bolum" class="sa-bolum sa-demo-bolum" aria-labelledby="demo-baslik">
+  <div class="sa-ic sa-ic-dar">
+    <div class="eyebrow sa-eyebrow">Dene</div>
+    <h2 class="section-title sa-h2" id="demo-baslik">Zinciri bir soruda kullan</h2>
+    <div id="demo" class="demo-card sv-demo" aria-labelledby="sv-baslik">
+    <div class="demo-top">
+      <span class="demo-lbl" id="sv-baslik">Boşluğa hangisi gelir?</span>
+      <span class="sv-durum" id="sv-durum">Önce sen seç</span>
+    </div>
+    <p class="sv-soru" lang="en"><span class="sv-bosluk" aria-label="boşluk">_____</span> <span class="sv-sag" id="sv-sag">heavy rainfall</span>, the event continued.</p>
+    <div class="sv-ipucu-satir">
+      <button type="button" class="sv-ipucu-btn" id="sv-ipucu-btn" onclick="svIpucu()">İpucu</button>
+      <span class="sv-ipucu" id="sv-ipucu" hidden>Boşluğun <b>sağına</b> bak.</span>
+    </div>
+    <div class="sv-opts" id="sv-opts" role="group" aria-label="Şıklar">
+      <button type="button" class="sv-opt" data-sik="A" onclick="svSec(this)"><span class="sv-opt-ust"><span class="sv-harf">A)</span> <span lang="en">Because</span><span class="sv-isaret" aria-hidden="true"></span></span><span class="sv-neden"></span></button>
+      <button type="button" class="sv-opt" data-sik="B" onclick="svSec(this)"><span class="sv-opt-ust"><span class="sv-harf">B)</span> <span lang="en">Although</span><span class="sv-isaret" aria-hidden="true"></span></span><span class="sv-neden"></span></button>
+      <button type="button" class="sv-opt" data-sik="C" onclick="svSec(this)"><span class="sv-opt-ust"><span class="sv-harf">C)</span> <span lang="en">Despite</span><span class="sv-isaret" aria-hidden="true"></span></span><span class="sv-neden"></span></button>
+      <button type="button" class="sv-opt" data-sik="D" onclick="svSec(this)"><span class="sv-opt-ust"><span class="sv-harf">D)</span> <span lang="en">Therefore</span><span class="sv-isaret" aria-hidden="true"></span></span><span class="sv-neden"></span></button>
+    </div>
+    <div class="sv-geri" id="sv-geri" aria-live="polite"></div>
+    <div class="sv-cozum" id="sv-cozum" hidden>
+      <ol class="sv-zincir" aria-label="Çözüm adımları">
+        <li class="sv-z"><b>SAĞA BAK</b> <span aria-hidden="true">👀</span></li>
+        <li class="sv-z"><span class="sv-sinyal" lang="en">heavy rainfall</span></li>
+        <li class="sv-z"><b>İSİM</b> <span class="sv-z-not">(fiil yok)</span></li>
+        <li class="sv-z sv-z-sonuc"><b><span lang="en">Despite</span> + İSİM ✓</b></li>
+      </ol>
+      <div class="sv-refleks">
+        <div class="sv-refleks-bas"><span aria-hidden="true">🎯</span> AVCI REFLEKSİ</div>
+        <div class="sv-refleks-metin">DESPITE GÖRDÜN → SAĞA BAK → İSİM / V-ing ARA</div>
       </div>
-      <div class="demo-fb" id="dfb"></div>
-      <button class="demo-next-btn" id="dnext" onclick="demoNext()">Sonraki alan →</button>
-    </div>
-  </div>
-</section>
-<section class="sosyal">
-  <div class="sosyal-inner">
-    <div class="stats">
-      <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Gramer konusu</div></div>
-      <div class="stat-div"></div>
-      <div><div class="stat-num">7/24</div><div class="stat-lbl">KLOD AI öğretmen</div></div>
-      <div class="stat-div"></div>
-      <div><div class="stat-num">0 TL</div><div class="stat-lbl">Ücret</div></div>
-    </div>
-    <div class="yorumlar" id="yorumlar-track"></div>
-    <div style="text-align:center;margin-top:20px">
-      <button onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">✍️ Deneyimini Paylaş</button>
-    </div>
-  </div>
-</section>
-<section id="nasil" class="nasil">
-  <div class="nasil-inner">
-    <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasıl Çalışır?</div><div class="section-title">Gelişinin ilk gününden sınav sabahına</div></div>
-    <div>
-      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Seviyeni öğren</div><div class="step-desc">"Seviyemi Öğren" butonuna bas, sınavını seç, 5 kısa soru çöz. Seviyeni ve zayıf noktanı hemen gör.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kayıt yok</span><span class="stag">Tamamen ücretsiz</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Bugünkü görevini yap</div><div class="step-desc">Test sonucuna göre sana tek bir görev veriyoruz. ÖSYM formatındaki sorularda bağlaçlar, tuzak ifadeler ve kilit kelimeler renkli işaretli.</div><div class="step-tags"><span class="stag">Sinyal bağlacı</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Türkçe açıklama</span><span class="stag">S+V+O haritası</span><span class="stag">ÖSYM tuzak analizi</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hız</span><span class="stag">Günlük tuzak</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalık rapor kartın geliyor</div><div class="step-desc">Kaç soru çözdün, hangi yapıda hata yaptın, tahmini puanın ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story görseli</span></div></div></div>
-    </div>
-  </div>
-</section>
-<section id="ekitap" class="ekitap">
-  <div class="ekitap-inner">
-    <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:14px">Ücretsiz E-Kitap</div>
-      <h2>30 Günlük Metin Fetih Kılavuzu</h2>
-      <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
-      <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
-      <form onsubmit="ekitapIndir(event)" class="ekitap-form">
-        <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
-        <button class="ekitap-submit" type="submit">Ücretsiz İndir</button>
-      </form>
-      <div class="ekitap-note" id="ekitap-note">Ücretsiz · Spam yok · İstediğinde çık</div>
-    </div>
-    <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
-  </div>
-</section>
-<section id="klod" class="klod">
-  <div>
-    <div class="eyebrow" style="color:var(--signal)">AI Öğretmen</div>
-    <div class="section-title">KLOD cevap vermez — düşündürür</div>
-    <p class="klod-desc">Çoğu AI "doğru cevap B'dir" der. KLOD neden yanlış düşündüğünü bulur ve oradan öğretir.</p>
-    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cümlede S+V+O haritası ve tuzak işaretlemesi</span><div class="klod-feat-detail">despite = zıtlık sinyali / far from = gizli olumsuz / must have = geçmiş çıkarım</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayıf yapı teşhisi</b><span>Modal, bağlaç, koşul — hangi yapıda hata yapıyorsun?</span><div class="klod-feat-detail">Yanlış cevapların analiz edilir ve zayıf yapın raporlanır.</div></div></div>
-    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
-  </div>
-  <div class="chat-ui">
-    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcısı AI Öğretmeni · Çevrimiçi</div></div></div>
-    <div class="chat-body" id="chat-body">
-      <div class="msg k">Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?</div>
-      <div class="msg k">"She must have left before the meeting started."</div>
-    </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabını yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
-  </div>
-</section>
-<section id="ses" class="ses">
-  <div class="ses-inner">
-    <div>
-      <div class="eyebrow" style="color:var(--contrast)">Ses Kurs</div>
-      <div class="section-title" style="color:var(--ink)">Beyin sesten öğrenir</div>
-      <p class="ses-desc">19 YDS/YÖKDİL gramer konusu — otobüste, yürüyüşte, yatmadan önce.</p>
-      <div class="ses-modes">
-        <div class="ses-mode active" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Öğret Modu</div><div class="ses-mode-desc">Türkçe kural · İngilizce örnek · Türkçe çeviri</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formül + hızlı örnek tekrarı</div></div></div>
-        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, seçenekler, cevap açıklanır</div></div></div>
-      </div>
-    </div>
-    <div class="player">
-      <div class="p-topic" id="p-topic">KONU 3 / 19 - CONDITIONALS</div>
-      <div class="p-en" id="p-en">If she had studied harder, she would have passed the exam.</div>
-      <div class="p-tr" id="p-tr">Daha çok çalışsaydı sınavı geçmiş olurdu.</div>
-      <div class="p-bar" onclick="seekPlayer(event)" role="button" tabindex="0"><div class="p-fill" id="p-fill"></div></div>
-      <div class="p-controls">
-        <button class="p-btn" onclick="playerPrev()">⏮</button>
-        <button class="p-btn" onclick="playerBack()">⏪</button>
-        <button class="p-play" id="p-play" onclick="playerToggle()">▶</button>
-        <button class="p-btn" onclick="playerFwd()">⏩</button>
-        <button class="p-btn" onclick="playerNext()">⏭</button>
-      </div>
-      <div class="p-speeds">
-        <button class="p-speed" onclick="playerSpeed(0.7,this)">0.7x</button>
-        <button class="p-speed active" onclick="playerSpeed(1,this)">1x</button>
-        <button class="p-speed" onclick="playerSpeed(1.2,this)">1.2x</button>
-        <button class="p-speed" onclick="playerSpeed(1.5,this)">1.5x</button>
+      <div class="sv-son-eylem">
+        <button type="button" class="sv-cta" onclick="basla()">🎯 Avcı'ya Başla →</button>
+        <button type="button" class="sv-tekrar" onclick="svSifirla()">Soruyu baştan çöz</button>
       </div>
     </div>
   </div>
+  <style id="sv-demo-stil">
+  /* Canlı demo — Sinyal Avcısı metodu (MASTER §12, §14, §17). Renkler yalnız anlam taşır:
+     sarı = sinyal · kırmızı = yanlış/tuzak · yeşil = doğru/çözüm · beyaz/gri = normal bilgi */
+  .sv-demo::before{display:none}
+  .sv-durum{font-size:13px;font-weight:600;color:var(--sa-metin-2);letter-spacing:.02em}
+  .sv-durum.dogru{color:var(--sa-dogru-metin)}
+  .sv-soru{font-size:clamp(19px,2.1vw,23px);font-weight:600;line-height:1.55;color:var(--sa-metin);margin:6px 0 12px}
+  .sv-bosluk{display:inline-block;min-width:3.2em;color:var(--sa-metin-2);letter-spacing:.05em}
+  .sv-sag{border-radius:6px;padding:1px 4px;margin:0 -4px;transition:background var(--t-med),box-shadow var(--t-med)}
+  .sv-sag.vurgu{background:var(--sa-sinyal-zemin);box-shadow:inset 0 -2px 0 var(--sa-sinyal);color:var(--sa-sinyal)}
+  .sv-ipucu-satir{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;min-height:44px}
+  .sv-ipucu-btn{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--sa-border);background:transparent;color:var(--sa-metin-2);font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer}
+  .sv-ipucu-btn:hover:not(:disabled){color:var(--sa-metin);border-color:var(--sa-metin-2)}
+  .sv-ipucu-btn:disabled{opacity:.5;cursor:default}
+  .sv-ipucu{font-size:15px;color:var(--sa-metin)}
+  .sv-ipucu b{color:var(--sa-sinyal)}
+  .sv-opts{display:grid;grid-template-columns:1fr;gap:8px}
+  .sv-opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:48px;padding:11px 14px;border-radius:10px;border:1px solid var(--sa-border);background:transparent;color:var(--sa-metin);font:600 17px 'IBM Plex Sans',sans-serif;text-align:left;cursor:pointer;transition:border-color var(--t-fast),background var(--t-fast)}
+  .sv-opt:hover:not(:disabled){border-color:var(--sa-metin-2);background:rgba(255,255,255,.03)}
+  .sv-opt:disabled{cursor:default}
+  .sv-opt-ust{display:flex;align-items:center;gap:6px;width:100%}
+  .sv-harf{color:var(--sa-metin-2);font-weight:600}
+  .sv-isaret{margin-left:auto;font-weight:800}
+  .sv-neden{font-size:15px;font-weight:500;line-height:1.45}
+  .sv-neden:empty{display:none}
+  .sv-opt.yanlis{border-color:var(--sa-tuzak);background:var(--sa-tuzak-zemin)}
+  .sv-opt.yanlis .sv-isaret{color:var(--sa-tuzak)}
+  .sv-opt.yanlis .sv-neden{color:var(--sa-metin)}
+  .sv-opt.yanlis .sv-neden b{color:var(--sa-tuzak-metin)}
+  .sv-opt.dogru{border-color:var(--sa-dogru);background:var(--sa-dogru-zemin)}
+  .sv-opt.dogru .sv-isaret,.sv-opt.dogru .sv-neden b{color:var(--sa-dogru-metin)}
+  .sv-opt.dogru .sv-neden{color:var(--sa-metin)}
+  .sv-geri{font-size:15px;font-weight:600;min-height:22px;margin-top:10px;color:var(--sa-metin-2)}
+  .sv-geri.dogru{color:var(--sa-dogru-metin);font-size:16px;letter-spacing:.02em}
+  .sv-cozum{margin-top:12px;border-top:1px solid var(--sa-border);padding-top:14px}
+  .sv-zincir{list-style:none;display:flex;flex-direction:column;gap:0;margin:0 0 14px}
+  .sv-z{position:relative;display:flex;align-items:center;gap:10px;min-height:38px;font-size:16px;color:var(--sa-metin);padding-left:2px}
+  .sv-z:not(:last-child)::after{content:'';position:absolute;left:13px;top:31px;width:2px;height:12px;background:var(--sa-border)}
+  .sv-z-no{flex:0 0 24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:700 12px 'IBM Plex Mono',monospace;color:var(--sa-metin-2);border:1px solid var(--sa-border)}
+  .sv-z-not{font-size:14px;color:var(--sa-metin-2)}
+  .sv-sinyal{background:var(--sa-sinyal-zemin);color:var(--sa-sinyal);font-weight:700;padding:2px 8px;border-radius:6px}
+  .sv-z-sonuc{color:var(--sa-dogru-metin)}
+  .sv-z-sonuc .sv-z-no{color:var(--sa-dogru-metin);border-color:var(--sa-dogru)}
+  .sv-refleks{border:1px solid var(--sa-sinyal);border-radius:12px;padding:12px 14px;background:var(--sa-sinyal-zemin)}
+  .sv-refleks-bas{font:700 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--sa-sinyal);margin-bottom:4px}
+  .sv-refleks-metin{font-size:16px;font-weight:800;color:var(--sa-metin);letter-spacing:.01em;line-height:1.45}
+  .sv-son-eylem{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:14px}
+  .sv-cta{min-height:48px;padding:0 20px;border-radius:10px;border:none;background:var(--sa-sinyal);color:var(--sa-cta-metin);font:700 16px 'IBM Plex Sans',sans-serif;cursor:pointer}
+  .sv-tekrar{min-height:44px;padding:0 4px;background:none;border:none;color:var(--sa-metin-2);font:600 15px 'IBM Plex Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .sv-cozum:not([hidden]) .sv-z,.sv-cozum:not([hidden]) .sv-refleks{animation:svGel .32s ease both}
+  .sv-cozum:not([hidden]) .sv-z:nth-child(2){animation-delay:.18s}
+  .sv-cozum:not([hidden]) .sv-z:nth-child(3){animation-delay:.36s}
+  .sv-cozum:not([hidden]) .sv-z:nth-child(4){animation-delay:.54s}
+  .sv-cozum:not([hidden]) .sv-refleks{animation-delay:.72s}
+  @keyframes svGel{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.sv-cozum .sv-z,.sv-cozum .sv-refleks{animation:none!important}.sv-sag{transition:none}}
+  </style>
+  <script>
+  /* Canlı demo mantığı. Çözüm, öğrenci doğru şıkkı bulmadan gösterilmez.
+     Yanlış şık: kırmızı ✕ + NEDEN (şık elenir, öğrenci tekrar dener).
+     Doğru şık: yeşil ✓ → kalan şıkların nedenleri → SAĞA BAK zinciri → AVCI REFLEKSİ. */
+  var SV_SIKLAR={
+    A:{dogru:false,neden:'<b>Because + CÜMLE</b> ister.'},
+    B:{dogru:false,neden:'<b>Although + CÜMLE</b> ister.'},
+    C:{dogru:true, neden:'<b>Despite + İSİM</b>'},
+    D:{dogru:false,neden:'<b>Therefore + CÜMLE</b> ister.'}
+  };
+  function svIsaretle(btn){
+    var k=btn.getAttribute('data-sik'),s=SV_SIKLAR[k];
+    btn.classList.add(s.dogru?'dogru':'yanlis');
+    btn.querySelector('.sv-isaret').textContent=s.dogru?'✓':'✕';
+    btn.querySelector('.sv-neden').innerHTML=s.neden;
+    btn.disabled=true;
+    btn.setAttribute('aria-label',btn.querySelector('.sv-opt-ust').textContent.replace(/[✓✕]/g,'').trim()+(s.dogru?', doğru. ':', yanlış. ')+btn.querySelector('.sv-neden').textContent);
+  }
+  function svSec(btn){
+    var s=SV_SIKLAR[btn.getAttribute('data-sik')],geri=document.getElementById('sv-geri');
+    svIsaretle(btn);
+    if(!s.dogru){
+      geri.className='sv-geri';
+      geri.textContent='Bu şık elendi. Boşluğun sağında ne var: cümle mi, isim mi? Tekrar dene.';
+      return;
+    }
+    document.querySelectorAll('#sv-opts .sv-opt').forEach(function(b){if(!b.disabled)svIsaretle(b);});
+    geri.className='sv-geri dogru';
+    geri.textContent='✓ SİNYAL YAKALANDI';
+    document.getElementById('demo').classList.add('sv-cozuldu');
+    var d=document.getElementById('sv-durum');d.textContent='Çözüldü';d.classList.add('dogru');
+    document.getElementById('sv-sag').classList.add('vurgu');
+    document.getElementById('sv-ipucu-btn').disabled=true;
+    document.getElementById('sv-cozum').hidden=false;
+  }
+  function svIpucu(){
+    document.getElementById('sv-ipucu').hidden=false;
+    document.getElementById('sv-sag').classList.add('vurgu');
+    document.getElementById('sv-ipucu-btn').disabled=true;
+  }
+  function svSifirla(){
+    document.querySelectorAll('#sv-opts .sv-opt').forEach(function(b){
+      b.classList.remove('dogru','yanlis');b.disabled=false;b.removeAttribute('aria-label');
+      b.querySelector('.sv-isaret').textContent='';b.querySelector('.sv-neden').innerHTML='';
+    });
+    var geri=document.getElementById('sv-geri');geri.className='sv-geri';geri.textContent='';
+    document.getElementById('demo').classList.remove('sv-cozuldu');
+    var d=document.getElementById('sv-durum');d.textContent='Önce sen seç';d.classList.remove('dogru');
+    document.getElementById('sv-sag').classList.remove('vurgu');
+    document.getElementById('sv-ipucu').hidden=true;
+    document.getElementById('sv-ipucu-btn').disabled=false;
+    document.getElementById('sv-cozum').hidden=true;
+    document.querySelector('#sv-opts .sv-opt').focus();
+  }
+  </script>
+  </div>
 </section>
-<section id="dashboard" class="dash">
+<section id="kazanim" class="sa-bolum sa-kazanim-bolum" aria-labelledby="kazanim-baslik">
+  <div class="sa-ic">
+    <div class="eyebrow sa-eyebrow">Öğrenci ne kazanıyor?</div>
+    <h2 class="section-title sa-h2" id="kazanim-baslik">Daha az çeviri, daha çok isabet</h2>
+    <div class="sa-kazanim-grid">
+      <div class="sa-kazanim"><h3>Nereye bakacağını gör</h3><p>Uzun cümlede kritik yapıyı fark et.</p></div>
+      <div class="sa-kazanim"><h3>Şıkları daha hızlı ele</h3><p>Her seçeneği çevirmeden yapıyı kullan.</p></div>
+      <div class="sa-kazanim"><h3>Hatanı anla</h3><p>Sadece yanlış yaptığını değil, neden yanlış yaptığını gör.</p></div>
+    </div>
+    <div class="sv-refleks sa-refleks-imza">
+      <div class="sv-refleks-bas"><span aria-hidden="true">🎯</span> AVCI REFLEKSİ</div>
+      <div class="sv-refleks-metin">Sinyali gör → Yapıyı kontrol et → Şıkları ele</div>
+    </div>
+  </div>
+</section>
+<section id="antrenman" class="sa-bolum sa-antrenman-bolum" aria-labelledby="antrenman-baslik">
+  <div class="sa-ic">
+    <div class="sa-antrenman">
+      <div class="sa-antrenman-bas" id="antrenman-baslik"><span aria-hidden="true">🎯</span> BUGÜNKÜ AVCI ANTRENMANI</div>
+      <div class="sa-antrenman-olcu"><span>10 SORU</span><span aria-hidden="true">·</span><span>≈ 20 DK</span></div>
+      <p>Bugünkü sinyalleri yakala, hatalarını gör, refleksini güçlendir.</p>
+      <button type="button" class="btn-primary sa-antrenman-cta" onclick="saAntrenmanBaslat()" aria-controls="dashboard" aria-expanded="false">Antrenmana Başla →</button>
+    </div>
+  </div>
+</section>
+<section id="dashboard" class="dash sa-kapali" data-sa-katli="1">
   <div class="dash-inner">
     <div class="dash-header">
       <div class="eyebrow" style="color:var(--signal)">Çalışma Alanın</div>
@@ -2055,7 +2333,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
               <label style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600">Hedef puan</label>
               <div class="pa-hedef-grid" id="pa-hedef-grid"></div>
             </div>
-            <div style="margin-top:10px" class="sp-field"><label>Sınav tarihi (YDS/2 varsayılan: 22 Kasım 2026)</label><input type="date" id="pa-tarih"></div>
+            <div style="margin-top:10px" class="sp-field"><label>Sınav tarihi (YDS/2 varsayılan: <span data-sa-sinav-yazi></span>)</label><input type="date" id="pa-tarih"></div>
             <button onclick="puanAnaliziOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📊 Analiz Et →</button>
           </div>
           <div id="pa-icerik" style="margin-top:16px"></div>
@@ -5986,8 +6264,87 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
 </section>
 
+<section id="kutuphane" class="sa-bolum sa-kutuphane" aria-labelledby="kutuphane-baslik">
+  <div class="sa-ic">
+    <div class="eyebrow sa-eyebrow">Kütüphane</div>
+    <h2 class="section-title sa-h2 sa-h2-kucuk" id="kutuphane-baslik">Antrenmanın dışında da yanında</h2>
+    <div class="sa-kut-grid">
+      <button type="button" class="sa-kut" onclick="saBolumGoster('klod')" aria-controls="klod" aria-expanded="false"><b>KLOD</b><span>Takıldığın soruyu Türkçe açıklayan AI öğretmen</span></button>
+      <button type="button" class="sa-kut" onclick="saBolumGoster('ses')" aria-controls="ses" aria-expanded="false"><b>Ses Kurs</b><span>19 gramer konusu, İngilizce + Türkçe</span></button>
+      <button type="button" class="sa-kut" onclick="saBolumGoster('ekitap')" aria-controls="ekitap" aria-expanded="false"><b>Ücretsiz E-Kitap</b><span>30 Günlük Metin Fetih Kılavuzu (PDF)</span></button>
+      <button type="button" class="sa-kut" onclick="saBolumGoster('medya')" aria-controls="medya" aria-expanded="false"><b>Medya</b><span>Kısa konu anlatımları ve podcast'ler</span></button>
+    </div>
+  </div>
+</section>
+<section id="klod" class="klod sa-kapali" data-sa-katli="1">
+  <div>
+    <div class="eyebrow" style="color:var(--signal)">AI Öğretmen</div>
+    <div class="section-title">KLOD cevap vermez — düşündürür</div>
+    <p class="klod-desc">Çoğu AI "doğru cevap B'dir" der. KLOD neden yanlış düşündüğünü bulur ve oradan öğretir.</p>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🎯</div><div class="klod-feat-text"><b>Sinyal analizi</b><span>Her cümlede S+V+O haritası ve tuzak işaretlemesi</span><div class="klod-feat-detail">despite = zıtlık sinyali / far from = gizli olumsuz / must have = geçmiş çıkarım</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🔍</div><div class="klod-feat-text"><b>Zayıf yapı teşhisi</b><span>Modal, bağlaç, koşul — hangi yapıda hata yapıyorsun?</span><div class="klod-feat-detail">Yanlış cevapların analiz edilir ve zayıf yapın raporlanır.</div></div></div>
+    <div class="klod-feat" onclick="this.classList.toggle('open')" role="button" tabindex="0"><div class="klod-feat-icon">🇹🇷</div><div class="klod-feat-text"><b>Tamamen Türkçe</b><span>Açıklamalar, ipuçları ve geri bildirim hep Türkçe</span><div class="klod-feat-detail">Gramer kuralları Türkçe açıklanır. ÖSYM tuzakları Türkçe analiz edilir.</div></div></div>
+  </div>
+  <div class="chat-ui">
+    <div class="chat-head"><div class="chat-av">K</div><div><div class="chat-head-name">KLOD</div><div class="chat-head-sub">Sinyal Avcısı AI Öğretmeni · Çevrimiçi</div></div></div>
+    <div class="chat-body" id="chat-body">
+      <div class="msg k">Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?</div>
+      <div class="msg k">"She must have left before the meeting started."</div>
+    </div>
+    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabını yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
+  </div>
+</section>
+<section id="ses" class="ses sa-kapali" data-sa-katli="1">
+  <div class="ses-inner">
+    <div>
+      <div class="eyebrow" style="color:var(--contrast)">Ses Kurs</div>
+      <div class="section-title" style="color:var(--ink)">Beyin sesten öğrenir</div>
+      <p class="ses-desc">19 YDS/YÖKDİL gramer konusu — otobüste, yürüyüşte, yatmadan önce.</p>
+      <div class="ses-modes">
+        <div class="ses-mode active" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">🎓</div><div><div class="ses-mode-name">Öğret Modu</div><div class="ses-mode-desc">Türkçe kural · İngilizce örnek · Türkçe çeviri</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">⚡</div><div><div class="ses-mode-name">Flashcard Modu</div><div class="ses-mode-desc">Formül + hızlı örnek tekrarı</div></div></div>
+        <div class="ses-mode" onclick="setSesMod(this)" role="button" tabindex="0"><div class="ses-mode-icon">❓</div><div><div class="ses-mode-name">Quiz Ses Modu</div><div class="ses-mode-desc">Soru sesli okunur, seçenekler, cevap açıklanır</div></div></div>
+      </div>
+    </div>
+    <div class="player">
+      <div class="p-topic" id="p-topic">KONU 3 / 19 - CONDITIONALS</div>
+      <div class="p-en" id="p-en">If she had studied harder, she would have passed the exam.</div>
+      <div class="p-tr" id="p-tr">Daha çok çalışsaydı sınavı geçmiş olurdu.</div>
+      <div class="p-bar" onclick="seekPlayer(event)" role="button" tabindex="0"><div class="p-fill" id="p-fill"></div></div>
+      <div class="p-controls">
+        <button class="p-btn" onclick="playerPrev()">⏮</button>
+        <button class="p-btn" onclick="playerBack()">⏪</button>
+        <button class="p-play" id="p-play" onclick="playerToggle()">▶</button>
+        <button class="p-btn" onclick="playerFwd()">⏩</button>
+        <button class="p-btn" onclick="playerNext()">⏭</button>
+      </div>
+      <div class="p-speeds">
+        <button class="p-speed" onclick="playerSpeed(0.7,this)">0.7x</button>
+        <button class="p-speed active" onclick="playerSpeed(1,this)">1x</button>
+        <button class="p-speed" onclick="playerSpeed(1.2,this)">1.2x</button>
+        <button class="p-speed" onclick="playerSpeed(1.5,this)">1.5x</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="ekitap" class="ekitap sa-kapali" data-sa-katli="1">
+  <div class="ekitap-inner">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:14px">Ücretsiz E-Kitap</div>
+      <h2>30 Günlük Metin Fetih Kılavuzu</h2>
+      <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
+      <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
+      <form onsubmit="ekitapIndir(event)" class="ekitap-form">
+        <input class="ekitap-input" type="email" id="ekitap-email" placeholder="E-posta adresin" required aria-label="E-posta adresin">
+        <button class="ekitap-submit" type="submit">Ücretsiz İndir</button>
+      </form>
+      <div class="ekitap-note" id="ekitap-note">Ücretsiz · Spam yok · İstediğinde çık</div>
+    </div>
+    <div class="ekitap-mockup"><img src="assets/ekitap-kapak.png" alt="30 Günlük Metin Fetih Kılavuzu — e-kitap kapağı" loading="lazy"></div>
+  </div>
+</section>
 <!-- MEDYA MERKEZİ -->
-<section id="medya" style="padding:80px 5vw;background:linear-gradient(135deg,#020617 0%,#0f172a 30%,#1e1b4b 60%,#312e81 100%);position:relative;overflow:hidden"><div style="position:absolute;top:-100px;right:5%;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.3),transparent 65%);pointer-events:none;animation:floatGlow 6s ease-in-out infinite"></div><div style="position:absolute;bottom:-100px;left:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(236,72,153,.2),transparent 65%);pointer-events:none;animation:floatGlow 8s ease-in-out infinite reverse"></div><div style="position:absolute;top:40%;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 65%);pointer-events:none;animation:floatGlow 10s ease-in-out infinite"></div>
+<section id="medya" class="sa-medya sa-kapali" data-sa-katli="1">
   <div style="max-width:1020px;margin:0 auto">
     <div style="text-align:center;margin-bottom:48px">
       <div class="eyebrow" style="color:var(--signal)">Medya Merkezi</div>
@@ -6026,7 +6383,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </div>
     <style>
       #medya-icerik.medya-kapali{max-height:560px;overflow:hidden;position:relative}
-      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#1e1b4b);pointer-events:none}
+      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,var(--sa-antrasit));pointer-events:none}
     </style>
     <script>
       function medyaTumunuGoster(){
@@ -6037,67 +6394,17 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
 </section>
 
-<!-- KARŞILAŞTIRMA -->
-<section style="padding:60px 5vw;background:var(--paper);max-width:900px;margin:0 auto">
-  <div style="text-align:center;margin-bottom:40px">
-    <div class="eyebrow" style="color:var(--signal)">Neden Sinyal Avcısı?</div>
-    <div class="section-title">Başka yere para verme</div>
-    <p style="font-size:16px;color:var(--ink);margin-top:12px;line-height:1.7"><strong>Cebinde para olmasa da</strong> — buradaki her şey sana ait.</p>
-  </div>
-  <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-family:IBM Plex Sans,sans-serif">
-      <thead>
-        <tr>
-          <th style="text-align:left;padding:14px 16px;font-size:14px;color:var(--muted);font-weight:600;border-bottom:2px solid var(--border)">Özellik</th>
-          <th style="padding:14px 16px;font-size:15px;font-weight:700;color:var(--signal);border-bottom:2px solid var(--signal);background:#1a2030;border-radius:8px 8px 0 0">Sinyal Avcısı</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid var(--border);background:#2e2410">
-          <td style="padding:14px 16px;font-size:15px;font-weight:700;color:#92400e">💰 Ücret</td>
-          <td style="padding:14px 16px;text-align:center;background:#0f2418;font-size:15px;font-weight:800;color:#15803d">TAMAMEN ÜCRETSİZ</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Sinyal metodolojisi</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Türkçe AI öğretmen (KLOD)</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Alan bazlı metinler (Hukuk, Sağlık…)</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Sesli kurs & podcast</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Spaced repetition kelime sistemi</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Adaptif soru motoru</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">✅</td>
-        </tr>
-        <tr>
-          <td style="padding:14px 16px;font-size:15px">İmkânsız öğrencilere destek</td>
-          <td style="padding:14px 16px;text-align:center;background:#141a26;font-size:18px">❤️</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div style="text-align:center;margin-top:32px">
-    <button onclick="basla()" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;box-shadow:0 6px 24px rgba(245,166,35,.3)">
-      🎯 Hemen Başla — Kayıt Bile İstemez
-    </button>
+<section class="sosyal" id="yorumlar" aria-label="Öğrenci yorumları">
+  <div class="sosyal-inner">
+    <div class="yorumlar" id="yorumlar-track"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">✍️ Deneyimini Paylaş</button>
+    </div>
   </div>
 </section>
-
 <section id="sss" class="sss">
   <div class="sss-inner">
-    <div class="sss-header"><div class="eyebrow" style="color:var(--signal)">Sık Sorulan Sorular</div><div class="section-title" style="color:var(--ink)">Aklındaki sorular</div></div>
+    <div class="sss-header"><div class="eyebrow sa-eyebrow">Sık Sorulan Sorular</div><div class="section-title" style="color:var(--ink)">Aklındaki sorular</div></div>
     <div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>YDS mi, YÖKDİL mi — platform ikisine de uygun mu?</span><span class="sss-icon">+</span></div><div class="sss-a">Evet, her ikisi için de uygundur. Alanını seçiyorsun — Sosyal, Fen, Sağlık veya Hukuk — ve platform sana özel metinler, sorular ve kelime bankasıyla çalışmaya başlıyor. İstediğin zaman alan değiştirebilirsin.</div></div>
       <div class="sss-item"><div class="sss-q" onclick="sssToggle(this)" role="button" tabindex="0"><span>Gerçekten ücretsiz mi — gizli bir ücret var mı?</span><span class="sss-icon">+</span></div><div class="sss-a">Gerçekten ücretsiz. Tek kuruş yok, kredi kartı yok, abonelik yok, 7 gün sonra sürpriz ücret yok. Platform tamamen ücretsiz ve şu an öyle ve öyle kalmaya çalışıyoruz. Çünkü bilgi, parasıyla satılacak bir şey değil.</div></div>
@@ -6130,7 +6437,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </div>
     <div style="margin-top:36px">
       <button onclick="basla()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.3);color:#ece7da;border-radius:12px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;backdrop-filter:blur(8px)">
-        🎯 Hemen Başla — Tek Kuruş Ödemeden
+        🎯 Avcı'ya Başla — Tek Kuruş Ödemeden
       </button>
     </div>
   </div>
@@ -6142,7 +6449,11 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <span onclick="goTo('klod')" role="button" tabindex="0">KLOD ile tanış</span>
     <span onclick="goTo('ekitap')" role="button" tabindex="0">Ücretsiz E-Kitap</span>
     <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
-    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
+    <span onclick="sinavSimulatoruAc()" role="button" tabindex="0">Deneme</span>
+    <span onclick="hpAc()" role="button" tabindex="0">Hedef Programı</span>
+    <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
+    <span onclick="goTo('medya')" role="button" tabindex="0">Medya</span>
+    <span onclick="if(typeof ahkGit==='function')ahkGit()" role="button" tabindex="0">AHA Kartları</span>
     <a href="/privacy" style="color:rgba(236,231,218,.5);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(236,231,218,.5)'">Gizlilik Politikası</a>
     <a href="/terms" style="color:rgba(236,231,218,.5);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(236,231,218,.5)'">Kullanım Şartları</a>
   </div>
@@ -6162,7 +6473,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <input class="modal-input" type="text" id="m-ad" placeholder="Ad Soyad" required aria-label="Ad Soyad">
         <input class="modal-input" type="email" id="m-email" placeholder="E-posta adresi" required aria-label="E-posta adresi">
         <input class="modal-input" type="password" id="m-sifre" placeholder="Şifre (en az 8 karakter)" minlength="8" required aria-label="Şifre">
-        <button class="modal-submit" type="submit" style="background:linear-gradient(135deg,var(--signal),#7c3aed);font-size:16px;padding:15px;border-radius:10px">🎯 Ücretsiz Hesap Oluştur</button>
+        <button class="modal-submit" type="submit" style="background:var(--sa-sinyal);font-size:16px;padding:15px;border-radius:10px">🎯 Ücretsiz Hesap Oluştur</button>
         <div style="text-align:center;margin-top:8px"><button type="button" onclick="sifremiUnuttum()" style="background:none;border:none;color:var(--signal);font-size:14px;cursor:pointer;text-decoration:underline">Şifremi unuttum</button></div>
       </form>
       <div style="display:flex;justify-content:center;gap:20px;margin-top:16px;flex-wrap:wrap">
@@ -6194,7 +6505,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <p style="font-size:16px;color:var(--ink);margin-bottom:8px;line-height:1.7">Başka platformlara para vermeden önce şunu bil:</p>
     <p style="font-size:18px;font-weight:700;color:#f5a623;margin-bottom:20px;line-height:1.6">Buradaki her şey <br>tek kuruş ödemeden senin.</p>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
-      <button onclick="exitKapat();basla()" style="background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🚀 Hemen Başla — Ücretsiz</button>
+      <button onclick="exitKapat();basla()" style="background:var(--sa-sinyal);color:var(--sa-cta-metin);border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🎯 Avcı'ya Başla — Ücretsiz</button>
       <button onclick="exitKapat()" style="background:none;border:none;font-size:14px;color:var(--muted);cursor:pointer;font-family:IBM Plex Sans,sans-serif;padding:6px">Tamam, daha sonra gelirim</button>
     </div>
   </div>
@@ -6206,7 +6517,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6">Yorumun, ekibimiz kontrol ettikten sonra ana sayfada yayınlanır.</p>
     <div id="testimonial-login-gerekli" style="display:none;text-align:center;padding:16px 0">
       <p style="font-size:15px;color:var(--ink);margin-bottom:14px">Yorum bırakmak için önce giriş yapmalısın.</p>
-      <button onclick="testimonialModalKapat();openModal('Ücretsiz Hesap','0')" style="background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Giriş yap / Kaydol</button>
+      <button onclick="testimonialModalKapat();openModal('Ücretsiz Hesap','0')" style="background:var(--sa-sinyal);color:var(--sa-cta-metin);border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Giriş yap / Kaydol</button>
     </div>
     <form id="testimonial-form" onsubmit="testimonialGonder(event)">
       <input id="tm-isim" placeholder="Adın (örn: Ahmet Y.)" required maxlength="60" style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:IBM Plex Sans,sans-serif;font-size:14px;margin-bottom:10px;outline:none;background:var(--paper);color:var(--ink)" aria-label="Adın">
@@ -6220,7 +6531,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <span class="tm-star" data-v="4" onclick="tmYildizSec(4)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
         <span class="tm-star" data-v="5" onclick="tmYildizSec(5)" style="cursor:pointer;font-size:20px;color:var(--border)" role="button" tabindex="0">★</span>
       </div>
-      <button type="submit" style="width:100%;background:linear-gradient(135deg,var(--signal),#7c3aed);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
+      <button type="submit" style="width:100%;background:var(--sa-sinyal);color:var(--sa-cta-metin);border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Gönder</button>
       <div id="tm-msg" style="font-size:13px;text-align:center;margin-top:10px;min-height:16px"></div>
     </form>
   </div>
@@ -6271,7 +6582,7 @@ function klodMotionDersKaydet(dersId){
 // ve cevapSunucuyaSenkronla/getSession zinciri HİÇ DEĞİŞMEDEN, anonim
 // kullanıcı için de aynen çalışır. UI'da HİÇBİR ŞEY göstermiyoruz —
 // showUserMenu/hoşgeldin animasyonu SADECE gerçek (is_anonymous olmayan)
-// oturumlarda tetiklenir; anonim kullanıcı hep "🎯 Hemen Başla" misafir
+// oturumlarda tetiklenir; anonim kullanıcı hep "🎯 Avcı'ya Başla" misafir
 // görünümünde kalır (nav'ın statik HTML varsayılanı zaten budur).
 let _sbAnonGirisimde=false;
 async function _sbAnonBaslat(){
@@ -6337,7 +6648,7 @@ function showUserMenu(u){
   setTimeout(()=>goTo('dashboard'),300);
   if(typeof bildirimBtnGuncelle==='function')bildirimBtnGuncelle();
 }
-function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Hemen Başla';n.onclick=()=>basla();n.style.background='linear-gradient(135deg,var(--signal),#7c3aed)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
+function showGuestMenu(){const n=document.querySelector('.btn-nav');if(n){n.textContent='🎯 Avcı\'ya Başla';n.onclick=()=>basla();n.style.background='var(--sa-sinyal)';}const nb=document.getElementById('notif-btn');if(nb)nb.style.display='none';}
 
 // ─── HOŞ GELDİN KARŞILAMA ANİMASYONU — girişte tetiklenir ──────────────────
 let _hgKapatTimer=null,_hgYaziTimer=null;
@@ -7951,167 +8262,170 @@ function kkAnswer(q){
 kkUpdateDashCard();
 
 // GUNLUK TUZAK — 30 soruluk havuz
+// id (tz001…tz160): kalıcı, bir kez verilir ve DEĞİŞTİRİLMEZ. Yeni soru sona eklenir (tz161…).
+// Günlük soru ve zorluk aralıkları hâlâ SIRAYA bağlı (tuzakGetDailyIdx, adaptifSoruHavuzu) — sırayı bozma.
+// Kilit: tests/fixtures/tuzak-id-kilidi.json (id → içerik parmak izi), tests/tuzak-id.test.mjs.
 const TUZAK_HAVUZ=[
-  {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"She would have attended the conference _____ she received the invitation in time."',opts:['A) if','B) had','C) unless','D) although'],dogru:1,fb:'3rd conditional devrik yapı: "if" düştüğünde "had" one çıkar.'},
-  {q:'Boşluğu doğru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e ragmen + tam cumle. Zitlik sinyali.'},
-  {q:'Anlamca en yakın seçenek hangisi?',sent:'"The findings were by no means conclusive."',opts:['A) tamamen kesin','B) kesinlikle kesin değil','C) bir ölçüde kesin','D) tartışmalı'],dogru:1,fb:'"By no means" = gizli olumsuz; kesinlikle degil.'},
-  {q:'Boşluğa hangisi gelmelidir?',sent:'"_____ the new policy, employees were given more flexibility."',opts:['A) Despite','B) Although','C) Under','D) However'],dogru:2,fb:'"Under + isim" = bir duzenleme altinda. Edat, baglac degil.'},
-  {q:'Modal yapıyı doğru tanımlayın:',sent:'"She must have forgotten the meeting."',opts:['A) Zorunluluk','B) Geçmişe dair güçlü çıkarım','C) Izin','D) Gelecek tahmin'],dogru:1,fb:'"Must have + V3" = gecmise dair kanita dayali guclu cıkarim. Zorunluluk degil!'},
-  {q:'Cümlede "far from" ne anlama gelir?',sent:'"The solution was far from perfect."',opts:['A) mükemmele yakın','B) mükemmeldi','C) mükemmel değildi','D) mükemmel olabilirdi'],dogru:2,fb:'"Far from" = gizli olumsuz. Anlaminda "degil" vardir.'},
-  {q:'Boşluğu doğru doldurun:',sent:'"The report was submitted _____ the deadline."',opts:['A) despite','B) prior to','C) although','D) however'],dogru:1,fb:'"Prior to" = once (edat). Zaman iliskisi kurar.'},
-  {q:'Hangi seçenek doğruda?',sent:'"Had she known the truth, she _____ differently."',opts:['A) will behave','B) would behave','C) would have behaved','D) had behaved'],dogru:2,fb:'3rd conditional: "Had she known..." → "would have + V3"'},
-  {q:'"Hardly" kelimesinin anlamı nedir?',sent:'"The committee hardly considered the proposal."',opts:['A) Mutlaka','B) Neredeyse hic','C) Kesinlikle','D) Büyük ölçüde'],dogru:1,fb:'"Hardly" = gizli olumsuz; neredeyse hic. OSYM tuzak yapisi.'},
-  {q:'Doğru seçeneği bulun:',sent:'"The new regulation aims to _____ the impact of pollution."',opts:['A) amplify','B) mitigate','C) accelerate','D) neglect'],dogru:1,fb:'"Mitigate" = hafifletmek, azaltmak. OSYM akademik kelime.'},
-  {q:'Boşluğa hangi bağlaç gelir?',sent:'"_____ its flaws, the study was widely cited."',opts:['A) Because of','B) Despite','C) Unless','D) Whenever'],dogru:1,fb:'"Despite + isim" = -e ragmen. Zitlik sinyali.'},
-  {q:'"Notwithstanding" hangi anlamda kullanılır?',sent:'"Notwithstanding the difficulties, the project succeeded."',opts:['A) Nedeniyle','B) Buna ragmen','C) Bundan dolayı','D) Aksi halde'],dogru:1,fb:'"Notwithstanding" = buna ragmen / karsin. Resmi dilde despite ile esdeger.'},
-  {q:'Hangi seçenek modalın doğru anlamını verir?',sent:'"The patient might have reacted to the medication."',opts:['A) Kesinlikle reaksiyon gösterdi','B) Zorunlu olarak gösterdi','C) Belki reaksiyon göstermiş olabilir','D) Göstermeli'],dogru:2,fb:'"Might have + V3" = gecmise dair zayif ihtimal. "Must have" ile karistirmayin!'},
-  {q:'Boşluğu tamamlayın:',sent:'"The committee was _____ divided on the issue."',opts:['A) deeply','B) deep','C) depth','D) deepen'],dogru:0,fb:'"Deeply divided" = derin bicimde bolunmus. Sifati niteleyen zarf kullanilir.'},
-  {q:'Anlam sorusu - ne ifade eder?',sent:'"The results were anything but conclusive."',opts:['A) Sonuçlar tamamen kesin','B) Sonuçlar kesin değildi','C) Sonuçlar yeterliydi','D) Sonuçlar beklendik'],dogru:1,fb:'"Anything but" = ... degil. Guclu gizli olumsuz. "Far from" ile ayni islev.'},
-  {q:'Hangi seçenek doğruda?',sent:'"The findings suggest that the hypothesis _____ further testing."',opts:['A) require','B) requires','C) required','D) requiring'],dogru:1,fb:'Subject (hypothesis) tekil → "requires". Subject-verb agreement tuzagi!'},
-  {q:'Boşluğu tamamlayın:',sent:'"The law was enacted _____ protect consumers."',opts:['A) so as to','B) despite','C) although','D) however'],dogru:0,fb:'"So as to" = amaci ifade eder (= in order to). Amac baglaci.'},
-  {q:'Modal yapı sorusu:',sent:'"You should have submitted the form earlier."',opts:['A) Formu gönderdin','B) Göndermeliydin ama göndermedin','C) Göndereceksin','D) Gönderebilirdin'],dogru:1,fb:'"Should have + V3" = gecmiste yapilmasi gerekirdi ama yapilmadi. Pismanlık yapisi.'},
-  {q:'Hangi kelime boşluğa uyar?',sent:'"The evidence was _____ to support the claim."',opts:['A) insufficient','B) sufficient','C) proficient','D) efficient'],dogru:0,fb:'"Insufficient" = yetersiz. "Insufficient to + V" kalibina dikkat.'},
-  {q:'Bağlaç sorusu:',sent:'"_____ the budget was limited, they completed the project."',opts:['A) Despite','B) Although','C) Because','D) Therefore'],dogru:1,fb:'"Although" + tam cumle = -e ragmen. "Despite" isim/V-ing ister.'},
-  {q:'Anlamca yakın seçenek hangisi?',sent:'"The policy is contingent on approval."',opts:['A) Onaydan bağımsız','B) Onaya bağlı','C) Onaya ragmen','D) Onay gerektirmeyen'],dogru:1,fb:'"Contingent on" = -e bagli, kosullu. Akademik metinlerde sik.'},
-  {q:'Hangi yapı yanlıştır?',sent:'A) Despite working hard / B) Despite she worked hard / C) Although she worked hard / D) Even though she worked hard',opts:['A) A sik','B) B yanlış','C) C doğru','D) D doğru'],dogru:1,fb:'"Despite" + isim/gerund. "Despite she worked" yanlış - sonrasında cümle gelmez!'},
-  {q:'Modal + have + V3 sorusu:',sent:'"The documents _____ been misplaced."',opts:['A) can','B) could have','C) should','D) might'],dogru:1,fb:'"Could have + V3" = gecmiste mumkun olmus olabilirdi.'},
-  {q:'Hangi kelime "azaltmak" anlamına gelir?',sent:'Bagdam: "The new policy will _____ emissions."',opts:['A) amplify','B) sustain','C) curtail','D) enhance'],dogru:2,fb:'"Curtail" = kismak, azaltmak. OSYM Fen/Sosyal metinlerinde sik.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The researcher\'s conclusion was _____ by subsequent studies."',opts:['A) refuted','B) stipulated','C) mitigated','D) amplified'],dogru:0,fb:'"Refute" = curutmek. "Subsequent" = sonraki. Ikisi birlikte OSYM kalibı.'},
-  {q:'Inversion sorusu:',sent:'"Never _____ such a significant error in the data."',opts:['A) we have seen','B) have we seen','C) we had seen','D) had we been seeing'],dogru:1,fb:'"Never" başa gelince devrik yapı: Never + yardımcı + özne + V. ÖSYM tuzağı!'},
-  {q:'Hangi seçenek doğru anlamı verir?',sent:'"The council is reluctant to adopt the new measures."',opts:['A) istekli','B) isteksiz','C) zorunlu','D) kararlı'],dogru:1,fb:'"Reluctant" = isteksiz, cekingen. "Reluctant to + V" OSYM\'de sik.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The results were _____ with previous findings."',opts:['A) consistent','B) consisted','C) consistency','D) consistently'],dogru:0,fb:'"Consistent with" = ile tutarli/uyumlu. Sifat (be + consistent) kalibi.'},
-  {q:'Tuzak soru - anlamine dikkat:',sent:'"The proposal was not without merit."',opts:['A) Tamamen değersizdi','B) Değerliydi','C) Tartışmalıydı','D) Değeri yoktu'],dogru:1,fb:'"Not without merit" = cift olumsuz = olumlu. Degersiz degildi → degerliydi!'},
-  {q:'Gerund / infinitive sorusu:',sent:'"She was accused of _____ the report."',opts:['A) to falsify','B) falsifying','C) falsify','D) having falsify'],dogru:1,fb:'"Accused of + V-ing". Edat (of) sonrasinda gerund gelir.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"It was not until the results were reviewed _____ the error was discovered."',opts:['A) that','B) when','C) which','D) then'],dogru:0,fb:'"It was not until... that" kalıbı: cleft (vurgu) yapı, boşluğa her zaman "that" gelir.'},
-  {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"The data _____ by the research team last year is now publicly available."',opts:['A) collecting','B) collected','C) which collect','D) to collect'],dogru:1,fb:'İndirgenmiş edilgen ilgi cümlesi: "which was collected" → "collected".'},
-  {q:'Modal yapıyı doğru yorumlayın:',sent:'"You need not have rewritten the entire report; a summary would have sufficed."',opts:['A) Raporu yeniden yazman gerekiyordu','B) Raporu yeniden yazman gerekmiyordu ama yazdın','C) Raporu yeniden yazmalısın','D) Rapor hâlâ eksik'],dogru:1,fb:'"Need not have + V3" = yapmana gerek yoktu ama yaptın. "Should have" ile karıştırılan bir tuzak yapı.'},
-  {q:'Boşluğu doğru bağlaçla tamamlayın:',sent:'"_____ the sharp rise in raw material costs, the company decided to freeze all new hires."',opts:['A) Given','B) Although','C) Provided that','D) Unless'],dogru:0,fb:'"Given + isim" = göz önüne alındığında, nedensellik bildirir. "Although" zıtlık ister, burada uymaz.'},
-  {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"The committee decided to _____ the meeting until further notice."',opts:['A) postpone','B) propose','C) pursue','D) preserve'],dogru:0,fb:'"Postpone" = ertelemek. "Until further notice" (yeni bir bildirime kadar) erteleme anlamını destekler.'},
-  {q:'Hangi seçenek doğru edilgen yapıdır?',sent:'"The new regulations _____ to take effect at the beginning of next fiscal year."',opts:['A) are expected','B) expect','C) expecting','D) have expected'],dogru:0,fb:'"Be expected to + V" = beklenmek. Özne eylemi yapan değil, beklenen taraf, bu yüzden edilgen kullanılır.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The more rigorously the hypothesis was tested, _____ the researchers became of its validity."',opts:['A) the more confident','B) more confident','C) the most confident','D) confident'],dogru:0,fb:'"The + comparative..., the + comparative..." paralel karşılaştırma yapısı.'},
-  {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"Whether the vaccine provides long-term immunity _____ still under investigation."',opts:['A) is','B) are','C) being','D) to be'],dogru:0,fb:'"Whether..." ile başlayan noun clause özne olarak tekil kabul edilir → "is".'},
-  {q:'Altı çizili kelimeye en yakın anlamlı seçenek hangisidir?',sent:'"The board\'s decision was largely arbitrary, lacking any consistent rationale."',opts:['A) keyfî','B) zorunlu','C) gerekçeli','D) oybirliğiyle'],dogru:0,fb:'"Arbitrary" = keyfî, mantıklı bir gerekçeye dayanmayan.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ failed to reach a consensus, the committee postponed the vote."',opts:['A) Having','B) Have','C) To have','D) Had'],dogru:0,fb:'"Having + V3" = bir eylem tamamlandıktan sonra ikinci eylem. "Having failed" = başarısız olduktan sonra.'},
-  {q:'Hangi seçenek devrik yapıyı doğru tamamlar?',sent:'"Not only _____ the deadline, but he also exceeded the quality expectations."',opts:['A) he met','B) did he meet','C) he did meet','D) meeting he'],dogru:1,fb:'"Not only" cümle başında olunca devrik yapı gerekir: Not only + yardımcı fiil + özne + fiil.'},
-  {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Researchers were unable to _____ a causal link between the two variables."',opts:['A) establish','B) install','C) construct','D) instruct'],dogru:0,fb:'"Establish a link/connection" = bağlantı kurmak, akademik metinlerde sık kullanılan bir kalıp.'},
-  {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"If the board had approved the merger last year, the company _____ a stronger market position today."',opts:['A) would have had','B) would have','C) will have','D) had had'],dogru:1,fb:'Karışık koşul: geçmiş şart (had approved) + şimdiki sonuç → "would have" (V1 ile).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The hypothesis _____ the entire study was based proved to be flawed."',opts:['A) on which','B) which','C) that','D) where'],dogru:0,fb:'"Based ON the hypothesis" → edat ilişkili yapı: "the hypothesis on which..."'},
-  {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Critics argue that the new policy could _____ public trust in the judiciary."',opts:['A) undermine','B) underline','C) undertake','D) understate'],dogru:0,fb:'"Undermine" = zayıflatmak, baltalamak. "Public trust\'ı undermine etmek" akademik metinlerde sık geçer.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The researchers used a double-blind design _____ eliminate potential bias."',opts:['A) so as to','B) so that','C) in case','D) as though'],dogru:0,fb:'"So as to + V" = amaç bildirir (= in order to). "So that" arkasından cümle (S+V) ister, burada fiil var.'},
-  {q:'Hangi seçenek boşluğu doğru tamamlar?',sent:'"It is the long-term side effects of the drug, not its immediate efficacy, _____ concerns regulators most."',opts:['A) that','B) who','C) what','D) which is'],dogru:0,fb:'Cleft yapı "It is X that..." — vurgulanan öğe kişi değil, bu yüzden "that" tercih edilir.'},
-  {q:'Boşluğa en uygun bağlacı seçin:',sent:'"The results were statistically insignificant. _____, the team believed the trend merited further investigation."',opts:['A) Nonetheless','B) Therefore','C) Similarly','D) Meanwhile'],dogru:0,fb:'"Nonetheless" = buna rağmen, zıtlık bildirir. Sonuç anlamsız olsa da araştırma devam etmeli düşüncesi var.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The board insisted that the audit _____ completed before the fiscal year ends."',opts:['A) be','B) is','C) was','D) will be'],dogru:0,fb:'"Insist that + S + (should) + V1" = dilek kipi (subjunctive). "be" kullanılır, "is/was" değil.'},
-  {q:'Altı çizili kelimeye en yakın anlamlı seçenek hangisidir?',sent:'"The new evidence appears to corroborate the initial findings of the study."',opts:['A) doğrulamak','B) çürütmek','C) reddetmek','D) gölgede bırakmak'],dogru:0,fb:'"Corroborate" = desteklemek, doğrulamak. "Contradict" (çürütmek) ile karıştırılan bir tuzak kelimedir.'},
-  {q:'Boşluğu tamamlayın:',sent:'"_____ repeatedly warned about the risks, investors continued to pour money into the venture."',opts:['A) Despite being','B) Although being','C) In spite that','D) Even so'],dogru:0,fb:'"Despite being + V3 (pasif participle)" = uyarılmış olmalarına rağmen. "Despite" isim/V-ing ister, "although" tek başına olmaz.'},
-  {q:'Hangi seçenek devrik yapıyı doğru tamamlar?',sent:'"Hardly _____ the announcement been made when shares began to plummet."',opts:['A) had','B) did','C) has','D) was'],dogru:0,fb:'"Hardly...when" = olur olmaz. "Hardly had + özne + V3...when" devrik yapı kullanılır.'},
-  {q:'Boşluğa en uygun ifadeyi seçin:',sent:'"The report presented _____ evidence supporting the new hypothesis."',opts:['A) a plethora of','B) a scarcity of','C) a fraction of','D) an absence of'],dogru:0,fb:'"A plethora of" = bolca, çokça. Bağlam "supporting the hypothesis" bolluk anlamını destekler.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Any complaint _____ within thirty days will be automatically dismissed."',opts:['A) not filed','B) not filing','C) that not filed','D) is not filed'],dogru:0,fb:'İndirgenmiş edilgen ilgi cümlesi: "that is not filed" → "not filed". Olumsuzluk fiilden önce gelir.'},
-  {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Companies that fail to _____ with the new environmental standards will face heavy fines."',opts:['A) comply','B) conform','C) obey','D) abide'],dogru:0,fb:'"Comply with" = uymak, standart kelime öbeği. "Abide" ise "with" değil "by" edatıyla kullanılır.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ by the committee yesterday."',opts:['A) was reviewed','B) will be reviewed','C) is reviewed','D) has been reviewing'],dogru:0,fb:'"Yesterday" geçmiş zaman sinyali → Past Passive: was/were + V3 → "was reviewed".'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The contract _____ by the CEO tomorrow morning."',opts:['A) is signed','B) was signed','C) will be signed','D) will be sign'],dogru:2,fb:'"Tomorrow morning" gelecek zaman sinyali → Future Passive: will be + V3 → "will be signed" (V1 değil, V3!).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ it was raining heavily, they decided to go for a picnic."',opts:['A) Although','B) Despite','C) Because','D) However'],dogru:0,fb:'Sonrasında S+V var → CÜMLE ister → Although. 🖼 Yağmur yağıyor ama pikniğe gidiyorlar.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The flight was cancelled _____ the thick fog."',opts:['A) because','B) because of','C) although','D) despite'],dogru:1,fb:'Sonrasında isim var → İSİM ister → because of. 🖼 Sis duvarı → uçak kalkamıyor.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen my uncle _____ I was a child."',opts:['A) for','B) when','C) since','D) while'],dogru:2,fb:'Present Perfect + başlangıç noktası → since. 🖼 Çocukluk = başlangıç çizgisi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If I _____ you, I would accept that job offer."',opts:['A) was','B) am','C) will be','D) were'],dogru:3,fb:'2. tip şart → If + were. 🖼 Hayali yer değişimi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new hospital _____ by the mayor next month."',opts:['A) will be opened','B) opens','C) is opened','D) was opened'],dogru:0,fb:'"next month" + by → Future Passive → will be V3. 🖼 Kurdele kesme töreni.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The student _____ scored the highest mark is my cousin."',opts:['A) which','B) who','C) where','D) whose'],dogru:1,fb:'student = kişi → who. 🖼 Öğrenciye ok → en yüksek not.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She didn\'t study; _____, she passed with a high score."',opts:['A) therefore','B) moreover','C) however','D) because'],dogru:2,fb:'Noktalı virgül + virgül → sentence adverb + zıtlık → however. 🖼 Çalışmadı ama geçti.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"We won\'t be able to finish _____ you help us."',opts:['A) if','B) although','C) because','D) unless'],dogru:3,fb:'won\'t + koşul → unless. 🖼 Yardım yoksa kapı kilitli.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By the time the police arrived, the thieves _____ away."',opts:['A) had run','B) run','C) have run','D) were running'],dogru:0,fb:'by the time + Past → Past Perfect. 🖼 Polis geliyor, hırsızlar kaçmış.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"This is the house _____ Atatürk was born."',opts:['A) which','B) where','C) who','D) that'],dogru:1,fb:'house = yer → where. 🖼 Evin üstüne doğum yeri etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ being very tired, he continued to work."',opts:['A) Although','B) Because','C) Despite','D) Since'],dogru:2,fb:'Sonrasında V-ing → Despite. 🖼 Yorgunluk var ama çalışmaya devam.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Scientists argue _____ global warming is a serious threat."',opts:['A) which','B) what','C) about','D) that'],dogru:3,fb:'argue that + cümle → that-clause. 🖼 Bilim insanı konuşma balonu.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The car _____ I bought last year has started to give problems."',opts:['A) which','B) who','C) where','D) whose'],dogru:0,fb:'car = şey → which. 🖼 Araba + geçen yıl aldığım etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If she _____ earlier, she wouldn\'t have missed the bus."',opts:['A) got up','B) had got up','C) gets up','D) would get up'],dogru:1,fb:'"wouldn\'t have missed" → 3. tip → had V3. 🖼 Alarm çalmadı → otobüs kaçtı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Penicillin _____ by Alexander Fleming in 1928."',opts:['A) discovered','B) is discovered','C) was discovered','D) has discovered'],dogru:2,fb:'1928 + by → Past Passive → was V3. 🖼 1928 laboratuvar keşfi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I _____ in this city for ten years."',opts:['A) live','B) lived','C) am living','D) have lived'],dogru:3,fb:'for + süre + şimdiye bağlı → Present Perfect. 🖼 10 yıllık zaman çizgisi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Some people like coffee, _____ others prefer tea."',opts:['A) while','B) because','C) so','D) unless'],dogru:0,fb:'Zıt tercih → while. 🖼 Biri kahve biri çay.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"He is a very talented musician; _____, he can play three instruments."',opts:['A) however','B) moreover','C) therefore','D) because'],dogru:1,fb:'Ek bilgi + noktalı virgül → moreover. 🖼 Yetenek + bonus bilgi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The report must _____ by the manager before noon."',opts:['A) sign','B) signed','C) be signed','D) be signing'],dogru:2,fb:'must + passive → must be V3. 🖼 Rapor + imza kaşesi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"We decided to stay at home _____ the weather was very cold."',opts:['A) because of','B) despite','C) although','D) because'],dogru:3,fb:'Sonrasında S+V → CÜMLE ister → because. 🖼 Soğuk hava → evde kalma kararı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ you work hard, you cannot succeed in this exam."',opts:['A) Unless','B) If','C) Although','D) Because'],dogru:0,fb:'Olumsuz koşul → Unless. 🖼 Çalışma yoksa kapı kilitli.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The man _____ car was stolen went to the police station."',opts:['A) who','B) whose','C) which','D) that'],dogru:1,fb:'Adamın arabası = sahiplik → whose. 🖼 Adam + onun arabası etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I saw him while I _____ to the market."',opts:['A) walked','B) walk','C) was walking','D) have walked'],dogru:2,fb:'while + devam eden geçmiş → Past Continuous. 🖼 Yürüyüş filmi devam ederken.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The economy is growing; _____, unemployment is still high."',opts:['A) moreover','B) therefore','C) similarly','D) however'],dogru:3,fb:'Zıtlık + noktalı virgül → however. 🖼 Büyüme var ama işsizlik duvarı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"This problem can _____ easily if we work together."',opts:['A) be solved','B) solve','C) solved','D) be solving'],dogru:0,fb:'can + passive → can be V3. 🖼 Problem düğümü birlikte çözülüyor.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"My father _____ to Germany in 1990."',opts:['A) has gone','B) went','C) was going','D) had gone'],dogru:1,fb:'"in 1990" = kesin geçmiş → Past Simple. 🖼 1990 takvim yaprağı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I will call you as soon as I _____ home."',opts:['A) will arrive','B) arrived','C) arrive','D) am arriving'],dogru:2,fb:'Zaman bağlacı → gelecek anlamı olsa bile Present Simple. 🖼 Eve varınca telefon tuşu.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ the traffic was heavy, we arrived on time."',opts:['A) Despite','B) Because','C) Since','D) Although'],dogru:3,fb:'Sonrasında S+V + zıtlık → Although. 🖼 Trafik yoğun ama saatinde varış.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"It is a fact _____ smoking damages health."',opts:['A) that','B) which','C) what','D) if'],dogru:0,fb:'"fact that" + cümle kalıbı. 🖼 Gerçek etiketi + that cümlesi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If water boils, it _____ into steam."',opts:['A) will turn','B) turns','C) turned','D) is turning'],dogru:1,fb:'Genel kural → 0. tip → Present Simple. 🖼 Kaynar şu → buhar.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ just _____ by the secretary."',opts:['A) had / been sent','B) is / sent','C) has / been sent','D) have / send'],dogru:2,fb:'"just" + yeni olmuş → Present Perfect Passive. 🖼 Mektup zarfı yeni postaya verildi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She is the writer _____ books are read all over the world."',opts:['A) who','B) which','C) that','D) whose'],dogru:3,fb:'Yazar + kitapları = sahiplik → whose. 🖼 Yazar + onun kitapları.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"He was driving too fast, _____ he had an accident."',opts:['A) so','B) because','C) although','D) however'],dogru:0,fb:'Sebep → sonuç → so. 🖼 Hız → domino → kaza.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"You _____ take your umbrella; it is raining outside."',opts:['A) must','B) should','C) can','D) will'],dogru:1,fb:'Tavsiye → should. 🖼 Yağmur → şemsiye hatırlatması.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By 2050, scientists _____ a cure for cancer."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'"By 2050" deadline → Future Perfect. 🖼 2050 çizgisinin önünde bulunmuş işareti.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ having a headache, she attended the meeting."',opts:['A) Although','B) Because of','C) Since','D) In spite of'],dogru:3,fb:'Sonrasında V-ing → In spite of / Despite. 🖼 Baş ağrısı var ama toplantıya gidiyor.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The method is effective; _____, it is costly."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:0,fb:'İyi özellik → kötü özellik = ZITLIK → however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The system failed; _____, a new model was developed."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Sebep → sonuç → therefore.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The solution is practical; _____, it requires training."',opts:['A) therefore','B) moreover','C) however','D) so'],dogru:2,fb:'Avantaj → dezavantaj = ZITLIK → however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The data were incomplete; _____, the study was postponed."',opts:['A) however','B) moreover','C) although','D) therefore'],dogru:3,fb:'Neden → sonuç → therefore.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The device is affordable; _____, it is unreliable."',opts:['A) however','B) therefore','C) so','D) moreover'],dogru:0,fb:'İyi → kötü = ZITLIK → however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The experiment was repeated; _____, more accurate results were obtained."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Sebep → sonuç → therefore.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The plan seems promising; _____, it lacks funding."',opts:['A) therefore','B) moreover','C) however','D) so'],dogru:2,fb:'Övgü → sorun = ZITLIK → however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The policy changed; _____, public awareness increased."',opts:['A) however','B) moreover','C) although','D) therefore'],dogru:3,fb:'Olay → sonuç → therefore.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The approach is innovative; _____, it is controversial."',opts:['A) however','B) therefore','C) so','D) moreover'],dogru:0,fb:'Güzel → problem = ZITLIK → however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The deadline was extended; _____, the team had more time."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Neden → sonuç → therefore.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen him _____ last year."',opts:['A) for','B) ago','C) since','D) when'],dogru:2,fb:'since + başlangıç noktası → Present Perfect.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She has been studying _____ three hours."',opts:['A) since','B) ago','C) during','D) for'],dogru:3,fb:'for + süre → Present Perfect.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"He moved to Ankara two years _____."',opts:['A) ago','B) since','C) for','D) before'],dogru:0,fb:'ago → Past Simple.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By the time she arrived, they _____ already left."',opts:['A) have','B) had','C) has','D) were'],dogru:1,fb:'by the time + Past → Past Perfect.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By 2030, scientists _____ a solution."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'by + gelecek tarih → Future Perfect.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The book _____ on the table belongs to me."',opts:['A) lying','B) lie','C) lied','D) to lie'],dogru:0,fb:'V-ing sıfat cümleciği = which is lying (masadaki kitap).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The documents _____ by the manager were sent yesterday."',opts:['A) signing','B) signed','C) sign','D) to sign'],dogru:1,fb:'V3 sıfat cümleciği = which were signed (imzalanan belgeler).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The woman I met _____ the conference was very helpful."',opts:['A) in','B) on','C) at','D) by'],dogru:2,fb:'Gizli relative clause — "the woman [that] I met at the conference".'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ the cold weather, the match continued."',opts:['A) Although','B) Because','C) However','D) Despite'],dogru:3,fb:'"the cold weather" = isim → Despite + isim.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"It was raining; _____, they went out."',opts:['A) nevertheless','B) because','C) although','D) despite'],dogru:0,fb:'Noktalı virgül + zıtlık → nevertheless/however.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The main idea _____ was difficult to understand."',opts:['A) which the passage','B) of the passage','C) that passage','D) in the passage'],dogru:1,fb:'"of + isim" = isim tamlaması, özneyi genişletir.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ being tired, she finished all her work."',opts:['A) Although','B) Because','C) Despite','D) However'],dogru:2,fb:'V-ing → Despite + V-ing.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ never reached its destination."',opts:['A) which sending','B) he sends','C) to send','D) he sent'],dogru:3,fb:'Gizli that = "The letter [that] he sent" — sıfat cümleciği.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Reading books _____ very beneficial."',opts:['A) is','B) are','C) were','D) being'],dogru:0,fb:'Reading = fiilimsi (özne) → kipli fiil "is".'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The painting _____ at the museum was priceless."',opts:['A) displaying','B) displayed','C) display','D) to display'],dogru:1,fb:'V3 sıfat cümleciği = which was displayed.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The scientist aimed to _____ the negative effects of the chemical."',opts:['A) mitigate','B) exaggerate','C) admire','D) ignore'],dogru:0,fb:'mitigate + effects → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The government decided to _____ a new education policy."',opts:['A) conduct','B) implement','C) advocate','D) sustain'],dogru:1,fb:'implement + policy → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Researchers _____ a study on the effects of social media."',opts:['A) made','B) performed','C) conducted','D) did'],dogru:2,fb:'conduct + study → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new technology will _____ the efficiency of the production process."',opts:['A) undermine','B) decline','C) reduce','D) enhance'],dogru:3,fb:'enhance + efficiency → pozitif collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The opposition tried to _____ the government\'s claims with new evidence."',opts:['A) refute','B) concede','C) advocate','D) sustain'],dogru:0,fb:'refute = çürütmek, evidence ile gider.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The door is unlocked. Someone _____ to lock it."',opts:['A) should forget','B) must have forgotten','C) could forget','D) might forget'],dogru:1,fb:'Kanıt var (kapı kilitsiz) → kesin geçmiş kanı → must have V3.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"You _____ me earlier — I was waiting for hours!"',opts:['A) must have called','B) could call','C) should have called','D) might call'],dogru:2,fb:'Beklenti karşılanmadı + eleştiri → should have V3.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The package _____ yesterday, but it still hasn\'t arrived."',opts:['A) must arrive','B) could arrive','C) might arriving','D) should have arrived'],dogru:3,fb:'Beklenen ama gerçekleşmeyen → should have V3.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She _____ the early bus — that\'s why she\'s late."',opts:['A) might have missed','B) must miss','C) should have missed','D) could miss'],dogru:0,fb:'Belirsiz ihtimal → might have V3.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ before the deadline, but no one submitted it."',opts:['A) must be submitted','B) could have been submitted','C) should submit','D) might submitted'],dogru:1,fb:'Kaçırılmış fırsat + passive → could have been V3.'},
-  {q:'Referans sorusunu yanıtlayın:',sent:'"The researchers published their findings; they were widely praised." — \'they\' refers to:',opts:['A) the researchers','B) the publishers','C) the findings','D) the critics'],dogru:2,fb:'they → hemen önceki isim = the findings.'},
-  {q:'Referans sorusunu yanıtlayın:',sent:'A paragraph ends with "This suggests that exercise alone is not sufficient." What does \'This\' refer to?',opts:['A) exercise','B) sufficiency','C) the paragraph title','D) the information presented before'],dogru:3,fb:'This = önceki cümlenin içeriği → CZ-REF tekniği.'},
-  {q:'Doğru cevabı seçin:',sent:'Which word signals a contrasting idea in a paragraph?',opts:['A) however','B) furthermore','C) consequently','D) for instance'],dogru:0,fb:'however = zıtlık bağlacı.'},
-  {q:'Doğru cevabı seçin:',sent:'What should you read FIRST when answering a main idea question?',opts:['A) every sentence','B) the first and last sentences','C) only the first sentence','D) the middle sentences'],dogru:1,fb:'3 Nokta Tekniği → ilk + son cümle.'},
-  {q:'Doğru cevabı seçin:',sent:'Which answer choice is most likely WRONG in an inference question?',opts:['A) one that paraphrases the text','B) one that is implied','C) one that uses \'always\' or \'never\'','D) one that matches the tone'],dogru:2,fb:'Abartılı şıklar → Şeytan Üçgeni.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Researchers decided to _____ a survey on student habits."',opts:['A) conduct','B) make','C) do','D) perform'],dogru:0,fb:'conduct + survey → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new law aims to _____ the negative effects of pollution."',opts:['A) increase','B) mitigate','C) ignore','D) admire'],dogru:1,fb:'mitigate + effects → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Economic growth can _____ new job opportunities."',opts:['A) result from','B) depend on','C) give rise to','D) refer to'],dogru:2,fb:'give rise to = yol açmak.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The success of the project will _____ the team\'s cooperation."',opts:['A) result in','B) carry out','C) point out','D) depend on'],dogru:3,fb:'depend on = bağlı olmak.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The committee decided to _____ a thorough investigation."',opts:['A) carry out','B) make','C) bring','D) set'],dogru:0,fb:'carry out + investigation → sabit collocation.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ several key problems in the education system."',opts:['A) carried out','B) pointed out','C) resulted in','D) depended on'],dogru:1,fb:'point out = belirtmek.'},
-  {q:'Doğru cevabı seçin:',sent:'YDS\'de yanlış cevap doğruyu götürür mü?',opts:['A) Evet, götürür','B) Bazen götürür','C) Hayır, götürmez','D) Sadece okumada götürür'],dogru:2,fb:'Boş bırakmak yerine tahmin et — yanlış doğruyu götürmez.'},
-  {q:'Doğru cevabı seçin:',sent:'Scanning tekniği ne için kullanılır?',opts:['A) Genel konuyu anlamak','B) Bağlaçları bulmak','C) Çeviri yapmak','D) Metinde anahtar kelimeyi bulmak'],dogru:3,fb:'Scanning = metinde anahtar kelimeyi bulmak, tamamını okumak için değil.'},
-  {q:'Doğru cevabı seçin:',sent:'Okuma parçalarına ayrılması gereken ortalama süre nedir?',opts:['A) 2,5-3 dakika/soru','B) 1 dakika/soru','C) 5 dakika/soru','D) 30 saniye/soru'],dogru:0,fb:'Okuma parçaları: 2,5-3 dakika/soru.'},
-  {q:'Doğru cevabı seçin:',sent:'Çift Turlu Çözüm\'de ★ işareti ne anlama gelir?',opts:['A) Bu soru yanlış','B) Zorlandım, 2. turda döneceğim','C) Bu soruyu atla','D) Bu soru kolay'],dogru:1,fb:'★ = zorlandım, 2. turda döneceğim (Çift Turlu Çözüm).'},
-  {q:'Doğru cevabı seçin:',sent:'Referans sorusunda \'it\' kelimesi nereye işaret eder?',opts:['A) Sonraki cümleye','B) Paragrafın başına','C) Hemen önceki isme','D) Yazara'],dogru:2,fb:'Referans sorusunda "it" hemen önceki isme işaret eder (CZ-REF tekniği).'},
-  {q:'Doğru cevabı seçin:',sent:'Ana fikir sorusunda hangi cümleler önce okunur?',opts:['A) Sadece orta paragraf','B) Tüm metin','C) Sadece başlık','D) İlk cümle ve son cümle'],dogru:3,fb:'Ana fikir sorusunda 3 Nokta Tekniği: ilk cümle ve son cümle önce okunur.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The researcher presented a _____ approach to solving the problem."',opts:['A) novel','B) fictional','C) narrative','D) reading'],dogru:0,fb:'novel (sıfat) = yeni, özgün.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The committee needs to _____ the issue of funding immediately."',opts:['A) locate','B) address','C) mail','D) ignore'],dogru:1,fb:'address (fiil) = ele almak.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The evidence presented was _____ and well-supported."',opts:['A) loud','B) musical','C) sound','D) noisy'],dogru:2,fb:'sound (sıfat) = sağlam, güvenilir.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new policy will _____ significant changes in the education system."',opts:['A) avoid','B) prevent','C) reduce','D) entail'],dogru:3,fb:'entail = gerektirmek.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The company _____ heavy losses during the economic crisis."',opts:['A) incurred','B) enjoyed','C) gained','D) achieved'],dogru:0,fb:'incur = maruz kalmak.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The accident _____ during the night shift."',opts:['A) was happened','B) happened','C) had been happened','D) has been happened'],dogru:1,fb:'happen passive yapılamaz.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She studied hard; _____, she passed the exam."',opts:['A) , therefore','B) because','C) therefore','D) despite'],dogru:2,fb:'Noktalı virgül + sonuç → therefore (virgülle değil).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ you register by Friday, you cannot attend the conference."',opts:['A) Unless not','B) If not','C) Without','D) Unless'],dogru:3,fb:'unless = if not, yanında not kullanılmaz.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new disease _____ in tropical regions."',opts:['A) occurs','B) is occurred','C) was occurred','D) has been occurred'],dogru:0,fb:'occur passive yapılamaz.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The results _____ that sleep deprivation affects performance."',opts:['A) suggest to','B) suggest','C) suggest about','D) suggestion'],dogru:1,fb:'suggest that + SVO (suggest to/about kullanılmaz).'},
-  {q:'Doğru cevabı seçin:',sent:'The branch of psychology that studies how culture affects behavior:',opts:['A) Clinical Psychology','B) Cognitive Psychology','C) Cross-cultural Psychology','D) Neuropsychology'],dogru:2,fb:'Cross-cultural Psychology = kültürün davranışa etkisini inceler.'},
-  {q:'Doğru cevabı seçin:',sent:'Psikologlar teorilerini test etmek için hangi araçları kullanır?',opts:['A) Novels/Poems/Songs','B) Laws/Rules','C) Maps/Charts','D) Surveys, Data, Experiments, Statistics'],dogru:3,fb:'Psikologlar: Surveys, Data, Experiments, Statistics kullanır.'},
-  {q:'Doğru cevabı seçin:',sent:'Jack came to the village every summer. Which is TRUE?',opts:['A) Jack regularly visited the village','B) Jack lived there','C) Jack owned a house there','D) Jack worked there'],dogru:0,fb:'Jack Kuralı: metinde ne yazıyorsa o doğru, çıkarım yapma.'},
-  {q:'Doğru cevabı seçin:',sent:'The study of mental disorders and their treatment:',opts:['A) Cognitive Psychology','B) Clinical Psychology','C) Developmental Psychology','D) Social Psychology'],dogru:1,fb:'Clinical Psychology = ruhsal hastalıkların tedavisi.'},
-  {q:'Doğru cevabı seçin:',sent:'Scientists discovered a cure; it was announced worldwide. \'it\' refers to:',opts:['A) scientists','B) the discovery','C) the cure','D) the world'],dogru:2,fb:'Zamir avı: it → hemen önceki isim = the cure.'},
+  {id:'tz001',q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"She would have attended the conference _____ she received the invitation in time."',opts:['A) if','B) had','C) unless','D) although'],dogru:1,fb:'3rd conditional devrik yapı: "if" düştüğünde "had" one çıkar.'},
+  {id:'tz002',q:'Boşluğu doğru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e ragmen + tam cumle. Zitlik sinyali.'},
+  {id:'tz003',q:'Anlamca en yakın seçenek hangisi?',sent:'"The findings were by no means conclusive."',opts:['A) tamamen kesin','B) kesinlikle kesin değil','C) bir ölçüde kesin','D) tartışmalı'],dogru:1,fb:'"By no means" = gizli olumsuz; kesinlikle degil.'},
+  {id:'tz004',q:'Boşluğa hangisi gelmelidir?',sent:'"_____ the new policy, employees were given more flexibility."',opts:['A) Despite','B) Although','C) Under','D) However'],dogru:2,fb:'"Under + isim" = bir duzenleme altinda. Edat, baglac degil.'},
+  {id:'tz005',q:'Modal yapıyı doğru tanımlayın:',sent:'"She must have forgotten the meeting."',opts:['A) Zorunluluk','B) Geçmişe dair güçlü çıkarım','C) Izin','D) Gelecek tahmin'],dogru:1,fb:'"Must have + V3" = gecmise dair kanita dayali guclu cıkarim. Zorunluluk degil!'},
+  {id:'tz006',q:'Cümlede "far from" ne anlama gelir?',sent:'"The solution was far from perfect."',opts:['A) mükemmele yakın','B) mükemmeldi','C) mükemmel değildi','D) mükemmel olabilirdi'],dogru:2,fb:'"Far from" = gizli olumsuz. Anlaminda "degil" vardir.'},
+  {id:'tz007',q:'Boşluğu doğru doldurun:',sent:'"The report was submitted _____ the deadline."',opts:['A) despite','B) prior to','C) although','D) however'],dogru:1,fb:'"Prior to" = once (edat). Zaman iliskisi kurar.'},
+  {id:'tz008',q:'Hangi seçenek doğruda?',sent:'"Had she known the truth, she _____ differently."',opts:['A) will behave','B) would behave','C) would have behaved','D) had behaved'],dogru:2,fb:'3rd conditional: "Had she known..." → "would have + V3"'},
+  {id:'tz009',q:'"Hardly" kelimesinin anlamı nedir?',sent:'"The committee hardly considered the proposal."',opts:['A) Mutlaka','B) Neredeyse hic','C) Kesinlikle','D) Büyük ölçüde'],dogru:1,fb:'"Hardly" = gizli olumsuz; neredeyse hic. OSYM tuzak yapisi.'},
+  {id:'tz010',q:'Doğru seçeneği bulun:',sent:'"The new regulation aims to _____ the impact of pollution."',opts:['A) amplify','B) mitigate','C) accelerate','D) neglect'],dogru:1,fb:'"Mitigate" = hafifletmek, azaltmak. OSYM akademik kelime.'},
+  {id:'tz011',q:'Boşluğa hangi bağlaç gelir?',sent:'"_____ its flaws, the study was widely cited."',opts:['A) Because of','B) Despite','C) Unless','D) Whenever'],dogru:1,fb:'"Despite + isim" = -e ragmen. Zitlik sinyali.'},
+  {id:'tz012',q:'"Notwithstanding" hangi anlamda kullanılır?',sent:'"Notwithstanding the difficulties, the project succeeded."',opts:['A) Nedeniyle','B) Buna ragmen','C) Bundan dolayı','D) Aksi halde'],dogru:1,fb:'"Notwithstanding" = buna ragmen / karsin. Resmi dilde despite ile esdeger.'},
+  {id:'tz013',q:'Hangi seçenek modalın doğru anlamını verir?',sent:'"The patient might have reacted to the medication."',opts:['A) Kesinlikle reaksiyon gösterdi','B) Zorunlu olarak gösterdi','C) Belki reaksiyon göstermiş olabilir','D) Göstermeli'],dogru:2,fb:'"Might have + V3" = gecmise dair zayif ihtimal. "Must have" ile karistirmayin!'},
+  {id:'tz014',q:'Boşluğu tamamlayın:',sent:'"The committee was _____ divided on the issue."',opts:['A) deeply','B) deep','C) depth','D) deepen'],dogru:0,fb:'"Deeply divided" = derin bicimde bolunmus. Sifati niteleyen zarf kullanilir.'},
+  {id:'tz015',q:'Anlam sorusu - ne ifade eder?',sent:'"The results were anything but conclusive."',opts:['A) Sonuçlar tamamen kesin','B) Sonuçlar kesin değildi','C) Sonuçlar yeterliydi','D) Sonuçlar beklendik'],dogru:1,fb:'"Anything but" = ... degil. Guclu gizli olumsuz. "Far from" ile ayni islev.'},
+  {id:'tz016',q:'Hangi seçenek doğruda?',sent:'"The findings suggest that the hypothesis _____ further testing."',opts:['A) require','B) requires','C) required','D) requiring'],dogru:1,fb:'Subject (hypothesis) tekil → "requires". Subject-verb agreement tuzagi!'},
+  {id:'tz017',q:'Boşluğu tamamlayın:',sent:'"The law was enacted _____ protect consumers."',opts:['A) so as to','B) despite','C) although','D) however'],dogru:0,fb:'"So as to" = amaci ifade eder (= in order to). Amac baglaci.'},
+  {id:'tz018',q:'Modal yapı sorusu:',sent:'"You should have submitted the form earlier."',opts:['A) Formu gönderdin','B) Göndermeliydin ama göndermedin','C) Göndereceksin','D) Gönderebilirdin'],dogru:1,fb:'"Should have + V3" = gecmiste yapilmasi gerekirdi ama yapilmadi. Pismanlık yapisi.'},
+  {id:'tz019',q:'Hangi kelime boşluğa uyar?',sent:'"The evidence was _____ to support the claim."',opts:['A) insufficient','B) sufficient','C) proficient','D) efficient'],dogru:0,fb:'"Insufficient" = yetersiz. "Insufficient to + V" kalibina dikkat.'},
+  {id:'tz020',q:'Bağlaç sorusu:',sent:'"_____ the budget was limited, they completed the project."',opts:['A) Despite','B) Although','C) Because','D) Therefore'],dogru:1,fb:'"Although" + tam cumle = -e ragmen. "Despite" isim/V-ing ister.'},
+  {id:'tz021',q:'Anlamca yakın seçenek hangisi?',sent:'"The policy is contingent on approval."',opts:['A) Onaydan bağımsız','B) Onaya bağlı','C) Onaya ragmen','D) Onay gerektirmeyen'],dogru:1,fb:'"Contingent on" = -e bagli, kosullu. Akademik metinlerde sik.'},
+  {id:'tz022',q:'Hangi yapı yanlıştır?',sent:'A) Despite working hard / B) Despite she worked hard / C) Although she worked hard / D) Even though she worked hard',opts:['A) A sik','B) B yanlış','C) C doğru','D) D doğru'],dogru:1,fb:'"Despite" + isim/gerund. "Despite she worked" yanlış - sonrasında cümle gelmez!'},
+  {id:'tz023',q:'Modal + have + V3 sorusu:',sent:'"The documents _____ been misplaced."',opts:['A) can','B) could have','C) should','D) might'],dogru:1,fb:'"Could have + V3" = gecmiste mumkun olmus olabilirdi.'},
+  {id:'tz024',q:'Hangi kelime "azaltmak" anlamına gelir?',sent:'Bagdam: "The new policy will _____ emissions."',opts:['A) amplify','B) sustain','C) curtail','D) enhance'],dogru:2,fb:'"Curtail" = kismak, azaltmak. OSYM Fen/Sosyal metinlerinde sik.'},
+  {id:'tz025',q:'Boşluğu tamamlayın:',sent:'"The researcher\'s conclusion was _____ by subsequent studies."',opts:['A) refuted','B) stipulated','C) mitigated','D) amplified'],dogru:0,fb:'"Refute" = curutmek. "Subsequent" = sonraki. Ikisi birlikte OSYM kalibı.'},
+  {id:'tz026',q:'Inversion sorusu:',sent:'"Never _____ such a significant error in the data."',opts:['A) we have seen','B) have we seen','C) we had seen','D) had we been seeing'],dogru:1,fb:'"Never" başa gelince devrik yapı: Never + yardımcı + özne + V. ÖSYM tuzağı!'},
+  {id:'tz027',q:'Hangi seçenek doğru anlamı verir?',sent:'"The council is reluctant to adopt the new measures."',opts:['A) istekli','B) isteksiz','C) zorunlu','D) kararlı'],dogru:1,fb:'"Reluctant" = isteksiz, cekingen. "Reluctant to + V" OSYM\'de sik.'},
+  {id:'tz028',q:'Boşluğu tamamlayın:',sent:'"The results were _____ with previous findings."',opts:['A) consistent','B) consisted','C) consistency','D) consistently'],dogru:0,fb:'"Consistent with" = ile tutarli/uyumlu. Sifat (be + consistent) kalibi.'},
+  {id:'tz029',q:'Tuzak soru - anlamine dikkat:',sent:'"The proposal was not without merit."',opts:['A) Tamamen değersizdi','B) Değerliydi','C) Tartışmalıydı','D) Değeri yoktu'],dogru:1,fb:'"Not without merit" = cift olumsuz = olumlu. Degersiz degildi → degerliydi!'},
+  {id:'tz030',q:'Gerund / infinitive sorusu:',sent:'"She was accused of _____ the report."',opts:['A) to falsify','B) falsifying','C) falsify','D) having falsify'],dogru:1,fb:'"Accused of + V-ing". Edat (of) sonrasinda gerund gelir.'},
+  {id:'tz031',q:'Boşluğu doğru tamamlayın:',sent:'"It was not until the results were reviewed _____ the error was discovered."',opts:['A) that','B) when','C) which','D) then'],dogru:0,fb:'"It was not until... that" kalıbı: cleft (vurgu) yapı, boşluğa her zaman "that" gelir.'},
+  {id:'tz032',q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"The data _____ by the research team last year is now publicly available."',opts:['A) collecting','B) collected','C) which collect','D) to collect'],dogru:1,fb:'İndirgenmiş edilgen ilgi cümlesi: "which was collected" → "collected".'},
+  {id:'tz033',q:'Modal yapıyı doğru yorumlayın:',sent:'"You need not have rewritten the entire report; a summary would have sufficed."',opts:['A) Raporu yeniden yazman gerekiyordu','B) Raporu yeniden yazman gerekmiyordu ama yazdın','C) Raporu yeniden yazmalısın','D) Rapor hâlâ eksik'],dogru:1,fb:'"Need not have + V3" = yapmana gerek yoktu ama yaptın. "Should have" ile karıştırılan bir tuzak yapı.'},
+  {id:'tz034',q:'Boşluğu doğru bağlaçla tamamlayın:',sent:'"_____ the sharp rise in raw material costs, the company decided to freeze all new hires."',opts:['A) Given','B) Although','C) Provided that','D) Unless'],dogru:0,fb:'"Given + isim" = göz önüne alındığında, nedensellik bildirir. "Although" zıtlık ister, burada uymaz.'},
+  {id:'tz035',q:'Boşluğa en uygun kelimeyi seçin:',sent:'"The committee decided to _____ the meeting until further notice."',opts:['A) postpone','B) propose','C) pursue','D) preserve'],dogru:0,fb:'"Postpone" = ertelemek. "Until further notice" (yeni bir bildirime kadar) erteleme anlamını destekler.'},
+  {id:'tz036',q:'Hangi seçenek doğru edilgen yapıdır?',sent:'"The new regulations _____ to take effect at the beginning of next fiscal year."',opts:['A) are expected','B) expect','C) expecting','D) have expected'],dogru:0,fb:'"Be expected to + V" = beklenmek. Özne eylemi yapan değil, beklenen taraf, bu yüzden edilgen kullanılır.'},
+  {id:'tz037',q:'Boşluğu tamamlayın:',sent:'"The more rigorously the hypothesis was tested, _____ the researchers became of its validity."',opts:['A) the more confident','B) more confident','C) the most confident','D) confident'],dogru:0,fb:'"The + comparative..., the + comparative..." paralel karşılaştırma yapısı.'},
+  {id:'tz038',q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"Whether the vaccine provides long-term immunity _____ still under investigation."',opts:['A) is','B) are','C) being','D) to be'],dogru:0,fb:'"Whether..." ile başlayan noun clause özne olarak tekil kabul edilir → "is".'},
+  {id:'tz039',q:'Altı çizili kelimeye en yakın anlamlı seçenek hangisidir?',sent:'"The board\'s decision was largely arbitrary, lacking any consistent rationale."',opts:['A) keyfî','B) zorunlu','C) gerekçeli','D) oybirliğiyle'],dogru:0,fb:'"Arbitrary" = keyfî, mantıklı bir gerekçeye dayanmayan.'},
+  {id:'tz040',q:'Boşluğu doğru tamamlayın:',sent:'"_____ failed to reach a consensus, the committee postponed the vote."',opts:['A) Having','B) Have','C) To have','D) Had'],dogru:0,fb:'"Having + V3" = bir eylem tamamlandıktan sonra ikinci eylem. "Having failed" = başarısız olduktan sonra.'},
+  {id:'tz041',q:'Hangi seçenek devrik yapıyı doğru tamamlar?',sent:'"Not only _____ the deadline, but he also exceeded the quality expectations."',opts:['A) he met','B) did he meet','C) he did meet','D) meeting he'],dogru:1,fb:'"Not only" cümle başında olunca devrik yapı gerekir: Not only + yardımcı fiil + özne + fiil.'},
+  {id:'tz042',q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Researchers were unable to _____ a causal link between the two variables."',opts:['A) establish','B) install','C) construct','D) instruct'],dogru:0,fb:'"Establish a link/connection" = bağlantı kurmak, akademik metinlerde sık kullanılan bir kalıp.'},
+  {id:'tz043',q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"If the board had approved the merger last year, the company _____ a stronger market position today."',opts:['A) would have had','B) would have','C) will have','D) had had'],dogru:1,fb:'Karışık koşul: geçmiş şart (had approved) + şimdiki sonuç → "would have" (V1 ile).'},
+  {id:'tz044',q:'Boşluğu doğru tamamlayın:',sent:'"The hypothesis _____ the entire study was based proved to be flawed."',opts:['A) on which','B) which','C) that','D) where'],dogru:0,fb:'"Based ON the hypothesis" → edat ilişkili yapı: "the hypothesis on which..."'},
+  {id:'tz045',q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Critics argue that the new policy could _____ public trust in the judiciary."',opts:['A) undermine','B) underline','C) undertake','D) understate'],dogru:0,fb:'"Undermine" = zayıflatmak, baltalamak. "Public trust\'ı undermine etmek" akademik metinlerde sık geçer.'},
+  {id:'tz046',q:'Boşluğu tamamlayın:',sent:'"The researchers used a double-blind design _____ eliminate potential bias."',opts:['A) so as to','B) so that','C) in case','D) as though'],dogru:0,fb:'"So as to + V" = amaç bildirir (= in order to). "So that" arkasından cümle (S+V) ister, burada fiil var.'},
+  {id:'tz047',q:'Hangi seçenek boşluğu doğru tamamlar?',sent:'"It is the long-term side effects of the drug, not its immediate efficacy, _____ concerns regulators most."',opts:['A) that','B) who','C) what','D) which is'],dogru:0,fb:'Cleft yapı "It is X that..." — vurgulanan öğe kişi değil, bu yüzden "that" tercih edilir.'},
+  {id:'tz048',q:'Boşluğa en uygun bağlacı seçin:',sent:'"The results were statistically insignificant. _____, the team believed the trend merited further investigation."',opts:['A) Nonetheless','B) Therefore','C) Similarly','D) Meanwhile'],dogru:0,fb:'"Nonetheless" = buna rağmen, zıtlık bildirir. Sonuç anlamsız olsa da araştırma devam etmeli düşüncesi var.'},
+  {id:'tz049',q:'Boşluğu doğru tamamlayın:',sent:'"The board insisted that the audit _____ completed before the fiscal year ends."',opts:['A) be','B) is','C) was','D) will be'],dogru:0,fb:'"Insist that + S + (should) + V1" = dilek kipi (subjunctive). "be" kullanılır, "is/was" değil.'},
+  {id:'tz050',q:'Altı çizili kelimeye en yakın anlamlı seçenek hangisidir?',sent:'"The new evidence appears to corroborate the initial findings of the study."',opts:['A) doğrulamak','B) çürütmek','C) reddetmek','D) gölgede bırakmak'],dogru:0,fb:'"Corroborate" = desteklemek, doğrulamak. "Contradict" (çürütmek) ile karıştırılan bir tuzak kelimedir.'},
+  {id:'tz051',q:'Boşluğu tamamlayın:',sent:'"_____ repeatedly warned about the risks, investors continued to pour money into the venture."',opts:['A) Despite being','B) Although being','C) In spite that','D) Even so'],dogru:0,fb:'"Despite being + V3 (pasif participle)" = uyarılmış olmalarına rağmen. "Despite" isim/V-ing ister, "although" tek başına olmaz.'},
+  {id:'tz052',q:'Hangi seçenek devrik yapıyı doğru tamamlar?',sent:'"Hardly _____ the announcement been made when shares began to plummet."',opts:['A) had','B) did','C) has','D) was'],dogru:0,fb:'"Hardly...when" = olur olmaz. "Hardly had + özne + V3...when" devrik yapı kullanılır.'},
+  {id:'tz053',q:'Boşluğa en uygun ifadeyi seçin:',sent:'"The report presented _____ evidence supporting the new hypothesis."',opts:['A) a plethora of','B) a scarcity of','C) a fraction of','D) an absence of'],dogru:0,fb:'"A plethora of" = bolca, çokça. Bağlam "supporting the hypothesis" bolluk anlamını destekler.'},
+  {id:'tz054',q:'Boşluğu doğru tamamlayın:',sent:'"Any complaint _____ within thirty days will be automatically dismissed."',opts:['A) not filed','B) not filing','C) that not filed','D) is not filed'],dogru:0,fb:'İndirgenmiş edilgen ilgi cümlesi: "that is not filed" → "not filed". Olumsuzluk fiilden önce gelir.'},
+  {id:'tz055',q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Companies that fail to _____ with the new environmental standards will face heavy fines."',opts:['A) comply','B) conform','C) obey','D) abide'],dogru:0,fb:'"Comply with" = uymak, standart kelime öbeği. "Abide" ise "with" değil "by" edatıyla kullanılır.'},
+  {id:'tz056',q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ by the committee yesterday."',opts:['A) was reviewed','B) will be reviewed','C) is reviewed','D) has been reviewing'],dogru:0,fb:'"Yesterday" geçmiş zaman sinyali → Past Passive: was/were + V3 → "was reviewed".'},
+  {id:'tz057',q:'Boşluğu doğru tamamlayın:',sent:'"The contract _____ by the CEO tomorrow morning."',opts:['A) is signed','B) was signed','C) will be signed','D) will be sign'],dogru:2,fb:'"Tomorrow morning" gelecek zaman sinyali → Future Passive: will be + V3 → "will be signed" (V1 değil, V3!).'},
+  {id:'tz058',q:'Boşluğu doğru tamamlayın:',sent:'"_____ it was raining heavily, they decided to go for a picnic."',opts:['A) Although','B) Despite','C) Because','D) However'],dogru:0,fb:'Sonrasında S+V var → CÜMLE ister → Although. 🖼 Yağmur yağıyor ama pikniğe gidiyorlar.'},
+  {id:'tz059',q:'Boşluğu doğru tamamlayın:',sent:'"The flight was cancelled _____ the thick fog."',opts:['A) because','B) because of','C) although','D) despite'],dogru:1,fb:'Sonrasında isim var → İSİM ister → because of. 🖼 Sis duvarı → uçak kalkamıyor.'},
+  {id:'tz060',q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen my uncle _____ I was a child."',opts:['A) for','B) when','C) since','D) while'],dogru:2,fb:'Present Perfect + başlangıç noktası → since. 🖼 Çocukluk = başlangıç çizgisi.'},
+  {id:'tz061',q:'Boşluğu doğru tamamlayın:',sent:'"If I _____ you, I would accept that job offer."',opts:['A) was','B) am','C) will be','D) were'],dogru:3,fb:'2. tip şart → If + were. 🖼 Hayali yer değişimi.'},
+  {id:'tz062',q:'Boşluğu doğru tamamlayın:',sent:'"The new hospital _____ by the mayor next month."',opts:['A) will be opened','B) opens','C) is opened','D) was opened'],dogru:0,fb:'"next month" + by → Future Passive → will be V3. 🖼 Kurdele kesme töreni.'},
+  {id:'tz063',q:'Boşluğu doğru tamamlayın:',sent:'"The student _____ scored the highest mark is my cousin."',opts:['A) which','B) who','C) where','D) whose'],dogru:1,fb:'student = kişi → who. 🖼 Öğrenciye ok → en yüksek not.'},
+  {id:'tz064',q:'Boşluğu doğru tamamlayın:',sent:'"She didn\'t study; _____, she passed with a high score."',opts:['A) therefore','B) moreover','C) however','D) because'],dogru:2,fb:'Noktalı virgül + virgül → sentence adverb + zıtlık → however. 🖼 Çalışmadı ama geçti.'},
+  {id:'tz065',q:'Boşluğu doğru tamamlayın:',sent:'"We won\'t be able to finish _____ you help us."',opts:['A) if','B) although','C) because','D) unless'],dogru:3,fb:'won\'t + koşul → unless. 🖼 Yardım yoksa kapı kilitli.'},
+  {id:'tz066',q:'Boşluğu doğru tamamlayın:',sent:'"By the time the police arrived, the thieves _____ away."',opts:['A) had run','B) run','C) have run','D) were running'],dogru:0,fb:'by the time + Past → Past Perfect. 🖼 Polis geliyor, hırsızlar kaçmış.'},
+  {id:'tz067',q:'Boşluğu doğru tamamlayın:',sent:'"This is the house _____ Atatürk was born."',opts:['A) which','B) where','C) who','D) that'],dogru:1,fb:'house = yer → where. 🖼 Evin üstüne doğum yeri etiketi.'},
+  {id:'tz068',q:'Boşluğu doğru tamamlayın:',sent:'"_____ being very tired, he continued to work."',opts:['A) Although','B) Because','C) Despite','D) Since'],dogru:2,fb:'Sonrasında V-ing → Despite. 🖼 Yorgunluk var ama çalışmaya devam.'},
+  {id:'tz069',q:'Boşluğu doğru tamamlayın:',sent:'"Scientists argue _____ global warming is a serious threat."',opts:['A) which','B) what','C) about','D) that'],dogru:3,fb:'argue that + cümle → that-clause. 🖼 Bilim insanı konuşma balonu.'},
+  {id:'tz070',q:'Boşluğu doğru tamamlayın:',sent:'"The car _____ I bought last year has started to give problems."',opts:['A) which','B) who','C) where','D) whose'],dogru:0,fb:'car = şey → which. 🖼 Araba + geçen yıl aldığım etiketi.'},
+  {id:'tz071',q:'Boşluğu doğru tamamlayın:',sent:'"If she _____ earlier, she wouldn\'t have missed the bus."',opts:['A) got up','B) had got up','C) gets up','D) would get up'],dogru:1,fb:'"wouldn\'t have missed" → 3. tip → had V3. 🖼 Alarm çalmadı → otobüs kaçtı.'},
+  {id:'tz072',q:'Boşluğu doğru tamamlayın:',sent:'"Penicillin _____ by Alexander Fleming in 1928."',opts:['A) discovered','B) is discovered','C) was discovered','D) has discovered'],dogru:2,fb:'1928 + by → Past Passive → was V3. 🖼 1928 laboratuvar keşfi.'},
+  {id:'tz073',q:'Boşluğu doğru tamamlayın:',sent:'"I _____ in this city for ten years."',opts:['A) live','B) lived','C) am living','D) have lived'],dogru:3,fb:'for + süre + şimdiye bağlı → Present Perfect. 🖼 10 yıllık zaman çizgisi.'},
+  {id:'tz074',q:'Boşluğu doğru tamamlayın:',sent:'"Some people like coffee, _____ others prefer tea."',opts:['A) while','B) because','C) so','D) unless'],dogru:0,fb:'Zıt tercih → while. 🖼 Biri kahve biri çay.'},
+  {id:'tz075',q:'Boşluğu doğru tamamlayın:',sent:'"He is a very talented musician; _____, he can play three instruments."',opts:['A) however','B) moreover','C) therefore','D) because'],dogru:1,fb:'Ek bilgi + noktalı virgül → moreover. 🖼 Yetenek + bonus bilgi.'},
+  {id:'tz076',q:'Boşluğu doğru tamamlayın:',sent:'"The report must _____ by the manager before noon."',opts:['A) sign','B) signed','C) be signed','D) be signing'],dogru:2,fb:'must + passive → must be V3. 🖼 Rapor + imza kaşesi.'},
+  {id:'tz077',q:'Boşluğu doğru tamamlayın:',sent:'"We decided to stay at home _____ the weather was very cold."',opts:['A) because of','B) despite','C) although','D) because'],dogru:3,fb:'Sonrasında S+V → CÜMLE ister → because. 🖼 Soğuk hava → evde kalma kararı.'},
+  {id:'tz078',q:'Boşluğu doğru tamamlayın:',sent:'"_____ you work hard, you cannot succeed in this exam."',opts:['A) Unless','B) If','C) Although','D) Because'],dogru:0,fb:'Olumsuz koşul → Unless. 🖼 Çalışma yoksa kapı kilitli.'},
+  {id:'tz079',q:'Boşluğu doğru tamamlayın:',sent:'"The man _____ car was stolen went to the police station."',opts:['A) who','B) whose','C) which','D) that'],dogru:1,fb:'Adamın arabası = sahiplik → whose. 🖼 Adam + onun arabası etiketi.'},
+  {id:'tz080',q:'Boşluğu doğru tamamlayın:',sent:'"I saw him while I _____ to the market."',opts:['A) walked','B) walk','C) was walking','D) have walked'],dogru:2,fb:'while + devam eden geçmiş → Past Continuous. 🖼 Yürüyüş filmi devam ederken.'},
+  {id:'tz081',q:'Boşluğu doğru tamamlayın:',sent:'"The economy is growing; _____, unemployment is still high."',opts:['A) moreover','B) therefore','C) similarly','D) however'],dogru:3,fb:'Zıtlık + noktalı virgül → however. 🖼 Büyüme var ama işsizlik duvarı.'},
+  {id:'tz082',q:'Boşluğu doğru tamamlayın:',sent:'"This problem can _____ easily if we work together."',opts:['A) be solved','B) solve','C) solved','D) be solving'],dogru:0,fb:'can + passive → can be V3. 🖼 Problem düğümü birlikte çözülüyor.'},
+  {id:'tz083',q:'Boşluğu doğru tamamlayın:',sent:'"My father _____ to Germany in 1990."',opts:['A) has gone','B) went','C) was going','D) had gone'],dogru:1,fb:'"in 1990" = kesin geçmiş → Past Simple. 🖼 1990 takvim yaprağı.'},
+  {id:'tz084',q:'Boşluğu doğru tamamlayın:',sent:'"I will call you as soon as I _____ home."',opts:['A) will arrive','B) arrived','C) arrive','D) am arriving'],dogru:2,fb:'Zaman bağlacı → gelecek anlamı olsa bile Present Simple. 🖼 Eve varınca telefon tuşu.'},
+  {id:'tz085',q:'Boşluğu doğru tamamlayın:',sent:'"_____ the traffic was heavy, we arrived on time."',opts:['A) Despite','B) Because','C) Since','D) Although'],dogru:3,fb:'Sonrasında S+V + zıtlık → Although. 🖼 Trafik yoğun ama saatinde varış.'},
+  {id:'tz086',q:'Boşluğu doğru tamamlayın:',sent:'"It is a fact _____ smoking damages health."',opts:['A) that','B) which','C) what','D) if'],dogru:0,fb:'"fact that" + cümle kalıbı. 🖼 Gerçek etiketi + that cümlesi.'},
+  {id:'tz087',q:'Boşluğu doğru tamamlayın:',sent:'"If water boils, it _____ into steam."',opts:['A) will turn','B) turns','C) turned','D) is turning'],dogru:1,fb:'Genel kural → 0. tip → Present Simple. 🖼 Kaynar şu → buhar.'},
+  {id:'tz088',q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ just _____ by the secretary."',opts:['A) had / been sent','B) is / sent','C) has / been sent','D) have / send'],dogru:2,fb:'"just" + yeni olmuş → Present Perfect Passive. 🖼 Mektup zarfı yeni postaya verildi.'},
+  {id:'tz089',q:'Boşluğu doğru tamamlayın:',sent:'"She is the writer _____ books are read all over the world."',opts:['A) who','B) which','C) that','D) whose'],dogru:3,fb:'Yazar + kitapları = sahiplik → whose. 🖼 Yazar + onun kitapları.'},
+  {id:'tz090',q:'Boşluğu doğru tamamlayın:',sent:'"He was driving too fast, _____ he had an accident."',opts:['A) so','B) because','C) although','D) however'],dogru:0,fb:'Sebep → sonuç → so. 🖼 Hız → domino → kaza.'},
+  {id:'tz091',q:'Boşluğu doğru tamamlayın:',sent:'"You _____ take your umbrella; it is raining outside."',opts:['A) must','B) should','C) can','D) will'],dogru:1,fb:'Tavsiye → should. 🖼 Yağmur → şemsiye hatırlatması.'},
+  {id:'tz092',q:'Boşluğu doğru tamamlayın:',sent:'"By 2050, scientists _____ a cure for cancer."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'"By 2050" deadline → Future Perfect. 🖼 2050 çizgisinin önünde bulunmuş işareti.'},
+  {id:'tz093',q:'Boşluğu doğru tamamlayın:',sent:'"_____ having a headache, she attended the meeting."',opts:['A) Although','B) Because of','C) Since','D) In spite of'],dogru:3,fb:'Sonrasında V-ing → In spite of / Despite. 🖼 Baş ağrısı var ama toplantıya gidiyor.'},
+  {id:'tz094',q:'Boşluğu doğru tamamlayın:',sent:'"The method is effective; _____, it is costly."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:0,fb:'İyi özellik → kötü özellik = ZITLIK → however.'},
+  {id:'tz095',q:'Boşluğu doğru tamamlayın:',sent:'"The system failed; _____, a new model was developed."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Sebep → sonuç → therefore.'},
+  {id:'tz096',q:'Boşluğu doğru tamamlayın:',sent:'"The solution is practical; _____, it requires training."',opts:['A) therefore','B) moreover','C) however','D) so'],dogru:2,fb:'Avantaj → dezavantaj = ZITLIK → however.'},
+  {id:'tz097',q:'Boşluğu doğru tamamlayın:',sent:'"The data were incomplete; _____, the study was postponed."',opts:['A) however','B) moreover','C) although','D) therefore'],dogru:3,fb:'Neden → sonuç → therefore.'},
+  {id:'tz098',q:'Boşluğu doğru tamamlayın:',sent:'"The device is affordable; _____, it is unreliable."',opts:['A) however','B) therefore','C) so','D) moreover'],dogru:0,fb:'İyi → kötü = ZITLIK → however.'},
+  {id:'tz099',q:'Boşluğu doğru tamamlayın:',sent:'"The experiment was repeated; _____, more accurate results were obtained."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Sebep → sonuç → therefore.'},
+  {id:'tz100',q:'Boşluğu doğru tamamlayın:',sent:'"The plan seems promising; _____, it lacks funding."',opts:['A) therefore','B) moreover','C) however','D) so'],dogru:2,fb:'Övgü → sorun = ZITLIK → however.'},
+  {id:'tz101',q:'Boşluğu doğru tamamlayın:',sent:'"The policy changed; _____, public awareness increased."',opts:['A) however','B) moreover','C) although','D) therefore'],dogru:3,fb:'Olay → sonuç → therefore.'},
+  {id:'tz102',q:'Boşluğu doğru tamamlayın:',sent:'"The approach is innovative; _____, it is controversial."',opts:['A) however','B) therefore','C) so','D) moreover'],dogru:0,fb:'Güzel → problem = ZITLIK → however.'},
+  {id:'tz103',q:'Boşluğu doğru tamamlayın:',sent:'"The deadline was extended; _____, the team had more time."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Neden → sonuç → therefore.'},
+  {id:'tz104',q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen him _____ last year."',opts:['A) for','B) ago','C) since','D) when'],dogru:2,fb:'since + başlangıç noktası → Present Perfect.'},
+  {id:'tz105',q:'Boşluğu doğru tamamlayın:',sent:'"She has been studying _____ three hours."',opts:['A) since','B) ago','C) during','D) for'],dogru:3,fb:'for + süre → Present Perfect.'},
+  {id:'tz106',q:'Boşluğu doğru tamamlayın:',sent:'"He moved to Ankara two years _____."',opts:['A) ago','B) since','C) for','D) before'],dogru:0,fb:'ago → Past Simple.'},
+  {id:'tz107',q:'Boşluğu doğru tamamlayın:',sent:'"By the time she arrived, they _____ already left."',opts:['A) have','B) had','C) has','D) were'],dogru:1,fb:'by the time + Past → Past Perfect.'},
+  {id:'tz108',q:'Boşluğu doğru tamamlayın:',sent:'"By 2030, scientists _____ a solution."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'by + gelecek tarih → Future Perfect.'},
+  {id:'tz109',q:'Boşluğu doğru tamamlayın:',sent:'"The book _____ on the table belongs to me."',opts:['A) lying','B) lie','C) lied','D) to lie'],dogru:0,fb:'V-ing sıfat cümleciği = which is lying (masadaki kitap).'},
+  {id:'tz110',q:'Boşluğu doğru tamamlayın:',sent:'"The documents _____ by the manager were sent yesterday."',opts:['A) signing','B) signed','C) sign','D) to sign'],dogru:1,fb:'V3 sıfat cümleciği = which were signed (imzalanan belgeler).'},
+  {id:'tz111',q:'Boşluğu doğru tamamlayın:',sent:'"The woman I met _____ the conference was very helpful."',opts:['A) in','B) on','C) at','D) by'],dogru:2,fb:'Gizli relative clause — "the woman [that] I met at the conference".'},
+  {id:'tz112',q:'Boşluğu doğru tamamlayın:',sent:'"_____ the cold weather, the match continued."',opts:['A) Although','B) Because','C) However','D) Despite'],dogru:3,fb:'"the cold weather" = isim → Despite + isim.'},
+  {id:'tz113',q:'Boşluğu doğru tamamlayın:',sent:'"It was raining; _____, they went out."',opts:['A) nevertheless','B) because','C) although','D) despite'],dogru:0,fb:'Noktalı virgül + zıtlık → nevertheless/however.'},
+  {id:'tz114',q:'Boşluğu doğru tamamlayın:',sent:'"The main idea _____ was difficult to understand."',opts:['A) which the passage','B) of the passage','C) that passage','D) in the passage'],dogru:1,fb:'"of + isim" = isim tamlaması, özneyi genişletir.'},
+  {id:'tz115',q:'Boşluğu doğru tamamlayın:',sent:'"_____ being tired, she finished all her work."',opts:['A) Although','B) Because','C) Despite','D) However'],dogru:2,fb:'V-ing → Despite + V-ing.'},
+  {id:'tz116',q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ never reached its destination."',opts:['A) which sending','B) he sends','C) to send','D) he sent'],dogru:3,fb:'Gizli that = "The letter [that] he sent" — sıfat cümleciği.'},
+  {id:'tz117',q:'Boşluğu doğru tamamlayın:',sent:'"Reading books _____ very beneficial."',opts:['A) is','B) are','C) were','D) being'],dogru:0,fb:'Reading = fiilimsi (özne) → kipli fiil "is".'},
+  {id:'tz118',q:'Boşluğu doğru tamamlayın:',sent:'"The painting _____ at the museum was priceless."',opts:['A) displaying','B) displayed','C) display','D) to display'],dogru:1,fb:'V3 sıfat cümleciği = which was displayed.'},
+  {id:'tz119',q:'Boşluğu doğru tamamlayın:',sent:'"The scientist aimed to _____ the negative effects of the chemical."',opts:['A) mitigate','B) exaggerate','C) admire','D) ignore'],dogru:0,fb:'mitigate + effects → sabit collocation.'},
+  {id:'tz120',q:'Boşluğu doğru tamamlayın:',sent:'"The government decided to _____ a new education policy."',opts:['A) conduct','B) implement','C) advocate','D) sustain'],dogru:1,fb:'implement + policy → sabit collocation.'},
+  {id:'tz121',q:'Boşluğu doğru tamamlayın:',sent:'"Researchers _____ a study on the effects of social media."',opts:['A) made','B) performed','C) conducted','D) did'],dogru:2,fb:'conduct + study → sabit collocation.'},
+  {id:'tz122',q:'Boşluğu doğru tamamlayın:',sent:'"The new technology will _____ the efficiency of the production process."',opts:['A) undermine','B) decline','C) reduce','D) enhance'],dogru:3,fb:'enhance + efficiency → pozitif collocation.'},
+  {id:'tz123',q:'Boşluğu doğru tamamlayın:',sent:'"The opposition tried to _____ the government\'s claims with new evidence."',opts:['A) refute','B) concede','C) advocate','D) sustain'],dogru:0,fb:'refute = çürütmek, evidence ile gider.'},
+  {id:'tz124',q:'Boşluğu doğru tamamlayın:',sent:'"The door is unlocked. Someone _____ to lock it."',opts:['A) should forget','B) must have forgotten','C) could forget','D) might forget'],dogru:1,fb:'Kanıt var (kapı kilitsiz) → kesin geçmiş kanı → must have V3.'},
+  {id:'tz125',q:'Boşluğu doğru tamamlayın:',sent:'"You _____ me earlier — I was waiting for hours!"',opts:['A) must have called','B) could call','C) should have called','D) might call'],dogru:2,fb:'Beklenti karşılanmadı + eleştiri → should have V3.'},
+  {id:'tz126',q:'Boşluğu doğru tamamlayın:',sent:'"The package _____ yesterday, but it still hasn\'t arrived."',opts:['A) must arrive','B) could arrive','C) might arriving','D) should have arrived'],dogru:3,fb:'Beklenen ama gerçekleşmeyen → should have V3.'},
+  {id:'tz127',q:'Boşluğu doğru tamamlayın:',sent:'"She _____ the early bus — that\'s why she\'s late."',opts:['A) might have missed','B) must miss','C) should have missed','D) could miss'],dogru:0,fb:'Belirsiz ihtimal → might have V3.'},
+  {id:'tz128',q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ before the deadline, but no one submitted it."',opts:['A) must be submitted','B) could have been submitted','C) should submit','D) might submitted'],dogru:1,fb:'Kaçırılmış fırsat + passive → could have been V3.'},
+  {id:'tz129',q:'Referans sorusunu yanıtlayın:',sent:'"The researchers published their findings; they were widely praised." — \'they\' refers to:',opts:['A) the researchers','B) the publishers','C) the findings','D) the critics'],dogru:2,fb:'they → hemen önceki isim = the findings.'},
+  {id:'tz130',q:'Referans sorusunu yanıtlayın:',sent:'A paragraph ends with "This suggests that exercise alone is not sufficient." What does \'This\' refer to?',opts:['A) exercise','B) sufficiency','C) the paragraph title','D) the information presented before'],dogru:3,fb:'This = önceki cümlenin içeriği → CZ-REF tekniği.'},
+  {id:'tz131',q:'Doğru cevabı seçin:',sent:'Which word signals a contrasting idea in a paragraph?',opts:['A) however','B) furthermore','C) consequently','D) for instance'],dogru:0,fb:'however = zıtlık bağlacı.'},
+  {id:'tz132',q:'Doğru cevabı seçin:',sent:'What should you read FIRST when answering a main idea question?',opts:['A) every sentence','B) the first and last sentences','C) only the first sentence','D) the middle sentences'],dogru:1,fb:'3 Nokta Tekniği → ilk + son cümle.'},
+  {id:'tz133',q:'Doğru cevabı seçin:',sent:'Which answer choice is most likely WRONG in an inference question?',opts:['A) one that paraphrases the text','B) one that is implied','C) one that uses \'always\' or \'never\'','D) one that matches the tone'],dogru:2,fb:'Abartılı şıklar → Şeytan Üçgeni.'},
+  {id:'tz134',q:'Boşluğu doğru tamamlayın:',sent:'"Researchers decided to _____ a survey on student habits."',opts:['A) conduct','B) make','C) do','D) perform'],dogru:0,fb:'conduct + survey → sabit collocation.'},
+  {id:'tz135',q:'Boşluğu doğru tamamlayın:',sent:'"The new law aims to _____ the negative effects of pollution."',opts:['A) increase','B) mitigate','C) ignore','D) admire'],dogru:1,fb:'mitigate + effects → sabit collocation.'},
+  {id:'tz136',q:'Boşluğu doğru tamamlayın:',sent:'"Economic growth can _____ new job opportunities."',opts:['A) result from','B) depend on','C) give rise to','D) refer to'],dogru:2,fb:'give rise to = yol açmak.'},
+  {id:'tz137',q:'Boşluğu doğru tamamlayın:',sent:'"The success of the project will _____ the team\'s cooperation."',opts:['A) result in','B) carry out','C) point out','D) depend on'],dogru:3,fb:'depend on = bağlı olmak.'},
+  {id:'tz138',q:'Boşluğu doğru tamamlayın:',sent:'"The committee decided to _____ a thorough investigation."',opts:['A) carry out','B) make','C) bring','D) set'],dogru:0,fb:'carry out + investigation → sabit collocation.'},
+  {id:'tz139',q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ several key problems in the education system."',opts:['A) carried out','B) pointed out','C) resulted in','D) depended on'],dogru:1,fb:'point out = belirtmek.'},
+  {id:'tz140',q:'Doğru cevabı seçin:',sent:'YDS\'de yanlış cevap doğruyu götürür mü?',opts:['A) Evet, götürür','B) Bazen götürür','C) Hayır, götürmez','D) Sadece okumada götürür'],dogru:2,fb:'Boş bırakmak yerine tahmin et — yanlış doğruyu götürmez.'},
+  {id:'tz141',q:'Doğru cevabı seçin:',sent:'Scanning tekniği ne için kullanılır?',opts:['A) Genel konuyu anlamak','B) Bağlaçları bulmak','C) Çeviri yapmak','D) Metinde anahtar kelimeyi bulmak'],dogru:3,fb:'Scanning = metinde anahtar kelimeyi bulmak, tamamını okumak için değil.'},
+  {id:'tz142',q:'Doğru cevabı seçin:',sent:'Okuma parçalarına ayrılması gereken ortalama süre nedir?',opts:['A) 2,5-3 dakika/soru','B) 1 dakika/soru','C) 5 dakika/soru','D) 30 saniye/soru'],dogru:0,fb:'Okuma parçaları: 2,5-3 dakika/soru.'},
+  {id:'tz143',q:'Doğru cevabı seçin:',sent:'Çift Turlu Çözüm\'de ★ işareti ne anlama gelir?',opts:['A) Bu soru yanlış','B) Zorlandım, 2. turda döneceğim','C) Bu soruyu atla','D) Bu soru kolay'],dogru:1,fb:'★ = zorlandım, 2. turda döneceğim (Çift Turlu Çözüm).'},
+  {id:'tz144',q:'Doğru cevabı seçin:',sent:'Referans sorusunda \'it\' kelimesi nereye işaret eder?',opts:['A) Sonraki cümleye','B) Paragrafın başına','C) Hemen önceki isme','D) Yazara'],dogru:2,fb:'Referans sorusunda "it" hemen önceki isme işaret eder (CZ-REF tekniği).'},
+  {id:'tz145',q:'Doğru cevabı seçin:',sent:'Ana fikir sorusunda hangi cümleler önce okunur?',opts:['A) Sadece orta paragraf','B) Tüm metin','C) Sadece başlık','D) İlk cümle ve son cümle'],dogru:3,fb:'Ana fikir sorusunda 3 Nokta Tekniği: ilk cümle ve son cümle önce okunur.'},
+  {id:'tz146',q:'Boşluğu doğru tamamlayın:',sent:'"The researcher presented a _____ approach to solving the problem."',opts:['A) novel','B) fictional','C) narrative','D) reading'],dogru:0,fb:'novel (sıfat) = yeni, özgün.'},
+  {id:'tz147',q:'Boşluğu doğru tamamlayın:',sent:'"The committee needs to _____ the issue of funding immediately."',opts:['A) locate','B) address','C) mail','D) ignore'],dogru:1,fb:'address (fiil) = ele almak.'},
+  {id:'tz148',q:'Boşluğu doğru tamamlayın:',sent:'"The evidence presented was _____ and well-supported."',opts:['A) loud','B) musical','C) sound','D) noisy'],dogru:2,fb:'sound (sıfat) = sağlam, güvenilir.'},
+  {id:'tz149',q:'Boşluğu doğru tamamlayın:',sent:'"The new policy will _____ significant changes in the education system."',opts:['A) avoid','B) prevent','C) reduce','D) entail'],dogru:3,fb:'entail = gerektirmek.'},
+  {id:'tz150',q:'Boşluğu doğru tamamlayın:',sent:'"The company _____ heavy losses during the economic crisis."',opts:['A) incurred','B) enjoyed','C) gained','D) achieved'],dogru:0,fb:'incur = maruz kalmak.'},
+  {id:'tz151',q:'Boşluğu doğru tamamlayın:',sent:'"The accident _____ during the night shift."',opts:['A) was happened','B) happened','C) had been happened','D) has been happened'],dogru:1,fb:'happen passive yapılamaz.'},
+  {id:'tz152',q:'Boşluğu doğru tamamlayın:',sent:'"She studied hard; _____, she passed the exam."',opts:['A) , therefore','B) because','C) therefore','D) despite'],dogru:2,fb:'Noktalı virgül + sonuç → therefore (virgülle değil).'},
+  {id:'tz153',q:'Boşluğu doğru tamamlayın:',sent:'"_____ you register by Friday, you cannot attend the conference."',opts:['A) Unless not','B) If not','C) Without','D) Unless'],dogru:3,fb:'unless = if not, yanında not kullanılmaz.'},
+  {id:'tz154',q:'Boşluğu doğru tamamlayın:',sent:'"The new disease _____ in tropical regions."',opts:['A) occurs','B) is occurred','C) was occurred','D) has been occurred'],dogru:0,fb:'occur passive yapılamaz.'},
+  {id:'tz155',q:'Boşluğu doğru tamamlayın:',sent:'"The results _____ that sleep deprivation affects performance."',opts:['A) suggest to','B) suggest','C) suggest about','D) suggestion'],dogru:1,fb:'suggest that + SVO (suggest to/about kullanılmaz).'},
+  {id:'tz156',q:'Doğru cevabı seçin:',sent:'The branch of psychology that studies how culture affects behavior:',opts:['A) Clinical Psychology','B) Cognitive Psychology','C) Cross-cultural Psychology','D) Neuropsychology'],dogru:2,fb:'Cross-cultural Psychology = kültürün davranışa etkisini inceler.'},
+  {id:'tz157',q:'Doğru cevabı seçin:',sent:'Psikologlar teorilerini test etmek için hangi araçları kullanır?',opts:['A) Novels/Poems/Songs','B) Laws/Rules','C) Maps/Charts','D) Surveys, Data, Experiments, Statistics'],dogru:3,fb:'Psikologlar: Surveys, Data, Experiments, Statistics kullanır.'},
+  {id:'tz158',q:'Doğru cevabı seçin:',sent:'Jack came to the village every summer. Which is TRUE?',opts:['A) Jack regularly visited the village','B) Jack lived there','C) Jack owned a house there','D) Jack worked there'],dogru:0,fb:'Jack Kuralı: metinde ne yazıyorsa o doğru, çıkarım yapma.'},
+  {id:'tz159',q:'Doğru cevabı seçin:',sent:'The study of mental disorders and their treatment:',opts:['A) Cognitive Psychology','B) Clinical Psychology','C) Developmental Psychology','D) Social Psychology'],dogru:1,fb:'Clinical Psychology = ruhsal hastalıkların tedavisi.'},
+  {id:'tz160',q:'Doğru cevabı seçin:',sent:'Scientists discovered a cure; it was announced worldwide. \'it\' refers to:',opts:['A) scientists','B) the discovery','C) the cure','D) the world'],dogru:2,fb:'Zamir avı: it → hemen önceki isim = the cure.'},
 ];
 
 let tuzakIdx=0,tuzakAnswered=false,_tuzakRtBaslangic=null,_tuzakRtIdx=null,_tuzakRtAnsweredSlot=null;
@@ -8183,6 +8497,58 @@ function tuzakSonraki(){
   const bugun=new Date();const aylar=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
   const lbl=document.getElementById('tuzak-tarih-lbl');
   if(lbl)lbl.textContent='Günlük Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear();
+})();
+
+// ─── BUGÜNKÜ AVCI ANTRENMANI — 10 soruluk oturum (Günlük Tuzak altyapısı) ───
+// Yeni bir sınav motoru DEĞİL: mevcut tuzakRender / tuzakSonraki / tuzakAns
+// aynen çalışır (Hata Defteri, seri, cevap kaydı onların içinde). Burada sadece
+// sayaç, "3 / 10" göstergesi ve 10. sorudan sonra bitiş eklenir.
+// Oturum SADECE ana sayfadaki "Antrenmana Başla" (saAntrenmanBaslat) ile açılır;
+// Günlük Tuzak'a başka yoldan girilince oturum kapanır ve normal davranış sürer.
+var _saAntrenman=null,_saAntrenmanBasliyor=false;
+const SA_ANTRENMAN_SORU=10;
+function saAntrenmanBaslat(){
+  _saAntrenman={toplam:SA_ANTRENMAN_SORU,cevaplanan:0,dogru:0,yanlis:0,bitti:false};
+  _saAntrenmanBasliyor=true;
+  bugunGorevGit('Günlük Tuzak');
+  _saAntrenmanBasliyor=false;
+  saAntrenmanCiz();
+}
+function saAntrenmanBitir(){_saAntrenman=null;saAntrenmanCiz();}
+function saAntrenmanCiz(){
+  const mod=document.getElementById('mod-tuzak');if(!mod)return;
+  let ust=document.getElementById('sa-antrenman-ust'),alt=document.getElementById('sa-antrenman-ozet');
+  if(!_saAntrenman){if(ust)ust.remove();if(alt)alt.remove();return;}
+  const a=_saAntrenman;
+  if(!ust){ust=document.createElement('div');ust.id='sa-antrenman-ust';ust.className='sa-ant-ust';mod.insertBefore(ust,document.getElementById('tuzak-container'));}
+  const siradaki=Math.min(a.cevaplanan+(tuzakAnswered?0:1),a.toplam);
+  ust.innerHTML=`<div class="sa-ant-satir"><b>🎯 AVCI Antrenmanı</b><span>Soru ${siradaki} / ${a.toplam}</span><span class="sa-ant-d">✓ ${a.dogru}</span><span class="sa-ant-y">✕ ${a.yanlis}</span></div><div class="sa-ant-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${a.toplam}" aria-valuenow="${a.cevaplanan}" aria-label="Antrenman ilerlemesi"><div style="width:${a.cevaplanan/a.toplam*100}%"></div></div>`;
+  if(a.bitti){
+    const nb=document.getElementById('tuzak-next-btn');if(nb)nb.style.display='none';
+    if(!alt){alt=document.createElement('div');alt.id='sa-antrenman-ozet';alt.className='sa-ant-ozet';alt.setAttribute('role','status');mod.appendChild(alt);}
+    alt.innerHTML=`<div class="sa-ant-ozet-bas">✓ Antrenman tamamlandı</div><p>${a.toplam} soruda <b class="sa-ant-d">${a.dogru} doğru</b>, <b class="sa-ant-y">${a.yanlis} yanlış</b>.${a.yanlis>0?' Yanlışların Hata Defteri\'ne eklendi.':''}</p><div class="sa-ant-btnlar">${a.yanlis>0?'<button type="button" onclick="saAntrenmanBitir();bugunGorevGit(\'Hata Defteri\')">📝 Hata Defterime Git</button>':''}<button type="button" onclick="saAntrenmanBitir();tuzakSonraki()">Günlük Tuzak\'a devam et</button></div>`;
+  }else if(alt){alt.remove();}
+}
+(function(){
+  const _orjRender=tuzakRender,_orjSonraki=tuzakSonraki,_orjAns=tuzakAns;
+  tuzakRender=function(){
+    if(_saAntrenman&&!_saAntrenmanBasliyor)_saAntrenman=null; // doğrudan giriş → normal Günlük Tuzak
+    const r=_orjRender.apply(this,arguments);saAntrenmanCiz();return r;
+  };
+  tuzakSonraki=function(){
+    if(_saAntrenman&&_saAntrenman.bitti){saAntrenmanCiz();return;} // 11. soru yok: oturum tamamlandı
+    const r=_orjSonraki.apply(this,arguments);saAntrenmanCiz();return r;
+  };
+  tuzakAns=function(btn,correct,dogru){
+    const onceden=tuzakAnswered;
+    const r=_orjAns.apply(this,arguments);
+    if(_saAntrenman&&!_saAntrenman.bitti&&!onceden&&tuzakAnswered){
+      _saAntrenman.cevaplanan++;if(correct)_saAntrenman.dogru++;else _saAntrenman.yanlis++;
+      if(_saAntrenman.cevaplanan>=_saAntrenman.toplam)_saAntrenman.bitti=true;
+      saAntrenmanCiz();
+    }
+    return r;
+  };
 })();
 
 function sssToggle(el){el.parentElement.classList.toggle('open');}
@@ -11107,7 +11473,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   medyaRender();
   sonYayinlarRender();
   const navLinks=document.querySelector('.nav-links');
-  if(navLinks&&!navLinks.querySelector('[data-medya]')){
+  if(navLinks&&!navLinks.hasAttribute('data-sade')&&!navLinks.querySelector('[data-medya]')){
     const span=document.createElement('span');
     span.textContent='Medya';span.setAttribute('data-medya','1');
     span.onclick=()=>goTo('medya');
@@ -11758,9 +12124,16 @@ function erisilebilirlikToggle(){
 // ============================================================
 // 4. WHATSAPP DESTEK BUTONU
 // ============================================================
+// GEÇİCİ OLARAK KAPALI: gerçek destek numarası henüz yok.
+// Açmak için SA_WHATSAPP_NUMARA'ya numarayı ülke koduyla, boşluksuz yaz
+// (örn. '905321234567'). Numara boşken veya geçersizken balon HİÇ oluşturulmaz,
+// böylece kimse boş/bozuk bir WhatsApp sayfasına yönlenmez.
+window.SA_WHATSAPP_NUMARA='';
 (function(){
+  const numara=String(window.SA_WHATSAPP_NUMARA||'');
+  if(!/^90\d{10}$/.test(numara))return;
   const wa=document.createElement('a');
-  wa.href='https://wa.me/905XXXXXXXXX?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
+  wa.href='https://wa.me/'+numara+'?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
   wa.target='_blank';
   wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;font-size:24px;transition:transform .2s';
   wa.innerHTML='💬';
@@ -12215,7 +12588,7 @@ function planOlustur(){
   icerikEl.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
       <div style="font-size:13px;font-weight:700;color:var(--ink)">📅 7 Günlük Çalışma Planın</div>
-      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--signal)">Sınava ${kalanGun} gün kaldı · En zayıf: ${enZayif}</div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--signal)">Sınava ${tarihEl?.value?Math.max(0,window.saTakvimGunFarki(tarihEl.value)):kalanGun} gün kaldı · En zayıf: ${enZayif}</div>
     </div>
     <div class="plan-section">
       ${planGunler.map(g=>`
@@ -12251,12 +12624,7 @@ const SP_MOTIVASYON=[
   "🚀 Geçmiş sınav sonucun bir başlangıç noktası, kaderin değil."
 ];
 function sinavPlanimVarsayilanTarih(){
-  const now=new Date();
-  let hedef=new Date(now.getFullYear(),10,22); // YDS/2 — 22 Kasım (Kasım = ay index 10)
-  if(hedef<new Date(now.getFullYear(),now.getMonth(),now.getDate()))hedef=new Date(now.getFullYear()+1,10,22);
-  const ay=String(hedef.getMonth()+1).padStart(2,'0');
-  const gun=String(hedef.getDate()).padStart(2,'0');
-  return hedef.getFullYear()+'-'+ay+'-'+gun;
+  return window.saSinavTarihi(); // tek kaynak: <head> → SA_SINAV_TARIHI
 }
 function spVarsayilanAyar(){
   return{dogru:17,yanlis:63,hedefPuan:60,tarih:sinavPlanimVarsayilanTarih()};
@@ -12282,7 +12650,8 @@ function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
   const gerekliDogruBosStrateji=Math.min(toplamSoru,Math.max(0,Math.ceil((hedefPuan/100)*toplamSoru)));
   const aciliyetRenk=kalanGun<14?'#dc2626':kalanGun<30?'#d97706':'#059669';
   const aciliyetMetin=kalanGun<14?'🔴 Kritik':kalanGun<30?'🟡 Yoğun':'🟢 Rahat';
-  return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,aciliyetRenk,aciliyetMetin};
+  const gorunenGun=Math.max(0,window.saTakvimGunFarki(tarihStr)); // ekranda gösterilen: standart takvim farkı
+  return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,gorunenGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,aciliyetRenk,aciliyetMetin};
 }
 
 // Haftalık müfredat fazları — "kişisel çalışma programı"
@@ -12434,8 +12803,8 @@ function sinavGunlukMesajGoster(){
   const ayar=spAyarYukle();
   const v=spHesaplaVerileri(ayar.dogru,ayar.yanlis,ayar.hedefPuan,ayar.tarih);
   const d=document.createElement('div');
-  d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99997;background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:700;font-family:IBM Plex Sans,sans-serif;box-shadow:0 8px 24px rgba(245,166,35,.35);text-align:center;max-width:90vw;cursor:pointer';
-  d.textContent=`📅 Hedefine ${v.kalanGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz! 🚀`;
+  d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99997;background:var(--sa-surface-2);border:1px solid var(--sa-sinyal);color:var(--sa-metin);padding:14px 24px;border-radius:14px;font-size:14px;font-weight:700;font-family:IBM Plex Sans,sans-serif;box-shadow:0 8px 24px rgba(245,166,35,.35);text-align:center;max-width:90vw;cursor:pointer';
+  d.textContent=`📅 Hedefine ${v.gorunenGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz! 🚀`;
   d.onclick=()=>{
     d.remove();
     const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Acil Kurtarma Planı'));
@@ -12508,11 +12877,11 @@ function sinavPlanimOlustur(){
     <div class="sp-grid" style="margin-top:16px">
       <div class="sp-stat"><div class="sp-stat-val">${v.mevcutPuan}</div><div class="sp-stat-lbl">Mevcut Puan</div></div>
       <div class="sp-stat vurgu"><div class="sp-stat-val">${hedefPuan}</div><div class="sp-stat-lbl">Hedef Puan</div></div>
-      <div class="sp-stat${v.kalanGun<14?' uyari':''}"><div class="sp-stat-val">${v.kalanGun}</div><div class="sp-stat-lbl">Kalan Gün</div></div>
+      <div class="sp-stat${v.kalanGun<14?' uyari':''}"><div class="sp-stat-val">${v.gorunenGun}</div><div class="sp-stat-lbl">Kalan Gün</div></div>
       <div class="sp-stat vurgu"><div class="sp-stat-val">${v.gunlukSoruHedefi}</div><div class="sp-stat-lbl">Günlük Soru Hedefi</div></div>
     </div>
     <div style="margin-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span class="adaptif-badge" style="background:${v.aciliyetRenk}20;color:${v.aciliyetRenk}">${v.aciliyetMetin} · ${v.kalanGun} gün kaldı</span>
+      <span class="adaptif-badge" style="background:${v.aciliyetRenk}20;color:${v.aciliyetRenk}">${v.aciliyetMetin} · ${v.gorunenGun} gün kaldı</span>
       <span style="font-size:12px;color:var(--muted)">${hedefPuan} puana ulaşmak için ~${v.gerekliDogruBosStrateji} doğru gerekiyor (yaklaşık ${v.gerekliNetArtis} doğru artışı)</span>
     </div>
     <div style="margin-top:16px">
@@ -12570,7 +12939,7 @@ function sinavKurtarmaKartRender(){
     <div class="sk-kart-baslik">🚨 Acil Kurtarma Planı</div>
     <div class="sk-kart-alt">${v.mevcutPuan} → ${v.hedefPuan} puan · ${v.tarihStr.split('-').reverse().join('.')}'a kadar</div>
     <div class="sk-grid">
-      <div class="sk-stat"><div class="sk-stat-val">${v.kalanGun}</div><div class="sk-stat-lbl">Gün Kaldı</div></div>
+      <div class="sk-stat"><div class="sk-stat-val">${v.gorunenGun}</div><div class="sk-stat-lbl">Gün Kaldı</div></div>
       <div class="sk-stat"><div class="sk-stat-val">${v.gerekliDogruBosStrateji}</div><div class="sk-stat-lbl">Gerekli Doğru</div></div>
       <div class="sk-stat"><div class="sk-stat-val">${v.gunlukSoruHedefi}</div><div class="sk-stat-lbl">Günlük Soru</div></div>
     </div>
@@ -12676,12 +13045,7 @@ const PA_TIP_ETIKET={sinyal:'SİNYAL OKUMA',kelime:'KELİME',tuzak:'TUZAK',anali
 const PA_TIP_RENK={sinyal:'#f5a623',kelime:'#34d399',tuzak:'#d97706',analiz:'#7c3aed',strateji:'#dc2626'};
 
 function paVarsayilanTarih(){
-  const now=new Date();
-  let hedef=new Date(2026,10,22); // YDS/2 — 22 Kasım 2026
-  if(hedef<now)hedef=new Date(now.getFullYear()+1,10,22);
-  const ay=String(hedef.getMonth()+1).padStart(2,'0');
-  const gun=String(hedef.getDate()).padStart(2,'0');
-  return hedef.getFullYear()+'-'+ay+'-'+gun;
+  return window.saSinavTarihi(); // tek kaynak: <head> → SA_SINAV_TARIHI
 }
 function paVarsayilanAyar(){
   return{dogru:17,yanlis:63,bolum:'sosyal',hedefPuan:60,tarih:paVarsayilanTarih()};
@@ -12725,7 +13089,8 @@ function paHesapla(dogru,yanlis,hedefPuan,tarihStr){
   const gerekliDogru=Math.max(0,Math.ceil(gerekliNet));
   const ekDogruGerekli=Math.max(0,gerekliDogru-dogru);
   const yanlisAzaltYuzde=0; // eski ceza varsayımından kalma alan — artık kullanılmıyor
-  return{dogru,yanlis,hedefPuan,tarihStr,net:Math.round(net*100)/100,mevcutPuan,kalanGun,kalanHafta,puanFarki,gerekliDogru,ekDogruGerekli,yanlisAzaltYuzde};
+  const gorunenGun=Math.max(0,window.saTakvimGunFarki(tarihStr));
+  return{dogru,yanlis,hedefPuan,tarihStr,net:Math.round(net*100)/100,mevcutPuan,kalanGun,gorunenGun,kalanHafta,puanFarki,gerekliDogru,ekDogruGerekli,yanlisAzaltYuzde};
 }
 function paYorum(puan){
   if(puan<21)return'En kritik sorun: temel eksikleri kapatmak — sinyal okuma ve temel kelimeden başla.';

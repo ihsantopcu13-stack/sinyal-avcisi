@@ -43,6 +43,15 @@ jobs:
           node --check tests/sot-signal-lookup.test.mjs
           node --check tests/faz2-input-contract.test.mjs
           node --check tests/sot-schema.test.mjs
+          node --check api/_avciDnaTaksonomi.mjs
+          node --check api/_avciDnaKurallar.mjs
+          node --check api/_avciDna.mjs
+          node --check scripts/dna-analyze.mjs
+          node --check tests/dna-kural-motoru.test.mjs
+          node --check tests/dna-altin.test.mjs
+          node --check tests/dna-cache-surum.test.mjs
+          node --check tests/dna-guvenlik.test.mjs
+          node --check tests/tuzak-id.test.mjs
           node --check tests/sot-migration.test.mjs
           node --check scripts/sl-havuz-generator.mjs
           node --check scripts/generate-sl-havuz.mjs
@@ -120,6 +129,24 @@ jobs:
 
       - name: SOURCE OF TRUTH — AŞAMA 1 canonical şema + stable ID testleri
         run: node tests/sot-schema.test.mjs
+
+      - name: AVCI ÖSYM DNA — FAZ 1 kural motoru (unit)
+        run: node tests/dna-kural-motoru.test.mjs
+
+      - name: AVCI ÖSYM DNA — FAZ 1 altın soru seti (golden)
+        run: node tests/dna-altin.test.mjs
+
+      - name: AVCI ÖSYM DNA — FAZ 1 cache / sürüm / override
+        run: node tests/dna-cache-surum.test.mjs
+
+      - name: AVCI ÖSYM DNA — FAZ 1 hata güvenliği / geriye uyumluluk / regresyon
+        run: node tests/dna-guvenlik.test.mjs
+
+      - name: TUZAK_HAVUZ kalıcı ID kilidi (sıra + içerik değişmedi)
+        run: node tests/tuzak-id.test.mjs
+
+      - name: AVCI ÖSYM DNA — soru-dna.json güncel mi (LLM çağrısı yok)
+        run: node scripts/dna-analyze.mjs --kontrol
 
       - name: SOURCE OF TRUTH — AŞAMA 2 59/59 kayıpsız migration testi
         run: node tests/sot-migration.test.mjs
