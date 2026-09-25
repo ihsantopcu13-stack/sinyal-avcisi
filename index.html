@@ -15854,8 +15854,28 @@ function aoyTamamlananSayisi(){
   return AOY_DERSLER.filter(l=>d[l.id]&&d[l.id].miniTestTamamlandi).length;
 }
 
+// Öğrenme Yolu içindeki sekme butonları (Sinyal Lab, Hata Defteri) için.
+// Eski satır-içi kod kaçış hatası yüzünden tıklanınca hiçbir şey yapmıyordu.
+function aoyTabGit(ad){
+  const tab=document.querySelector('.dtab[onclick*="\''+ad+'\'"]');
+  if(tab&&typeof dtab==='function')dtab(tab,ad);
+  const hedef=document.getElementById('mod-'+ad);
+  if(hedef)hedef.scrollIntoView({behavior:'smooth',block:'start'});
+}
+// SL_HAVUZ sorularında cümle "sent" alanında (HTML işaretli) durur; düz metne çevir.
+function _aoySoruMetni(s){
+  if(!s)return '';
+  if(s.soru_en)return s.soru_en;
+  const div=document.createElement('div');div.innerHTML=s.sent||'';
+  return (div.textContent||'').replace(/^\s*"|"\s*$/g,'').trim();
+}
 // ─── ANA WIDGET: Öğrenme Yolu Anasayfa ──────────────────────────────────
 function aoyAc(){
+  // Menüde "Öğrenme Yolu"nu aktif göster ve içeriğe kaydır (yoksa sayfanın altında
+  // açılıyor, kullanıcı boş bir ekran görüyordu).
+  const oyItem=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Öğrenme Yolu'));
+  if(oyItem){document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));oyItem.classList.add('active');}
+  setTimeout(()=>{const c=document.getElementById('aoy-container');if(c)c.scrollIntoView({behavior:'smooth',block:'start'});},60);
   // Önce Avcı Master tab'ını aç
   const avciTab=document.querySelector('.dtab[onclick*="avci"]');
   if(avciTab&&typeof dtab==='function')dtab(avciTab,'avci');
@@ -15936,11 +15956,11 @@ function aoyAc(){
       <div style="font-size:13px;font-weight:700;color:var(--signal)">${tekrarlar} sinyal hatası tekrar bekliyor</div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">Hata Defterinde kayıtlı</div>
     </div>
-    <button onclick="dtab(document.querySelector('.dtab[onclick*=\\'hatalar\\']'),\\'hatalar\\')" class="aoy-btn aoy-btn-secondary" style="flex:none;padding:7px 12px;font-size:12px">Tekrar Et</button>
+    <button onclick="aoyTabGit(\'hatalar\')" class="aoy-btn aoy-btn-secondary" style="flex:none;padding:7px 12px;font-size:12px">Tekrar Et</button>
   </div>`:''}
   <div class="aoy-btn-row">
     <button onclick="aoyDersAc('${sonrakiDers.id}')" class="aoy-btn aoy-btn-primary">▶ ${d[sonrakiDers.id]?.dersTamamlandi?'Mini Teste Geç':'Derse Başla'}: ${sonrakiDers.baslik}</button>
-    <button onclick="dtab(document.querySelector('.dtab[onclick*=\\'sinyal\\']'),\\'sinyal\\')" class="aoy-btn aoy-btn-secondary">🔬 Sinyal Lab</button>
+    <button onclick="aoyTabGit(\'sinyal\')" class="aoy-btn aoy-btn-secondary">🔬 Sinyal Lab</button>
   </div>
   `;
 }
@@ -15980,7 +16000,7 @@ function aoyDersAc(dersId){
       ${derseSorular.length>0?`
       <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aşağıdaki cümlede sinyali ve yapıyı bul, sonra KLOD'a sor:</div>
       <div id="aoy-ornek-cumle" style="background:#0c0e14;border-radius:8px;padding:10px 12px;font-size:14px;color:#ece7da;line-height:1.7;margin-bottom:8px;font-style:italic">
-        "${(derseSorular[0].soru_en||'').substring(0,120)}${derseSorular[0].soru_en?.length>120?'…':''}"
+        "${_aoySoruMetni(derseSorular[0]).substring(0,160)}${_aoySoruMetni(derseSorular[0]).length>160?'…':''}"
       </div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Sinyal: <b style="color:var(--signal)">${derseSorular[0].sinyal||ders.id}</b> · İpucu: ${derseSorular[0].sinyal_ipucu||ders.kural.split('.')[0]}</div>
       `:`<div style="font-size:13px;color:var(--muted)">Örnek cümle: Sinyal Lab'da bu sinyalin sorularını çöz.</div>`}
@@ -15996,13 +16016,13 @@ function aoyDersAc(dersId){
         ▶ Mini Testi Başlat
       </button>
       `:`<div style="font-size:13px;color:var(--muted)">Bu sinyal için yeterli soru henüz yok. Sinyal Lab'da tüm soruları çöz.</div>
-      <button onclick="dtab(document.querySelector('.dtab[onclick*=\\'sinyal\\']'),\\'sinyal\\')" style="background:var(--signal);border:none;color:#0c0e14;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:8px">🔬 Sinyal Lab'a Git</button>`}
+      <button onclick="aoyTabGit(\'sinyal\')" style="background:var(--signal);border:none;color:#0c0e14;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-top:8px">🔬 Sinyal Lab'a Git</button>`}
     </div>
 
     <!-- EYLEMLER -->
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       ${!dd.dersTamamlandi?`<button onclick="aoyDersiBitir('${dersId}')" style="flex:1;background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">✓ Dersi Tamamladım</button>`:''}
-      <button onclick="dtab(document.querySelector('.dtab[onclick*=\\'sinyal\\']'),\\'sinyal\\');aoySlSinyalFiltrele('${dersId}')" style="flex:1;background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">🔬 Bu Sinyalin Sorularına Git</button>
+      <button onclick="aoyTabGit(\'sinyal\');aoySlSinyalFiltrele('${dersId}')" style="flex:1;background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">🔬 Bu Sinyalin Sorularına Git</button>
     </div>
   </div>
   `;
@@ -16013,7 +16033,7 @@ function aoyKlodaSor(dersId){
   const ders=AOY_DERSLER.find(d=>d.id===dersId);
   if(!ders)return;
   // KLOD sekmesine geç
-  const klodItem=document.querySelector('.dn-item[onclick*="KLOD"]');
+  const klodItem=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes("KLOD'a Sor"));
   if(klodItem)klodItem.click();
   // Giriş alanını doldur ve gönder
   setTimeout(function(){
@@ -16106,7 +16126,7 @@ function _aoyMiniTestRender(el){
     <div style="background:#0c0e14;border-radius:10px;padding:12px 14px;font-size:14px;color:#ece7da;line-height:1.7;margin-bottom:12px">
       ${soru.soru_en||soru.sent||''}
     </div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:8px">${soru.soru_tr||''}</div>
+    <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px">${soru.soru_tr||soru.q||''}</div>
     <div id="aoy-mt-opts" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
       ${secenekler.map((opt,i)=>`
         <button onclick="aoyMiniTestCevap(${i},${dogru})" data-idx="${i}"
@@ -16149,7 +16169,7 @@ function aoyMiniTestCevap(secilen, dogru){
       opts[dogru].style.borderColor='#16a34a';
     }
     // Mevcut hataEkle sistemine yaz
-    const soruMetni=(soru.soru_en||'').substring(0,80);
+    const soruMetni=_aoySoruMetni(soru).substring(0,80);
     const secilenMetin=(soru.secenekler_tr||soru.opts||[])[secilen]||'?';
     const dogruMetin=(soru.secenekler_tr||soru.opts||[])[dogru]||'?';
     if(typeof hataEkle==='function')hataEkle(soruMetni,secilenMetin,dogruMetin,'sinyal');
@@ -16162,7 +16182,7 @@ function aoyMiniTestCevap(secilen, dogru){
     cevapKaydet({
       questionId:soru.id||null,
       modul:'avci_yol_mini_test',
-      soru:(soru.soru_en||'').substring(0,100),
+      soru:_aoySoruMetni(soru).substring(0,100),
       selectedOption:secilenMetin,
       correctOption:dogruMetin,
       isCorrect,
@@ -16227,7 +16247,7 @@ function _aoyMiniTestSonuc(el){
     </div>`:''}
     <div style="display:flex;flex-direction:column;gap:8px;max-width:300px;margin:0 auto">
       ${sonraki?`<button onclick="aoyDersAc('${sonraki.id}')" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#0c0e14;padding:12px 18px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Sonraki Ders: ${sonraki.baslik} →</button>`:''}
-      ${hatalar>0?`<button onclick="dtab(document.querySelector('.dtab[onclick*=\\'hatalar\\']'),\\'hatalar\\')" style="background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📝 Hataları Gör</button>`:''}
+      ${hatalar>0?`<button onclick="aoyTabGit(\'hatalar\')" style="background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📝 Hataları Gör</button>`:''}
       <button onclick="aoyAc()" style="background:var(--sl);border:1px solid var(--border);color:var(--ink);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">🗺️ Öğrenme Yoluna Dön</button>
     </div>
   </div>
@@ -16266,6 +16286,7 @@ window.aoyMiniTestBaslat=aoyMiniTestBaslat;
 window.aoyMiniTestCevap=aoyMiniTestCevap;
 window.aoyMiniTestSonraki=aoyMiniTestSonraki;
 window.aoySlSinyalFiltrele=aoySlSinyalFiltrele;
+window.aoyTabGit=aoyTabGit;
 window.aoyDashCtaGuncelle=aoyDashCtaGuncelle;
 
 // Dashboard yüklendiğinde CTA'yı güncelle
