@@ -7766,12 +7766,14 @@ function dAns(btn,correct){
   faz2GaEvent('question_answered',{question_id:__slQidAns,correct:Boolean(correct)});
   faz2GaEvent(correct?'answer_correct':'answer_wrong',{question_id:__slQidAns});
   if(correct){
-    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Doğru! '+soru.fb;
     streakSoruEkle('sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
     if(typeof konfeti==='function')konfeti();
   } else {
-    btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb';
+    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.sent+' '+soru.q,secenekler:soru.opts,dogruIdx:soru.ans,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Sinyal Lab'});
+    else{fb.className='dm-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
