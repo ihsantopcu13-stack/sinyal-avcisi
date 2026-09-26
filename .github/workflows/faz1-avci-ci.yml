@@ -102,6 +102,8 @@ jobs:
           node --check tests/avci-hint-leak-guard.test.mjs
           node --check api/_avciPedagogy.mjs
           node --check tests/avci-pedagogy-controller.test.mjs
+          node --check api/_klodChatPrompt.mjs
+          node --check tests/klod-chat-prompt-senkron.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -252,3 +254,6 @@ jobs:
 
       - name: AVCI Pedagoji Kontrolcüsü — deterministik B merdiveni (MISS_1 -> STEP_BACK -> RECOVERY -> ASIL soru), sızıntı hakemi, kaçışlar (mock Anthropic, gerçek ağ yok)
         run: node tests/avci-pedagogy-controller.test.mjs
+
+      - name: KLOD güvenlik — sunucu talimatı index.html ile birebir aynı, istemci system'i yok sayılıyor, mode izin listesi, image_soru sınırı (mock Anthropic, gerçek ağ yok)
+        run: node tests/klod-chat-prompt-senkron.test.mjs
