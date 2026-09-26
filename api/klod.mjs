@@ -495,6 +495,7 @@ function parseXMLOutput(text) {
 }
 
 // 20. TOKEN COUNTING — Context limiti kontrolü
+const GORSEL_TAHMINI_TOKEN = 1600;
 function estimateTokens(messages) {
   const totalChars = messages.reduce((sum, m) => sum + (m.content?.length || 0), 0);
   return Math.ceil(totalChars / 4); // Yaklaşık token sayısı
@@ -848,8 +849,13 @@ export default async function handler(req, res) {
   // Başarısız/eksik olması isteği ASLA engellemez.
   const verifiedUser = await klodDogrulanmisKullaniciAl(req.headers.authorization);
 
-  // 20. TOKEN COUNTING — Limit kontrolü
-  const estimatedTokens = estimateTokens(messages);
+  // 20. TOKEN COUNTING — Limit kontrolü. Görsel varsa soru metni ve görselin
+  // kendisi de girdiye eklenir (Anthropic büyük görselleri küçültür; bir
+  // görsel en fazla ~1.600 token tutar).
+  const gorselSoruMetni = image_base64 && typeof image_soru === 'string' ? image_soru : '';
+  const estimatedTokens = estimateTokens(messages)
+    + Math.ceil(gorselSoruMetni.length / 4)
+    + (image_base64 ? GORSEL_TAHMINI_TOKEN : 0);
   if (estimatedTokens > 150000) {
     return res.status(400).json({ 
       error: 'Konuşma çok uzadı', 
@@ -874,7 +880,7 @@ export default async function handler(req, res) {
   const trimmedMessages = processedMessages.slice(-maxMessages);
   // Modele GİDECEK kısmın toplam boyutu (kırpmadan SONRA — uzun sohbetler
   // eskisi gibi çalışsın, sadece tek istekte aşırı büyük girdi reddedilsin)
-  if (toplamKarakter(trimmedMessages) > SINIRLAR.toplamKarakter) {
+  if (toplamKarakter(trimmedMessages) + gorselSoruMetni.length > SINIRLAR.toplamKarakter) {
     return res.status(400).json({ error: 'Konuşma çok uzadı', message: 'Yeni bir sohbet başlatın' });
   }
 
