@@ -406,6 +406,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .klod-method-strip{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:12px}
 .klod-method-chip{color:var(--ink);background:rgba(245,166,35,.08);border-radius:5px;padding:3px 7px;white-space:nowrap}
 .klod-method-arrow{color:var(--signal);opacity:.6}
+.klod-quick-chip,.klod-method-chip,.klod-method-arrow{flex-shrink:0}
 .klod-ws{display:flex;flex-direction:column;height:min(70vh,700px);min-height:400px}
 .klod-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 4px 4px 0}
 .klod-msgs .msg{max-width:min(720px,88%)}
@@ -6789,7 +6790,26 @@ function dtab(el,mod){
     }
     return;
   }
+  if(mod==='sinyal'&&typeof modSinyalAsilGeriYukle==='function')modSinyalAsilGeriYukle();
+  // KLOD odak modu açıkken kod yoluyla başka sekmeye geçilirse odaktan da çık
+  if(document.body.classList.contains('klod-odak')&&typeof klodOdakAyarla==='function'){klodOdakAyarla(false);document.querySelector('.dash-inner')?.classList.remove('dash-inner-klod');}
   const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
+}
+// #mod-sinyal hem Sinyal Lab'ın kendisi hem de KLOD/Raporlar/Ses Kurs'un
+// yazıldığı alan. Başka içerik yazılmadan önce Sinyal Lab'ın canlı DOM
+// düğümleri kenara alınır (silinmez; çözülmüş soru/tahta durumu korunur),
+// Bugün/Sinyal Lab açılınca aynen geri takılır.
+let _modSinyalAsil=null;
+function modSinyalAsilSakla(t){
+  if(!t||_modSinyalAsil)return;
+  const f=document.createDocumentFragment();
+  while(t.firstChild)f.appendChild(t.firstChild);
+  _modSinyalAsil=f;
+}
+function modSinyalAsilGeriYukle(){
+  const t=document.getElementById('mod-sinyal');
+  if(!t||!_modSinyalAsil)return;
+  t.innerHTML='';t.appendChild(_modSinyalAsil);_modSinyalAsil=null;
 }
 function dnav(el){
   const oncekiAktif=document.querySelector('.dn-item.active');
@@ -6809,6 +6829,7 @@ function dnav(el){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
+    modSinyalAsilGeriYukle();
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
     if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
@@ -6816,18 +6837,19 @@ function dnav(el){
     // KATMAN 5B — mod-sinyal'in içeriği Raporlar HTML'iyle DEĞİŞTİRİLİYOR,
     // artık gerçek bir Sinyal Lab sorusu görünmüyor — tracker temizlenir.
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     main.querySelector('.dash-tabs').style.display='none';
     t.innerHTML=raporlarHTML();
   } else if(txt.includes('Sinyal Lab')){
     _aktifSoruModulu='sinyal_lab';
+    modSinyalAsilGeriYukle();
     main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';
     document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
   } else if(txt.includes('KLOD')){
     // KATMAN 5B — BİLİNÇLİ OLARAK tracker'a DOKUNULMUYOR: öğrenci Sinyal
     // Lab'dan "bu soruyu KLOD'a sorayım" diyerek gelmiş olabilir, o context
     // KLOD sekmesine geçince de geçerliliğini korumalı.
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML=`
       <div class="klod-topbar">
         <div class="klod-topbar-main">
@@ -6889,11 +6911,11 @@ function dnav(el){
     document.getElementById('mod-tuzak').style.display='block';tuzakRender();
   } else if(txt.includes('Ses')){
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;display:flex;justify-content:space-between;align-items:center" role="button" tabindex="0"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
   } else if(txt.includes('Rapor')){
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
     t.innerHTML=`<div class="dm-eye">📈 RAPORLAR — XP & LİDERLİK</div>
 <div style="background:#0f172a;border-radius:12px;padding:16px;margin-bottom:12px;color:#fff">
