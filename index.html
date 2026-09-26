@@ -10373,17 +10373,23 @@ function streakSoruEkle(tip){
 }
 function avciKlodaGit(){avciKomutGonder('AVCI MASTER BAŞLA');}
 function avciKomutGonder(komut){
-  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
   const klodItem=Array.from(document.querySelectorAll('.dn-item')).find(i=>i.textContent.includes('KLOD'));
-  if(klodItem){klodItem.classList.add('active');dnav(klodItem);}
+  // KLOD zaten açıksa ekran yeniden çizilmez (sohbet silinmesin); değilse
+  // dnav() sekmeyi açar (önceki aktif sekmeyi de Geri için kendisi kaydeder).
+  const klodAcik=!!(klodItem&&klodItem.classList.contains('active')&&document.getElementById('dnav-chat'));
+  if(!klodAcik&&klodItem)dnav(klodItem);
   setTimeout(()=>{
+    // KLOD sesli okurken: önce sesi durdur (⏹ ile aynı), sonra komutu gönder.
+    // Hâlâ yanıt bekleniyorsa (THINKING) komut gönderilmez, kutuya da yazılmaz.
+    if(typeof dnavTurnState!=='undefined'&&dnavTurnState==='SPEAKING'&&typeof dnavAvciSustur==='function')dnavAvciSustur();
+    if(typeof dnavTurnState!=='undefined'&&dnavTurnState!=='IDLE')return;
     const inp=document.getElementById('dnav-in');
     if(inp){
       inp.value=komut;inp.focus();
       const ev=new KeyboardEvent('keydown',{key:'Enter',bubbles:true});
       inp.dispatchEvent(ev);
     }
-  },600);
+  },klodAcik?0:600);
 }
 // KLOD çalışma alanı hızlı öğretim butonları (2026-09-17 modernizasyonu).
 // "Hata Defterim" sekmeye geçer; diğerleri mevcut avciKomutGonder() ile
