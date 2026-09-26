@@ -435,6 +435,19 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
    menülerin (nav 200) üstünde, modal'ların (.modal-ov 300+) altında. */
 .klod-geri-btn{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:border-color .15s}
 .klod-geri-btn:hover{border-color:var(--signal);color:var(--signal)}
+/* YANLIŞ CEVAP AÇIKLAMA KUTUSU — soru içeren bütün bölümlerin ortak bileşeni (yanlisCevapKutusu). */
+.yc-kutu{display:block;margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.4);border-left:4px solid var(--trap,#e03c3c);background:rgba(224,60,60,.07);color:var(--ink);font-size:14px;line-height:1.55;text-align:left}
+.yc-baslik{font-weight:800;color:var(--trap,#e03c3c);margin-bottom:8px}
+.yc-satir{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin:3px 0}
+.yc-satir span{font-size:12px;font-weight:700;letter-spacing:.02em;min-width:92px;color:var(--muted)}
+.yc-senin b{color:var(--trap,#e03c3c)}
+.yc-dogru-satir b{color:#16a34a}
+.yc-aciklama{margin-top:8px;padding-top:8px;border-top:1px dashed rgba(224,60,60,.3);color:var(--ink)}
+.yc-klod-btn{margin-top:10px;background:var(--sl);border:1px solid var(--signal);color:var(--signal);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
+.yc-klod-btn:hover{filter:brightness(1.12)}
+.yc-klod-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.yc-dogru{border-color:#16a34a!important;background:rgba(22,163,74,.14)!important;color:#16a34a!important}
+.yc-yanlis{border-color:var(--trap,#e03c3c)!important;background:rgba(224,60,60,.12)!important;color:var(--trap,#e03c3c)!important}
 .klod-hata{align-self:stretch;max-width:min(720px,100%);display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.45);background:rgba(224,60,60,.08);color:var(--ink);font-size:14px;line-height:1.5}
 .klod-hata-yazi{flex:1 1 220px;font-weight:600}
 .klod-hata-btn{background:var(--surface);border:1px solid rgba(224,60,60,.5);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
@@ -6822,6 +6835,7 @@ function dnav(el){
   const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
+  if(!txt.includes('KLOD'))_klodDonusGorunumu=null; // menüden başka yere gidildi: normal akış
   document.querySelector('.dash-inner')?.classList.toggle('dash-inner-klod',txt.includes('KLOD'));
   klodOdakAyarla(txt.includes('KLOD'),oncekiAktif);
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
@@ -6957,6 +6971,37 @@ function dnav(el){
 // Telefonun geri tuşu için girişte bir history kaydı eklenir; geri tuşu/Geri
 // butonu/Esc bu kaydı geri alır, popstate'te önceki sekmeye dönülür.
 let _klodOncekiItem=null,_klodScrollY=0,_klodPopSessiz=false;
+// "KLOD'la açıkla" (yanlış cevap kutusu) ile KLOD'a gelindiyse, önceki ekranın
+// görünüm durumu. Dönüşte bölüm YENİDEN ÇİZİLMEZ (soru/cevap işaretleri
+// korunur, cevap ikinci kez sayılmaz); sadece görünürlükler geri alınır.
+// Kullanıcı menüden başka yere giderse dnav() bu kaydı atar.
+let _klodDonusGorunumu=null;
+function klodDonusGorunumuSakla(){
+  const main=document.querySelector('.dash-main');
+  const parca=['.dash-karts','.dash-tabs','.dash-welcome','#sk-kart','#bugun-kart'].map(s=>{const e=(main&&main.querySelector(s))||document.querySelector(s);return [e,e?e.style.display:null];});
+  _klodDonusGorunumu={
+    dmod:[...document.querySelectorAll('.dmod')].map(m=>[m,m.style.display]),
+    parca,
+    dnItem:document.querySelector('.dn-item.active'),
+    dtab:document.querySelector('.dtab.active'),
+    aktifSoruModulu:typeof _aktifSoruModulu!=='undefined'?_aktifSoruModulu:null
+  };
+}
+function klodDonusGorunumuUygula(g){
+  const y=_klodScrollY;
+  klodOdakAyarla(false);
+  document.querySelector('.dash-inner')?.classList.remove('dash-inner-klod');
+  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
+  if(g.dnItem&&document.contains(g.dnItem))g.dnItem.classList.add('active');
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  if(g.dtab&&document.contains(g.dtab))g.dtab.classList.add('active');
+  g.dmod.forEach(([m,d])=>{m.style.display=d;});
+  g.parca.forEach(([e,d])=>{if(e)e.style.display=d;});
+  // #mod-sinyal KLOD'un içeriğini taşıyor: Sinyal Lab görünüyorduysa asıl düğümleri geri tak
+  if(g.dmod.some(([m,d])=>m.id==='mod-sinyal'&&d&&d!=='none'))modSinyalAsilGeriYukle();
+  if(typeof _aktifSoruModulu!=='undefined')_aktifSoruModulu=g.aktifSoruModulu;
+  window.scrollTo(0,y);
+}
 function klodOdakAyarla(acik,oncekiAktif){
   const b=document.body,zatenAcik=b.classList.contains('klod-odak');
   if(acik&&!zatenAcik){
@@ -6971,6 +7016,7 @@ function klodOdakAyarla(acik,oncekiAktif){
 }
 function _klodOdakKapat(){
   if(!document.body.classList.contains('klod-odak'))return;
+  if(_klodDonusGorunumu){const g=_klodDonusGorunumu;_klodDonusGorunumu=null;klodDonusGorunumuUygula(g);return;}
   let hedef=_klodOncekiItem;
   if(!hedef||!document.contains(hedef)||hedef.textContent.includes('KLOD'))hedef=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Bugün'));
   const y=_klodScrollY;
@@ -10439,6 +10485,49 @@ const KLOD_YONTEM_ADIMLARI={gor:'GÖR',fiil:'FİİLİ BUL',svo:'S+V+O',sinyal:'S
 function klodYontemAdimi(adim){
   const ad=KLOD_YONTEM_ADIMLARI[adim];
   if(ad)avciKomutGonder(`AVCI adımı: ${ad}. Bu adımı kısa bir YDS cümlesi üzerinde anlat.`);
+}
+// ─── YANLIŞ CEVAP AÇIKLAMA KUTUSU ────────────────────────────────────────
+// Soru içeren bölümler yanlış cevapta bu ortak kutuyu gösterir: seçilen şık
+// kırmızı, doğru şık yeşil ve yazılı, varsa mevcut kısa açıklama, ve
+// "KLOD'la açıkla" butonu (avciKomutGonder altyapısı). Sadece GÖRÜNÜM:
+// cevap kaydı / hata defteri / XP her bölümün kendi kodunda kalır.
+function ycKacis(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function ycDuzMetin(s){
+  try{return (new DOMParser().parseFromString(String(s==null?'':s),'text/html').body.textContent||'').replace(/\s+/g,' ').trim();}
+  catch(e){return String(s==null?'':s);}
+}
+function ycSikEtiketi(metin,i){
+  const t=ycDuzMetin(metin);
+  return /^[A-E]\s*[).]/.test(t)?t:String.fromCharCode(65+i)+') '+t;
+}
+// o: {hedef, soru, secenekler, dogruIdx, secilenIdx, aciklama?, butonlar?, bolum?}
+function yanlisCevapKutusu(o){
+  const h=o&&o.hedef;if(!h)return;
+  const sec=(o.secenekler||[]).map(ycSikEtiketi);
+  (o.butonlar||[]).forEach((b,i)=>{if(!b)return;if(i===o.dogruIdx)b.classList.add('yc-dogru');else if(i===o.secilenIdx)b.classList.add('yc-yanlis');});
+  h.classList.add('yc-kutu');
+  h.style.display='block';
+  const aciklama=o.aciklama?String(o.aciklama).trim():'';
+  h.innerHTML='<div class="yc-baslik">❌ Yanlış cevap</div>'
+    +'<div class="yc-satir yc-senin"><span>Senin cevabın</span><b>'+ycKacis(sec[o.secilenIdx]||'')+'</b></div>'
+    +'<div class="yc-satir yc-dogru-satir"><span>Doğru cevap</span><b>'+ycKacis(sec[o.dogruIdx]||'')+'</b></div>'
+    +(aciklama?'<div class="yc-aciklama">'+(typeof _safeHTML==='function'?_safeHTML(aciklama):ycKacis(aciklama))+'</div>':'')
+    +'<button type="button" class="yc-klod-btn">🎯 KLOD\'la açıkla</button>';
+  h.querySelector('.yc-klod-btn').onclick=()=>yanlisCevapKlodaSor({soru:o.soru,secenekler:sec,dogruIdx:o.dogruIdx,secilenIdx:o.secilenIdx,bolum:o.bolum});
+}
+function yanlisCevapKlodaSor(v){
+  // KLOD'un giriş kutusu tek satırlık: satır sonu yerine ' | ' ile ayrılır
+  const parcalar=[
+    'Bu soruda yanlış cevap verdim, açıklar mısın?',
+    v.bolum?'Bölüm: '+v.bolum:'',
+    'Soru: '+ycDuzMetin(v.soru).slice(0,3000),
+    'Şıklar: '+v.secenekler.join(' / '),
+    'Benim cevabım: '+(v.secenekler[v.secilenIdx]||''),
+    'Doğru cevap: '+(v.secenekler[v.dogruIdx]||''),
+    'Neden yanlış olduğunu, doğru kuralı ve diğer şıkların tuzağını kısa anlat.'
+  ].filter(Boolean);
+  klodDonusGorunumuSakla();
+  avciKomutGonder(parcalar.join(' | '));
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
