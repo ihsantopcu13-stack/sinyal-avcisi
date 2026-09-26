@@ -9800,6 +9800,11 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
     fb.style.background=dogru_mu?'#0f2418':'#2a1414';
     fb.style.borderLeft='3px solid '+(dogru_mu?'#16a34a':'var(--trap)');
     fb.innerHTML=(dogru_mu?'✅ <b>Doğru!</b> ':'❌ <b>Yanlış.</b> ')+s.fb;
+    if(!dogru_mu&&typeof yanlisCevapKutusu==='function'){
+      fb.style.background='';fb.style.borderLeft='';
+      const btnlar=s.opts.map((_,i)=>document.getElementById('popt-'+pidx+'-'+sidx+'-'+i));
+      yanlisCevapKutusu({hedef:fb,soru:'Paragraf: '+(p.metin||'')+' SORU: '+s.q,secenekler:s.opts,dogruIdx:dogru_,secilenIdx:oidx,aciklama:s.fb,butonlar:btnlar,bolum:'Paragraf'});
+    }
   }
   
   if(dogru_mu){
