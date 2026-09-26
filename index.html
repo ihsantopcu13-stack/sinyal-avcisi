@@ -427,6 +427,10 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
    menülerin (nav 200) üstünde, modal'ların (.modal-ov 300+) altında. */
 .klod-geri-btn{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:border-color .15s}
 .klod-geri-btn:hover{border-color:var(--signal);color:var(--signal)}
+.klod-hata{align-self:stretch;max-width:min(720px,100%);display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.45);background:rgba(224,60,60,.08);color:var(--ink);font-size:14px;line-height:1.5}
+.klod-hata-yazi{flex:1 1 220px;font-weight:600}
+.klod-hata-btn{background:var(--surface);border:1px solid rgba(224,60,60,.5);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
+.klod-hata-btn:hover{border-color:var(--signal);color:var(--signal)}
 body.klod-odak{overflow:hidden}
 body.klod-odak nav,body.klod-odak .mmenu,body.klod-odak #mobileBottomNav,body.klod-odak .mbn-sheet,body.klod-odak .mbn-sheet-backdrop,body.klod-odak #scroll-top-btn,body.klod-odak #wa-destek-btn{display:none!important}
 body.klod-odak #mod-sinyal{position:fixed;inset:0;z-index:250;display:flex!important;flex-direction:column;height:100vh;height:100dvh;background:var(--paper);padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:hidden;animation:none}
@@ -7272,7 +7276,13 @@ function avciAyniSinyaldenPratikSorusuBul(){
 
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
-  if(!inp||!inp.value.trim())return;
+  // "Tekrar dene" (klodHataGoster) son mesajı _dnavTekrarMetni ile yeniden
+  // gönderir: kullanıcı balonu ekranda zaten var, yenisi eklenmez; kutudaki
+  // yazıya dokunulmaz. Değer tek kullanımlıktır.
+  const tekrarMetni=typeof _dnavTekrarMetni==='string'?_dnavTekrarMetni:null;
+  _dnavTekrarMetni=null;
+  const tekrar=typeof tekrarMetni==='string'&&tekrarMetni.trim()!=='';
+  if(!inp||(!tekrar&&!inp.value.trim()))return;
   // TURN CONTROLLER — RE-ENTRANCY GUARD: SADECE IDLE'dan THINKING'e
   // geçilebilir. Öğrenci hızlı çift tıklama/Enter yaparsa veya AVCI zaten
   // düşünüyor/konuşuyorken yeni bir istek tetiklenmeye çalışılırsa,
@@ -7286,10 +7296,13 @@ async function dnavChat(){
   // ilerletirse, bu turun GECİKMELİ (stale) callback'leri artık
   // dnavTurnState'i DEĞİŞTİREMEZ (bkz. dnavTurNesil tanımı, yukarıda).
   const benimTurNesil=++dnavTurNesil;
+  const bekleyenGirdi=tekrar?inp.value:'';
+  if(tekrar)inp.value=tekrarMetni;
   const val=inp.value.trim();
   const body=document.getElementById('dnav-chat');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
-  inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
+  if(typeof klodHataTemizle==='function')klodHataTemizle(body);
+  if(!tekrar){const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);}
+  inp.value=bekleyenGirdi;inp.disabled=true;body.scrollTop=body.scrollHeight;
 
   // KATMAN 5H — CANONICAL NEXT QUESTION BRIDGE: öğrencinin AÇIK/deterministik
   // "sonraki soru" komutu, Sinyal Lab GERÇEKTEN aktifken (_aktifSoruModulu),
@@ -7354,7 +7367,9 @@ async function dnavChat(){
   const tp=document.createElement('div');tp.className='msg k';
   tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
   body.appendChild(tp);body.scrollTop=body.scrollHeight;
-  dnavHistory.push({role:'user',content:val});
+  // İstek başarısız olursa bu kayıt geçmişten geri çıkarılır (bkz. catch)
+  const kullaniciKaydi={role:'user',content:val};
+  dnavHistory.push(kullaniciKaydi);
   try{
     // KATMAN 5 MVP-1 — AUTH FOUNDATION: varsa geçerli Supabase session
     // token'ı Authorization header'ı olarak eklenir. sb hazır değilse/
@@ -7526,17 +7541,22 @@ AVCI MASTER BASLA: Seviyeye uygun tek YDS/YOKDIL Sosyal Bilimler sorusuyla basla
 ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan sonrakine gecme.`
       })
     });
-    const data=await res.json();
-    _dnavCtrlState=(data&&data.controller_state)||null;
-    tp.remove();
+    // HTTP hatası (429/400/500…), JSON olmayan yanıt veya boş metin → hata
+    // kutusu (catch). Bunlar KLOD cevabı gibi gösterilmez/okunmaz/geçmişe yazılmaz.
+    let data=null;
+    try{data=await res.json();}catch(e){data=null;}
+    if(!res.ok||!data)throw klodHataOlustur(res.ok?0:res.status,data);
     // KATMAN 5E — data.content artık (board_actions için tool_use
     // çağrılmışsa) metin dışında bloklar da içerebilir; index 0'ın HER
     // ZAMAN metin olduğunu VARSAYMAK yerine gerçek metin bloğunu ARIYORUZ
     // (sendChat()'in zaten kullandığı GÜVENLİ desenin aynısı).
-    const cevap=data.content?.find(b=>b.type==='text')?.text||data.error||'Bir hata oluştu.';
-    const km=document.createElement('div');km.className='msg k';
+    const cevap=data.content?.find(b=>b.type==='text')?.text||'';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
+    if(!temizCevap)throw klodHataOlustur(0,data);
+    _dnavCtrlState=(data&&data.controller_state)||null;
+    tp.remove();
+    const km=document.createElement('div');km.className='msg k';
     km.innerHTML=_safeHTML(renderMD(temizCevap));
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     // KATMAN 5K — VOICE-LITE: metin cevabı ZATEN render edildi (yukarıda),
@@ -7596,20 +7616,64 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     dnavHistory.push({role:'assistant',content:cevap});
   } catch(err){
     tp.remove();
-    // API erişimi yoksa akıllı fallback
-    const m=val.toLowerCase();let cevap='';
-    for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-    // val kullanıcı girdisi → HTML olarak kaçışlanır; KB cevapları sabit metin (<b> içerir)
-    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
-    body.appendChild(km);body.scrollTop=body.scrollHeight;
-    dnavHistory.push({role:'assistant',content:cevap});
-    // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi (written
-    // fallback zaten gösterildi), tur burada biter - DEADLOCK YOK. Yine
-    // benimTurNesil ile korunuyor (bkz. SPEAKING bloğundaki AYNI gerekçe).
+    // Cevapsız kullanıcı mesajı geçmişte kalmasın; "Tekrar dene" yeniden ekler.
+    const kayitIdx=dnavHistory.indexOf(kullaniciKaydi);
+    if(kayitIdx>=0)dnavHistory.splice(kayitIdx,1);
+    const tur=typeof klodHataTuru==='function'?klodHataTuru(err):'genel';
+    if(tur==='uzun_mesaj')inp.value=val; // kısaltıp yeniden göndersin
+    try{if(typeof klodHataGoster==='function')klodHataGoster(body,tur,err&&err.klodMesaj,val);}catch(e){}
+    // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi, tur burada
+    // biter - DEADLOCK YOK. Yine benimTurNesil ile korunuyor (bkz. SPEAKING
+    // bloğundaki AYNI gerekçe).
     if(benimTurNesil===dnavTurNesil)dnavTurnState='IDLE';
   }
   inp.disabled=false;inp.focus();
+}
+// ─── KLOD HATA KUTUSU ────────────────────────────────────────────────────
+// API başarısız olduğunda KLOD balonu yerine ayrı görünümlü kutu. Geçmişe
+// yazılmaz, sesli okunmaz. Ekranda en fazla bir tane olur.
+var _dnavTekrarMetni=null;
+function klodHataOlustur(status,data){
+  const e=new Error('KLOD API hatası'+(status?' ('+status+')':''));
+  e.klodStatus=status||0;
+  e.klodMesaj=(data&&typeof data.error==='string')?data.error:'';
+  return e;
+}
+function klodHataTuru(err){
+  const st=err&&err.klodStatus,msj=(err&&err.klodMesaj)||'';
+  if(st===429)return /günlük/i.test(msj)?'gunluk':'yogun';
+  if(st===400)return msj==='Mesaj çok uzun'?'uzun_mesaj':'uzun_sohbet';
+  return 'genel';
+}
+function klodHataTemizle(body){
+  if(!body||typeof body.querySelectorAll!=='function')return;
+  body.querySelectorAll('.klod-hata').forEach(h=>h.remove());
+}
+function klodHataGoster(body,tur,sunucuMesaji,sonMesaj){
+  if(!body)return;
+  const METIN={
+    genel:'KLOD şu an yanıt veremiyor. Birkaç saniye sonra tekrar dene.',
+    yogun:'Çok fazla istek. 1 dakika sonra tekrar dene.',
+    gunluk:sunucuMesaji||'Günlük KLOD limitine ulaştın. Yarın devam edebilirsin.',
+    uzun_sohbet:'Konuşma çok uzadı. Yeni sohbet başlat.',
+    uzun_mesaj:'Mesajın çok uzun, kısaltıp tekrar gönder.'
+  };
+  const kutu=document.createElement('div');kutu.className='klod-hata';
+  if(typeof kutu.setAttribute==='function')kutu.setAttribute('role','alert');
+  const yazi=document.createElement('div');yazi.className='klod-hata-yazi';yazi.textContent='⚠️ '+(METIN[tur]||METIN.genel);
+  kutu.appendChild(yazi);
+  const buton=(etiket,fn)=>{const b=document.createElement('button');b.type='button';b.className='klod-hata-btn';b.textContent=etiket;b.onclick=fn;kutu.appendChild(b);};
+  if(tur==='genel'||tur==='yogun')buton('↻ Tekrar dene',()=>{kutu.remove();_dnavTekrarMetni=sonMesaj;dnavChat();});
+  if(tur==='uzun_sohbet')buton('Yeni sohbet',()=>klodYeniSohbet(sonMesaj));
+  body.appendChild(kutu);body.scrollTop=body.scrollHeight;
+}
+function klodYeniSohbet(sonMesaj){
+  // Pedagoji durumu sıfırlanmaz: sunucu geçmişle uyumsuz durumu zaten atar.
+  dnavHistory=[];
+  const body=document.getElementById('dnav-chat');
+  if(body){body.innerHTML='';const km=document.createElement('div');km.className='msg k';km.textContent='Yeni sohbet başladı. Mesajın aşağıda, istersen düzenleyip gönder.';body.appendChild(km);}
+  const inp=document.getElementById('dnav-in');
+  if(inp){inp.value=sonMesaj||'';inp.focus();}
 }
 function dAns(btn,correct){
   if(slAnswered)return;
@@ -8256,12 +8320,6 @@ function tuzakSonraki(){
 function sssToggle(el){el.parentElement.classList.toggle('open');}
 
 // KLOD CHAT
-const KB=[
-  {keys:['must','modal perfect'],r:['<b>must have + V3</b> = gecmise dair kanita dayali guclu cıkarim. "might have" ile karistirmak OSYM tuzagi.']},
-  {keys:['despite','although','zitlik','however'],r:['<b>Despite</b> + isim/V-ing. "Although" ise + cumle ister. Zitlik sinyalleri anlami tersine cevirir.']},
-  {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.']},
-  {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi. "Had she known" devrik kullanim.']},
-];
 const KB_GENEL=[
   'Güzel soru! Bu yapıda ÖSYM genellikle zıtlık sinyalini gizler. "although/despite/yet" görünce sağ tarafı kontrol et — S+V mi, noun mu?',
   'Doğru yönde gidiyorsun. Modal perfect yapısında "must have V3" geçmişe dair güçlü çıkarım yapar. "might have" ile karıştırma — bu ÖSYM tuzağı!',
