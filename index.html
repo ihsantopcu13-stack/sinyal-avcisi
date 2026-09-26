@@ -8356,12 +8356,14 @@ function tuzakAns(btn,correct,dogru){
   const opts=document.querySelectorAll('#tuzak-opts-inner .tuzak-opt');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('tuzak-fb-inner'),soru=TUZAK_HAVUZ[tuzakIdx];
   if(correct){
-    btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Doğru! '+soru.fb;
     streakSoruEkle('tuzak');
     cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:btn.textContent,correctOption:opts[dogru].textContent,isCorrect:true,topic:'tuzak',signal:null,responseTimeMs:_tuzakRt});
     if(typeof konfeti==='function')konfeti();
   } else {
-    btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb';
+    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.q+' '+soru.sent,secenekler:soru.opts,dogruIdx:dogru,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Günlük Tuzak'});
+    else{fb.className='tuzak-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     // Hata defterine ekle
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
