@@ -10,6 +10,7 @@ import { rateLimit } from './_rateLimit.mjs';
 import { costGuard } from './_costGuard.mjs';
 import { originIzinliMi, klodGovdesiniDogrula, toplamKarakter, SINIRLAR } from './_requestGuard.mjs';
 import * as Pedagoji from './_avciPedagogy.mjs';
+import { KLOD_CHAT_SYSTEM_PROMPT } from './_klodChatPrompt.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
 // source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
@@ -494,6 +495,7 @@ function parseXMLOutput(text) {
 }
 
 // 20. TOKEN COUNTING — Context limiti kontrolü
+const GORSEL_TAHMINI_TOKEN = 1600;
 function estimateTokens(messages) {
   const totalChars = messages.reduce((sum, m) => sum + (m.content?.length || 0), 0);
   return Math.ceil(totalChars / 4); // Yaklaşık token sayısı
@@ -833,14 +835,27 @@ export default async function handler(req, res) {
     return res.status(cg.status).json(cg.json);
   }
 
-  const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
+  const { messages, mode, use_tools, image_base64, image_type, image_soru } = req.body;
+  // İstemcinin gönderdiği `system` HİÇBİR modda kullanılmaz: aksi halde bu
+  // endpoint kendi talimatını gönderen herkes için genel amaçlı bir Claude
+  // vekili olurdu. KLOD sohbeti (mode==='chat') sunucudaki birebir kopyayı
+  // kullanır; `system` dolu olduğu için aşağıdaki RAG bloğu KLOD'da eskisi
+  // gibi (dnavChat hep system gönderdiğinden) ÇALIŞMAZ. Diğer modlarda
+  // `system` boştur → varsayılan prompt + RAG, istemci system göndermeyen
+  // DILA/dilaSor/demo sohbetinde olduğu gibi aynen devam eder.
+  const system = mode === 'chat' ? KLOD_CHAT_SYSTEM_PROMPT : null;
 
   // KATMAN 5 MVP-1 — best-effort kimlik doğrulama (bkz. yukarıdaki blok).
   // Başarısız/eksik olması isteği ASLA engellemez.
   const verifiedUser = await klodDogrulanmisKullaniciAl(req.headers.authorization);
 
-  // 20. TOKEN COUNTING — Limit kontrolü
-  const estimatedTokens = estimateTokens(messages);
+  // 20. TOKEN COUNTING — Limit kontrolü. Görsel varsa soru metni ve görselin
+  // kendisi de girdiye eklenir (Anthropic büyük görselleri küçültür; bir
+  // görsel en fazla ~1.600 token tutar).
+  const gorselSoruMetni = image_base64 && typeof image_soru === 'string' ? image_soru : '';
+  const estimatedTokens = estimateTokens(messages)
+    + Math.ceil(gorselSoruMetni.length / 4)
+    + (image_base64 ? GORSEL_TAHMINI_TOKEN : 0);
   if (estimatedTokens > 150000) {
     return res.status(400).json({ 
       error: 'Konuşma çok uzadı', 
@@ -865,7 +880,7 @@ export default async function handler(req, res) {
   const trimmedMessages = processedMessages.slice(-maxMessages);
   // Modele GİDECEK kısmın toplam boyutu (kırpmadan SONRA — uzun sohbetler
   // eskisi gibi çalışsın, sadece tek istekte aşırı büyük girdi reddedilsin)
-  if (toplamKarakter(trimmedMessages) > SINIRLAR.toplamKarakter) {
+  if (toplamKarakter(trimmedMessages) + gorselSoruMetni.length > SINIRLAR.toplamKarakter) {
     return res.status(400).json({ error: 'Konuşma çok uzadı', message: 'Yeni bir sohbet başlatın' });
   }
 

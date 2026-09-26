@@ -131,9 +131,10 @@ try {
     kontrol("21) HANDLER mode YOK (chat değil): yanıt DEĞİŞMİYOR ve max_tokens 350 (diğer modlar DEĞİŞMEDİ)", res._json?.content?.[0]?.text === SIZINTI_2 && res._json.hint_leak_guard === false && istek && istek.max_tokens === 350);
   }
   {
-    const { istek: i1 } = await cagir({ messages: [{ role: "user", content: "x" }], mode: "soru_uret" }, "a");
+    // soru_uret hiçbir istemcide kullanılmadığı için mode izin listesinde yok → 400, model çağrısı YOK.
+    const { res: r1, istek: i1 } = await cagir({ messages: [{ role: "user", content: "x" }], mode: "soru_uret" }, "a");
     const { istek: i2 } = await cagir({ messages: [{ role: "user", content: "x" }], mode: "sinyal_analiz" }, "a");
-    kontrol("22) soru_uret 512 ve sinyal_analiz 400 DEĞİŞMEDİ", i1 && i1.max_tokens === 512 && i2 && i2.max_tokens === 400);
+    kontrol("22) soru_uret artık reddediliyor (400, model çağrısı yok); sinyal_analiz 400 token DEĞİŞMEDİ", r1._status === 400 && !i1 && i2 && i2.max_tokens === 400);
   }
   {
     const { res } = await cagir({ messages: [{ role: "user", content: "Hocam anlamadim." }], mode: "chat", use_tools: false, context: BAGLAM, system: "S" }, 'Bak: "The treatment was far from effective although it had shown promising results in trials."');

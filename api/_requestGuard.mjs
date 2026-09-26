@@ -34,8 +34,13 @@ export const SINIRLAR = {
   toplamKarakter: 80_000,    // kırpılmış (son 20) mesajların toplamı
   systemKarakter: 30_000,    // istemcinin gönderdiği system prompt
   gorselKarakter: 1_500_000, // base64 görsel (~1,1 MB) — istemci şu an hiç kullanmıyor
+  gorselSoruKarakter: 2_000, // görselle gelen soru metni (image_soru)
 };
 const GORSEL_TIPLERI = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+// Sadece istemcinin gerçekten kullandığı modlar (mode YOK = DILA/dilaSor/demo
+// sohbeti). Bilinmeyen mode reddedilir; klod.mjs'deki soru_uret/json_output/
+// xml_output/structured dalları bu yüzden artık dışarıdan tetiklenemez.
+const IZINLI_MODLAR = new Set(['chat', 'sinyal_analiz']);
 
 export function originIzinliMi(origin) {
   if (!origin) return true; // tarayıcı dışı istemci — bkz. yukarıdaki not
@@ -44,7 +49,8 @@ export function originIzinliMi(origin) {
 
 // Hata varsa Türkçe mesaj döner, yoksa null.
 export function klodGovdesiniDogrula(body) {
-  const { messages, system, image_base64, image_type } = body || {};
+  const { messages, system, mode, image_base64, image_type, image_soru } = body || {};
+  if (mode != null && !IZINLI_MODLAR.has(mode)) return 'Geçersiz istek';
   if (!Array.isArray(messages) || messages.length === 0 || messages.length > SINIRLAR.mesajSayisi) {
     return 'Geçersiz istek';
   }
@@ -60,6 +66,12 @@ export function klodGovdesiniDogrula(body) {
   if (image_base64 != null) {
     if (typeof image_base64 !== 'string' || image_base64.length > SINIRLAR.gorselKarakter) return 'Görsel çok büyük';
     if (image_type != null && !GORSEL_TIPLERI.has(image_type)) return 'Geçersiz görsel türü';
+  }
+  // image_soru modele metin olarak gider: sınırsız bırakılırsa tek istekte
+  // mesaj sınırlarının dışından çok büyük girdi gönderilebilirdi.
+  if (image_soru != null) {
+    if (typeof image_soru !== 'string') return 'Geçersiz istek';
+    if (image_soru.length > SINIRLAR.gorselSoruKarakter) return 'Görsel sorusu çok uzun';
   }
   return null;
 }
