@@ -410,9 +410,9 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .klod-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 4px 4px 0}
 .klod-msgs .msg{max-width:min(720px,88%)}
 .klod-input-row{display:flex;gap:10px;align-items:center;border-top:1px solid var(--border);padding-top:12px;margin-top:10px}
-.klod-input{flex:1;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
+.klod-input{flex:1;min-width:0;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
 .klod-input:focus{border-color:var(--signal)}
-.klod-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;padding:0 22px;height:48px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(245,166,35,.35);flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
+.klod-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;padding:0 22px;width:auto;white-space:nowrap;height:48px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(245,166,35,.35);flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
 .klod-send:hover{filter:brightness(1.06)}
 @media(max-width:900px){
   .klod-ws{height:min(66vh,600px)}
@@ -421,6 +421,30 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
   .klod-master-btn{width:100%}
   .klod-quick-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
   .klod-method-strip{overflow-x:auto;flex-wrap:nowrap}
+}
+/* KLOD ODAK MODU — body.klod-odak iken #mod-sinyal tam ekran; menüler ve
+   yüzen butonlar gizlenir. Aç/kapat: dnav() + klodOdakCik(). z-index 250:
+   menülerin (nav 200) üstünde, modal'ların (.modal-ov 300+) altında. */
+.klod-geri-btn{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:border-color .15s}
+.klod-geri-btn:hover{border-color:var(--signal);color:var(--signal)}
+body.klod-odak{overflow:hidden}
+body.klod-odak nav,body.klod-odak .mmenu,body.klod-odak #mobileBottomNav,body.klod-odak .mbn-sheet,body.klod-odak .mbn-sheet-backdrop,body.klod-odak #scroll-top-btn,body.klod-odak #wa-destek-btn{display:none!important}
+body.klod-odak #mod-sinyal{position:fixed;inset:0;z-index:250;display:flex!important;flex-direction:column;height:100vh;height:100dvh;background:var(--paper);padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:hidden;animation:none}
+body.klod-odak .klod-topbar,body.klod-odak .klod-quick-row,body.klod-odak .klod-method-strip{flex-shrink:0}
+body.klod-odak .klod-ws{flex:1;min-height:0;height:auto}
+body.klod-odak .klod-input-row{flex-shrink:0}
+@media(max-width:600px){
+  body.klod-odak #mod-sinyal{padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+  body.klod-odak .klod-topbar{flex-direction:row;align-items:center;gap:8px;padding-bottom:8px;margin-bottom:8px}
+  body.klod-odak .klod-subtitle,body.klod-odak .klod-status-dot{display:none}
+  body.klod-odak .klod-avatar{width:34px;height:34px;font-size:17px}
+  body.klod-odak .klod-title{font-size:15px}
+  body.klod-odak .klod-status-row{width:100%}
+  body.klod-odak .klod-quick-row,body.klod-odak .klod-method-strip{margin-bottom:8px}
+  body.klod-odak .klod-input-row{gap:6px;padding-top:8px;margin-top:6px}
+  body.klod-odak .klod-input{font-size:16px;height:44px;padding:0 12px}
+  body.klod-odak #dnav-mic-btn,body.klod-odak #dnav-stop-btn{padding:10px!important}
+  body.klod-odak .klod-send{height:44px;padding:0 14px}
 }
 .kk{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:56px 32px;text-align:center;cursor:pointer;min-height:260px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px;transition:border-color .15s}
 .kk:hover{border-color:var(--signal)}
@@ -6764,9 +6788,11 @@ function dtab(el,mod){
   const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
 }
 function dnav(el){
+  const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
   document.querySelector('.dash-inner')?.classList.toggle('dash-inner-klod',txt.includes('KLOD'));
+  klodOdakAyarla(txt.includes('KLOD'),oncekiAktif);
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
   main.querySelector('.dash-karts').style.display='none';
   main.querySelector('.dash-tabs').style.display='none';
@@ -6801,6 +6827,7 @@ function dnav(el){
     t.innerHTML=`
       <div class="klod-topbar">
         <div class="klod-topbar-main">
+          <button class="klod-geri-btn" type="button" onclick="klodOdakCik()" aria-label="KLOD odak modundan çık">← Geri</button>
           <div class="klod-avatar">🎯</div>
           <div>
             <div class="klod-title">KLOD — AVCI AI ÖĞRETMEN</div>
@@ -6893,6 +6920,46 @@ function dnav(el){
     seviyeKontrol(xd.toplam);
   }
 }
+// KLOD ODAK MODU — KLOD'a Sor açıkken body.klod-odak (CSS tam ekran yapar).
+// Telefonun geri tuşu için girişte bir history kaydı eklenir; geri tuşu/Geri
+// butonu/Esc bu kaydı geri alır, popstate'te önceki sekmeye dönülür.
+let _klodOncekiItem=null,_klodScrollY=0,_klodPopSessiz=false;
+function klodOdakAyarla(acik,oncekiAktif){
+  const b=document.body,zatenAcik=b.classList.contains('klod-odak');
+  if(acik&&!zatenAcik){
+    _klodOncekiItem=oncekiAktif||null;_klodScrollY=window.scrollY;
+    b.classList.add('klod-odak');
+    try{history.pushState({klodOdak:1},'');}catch(e){}
+  }else if(!acik&&zatenAcik){
+    b.classList.remove('klod-odak');
+    // Başka yoldan (menü, Ctrl+K) çıkıldıysa fazladan kalan history kaydını geri al
+    if(history.state&&history.state.klodOdak){_klodPopSessiz=true;history.back();}
+  }
+}
+function _klodOdakKapat(){
+  if(!document.body.classList.contains('klod-odak'))return;
+  let hedef=_klodOncekiItem;
+  if(!hedef||!document.contains(hedef)||hedef.textContent.includes('KLOD'))hedef=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Bugün'));
+  const y=_klodScrollY;
+  if(hedef)hedef.click();else document.body.classList.remove('klod-odak');
+  document.body.classList.remove('klod-odak');
+  window.scrollTo(0,y);
+}
+function klodOdakCik(){
+  if(history.state&&history.state.klodOdak)history.back(); // popstate kapatır
+  else _klodOdakKapat();
+}
+window.addEventListener('popstate',()=>{
+  if(_klodPopSessiz){_klodPopSessiz=false;return;}
+  _klodOdakKapat();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!document.body.classList.contains('klod-odak'))return;
+  if(document.getElementById('arama-modal')?.classList.contains('acik'))return;
+  if(document.getElementById('ia-overlay')?.classList.contains('acik'))return;
+  if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
+  klodOdakCik();
+});
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
 // TURBO #8-B — pedagoji kontrolcüsü durumu: sunucu her yanıtta döndürür, biz bir
@@ -11776,6 +11843,7 @@ function sinavSimulatoruAc(){
 // ============================================================
 (function(){
   const btn=document.createElement('button');
+  btn.id='scroll-top-btn';
   btn.innerHTML='↑';
   btn.style.cssText='position:fixed;bottom:24px;left:24px;z-index:400;width:40px;height:40px;background:var(--surface);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;opacity:0;transition:opacity .3s;font-family:IBM Plex Sans,sans-serif;display:grid;place-items:center';
   btn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
@@ -11818,6 +11886,7 @@ function erisilebilirlikToggle(){
 // ============================================================
 (function(){
   const wa=document.createElement('a');
+  wa.id='wa-destek-btn';
   wa.href='https://wa.me/905XXXXXXXXX?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
   wa.target='_blank';
   wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;font-size:24px;transition:transform .2s';
