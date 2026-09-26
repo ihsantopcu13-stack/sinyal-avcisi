@@ -406,13 +406,14 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .klod-method-strip{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin-bottom:12px}
 .klod-method-chip{color:var(--ink);background:rgba(245,166,35,.08);border-radius:5px;padding:3px 7px;white-space:nowrap}
 .klod-method-arrow{color:var(--signal);opacity:.6}
+.klod-quick-chip,.klod-method-chip,.klod-method-arrow{flex-shrink:0}
 .klod-ws{display:flex;flex-direction:column;height:min(70vh,700px);min-height:400px}
 .klod-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 4px 4px 0}
 .klod-msgs .msg{max-width:min(720px,88%)}
 .klod-input-row{display:flex;gap:10px;align-items:center;border-top:1px solid var(--border);padding-top:12px;margin-top:10px}
-.klod-input{flex:1;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
+.klod-input{flex:1;min-width:0;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 16px;font-family:'IBM Plex Sans',sans-serif;font-size:15px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
 .klod-input:focus{border-color:var(--signal)}
-.klod-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;padding:0 22px;height:48px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(245,166,35,.35);flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
+.klod-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;padding:0 22px;width:auto;white-space:nowrap;height:48px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(245,166,35,.35);flex-shrink:0;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
 .klod-send:hover{filter:brightness(1.06)}
 @media(max-width:900px){
   .klod-ws{height:min(66vh,600px)}
@@ -421,6 +422,34 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
   .klod-master-btn{width:100%}
   .klod-quick-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
   .klod-method-strip{overflow-x:auto;flex-wrap:nowrap}
+}
+/* KLOD ODAK MODU — body.klod-odak iken #mod-sinyal tam ekran; menüler ve
+   yüzen butonlar gizlenir. Aç/kapat: dnav() + klodOdakCik(). z-index 250:
+   menülerin (nav 200) üstünde, modal'ların (.modal-ov 300+) altında. */
+.klod-geri-btn{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:border-color .15s}
+.klod-geri-btn:hover{border-color:var(--signal);color:var(--signal)}
+.klod-hata{align-self:stretch;max-width:min(720px,100%);display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.45);background:rgba(224,60,60,.08);color:var(--ink);font-size:14px;line-height:1.5}
+.klod-hata-yazi{flex:1 1 220px;font-weight:600}
+.klod-hata-btn{background:var(--surface);border:1px solid rgba(224,60,60,.5);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
+.klod-hata-btn:hover{border-color:var(--signal);color:var(--signal)}
+body.klod-odak{overflow:hidden}
+body.klod-odak nav,body.klod-odak .mmenu,body.klod-odak #mobileBottomNav,body.klod-odak .mbn-sheet,body.klod-odak .mbn-sheet-backdrop,body.klod-odak #scroll-top-btn,body.klod-odak #wa-destek-btn{display:none!important}
+body.klod-odak #mod-sinyal{position:fixed;inset:0;z-index:250;display:flex!important;flex-direction:column;height:100vh;height:100dvh;background:var(--paper);padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:hidden;animation:none}
+body.klod-odak .klod-topbar,body.klod-odak .klod-quick-row,body.klod-odak .klod-method-strip{flex-shrink:0}
+body.klod-odak .klod-ws{flex:1;min-height:0;height:auto}
+body.klod-odak .klod-input-row{flex-shrink:0}
+@media(max-width:600px){
+  body.klod-odak #mod-sinyal{padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+  body.klod-odak .klod-topbar{flex-direction:row;align-items:center;gap:8px;padding-bottom:8px;margin-bottom:8px}
+  body.klod-odak .klod-subtitle,body.klod-odak .klod-status-dot{display:none}
+  body.klod-odak .klod-avatar{width:34px;height:34px;font-size:17px}
+  body.klod-odak .klod-title{font-size:15px}
+  body.klod-odak .klod-status-row{width:100%}
+  body.klod-odak .klod-quick-row,body.klod-odak .klod-method-strip{margin-bottom:8px}
+  body.klod-odak .klod-input-row{gap:6px;padding-top:8px;margin-top:6px}
+  body.klod-odak .klod-input{font-size:16px;height:44px;padding:0 12px}
+  body.klod-odak #dnav-mic-btn,body.klod-odak #dnav-stop-btn{padding:10px!important}
+  body.klod-odak .klod-send{height:44px;padding:0 14px}
 }
 .kk{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:56px 32px;text-align:center;cursor:pointer;min-height:260px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px;transition:border-color .15s}
 .kk:hover{border-color:var(--signal)}
@@ -6761,12 +6790,33 @@ function dtab(el,mod){
     }
     return;
   }
+  if(mod==='sinyal'&&typeof modSinyalAsilGeriYukle==='function')modSinyalAsilGeriYukle();
+  // KLOD odak modu açıkken kod yoluyla başka sekmeye geçilirse odaktan da çık
+  if(document.body.classList.contains('klod-odak')&&typeof klodOdakAyarla==='function'){klodOdakAyarla(false);document.querySelector('.dash-inner')?.classList.remove('dash-inner-klod');}
   const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
 }
+// #mod-sinyal hem Sinyal Lab'ın kendisi hem de KLOD/Raporlar/Ses Kurs'un
+// yazıldığı alan. Başka içerik yazılmadan önce Sinyal Lab'ın canlı DOM
+// düğümleri kenara alınır (silinmez; çözülmüş soru/tahta durumu korunur),
+// Bugün/Sinyal Lab açılınca aynen geri takılır.
+let _modSinyalAsil=null;
+function modSinyalAsilSakla(t){
+  if(!t||_modSinyalAsil)return;
+  const f=document.createDocumentFragment();
+  while(t.firstChild)f.appendChild(t.firstChild);
+  _modSinyalAsil=f;
+}
+function modSinyalAsilGeriYukle(){
+  const t=document.getElementById('mod-sinyal');
+  if(!t||!_modSinyalAsil)return;
+  t.innerHTML='';t.appendChild(_modSinyalAsil);_modSinyalAsil=null;
+}
 function dnav(el){
+  const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
   document.querySelector('.dash-inner')?.classList.toggle('dash-inner-klod',txt.includes('KLOD'));
+  klodOdakAyarla(txt.includes('KLOD'),oncekiAktif);
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
   main.querySelector('.dash-karts').style.display='none';
   main.querySelector('.dash-tabs').style.display='none';
@@ -6779,6 +6829,7 @@ function dnav(el){
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
+    modSinyalAsilGeriYukle();
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
     if(typeof gunlukHedefGuncelle==='function')setTimeout(gunlukHedefGuncelle,100);
@@ -6786,21 +6837,23 @@ function dnav(el){
     // KATMAN 5B — mod-sinyal'in içeriği Raporlar HTML'iyle DEĞİŞTİRİLİYOR,
     // artık gerçek bir Sinyal Lab sorusu görünmüyor — tracker temizlenir.
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     main.querySelector('.dash-tabs').style.display='none';
     t.innerHTML=raporlarHTML();
   } else if(txt.includes('Sinyal Lab')){
     _aktifSoruModulu='sinyal_lab';
+    modSinyalAsilGeriYukle();
     main.querySelector('.dash-tabs').style.display='flex';document.getElementById('mod-sinyal').style.display='block';
     document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
   } else if(txt.includes('KLOD')){
     // KATMAN 5B — BİLİNÇLİ OLARAK tracker'a DOKUNULMUYOR: öğrenci Sinyal
     // Lab'dan "bu soruyu KLOD'a sorayım" diyerek gelmiş olabilir, o context
     // KLOD sekmesine geçince de geçerliliğini korumalı.
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML=`
       <div class="klod-topbar">
         <div class="klod-topbar-main">
+          <button class="klod-geri-btn" type="button" onclick="klodOdakCik()" aria-label="KLOD odak modundan çık">← Geri</button>
           <div class="klod-avatar">🎯</div>
           <div>
             <div class="klod-title">KLOD — AVCI AI ÖĞRETMEN</div>
@@ -6858,11 +6911,11 @@ function dnav(el){
     document.getElementById('mod-tuzak').style.display='block';tuzakRender();
   } else if(txt.includes('Ses')){
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML='<div class="dm-eye">SES KURSU - 19 KONU</div><div style="display:flex;flex-direction:column;gap:6px">'+PD.map((p,i)=>`<div onclick="dashPlaySes(${i})" style="cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:15px;display:flex;justify-content:space-between;align-items:center" role="button" tabindex="0"><span>${p.t}</span><span style="color:var(--signal)">▶ Dinle</span></div>`).join('')+'</div>';
   } else if(txt.includes('Rapor')){
     _aktifSoruModulu=null;
-    const t=document.getElementById('mod-sinyal');t.style.display='block';
+    const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
     t.innerHTML=`<div class="dm-eye">📈 RAPORLAR — XP & LİDERLİK</div>
 <div style="background:#0f172a;border-radius:12px;padding:16px;margin-bottom:12px;color:#fff">
@@ -6893,6 +6946,46 @@ function dnav(el){
     seviyeKontrol(xd.toplam);
   }
 }
+// KLOD ODAK MODU — KLOD'a Sor açıkken body.klod-odak (CSS tam ekran yapar).
+// Telefonun geri tuşu için girişte bir history kaydı eklenir; geri tuşu/Geri
+// butonu/Esc bu kaydı geri alır, popstate'te önceki sekmeye dönülür.
+let _klodOncekiItem=null,_klodScrollY=0,_klodPopSessiz=false;
+function klodOdakAyarla(acik,oncekiAktif){
+  const b=document.body,zatenAcik=b.classList.contains('klod-odak');
+  if(acik&&!zatenAcik){
+    _klodOncekiItem=oncekiAktif||null;_klodScrollY=window.scrollY;
+    b.classList.add('klod-odak');
+    try{history.pushState({klodOdak:1},'');}catch(e){}
+  }else if(!acik&&zatenAcik){
+    b.classList.remove('klod-odak');
+    // Başka yoldan (menü, Ctrl+K) çıkıldıysa fazladan kalan history kaydını geri al
+    if(history.state&&history.state.klodOdak){_klodPopSessiz=true;history.back();}
+  }
+}
+function _klodOdakKapat(){
+  if(!document.body.classList.contains('klod-odak'))return;
+  let hedef=_klodOncekiItem;
+  if(!hedef||!document.contains(hedef)||hedef.textContent.includes('KLOD'))hedef=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Bugün'));
+  const y=_klodScrollY;
+  if(hedef)hedef.click();else document.body.classList.remove('klod-odak');
+  document.body.classList.remove('klod-odak');
+  window.scrollTo(0,y);
+}
+function klodOdakCik(){
+  if(history.state&&history.state.klodOdak)history.back(); // popstate kapatır
+  else _klodOdakKapat();
+}
+window.addEventListener('popstate',()=>{
+  if(_klodPopSessiz){_klodPopSessiz=false;return;}
+  _klodOdakKapat();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!document.body.classList.contains('klod-odak'))return;
+  if(document.getElementById('arama-modal')?.classList.contains('acik'))return;
+  if(document.getElementById('ia-overlay')?.classList.contains('acik'))return;
+  if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
+  klodOdakCik();
+});
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
 // TURBO #8-B — pedagoji kontrolcüsü durumu: sunucu her yanıtta döndürür, biz bir
@@ -7205,7 +7298,13 @@ function avciAyniSinyaldenPratikSorusuBul(){
 
 async function dnavChat(){
   const inp=document.getElementById('dnav-in');
-  if(!inp||!inp.value.trim())return;
+  // "Tekrar dene" (klodHataGoster) son mesajı _dnavTekrarMetni ile yeniden
+  // gönderir: kullanıcı balonu ekranda zaten var, yenisi eklenmez; kutudaki
+  // yazıya dokunulmaz. Değer tek kullanımlıktır.
+  const tekrarMetni=typeof _dnavTekrarMetni==='string'?_dnavTekrarMetni:null;
+  _dnavTekrarMetni=null;
+  const tekrar=typeof tekrarMetni==='string'&&tekrarMetni.trim()!=='';
+  if(!inp||(!tekrar&&!inp.value.trim()))return;
   // TURN CONTROLLER — RE-ENTRANCY GUARD: SADECE IDLE'dan THINKING'e
   // geçilebilir. Öğrenci hızlı çift tıklama/Enter yaparsa veya AVCI zaten
   // düşünüyor/konuşuyorken yeni bir istek tetiklenmeye çalışılırsa,
@@ -7219,10 +7318,13 @@ async function dnavChat(){
   // ilerletirse, bu turun GECİKMELİ (stale) callback'leri artık
   // dnavTurnState'i DEĞİŞTİREMEZ (bkz. dnavTurNesil tanımı, yukarıda).
   const benimTurNesil=++dnavTurNesil;
+  const bekleyenGirdi=tekrar?inp.value:'';
+  if(tekrar)inp.value=tekrarMetni;
   const val=inp.value.trim();
   const body=document.getElementById('dnav-chat');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);
-  inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
+  if(typeof klodHataTemizle==='function')klodHataTemizle(body);
+  if(!tekrar){const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);}
+  inp.value=bekleyenGirdi;inp.disabled=true;body.scrollTop=body.scrollHeight;
 
   // KATMAN 5H — CANONICAL NEXT QUESTION BRIDGE: öğrencinin AÇIK/deterministik
   // "sonraki soru" komutu, Sinyal Lab GERÇEKTEN aktifken (_aktifSoruModulu),
@@ -7287,7 +7389,9 @@ async function dnavChat(){
   const tp=document.createElement('div');tp.className='msg k';
   tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
   body.appendChild(tp);body.scrollTop=body.scrollHeight;
-  dnavHistory.push({role:'user',content:val});
+  // İstek başarısız olursa bu kayıt geçmişten geri çıkarılır (bkz. catch)
+  const kullaniciKaydi={role:'user',content:val};
+  dnavHistory.push(kullaniciKaydi);
   try{
     // KATMAN 5 MVP-1 — AUTH FOUNDATION: varsa geçerli Supabase session
     // token'ı Authorization header'ı olarak eklenir. sb hazır değilse/
@@ -7459,17 +7563,22 @@ AVCI MASTER BASLA: Seviyeye uygun tek YDS/YOKDIL Sosyal Bilimler sorusuyla basla
 ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan sonrakine gecme.`
       })
     });
-    const data=await res.json();
-    _dnavCtrlState=(data&&data.controller_state)||null;
-    tp.remove();
+    // HTTP hatası (429/400/500…), JSON olmayan yanıt veya boş metin → hata
+    // kutusu (catch). Bunlar KLOD cevabı gibi gösterilmez/okunmaz/geçmişe yazılmaz.
+    let data=null;
+    try{data=await res.json();}catch(e){data=null;}
+    if(!res.ok||!data)throw klodHataOlustur(res.ok?0:res.status,data);
     // KATMAN 5E — data.content artık (board_actions için tool_use
     // çağrılmışsa) metin dışında bloklar da içerebilir; index 0'ın HER
     // ZAMAN metin olduğunu VARSAYMAK yerine gerçek metin bloğunu ARIYORUZ
     // (sendChat()'in zaten kullandığı GÜVENLİ desenin aynısı).
-    const cevap=data.content?.find(b=>b.type==='text')?.text||data.error||'Bir hata oluştu.';
-    const km=document.createElement('div');km.className='msg k';
+    const cevap=data.content?.find(b=>b.type==='text')?.text||'';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
+    if(!temizCevap)throw klodHataOlustur(0,data);
+    _dnavCtrlState=(data&&data.controller_state)||null;
+    tp.remove();
+    const km=document.createElement('div');km.className='msg k';
     km.innerHTML=_safeHTML(renderMD(temizCevap));
     body.appendChild(km);body.scrollTop=body.scrollHeight;
     // KATMAN 5K — VOICE-LITE: metin cevabı ZATEN render edildi (yukarıda),
@@ -7529,20 +7638,64 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     dnavHistory.push({role:'assistant',content:cevap});
   } catch(err){
     tp.remove();
-    // API erişimi yoksa akıllı fallback
-    const m=val.toLowerCase();let cevap='';
-    for(const p of KB){if(p.keys.some(k=>m.includes(k))){cevap=p.r[0];break;}}
-    // val kullanıcı girdisi → HTML olarak kaçışlanır; KB cevapları sabit metin (<b> içerir)
-    if(!cevap)cevap='Güzel soru! "'+val.substring(0,30).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'..." için ÖSYM\'nin tuzak kurma mantığını düşün. Hangi sinyal kelimesini görüyorsun?';
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=cevap;
-    body.appendChild(km);body.scrollTop=body.scrollHeight;
-    dnavHistory.push({role:'assistant',content:cevap});
-    // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi (written
-    // fallback zaten gösterildi), tur burada biter - DEADLOCK YOK. Yine
-    // benimTurNesil ile korunuyor (bkz. SPEAKING bloğundaki AYNI gerekçe).
+    // Cevapsız kullanıcı mesajı geçmişte kalmasın; "Tekrar dene" yeniden ekler.
+    const kayitIdx=dnavHistory.indexOf(kullaniciKaydi);
+    if(kayitIdx>=0)dnavHistory.splice(kayitIdx,1);
+    const tur=typeof klodHataTuru==='function'?klodHataTuru(err):'genel';
+    if(tur==='uzun_mesaj')inp.value=val; // kısaltıp yeniden göndersin
+    try{if(typeof klodHataGoster==='function')klodHataGoster(body,tur,err&&err.klodMesaj,val);}catch(e){}
+    // TURN CONTROLLER — network/API hatası: TTS'e hiç gidilmedi, tur burada
+    // biter - DEADLOCK YOK. Yine benimTurNesil ile korunuyor (bkz. SPEAKING
+    // bloğundaki AYNI gerekçe).
     if(benimTurNesil===dnavTurNesil)dnavTurnState='IDLE';
   }
   inp.disabled=false;inp.focus();
+}
+// ─── KLOD HATA KUTUSU ────────────────────────────────────────────────────
+// API başarısız olduğunda KLOD balonu yerine ayrı görünümlü kutu. Geçmişe
+// yazılmaz, sesli okunmaz. Ekranda en fazla bir tane olur.
+var _dnavTekrarMetni=null;
+function klodHataOlustur(status,data){
+  const e=new Error('KLOD API hatası'+(status?' ('+status+')':''));
+  e.klodStatus=status||0;
+  e.klodMesaj=(data&&typeof data.error==='string')?data.error:'';
+  return e;
+}
+function klodHataTuru(err){
+  const st=err&&err.klodStatus,msj=(err&&err.klodMesaj)||'';
+  if(st===429)return /günlük/i.test(msj)?'gunluk':'yogun';
+  if(st===400)return msj==='Mesaj çok uzun'?'uzun_mesaj':'uzun_sohbet';
+  return 'genel';
+}
+function klodHataTemizle(body){
+  if(!body||typeof body.querySelectorAll!=='function')return;
+  body.querySelectorAll('.klod-hata').forEach(h=>h.remove());
+}
+function klodHataGoster(body,tur,sunucuMesaji,sonMesaj){
+  if(!body)return;
+  const METIN={
+    genel:'KLOD şu an yanıt veremiyor. Birkaç saniye sonra tekrar dene.',
+    yogun:'Çok fazla istek. 1 dakika sonra tekrar dene.',
+    gunluk:sunucuMesaji||'Günlük KLOD limitine ulaştın. Yarın devam edebilirsin.',
+    uzun_sohbet:'Konuşma çok uzadı. Yeni sohbet başlat.',
+    uzun_mesaj:'Mesajın çok uzun, kısaltıp tekrar gönder.'
+  };
+  const kutu=document.createElement('div');kutu.className='klod-hata';
+  if(typeof kutu.setAttribute==='function')kutu.setAttribute('role','alert');
+  const yazi=document.createElement('div');yazi.className='klod-hata-yazi';yazi.textContent='⚠️ '+(METIN[tur]||METIN.genel);
+  kutu.appendChild(yazi);
+  const buton=(etiket,fn)=>{const b=document.createElement('button');b.type='button';b.className='klod-hata-btn';b.textContent=etiket;b.onclick=fn;kutu.appendChild(b);};
+  if(tur==='genel'||tur==='yogun')buton('↻ Tekrar dene',()=>{kutu.remove();_dnavTekrarMetni=sonMesaj;dnavChat();});
+  if(tur==='uzun_sohbet')buton('Yeni sohbet',()=>klodYeniSohbet(sonMesaj));
+  body.appendChild(kutu);body.scrollTop=body.scrollHeight;
+}
+function klodYeniSohbet(sonMesaj){
+  // Pedagoji durumu sıfırlanmaz: sunucu geçmişle uyumsuz durumu zaten atar.
+  dnavHistory=[];
+  const body=document.getElementById('dnav-chat');
+  if(body){body.innerHTML='';const km=document.createElement('div');km.className='msg k';km.textContent='Yeni sohbet başladı. Mesajın aşağıda, istersen düzenleyip gönder.';body.appendChild(km);}
+  const inp=document.getElementById('dnav-in');
+  if(inp){inp.value=sonMesaj||'';inp.focus();}
 }
 function dAns(btn,correct){
   if(slAnswered)return;
@@ -8189,12 +8342,6 @@ function tuzakSonraki(){
 function sssToggle(el){el.parentElement.classList.toggle('open');}
 
 // KLOD CHAT
-const KB=[
-  {keys:['must','modal perfect'],r:['<b>must have + V3</b> = gecmise dair kanita dayali guclu cıkarim. "might have" ile karistirmak OSYM tuzagi.']},
-  {keys:['despite','although','zitlik','however'],r:['<b>Despite</b> + isim/V-ing. "Although" ise + cumle ister. Zitlik sinyalleri anlami tersine cevirir.']},
-  {keys:['far from','by no means','hardly'],r:['<b>Far from</b>, <b>by no means</b>, <b>hardly</b> hepsi gizli olumsuz! "Far from effective" = etkili DEGIL.']},
-  {keys:['conditional','if','would have'],r:['<b>Type 3</b> = gecmiste gerceklesmedi. "Would have + V3" yapisi. "Had she known" devrik kullanim.']},
-];
 const KB_GENEL=[
   'Güzel soru! Bu yapıda ÖSYM genellikle zıtlık sinyalini gizler. "although/despite/yet" görünce sağ tarafı kontrol et — S+V mi, noun mu?',
   'Doğru yönde gidiyorsun. Modal perfect yapısında "must have V3" geçmişe dair güçlü çıkarım yapar. "might have" ile karıştırma — bu ÖSYM tuzağı!',
@@ -10248,17 +10395,23 @@ function streakSoruEkle(tip){
 }
 function avciKlodaGit(){avciKomutGonder('AVCI MASTER BAŞLA');}
 function avciKomutGonder(komut){
-  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
   const klodItem=Array.from(document.querySelectorAll('.dn-item')).find(i=>i.textContent.includes('KLOD'));
-  if(klodItem){klodItem.classList.add('active');dnav(klodItem);}
+  // KLOD zaten açıksa ekran yeniden çizilmez (sohbet silinmesin); değilse
+  // dnav() sekmeyi açar (önceki aktif sekmeyi de Geri için kendisi kaydeder).
+  const klodAcik=!!(klodItem&&klodItem.classList.contains('active')&&document.getElementById('dnav-chat'));
+  if(!klodAcik&&klodItem)dnav(klodItem);
   setTimeout(()=>{
+    // KLOD sesli okurken: önce sesi durdur (⏹ ile aynı), sonra komutu gönder.
+    // Hâlâ yanıt bekleniyorsa (THINKING) komut gönderilmez, kutuya da yazılmaz.
+    if(typeof dnavTurnState!=='undefined'&&dnavTurnState==='SPEAKING'&&typeof dnavAvciSustur==='function')dnavAvciSustur();
+    if(typeof dnavTurnState!=='undefined'&&dnavTurnState!=='IDLE')return;
     const inp=document.getElementById('dnav-in');
     if(inp){
       inp.value=komut;inp.focus();
       const ev=new KeyboardEvent('keydown',{key:'Enter',bubbles:true});
       inp.dispatchEvent(ev);
     }
-  },600);
+  },klodAcik?0:600);
 }
 // KLOD çalışma alanı hızlı öğretim butonları (2026-09-17 modernizasyonu).
 // "Hata Defterim" sekmeye geçer; diğerleri mevcut avciKomutGonder() ile
@@ -11776,6 +11929,7 @@ function sinavSimulatoruAc(){
 // ============================================================
 (function(){
   const btn=document.createElement('button');
+  btn.id='scroll-top-btn';
   btn.innerHTML='↑';
   btn.style.cssText='position:fixed;bottom:24px;left:24px;z-index:400;width:40px;height:40px;background:var(--surface);color:#fff;border:none;border-radius:50%;font-size:18px;cursor:pointer;opacity:0;transition:opacity .3s;font-family:IBM Plex Sans,sans-serif;display:grid;place-items:center';
   btn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
@@ -11818,6 +11972,7 @@ function erisilebilirlikToggle(){
 // ============================================================
 (function(){
   const wa=document.createElement('a');
+  wa.id='wa-destek-btn';
   wa.href='https://wa.me/905XXXXXXXXX?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
   wa.target='_blank';
   wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;font-size:24px;transition:transform .2s';
