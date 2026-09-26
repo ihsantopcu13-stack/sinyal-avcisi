@@ -187,7 +187,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const res = sahteRes();
   await handler(
     sahteReq(
-      { messages: [{ role: "user", content: "bu soruda niye B?" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, system: SYSTEM_PROMPT },
+      { messages: [{ role: "user", content: "bu soruda niye B?" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, mode: "chat", system: SYSTEM_PROMPT },
       { ip: "40.0.0.1", authorization: "Bearer gecerli-token" }
     ),
     res
@@ -202,7 +202,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const m = fullMock();
   fetchMockKur(m.impl);
   const res = sahteRes();
-  await handler(sahteReq({ messages: [{ role: "user", content: "bu soruda niye B?" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, system: SYSTEM_PROMPT }, { ip: "40.0.0.2" }), res);
+  await handler(sahteReq({ messages: [{ role: "user", content: "bu soruda niye B?" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, mode: "chat", system: SYSTEM_PROMPT }, { ip: "40.0.0.2" }), res);
   const sistem = sistemMetniAl(m.gorulenIstekler);
   kontrol("H) STUDENT_CONTEXT yok (auth yok) → AKTİF SORU BAĞLAMI ve ana AVCI prompt'u yine de çalışıyor", sistem.includes("AKTİF SORU BAĞLAMI") && !sistem.includes("ÖĞRENCİ KANIT ÖZETİ") && sistem.includes("AVCI YEDI ADIM"));
   kontrol("I) AUTH false → current question öğretimi (5B) ETKİLENMEDEN çalışıyor", res._status === 200);
@@ -214,7 +214,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const m = fullMock({ restRows: [{ signal: "because", topic: null, is_correct: false, answered_at: new Date().toISOString(), response_time_ms: null }] }); // 1 satır → YETERSİZ_KANIT
   fetchMockKur(m.impl);
   const res = sahteRes();
-  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], system: SYSTEM_PROMPT }, { ip: "40.0.0.3", authorization: "Bearer gecerli-token" }), res);
+  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], mode: "chat", system: SYSTEM_PROMPT }, { ip: "40.0.0.3", authorization: "Bearer gecerli-token" }), res);
   const sistem = sistemMetniAl(m.gorulenIstekler);
   kontrol("J) YETERSİZ_KANIT durumunda dahi prompt'ta 'zayıf öğrenci' etiketleme dili YOK, sadece yasaklama talimatı var", !/sen bu konuda zayifsin/i.test(sistem.replace(/ASLA "sen bu konuda zayifsin" gibi bir etiket\/karakter yargisi olarak yansitma/gi, "")) || sistem.includes("YETERSIZ_KANIT"));
   kontrol("K) response_time/reflex prompt'ta 'dikkatsizsin/yavaşsın' çıkarımına İZİN VERMİYOR (açık yasak var)", /response_time dikkatsizlik degildir/i.test(sistem));
@@ -226,7 +226,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const m = fullMock();
   fetchMockKur(m.impl);
   const res = sahteRes();
-  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], system: SYSTEM_PROMPT }, { ip: "40.0.0.4", authorization: "Bearer gecerli-token" }), res);
+  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], mode: "chat", system: SYSTEM_PROMPT }, { ip: "40.0.0.4", authorization: "Bearer gecerli-token" }), res);
   const sistem = sistemMetniAl(m.gorulenIstekler);
   // NOT: 5C bloğu "Katman 4 varmış gibi davranma" diye AÇIKÇA yasaklıyor —
   // bu, ismi bir kez, sadece bir OLUMSUZLAMA/yasaklama içinde geçiriyor
@@ -244,7 +244,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const m = fullMock();
   fetchMockKur(m.impl);
   const res = sahteRes();
-  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, system: SYSTEM_PROMPT }, { ip: "40.0.0.5" }), res);
+  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], context: { module: "sinyal_lab", question_id: "q001", answered: false }, mode: "chat", system: SYSTEM_PROMPT }, { ip: "40.0.0.5" }), res);
   const sistem = sistemMetniAl(m.gorulenIstekler);
   kontrol("O) 5B answer-leak: before-answer'da correct_answer/is_correct hâlâ YOK", !sistem.includes('"correct_answer"') && !sistem.includes('"is_correct"'));
   fetchMockTemizle();
@@ -255,7 +255,7 @@ process.env.ANTHROPIC_API_KEY = "sahte-test-degeri-gercek-degil";
   const m = fullMock({ restRows: [] });
   fetchMockKur(m.impl);
   const res = sahteRes();
-  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], system: SYSTEM_PROMPT }, { ip: "40.0.0.6", authorization: "Bearer gecerli-token" }), res);
+  await handler(sahteReq({ messages: [{ role: "user", content: "test" }], mode: "chat", system: SYSTEM_PROMPT }, { ip: "40.0.0.6", authorization: "Bearer gecerli-token" }), res);
   const sistem = sistemMetniAl(m.gorulenIstekler);
   kontrol("P) 5C: boş answer_history'de bile PII/profilEtiketi/user_id sistem promptunda YOK", !/profilEtiketi/i.test(sistem) && !sistem.includes("user-1") && !sistem.includes("u1"));
   fetchMockTemizle();

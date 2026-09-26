@@ -10,6 +10,7 @@ import { rateLimit } from './_rateLimit.mjs';
 import { costGuard } from './_costGuard.mjs';
 import { originIzinliMi, klodGovdesiniDogrula, toplamKarakter, SINIRLAR } from './_requestGuard.mjs';
 import * as Pedagoji from './_avciPedagogy.mjs';
+import { KLOD_CHAT_SYSTEM_PROMPT } from './_klodChatPrompt.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
 // source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
@@ -833,7 +834,15 @@ export default async function handler(req, res) {
     return res.status(cg.status).json(cg.json);
   }
 
-  const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
+  const { messages, mode, use_tools, image_base64, image_type, image_soru } = req.body;
+  // İstemcinin gönderdiği `system` HİÇBİR modda kullanılmaz: aksi halde bu
+  // endpoint kendi talimatını gönderen herkes için genel amaçlı bir Claude
+  // vekili olurdu. KLOD sohbeti (mode==='chat') sunucudaki birebir kopyayı
+  // kullanır; `system` dolu olduğu için aşağıdaki RAG bloğu KLOD'da eskisi
+  // gibi (dnavChat hep system gönderdiğinden) ÇALIŞMAZ. Diğer modlarda
+  // `system` boştur → varsayılan prompt + RAG, istemci system göndermeyen
+  // DILA/dilaSor/demo sohbetinde olduğu gibi aynen devam eder.
+  const system = mode === 'chat' ? KLOD_CHAT_SYSTEM_PROMPT : null;
 
   // KATMAN 5 MVP-1 — best-effort kimlik doğrulama (bkz. yukarıdaki blok).
   // Başarısız/eksik olması isteği ASLA engellemez.
