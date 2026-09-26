@@ -37,6 +37,10 @@ export const SINIRLAR = {
   gorselSoruKarakter: 2_000, // görselle gelen soru metni (image_soru)
 };
 const GORSEL_TIPLERI = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+// Sadece istemcinin gerçekten kullandığı modlar (mode YOK = DILA/dilaSor/demo
+// sohbeti). Bilinmeyen mode reddedilir; klod.mjs'deki soru_uret/json_output/
+// xml_output/structured dalları bu yüzden artık dışarıdan tetiklenemez.
+const IZINLI_MODLAR = new Set(['chat', 'sinyal_analiz']);
 
 export function originIzinliMi(origin) {
   if (!origin) return true; // tarayıcı dışı istemci — bkz. yukarıdaki not
@@ -45,7 +49,8 @@ export function originIzinliMi(origin) {
 
 // Hata varsa Türkçe mesaj döner, yoksa null.
 export function klodGovdesiniDogrula(body) {
-  const { messages, system, image_base64, image_type, image_soru } = body || {};
+  const { messages, system, mode, image_base64, image_type, image_soru } = body || {};
+  if (mode != null && !IZINLI_MODLAR.has(mode)) return 'Geçersiz istek';
   if (!Array.isArray(messages) || messages.length === 0 || messages.length > SINIRLAR.mesajSayisi) {
     return 'Geçersiz istek';
   }
