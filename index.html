@@ -407,6 +407,12 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .klod-method-chip{color:var(--ink);background:rgba(245,166,35,.08);border-radius:5px;padding:3px 7px;white-space:nowrap}
 .klod-method-arrow{color:var(--signal);opacity:.6}
 .klod-quick-chip,.klod-method-chip,.klod-method-arrow{flex-shrink:0}
+/* Yöntem şeridi adımları tıklanabilir: klodYontemAdimi() o adımı KLOD'a anlattırır. */
+.klod-method-adim{flex-shrink:0;display:inline-flex;align-items:center;background:none;border:1px solid transparent;border-radius:7px;padding:1px;margin:0;font:inherit;color:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.klod-method-adim:hover{border-color:var(--signal);background:var(--sl)}
+.klod-method-adim:hover .klod-method-chip{color:var(--signal)}
+.klod-method-adim:focus-visible{outline:2px solid var(--signal);outline-offset:1px}
+.klod-method-adim:active{transform:translateY(1px)}
 .klod-ws{display:flex;flex-direction:column;height:min(70vh,700px);min-height:400px}
 .klod-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 4px 4px 0}
 .klod-msgs .msg{max-width:min(720px,88%)}
@@ -422,6 +428,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
   .klod-master-btn{width:100%}
   .klod-quick-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}
   .klod-method-strip{overflow-x:auto;flex-wrap:nowrap}
+  .klod-method-adim{min-height:32px}
 }
 /* KLOD ODAK MODU — body.klod-odak iken #mod-sinyal tam ekran; menüler ve
    yüzen butonlar gizlenir. Aç/kapat: dnav() + klodOdakCik(). z-index 250:
@@ -6875,13 +6882,13 @@ function dnav(el){
         <button class="klod-quick-chip" onclick="klodHizliAksiyon('hata')">📝 Hata Defterim</button>
       </div>
       <div class="klod-method-strip">
-        <span class="klod-method-chip">GÖR</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">FİİLİ BUL</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">S+V+O</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">SİNYALİ YAKALA</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">SAĞ/SOL KONTROL</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">ŞIK ELE</span><span class="klod-method-arrow">→</span>
-        <span class="klod-method-chip">ANLAMI DOĞRULA</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('gor')" title="GÖR adımını anlat" aria-label="GÖR adımını anlat"><span class="klod-method-chip">GÖR</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('fiil')" title="FİİLİ BUL adımını anlat" aria-label="FİİLİ BUL adımını anlat"><span class="klod-method-chip">FİİLİ BUL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('svo')" title="S+V+O adımını anlat" aria-label="S+V+O adımını anlat"><span class="klod-method-chip">S+V+O</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sinyal')" title="SİNYALİ YAKALA adımını anlat" aria-label="SİNYALİ YAKALA adımını anlat"><span class="klod-method-chip">SİNYALİ YAKALA</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sagsol')" title="SAĞ/SOL KONTROL adımını anlat" aria-label="SAĞ/SOL KONTROL adımını anlat"><span class="klod-method-chip">SAĞ/SOL KONTROL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sik')" title="ŞIK ELE adımını anlat" aria-label="ŞIK ELE adımını anlat"><span class="klod-method-chip">ŞIK ELE</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('anlam')" title="ANLAMI DOĞRULA adımını anlat" aria-label="ANLAMI DOĞRULA adımını anlat"><span class="klod-method-chip">ANLAMI DOĞRULA</span></button>
       </div>
       <div class="klod-ws">
         <div class="klod-msgs" id="dnav-chat">
@@ -10424,6 +10431,14 @@ function klodHizliAksiyon(tip){
   }
   const KLOD_HIZLI_KOMUT={soru:'SORUYU AVLA',cumle:'CÜMLEYİ AVLA',sinyal:'SİNYALİ BUL',kelime:'KELİME AVCISI BAŞLA',master:'AVCI MASTER BAŞLA'};
   if(KLOD_HIZLI_KOMUT[tip])avciKomutGonder(KLOD_HIZLI_KOMUT[tip]);
+}
+// Yöntem şeridi: bir AVCI adımına tıklayınca KLOD o adımı kısa bir YDS
+// cümlesi üzerinde anlatır. Hızlı butonlarla AYNI altyapı (avciKomutGonder):
+// sohbet korunur, KLOD konuşuyorsa önce susturulur, yanıt beklenirken yok sayılır.
+const KLOD_YONTEM_ADIMLARI={gor:'GÖR',fiil:'FİİLİ BUL',svo:'S+V+O',sinyal:'SİNYALİ YAKALA',sagsol:'SAĞ/SOL KONTROL',sik:'ŞIK ELE',anlam:'ANLAMI DOĞRULA'};
+function klodYontemAdimi(adim){
+  const ad=KLOD_YONTEM_ADIMLARI[adim];
+  if(ad)avciKomutGonder(`AVCI adımı: ${ad}. Bu adımı kısa bir YDS cümlesi üzerinde anlat.`);
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
