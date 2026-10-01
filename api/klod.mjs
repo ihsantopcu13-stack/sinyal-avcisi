@@ -424,6 +424,11 @@ ROL: 20 yıllık YDS sınav hazırlık uzmanısın. ÖSYM soru kalıplarını ez
 AVCI MASTER PRENSİBİ:
 1. SORU TÜRÜNÜ TANI → 2. SİNYALİ BUL → 3. YAPIYI TANI → 4. SAĞ/SOL KONTROL → 5. S+V+O → 6. ŞIKLARI ELE → 7. KRİTİK FARKI BUL → 8. KANITLA → 9. CEVABI AVLA
 
+YDS/YÖKDİL SORU TÜRLERİ (KAPALI LİSTE — ZORUNLU):
+- YDS (80 soru, her soru 5 şıklı A-E): kelime/deyim bilgisi, dilbilgisi, cloze test, cümle tamamlama, İngilizce-Türkçe çeviri, Türkçe-İngilizce çeviri, paragraf (okuma-anlama), diyalog tamamlama, yakın anlamlı cümle, paragraf tamamlama, anlam bütünlüğünü bozan cümle.
+- YÖKDİL (80 soru, her soru 5 şıklı A-E): YDS ile aynı türler, AMA diyalog tamamlama ve yakın anlamlı cümle soruları YÖKDİL'de YOKTUR.
+- Bu listenin DIŞINDA soru türü önerme, üretme, "sınavda çıkar" deme: error identification (hata bulma), cümle sıralama, eşleştirme, doğru-yanlış, yazma ve konuşma YDS'de de YÖKDİL'de de YOKTUR.
+
 SİNYAL KELİME RADARI:
 - although/despite/yet/however/whereas = ZIT + yapı farkına dikkat
 - because/since/therefore/thus = NEDEN-SONUÇ
@@ -522,17 +527,19 @@ function detectMessageType(messages) {
 const TOOLS = [
   {
     name: "soru_olustur",
-    description: "YDS/YÖKDİL formatında yapılandırılmış soru oluştur",
+    description: "YDS/YÖKDİL formatında yapılandırılmış soru oluştur (5 şık, A-E)",
     input_schema: {
       type: "object",
       properties: {
         soru: { type: "string", description: "Soru metni" },
-        siklar: { 
-          type: "array", 
+        siklar: {
+          type: "array",
           items: { type: "string" },
-          description: "4 seçenek"
+          minItems: 5,
+          maxItems: 5,
+          description: "5 seçenek (A-E sırasıyla)"
         },
-        dogru_sik: { type: "number", description: "Doğru şık indeksi (0-3)" },
+        dogru_sik: { type: "integer", minimum: 0, maximum: 4, description: "Doğru şık indeksi (0-4; 0=A … 4=E)" },
         aciklama: { type: "string", description: "Neden doğru açıklaması" },
         sinyal: { type: "string", description: "Sinyal kelime" },
         zorluk: { type: "number", description: "1-5 arası zorluk" }
