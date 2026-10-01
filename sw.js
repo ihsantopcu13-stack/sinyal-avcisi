@@ -1,6 +1,8 @@
-// v3: SW artık yalnızca sitenin kendi origin'indeki GET isteklerini yönetiyor
-// (bkz. fetch). Ad değişince activate'teki temizlik eski v2 önbelleğini siler.
-const CACHE_NAME = 'sinyal-avcisi-v3';
+// v4: SW artık yalnızca HTML'i, /assets/ altını ve manifest.json'ı önbelleğe
+// alıyor; /api/ yanıtları HİÇ önbelleğe girmiyor (bkz. fetch). Ad değişince
+// activate'teki temizlik, v3'te biriken API yanıtlarıyla birlikte eski
+// önbelleği siler.
+const CACHE_NAME = 'sinyal-avcisi-v4';
 const CACHE_URLS = ['/', '/index.html'];
 
 self.addEventListener('install', e => {
@@ -28,7 +30,12 @@ self.addEventListener('fetch', e => {
   // Eskiden SW bunları kendisi fetch ediyordu; sw.js'e uygulanan CSP'nin
   // connect-src listesinde cdn.jsdelivr.net / fonts olmadığı için istekler
   // ERR_FAILED oluyor, ikinci ziyarette Supabase hiç yüklenmiyordu.
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
+  // API yanıtları kullanıcıya/oturuma özel ve anlık olmalı (admin listeleri,
+  // anon-profile kurtarma vb.). Cache yalnızca URL'e baktığı için Authorization
+  // başlığını ayırt edemiyor — bu yüzden /api/'ye HİÇ karışma.
+  if (url.pathname.startsWith('/api/')) return;
   const isHtmlNav = req.mode === 'navigate' ||
     (req.method === 'GET' && (req.headers.get('accept') || '').includes('text/html'));
 
@@ -41,8 +48,10 @@ self.addEventListener('fetch', e => {
     e.respondWith(
       fetch(req)
         .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          }
           return res;
         })
         .catch(() => caches.match(req).then(r => r || caches.match('/')))
@@ -50,12 +59,21 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Diğer istekler: cache-first + arka planda sessizce güncelle
+  // HTML dışında önbelleğe yalnızca statik varlıklar girer; geri kalan her şey
+  // (sitemap.xml, robots.txt, kök dizindeki diğer dosyalar…) tarayıcının
+  // normal yolundan gider.
+  if (!url.pathname.startsWith('/assets/') && url.pathname !== '/manifest.json') return;
+
+  // Statik varlıklar: cache-first + arka planda sessizce güncelle
   e.respondWith(
     caches.match(req).then(cached => {
       const network = fetch(req)
         .then(res => {
-          if (res && res.ok) caches.open(CACHE_NAME).then(cache => cache.put(req, res.clone()));
+          if (res && res.ok) {
+            // clone() senkron alınmalı: yanıt döndükten sonra gövde okunmuş olabilir
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          }
           return res;
         })
         .catch(() => cached);
