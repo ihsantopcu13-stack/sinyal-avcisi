@@ -613,7 +613,10 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 @keyframes slideOutLeft{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-60px)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 /* STREAK */
-.streak-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#1a1f35,#0c1428);border-bottom:1px solid rgba(255,255,255,.07);padding:8px 5vw;font-size:16px;color:rgba(236,231,218,.6);position:fixed;top:56px;left:0;right:0;z-index:199;height:44px}
+.streak-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#1a1f35,#0c1428);border-bottom:1px solid rgba(255,255,255,.07);padding:8px 5vw;font-size:16px;color:rgba(236,231,218,.6);position:fixed;top:60px;left:0;right:0;z-index:199;height:44px}
+/* Çubuk sabit (fixed) olduğu için akışta yer kaplamıyor: görünürken panelin üst
+   boşluğunu nav(60) + çubuk(44) + eski 12px pay kadar artır (bkz. streakRender). */
+body.streak-acik .dash{padding-top:116px}
 .streak-fire{font-size:18px;line-height:1}
 .streak-count{font-family:'IBM Plex Serif',serif;font-size:20px;color:#e8d5a3;line-height:1}
 .streak-label{font-size:15px;color:rgba(236,231,218,.4)}
@@ -1270,7 +1273,13 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   .dash-karts{grid-template-columns:1fr}
   .ist-kpi-grid{grid-template-columns:repeat(2,1fr)}
   .stats{gap:24px}
-  .streak-bar{font-size:14px;gap:6px;padding:8px 4vw}
+  /* Sabit 44px yükseklik dar ekranda taşan içeriği çubuğun dışına (içeriğin
+     üstüne) döküyordu: satır kırılmasın, rozetler yatay kaydırılsın. */
+  .streak-bar{font-size:14px;gap:6px;padding:8px 4vw;height:auto;min-height:44px;white-space:nowrap}
+  .streak-bar>*{flex-shrink:0}
+  .streak-badges{flex-shrink:1;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .streak-badges::-webkit-scrollbar{display:none}
+  .streak-badges .rozet{flex-shrink:0}
   .streak-label{font-size:13px}
   [style*="grid-template-columns:repeat(3,1fr)"],
   [style*="grid-template-columns: repeat(3,1fr)"],
@@ -10010,6 +10019,7 @@ function streakRender(d){
   // Hiç soru çözmemiş yeni ziyaretçiye "1 günlük seri / 0 soru" göstermiyoruz.
   const barEl=document.getElementById('streak-bar');
   if(barEl)barEl.style.display=(d.toplamSoru>0)?'':'none';
+  if(document.body)document.body.classList.toggle('streak-acik',!!barEl&&d.toplamSoru>0);
   if(haftaEl)haftaEl.textContent=(d.buHaftaSoru||0)+' soru';
   rozetRender(d);
 }
