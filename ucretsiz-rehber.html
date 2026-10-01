@@ -470,12 +470,12 @@ var TESHIS_SORULARI = [
     q: 'Bu metne göre tedavi hakkında ne söylenebilir?',
     sent: '"The researchers concluded that, despite the promising results, the treatment was far from guaranteed."',
     opts: [
+      'Tedavi başarıyla tamamlandı.',
       'Tedavi tüm hastalar için etkilidir.',
       'Tedavi umut verici ama garantili değildir.',
-      'Sonuçlar yetersiz kaldı.',
-      'Tedavi başarıyla tamamlandı.'
+      'Sonuçlar yetersiz kaldı.'
     ],
-    ans: 1,
+    ans: 2,
     fb: '"Despite" = zıtlık. "Far from guaranteed" = garantili değil. Gizli olumsuz tuzak!'
   },
   {
@@ -485,12 +485,12 @@ var TESHIS_SORULARI = [
     q: 'Bu cümleye göre yasa hakkında ne söylenebilir?',
     sent: '"Although the law was intended to protect consumers, it inadvertently created new barriers for small businesses."',
     opts: [
-      'Yasa küçük işletmeleri destekledi.',
       'Yasa tüketicileri korumayı amaçladı ancak küçük işletmeler için engel oluşturdu.',
       'Yasa tamamen etkisiz kaldı.',
+      'Yasa küçük işletmeleri destekledi.',
       'Küçük işletmeler yasadan faydalandı.'
     ],
-    ans: 1,
+    ans: 0,
     fb: '"Although" = zıtlık sinyali. Sol: tüketicileri koruma amacı ↔ Sağ: küçük işletmelere engel. Her iki taraf da doğru cevapta olmalı.'
   },
   {
@@ -501,11 +501,11 @@ var TESHIS_SORULARI = [
     sent: '"The appellate court ruled that, despite the irregularities, the verdict was by no means invalid."',
     opts: [
       'Usul hataları kararı geçersiz kıldı.',
-      'Usul hatalarına rağmen karar geçerliliğini korudu.',
       'Mahkeme yeniden yargılama istedi.',
-      'Karar kesinlikle geçersiz bulundu.'
+      'Karar kesinlikle geçersiz bulundu.',
+      'Usul hatalarına rağmen karar geçerliliğini korudu.'
     ],
-    ans: 1,
+    ans: 3,
     fb: '"Despite" = zıtlık, "by no means invalid" = kesinlikle geçersiz DEĞİL. Gizli olumsuz!'
   },
   {
@@ -515,12 +515,12 @@ var TESHIS_SORULARI = [
     q: 'Bu cümle ne ifade eder?',
     sent: '"She must have forgotten to submit the report before the deadline."',
     opts: [
-      'Raporu kesinlikle göndermedi.',
       'Raporu göndermeyi unutmuş olmalı.',
       'Raporu göndermesi zorunluydu.',
-      'Raporu göndermeyecek.'
+      'Raporu göndermeyecek.',
+      'Raporu kesinlikle göndermedi.'
     ],
-    ans: 1,
+    ans: 0,
     fb: '"Must have + V3" = geçmişe güçlü çıkarım (zorunluluk DEĞİL). "Kesin olarak geçmişte öyle oldu" anlamı.'
   },
   {
@@ -530,10 +530,10 @@ var TESHIS_SORULARI = [
     q: 'Yasa hakkında ne söylenebilir?',
     sent: '"The statute was far from unambiguous, yet the court applied it without hesitation."',
     opts: [
-      'Yasa açık olduğu için mahkeme uyguladı.',
-      'Yasa belirsiz olmasına rağmen mahkeme tereddütsüz uyguladı.',
       'Mahkeme yasayı uygulamayı reddetti.',
-      'Yasa açıkça tanımlıydı ve kolayca uygulandı.'
+      'Yasa belirsiz olmasına rağmen mahkeme tereddütsüz uyguladı.',
+      'Yasa açıkça tanımlıydı ve kolayca uygulandı.',
+      'Yasa açık olduğu için mahkeme uyguladı.'
     ],
     ans: 1,
     fb: '"Far from unambiguous" = belirsiz. "Yet" = zıtlık. Belirsiz ↔ tereddütsüz uygulama.'
