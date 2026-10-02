@@ -96,6 +96,9 @@ function sandboxKur({ yanitlar = ["Boşluktan sonra ne geliyor?"], bekletFetch =
     localStorage: { getItem: () => null },
     KB: [],
     renderMD: (t) => t,
+    // dnavChat cevabı _safeHTML(renderMD(...)) ile yazıyor; gerçek sayfada window._safeHTML
+    // en başta tanımlı. Sandbox'ta yoksa ReferenceError → cevap hiç render edilmez.
+    _safeHTML: (t) => t,
     sb: undefined,
     _aktifSoruModulu: null,
     avciAktifSinyalLabBaglamiAl: () => null,
