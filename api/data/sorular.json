@@ -1245,12 +1245,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre çalışanlar hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Yalnızca yönetici bilgilendirildi.",
-      "Çalışanlar planı duyurulmadan önce öğrendi.",
+      "Ne yönetici ne de çalışanlar önceden bilgilendirildi.",
       "Yalnızca çalışanlar bilgilendirildi.",
-      "Ne yönetici ne de çalışanlar önceden bilgilendirildi."
+      "Çalışanlar planı duyurulmadan önce öğrendi.",
+      "Yalnızca yönetici bilgilendirildi.",
+      "Yönetici ya da çalışanlardan biri önceden bilgilendirildi."
     ],
-    "dogru_index": 3,
+    "dogru_index": 0,
     "aciklama_tr": "Neither...nor = ikisi de değil. Hem yönetici hem çalışanlar bilgilendirilmedi.",
     "sinyal": "nor",
     "sinyal_ipucu": "Olumsuz çift bağlaç",
@@ -1265,12 +1266,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre proje başlamadan önce ne gereklidir?",
     "secenekler_tr": [
-      "Hem direktör hem de yönetim kurulu onaylamalıdır.",
+      "Ne direktör ne de yönetim kurulu bütçeyi onaylamak zorundadır.",
       "Proje zaten başlamıştır.",
+      "Direktör veya yönetim kurulu onaylamalıdır.",
       "Bütçe onaysız başlayabilir.",
-      "Direktör veya yönetim kurulu onaylamalıdır."
+      "Hem direktör hem de yönetim kurulu onaylamalıdır."
     ],
-    "dogru_index": 3,
+    "dogru_index": 2,
     "aciklama_tr": "Either...or = ya...ya da. İkisinden birinin onayı yeterlidir.",
     "sinyal": "either",
     "sinyal_ipucu": "Seçenekli bağlaç",
@@ -1285,12 +1287,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre yeni bileşik için ne söylenebilir?",
     "secenekler_tr": [
-      "Araştırma bulgular hipotezi destekliyor.",
-      "Hipotez zaten doğrulanmış durumda.",
       "Ne bulgular ne veriler hipotezi destekliyor.",
-      "Klinik veriler hipotezi destekliyor."
+      "Klinik veriler hipotezi destekliyor.",
+      "Hipotez zaten doğrulanmış durumda.",
+      "Bulgular hipotezi desteklemiyor, ancak klinik veriler bileşiğin daha güvenli olduğunu gösteriyor.",
+      "Araştırma bulguları hipotezi destekliyor."
     ],
-    "dogru_index": 2,
+    "dogru_index": 0,
     "aciklama_tr": "Neither...nor her iki özneyi de olumsuzlar. Fiil data (çoğul) ile uyumlu: support.",
     "sinyal": "nor",
     "sinyal_ipucu": "Olumsuz çift bağlaç — proximity rule",
@@ -1305,12 +1308,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre yeni politikanın etkisi nedir?",
     "secenekler_tr": [
-      "Yalnızca maliyetleri düşürdü.",
-      "Politikanın hiçbir etkisi olmadı.",
+      "Maliyetleri düşürdü ama çalışan memnuniyetini azalttı.",
       "Hem maliyetleri düşürdü hem de memnuniyeti artırdı.",
-      "Yalnızca çalışan memnuniyetini artırdı."
+      "Yalnızca maliyetleri düşürdü.",
+      "Yalnızca çalışan memnuniyetini artırdı.",
+      "Politikanın hiçbir etkisi olmadı."
     ],
-    "dogru_index": 2,
+    "dogru_index": 1,
     "aciklama_tr": "Not only...but also = hem...hem de. İki olumlu sonuç birden.",
     "sinyal": "Not only",
     "sinyal_ipucu": "Devrik yapı: Not only + did + özne",
@@ -1325,12 +1329,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre profesör hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Diğerlerinden daha az makale yayımlamıştır.",
-      "Yalnızca en genç profesördür.",
+      "Hem en gençtir hem de en çok makale yayımlamıştır.",
+      "Bölümün en genç profesörü değildir ama en çok makaleyi o yayımlamıştır.",
       "Yalnızca en çok makale yayımlamıştır.",
-      "Hem en gençtir hem de en çok makale yayımlamıştır."
+      "Yalnızca en genç profesördür.",
+      "Diğerlerinden daha az makale yayımlamıştır."
     ],
-    "dogru_index": 3,
+    "dogru_index": 0,
     "aciklama_tr": "Not only...but also iki niteliği birleştirir. Devrik yapı: Not only is she...",
     "sinyal": "Not only",
     "sinyal_ipucu": "Devrik yapı: Not only + is + özne",
@@ -1346,9 +1351,10 @@
     "soru_tr": "Bu cümleye göre tedavi hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Hem semptomları giderir hem de kaynağa müdahale eder.",
-      "Tedavi henüz semptomları gideremiyor.",
       "Yalnızca hastalığın kaynağını ele alır.",
-      "Yalnızca semptomları giderir."
+      "Tedavi henüz semptomları gideremiyor.",
+      "Yalnızca semptomları giderir.",
+      "Hastalığın asıl nedenini ortadan kaldırdığı için semptomları da giderir."
     ],
     "dogru_index": 0,
     "aciklama_tr": "Not only...but also = çift olumlu etki. does devrik yapıyı gösterir.",
@@ -1365,12 +1371,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre konferansta ne oldu?",
     "secenekler_tr": [
-      "Yangın alarmı konferanstan çok sonra çaldı.",
+      "Konferans sorunsuz tamamlandı.",
       "Konferans yangın alarmından önce bitti.",
+      "Yangın alarmı çaldıktan hemen sonra konferans başladı.",
       "Yangın alarmı konferans başlar başlamaz çaldı.",
-      "Konferans sorunsuz tamamlandı."
+      "Yangın alarmı konferanstan çok sonra çaldı."
     ],
-    "dogru_index": 2,
+    "dogru_index": 3,
     "aciklama_tr": "No sooner had + V3 than = -ir -mez. Konferans başar başlamaz alarm çaldı.",
     "sinyal": "No sooner had",
     "sinyal_ipucu": "Devrik yapı: No sooner had + özne + V3 + than",
@@ -1385,12 +1392,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre ne oldu?",
     "secenekler_tr": [
+      "Rakip takım bulgular yayımlanmadan önce duyurdu.",
+      "Rakip takımın duyurusu, bilim insanlarını bulgularını hemen yayımlamaya yöneltti.",
       "Keşifler birbiriyle uyumluydu.",
       "Bilim insanları rakip takımla iş birliği yaptı.",
-      "Bulgular yayımlanır yayımlanmaz rakip takım çelişkili bir keşif duyurdu.",
-      "Rakip takım bulgular yayımlanmadan önce duyurdu."
+      "Bulgular yayımlanır yayımlanmaz rakip takım çelişkili bir keşif duyurdu."
     ],
-    "dogru_index": 2,
+    "dogru_index": 4,
     "aciklama_tr": "Hardly had + V3 when = -ir -mez. Yayım yapılır yapılmaz rakip duyuru geldi.",
     "sinyal": "hardly",
     "sinyal_ipucu": "Devrik yapı: Hardly had + özne + V3 + when",
@@ -1405,12 +1413,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre ekonomik toparlanma hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "İlk projeksiyonların aksine beklenenden hızlı gerçekleşti.",
       "Beklenenden çok daha yavaş gerçekleşti.",
-      "İlk projeksiyonlarla örtüştü.",
-      "Projeksiyonlar toparlanmayı doğru tahmin etti."
+      "Projeksiyonlar toparlanmayı doğru tahmin etti.",
+      "Toparlanma hızlı oldu, ancak ilk projeksiyonlardan biraz daha yavaş kaldı.",
+      "İlk projeksiyonların aksine beklenenden hızlı gerçekleşti.",
+      "İlk projeksiyonlarla örtüştü."
     ],
-    "dogru_index": 0,
+    "dogru_index": 3,
     "aciklama_tr": "Contrary to = -e aykırı olarak, aksine. Noun/gerund ister (initial projections).",
     "sinyal": "Contrary to",
     "sinyal_ipucu": "Contrary to + noun/gerund — S+V gelmez",
@@ -1425,10 +1434,11 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre araştırma ne zaman devam edecek?",
     "secenekler_tr": [
-      "Fon kesildiğinde devam edecek.",
-      "Fon durumundan bağımsız olarak devam edecek.",
+      "Fon mevcut olsa da araştırma ekibi çalışmayı bırakacak.",
       "Araştırma zaten tamamlandı.",
-      "Fon mevcut olduğu sürece devam edecek."
+      "Fon durumundan bağımsız olarak devam edecek.",
+      "Fon mevcut olduğu sürece devam edecek.",
+      "Fon kesildiğinde devam edecek."
     ],
     "dogru_index": 3,
     "aciklama_tr": "As long as = olduğu sürece (koşul bağlacı). Funds mevcut → araştırma devam.",
@@ -1445,12 +1455,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre iş kazaları ne zaman azalır?",
     "secenekler_tr": [
+      "Kazalar, çalışanlar protokollere uymadığı sürece azalır.",
+      "Kazalar azaltılamaz.",
       "Güvenlik protokolleri kaldırılırsa azalır.",
       "Yalnızca yöneticiler protokollere uyarsa azalır.",
-      "Kazalar azaltılamaz.",
       "Çalışanlar protokollere uyduğu sürece azalır."
     ],
-    "dogru_index": 3,
+    "dogru_index": 4,
     "aciklama_tr": "As long as koşul: çalışanlar uyarsa → kazalar azalır.",
     "sinyal": "as long as",
     "sinyal_ipucu": "Koşul: as long as + Present Simple",
@@ -1465,12 +1476,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre komite öneri hakkında ne düşünüyor?",
     "secenekler_tr": [
-      "Komite öneriyi reddetmiştir.",
-      "Komitenin görüşüne göre öneri tüm kriterleri karşılıyor.",
+      "Öneri, komitenin görüşünden bağımsız olarak tüm kriterleri kesin biçimde karşılıyor.",
       "Komite henüz karar vermemiştir.",
-      "Öneri kriterleri karşılamıyor."
+      "Komite öneriyi reddetmiştir.",
+      "Öneri kriterleri karşılamıyor.",
+      "Komitenin görüşüne göre öneri tüm kriterleri karşılıyor."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "As far as...is concerned = -e göre, bakış açısından. Fikir sınırlama ifadesi.",
     "sinyal": "As far as",
     "sinyal_ipucu": "As far as X is concerned = X'in görüşüne göre",
@@ -1485,10 +1497,11 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre tam iyileşme için ne gereklidir?",
     "secenekler_tr": [
-      "İlaçlar etkisizdir.",
-      "Hastanın düzenli ilaç kullanması gerekir.",
       "İlaç kullanımı gerekmez.",
-      "İyileşme üç aydan uzun sürecek."
+      "Hastanın düzenli ilaç kullanması gerekir.",
+      "İyileşme üç aydan uzun sürecek.",
+      "İlaçlar etkisizdir.",
+      "Hasta ilaçlarını düzensiz alsa da üç ay içinde tamamen iyileşecek."
     ],
     "dogru_index": 1,
     "aciklama_tr": "As long as = koşul. İlaç düzenli alınırsa → iyileşme bekleniyor.",
@@ -1505,12 +1518,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre gümrük tarifeleri neden indirildi?",
     "secenekler_tr": [
-      "Enflasyonu artırmak için.",
-      "Yerli üreticilerin ucuz hammaddeye erişmesini sağlamak için.",
+      "Yabancı üreticilere avantaj sağlamak için.",
       "İhracatı kısıtlamak için.",
-      "Yabancı üreticilere avantaj sağlamak için."
+      "Enflasyonu artırmak için.",
+      "Yerli üreticiler ucuz hammaddeye erişebildiği için tarifeler indirildi.",
+      "Yerli üreticilerin ucuz hammaddeye erişmesini sağlamak için."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "So that = amaç bağlacı → S+V ister; could ile amaç ifade edilir.",
     "sinyal": "so that",
     "sinyal_ipucu": "Amaç bağlacı: so that + could/can/would",
@@ -1525,10 +1539,11 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre araştırmacılar neden yöntemi sadeleştirdi?",
     "secenekler_tr": [
+      "Sonuçları gizlemek için.",
       "Daha fazla katılımcı çekmek için.",
-      "Araştırmanın maliyetini düşürmek için.",
       "Bağımsız laboratuvarların çalışmayı tekrarlayabilmesi için.",
-      "Sonuçları gizlemek için."
+      "Araştırmanın maliyetini düşürmek için.",
+      "Bağımsız laboratuvarların çalışmayı tekrarlamasını engellemek için."
     ],
     "dogru_index": 2,
     "aciklama_tr": "In order to = amaç; arkasından bare infinitive (make) gelir.",
@@ -1545,9 +1560,10 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre gizlilik politikası neden güncellendi?",
     "secenekler_tr": [
-      "Yasal yükümlülükten kaçınmak için.",
-      "Kullanıcıların veriler üzerinde daha fazla kontrol sahibi olması için.",
       "Kullanıcı verilerini toplamak için.",
+      "Kullanıcıların veriler üzerinde daha fazla kontrol sahibi olması için.",
+      "Kullanıcılar verileri üzerinde zaten tam kontrole sahip olduğu için.",
+      "Yasal yükümlülükten kaçınmak için.",
       "Veri depolamayı azaltmak için."
     ],
     "dogru_index": 1,
@@ -1566,11 +1582,12 @@
     "soru_tr": "Bu cümleye göre girişim ne yaptı?",
     "secenekler_tr": [
       "Üretime hiç başlamadı.",
-      "Pahalı ekipman satın aldı.",
+      "Üretimi dışarıya yaptırmak yerine pahalı ekipmana yatırım yapmayı tercih etti.",
+      "Üretimi dışarıya yaptırmayı tercih etti.",
       "Hem ekipman aldı hem de dışarıya yaptırdı.",
-      "Üretimi dışarıya yaptırmayı tercih etti."
+      "Pahalı ekipman satın aldı."
     ],
-    "dogru_index": 3,
+    "dogru_index": 2,
     "aciklama_tr": "Rather than = -mek yerine, tercih olarak. Ekipman almak yerine outsource seçildi.",
     "sinyal": "rather than",
     "sinyal_ipucu": "Tercih/karşıtlık: rather than + V-ing",
@@ -1585,12 +1602,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre bilim insanı ne yapmayı tercih etti?",
     "secenekler_tr": [
-      "Ön sonuçları yayımlamak yerine bekledi.",
-      "Hiçbir şey yayımlamadı.",
       "Hipotezi doğrulanana kadar bekledi.",
-      "Hipotezi doğrulanmadan ön sonuçları yayımladı."
+      "Hem ön sonuçları yayımladı hem de nihai doğrulamayı bekledi.",
+      "Hipotezi doğrulanmadan ön sonuçları yayımladı.",
+      "Hiçbir şey yayımlamadı.",
+      "Ön sonuçları yayımlamak yerine bekledi."
     ],
-    "dogru_index": 3,
+    "dogru_index": 2,
     "aciklama_tr": "Rather than wait = beklemek yerine. Ön sonuçları yayımlamayı tercih etti.",
     "sinyal": "rather than",
     "sinyal_ipucu": "Tercih: chose to X rather than Y",
@@ -1606,9 +1624,10 @@
     "soru_tr": "Bu cümleye göre şirket ne yapmayı tercih etti?",
     "secenekler_tr": [
       "Mevcut pazarlardaki konumunu güçlendirmeye odaklandı.",
-      "Hem genişledi hem de konumunu güçlendirdi.",
       "Piyasadan çekildi.",
-      "Yeni pazarlara açıldı."
+      "Hem genişledi hem de konumunu güçlendirdi.",
+      "Yeni pazarlara açıldı.",
+      "Yeni pazarlara açılmak için önce mevcut pazarlardaki konumunu güçlendirdi."
     ],
     "dogru_index": 0,
     "aciklama_tr": "Instead of = -mek yerine + V-ing. Yeni pazar yerine mevcut pazar güçlendirildi.",
@@ -1626,11 +1645,12 @@
     "soru_tr": "Bu cümleye göre deneysel sonuçlar hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Sonuçlar kesin olarak kabul edilmelidir.",
+      "Sonuçlar ek hakem değerlendirmesi olmadan kesin yorumlanmamalıdır.",
+      "Sonuçlar hakem değerlendirmesinden geçse bile kesin olarak yorumlanamaz.",
       "Sonuçlar zaten doğrulanmıştır.",
-      "Hakem değerlendirmesi gerekli değildir.",
-      "Sonuçlar ek hakem değerlendirmesi olmadan kesin yorumlanmamalıdır."
+      "Hakem değerlendirmesi gerekli değildir."
     ],
-    "dogru_index": 3,
+    "dogru_index": 1,
     "aciklama_tr": "By no means = kesinlikle...değil + devrik yapı: should özne öne çıkar.",
     "sinyal": "By no means",
     "sinyal_ipucu": "Devrik yapı: By no means + should + özne",
@@ -1645,10 +1665,11 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre pilot projenin başarısı hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Tam ölçekli uygulama iptal edilmiştir.",
-      "Tam ölçekli uygulamanın sorunsuz gideceğini garanti eder.",
       "Pilot proje başarısız olmuştur.",
-      "Tam ölçekli uygulamanın başarısını garanti etmez."
+      "Tam ölçekli uygulamanın sorunsuz gideceğini garanti eder.",
+      "Pilot projenin başarısı, tam ölçekli uygulamanın kesinlikle başarısız olacağını gösterir.",
+      "Tam ölçekli uygulamanın başarısını garanti etmez.",
+      "Tam ölçekli uygulama iptal edilmiştir."
     ],
     "dogru_index": 3,
     "aciklama_tr": "By no means = kesinlikle değil. Pilot başarı → tam uygulama başarısını garantilemez.",
@@ -1667,8 +1688,9 @@
     "secenekler_tr": [
       "Sektörde herhangi bir değişikliğe yol açmadı.",
       "Yük olmak bir yana, inovasyonu teşvik etti.",
+      "Sektörü olumsuz etkiledi.",
       "İnovasyonu engelledi.",
-      "Sektörü olumsuz etkiledi."
+      "Başlangıçta sektöre yük oldu, ancak zamanla inovasyonu teşvik etti."
     ],
     "dogru_index": 1,
     "aciklama_tr": "Far from = -den uzak, aksine. Yük olmak yerine inovasyonu tetikledi.",
@@ -1685,12 +1707,13 @@
     "alinti": false,
     "soru_tr": "Bu cümleye göre komitenin niyeti neydi?",
     "secenekler_tr": [
-      "Azınlık seslerini dışlamak gibi bir niyeti kesinlikle yoktu.",
-      "Karar süreci yalnızca azınlıklara açıktı.",
+      "Azınlık seslerini dışlamayı amaçladı.",
       "Komite karar sürecini iptal etti.",
-      "Azınlık seslerini dışlamayı amaçladı."
+      "Azınlık seslerini dışlamak gibi bir niyeti kesinlikle yoktu.",
+      "Komitenin niyeti kesin değildi; azınlıkları dışlayıp dışlamayacağına karar vermemişti.",
+      "Karar süreci yalnızca azınlıklara açıktı."
     ],
-    "dogru_index": 0,
+    "dogru_index": 2,
     "aciklama_tr": "By no means did = devrik yapı + kesinlikle değil niyeti. Dışlama amacı yoktu.",
     "sinyal": "By no means",
     "sinyal_ipucu": "Devrik yapı: By no means + did + özne",
@@ -1706,11 +1729,12 @@
     "soru_tr": "Bu cümleye göre mimar hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Mimar yapısal mühendise danıştı.",
+      "Mimar mühendise danışabilirdi ama buna gerek yoktu.",
       "Mimar müşteriyle iletişime geçmedi.",
       "Mimar danışması gerekirdi ama danışmadı.",
       "Mimar danışmak zorundaydı ve danıştı."
     ],
-    "dogru_index": 2,
+    "dogru_index": 3,
     "aciklama_tr": "Should have + V3 = yapması gerekirdi ama yapmadı. Geçmişe yönelik pişmanlık/eleştiri.",
     "sinyal": "should have",
     "sinyal_ipucu": "Modal perfect: should have V3 = gerekirdi ama yapılmadı",
