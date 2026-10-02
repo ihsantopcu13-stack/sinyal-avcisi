@@ -52,18 +52,21 @@ export function soruDogrula(soru) {
   if (!Array.isArray(soru.secenekler_tr)) {
     hatalar.push('secenekler_tr dizi değil');
   } else {
-    if (soru.secenekler_tr.length !== 4) {
-      hatalar.push(`4 şık gerekli, ${soru.secenekler_tr.length} var`);
+    // Geçiş dönemi: 4 şıklı eski sorular ve 5 şıklı (A-E) yeni sorular birlikte geçerli.
+    if (soru.secenekler_tr.length !== 4 && soru.secenekler_tr.length !== 5) {
+      hatalar.push(`4 veya 5 şık gerekli, ${soru.secenekler_tr.length} var`);
     }
     const bos = soru.secenekler_tr.filter(s => !s || s.trim().length < 2);
     if (bos.length > 0) hatalar.push(`${bos.length} şık boş veya çok kısa`);
+    if (new Set(soru.secenekler_tr).size !== soru.secenekler_tr.length) hatalar.push('aynı şık metni birden fazla kez var');
   }
 
   // 3. Doğru şık indexi
-  if (typeof soru.dogru_index !== 'number') {
-    hatalar.push('dogru_index sayı değil');
-  } else if (soru.dogru_index < 0 || soru.dogru_index > 3) {
-    hatalar.push(`dogru_index geçersiz: ${soru.dogru_index} (0-3 arası olmalı)`);
+  const sikSayisi = Array.isArray(soru.secenekler_tr) ? soru.secenekler_tr.length : 0;
+  if (!Number.isInteger(soru.dogru_index)) {
+    hatalar.push('dogru_index tam sayı değil');
+  } else if (soru.dogru_index < 0 || soru.dogru_index >= sikSayisi) {
+    hatalar.push(`dogru_index geçersiz: ${soru.dogru_index} (0 ile ${Math.max(sikSayisi - 1, 0)} arası olmalı)`);
   }
 
   // 4. Sinyal whitelist kontrolü

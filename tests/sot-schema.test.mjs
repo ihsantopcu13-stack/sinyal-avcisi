@@ -64,12 +64,15 @@ kontrol("1) Canonical dosya 83 soru içeriyor", sorular.length === 83, `uzunluk:
   kontrol("5b) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli.length === 83 && sinyalsiz.length === 0, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
 }
 {
-  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || s.secenekler_tr.length !== 4 || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
-  kontrol("6) Her soruda tam 4 dolu seçenek var", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
+  // Geçiş dönemi: 4 şıklı eski sorular ve 5 şıklı (A-E, YDS/YÖKDİL biçimi) yeni sorular birlikte geçerli.
+  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || (s.secenekler_tr.length !== 4 && s.secenekler_tr.length !== 5) || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
+  kontrol("6) Her soruda 4 veya 5 dolu seçenek var", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
+  const tekrarli = sorular.filter((s) => Array.isArray(s.secenekler_tr) && new Set(s.secenekler_tr).size !== s.secenekler_tr.length);
+  kontrol("6b) Hiçbir soruda aynı şık metni iki kez yok", tekrarli.length === 0, tekrarli.map((s) => s.id).join(", "));
 }
 {
-  const geciksizIndex = sorular.filter((s) => !Number.isInteger(s.dogru_index) || s.dogru_index < 0 || s.dogru_index > 3);
-  kontrol("7) dogru_index her soruda 0-3 aralığında geçerli bir tam sayı", geciksizIndex.length === 0, geciksizIndex.map((s) => s.id).join(", "));
+  const geciksizIndex = sorular.filter((s) => !Number.isInteger(s.dogru_index) || s.dogru_index < 0 || !Array.isArray(s.secenekler_tr) || s.dogru_index >= s.secenekler_tr.length);
+  kontrol("7) dogru_index her soruda 0 ≤ dogru_index < şık sayısı olan bir tam sayı", geciksizIndex.length === 0, geciksizIndex.map((s) => s.id).join(", "));
 }
 
 // ---- pedagojik metadata alanları (yeni: sinyal_ipucu, tuzak, tuzak_ipucu, anahtar) ----

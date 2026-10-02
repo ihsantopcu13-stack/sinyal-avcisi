@@ -101,7 +101,7 @@ function fakeBtn(metin) {
   return { _text: metin, get textContent() { return this._text; }, classList: { added: [], add(c) { this.added.push(c); } }, disabled: false };
 }
 
-function sandboxKur() {
+function sandboxKur(havuz = [CANONICAL_Q1, CANONICAL_Q2]) {
   const elMap = {
     "sl-eyebrow": { textContent: "" },
     "sl-sent": { innerHTML: "", onmouseenter: null, querySelectorAll: () => [] },
@@ -131,7 +131,7 @@ function sandboxKur() {
     streakSoruEkle: () => {},
     konfeti: () => {},
     saShakeBtn: () => {},
-    SL_HAVUZ: [CANONICAL_Q1, CANONICAL_Q2],
+    SL_HAVUZ: havuz,
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(FULL_SRC, context, { filename: "index.html (extracted, katman5b-context)" });
@@ -166,8 +166,21 @@ function sandboxKur() {
   kontrol("8) before answer → selected_answer YOK", !("selected_answer" in baglam));
   kontrol("9) before answer → explanation/fb YOK (payload'da hiç yok)", !("explanation" in baglam) && !("fb" in baglam));
   kontrol("10) question_text HTML etiketi içermiyor (raw HTML yok)", !/<[^>]+>/.test(baglam.question_text));
-  kontrol("11) options 4 öğe, HTML yok", baglam.options.length === 4 && baglam.options.every((o) => !/<[^>]+>/.test(o)));
+  kontrol("11) options sorunun TÜM şıkları (4 şıklı soru → 4 öğe), HTML yok", baglam.options.length === CANONICAL_Q1.opts.length && baglam.options.every((o) => !/<[^>]+>/.test(o)));
   kontrol("12) signal doğru", baglam.signal === "despite");
+}
+
+// 12b-12c) 5 ŞIKLI (A-E) SORU — E şıkkı bağlamdan KESİLMİYOR, doğru cevap E olabiliyor
+{
+  const Q5 = { ...CANONICAL_Q1, id: "q001", opts: [...CANONICAL_Q1.opts, "Beşinci (E) şıkkı."], ans: CANONICAL_Q1.opts.length };
+  const t = sandboxKur([Q5, CANONICAL_Q2]);
+  t.context.__t_setAktifModul("sinyal_lab");
+  t.context.slRender();
+  const once = t.context.avciAktifSinyalLabBaglamiAl();
+  kontrol("12b) 5 şıklı soru → options 5 öğe, E şıkkı dahil", once.options.length === 5 && once.options[4] === "Beşinci (E) şıkkı.");
+  t.context.dAns(fakeBtn(Q5.opts[4]), true);
+  const sonra = t.context.avciAktifSinyalLabBaglamiAl();
+  kontrol("12c) doğru cevap E iken correct_answer E şıkkının metni", sonra.correct_answer === "Beşinci (E) şıkkı." && sonra.is_correct === true);
 }
 
 // 13-14) CEVAP SONRASI — doğru cevap

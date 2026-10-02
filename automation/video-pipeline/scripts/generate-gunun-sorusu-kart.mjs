@@ -59,12 +59,11 @@ function escapeHtml(str) {
 }
 
 export function kartHtmlUret(soru) {
-  const harfler = ["A", "B", "C", "D"];
   const secenekSatirlari = soru.secenekler_tr
     .map(
       (s, i) => `
         <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:16px 20px">
-          <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(245,166,35,.14);border:1.5px solid #f5a623;color:#f5a623;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center">${harfler[i]}</div>
+          <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:rgba(245,166,35,.14);border:1.5px solid #f5a623;color:#f5a623;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center">${String.fromCharCode(65 + i)}</div>
           <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:21px;line-height:1.45;color:rgba(255,255,255,.9);padding-top:4px">${escapeHtml(s)}</div>
         </div>`
     )
@@ -164,7 +163,7 @@ export async function kartUret() {
     await page.screenshot({ path: pngPath, type: "png" });
     console.log("Günün Sorusu kartı hazır:", pngPath);
 
-    const dogruHarf = ["A", "B", "C", "D"][soru.dogru_index] || "A";
+    const dogruHarf = Number.isInteger(soru.dogru_index) && soru.dogru_index >= 0 ? String.fromCharCode(65 + soru.dogru_index) : "A";
     const cikti = {
       soru,
       dogruHarf,

@@ -376,6 +376,9 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .dm-sent{font-size:16px;line-height:1.8;margin-bottom:12px;font-weight:500}
 .dm-q{font-size:15px;font-weight:600;margin-bottom:8px}
 .dm-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+/* 5 şıklı (A-E) sorularda E tek başına yarım sütunda kalmasın: tek sayıda
+   şık varsa sonuncusu iki sütuna yayılır; 4 şıklı görünüm değişmez. */
+.dm-opts>.dmo:last-child:nth-child(odd){grid-column:1/-1}
 .dmo{background:transparent;border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;text-align:left;color:var(--ink)}
 .dmo:hover:not(:disabled){background:var(--sl);border-color:var(--signal);color:var(--signal)}
 .dmo.ok{background:#0f2418;border-color:#22c55e;color:#16a34a}
@@ -7099,7 +7102,7 @@ function avciAktifSinyalLabBaglamiAl(){
     module:'sinyal_lab',
     question_id:soru.id||null,
     question_text:(duzMetin(soru.sent)+'\n\nSORU: '+duzMetin(soru.q)).slice(0,600),
-    options:Array.isArray(soru.opts)?soru.opts.slice(0,4).map(o=>duzMetin(o).slice(0,200)):[],
+    options:Array.isArray(soru.opts)?soru.opts.slice(0,5).map(o=>duzMetin(o).slice(0,200)):[],
     signal:soru.sinyal?String(soru.sinyal).slice(0,50):null,
     answered:Boolean(slAnswered),
   };

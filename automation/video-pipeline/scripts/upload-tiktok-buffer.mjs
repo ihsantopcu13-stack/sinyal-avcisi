@@ -134,8 +134,8 @@ async function findTikTokChannel() {
 }
 
 function captionOlustur(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
-  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
+  const dogruHarf = Number.isInteger(senaryo.dogru_index) && senaryo.dogru_index >= 0 ? String.fromCharCode(65 + senaryo.dogru_index) : "A";
+  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${String.fromCharCode(65 + i)}) ${s}`);
   const sinyalSatiri = senaryo.sinyal ? ` — Sinyal: "${senaryo.sinyal}"` : "";
   return `🎯 ${senaryo.hook}\n\n${senaryo.soru_en}\n\n${senaryo.soru_tr}\n${secenekSatirlari.join("\n")}\n\nDoğru cevap: ${dogruHarf}${sinyalSatiri}\n\n${senaryo.aciklama_tr}\n\n💙 Platform tamamen ücretsiz — link bio'da.\n\n${hashtagSeti(senaryo, { instagram: true }).join(" ")}`;
 }
