@@ -92,6 +92,7 @@ jobs:
           node --check tests/avci-turn-controller.test.mjs
           node --check tests/avci-tap-to-interrupt.test.mjs
           node --check tests/avci-turn-handoff-cue.test.mjs
+          node --check tests/canli-ders-avci-hoca.test.mjs
           node --check tests/avci-lesson-closure-summary.test.mjs
           node --check tests/avci-controlled-step-back.test.mjs
           node --check tests/avci-step-back-recovery.test.mjs
@@ -257,3 +258,6 @@ jobs:
 
       - name: KLOD güvenlik — sunucu talimatı index.html ile birebir aynı, istemci system'i yok sayılıyor, mode izin listesi, image_soru sınırı (mock Anthropic, gerçek ağ yok)
         run: node tests/klod-chat-prompt-senkron.test.mjs
+
+      - name: CANLI DERS ↔ AVCI HOCA köprüsü — gerçek dnavChat + köprü (vm), yeni endpoint/model YOK, gerçek ağ yok
+        run: node tests/canli-ders-avci-hoca.test.mjs
