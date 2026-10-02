@@ -1,15 +1,15 @@
-// SİNYAL LAB 5 ŞIK — AŞAMA 2: api/_sikKurallari.mjs (E şıkkı ekleme kuralları)
-// ve scripts/e-sikki-ekle.mjs (parti CLI'ı) için deterministik testler.
-// Gerçek veri DEĞİŞTİRİLMEZ: kural testleri sahte sorularla çalışır; CLI
-// yalnızca --kuru (sadece doğrula) modunda çalıştırılır ve sorular.json'ın
-// bayt bayt aynı kaldığı doğrulanır.
+// SİNYAL LAB 5 ŞIK — AŞAMA 2-3: api/_sikKurallari.mjs (E şıkkı ekleme +
+// parti karıştırma kuralları) ve scripts/e-sikki-ekle.mjs (parti CLI'ı) için
+// deterministik testler. Gerçek veri DEĞİŞTİRİLMEZ: kural testleri sahte
+// sorularla çalışır; CLI gerçek repoda yalnızca --kuru modunda çalıştırılır
+// (sorular.json bayt bayt aynı kalır), yazma yolu GEÇİCİ bir kopyada denenir.
 
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { sikNormalize, besinciSikHatasi, soruBesinciSikHatasi, eSikkiEkle, sikSayaci } from "../api/_sikKurallari.mjs";
+import { sikNormalize, besinciSikHatasi, soruSikHatasi, eSikkiEkle, partiyiKaristir, sikSayaci } from "../api/_sikKurallari.mjs";
 import { soruDogrula } from "../api/_contentGuard.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -41,7 +41,10 @@ kontrol("2) boş / sadece boşluk / string olmayan E reddedilir",
 kontrol("3) A-D'den birinin kopyası olan E reddedilir (hangi şık olduğu söylenir)",
   besinciSikHatasi(soru("x").secenekler_tr, "  karar GEÇERLİ ") === "5. şık (E), B şıkkının kopyası olamaz");
 kontrol("4) geçerli, farklı bir E kabul edilir", besinciSikHatasi(soru("x").secenekler_tr, "Mahkeme kararı erteledi.") === null);
-kontrol("5) soruBesinciSikHatasi: 4 şıklı soruda kontrol yok (null)", soruBesinciSikHatasi(soru("x")) === null);
+kontrol("5) soruSikHatasi: kopyasız şıklarda hata yok; KARIŞMIŞ konumlardaki kopya ve boş şık da yakalanıyor",
+  soruSikHatasi(soru("x")) === null
+  && soruSikHatasi({ secenekler_tr: ["Dava düştü.", "Karar geçerli.", "Yeniden yargılama.", "dava  DÜŞTÜ", "Kesinlikle geçersiz."] }) === "A ve D şıkları aynı (birbirinin kopyası olamaz)"
+  && soruSikHatasi({ secenekler_tr: ["aa", " . ", "cc", "dd"] }) === "B şıkkı boş olamaz");
 
 // ---- parti uygulama ----
 {
@@ -77,9 +80,9 @@ kontrol("5) soruBesinciSikHatasi: 4 şıklı soruda kontrol yok (null)", soruBes
 {
   const bes = eSikkiEkle(havuz(), [{ id: "q001", e: "Mahkeme kararı erteledi." }])[0];
   const kopyaE = { ...soru("q001"), secenekler_tr: [...soru("q001").secenekler_tr, "Karar Geçerli"] };
-  const hatalar = (s) => (soruDogrula(s).hatalar || []).filter((h) => /5\. şık/.test(h));
-  kontrol("15) contentGuard: geçerli E'li 5 şıklı soruda 5. şık hatası yok", hatalar(bes).length === 0);
-  kontrol("16) contentGuard: kopya E'yi aynı kuralla reddediyor", hatalar(kopyaE).some((h) => /B şıkkının kopyası/.test(h)), hatalar(kopyaE).join("; "));
+  const hatalar = (s) => (soruDogrula(s).hatalar || []).filter((h) => /şık/.test(h));
+  kontrol("15) contentGuard: geçerli E'li 5 şıklı soruda şık hatası yok", hatalar(bes).length === 0, hatalar(bes).join("; "));
+  kontrol("16) contentGuard: kopya E'yi aynı kuralla reddediyor", hatalar(kopyaE).some((h) => /B ve E şıkları aynı/.test(h)), hatalar(kopyaE).join("; "));
 }
 
 // ---- CLI: --kuru modu veriyi DEĞİŞTİRMİYOR ----
@@ -133,10 +136,11 @@ kontrol("5) soruBesinciSikHatasi: 4 şıklı soruda kontrol yok (null)", soruBes
     const veriSonra = JSON.parse(readFileSync(path.join(tmp, "api/data/sorular.json"), "utf-8"));
     const dogru = hedefler.every((h) => {
       const s = veriSonra.find((x) => x.id === h.id);
-      return s.secenekler_tr.length === 5 && s.secenekler_tr[4] === eMetni(h) && s.dogru_index === h.dogru_index
-        && s.secenekler_tr.slice(0, 4).join("|") === h.secenekler_tr.join("|");
+      return s.secenekler_tr.length === 5
+        && [...s.secenekler_tr].sort().join("|") === [...h.secenekler_tr, eMetni(h)].sort().join("|")
+        && s.secenekler_tr[s.dogru_index] === h.secenekler_tr[h.dogru_index];
     });
-    kontrol("20) CLI yazma: E sona eklendi, A-D ve dogru_index aynen kaldı", dogru);
+    kontrol("20) CLI yazma: E eklendi, parti karıştırıldı; şıklar = eski 4 + E, doğru cevap METNİ aynı", dogru);
     const digerleri = veriSonra.filter((s) => !hedefler.some((h) => h.id === s.id));
     kontrol("21) CLI yazma: partide olmayan sorular değişmedi",
       JSON.stringify(digerleri) === JSON.stringify(veriOnce.filter((s) => !hedefler.some((h) => h.id === s.id))));
@@ -146,6 +150,37 @@ kontrol("5) soruBesinciSikHatasi: 4 şıklı soruda kontrol yok (null)", soruBes
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+}
+
+// ---- partiyiKaristir ----
+{
+  // 10 soruluk 5 şıklı sahte parti + parti dışı 4 şıklı sorular
+  const besSik = (id, d) => ({ ...soru(id, d), secenekler_tr: [`${id}-a`, `${id}-b`, `${id}-c`, `${id}-d`, `${id}-e`] });
+  const ids = Array.from({ length: 10 }, (_, i) => `p${String(i).padStart(2, "0")}`);
+  const once = [...ids.map((id) => besSik(id, 4)), soru("q900", 0), soru("q901", 0)];
+  const anlik = JSON.stringify(once);
+  const sonra = partiyiKaristir(once, ids);
+  const tekrar = partiyiKaristir(once, ids);
+  kontrol("23) aynı girdi + aynı parti → aynı sonuç (tohumlu, deterministik)", JSON.stringify(sonra) === JSON.stringify(tekrar));
+  kontrol("24) girdi DEĞİŞTİRİLMİYOR, parti dışı sorular aynı nesne", JSON.stringify(once) === anlik && sonra[10] === once[10] && sonra[11] === once[11]);
+  kontrol("25) her soruda şık kümesi ve doğru cevap METNİ korunuyor",
+    once.slice(0, 10).every((o, i) => [...sonra[i].secenekler_tr].sort().join("|") === [...o.secenekler_tr].sort().join("|")
+      && sonra[i].secenekler_tr[sonra[i].dogru_index] === o.secenekler_tr[o.dogru_index]));
+  const dagilim = [0, 0, 0, 0, 0];
+  sonra.slice(0, 10).forEach((s) => dagilim[s.dogru_index]++);
+  kontrol("26) 10 soru → doğru cevaplar A-E'ye tam dengeli (2/2/2/2/2), hepsi E iken bile", dagilim.join("/") === "2/2/2/2/2", dagilim.join("/"));
+  const baska = partiyiKaristir(once, ids.slice(0, 9));
+  kontrol("27) farklı parti → farklı desen (tohum id listesinden türetiliyor)",
+    JSON.stringify(baska.slice(0, 9).map((s) => s.dogru_index)) !== JSON.stringify(sonra.slice(0, 9).map((s) => s.dogru_index)));
+}
+{
+  // Artan soru(lar), havuzun geri kalanında en az doğru cevap olan harfe gidiyor
+  const besSik = (id) => ({ ...soru(id, 0), secenekler_tr: [`${id}-a`, `${id}-b`, `${id}-c`, `${id}-d`, `${id}-e`] });
+  const disari = [0, 0, 1, 1, 2, 2, 3, 3].map((d, i) => ({ ...besSik(`x${i}`), dogru_index: d })); // E hiç yok
+  const sonra = partiyiKaristir([...disari, besSik("y0")], ["y0"]);
+  kontrol("28) tek soruluk parti: artan soru havuzda en az kullanılan harfe (E) gidiyor", sonra[8].dogru_index === 4, `→ ${"ABCDE"[sonra[8].dogru_index]}`);
+  kontrol("29) şık sayısı karışık parti reddediliyor",
+    /şık sayısı aynı/.test(hataMetni(() => partiyiKaristir([besSik("z0"), soru("z1")], ["z0", "z1"])) || ""));
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);

@@ -107,11 +107,12 @@
     "soru_tr": "Katalizör için ne söylenebilir?",
     "secenekler_tr": [
       "Katalizör ve sıcaklık birlikte etkili oldu.",
-      "Sıcaklık çok düşüktü.",
       "Reaksiyonu başarıyla hızlandırdı.",
-      "Sıcaklık optimum olsa da başarısız oldu."
+      "Sıcaklık optimum olsa da başarısız oldu.",
+      "Sıcaklık optimum olmadığı için reaksiyonu hızlandıramadı.",
+      "Sıcaklık çok düşüktü."
     ],
-    "dogru_index": 3,
+    "dogru_index": 2,
     "aciklama_tr": "\"Failed to\" = başaramadı + \"even though optimal\" = tezat.",
     "sinyal": "even though",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -226,12 +227,13 @@
     "alinti": true,
     "soru_tr": "Deney sonuçları ne gösterdi?",
     "secenekler_tr": [
-      "Sonuçlar belirsizdi.",
-      "Hipotezi doğrulamadı, aksine önceki varsayımları çürüttü.",
       "Hipotezi kısmen destekledi.",
-      "Hipotezi tamamen doğruladı."
+      "Sonuçlar belirsizdi.",
+      "Hipotezi tamamen doğruladı.",
+      "Hipotezi doğrulamadı, aksine önceki varsayımları çürüttü.",
+      "Hipotezi doğrulamadı ama önceki varsayımları destekledi."
     ],
-    "dogru_index": 1,
+    "dogru_index": 3,
     "aciklama_tr": "\"By no means confirmed\" + \"on the contrary\" = kesinlikle doğrulamadı, aksine çürüttü.",
     "sinyal": "on the contrary",
     "sinyal_ipucu": "Karşı sinyal",
@@ -348,6 +350,7 @@
     "secenekler_tr": [
       "Kalıcı değişime uğramadan reaksiyonu kolaylaştırır.",
       "Reaksiyonu engeller.",
+      "Reaksiyonu kolaylaştırırken kendisi de kalıcı olarak değişir.",
       "Kimyasal olarak dönüşür.",
       "Reaksiyonda tüketilir."
     ],
@@ -426,12 +429,13 @@
     "alinti": true,
     "soru_tr": "Penisilin keşfinden önce bakteriyel enfeksiyonlar hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Çoğunlukla ölümcül sonuçlanıyordu.",
+      "Penisilin sayesinde nadiren ölümcül oluyordu.",
       "Nadiren görülüyordu.",
-      "Etkili tedavileri mevcuttu.",
-      "Kolayca tedavi ediliyordu."
+      "Çoğunlukla ölümcül sonuçlanıyordu.",
+      "Kolayca tedavi ediliyordu.",
+      "Etkili tedavileri mevcuttu."
     ],
-    "dogru_index": 0,
+    "dogru_index": 2,
     "aciklama_tr": "\"Prior to\" = -den önce. \"Often fatal\" = çoğunlukla ölümcül.",
     "sinyal": "Prior to",
     "sinyal_ipucu": "Zaman",
@@ -666,12 +670,13 @@
     "alinti": false,
     "soru_tr": "Deneyin sonuçları için ne söylenebilir?",
     "secenekler_tr": [
+      "Sonuçlar tekrarlanamadı çünkü laboratuvar koşulları kontrol edilmemişti.",
       "Sonuçlar her seferinde aynı çıktı.",
       "Laboratuvar koşulları deneyin tekrarlanmasını engelledi.",
       "Kontrollü koşullara rağmen sonuçlar neredeyse tekrarlanamadı.",
       "Kontrollü koşullar sayesinde sonuçlar kolayca tekrarlanabilirdi."
     ],
-    "dogru_index": 2,
+    "dogru_index": 3,
     "aciklama_tr": "\"Scarcely reproducible\" = neredeyse tekrarlanamaz + \"despite controlled conditions\" = zıtlık.",
     "sinyal": "despite",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -688,10 +693,11 @@
     "secenekler_tr": [
       "Hipotez verilerle tamamen desteklendi.",
       "Veriler hipotezi çürüttü.",
-      "Hipotez makul görünse de veriler yeterli destek sağlayamadı.",
-      "Hipotez veri toplanmadan reddedildi."
+      "Hipotez veri toplanmadan reddedildi.",
+      "Hipotez makul görünmediği için veriler onu desteklemedi.",
+      "Hipotez makul görünse de veriler yeterli destek sağlayamadı."
     ],
-    "dogru_index": 2,
+    "dogru_index": 4,
     "aciklama_tr": "\"Although plausible\" = zıtlık. Makul görünüyordu AMA veri destek vermedi.",
     "sinyal": "Although",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -946,12 +952,13 @@
     "alinti": true,
     "soru_tr": "Bileşik hakkında ne doğrudur?",
     "secenekler_tr": [
+      "Oda sıcaklığında kararlıdır.",
+      "Önceki varsayımların aksine oda sıcaklığında kararsızdır.",
       "Önceki varsayımlar doğrulanmıştır.",
       "Yalnızca düşük sıcaklıklarda test edilmiştir.",
-      "Önceki varsayımların aksine oda sıcaklığında kararsızdır.",
-      "Oda sıcaklığında kararlıdır."
+      "Önceki varsayımlarda belirtildiği gibi oda sıcaklığında kararsızdır."
     ],
-    "dogru_index": 2,
+    "dogru_index": 1,
     "aciklama_tr": "\"Contrary to\" = aksine + \"anything but stable\" = hiç kararlı değil.",
     "sinyal": "Contrary to",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -1046,12 +1053,13 @@
     "alinti": true,
     "soru_tr": "Uydunun yörüngesi hakkında ne söylenebilir?",
     "secenekler_tr": [
+      "Hiçbir sapma gözlemlenmedi.",
       "Düzeltmeye gerek duyulmadı.",
+      "Sapma çok az olduğu için düzeltme ileri bir tarihe ertelendi.",
       "Öngörülen yoldan çok büyük ölçüde saptı.",
-      "Çok az sapmasına rağmen anında düzeltme gerekti.",
-      "Hiçbir sapma gözlemlenmedi."
+      "Çok az sapmasına rağmen anında düzeltme gerekti."
     ],
-    "dogru_index": 2,
+    "dogru_index": 4,
     "aciklama_tr": "\"Deviated only slightly\" = çok az saptı ama yine de düzeltme gerekti — küçük sapmanın önemi vurgulanıyor.",
     "sinyal": "nonetheless",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -1146,12 +1154,13 @@
     "alinti": true,
     "soru_tr": "Reaksiyonun devam etmesi için hangi koşul gereklidir?",
     "secenekler_tr": [
-      "Sürekli müdahale edilmesi.",
       "Sıcaklığın kararlı kalması.",
       "Sıcaklığın sürekli değişmesi.",
+      "Sıcaklığın önce yükseltilip sonra sabitlenmesi.",
+      "Sürekli müdahale edilmesi.",
       "Katalizör eklenmesi."
     ],
-    "dogru_index": 1,
+    "dogru_index": 0,
     "aciklama_tr": "\"Provided that\" = şartıyla. Sıcaklık kararlı kalırsa reaksiyon müdahalesiz devam eder.",
     "sinyal": "Provided that",
     "sinyal_ipucu": "Koşul sinyali",
