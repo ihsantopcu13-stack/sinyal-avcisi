@@ -67,11 +67,12 @@
     "soru_tr": "Tedavi hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Klinik denemelerde başarısız oldu.",
-      "Denemelerde etkili bulundu.",
       "Sonuçlar değerlendirilmedi.",
+      "Denemelerde etkili bulundu.",
+      "Denemelerde ümit verici sonuç vermediği için etkili olmadı.",
       "Ümit verici sonuçlara rağmen etkili olmadı."
     ],
-    "dogru_index": 3,
+    "dogru_index": 4,
     "aciklama_tr": "\"Far from effective\" + \"although promising\" = ümit verici ama etkili değil.",
     "sinyal": "although",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -188,12 +189,13 @@
     "alinti": true,
     "soru_tr": "İlaç hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "İlaç hiçbir doz için test edilmedi.",
       "Doz artırınca etkinliği arttı.",
       "Maksimum doza rağmen neredeyse hiç etki etmedi.",
-      "Maksimum dozda çok etkili oldu."
+      "Maksimum dozda çok etkili oldu.",
+      "İltihabı neredeyse hiç azaltmadı çünkü yeterli dozda verilmedi.",
+      "İlaç hiçbir doz için test edilmedi."
     ],
-    "dogru_index": 2,
+    "dogru_index": 1,
     "aciklama_tr": "\"Scarcely\" = neredeyse hiç + \"despite maximum dosage\" = doza rağmen.",
     "sinyal": "despite",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -330,12 +332,13 @@
     "alinti": true,
     "soru_tr": "Semptomların ortaya çıkmasıyla enfeksiyon arasındaki ilişki nedir?",
     "secenekler_tr": [
-      "Enfeksiyon semptomların ardından başladı.",
       "Enfeksiyon semptomların gözlemlenmesinden önce yayılmıştı.",
+      "Semptomlar, enfeksiyon komşu dokulara yayılmadan önce ortaya çıktı.",
+      "Semptomlar enfeksiyonu durdurdu.",
       "Semptomlar dokuyu korudu.",
-      "Semptomlar enfeksiyonu durdurdu."
+      "Enfeksiyon semptomların ardından başladı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 0,
     "aciklama_tr": "\"By the time\" + past perfect: semptomlardan ÖNCE yayılma tamamlandı.",
     "sinyal": "By the time",
     "sinyal_ipucu": "Zaman sinyali",
@@ -412,12 +415,13 @@
     "alinti": true,
     "soru_tr": "İlaç hakkında hangisi doğrudur?",
     "secenekler_tr": [
+      "Klinik etkisi kanıtlanmamıştır.",
+      "Uzun vadeli güvenliği kanıtlanmış ancak etkinliği belirsizdir.",
       "Etkin olduğu gösterilmiş ancak uzun vadeli güvenliği belirsizdir.",
       "Uzun vadeli güvenliği tanımlanmıştır.",
-      "Klinik deneyler tamamlanmamıştır.",
-      "Klinik etkisi kanıtlanmamıştır."
+      "Klinik deneyler tamamlanmamıştır."
     ],
-    "dogru_index": 0,
+    "dogru_index": 2,
     "aciklama_tr": "\"Although\" zıtlık: etkinlik VAR ama güvenlik belirsiz. \"Efficacy\" = etkinlik.",
     "sinyal": "Although",
     "sinyal_ipucu": "Zıtlık",
@@ -614,10 +618,11 @@
     "alinti": false,
     "soru_tr": "Klinik araştırma sonuçları nasıl değerlendirilir?",
     "secenekler_tr": [
-      "Araştırmacılar hayal kırıklığı yaşayınca çalışmayı durdurdu.",
       "Sonuçlar başlangıçta umut edilenden çok daha iyi çıktı.",
+      "Sonuçlar beklendiği kadar umut verici olmadı, bu yüzden araştırma genişletildi.",
       "Sonuçlar beklendiği kadar umut verici olmasa da araştırma sürdü.",
-      "Sonuçlar tam olarak beklendiği gibiydi."
+      "Sonuçlar tam olarak beklendiği gibiydi.",
+      "Araştırmacılar hayal kırıklığı yaşayınca çalışmayı durdurdu."
     ],
     "dogru_index": 2,
     "aciklama_tr": "\"Nowhere near as promising\" = hiç umut verici değil + \"although\" = zıtlık.",
@@ -634,10 +639,11 @@
     "alinti": false,
     "soru_tr": "Hastalığın tedavisiyle ilgili ne söylenebilir?",
     "secenekler_tr": [
-      "Araştırmalar tedavinin imkansız olduğunu göstermiştir.",
-      "Bilim insanları kesin bir tedavi yöntemi bulmuştur.",
       "Tedavi yakın zamanda bulunacağı öngörülmektedir.",
-      "Yıllarca araştırmaya rağmen kesin bir tedavi henüz bulunamamıştır."
+      "Bilim insanları kesin bir tedavi yöntemi bulmuştur.",
+      "Kesin tedavi henüz bulunamamıştır çünkü yeterince araştırma yapılmamıştır.",
+      "Yıllarca araştırmaya rağmen kesin bir tedavi henüz bulunamamıştır.",
+      "Araştırmalar tedavinin imkansız olduğunu göstermiştir."
     ],
     "dogru_index": 3,
     "aciklama_tr": "\"Despite years\" = zıtlık + \"yet to find\" = henüz bulunamadı.",
@@ -654,12 +660,13 @@
     "alinti": false,
     "soru_tr": "İlaçla ilgili ne öğrenilmiştir?",
     "secenekler_tr": [
-      "İlk güvenlik taramalarını geçmesine rağmen ilaç zararlı çıktı.",
-      "İlaç zararlı olduğu için güvenlik testlerini geçemedi.",
       "Güvenlik taramaları ilaç için yapılmadı.",
-      "İlaç güvenlik testlerini geçtiği için zararsız olduğu kanıtlandı."
+      "İlk taramaları geçti ve yalnızca hafif, önemsiz yan etkiler gösterdi.",
+      "İlaç güvenlik testlerini geçtiği için zararsız olduğu kanıtlandı.",
+      "İlaç zararlı olduğu için güvenlik testlerini geçemedi.",
+      "İlk güvenlik taramalarını geçmesine rağmen ilaç zararlı çıktı."
     ],
-    "dogru_index": 0,
+    "dogru_index": 4,
     "aciklama_tr": "\"Far from harmless\" = zararsız değil + \"even though passed\" = zıtlık.",
     "sinyal": "even though",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -798,12 +805,13 @@
     "alinti": false,
     "soru_tr": "Hastanın belirtileri hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Belirtiler birden fazla durumla uyumluydu, bu yüzden yanlış teşhis mümkün görünüyordu.",
-      "Belirtiler yalnızca tek bir hastalığa işaret ediyordu.",
       "Teşhis kesinlikle doğruydu.",
+      "Belirtiler birden fazla durumla uyumlu olduğu için doğru teşhis koymak kolaydı.",
+      "Belirtiler yalnızca tek bir hastalığa işaret ediyordu.",
+      "Belirtiler birden fazla durumla uyumluydu, bu yüzden yanlış teşhis mümkün görünüyordu.",
       "Belirtiler kesinlikle yanlış teşhis edildi."
     ],
-    "dogru_index": 0,
+    "dogru_index": 3,
     "aciklama_tr": "\"Could have been misdiagnosed\" = yanlış teşhis edilmiş olabilirdi. Geçmişe olasılık.",
     "sinyal": "could have",
     "sinyal_ipucu": null,
@@ -939,12 +947,13 @@
     "alinti": true,
     "soru_tr": "Klinik kılavuzların revize edilme nedeni nedir?",
     "secenekler_tr": [
+      "Yeni kanıtlar ilacın uzun vadeli güvenliğini doğruladığı için.",
       "Yeni kanıtlar ilacın uzun vadeli güvenliğine şüphe düşürdüğü için.",
+      "Kılavuzlar zaten güncel değildi.",
       "İlacın etkinliği kanıtlandığı için.",
-      "Hastalar şikayette bulunduğu için.",
-      "Kılavuzlar zaten güncel değildi."
+      "Hastalar şikayette bulunduğu için."
     ],
-    "dogru_index": 0,
+    "dogru_index": 1,
     "aciklama_tr": "\"Cast doubt on\" = şüphe uyandırmak. Yeni kanıt güvenliği sorgulattı, bu yüzden kılavuz revize edildi.",
     "sinyal": "after",
     "sinyal_ipucu": "Zaman sinyali",
@@ -1041,12 +1050,13 @@
     "alinti": true,
     "soru_tr": "Tedavinin gecikmesinin nedeni nedir?",
     "secenekler_tr": [
-      "Hastane kapasitesi yetersizdi.",
       "Enfeksiyon yanlış teşhis edildikten sonra tedavi haftalarca gecikti.",
+      "Hastane kapasitesi yetersizdi.",
       "Hasta tedaviyi reddetti.",
+      "Tedavi gecikti ve bu gecikme enfeksiyonun yanlış teşhis edilmesine yol açtı.",
       "İlaç stokta yoktu."
     ],
-    "dogru_index": 1,
+    "dogru_index": 0,
     "aciklama_tr": "\"Once...had been misdiagnosed\" = yanlış teşhisten sonra. \"Delayed by\" = ile gecikti.",
     "sinyal": "Once",
     "sinyal_ipucu": "Zaman sinyali",
@@ -1144,11 +1154,12 @@
     "soru_tr": "Tedavi neden genel nüfusa uygulanmadı?",
     "secenekler_tr": [
       "Denemeler tamamen durduruldu.",
+      "Erken sonuçlar olumsuzdu.",
+      "Erken sonuçlar umut verici olduğundan ek denemelere gerek görülmedi.",
       "Tedavi tüm hastalara başarıyla uygulandı.",
-      "Erken sonuçlar umut verici olsa da ek denemeler beklenene kadar uygulamadan alıkonuldu.",
-      "Erken sonuçlar olumsuzdu."
+      "Erken sonuçlar umut verici olsa da ek denemeler beklenene kadar uygulamadan alıkonuldu."
     ],
-    "dogru_index": 2,
+    "dogru_index": 4,
     "aciklama_tr": "\"Withheld from\" = alıkonuldu, uygulanmadı. \"Despite promising\" zıtlık kurar, yine de bekletildi.",
     "sinyal": "Despite",
     "sinyal_ipucu": "Zıtlık sinyali",
