@@ -10,6 +10,11 @@
 // dogru_index değişir. answer_history şık METNİNİ sakladığı için
 // geçmiş kayıtlar bozulmaz.
 //
+// DURUM (2026-10-02): geçiş tamamlandı (#62-#67), havuz tamamen 5 şıklı.
+// soruSikHatasi (kopya/boş şık) ve sikSayaci kalıcı kontroller olarak
+// kullanılmaya devam ediyor; eSikkiEkle/partiyiKaristir yalnızca 4 şıklı
+// yeni soru aktarımı için.
+//
 // Bu modül SAF (side-effect'siz): scripts/e-sikki-ekle.mjs (CLI),
 // api/_contentGuard.mjs ve tests/sot-schema.test.mjs aynı kuralı
 // buradan kullanır — tek yerde, iki kopyası yok.

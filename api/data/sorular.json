@@ -99,7 +99,7 @@
     "dogru_index": 2,
     "aciklama_tr": "\"Hardly operates independently\" = neredeyse hiç bağımsız değil.",
     "sinyal": "hardly",
-    "sinyal_ipucu": null,
+    "sinyal_ipucu": "Gizli olumsuz: hardly = neredeyse hiç",
     "tuzak": "hardly",
     "tuzak_ipucu": "Gizli olumsuz",
     "anahtar": "cultural"
@@ -178,7 +178,7 @@
       "Korelasyonun güçlü olduğunu gösterdi.",
       "Sonuçlar henüz değerlendirilmedi.",
       "Erken bulguları doğruladı.",
-      "Erken bulgularla çelişiyor, sonuçları tekrarlayamadı."
+      "Erken bulguları tekrarlayamadı; bu açıdan onlarla örtüşmüyor."
     ],
     "dogru_index": 4,
     "aciklama_tr": "\"Whereas\" = karşıtlık + \"failed to replicate\" = tekrarlayamadı.",
@@ -226,8 +226,8 @@
     "aciklama_tr": "\"Anything but neutral\" = tarafsız değil. Güçlü gizli olumsuz!",
     "sinyal": "anything but",
     "sinyal_ipucu": "Gizli olumsuz",
-    "tuzak": "marginalized",
-    "tuzak_ipucu": "Vurgu sinyali",
+    "tuzak": null,
+    "tuzak_ipucu": null,
     "anahtar": "neutral"
   },
   {
@@ -332,7 +332,7 @@
     "sinyal": "notwithstanding",
     "sinyal_ipucu": "Zıtlık sinyali",
     "tuzak": "pleaded not guilty",
-    "tuzak_ipucu": "Tuzak: suçsuz değil",
+    "tuzak_ipucu": "Tuzak: pleaded not guilty = suçsuz olduğunu iddia etti (suçunu kabul etmedi)",
     "anahtar": null
   },
   {
@@ -414,7 +414,7 @@
     "dogru_index": 0,
     "aciklama_tr": "\"Voidable\" = iptal edilebilir ama otomatik geçersiz değil. \"At discretion\" = ihtiyara bağlı.",
     "sinyal": "provided that",
-    "sinyal_ipucu": "Koşul",
+    "sinyal_ipucu": "Dikkat: burada koşul değil — provide that = hükme bağlamak, öngörmek",
     "tuzak": null,
     "tuzak_ipucu": null,
     "anahtar": "voidable"
@@ -511,7 +511,7 @@
     "soru_tr": "Araştırmacıların tutumu nedir?",
     "secenekler_tr": [
       "Deney beklenen sonuçları verdiği için geleceğe dair iyimserdiler.",
-      "Beklenmedik sonuçlara rağmen iyimserliklerini korudular.",
+      "Deney beklenen sonuçları vermese de iyimserliklerini korudular.",
       "Beklenen sonuçlara ulaştılar.",
       "Başarısız deney sonrasında umutsuzluğa kapıldılar.",
       "Deneyi tekrarlamaya karar verdiler."
@@ -643,7 +643,7 @@
       "Araştırmacılar hayal kırıklığı yaşayınca çalışmayı durdurdu."
     ],
     "dogru_index": 2,
-    "aciklama_tr": "\"Nowhere near as promising\" = hiç umut verici değil + \"although\" = zıtlık.",
+    "aciklama_tr": "\"Nowhere near as promising as hoped\" = umut edildiğinin çok gerisinde + \"although\" = zıtlık.",
     "sinyal": "although",
     "sinyal_ipucu": "Zıtlık sinyali",
     "tuzak": "nowhere near",
@@ -657,7 +657,7 @@
     "alinti": false,
     "soru_tr": "Hastalığın tedavisiyle ilgili ne söylenebilir?",
     "secenekler_tr": [
-      "Tedavi yakın zamanda bulunacağı öngörülmektedir.",
+      "Tedavinin yakın zamanda bulunacağı öngörülmektedir.",
       "Bilim insanları kesin bir tedavi yöntemi bulmuştur.",
       "Kesin tedavi henüz bulunamamıştır çünkü yeterince araştırma yapılmamıştır.",
       "Yıllarca araştırmaya rağmen kesin bir tedavi henüz bulunamamıştır.",
@@ -792,7 +792,7 @@
     "dogru_index": 2,
     "aciklama_tr": "\"Must have been\" = geçmişe güçlü çıkarım. Kanıtlara dayanarak bu sonuca varıldı.",
     "sinyal": "must have",
-    "sinyal_ipucu": null,
+    "sinyal_ipucu": "Güçlü çıkarım: must have V3 = -miş olmalı",
     "tuzak": "must have been",
     "tuzak_ipucu": "Geçmişe güçlü çıkarım!",
     "anahtar": "concluded"
@@ -804,16 +804,16 @@
     "alinti": false,
     "soru_tr": "Bu cümleden çıkarılacak sonuç nedir?",
     "secenekler_tr": [
-      "Ekip kritik kararı almadan önce uzmanlarla danışmalıydı ama danışmadı.",
+      "Ekip kritik kararı almadan önce uzmanlara danışmalıydı ama danışmadı.",
       "Uzmanlar ekibin kararını onayladı.",
       "Ekip doğru kararı aldı.",
       "Ekibin uzmanlara danışması gerekmiyordu, bu yüzden danışmadı.",
-      "Ekip uzmanlarla danıştıktan sonra karar aldı."
+      "Ekip uzmanlara danıştıktan sonra karar aldı."
     ],
     "dogru_index": 0,
     "aciklama_tr": "\"Should have consulted\" = danışmalıydı ama danışmadı. Geçmişe pişmanlık yapısı!",
     "sinyal": "should have",
-    "sinyal_ipucu": null,
+    "sinyal_ipucu": "Eleştiri: should have V3 = gerekirdi ama yapılmadı",
     "tuzak": "should have consulted",
     "tuzak_ipucu": "Pişmanlık yapısı!",
     "anahtar": "critical"
@@ -834,9 +834,9 @@
     "dogru_index": 3,
     "aciklama_tr": "\"Could have been misdiagnosed\" = yanlış teşhis edilmiş olabilirdi. Geçmişe olasılık.",
     "sinyal": "could have",
-    "sinyal_ipucu": null,
+    "sinyal_ipucu": "Olasılık: could have V3 = olabilirdi",
     "tuzak": "could have been",
-    "tuzak_ipucu": "Geçmişe güçlü çıkarım!",
+    "tuzak_ipucu": "Geçmişe olasılık: could have V3 = olabilirdi (kesin değil)",
     "anahtar": "consistent"
   },
   {
@@ -849,7 +849,7 @@
       "Ekip daha fazla fon talep etti.",
       "Ekip bazı temel hedeflerden vazgeçti, bu da projenin fonlarının kesilmesine yol açtı.",
       "Hedefler revize edildi ama terk edilmedi.",
-      "Ekip hedeflerine rağmen projeyi tamamladı.",
+      "Ekip fon yetersizliğine rağmen tüm hedefleriyle projeyi tamamladı.",
       "Yetersiz fon nedeniyle ekip bazı temel hedeflerden vazgeçmek zorunda kaldı."
     ],
     "dogru_index": 4,
@@ -1057,7 +1057,7 @@
     "soru_tr": "Bu cümleden ne çıkarılabilir?",
     "secenekler_tr": [
       "Tanık daha erken ifade verseydi dava sonucu farklı olabilirdi.",
-      "Dava tanık ifadesi olmadan sonuçlandı.",
+      "Tanık hiç ortaya çıkmadı ve bu sonucu etkilemedi.",
       "Tanık erken ifade verdiği için dava sonucu farklı oldu.",
       "Tanık zamanında ifade verdi ve dava sonucu değişmedi.",
       "Tanığın ifadesi davayı etkilemedi."
@@ -1065,7 +1065,7 @@
     "dogru_index": 0,
     "aciklama_tr": "\"Had the witness come forward\" = devrik 3. tip koşul (if düşmüş). Gerçekleşmemiş bir geçmiş varsayım.",
     "sinyal": "had",
-    "sinyal_ipucu": null,
+    "sinyal_ipucu": "Devrik 3. tip koşul: Had + özne + V3 = -seydi",
     "tuzak": "come forward",
     "tuzak_ipucu": "Tuzak: devrik 3. koşul",
     "anahtar": "outcome"
@@ -1378,7 +1378,7 @@
       "Yangın alarmı konferanstan çok sonra çaldı."
     ],
     "dogru_index": 3,
-    "aciklama_tr": "No sooner had + V3 than = -ir -mez. Konferans başar başlamaz alarm çaldı.",
+    "aciklama_tr": "No sooner had + V3 than = -ir -mez. Konferans başlar başlamaz alarm çaldı.",
     "sinyal": "No sooner had",
     "sinyal_ipucu": "Devrik yapı: No sooner had + özne + V3 + than",
     "tuzak": "than",
@@ -1441,7 +1441,7 @@
       "Fon kesildiğinde devam edecek."
     ],
     "dogru_index": 3,
-    "aciklama_tr": "As long as = olduğu sürece (koşul bağlacı). Funds mevcut → araştırma devam.",
+    "aciklama_tr": "As long as = olduğu sürece (koşul bağlacı). Fon mevcut → araştırma devam eder.",
     "sinyal": "as long as",
     "sinyal_ipucu": "Koşul bağlacı: as long as = provided that",
     "tuzak": "remains",

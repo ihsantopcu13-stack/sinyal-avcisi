@@ -1,5 +1,10 @@
 // SİNYAL LAB 5 ŞIK — AŞAMA 2/3: 4 şıklı sorulara E şıkkını parti halinde ekler.
 //
+// DURUM (2026-10-02): 4 → 5 geçişi tamamlandı (#62-#67); havuzdaki 83 sorunun
+// hepsi 5 şıklı ve sot-schema/contentGuard artık tam 5 şık istiyor. Bu araç
+// yalnızca ileride 4 şıklı bir kaynaktan soru aktarılırsa işe yarar; mevcut
+// havuzda çalıştırılırsa her soru "zaten 5 şıklı" diye reddedilir.
+//
 // Çalıştırma:
 //   node scripts/e-sikki-ekle.mjs <parti.json>            # doğrula + uygula
 //   node scripts/e-sikki-ekle.mjs <parti.json> --kuru     # sadece doğrula, hiçbir dosyaya yazma
