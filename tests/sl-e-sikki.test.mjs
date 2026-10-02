@@ -85,15 +85,42 @@ kontrol("5) soruSikHatasi: kopyasız şıklarda hata yok; KARIŞMIŞ konumlardak
   kontrol("16) contentGuard: kopya E'yi aynı kuralla reddediyor", hatalar(kopyaE).some((h) => /B ve E şıkları aynı/.test(h)), hatalar(kopyaE).join("; "));
 }
 
-// ---- CLI: --kuru modu veriyi DEĞİŞTİRMİYOR ----
+// ---- CLI testleri: repo'nun GEÇİCİ bir kopyasında, 4 şıklı SAHTE veriyle ----
+// Gerçek havuz artık tamamen 5 şıklı (Aşama 3 bitti), bu yüzden CLI'ın başarı
+// yolları gerçek veriye bağlı OLMAMALI: CLI'ın ihtiyaç duyduğu dosyalar aynı
+// klasör yapısıyla tmp'ye kopyalanır; sorular.json, gerçek ilk 6 sorudan son
+// çeldiricisi düşürülerek türetilmiş 4 şıklı kayıtlarla değiştirilir.
+const CLI_DOSYALARI = ["scripts/e-sikki-ekle.mjs", "scripts/generate-sl-havuz.mjs", "scripts/sl-havuz-generator.mjs",
+  "api/_sikKurallari.mjs", "index.html"];
+function dortSikliSahteVeri() {
+  const gercek = JSON.parse(readFileSync(path.join(ROOT, "api", "data", "sorular.json"), "utf-8"));
+  return gercek.slice(0, 6).map((s) => {
+    const dus = [...s.secenekler_tr.keys()].reverse().find((i) => i !== s.dogru_index); // doğru cevap olmayan son şık
+    const secenekler_tr = s.secenekler_tr.filter((_, i) => i !== dus);
+    return { ...s, secenekler_tr, dogru_index: secenekler_tr.indexOf(s.secenekler_tr[s.dogru_index]) };
+  });
+}
+function geciciRepo(onEk) {
+  const tmp = mkdtempSync(path.join(tmpdir(), onEk));
+  for (const rel of CLI_DOSYALARI) {
+    const hedef = path.join(tmp, rel);
+    mkdirSync(path.dirname(hedef), { recursive: true });
+    writeFileSync(hedef, readFileSync(path.join(ROOT, rel)));
+  }
+  mkdirSync(path.join(tmp, "api", "data"), { recursive: true });
+  writeFileSync(path.join(tmp, "api", "data", "sorular.json"), JSON.stringify(dortSikliSahteVeri(), null, 2) + "\n");
+  return tmp;
+}
+
+// ---- CLI: --kuru modu veriyi DEĞİŞTİRMİYOR + hatalı parti reddediliyor ----
 {
-  const veriYolu = path.join(ROOT, "api", "data", "sorular.json");
-  const htmlYolu = path.join(ROOT, "index.html");
+  const tmp = geciciRepo("sa-e-sikki-");
+  const cli = path.join(tmp, "scripts", "e-sikki-ekle.mjs");
+  const veriYolu = path.join(tmp, "api", "data", "sorular.json");
+  const htmlYolu = path.join(tmp, "index.html");
   const veriOnce = readFileSync(veriYolu);
   const htmlOnce = readFileSync(htmlYolu);
-  const ilk = JSON.parse(veriOnce.toString("utf-8")).find((s) => s.secenekler_tr.length === 4);
-  const tmp = mkdtempSync(path.join(tmpdir(), "sa-e-sikki-"));
-  const cli = path.join(ROOT, "scripts", "e-sikki-ekle.mjs");
+  const ilk = JSON.parse(veriOnce.toString("utf-8"))[0];
   try {
     const gecerli = path.join(tmp, "gecerli.json");
     writeFileSync(gecerli, JSON.stringify([{ id: ilk.id, e: "Bu şık testte üretilen benzersiz bir çeldiricidir." }]));
@@ -106,26 +133,39 @@ kontrol("5) soruSikHatasi: kopyasız şıklarda hata yok; KARIŞMIŞ konumlardak
     try { execFileSync(process.execPath, [cli, hatali, "--kuru"], { encoding: "utf-8", stdio: "pipe" }); }
     catch (e) { kod = e.status; hataCikti = String(e.stderr); }
     kontrol("18) CLI: kopya E'li parti exit 1 ile reddediliyor", kod === 1 && /A şıkkının kopyası/.test(hataCikti), `exit=${kod}`);
+    kontrol("19) CLI --kuru ve reddedilen parti sonrası sorular.json ve index.html bayt bayt AYNI",
+      readFileSync(veriYolu).equals(veriOnce) && readFileSync(htmlYolu).equals(htmlOnce));
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
-  kontrol("19) CLI çalıştırmalarından sonra sorular.json ve index.html bayt bayt AYNI",
-    readFileSync(veriYolu).equals(veriOnce) && readFileSync(htmlYolu).equals(htmlOnce));
+}
+{
+  // Gerçek repoda: zaten 5 şıklı soruya E eklemeye çalışan parti (--kuru OLMADAN) yazmadan reddediliyor
+  const veriYolu = path.join(ROOT, "api", "data", "sorular.json");
+  const htmlYolu = path.join(ROOT, "index.html");
+  const veriOnce = readFileSync(veriYolu);
+  const htmlOnce = readFileSync(htmlYolu);
+  const besSikli = JSON.parse(veriOnce.toString("utf-8")).find((s) => s.secenekler_tr.length === 5);
+  if (besSikli) {
+    const tmp = mkdtempSync(path.join(tmpdir(), "sa-e-sikki-gercek-"));
+    try {
+      const parti = path.join(tmp, "parti.json");
+      writeFileSync(parti, JSON.stringify([{ id: besSikli.id, e: "Bu şık testte üretilen benzersiz bir çeldiricidir." }]));
+      let kod = 0, hataCikti = "";
+      try { execFileSync(process.execPath, [path.join(ROOT, "scripts", "e-sikki-ekle.mjs"), parti], { encoding: "utf-8", stdio: "pipe" }); }
+      catch (e) { kod = e.status; hataCikti = String(e.stderr); }
+      kontrol("19b) gerçek repo: 5 şıklı soruya E eklenmiyor (exit 1), sorular.json ve index.html bayt bayt AYNI",
+        kod === 1 && /zaten 5 şıklı/.test(hataCikti) && readFileSync(veriYolu).equals(veriOnce) && readFileSync(htmlYolu).equals(htmlOnce), `exit=${kod}`);
+    } finally {
+      rmSync(tmp, { recursive: true, force: true });
+    }
+  }
 }
 
-// ---- CLI: GERÇEK yazma yolu — repo'nun GEÇİCİ bir kopyasında ----
-// (gerçek repo dosyalarına dokunmadan: CLI'ın ihtiyaç duyduğu dosyalar aynı
-// klasör yapısıyla tmp'ye kopyalanır, CLI orada çalıştırılır.)
+// ---- CLI: GERÇEK yazma yolu — repo'nun GEÇİCİ bir kopyasında (4 şıklı sahte veri) ----
 {
-  const tmp = mkdtempSync(path.join(tmpdir(), "sa-e-sikki-yaz-"));
-  const kopyala = (rel) => {
-    const hedef = path.join(tmp, rel);
-    mkdirSync(path.dirname(hedef), { recursive: true });
-    writeFileSync(hedef, readFileSync(path.join(ROOT, rel)));
-  };
+  const tmp = geciciRepo("sa-e-sikki-yaz-");
   try {
-    ["scripts/e-sikki-ekle.mjs", "scripts/generate-sl-havuz.mjs", "scripts/sl-havuz-generator.mjs",
-      "api/_sikKurallari.mjs", "api/data/sorular.json", "index.html"].forEach(kopyala);
     const veriOnce = JSON.parse(readFileSync(path.join(tmp, "api/data/sorular.json"), "utf-8"));
     const hedefler = veriOnce.filter((s) => s.secenekler_tr.length === 4).slice(0, 2);
     const parti = path.join(tmp, "parti.json");
