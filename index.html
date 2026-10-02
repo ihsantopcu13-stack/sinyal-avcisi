@@ -9253,6 +9253,20 @@ function clCevapSec(i){
   ttsSpeak(tamMetin,'tr-TR',null,clHookMouth);
   if(typeof konuUstalikGuncelle==='function')konuUstalikGuncelle(k.baslik,i===k.cevap);
   if(typeof konuRadariCiz==='function')konuRadariCiz();
+  // Yanlış cevapta "KLOD'la açıkla" (tahta görünümü zaten doğru cevabı ve açıklamayı veriyor)
+  const blok=document.getElementById('cl-blok-cevap');
+  if(blok){
+    blok.querySelector('.yc-klod-btn')?.remove();
+    if(i!==k.cevap&&typeof yanlisCevapKlodaSor==='function'){
+      const b=document.createElement('button');b.type='button';b.className='yc-klod-btn';b.textContent="🎯 KLOD'la açıkla";
+      b.onclick=()=>{
+        // Canlı Ders sesi KLOD'un üstüne binmesin; tahtadaki yazı tamamlanmaya devam eder
+        ttsNesil++;if(window.speechSynthesis)speechSynthesis.cancel();if(pAudio)pAudio.pause();if(typeof clStopMouth==='function')clStopMouth();
+        yanlisCevapKlodaSor({soru:k.soru,secenekler:k.secenekler.map(ycSikEtiketi),dogruIdx:k.cevap,secilenIdx:i,bolum:'Canlı Ders — '+k.baslik});
+      };
+      blok.appendChild(b);
+    }
+  }
 }
 function clTekrarAnlat(){clOynatKonu(clIdx);}
 function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
