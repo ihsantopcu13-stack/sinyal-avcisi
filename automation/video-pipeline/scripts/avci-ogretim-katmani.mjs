@@ -41,7 +41,9 @@ export const ADIM_ENUM = [
   "KISA_KURAL",
 ];
 
-const HARFLER = ["A", "B", "C", "D"];
+// Şık harfleri sabit 4 değil: YDS/YÖKDİL 5 şıklı (A-E); 4 şıklı eski sorular da geçerli.
+const SIK_HARFI = (i) => String.fromCharCode(65 + i);
+const HARFLER = Array.from({ length: 5 }, (_, i) => SIK_HARFI(i));
 
 // YAPISAL_KONTROL_UYGULANSIN — YAPIYI_KONTROL_ET adımı artık whitelist'teki
 // HER sinyale koşulsuz eklenmiyor. Mimari denetimde (bkz. proje raporu)
@@ -154,7 +156,7 @@ function yapisalBaglamCikar(soruEn, sinyal) {
 }
 
 function kullaniciMesajiOlustur(soru, dogruSecenek, beklenenHarf, kural, yapisalBaglam) {
-  const sikSatirlari = soru.secenekler_tr.map((s, i) => `${HARFLER[i]}) ${s}`).join("\n");
+  const sikSatirlari = soru.secenekler_tr.map((s, i) => `${SIK_HARFI(i)}) ${s}`).join("\n");
   const baglamSatiri = yapisalBaglam
     ? `SİNYALİN BİTİŞİK BAĞLAMI (koddan çıkarılmış İPUÇU, kesin gerçek değil — SİNYALİ_YAKALA anlatımında istersen doğal bir renk olarak kullanabilirsin, ayrı bir adım/kesin konum iddiası olarak DEĞİL): "${yapisalBaglam}"`
     : `SİNYALİN BİTİŞİK BAĞLAMI: (koddan çıkarılamadı — konum iddiasında bulunma, sadece genel SİNYAL KURALI'na dayan)`;

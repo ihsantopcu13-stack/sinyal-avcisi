@@ -232,10 +232,10 @@ function narrasyonVeAltyaziSatirlariUret(senaryo) {
   }
 
   // Bugünkü (değişmemiş) şablon davranışı.
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
+  const dogruHarf = Number.isInteger(senaryo.dogru_index) && senaryo.dogru_index >= 0 ? String.fromCharCode(65 + senaryo.dogru_index) : "A";
   const dogruMetni = senaryo.secenekler_tr[senaryo.dogru_index] || "";
   const secenekSatirlari = senaryo.secenekler_tr.map(
-    (s, i) => `${["A", "B", "C", "D"][i]}) ${s}`
+    (s, i) => `${String.fromCharCode(65 + i)}) ${s}`
   );
 
   return [

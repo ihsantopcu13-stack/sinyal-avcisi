@@ -118,8 +118,7 @@ function dueAtIso() {
 }
 
 function ortakGovde(soru) {
-  const harfler = ["A", "B", "C", "D"];
-  const secenekSatirlari = soru.secenekler_tr.map((s, i) => `${harfler[i]}) ${s}`);
+  const secenekSatirlari = soru.secenekler_tr.map((s, i) => `${String.fromCharCode(65 + i)}) ${s}`);
   return [
     `🎯 Günün Sorusu`,
     ``,
