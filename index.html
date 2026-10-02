@@ -461,7 +461,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .klod-hata-btn{background:var(--surface);border:1px solid rgba(224,60,60,.5);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 .klod-hata-btn:hover{border-color:var(--signal);color:var(--signal)}
 body.klod-odak{overflow:hidden}
-body.klod-odak nav,body.klod-odak .mmenu,body.klod-odak #mobileBottomNav,body.klod-odak .mbn-sheet,body.klod-odak .mbn-sheet-backdrop,body.klod-odak #scroll-top-btn,body.klod-odak #wa-destek-btn{display:none!important}
+body.klod-odak nav,body.klod-odak .mmenu,body.klod-odak #mobileBottomNav,body.klod-odak .mbn-sheet,body.klod-odak .mbn-sheet-backdrop,body.klod-odak #scroll-top-btn,body.klod-odak #wa-destek-btn,body.klod-odak #ap-banner{display:none!important}
 body.klod-odak #mod-sinyal{position:fixed;inset:0;z-index:250;display:flex!important;flex-direction:column;height:100vh;height:100dvh;background:var(--paper);padding:max(14px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));overflow:hidden;animation:none}
 body.klod-odak .klod-topbar,body.klod-odak .klod-quick-row,body.klod-odak .klod-method-strip{flex-shrink:0}
 body.klod-odak .klod-ws{flex:1;min-height:0;height:auto}
@@ -16796,6 +16796,9 @@ document.addEventListener('keydown', function(e){
 const AP_KEY  = 'sa_anon_id';
 const APC_KEY = 'sa_recovery_code';
 const APS_KEY = 'sa_anon_synced'; // son sync timestamp
+// Kurtarma kodu kutusu gösterildi ama "Tamam, not aldım" denmedi. Sayfa
+// kapanırsa (ör. KLOD odak modunda kutu gizliyken) sonraki açılışta yine çıkar.
+const APC_ONAY_KEY = 'sa_recovery_onay_bekliyor';
 
 // Rastgele UUID (crypto.randomUUID veya fallback)
 function uuidUret(){
@@ -16811,6 +16814,7 @@ function uuidUret(){
 // localStorage güvenli okuma
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(_){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(_){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(_){} }
 
 // anon_id al veya oluştur
 function anonIdAl(){
@@ -16823,6 +16827,7 @@ function anonIdAl(){
 async function profilBaslat(){
   const anon_id = anonIdAl();
   const mevcutKod = lsGet(APC_KEY);
+  if(mevcutKod && lsGet(APC_ONAY_KEY)) kurtarmaKoduGoster(mevcutKod);
 
   try{
     const res = await fetch('/api/anon-profile', {
@@ -16907,8 +16912,11 @@ async function gunlukSync(){
 }
 
 // Kurtarma kodu banner — sade, silinebilir
+// KLOD odak modundayken CSS ile gizlenir (body.klod-odak #ap-banner); DOM'da
+// kaldığı için odaktan çıkınca aynen görünür.
 function kurtarmaKoduGoster(kod){
   if(document.getElementById('ap-banner')) return;
+  lsSet(APC_ONAY_KEY, '1');
   const banner = document.createElement('div');
   banner.id = 'ap-banner';
   banner.style.cssText=[
@@ -16924,9 +16932,13 @@ function kurtarmaKoduGoster(kod){
     <div style="font-size:12px;color:rgba(236,231,218,.6);margin-bottom:12px">Bu kodu not al. Tarayıcı sıfırlansa bile ilerlemenizi kurtarır.</div>
     <div style="display:flex;gap:8px">
       <button onclick="navigator.clipboard?.writeText('${kod}');this.textContent='✓ Kopyalandı'" style="flex:1;background:rgba(245,166,35,.15);color:#f5a623;border:1px solid rgba(245,166,35,.3);border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">📋 Kopyala</button>
-      <button onclick="document.getElementById('ap-banner').remove()" style="flex:1;background:rgba(255,255,255,.06);color:rgba(236,231,218,.7);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px;font-size:12px;cursor:pointer">Tamam, not aldım</button>
+      <button data-ap-onay style="flex:1;background:rgba(255,255,255,.06);color:rgba(236,231,218,.7);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px;font-size:12px;cursor:pointer">Tamam, not aldım</button>
     </div>
   `;
+  banner.querySelector('[data-ap-onay]').addEventListener('click', ()=>{
+    lsDel(APC_ONAY_KEY);
+    banner.remove();
+  });
   document.body.appendChild(banner);
 }
 
