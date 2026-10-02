@@ -73,7 +73,7 @@ function klodSinyalLabBaglamiDogrula(context) {
     module: 'sinyal_lab',
     question_id: canonical.id,
     question_text: `${String(canonical.soru_en || '')}\n\nSORU: ${String(canonical.soru_tr || '')}`.slice(0, 600),
-    options: Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.slice(0, 4).map((o) => String(o).slice(0, 200)) : [],
+    options: Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.slice(0, 5).map((o) => String(o).slice(0, 200)) : [],
     signal: canonical.sinyal ? String(canonical.sinyal).slice(0, 50) : null,
     answered: context.answered === true,
   };
@@ -984,7 +984,7 @@ export default async function handler(req, res) {
 
   // 2. XML TAGS — Yapılandırılmış çıktı için sistem eki
   const xmlInstruction = mode === 'structured' 
-    ? '\n\nCevabını şu XML formatında ver:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>'
+    ? '\n\nCevabını şu XML formatında ver:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...\nE)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>'
     : '';
 
   try {
