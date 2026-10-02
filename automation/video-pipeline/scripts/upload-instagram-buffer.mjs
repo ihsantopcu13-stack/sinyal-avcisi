@@ -129,8 +129,8 @@ async function findInstagramChannel() {
 }
 
 function captionOlustur(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
-  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
+  const dogruHarf = Number.isInteger(senaryo.dogru_index) && senaryo.dogru_index >= 0 ? String.fromCharCode(65 + senaryo.dogru_index) : "A";
+  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${String.fromCharCode(65 + i)}) ${s}`);
   const sinyalSatiri = senaryo.sinyal ? ` — Sinyal: "${senaryo.sinyal}"` : "";
   // 2026 Instagram SEO: keşif artık hashtag'den çok caption içindeki
   // doğal anahtar kelimeye dayanıyor (bkz. scripts/_seo.mjs) — bu yüzden

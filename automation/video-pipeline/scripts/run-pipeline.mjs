@@ -1,12 +1,12 @@
 // ============================================================
-// Tam akış: Gerçek soru havuzu → OpenAI TTS → Remotion → YouTube + Instagram + TikTok (Buffer)
+// Tam akış: Gerçek soru havuzu → OpenAI TTS → Remotion → Instagram + TikTok (Buffer)
+// (YouTube kanalı silindi — yükleme adımı 2026-09-25'te kaldırıldı)
 // ============================================================
 
 import { scriptUret } from "./generate-script.mjs";
 import { audioUret } from "./generate-audio.mjs";
 import { render } from "./render.mjs";
 import { kapakGoruntusuUret } from "./generate-thumbnail.mjs";
-import { youtubeYukle } from "./upload-youtube.mjs";
 import { reelsYayinlaBuffer } from "./upload-instagram-buffer.mjs";
 import { tiktokYayinlaBuffer } from "./upload-tiktok-buffer.mjs";
 
@@ -16,7 +16,7 @@ async function main() {
 
   // ATLANDI — kaynak veri kalite kontrolünden geçemedi (bkz.
   // generate-script.mjs:veriKalitesiSorunu). Bu bir HATA/crash DEĞİL,
-  // bilinçli bir güvenlik kararı: audio/render/YouTube/Instagram/TikTok
+  // bilinçli bir güvenlik kararı: audio/render/Instagram/TikTok
   // adımlarının hiçbiri çalıştırılmadan pipeline nazikçe sonlanır.
   if (scriptSonuc.atlandi) {
     console.log("\n=== PIPELINE ATLANDI (güvenlik kararı, hata değil) ===");
@@ -36,28 +36,21 @@ async function main() {
   try {
     await kapakGoruntusuUret();
   } catch (err) {
-    // Kapak görseli opsiyonel bir iyileştirme — üretilemezse YouTube/Instagram
-    // yüklemeleri otomatik seçilen video karesine düşerek devam eder.
+    // Kapak görseli opsiyonel bir iyileştirme — üretilemezse Instagram
+    // yüklemesi otomatik seçilen video karesine düşerek devam eder.
     console.error("Kapak görseli üretilemedi (devam ediliyor):", err.message);
   }
 
-  // YouTube, Instagram ve TikTok yüklemeleri birbirinden bağımsız: biri
-  // (örn. YouTube günlük yükleme kotası) başarısız olsa da diğerleri
-  // yine de denenir.
-  console.log("5/7 YouTube Shorts'a yükleniyor...");
-  console.log("6/7 Instagram Reels'e yükleniyor (Buffer)...");
-  console.log("7/7 TikTok'a yükleniyor (Buffer)...");
-  const [youtube, instagram, tiktok] = await Promise.allSettled([
-    youtubeYukle(),
+  // Instagram ve TikTok yüklemeleri birbirinden bağımsız: biri başarısız
+  // olsa da diğeri yine de denenir.
+  console.log("5/6 Instagram Reels'e yükleniyor (Buffer)...");
+  console.log("6/6 TikTok'a yükleniyor (Buffer)...");
+  const [instagram, tiktok] = await Promise.allSettled([
     reelsYayinlaBuffer(),
     tiktokYayinlaBuffer(),
   ]);
 
   console.log("\n=== SONUÇ ===");
-  console.log(
-    "YouTube:",
-    youtube.status === "fulfilled" ? youtube.value.videoUrl : `HATA: ${youtube.reason?.message || youtube.reason}`
-  );
   console.log(
     "Instagram:",
     instagram.status === "fulfilled"
@@ -73,7 +66,7 @@ async function main() {
         : `${tiktok.value.id} ${tiktok.value.status}`
   );
 
-  if (youtube.status === "rejected" || instagram.status === "rejected" || tiktok.status === "rejected") {
+  if (instagram.status === "rejected" || tiktok.status === "rejected") {
     process.exitCode = 1;
   }
 }

@@ -101,7 +101,7 @@ function fakeBtn(metin) {
   return { _text: metin, get textContent() { return this._text; }, classList: { added: [], add(c) { this.added.push(c); } }, disabled: false };
 }
 
-function sandboxKur() {
+function sandboxKur(havuz = [CANONICAL_Q1, CANONICAL_Q2]) {
   const elMap = {
     "sl-eyebrow": { textContent: "" },
     "sl-sent": { innerHTML: "", onmouseenter: null, querySelectorAll: () => [] },
@@ -131,7 +131,7 @@ function sandboxKur() {
     streakSoruEkle: () => {},
     konfeti: () => {},
     saShakeBtn: () => {},
-    SL_HAVUZ: [CANONICAL_Q1, CANONICAL_Q2],
+    SL_HAVUZ: havuz,
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(FULL_SRC, context, { filename: "index.html (extracted, katman5b-context)" });
@@ -166,8 +166,21 @@ function sandboxKur() {
   kontrol("8) before answer → selected_answer YOK", !("selected_answer" in baglam));
   kontrol("9) before answer → explanation/fb YOK (payload'da hiç yok)", !("explanation" in baglam) && !("fb" in baglam));
   kontrol("10) question_text HTML etiketi içermiyor (raw HTML yok)", !/<[^>]+>/.test(baglam.question_text));
-  kontrol("11) options 4 öğe, HTML yok", baglam.options.length === 4 && baglam.options.every((o) => !/<[^>]+>/.test(o)));
+  kontrol("11) options sorunun TÜM şıkları (4 şıklı soru → 4 öğe), HTML yok", baglam.options.length === CANONICAL_Q1.opts.length && baglam.options.every((o) => !/<[^>]+>/.test(o)));
   kontrol("12) signal doğru", baglam.signal === "despite");
+}
+
+// 12b-12c) 5 ŞIKLI (A-E) SORU — E şıkkı bağlamdan KESİLMİYOR, doğru cevap E olabiliyor
+{
+  const Q5 = { ...CANONICAL_Q1, id: "q001", opts: [...CANONICAL_Q1.opts, "Beşinci (E) şıkkı."], ans: CANONICAL_Q1.opts.length };
+  const t = sandboxKur([Q5, CANONICAL_Q2]);
+  t.context.__t_setAktifModul("sinyal_lab");
+  t.context.slRender();
+  const once = t.context.avciAktifSinyalLabBaglamiAl();
+  kontrol("12b) 5 şıklı soru → options 5 öğe, E şıkkı dahil", once.options.length === 5 && once.options[4] === "Beşinci (E) şıkkı.");
+  t.context.dAns(fakeBtn(Q5.opts[4]), true);
+  const sonra = t.context.avciAktifSinyalLabBaglamiAl();
+  kontrol("12c) doğru cevap E iken correct_answer E şıkkının metni", sonra.correct_answer === "Beşinci (E) şıkkı." && sonra.is_correct === true);
 }
 
 // 13-14) CEVAP SONRASI — doğru cevap
@@ -302,7 +315,7 @@ function getBaglamObj(capturedRequest) {
   const res = sahteRes();
   await handler(sahteReq({ messages: [{ role: "user", content: "niye yanlış?" }], context: { module: "sinyal_lab", question_id: "q001", answered: true, selected_answer: "Usul hatalari karari gecersiz kildi." } }, { ip: "20.0.0.2" }), res);
   const baglam = getBaglamObj(m.capturedRequests[0]);
-  kontrol("21) after answer → correct_answer VAR ve canonical (dogru_index=1)", baglam.correct_answer === "Usul hatalarina ragmen karar gecerlilligini korodu.");
+  kontrol("21) after answer → correct_answer VAR ve canonical (dogru_index=1)", baglam.correct_answer === "Usul hatalarına rağmen karar geçerliliğini korudu.");
   kontrol("21b) after answer → selected_answer VAR ve client'ın bildirdiği gibi", baglam.selected_answer === "Usul hatalari karari gecersiz kildi.");
   kontrol("21c) after answer → is_correct SERVER TARAFINDAN doğru hesaplanmış (yanlış şık seçildi → false)", baglam.is_correct === false);
   fetchMockTemizle();
@@ -315,7 +328,7 @@ function getBaglamObj(capturedRequest) {
   const res = sahteRes();
   await handler(sahteReq({ messages: [{ role: "user", content: "test" }], context: { module: "sinyal_lab", question_id: "q001", answered: true, selected_answer: "Usul hatalari karari gecersiz kildi.", correct_answer: "SAHTE UYDURMA CEVAP", is_correct: true } }, { ip: "20.0.0.3" }), res);
   const baglam = getBaglamObj(m.capturedRequests[0]);
-  kontrol("22) client'ın uydurma correct_answer alanı HİÇ YANSIMIYOR — gerçek canonical cevap kullanılıyor", baglam.correct_answer === "Usul hatalarina ragmen karar gecerlilligini korodu." && baglam.correct_answer !== "SAHTE UYDURMA CEVAP");
+  kontrol("22) client'ın uydurma correct_answer alanı HİÇ YANSIMIYOR — gerçek canonical cevap kullanılıyor", baglam.correct_answer === "Usul hatalarına rağmen karar geçerliliğini korudu." && baglam.correct_answer !== "SAHTE UYDURMA CEVAP");
   kontrol("22b) server KENDİ hesapladığı is_correct'i kullanıyor (yanlış şık seçilmiş → false), client'ın is_correct:true İDDİASI YOK SAYILDI", baglam.is_correct === false);
   fetchMockTemizle();
 }

@@ -1,0 +1,52 @@
+# 📊 Haftalık kullanıcı raporu — Supabase'den SADECE sayım okur, Gmail ile e-posta atar.
+# Kod: scripts/haftalik-rapor/ (kendi package.json'u; kök bağımlılıklara dokunmaz).
+name: Haftalık Kullanıcı Raporu
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Her pazartesi 06:00 UTC = 09:00 İstanbul
+  workflow_dispatch:
+    inputs:
+      kuru_calisma:
+        description: "Kuru çalışma: e-posta GÖNDERME, raporu sadece log'a yaz"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: haftalik-rapor
+  cancel-in-progress: false
+
+jobs:
+  rapor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: scripts/haftalik-rapor
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/haftalik-rapor
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22" # @supabase/supabase-js Node 22+ istiyor
+
+      - name: Bağımlılıkları kur (sadece bu klasör)
+        run: npm install --no-audit --no-fund
+
+      - name: Raporu hazırla ve gönder
+        run: node index.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RAPOR_ALICI: ${{ vars.RAPOR_ALICI }}
+          HEDEF_KULLANICI: ${{ vars.HEDEF_KULLANICI }}
+          SINAV_TARIHI: ${{ vars.SINAV_TARIHI }}
+          # Zamanlanmış çalışmada input yoktur → gerçek gönderim
+          KURU_CALISMA: ${{ inputs.kuru_calisma && 'true' || 'false' }}

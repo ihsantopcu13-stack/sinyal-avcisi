@@ -52,6 +52,9 @@
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
 import readline from "node:readline";
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   REDIRECT_URI,
   createOAuth2Client,
@@ -66,6 +69,46 @@ import {
 } from "./_oauth-recover-lib.mjs";
 
 const PORT = 53682; // mevcut Desktop OAuth Client'ın kayıtlı redirect URI'siyle AYNI olmalı
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ENV_LOCAL_PATH = path.join(__dirname, "..", ".env.local");
+
+// GitHub Secrets güncellemesinden bağımsız: lokal geliştirme/test için
+// .env.local'deki üç değeri de senkron tutar. Değerler console.log'a
+// hiçbir zaman yazılmaz, sadece dosyaya yazılır.
+async function updateEnvLocal({ clientId, clientSecret, refreshToken }) {
+  let content = "";
+  try {
+    content = await readFile(ENV_LOCAL_PATH, "utf-8");
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
+
+  const updates = {
+    YOUTUBE_CLIENT_ID: clientId,
+    YOUTUBE_CLIENT_SECRET: clientSecret,
+    YOUTUBE_REFRESH_TOKEN: refreshToken,
+  };
+
+  const seen = new Set();
+  const lines = content
+    .split(/\r?\n/)
+    .filter((line, idx, arr) => !(line === "" && idx === arr.length - 1))
+    .map((line) => {
+      const match = line.match(/^([A-Z0-9_]+)=/);
+      if (match && Object.prototype.hasOwnProperty.call(updates, match[1])) {
+        seen.add(match[1]);
+        return `${match[1]}=${updates[match[1]]}`;
+      }
+      return line;
+    });
+
+  for (const key of Object.keys(updates)) {
+    if (!seen.has(key)) lines.push(`${key}=${updates[key]}`);
+  }
+
+  await writeFile(ENV_LOCAL_PATH, lines.join("\n") + "\n", "utf-8");
+}
 
 // Sadece GitHub Secrets güncelleme onayı (y/N) için kullanılır — credential
 // girişi DEĞİL, bu yüzden maskelemeye gerek yok.
@@ -186,6 +229,13 @@ async function main() {
     return;
   }
   console.log("YOUTUBE_OAUTH_TOKEN_OK");
+
+  try {
+    await updateEnvLocal({ clientId, clientSecret, refreshToken });
+    console.log(".env.local güncellendi (YOUTUBE_CLIENT_ID/SECRET/REFRESH_TOKEN).");
+  } catch (err) {
+    console.error(".env.local güncellenemedi:", err.message);
+  }
 
   const guncelle = await confirmPrompt(
     "\nDoğrulama başarılı. Üç GitHub Secret'ı (YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET, YOUTUBE_REFRESH_TOKEN) şimdi güncellemek ister misin?"

@@ -25,8 +25,8 @@ function oauthClient() {
 }
 
 function baslikVeAciklamaOlustur(senaryo) {
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
-  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${["A", "B", "C", "D"][i]}) ${s}`);
+  const dogruHarf = Number.isInteger(senaryo.dogru_index) && senaryo.dogru_index >= 0 ? String.fromCharCode(65 + senaryo.dogru_index) : "A";
+  const secenekSatirlari = senaryo.secenekler_tr.map((s, i) => `${String.fromCharCode(65 + i)}) ${s}`);
   // 2026 YouTube Shorts SEO: başlıkta hashtag KULLANMA — anahtar kelime
   // öne yüklensin, mobilde tam görünmesi için ~70 karakterde kessin.
   // (bkz. scripts/_seo.mjs üstündeki not)

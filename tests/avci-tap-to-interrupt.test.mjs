@@ -136,6 +136,9 @@ function sandboxKur({ fetchOk = true, ttsOnEndGecikmeMs = 0, srVarMi = true, bas
     localStorage: { getItem: () => null },
     KB: [],
     renderMD: (t) => t,
+    // 0be0968 (XSS sanitizer) sonrası dnavChat cevabı window._safeHTML ile sarıyor;
+    // sandbox'ta sağlanmazsa ReferenceError → catch/fallback yoluna düşülür.
+    _safeHTML: (s) => s,
     sb: undefined,
     _aktifSoruModulu: null,
     avciAktifSinyalLabBaglamiAl: () => null,
@@ -245,7 +248,7 @@ function bekle(ms) { return new Promise((r) => setTimeout(r, ms)); }
     console: { warn: () => {}, log: () => {}, error: () => {} },
     document: { getElementById: (id) => els[id] || null, createElement: () => fakeElGeneric() },
     window: { SpeechRecognition: PatlayanSR },
-    localStorage: { getItem: () => null }, KB: [], renderMD: (t) => t, sb: undefined,
+    localStorage: { getItem: () => null }, KB: [], renderMD: (t) => t, _safeHTML: (s) => s, sb: undefined,
     _aktifSoruModulu: null, avciAktifSinyalLabBaglamiAl: () => null,
     avciSonrakiSoruKomutuMu: () => false, avciSinyalPratikKomutuMu: () => false,
     fetch: async () => ({ ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) }),

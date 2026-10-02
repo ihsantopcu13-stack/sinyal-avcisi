@@ -6,7 +6,8 @@
 // channel not configured"} ile RESOLVE ediyor. run-pipeline.mjs bunu
 // Promise.allSettled'da "fulfilled" (rejected DEĞİL) olarak görüyor,
 // yani TikTok eksikliği artık process.exitCode'u 1 yapmıyor — diğer
-// platformların (YouTube/Instagram) sonucu bundan etkilenmiyor.
+// platformun (Instagram) sonucu bundan etkilenmiyor. (YouTube 2026-09-25'te
+// pipeline'dan kaldırıldı.)
 //
 // Gerçek Buffer/GitHub API'sine hiç istek atılmaz (global.fetch
 // stub'lanır). Gerçek out/ dosyalarına DOKUNULMAZ (PIPELINE_OUT_DIR_
@@ -118,16 +119,15 @@ function jsonResponse(obj) {
 {
   await fixtureHazirla();
   globalThis.fetch = fetchStub({ tiktokConnected: false });
-  const sahteYoutube = Promise.resolve({ videoUrl: "https://youtube.com/fake" });
   const sahteInstagram = Promise.resolve({ id: "igPost1", status: "scheduled" });
-  const [youtube, instagram, tiktok] = await Promise.allSettled([sahteYoutube, sahteInstagram, tiktokYayinlaBuffer()]);
-  kontrol("9) TikTok skip olduğunda pipeline'ın diğer adımları (simüle) etkilenmeden tamamlanıyor", youtube.status === "fulfilled" && instagram.status === "fulfilled" && tiktok.status === "fulfilled");
-  kontrol("10) TikTok 'fulfilled' (rejected DEĞİL) döndüğü için process.exitCode=1 tetiklenmiyor — diğer sonuçlar bozulmadı", tiktok.status === "fulfilled" && tiktok.value.skipped === true && youtube.value.videoUrl === "https://youtube.com/fake" && instagram.value.id === "igPost1");
+  const [instagram, tiktok] = await Promise.allSettled([sahteInstagram, tiktokYayinlaBuffer()]);
+  kontrol("9) TikTok skip olduğunda pipeline'ın diğer adımları (simüle) etkilenmeden tamamlanıyor", instagram.status === "fulfilled" && tiktok.status === "fulfilled");
+  kontrol("10) TikTok 'fulfilled' (rejected DEĞİL) döndüğü için process.exitCode=1 tetiklenmiyor — diğer sonuçlar bozulmadı", tiktok.status === "fulfilled" && tiktok.value.skipped === true && instagram.value.id === "igPost1");
 }
 
 // ---- run-pipeline.mjs kaynak kontrolü: rejected/exitCode mantığı TikTok skip'i fatal saymıyor ----
 {
-  const exitLogicVar = /if \(youtube\.status === "rejected" \|\| instagram\.status === "rejected" \|\| tiktok\.status === "rejected"\) \{\s*\n\s*process\.exitCode = 1;/.test(RUN_PIPELINE_SOURCE);
+  const exitLogicVar = /if \(instagram\.status === "rejected" \|\| tiktok\.status === "rejected"\) \{\s*\n\s*process\.exitCode = 1;/.test(RUN_PIPELINE_SOURCE);
   kontrol("10b) run-pipeline.mjs sadece 'rejected' durumunda exitCode=1 basıyor (skip artık 'fulfilled' olduğu için buna girmiyor)", exitLogicVar);
 }
 

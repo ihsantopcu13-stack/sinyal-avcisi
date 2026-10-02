@@ -7,6 +7,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { rateLimit } from './_rateLimit.mjs';
+import { costGuard } from './_costGuard.mjs';
+import { originIzinliMi, klodGovdesiniDogrula, toplamKarakter, SINIRLAR } from './_requestGuard.mjs';
+import * as Pedagoji from './_avciPedagogy.mjs';
+import { KLOD_CHAT_SYSTEM_PROMPT } from './_klodChatPrompt.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
 // source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
@@ -69,7 +73,7 @@ function klodSinyalLabBaglamiDogrula(context) {
     module: 'sinyal_lab',
     question_id: canonical.id,
     question_text: `${String(canonical.soru_en || '')}\n\nSORU: ${String(canonical.soru_tr || '')}`.slice(0, 600),
-    options: Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.slice(0, 4).map((o) => String(o).slice(0, 200)) : [],
+    options: Array.isArray(canonical.secenekler_tr) ? canonical.secenekler_tr.slice(0, 5).map((o) => String(o).slice(0, 200)) : [],
     signal: canonical.sinyal ? String(canonical.sinyal).slice(0, 50) : null,
     answered: context.answered === true,
   };
@@ -261,7 +265,7 @@ function klodBoardActionlariDogrula(rawActions, dogrulanmisBaglam, canonical) {
 // okunmuyor) ASLA güvenilmez — kimlik SADECE bu sunucu-taraflı
 // doğrulamadan gelir.
 const SUPABASE_URL_AUTH = 'https://scqczkyiyshmczzmlshl.supabase.co';
-const SUPABASE_ANON_KEY_AUTH = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
+const SUPABASE_ANON_KEY_AUTH = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 
 async function klodDogrulanmisKullaniciAl(authHeader) {
   if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) return null;
@@ -420,6 +424,11 @@ ROL: 20 yıllık YDS sınav hazırlık uzmanısın. ÖSYM soru kalıplarını ez
 AVCI MASTER PRENSİBİ:
 1. SORU TÜRÜNÜ TANI → 2. SİNYALİ BUL → 3. YAPIYI TANI → 4. SAĞ/SOL KONTROL → 5. S+V+O → 6. ŞIKLARI ELE → 7. KRİTİK FARKI BUL → 8. KANITLA → 9. CEVABI AVLA
 
+YDS/YÖKDİL SORU TÜRLERİ (KAPALI LİSTE — ZORUNLU):
+- YDS (80 soru, her soru 5 şıklı A-E): kelime/deyim bilgisi, dilbilgisi, cloze test, cümle tamamlama, İngilizce-Türkçe çeviri, Türkçe-İngilizce çeviri, paragraf (okuma-anlama), diyalog tamamlama, yakın anlamlı cümle, paragraf tamamlama, anlam bütünlüğünü bozan cümle.
+- YÖKDİL (80 soru, her soru 5 şıklı A-E): YDS ile aynı türler, AMA diyalog tamamlama ve yakın anlamlı cümle soruları YÖKDİL'de YOKTUR.
+- Bu listenin DIŞINDA soru türü önerme, üretme, "sınavda çıkar" deme: error identification (hata bulma), cümle sıralama, eşleştirme, doğru-yanlış, yazma ve konuşma YDS'de de YÖKDİL'de de YOKTUR.
+
 SİNYAL KELİME RADARI:
 - although/despite/yet/however/whereas = ZIT + yapı farkına dikkat
 - because/since/therefore/thus = NEDEN-SONUÇ
@@ -491,6 +500,7 @@ function parseXMLOutput(text) {
 }
 
 // 20. TOKEN COUNTING — Context limiti kontrolü
+const GORSEL_TAHMINI_TOKEN = 1600;
 function estimateTokens(messages) {
   const totalChars = messages.reduce((sum, m) => sum + (m.content?.length || 0), 0);
   return Math.ceil(totalChars / 4); // Yaklaşık token sayısı
@@ -517,17 +527,19 @@ function detectMessageType(messages) {
 const TOOLS = [
   {
     name: "soru_olustur",
-    description: "YDS/YÖKDİL formatında yapılandırılmış soru oluştur",
+    description: "YDS/YÖKDİL formatında yapılandırılmış soru oluştur (5 şık, A-E)",
     input_schema: {
       type: "object",
       properties: {
         soru: { type: "string", description: "Soru metni" },
-        siklar: { 
-          type: "array", 
+        siklar: {
+          type: "array",
           items: { type: "string" },
-          description: "4 seçenek"
+          minItems: 5,
+          maxItems: 5,
+          description: "5 seçenek (A-E sırasıyla)"
         },
-        dogru_sik: { type: "number", description: "Doğru şık indeksi (0-3)" },
+        dogru_sik: { type: "integer", minimum: 0, maximum: 4, description: "Doğru şık indeksi (0-4; 0=A … 4=E)" },
         aciklama: { type: "string", description: "Neden doğru açıklaması" },
         sinyal: { type: "string", description: "Sinyal kelime" },
         zorluk: { type: "number", description: "1-5 arası zorluk" }
@@ -606,9 +618,202 @@ async function visionAnaliz(imageBase64, mediaType, soru) {
   };
 }
 
+// ============================================================
+// AVCI — İPUCU CEVAP-SIZINTISI ARKA KORUMASI (KATMAN 5 FINAL SINAV / TURBO #8)
+// ============================================================
+// Gerçek model doğrulamasında (2/2 temiz koşu) AVCI'nin, prompt'taki "soru
+// cümlesini yeniden yazma/kalın gösterme" yasağına rağmen, öğrencinin kısa
+// bir cevap denemesine verdiği ipucu/geri adım mesajlarında soru cümlesinin
+// bir parçasını (çoğu kez CEVABI içeren kısmı) kalın alıntı olarak tekrar
+// yazdığı kanıtlandı. Prompt tek başına yetmediği için bu DETERMINISTIK,
+// FAIL-OPEN bir arka korumadır: SADECE mode==='chat' (dnavChat), stream
+// OLMAYAN, doğrulanmış aktif Sinyal Lab sorusu CEVAPLANMAMIŞKEN, önceki
+// asistan mesajı açık bir soruyla bittiğinde ve öğrenci mesajı kısa bir
+// cevap denemesi olduğunda (açık çözüm/anlamadım/özetle/devam/soru işareti
+// vb. istekleri HARİÇ) çalışır. Yanıttaki, soru cümlesinden BİREBİR kopyalanmış
+// 2+ kelimelik dizileri "…" ile değiştirir — öğrencinin KENDİ yazdığı ifadeler
+// (onay mesajlarında geri söylenenler) ve tek kelimelik anmalar DOKUNULMAZ.
+// Herhangi bir hata → orijinal metin aynen döner (yanıt ASLA bloklanmaz).
+function klodKatla(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/ı/g, 'i')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '');
+}
+
+const KLOD_IPUCU_ISTISNA_DESENI = /cozum|pes ettim|acikla|anlamadim|tekrar anlat|bastan|ozetle|yaptik|calistik|mini soru|test et|sonraki|bugunluk|anladim|devam|\?/;
+
+function klodIpucuYanitiMi(messages, dogrulanmisBaglam) {
+  try {
+    if (!dogrulanmisBaglam || dogrulanmisBaglam.answered) return false;
+    if (!Array.isArray(messages) || messages.length < 3) return false;
+    const son = messages[messages.length - 1];
+    const onceki = messages[messages.length - 2];
+    if (!son || son.role !== 'user' || typeof son.content !== 'string') return false;
+    if (!onceki || onceki.role !== 'assistant' || typeof onceki.content !== 'string') return false;
+    if (!/\?[\s*_"')\]]*$/.test(onceki.content.trim())) return false;
+    const sonMetin = son.content.trim();
+    if (!sonMetin || sonMetin.split(/\s+/).length > 8) return false;
+    if (KLOD_IPUCU_ISTISNA_DESENI.test(klodKatla(sonMetin))) return false;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const KLOD_KELIME_DESENI = /[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu;
+const KLOD_YUMUSAK_AYIRAC = /^[ \t*_"'“”‘’.,;:…()[\]—–-]{0,8}$/;
+
+function klodSoruIfadesiSizintisiniTemizle(yanit, soruEn, ogrenciMetni) {
+  try {
+    if (typeof yanit !== 'string' || !yanit || typeof soruEn !== 'string' || !soruEn) return yanit;
+    const soruKelimeleri = (soruEn.match(KLOD_KELIME_DESENI) || []).map(klodKatla);
+    if (soruKelimeleri.length < 2) return yanit;
+    const jetonlar = [];
+    for (const m of yanit.matchAll(KLOD_KELIME_DESENI)) {
+      jetonlar.push({ t: klodKatla(m[0]), s: m.index, e: m.index + m[0].length });
+    }
+    const ogrenciKelimeleri = ` ${((ogrenciMetni || '').match(KLOD_KELIME_DESENI) || []).map(klodKatla).join(' ')} `;
+    const aralar = [];
+    for (let i = 0; i < jetonlar.length;) {
+      let enUzun = 0;
+      for (let j = 0; j < soruKelimeleri.length; j++) {
+        let L = 0;
+        while (
+          i + L < jetonlar.length && j + L < soruKelimeleri.length &&
+          jetonlar[i + L].t === soruKelimeleri[j + L] &&
+          (L === 0 || KLOD_YUMUSAK_AYIRAC.test(yanit.slice(jetonlar[i + L - 1].e, jetonlar[i + L].s)))
+        ) L++;
+        if (L > enUzun) enUzun = L;
+      }
+      if (enUzun >= 2) {
+        const dizi = ` ${jetonlar.slice(i, i + enUzun).map((x) => x.t).join(' ')} `;
+        if (!ogrenciKelimeleri.includes(dizi)) {
+          let bas = jetonlar[i].s;
+          let son = jetonlar[i + enUzun - 1].e;
+          // Aralık içinde tek kalan (eşsiz) ** varsa eşini de kapsa — yetim kalın işareti bırakma.
+          if (((yanit.slice(bas, son).match(/\*\*/g) || []).length) % 2 === 1) {
+            if (yanit.startsWith('**', son)) son += 2;
+            else if (bas >= 2 && yanit.slice(bas - 2, bas) === '**') bas -= 2;
+          }
+          aralar.push([bas, son]);
+        }
+        i += enUzun;
+      } else {
+        i += 1;
+      }
+    }
+    if (aralar.length === 0) return yanit;
+    let sonuc = yanit;
+    for (let k = aralar.length - 1; k >= 0; k--) {
+      sonuc = sonuc.slice(0, aralar[k][0]) + '…' + sonuc.slice(aralar[k][1]);
+    }
+    return sonuc
+      .replace(/…\.+/g, '…')
+      .replace(/…(\s*…)+/g, '…')
+      .replace(/\*\*\s*(["“”'‘’]?\s*…\s*["“”'‘’]?)\s*\*\*/g, '$1');
+  } catch (e) {
+    return yanit;
+  }
+}
+
+// ============================================================
+// AVCI PEDAGOJI KONTROLCUSU — handler köprüsü (bkz. _avciPedagogy.mjs)
+// ============================================================
+// TEK ÇAĞRI: öğretmen çağrısı dışında model çağrısı YOK. Yanıt ÖNCESİ: durumu
+// doğrula; öğrenci cevap denemesiyse (mevcut klodIpucuYanitiMi kapısı) önceki
+// duruma göre hüküm-işareti yönergesini system'e ekle. Yanıt SONRASI: işareti
+// ayıkla (görünür yanıta/board'a asla sızmaz), geçişi kod uygular, yanıtı
+// duruma göre KUR. Fail-open: hata => kontrolcü yok. Çözüm isteği /
+// cevaplanmış soru => durum DÜŞER (tuzağa düşürme YOK).
+function klodPedagojiHazirla(body, messages, baglam, systemContent) {
+  const bos = { aktif: false, mod: null, yeniDurum: null };
+  try {
+    if (!baglam || baglam.answered) return bos;
+    const qid = baglam.question_id;
+    const son = Array.isArray(messages) ? messages[messages.length - 1] : null;
+    const sonMetin = son && typeof son.content === 'string' ? son.content : '';
+    if (Pedagoji.cozumIstegiMi(sonMetin)) return bos;
+    const gecerli = Pedagoji.durumuDogrula(body && body.controller_state, { qid, messages });
+    const n = messages.length + 1;
+    const tasi = (d) => (d ? { ...d, n } : null);
+    if (!klodIpucuYanitiMi(messages, baglam)) return { aktif: false, mod: null, yeniDurum: tasi(gecerli) };
+    const pending = Pedagoji.soruCumlesiCikar(messages[messages.length - 2].content);
+    const canonical = SORU_HAVUZU.find((s) => s.id === qid);
+    if (!pending || !canonical) return { aktif: false, mod: null, yeniDurum: tasi(gecerli) };
+    systemContent.push({ type: 'text', text: Pedagoji.dogrulamaYonergesi(gecerli ? gecerli.faz : null) });
+    return { aktif: true, mod: null, yeniDurum: tasi(gecerli), gecerli, pending, cumle: canonical.soru_en, ogrenciMetni: sonMetin, qid, n, tohum: messages.length };
+  } catch (e) {
+    return bos;
+  }
+}
+
+const KLOD_ISARET_TEMIZLE = /\[{1,2}\s*V\s*=?\s*[A-Za-z]{0,8}\s*\]{0,2}/g;
+
+function klodPedagojiUygula(pedagoji, data) {
+  const sonuc = { mod: pedagoji.mod, yeniDurum: pedagoji.yeniDurum, yedek: false, kontrollu: false };
+  try {
+    if (!Array.isArray(data.content)) return sonuc;
+    // 1) Her chat yanıtında işareti AYIKLA (metin + tool_use girdisi): görünür yanıta/board'a sızmasın.
+    const hukumler = [];
+    let bozuk = false;
+    let modelMetni = '';
+    let ilkMetin = null;
+    for (const blok of data.content) {
+      if (!blok) continue;
+      if (blok.type === 'text' && typeof blok.text === 'string') {
+        const a = Pedagoji.isaretiAyikla(blok.text);
+        blok.text = a.temiz;
+        hukumler.push(...a.hukumler);
+        if (a.bozuk) bozuk = true;
+        modelMetni += (modelMetni ? '\n' : '') + a.temiz;
+        if (ilkMetin === null) ilkMetin = blok;
+      } else if (blok.type === 'tool_use' && blok.input) {
+        try { blok.input = JSON.parse(JSON.stringify(blok.input).replace(KLOD_ISARET_TEMIZLE, '')); } catch (e) { /* girdi bozuksa olduğu gibi */ }
+      }
+    }
+    if (!pedagoji.aktif) return sonuc;
+    // 2) Hüküm -> deterministik geçiş -> yanıtı duruma göre KUR.
+    const hukum = Pedagoji.nihaiHukum(hukumler, bozuk);
+    const k = Pedagoji.yanitiKur({
+      gecerli: pedagoji.gecerli,
+      hukum,
+      pending: pedagoji.pending,
+      modelMetni,
+      ogrenciMetni: pedagoji.ogrenciMetni,
+      tohum: pedagoji.tohum,
+      verbatimIhlalMi: (q) => klodSoruIfadesiSizintisiniTemizle(q, pedagoji.cumle, pedagoji.ogrenciMetni) !== q,
+    });
+    sonuc.mod = k.mod;
+    sonuc.yedek = k.yedek;
+    sonuc.yeniDurum = k.yeni
+      ? { v: Pedagoji.PEDAGOJI_SURUM, qid: pedagoji.qid, faz: k.yeni.faz, orig: k.yeni.orig, n: pedagoji.n }
+      : null;
+    sonuc.kontrollu = k.mod !== 'ADVANCE';
+    // Pending soru çıkarılamadığı için HOLD şablonu kurulamadıysa (metin null): model metni işaretsiz geçer.
+    if (k.metin !== null && ilkMetin) {
+      ilkMetin.text = k.metin;
+      for (const blok of data.content) {
+        if (blok && blok !== ilkMetin && blok.type === 'text') blok.text = '';
+      }
+    } else if (k.metin === null) {
+      sonuc.kontrollu = false;
+    }
+  } catch (e) {
+    // fail-open: yanıt bloklanmaz
+  }
+  return sonuc;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // İSTEK KORUMASI — başka sitelerden (tarayıcı üzerinden) kullanımı engelle
+  if (!originIzinliMi(req.headers.origin)) {
+    return res.status(403).json({ error: 'İzin verilmeyen kaynak' });
   }
 
   const rl = rateLimit(req, { key: 'klod', limit: 15, windowMs: 60_000 });
@@ -616,19 +821,48 @@ export default async function handler(req, res) {
     res.setHeader('Retry-After', Math.ceil(rl.retryAfterMs / 1000));
     return res.status(429).json({ error: 'Çok fazla istek gönderdiniz. Biraz sonra tekrar deneyin.' });
   }
-
-  const { messages, system, mode, use_tools, image_base64, image_type, image_soru } = req.body;
-
-  if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Geçersiz istek' });
+  // IP başına günlük tavan (best-effort, instance başına) — costGuard'ın
+  // anon_id'si istemciden geldiği için değiştirilerek aşılabiliyor.
+  const rlGun = rateLimit(req, { key: 'klod-gun', limit: 400, windowMs: 24 * 60 * 60_000 });
+  if (!rlGun.allowed) {
+    res.setHeader('Retry-After', Math.ceil(rlGun.retryAfterMs / 1000));
+    return res.status(429).json({ error: 'Günlük istek sınırına ulaşıldı. Yarın tekrar deneyin.' });
   }
+
+  // Boyut / biçim sınırları — model çağrısından ve costGuard'ın sayaç
+  // artırımından ÖNCE (geçersiz istek kullanıcının günlük hakkını yemesin).
+  const gecersiz = klodGovdesiniDogrula(req.body);
+  if (gecersiz) {
+    return res.status(400).json({ error: gecersiz });
+  }
+
+  // COST GUARD — günlük limit kontrolü
+  const cg = await costGuard(req, false /* anonim */);
+  if (cg.blocked) {
+    return res.status(cg.status).json(cg.json);
+  }
+
+  const { messages, mode, use_tools, image_base64, image_type, image_soru } = req.body;
+  // İstemcinin gönderdiği `system` HİÇBİR modda kullanılmaz: aksi halde bu
+  // endpoint kendi talimatını gönderen herkes için genel amaçlı bir Claude
+  // vekili olurdu. KLOD sohbeti (mode==='chat') sunucudaki birebir kopyayı
+  // kullanır; `system` dolu olduğu için aşağıdaki RAG bloğu KLOD'da eskisi
+  // gibi (dnavChat hep system gönderdiğinden) ÇALIŞMAZ. Diğer modlarda
+  // `system` boştur → varsayılan prompt + RAG, istemci system göndermeyen
+  // DILA/dilaSor/demo sohbetinde olduğu gibi aynen devam eder.
+  const system = mode === 'chat' ? KLOD_CHAT_SYSTEM_PROMPT : null;
 
   // KATMAN 5 MVP-1 — best-effort kimlik doğrulama (bkz. yukarıdaki blok).
   // Başarısız/eksik olması isteği ASLA engellemez.
   const verifiedUser = await klodDogrulanmisKullaniciAl(req.headers.authorization);
 
-  // 20. TOKEN COUNTING — Limit kontrolü
-  const estimatedTokens = estimateTokens(messages);
+  // 20. TOKEN COUNTING — Limit kontrolü. Görsel varsa soru metni ve görselin
+  // kendisi de girdiye eklenir (Anthropic büyük görselleri küçültür; bir
+  // görsel en fazla ~1.600 token tutar).
+  const gorselSoruMetni = image_base64 && typeof image_soru === 'string' ? image_soru : '';
+  const estimatedTokens = estimateTokens(messages)
+    + Math.ceil(gorselSoruMetni.length / 4)
+    + (image_base64 ? GORSEL_TAHMINI_TOKEN : 0);
   if (estimatedTokens > 150000) {
     return res.status(400).json({ 
       error: 'Konuşma çok uzadı', 
@@ -651,6 +885,11 @@ export default async function handler(req, res) {
   // 13. LONG CONTEXT — Geçmiş mesajları akıllıca kırp
   const maxMessages = estimatedTokens > 50000 ? 6 : 20;
   const trimmedMessages = processedMessages.slice(-maxMessages);
+  // Modele GİDECEK kısmın toplam boyutu (kırpmadan SONRA — uzun sohbetler
+  // eskisi gibi çalışsın, sadece tek istekte aşırı büyük girdi reddedilsin)
+  if (toplamKarakter(trimmedMessages) + gorselSoruMetni.length > SINIRLAR.toplamKarakter) {
+    return res.status(400).json({ error: 'Konuşma çok uzadı', message: 'Yeni bir sohbet başlatın' });
+  }
 
   // 12. MULTISHOT CALIBRATION — İyi/kötü örnek ekle
   const calibratedMessages = mode === 'soru_uret' 
@@ -721,6 +960,12 @@ export default async function handler(req, res) {
     });
   }
 
+  // TURBO #8-B — pedagoji kontrolcüsü (SADECE chat + stream değil + doğrulanmış aktif soru).
+  let pedagoji = { aktif: false, mod: null, yeniDurum: null };
+  if (mode === 'chat' && req.body.stream !== true) {
+    pedagoji = klodPedagojiHazirla(req.body, messages, dogrulanmisBaglam, systemContent);
+  }
+
   // 8. PROMPT CHAINING — Mod bazlı zincir
   let finalMessages = calibratedMessages;
   
@@ -739,7 +984,7 @@ export default async function handler(req, res) {
 
   // 2. XML TAGS — Yapılandırılmış çıktı için sistem eki
   const xmlInstruction = mode === 'structured' 
-    ? '\n\nCevabını şu XML formatında ver:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>'
+    ? '\n\nCevabını şu XML formatında ver:\n<soru>...</soru>\n<siklar>A)...\nB)...\nC)...\nD)...\nE)...</siklar>\n<aciklama>...</aciklama>\n<zorluk>1-5</zorluk>'
     : '';
 
   try {
@@ -750,7 +995,7 @@ export default async function handler(req, res) {
 
     const requestBody = {
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: mode === 'soru_uret' ? 512 : mode === 'sinyal_analiz' ? 400 : 350,
+      max_tokens: mode === 'soru_uret' ? 512 : mode === 'sinyal_analiz' ? 400 : mode === 'chat' ? 700 : 350,
       temperature,
       system: systemContent,
       messages: finalMessages,
@@ -784,7 +1029,8 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const err = await response.text();
       console.error('Anthropic API error:', err);
-      return res.status(500).json({ error: 'API hatası', detail: err });
+      // Ayrıntı yalnızca sunucu log'unda — istemciye iç hata metni gönderilmez
+      return res.status(500).json({ error: 'API hatası' });
     }
 
     // 18. STREAMING yanıtı
@@ -807,7 +1053,32 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    
+
+    // TURBO #8-B — pedagoji kontrolcüsü (TEK çağrı): hüküm işaretini ayıkla, geçişi uygula,
+    // yanıtı duruma göre kur. Kontrolcü kurduysa aşağıdaki verbatim guard ATLANIR (sunucunun
+    // geri eklediği ASIL soru bozulmasın; STEP_BACK sorusu zaten verbatim için doğrulandı).
+    const pedagojiSonuc = mode === 'chat'
+      ? klodPedagojiUygula(pedagoji, data)
+      : { mod: null, yeniDurum: null, yedek: false, kontrollu: false };
+
+    // TURBO #8 — ipucu cevap-sızıntısı arka koruması (bkz. yukarıdaki blok).
+    // Fail-open: hata/uygunsuzluk → yanıt AYNEN döner.
+    let ipucuKorumaUygulandi = false;
+    if (mode === 'chat' && !pedagojiSonuc.kontrollu && Array.isArray(data.content) && klodIpucuYanitiMi(messages, dogrulanmisBaglam)) {
+      try {
+        const canonicalSoru = SORU_HAVUZU.find((s) => s.id === dogrulanmisBaglam.question_id);
+        const ogrenciMetni = messages[messages.length - 1].content;
+        for (const blok of data.content) {
+          if (blok && blok.type === 'text' && typeof blok.text === 'string') {
+            const temiz = klodSoruIfadesiSizintisiniTemizle(blok.text, canonicalSoru?.soru_en, ogrenciMetni);
+            if (temiz !== blok.text) { blok.text = temiz; ipucuKorumaUygulandi = true; }
+          }
+        }
+      } catch (e) {
+        ipucuKorumaUygulandi = false;
+      }
+    }
+
     // 10. EVALUATION — Tool use sonuçlarını işle
     let toolResults = null;
     if (data.content) {
@@ -862,12 +1133,20 @@ export default async function handler(req, res) {
       // KATMAN 5E — mevcut text reply kontratı (content[0]/parsed/vs.)
       // DEĞİŞMEDEN, geriye uyumlu, ADDITIVE bir alan. Client bu alanı
       // okumazsa (eski davranış) hiçbir şey değişmez.
-      board_actions: boardActions,
+      // TURBO #8-B: kontrollü (ipucu/geri adım/toparlanma/teklif/bekleme) turlarda board action YOK
+      // (cevabı gösteren tahta hamlesi, sunucunun kurduğu yanıtla çelişmesin).
+      board_actions: pedagojiSonuc.kontrollu ? [] : boardActions,
+      // TURBO #8 — ADDITIVE: arka koruma yanıtı değiştirdi mi (gözlemlenebilirlik).
+      hint_leak_guard: ipucuKorumaUygulandi,
+      // TURBO #8-B — ADDITIVE: pedagoji kontrolcüsü durumu (istemci bir sonraki istekte geri gönderir).
+      controller_state: pedagojiSonuc.yeniDurum || null,
+      pedagogy_mode: pedagojiSonuc.mod || null,
+      pedagogy_fallback: pedagojiSonuc.yedek,
     });
 
   } catch (error) {
     console.error('Handler error:', error);
-    return res.status(500).json({ error: 'Sunucu hatası', message: error.message });
+    return res.status(500).json({ error: 'Sunucu hatası' });
   }
 }
 
@@ -875,4 +1154,4 @@ export default async function handler(req, res) {
 // bu satır runtime davranışını DEĞİŞTİRMEZ) — client/server parity
 // testinin saf fonksiyonları doğrudan çağırabilmesi için, bkz.
 // tests/avci-klod-student-context.test.mjs.
-export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi, klodBoardActionlariDogrula, klodSinyalLabBaglamiDogrula, BOARD_ACTION_ALLOWLIST };
+export { klodOgrenciModeliHesapla, klodStudentContextOlustur, klodGrupIstatistigi, klodBoardActionlariDogrula, klodSinyalLabBaglamiDogrula, BOARD_ACTION_ALLOWLIST, klodIpucuYanitiMi, klodSoruIfadesiSizintisiniTemizle };

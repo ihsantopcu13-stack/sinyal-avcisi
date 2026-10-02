@@ -38,7 +38,7 @@ const BLOK = P.slice(bas, P.indexOf(RECOVERY, bas));
 
 // ---- konum / tekillik ----
 kontrol("1) kural başlığı TAM OLARAK 1 kez geçiyor", P.split(BASLIK).length === 2);
-kontrol("2) blok OGRENCI CIPLAK/KISA CEVAP ile GERI ADIM SONRASI TOPARLANMA arasında; 'Anladim, devam.' satırı (DIGER OGRENCI IFADELERI) DOKUNULMADAN duruyor", P.indexOf("OGRENCI CIPLAK/KISA BIR CEVAP") < bas && bas < P.indexOf(RECOVERY) && P.indexOf(RECOVERY) < P.indexOf("DIGER OGRENCI IFADELERI") && /- "Anladim, devam\." -> aktif sorunun BIR SONRAKI AVCI adimina gec\./.test(P));
+kontrol("2) blok OGRENCI CIPLAK/KISA CEVAP ile GERI ADIM SONRASI TOPARLANMA arasında; 'Anladim, devam.' satırı (DIGER OGRENCI IFADELERI) artık AÇIK-SORU KOŞULUYLA nitelendirilmiş (koşulsuz ilerletme YOK)", P.indexOf("OGRENCI CIPLAK/KISA BIR CEVAP") < bas && bas < P.indexOf(RECOVERY) && P.indexOf(RECOVERY) < P.indexOf("DIGER OGRENCI IFADELERI") && /- "Anladim, devam\." -> SADECE senin SON mesajin ogrencinin cevaplamadigi acik bir mikro-soruyla BITMEDIYSE aktif sorunun BIR SONRAKI AVCI adimina gec; acik soru VARSA adimi ILERLETME/.test(P) && !/- "Anladim, devam\." -> aktif sorunun BIR SONRAKI AVCI adimina gec\./.test(P));
 kontrol("3) 'Anladim, devam.' maddesine AÇIK istisna olduğu belirtiliyor", /"Anladim, devam\." maddesine ISTISNADIR/.test(BLOK));
 
 // ---- tetikleyici + davranış ----

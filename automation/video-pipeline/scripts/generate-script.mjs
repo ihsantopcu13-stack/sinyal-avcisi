@@ -103,9 +103,12 @@ export function veriKalitesiSorunu(soru) {
   if (!soru.soru_tr || !soru.soru_tr.trim()) return "bos_soru_tr";
   if (!soru.aciklama_tr || !soru.aciklama_tr.trim()) return "bos_aciklama_tr";
   if (!Array.isArray(soru.secenekler_tr)) return "secenekler_tr_yok";
-  if (soru.secenekler_tr.length !== 4) return `secenekler_tr_4_eleman_degil (${soru.secenekler_tr.length})`;
+  // YDS/YÖKDİL biçimi: tam 5 şık (A-E). 4 → 5 geçişi tamamlandı (#62-#67).
+  if (soru.secenekler_tr.length !== 5) {
+    return `secenekler_tr_5_eleman_degil (${soru.secenekler_tr.length})`;
+  }
   if (soru.secenekler_tr.some((s) => typeof s !== "string" || !s.trim())) return "bos_secenek";
-  if (!Number.isInteger(soru.dogru_index) || soru.dogru_index < 0 || soru.dogru_index > 3) {
+  if (!Number.isInteger(soru.dogru_index) || soru.dogru_index < 0 || soru.dogru_index >= soru.secenekler_tr.length) {
     return `gecersiz_dogru_index (${soru.dogru_index})`;
   }
   if (!soru.secenekler_tr[soru.dogru_index] || !soru.secenekler_tr[soru.dogru_index].trim()) {
@@ -232,10 +235,10 @@ function narrasyonVeAltyaziSatirlariUret(senaryo) {
   }
 
   // Bugünkü (değişmemiş) şablon davranışı.
-  const dogruHarf = ["A", "B", "C", "D"][senaryo.dogru_index] || "A";
+  const dogruHarf = Number.isInteger(senaryo.dogru_index) && senaryo.dogru_index >= 0 ? String.fromCharCode(65 + senaryo.dogru_index) : "A";
   const dogruMetni = senaryo.secenekler_tr[senaryo.dogru_index] || "";
   const secenekSatirlari = senaryo.secenekler_tr.map(
-    (s, i) => `${["A", "B", "C", "D"][i]}) ${s}`
+    (s, i) => `${String.fromCharCode(65 + i)}) ${s}`
   );
 
   return [

@@ -32,6 +32,20 @@ export function buildSentHtml(soru) {
   if (anahtarSpan) spans.push({ ...anahtarSpan, cls: "s-key", tip: null });
 
   spans.sort((a, b) => a.start - b.start);
+  // Bir işaret diğerinin İÇİNDEYSE (aynı aralık dahil) tek span üretilir:
+  // örn. q005 "hardly" hem sinyal hem tuzak, q038 sinyal "must have" tuzak
+  // "must have been" içinde. Kapsayan aralık korunur, tuzak rengi baskın,
+  // ipucu tuzağınki (yoksa diğerininki). Kısmi çakışma yine hata fırlatır.
+  for (let i = spans.length - 1; i > 0; i--) {
+    const a = spans[i - 1], b = spans[i];
+    const dis = (a.start <= b.start && a.end >= b.end) ? a : ((b.start <= a.start && b.end >= a.end) ? b : null);
+    if (!dis) continue;
+    const ic = dis === a ? b : a;
+    const tuzak = [a, b].find((x) => x.cls === "s-trap");
+    const cls = tuzak ? "s-trap" : dis.cls;
+    const tip = (tuzak && tuzak.tip) || dis.tip || ic.tip;
+    spans.splice(i - 1, 2, { ...dis, cls, tip });
+  }
   for (let i = 1; i < spans.length; i++) {
     if (spans[i].start < spans[i - 1].end) {
       throw new Error(`sl-havuz-generator: span çakışması ${soru.id} — ${JSON.stringify(spans[i - 1])} vs ${JSON.stringify(spans[i])}`);

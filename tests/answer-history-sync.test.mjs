@@ -185,7 +185,10 @@ const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
 // ---- TEST: tüm 5 quiz modülü hem DOĞRU hem YANLIŞ cevabı kaydediyor ----
 {
   const cevapKaydetCagriSayisi = (html.match(/cevapKaydet\(\{/g) || []).length;
-  kontrol("35) cevapKaydet tam olarak 10 kez çağrılıyor (5 modül × doğru+yanlış)", cevapKaydetCagriSayisi === 10, `bulunan: ${cevapKaydetCagriSayisi}`);
+  // 5 modül × (doğru+yanlış) = 10 çağrı + Avcı Öğrenme Yolu mini testi (afb96ec / 3f3bfe7):
+  // tek bir cevapKaydet({ ... isCorrect, ... }) çağrısıyla her iki sonucu da kaydediyor → 11.
+  // module kolonu serbest text (supabase/answer-history-schema.sql) — 'avci_yol_mini_test' geçerli.
+  kontrol("35) cevapKaydet tam olarak 11 kez çağrılıyor (5 modül × doğru+yanlış + AOY mini test)", cevapKaydetCagriSayisi === 11, `bulunan: ${cevapKaydetCagriSayisi}`);
 
   const moduller = ["sinyal", "sat", "kelime", "tuzak", "paragraf"];
   for (const modul of moduller) {

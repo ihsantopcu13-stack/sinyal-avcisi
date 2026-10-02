@@ -1,3 +1,14 @@
 .vercel
 .env*
 node_modules/
+
+# Gizli anahtar / kimlik dosyaları — asla commit edilmemeli
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc
+client_secret*.json
+service-account*.json
+*credentials*.json

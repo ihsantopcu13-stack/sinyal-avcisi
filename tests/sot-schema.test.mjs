@@ -8,6 +8,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { sikSayaci, soruSikHatasi } from "../api/_sikKurallari.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,12 +23,13 @@ function kontrol(ad, sonuc, detay) {
 const canonicalPath = path.join(__dirname, "..", "api", "data", "sorular.json");
 const sorular = JSON.parse(readFileSync(canonicalPath, "utf-8"));
 
-kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk: ${sorular.length}`);
+// 2026-09: soru bankası 59 → 83 soruya genişletildi (q060-q083, commit e4acff0).
+kontrol("1) Canonical dosya 83 soru içeriyor", sorular.length === 83, `uzunluk: ${sorular.length}`);
 
 // ---- stable id format + uniqueness + sıralılık ----
 {
   const idFormatUyumsuz = sorular.filter((s) => !/^q\d{3}$/.test(s.id));
-  kontrol("2) Tüm id'ler qNNN formatında (q001-q059)", idFormatUyumsuz.length === 0, `uyumsuz: ${idFormatUyumsuz.map((s) => s.id).join(", ") || "yok"}`);
+  kontrol("2) Tüm id'ler qNNN formatında (q001-q083)", idFormatUyumsuz.length === 0, `uyumsuz: ${idFormatUyumsuz.map((s) => s.id).join(", ") || "yok"}`);
 }
 {
   const idler = sorular.map((s) => s.id);
@@ -37,7 +39,7 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 {
   const beklenen = sorular.map((_, i) => `q${String(i + 1).padStart(3, "0")}`);
   const hepsiEslesiyor = sorular.every((s, i) => s.id === beklenen[i]);
-  kontrol("4) Id'ler mevcut array sırasıyla q001..q059 olarak atanmış", hepsiEslesiyor);
+  kontrol("4) Id'ler mevcut array sırasıyla q001..q083 olarak atanmış", hepsiEslesiyor);
 }
 
 // ---- zorunlu alanlar ----
@@ -59,15 +61,37 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 {
   const sinyalli = sorular.filter((s) => typeof s.sinyal === "string" && s.sinyal.length > 0);
   const sinyalsiz = sorular.filter((s) => s.sinyal === null);
-  kontrol("5b) sinyalli/null soru sayısı (54/5 bekleniyor)", sinyalli.length === 54 && sinyalsiz.length === 5, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
+  // 5d79a5e ile eski 5 null sinyal (q005/q038/q039/q040/q051) dolduruldu; yeni 24 sorunun hepsi sinyalli.
+  kontrol("5b) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli.length === 83 && sinyalsiz.length === 0, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
 }
 {
-  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || s.secenekler_tr.length !== 4 || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
-  kontrol("6) Her soruda tam 4 dolu seçenek var", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
+  // YDS/YÖKDİL biçimi: tam 5 şık (A-E). 4 → 5 geçişi tamamlandı (#62-#67).
+  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || s.secenekler_tr.length !== 5 || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
+  kontrol("6) Her soruda tam 5 dolu seçenek var (A-E)", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
+  const tekrarli = sorular.filter((s) => Array.isArray(s.secenekler_tr) && new Set(s.secenekler_tr).size !== s.secenekler_tr.length);
+  kontrol("6b) Hiçbir soruda aynı şık metni iki kez yok", tekrarli.length === 0, tekrarli.map((s) => s.id).join(", "));
 }
 {
-  const geciksizIndex = sorular.filter((s) => !Number.isInteger(s.dogru_index) || s.dogru_index < 0 || s.dogru_index > 3);
-  kontrol("7) dogru_index her soruda 0-3 aralığında geçerli bir tam sayı", geciksizIndex.length === 0, geciksizIndex.map((s) => s.id).join(", "));
+  // Şık sayısı sayacı: geçiş tamamlandı, 4 şıklı soru kalmamalı.
+  const sayac = sikSayaci(sorular);
+  kontrol("6c) Şık sayısı sayacı: her soru 5 şıklı, 4 şıklı soru yok", sayac.dort === 0 && sayac.diger === 0 && sayac.bes === sorular.length,
+    `4 şıklı: ${sayac.dort}, 5 şıklı: ${sayac.bes}${sayac.diger ? `, diğer: ${sayac.diger}` : ""} (toplam ${sorular.length})`);
+}
+{
+  // Hiçbir şık boş değil ve hiçbir iki şık (normalize edilmiş haliyle) aynı değil.
+  // Karıştırmadan sonra yeni eklenen şık E konumunda olmayabilir → tüm çiftler.
+  const sikHatali = sorular.map((s) => [s.id, soruSikHatasi(s)]).filter(([, h]) => h);
+  kontrol("6d) Hiçbir soruda boş şık yok ve hiçbir iki şık birbirinin kopyası değil (normalize)", sikHatali.length === 0, sikHatali.map(([id, h]) => `${id}: ${h}`).join("; "));
+}
+{
+  // Bilgi amaçlı: doğru cevapların harf dağılımı (karıştırmanın dengesini izlemek için).
+  const dagilim = [0, 0, 0, 0, 0];
+  sorular.forEach((s) => { if (Number.isInteger(s.dogru_index) && s.dogru_index < 5) dagilim[s.dogru_index]++; });
+  kontrol("6f) Doğru cevap harf dağılımı (bilgi)", true, `A/B/C/D/E = ${dagilim.join("/")}`);
+}
+{
+  const geciksizIndex = sorular.filter((s) => !Number.isInteger(s.dogru_index) || s.dogru_index < 0 || !Array.isArray(s.secenekler_tr) || s.dogru_index >= s.secenekler_tr.length);
+  kontrol("7) dogru_index her soruda 0 ≤ dogru_index < şık sayısı olan bir tam sayı", geciksizIndex.length === 0, geciksizIndex.map((s) => s.id).join(", "));
 }
 
 // ---- pedagojik metadata alanları (yeni: sinyal_ipucu, tuzak, tuzak_ipucu, anahtar) ----
@@ -100,7 +124,7 @@ kontrol("1) Canonical dosya 59 soru içeriyor", sorular.length === 59, `uzunluk:
 }
 {
   const alintisiz = sorular.filter((s) => s.alinti === false);
-  kontrol("9c) alinti=false sayısı 21 (bilinen q024-q044 bandı)", alintisiz.length === 21, `bulunan: ${alintisiz.length}`);
+  kontrol("9c) alinti=false sayısı 45 (bilinen q024-q044 + q060-q083 bantları)", alintisiz.length === 45, `bulunan: ${alintisiz.length}`);
 }
 
 // ---- bilinen 2 sinyal düzeltmesi (eski frontend hatası, canonical doğru değeri korur) ----

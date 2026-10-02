@@ -3,6 +3,7 @@
     {
       "source": "/(.*)",
       "headers": [
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000" },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
@@ -11,6 +12,12 @@
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://region1.google-analytics.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
         }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" }
       ]
     },
     {
@@ -31,13 +38,20 @@
   ],
   "rewrites": [
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/terms", "destination": "/terms.html" }
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/ucretsiz-rehber", "destination": "/ucretsiz-rehber.html" }
   ],
   "redirects": [
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.sinyal-avcisi.com" }],
       "destination": "https://sinyal-avcisi.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path((?!api(?:/|$)).*)",
+      "has": [{ "type": "host", "value": "sinyal-avcisi-five.vercel.app" }],
+      "destination": "https://sinyal-avcisi.com/:path",
       "permanent": true
     }
   ]

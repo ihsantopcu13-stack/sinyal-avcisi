@@ -145,6 +145,9 @@ function sandboxKur({ fetchOk = true, fetchGecikmeMs = 0, ttsOnEndGecikmeMs = 0,
     localStorage: { getItem: () => null },
     KB: [],
     renderMD: (t) => t,
+    // 0be0968 (XSS sanitizer) sonrası dnavChat cevabı window._safeHTML ile sarıyor;
+    // sandbox'ta sağlanmazsa ReferenceError → catch/fallback yoluna düşülür.
+    _safeHTML: (s) => s,
     sb: undefined,
     _aktifSoruModulu: null,
     avciAktifSinyalLabBaglamiAl: () => null,

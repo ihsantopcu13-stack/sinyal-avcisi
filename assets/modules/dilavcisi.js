@@ -826,7 +826,7 @@
     {id:'word20',en:'investigate',tr:'araştırmak',ornek:'Researchers investigated the cause of the outbreak.',grup:2},
     {id:'word21',en:'significant',tr:'önemli, anlamlı',ornek:'There was a significant improvement in test scores.',grup:3},
     {id:'word22',en:'substantial',tr:'önemli miktarda, büyük',ornek:'The company made a substantial investment in research.',grup:3},
-    {id:'word23',en:'crucial',tr:'kritik, hayati',ornek:'Sleep plays a crucial role in learning.',grup:3},
+    {id:'word23',en:'crucial',tr:'kritik, hayatı',ornek:'Sleep plays a crucial role in learning.',grup:3},
     {id:'word24',en:'evident',tr:'açık, belirgin',ornek:'The benefits of the program are evident.',grup:3},
     {id:'word25',en:'relevant',tr:'ilgili, alakalı',ornek:'Only relevant data was included in the analysis.',grup:3},
     {id:'word26',en:'comprehensive',tr:'kapsamlı',ornek:'The report offers a comprehensive review of the topic.',grup:3},
