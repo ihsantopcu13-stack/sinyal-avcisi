@@ -311,6 +311,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .chat-input-row{border-top:1px solid var(--border);padding:14px 16px;display:flex;gap:10px;background:#12161f}
 .chat-in{flex:1;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
 .chat-in:focus{border-color:var(--signal)}
+.chat-klod-btn{flex:1;background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;border-radius:10px;padding:12px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(245,166,35,.35)}
 .chat-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:18px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(245,166,35,.35);transition:all .15s;flex-shrink:0}
 .ses{background:linear-gradient(135deg,#0c0e14,#161b2e);padding:80px 5vw;color:var(--ink)}
 .ses-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
@@ -1649,7 +1650,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <div class="msg k">Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?</div>
       <div class="msg k">"She must have left before the meeting started."</div>
     </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabını yaz..." oninput="anaKlodOdagaGec(false)" onkeydown="if(event.key=='Enter')anaKlodOdagaGec(true)" aria-label="Cevabını yaz"><button class="chat-send" onclick="anaKlodOdagaGec(true)" aria-label="KLOD'u tam ekran aç">→</button></div>
+    <div class="chat-input-row"><button type="button" class="chat-klod-btn" onclick="anaKlodOdagaGec()">🎯 KLOD'a Sor</button></div>
   </div>
 </section>
 <section id="ses" class="ses">
@@ -7060,22 +7061,20 @@ document.addEventListener('keydown',e=>{
   if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
   klodOdakCik();
 });
-// ANA SAYFA KLOD KUTUSU → KLOD ODAK MODU — #klod bölümündeki kutu kendi
-// başına API'ye gitmez: öğrenci yazmaya başlayınca, Enter'a ya da → butonuna
-// basınca KLOD'a Sor tam ekran odak modunda açılır. Demo soru oraya taşınır,
-// öğrencinin ilk mesajı onun bağlamıyla gider (_anaKlodDemoBaglam, dnavChat).
+// ANA SAYFA KLOD KUTUSU → KLOD ODAK MODU — #klod bölümünde giriş kutusu yok,
+// "KLOD'a Sor" butonu KLOD'a Sor'u tam ekran odak modunda açar. Demo soru
+// oraya taşınır, öğrencinin ilk mesajı onun bağlamıyla gider
+// (_anaKlodDemoBaglam, dnavChat). #dnav-in'e odak AYNI dokunma olayı içinde
+// verilir: iOS klavyeyi yalnızca kullanıcı hareketinin içindeki focus() ile açar.
 // Geri/Esc/telefon geri tuşu klodDonusGorunumuSakla() kaydıyla ana sayfadaki
 // aynı kaydırma konumuna döner; dashboard'ın açık sekmesi değişmez.
 const ANA_KLOD_DEMO_CUMLE='She must have left before the meeting started.';
 let _anaKlodDemoBaglam=null;
-function anaKlodOdagaGec(gonder){
-  const inp=document.getElementById('chat-in');
+function anaKlodOdagaGec(){
   const klodItem=[...document.querySelectorAll('.dn-item')].find(i=>i.textContent.includes('KLOD'));
-  if(!inp||!klodItem)return;
-  const metin=inp.value;
-  inp.value='';inp.blur();
+  if(!klodItem)return;
   klodDonusGorunumuSakla();
-  dnav(klodItem);
+  dnav(klodItem); // senkron çizer: #dnav-chat ve #dnav-in hemen var
   const body=document.getElementById('dnav-chat');
   if(body){
     body.innerHTML='';
@@ -7084,15 +7083,7 @@ function anaKlodOdagaGec(gonder){
     });
   }
   _anaKlodDemoBaglam='[Ana sayfadaki demo soru: "'+ANA_KLOD_DEMO_CUMLE+'" cümlesinde "must have left" ne anlama geliyor? Aşağıdaki mesaj bu soruya cevap ya da başka bir soru olabilir.] ';
-  const dIn=document.getElementById('dnav-in');
-  if(!dIn)return;
-  dIn.value=metin;dIn.focus();
-  // Yazmaya başlayınca sadece taşınır; Enter/→ ile gelindiyse hemen gönderilir.
-  // KLOD hâlâ konuşuyorsa önce susturulur (avciKomutGonder ile aynı kural).
-  if(gonder&&metin.trim()){
-    if(dnavTurnState==='SPEAKING'&&typeof dnavAvciSustur==='function')dnavAvciSustur();
-    if(dnavTurnState==='IDLE')dnavChat();
-  }
+  document.getElementById('dnav-in')?.focus();
 }
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
