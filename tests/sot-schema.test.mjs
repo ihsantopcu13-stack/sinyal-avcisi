@@ -8,6 +8,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { sikSayaci, soruBesinciSikHatasi } from "../api/_sikKurallari.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -69,6 +70,21 @@ kontrol("1) Canonical dosya 83 soru içeriyor", sorular.length === 83, `uzunluk:
   kontrol("6) Her soruda 4 veya 5 dolu seçenek var", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
   const tekrarli = sorular.filter((s) => Array.isArray(s.secenekler_tr) && new Set(s.secenekler_tr).size !== s.secenekler_tr.length);
   kontrol("6b) Hiçbir soruda aynı şık metni iki kez yok", tekrarli.length === 0, tekrarli.map((s) => s.id).join(", "));
+}
+{
+  // 4 → 5 şık geçiş sayacı (Aşama 3 partilerinin ilerlemesini gösterir).
+  const sayac = sikSayaci(sorular);
+  kontrol("6c) Şık sayısı sayacı: her soru 4 ya da 5 şıklı", sayac.diger === 0 && sayac.dort + sayac.bes === sorular.length,
+    `4 şıklı: ${sayac.dort}, 5 şıklı: ${sayac.bes}${sayac.diger ? `, diğer: ${sayac.diger}` : ""} (toplam ${sorular.length})`);
+}
+{
+  // 5. şık (E): boş olamaz, ilk 4 şıktan birinin kopyası olamaz (normalize edilmiş karşılaştırma).
+  const eHatali = sorular.map((s) => [s.id, soruBesinciSikHatasi(s)]).filter(([, h]) => h);
+  kontrol("6d) 5 şıklı sorularda E şıkkı boş değil ve A-D'den birinin kopyası değil", eHatali.length === 0, eHatali.map(([id, h]) => `${id}: ${h}`).join("; "));
+  // E her zaman SONA eklenen bir ÇELDİRİCİ: doğru cevap E'ye taşınmaz, dogru_index A-D'de kalır.
+  // (İleride şık sırası 5 şıklı sorularda da karıştırılırsa bu kural o PR'da gevşetilmeli.)
+  const eDogru = sorular.filter((s) => Array.isArray(s.secenekler_tr) && s.secenekler_tr.length === 5 && s.dogru_index === 4);
+  kontrol("6e) 5 şıklı sorularda doğru cevap E değil (E sona eklenen çeldiricidir)", eDogru.length === 0, eDogru.map((s) => s.id).join(", "));
 }
 {
   const geciksizIndex = sorular.filter((s) => !Number.isInteger(s.dogru_index) || s.dogru_index < 0 || !Array.isArray(s.secenekler_tr) || s.dogru_index >= s.secenekler_tr.length);
