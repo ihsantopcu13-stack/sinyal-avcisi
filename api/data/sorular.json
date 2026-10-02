@@ -46,12 +46,13 @@
     "alinti": true,
     "soru_tr": "Kanun hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Kanun tamamen açık ve kesindir.",
       "Kanun uygulanmadı.",
-      "Kanun belirsiz olmasına rağmen sıkı uygulandı.",
-      "Mahkeme kanunu esnek yorumladı."
+      "Kanun tamamen açık ve kesindir.",
+      "Kanun açık olduğu için mahkeme onu sıkı uyguladı.",
+      "Mahkeme kanunu esnek yorumladı.",
+      "Kanun belirsiz olmasına rağmen sıkı uygulandı."
     ],
-    "dogru_index": 2,
+    "dogru_index": 4,
     "aciklama_tr": "\"Far from unambiguous\" = belirsiz + \"yet\" = zıtlık. İki sinyal bir arada!",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -149,12 +150,13 @@
     "alinti": true,
     "soru_tr": "Kanun öncesinde şirketler için ne gerçekti?",
     "secenekler_tr": [
+      "Kanun çıktıktan sonra da şirketler neredeyse hiç sorumlu tutulmadı.",
       "Sorumluluk kanunla azaltı.",
-      "Şirketler her zaman sorumlu tutulurdu.",
+      "Şirketler gönüllü sorumluluk aldı.",
       "Şirketler neredeyse hiç sorumlu tutulmazdı.",
-      "Şirketler gönüllü sorumluluk aldı."
+      "Şirketler her zaman sorumlu tutulurdu."
     ],
-    "dogru_index": 2,
+    "dogru_index": 3,
     "aciklama_tr": "\"Rarely\" = gizli olumsuz, neredeyse hiç. \"Prior to\" = öncesinde.",
     "sinyal": "Prior to",
     "sinyal_ipucu": "Zaman sinyali",
@@ -272,12 +274,13 @@
     "alinti": true,
     "soru_tr": "Savunma argümanı hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Tamamen değersizdi.",
-      "Belirli bir değeri vardı ama mahkeme yine de aleyhine karar verdi.",
       "Mahkemeyi ikna etti.",
-      "Değerlendirilmedi."
+      "Argümanın hiçbir değeri yoktu, bu yüzden mahkeme aleyhine karar verdi.",
+      "Belirli bir değeri vardı ama mahkeme yine de aleyhine karar verdi.",
+      "Değerlendirilmedi.",
+      "Tamamen değersizdi."
     ],
-    "dogru_index": 1,
+    "dogru_index": 2,
     "aciklama_tr": "\"Not without merit\" = çift olumsuz = değerli. \"Yet\" = ama. Klasik ÖSYM tuzağı!",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık",
@@ -312,12 +315,13 @@
     "alinti": true,
     "soru_tr": "Bu metne göre savunma hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Deliller yetersiz bulundu.",
-      "Mahkeme savunuyu reddetti.",
       "Deliller savunuyu destekledi.",
-      "Güçlü delillere rağmen suçlu olmadığı iddia edildi."
+      "Güçlü delillere rağmen suçlu olmadığı iddia edildi.",
+      "Mahkeme savunuyu reddetti.",
+      "Deliller güçlü olduğu için sanık suçunu kabul etti.",
+      "Deliller yetersiz bulundu."
     ],
-    "dogru_index": 3,
+    "dogru_index": 1,
     "aciklama_tr": "\"Notwithstanding\" = -e rağmen. Güçlü delil varken suçsuz dendi.",
     "sinyal": "notwithstanding",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -395,12 +399,13 @@
     "alinti": true,
     "soru_tr": "Kanuna göre baskı altında imzalanan sözleşme için ne söylenebilir?",
     "secenekler_tr": [
+      "Mağdur tarafın talebine göre iptal edilebilir.",
       "Sözleşme kesinlikle geçersizdir.",
-      "Mahkeme sözleşmeyi kendiliğinden iptal eder.",
+      "Baskı uygulayan tarafın talebi hâlinde iptal edilebilir.",
       "Sözleşme her durumda geçerlidir.",
-      "Mağdur tarafın talebine göre iptal edilebilir."
+      "Mahkeme sözleşmeyi kendiliğinden iptal eder."
     ],
-    "dogru_index": 3,
+    "dogru_index": 0,
     "aciklama_tr": "\"Voidable\" = iptal edilebilir ama otomatik geçersiz değil. \"At discretion\" = ihtiyara bağlı.",
     "sinyal": "provided that",
     "sinyal_ipucu": "Koşul",
@@ -558,12 +563,13 @@
     "alinti": false,
     "soru_tr": "Sanığın savunması hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Savunma ikna edici olmasa da jüri üç gün müzakere etti.",
-      "Savunma ikna ediciydi ve jüri hızla karar verdi.",
+      "Savunma ikna edici olduğu için jüri üç gün müzakere etti.",
+      "Jüri savunmayı ikna edici buldu.",
       "Jüri bir gün içinde karar verdi.",
-      "Jüri savunmayı ikna edici buldu."
+      "Savunma ikna ediciydi ve jüri hızla karar verdi.",
+      "Savunma ikna edici olmasa da jüri üç gün müzakere etti."
     ],
-    "dogru_index": 0,
+    "dogru_index": 4,
     "aciklama_tr": "\"By no means convincing\" = hiç ikna edici değil + \"yet\" = zıtlık.",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -578,12 +584,13 @@
     "alinti": false,
     "soru_tr": "Mahkemenin kararıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
+      "Mahkeme kanıtlar ışığında oybirliğiyle karar verdi.",
       "Mahkeme oybirliğiyle beraat kararı verdi.",
       "Ağırlıklı kanıtlara rağmen mahkeme oybirliğinden uzaktı.",
-      "Mahkeme kanıtlar ışığında oybirliğiyle karar verdi.",
-      "Kanıtlar yetersiz bulundu."
+      "Kanıtlar yetersiz bulundu.",
+      "Kanıtlar zayıf olduğu için mahkeme oybirliğine varamadı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 2,
     "aciklama_tr": "\"Despite overwhelming evidence\" = zıtlık + \"far from unanimous\" = oybirliği yok.",
     "sinyal": "Despite",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -598,12 +605,13 @@
     "alinti": false,
     "soru_tr": "Sözleşme şartları hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Şartlar neredeyse hiç avantajlı olmasa da taraflar devam etmeye karar verdi.",
-      "Sözleşme müzakere aşamasında iptal edildi.",
+      "Şartlar yalnızca taraflardan birine avantajlıydı, yine de ikisi de devam etti.",
       "Taraflar şartları avantajlı buldukları için anlaşmaya vardı.",
-      "Şartlar her iki taraf için de çok avantajlıydı."
+      "Sözleşme müzakere aşamasında iptal edildi.",
+      "Şartlar her iki taraf için de çok avantajlıydı.",
+      "Şartlar neredeyse hiç avantajlı olmasa da taraflar devam etmeye karar verdi."
     ],
-    "dogru_index": 0,
+    "dogru_index": 4,
     "aciklama_tr": "\"Hardly favorable\" = neredeyse hiç avantajlı değil + \"yet\" = zıtlık.",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -887,12 +895,13 @@
     "alinti": false,
     "soru_tr": "Sanığın serbest bırakılması ne koşula bağlıdır?",
     "secenekler_tr": [
+      "Sanık tüm kısıtlamaları ihlal etti.",
+      "Sanık, kısıtlamaların bir kısmına uyması koşuluyla serbest bırakılacak.",
       "Sanık, mahkemenin koyduğu tüm kısıtlamalara uyması koşuluyla serbest bırakılacak.",
-      "Mahkeme tüm kısıtlamaları kaldırdı.",
       "Sanık koşulsuz olarak serbest bırakıldı.",
-      "Sanık tüm kısıtlamaları ihlal etti."
+      "Mahkeme tüm kısıtlamaları kaldırdı."
     ],
-    "dogru_index": 0,
+    "dogru_index": 2,
     "aciklama_tr": "\"On condition that\" = şartıyla. Kısıtlamalara uyma koşuluyla serbest.",
     "sinyal": "on condition that",
     "sinyal_ipucu": "Koşul sinyali",
@@ -927,12 +936,13 @@
     "alinti": true,
     "soru_tr": "Kararın kesinleşmesi neye bağlıdır?",
     "secenekler_tr": [
-      "Karar zaten kesinleşmiştir.",
+      "Otuz gün içinde itiraz edilirse karar kesinleşecektir.",
+      "Otuz gün içinde itiraz edilmezse karar kesinleşecektir.",
       "İtiraz süresi sınırsızdır.",
-      "Karar hiçbir koşulda kesinleşmez.",
-      "Otuz gün içinde itiraz edilmezse karar kesinleşecektir."
+      "Karar zaten kesinleşmiştir.",
+      "Karar hiçbir koşulda kesinleşmez."
     ],
-    "dogru_index": 3,
+    "dogru_index": 1,
     "aciklama_tr": "\"Unless\" = eğer olmazsa. İtiraz edilmezse (30 gün içinde) karar kesinleşir.",
     "sinyal": "Unless",
     "sinyal_ipucu": "Koşul sinyali",
@@ -1030,12 +1040,13 @@
     "alinti": true,
     "soru_tr": "Bu cümleden ne çıkarılabilir?",
     "secenekler_tr": [
-      "Dava tanık ifadesi olmadan sonuçlandı.",
-      "Tanığın ifadesi davayı etkilemedi.",
       "Tanık daha erken ifade verseydi dava sonucu farklı olabilirdi.",
-      "Tanık zamanında ifade verdi ve dava sonucu değişmedi."
+      "Dava tanık ifadesi olmadan sonuçlandı.",
+      "Tanık erken ifade verdiği için dava sonucu farklı oldu.",
+      "Tanık zamanında ifade verdi ve dava sonucu değişmedi.",
+      "Tanığın ifadesi davayı etkilemedi."
     ],
-    "dogru_index": 2,
+    "dogru_index": 0,
     "aciklama_tr": "\"Had the witness come forward\" = devrik 3. tip koşul (if düşmüş). Gerçekleşmemiş bir geçmiş varsayım.",
     "sinyal": "had",
     "sinyal_ipucu": null,
@@ -1134,11 +1145,12 @@
     "soru_tr": "Maddenin amacı nedir?",
     "secenekler_tr": [
       "Yalnızca bir tarafa fesih hakkı tanımak.",
-      "Taraflardan hiçbirinin anlaşmayı tek taraflı feshetmesini önlemek.",
+      "Anlaşmanın karşılıklı rızayla feshedilmesini önlemek.",
       "Tarafların anlaşmayı istedikleri zaman feshetmesine izin vermek.",
+      "Taraflardan hiçbirinin anlaşmayı tek taraflı feshetmesini önlemek.",
       "Anlaşmayı otomatik olarak sona erdirmek."
     ],
-    "dogru_index": 1,
+    "dogru_index": 3,
     "aciklama_tr": "\"So as to prevent\" = önlemek amacıyla. \"Unilaterally terminating\" = tek taraflı feshetme.",
     "sinyal": "so as to",
     "sinyal_ipucu": "Amaç sinyali",
