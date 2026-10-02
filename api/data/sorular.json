@@ -6,12 +6,13 @@
     "alinti": true,
     "soru_tr": "Bu metne göre mahkeme kararı hakkında ne söylenebilir?",
     "secenekler_tr": [
+      "Karar kesinlikle geçersiz bulundu.",
+      "Usul hataları kararı geçersiz kıldı.",
       "Mahkeme yeniden yargılama istedi.",
       "Usul hatalarına rağmen karar geçerliliğini korudu.",
-      "Usul hataları kararı geçersiz kıldı.",
-      "Karar kesinlikle geçersiz bulundu."
+      "Karar geçerliliğini korudu çünkü usulde hiçbir hata yapılmamıştı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 3,
     "aciklama_tr": "\"Despite\" = zıtlık, \"by no means invalid\" = kesinlikle geçersiz değil.",
     "sinyal": "despite",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -27,9 +28,10 @@
     "soru_tr": "Araştırmacılar tedavi hakkında ne söylemiştir?",
     "secenekler_tr": [
       "Tedavi ümit verici ama garantili değildir.",
-      "Sonuçlar yetersiz kaldı.",
+      "Sonuçlar ümit verici olmadığı için tedavinin garantisi yoktur.",
       "Tedavi tüm hastalar için etkilidir.",
-      "Tedavi başarıyla tamamlandı."
+      "Tedavi başarıyla tamamlandı.",
+      "Sonuçlar yetersiz kaldı."
     ],
     "dogru_index": 0,
     "aciklama_tr": "\"Far from guaranteed\" = garantili değil. Gizli olumsuz tuzak!",
@@ -130,10 +132,11 @@
     "alinti": true,
     "soru_tr": "Komite kararı hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Komite oybirliği ile karar aldı.",
       "Karar ertelendi.",
+      "Komite oybirliği ile karar aldı.",
       "Komite ne oybirliği sağladı ne de uzlaştı.",
-      "Komite çoğunlukla uzlaştı."
+      "Komite çoğunlukla uzlaştı.",
+      "Komite oybirliği sağlayamadı ama sonunda uzlaşmaya vardı."
     ],
     "dogru_index": 2,
     "aciklama_tr": "\"By no means unanimous\" + \"nor\" = ne ... ne de. Çift olumsuz-zıtlık kombinasyonu!",
@@ -151,7 +154,7 @@
     "soru_tr": "Kanun öncesinde şirketler için ne gerçekti?",
     "secenekler_tr": [
       "Kanun çıktıktan sonra da şirketler neredeyse hiç sorumlu tutulmadı.",
-      "Sorumluluk kanunla azaltı.",
+      "Sorumluluk kanunla azaltıldı.",
       "Şirketler gönüllü sorumluluk aldı.",
       "Şirketler neredeyse hiç sorumlu tutulmazdı.",
       "Şirketler her zaman sorumlu tutulurdu."
@@ -171,12 +174,13 @@
     "alinti": true,
     "soru_tr": "Yeni bulgular hakkında ne söylenebilir?",
     "secenekler_tr": [
+      "Erken çalışmalar zayıf bir korelasyon öne sürmüştü, yeni bulgular da bunu tekrarlayamadı.",
+      "Korelasyonun güçlü olduğunu gösterdi.",
       "Sonuçlar henüz değerlendirilmedi.",
-      "Erken bulgularla çelişiyor, sonuçları tekrarlayamadı.",
-      "Korrelasyonun güçlü olduğunu gösterdi.",
-      "Erken bulguları doğruladı."
+      "Erken bulguları doğruladı.",
+      "Erken bulgularla çelişiyor, sonuçları tekrarlayamadı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "\"Whereas\" = karşıtlık + \"failed to replicate\" = tekrarlayamadı.",
     "sinyal": "Whereas",
     "sinyal_ipucu": "Karşıtlık",
@@ -254,12 +258,13 @@
     "alinti": true,
     "soru_tr": "Bu cümleye göre ne oldu?",
     "secenekler_tr": [
-      "Şirketler yönetmeliği destekledi.",
-      "Yönetmelik hayata geçmeden hemen şirketler lobi yapmaya başladı.",
       "Lobi faaliyetleri başarılı oldu.",
-      "Şirketler yönetmelikten önce lobi yaptı."
+      "Şirketler yönetmelikten önce lobi yaptı.",
+      "Şirketler yönetmelik yürürlüğe girdikten uzun süre sonra lobi yapmaya başladı.",
+      "Yönetmelik hayata geçer geçmez şirketler lobi yapmaya başladı.",
+      "Şirketler yönetmeliği destekledi."
     ],
-    "dogru_index": 1,
+    "dogru_index": 3,
     "aciklama_tr": "\"No sooner...than\" = yapar yapmaz. Devrik yapı + zaman sinyali.",
     "sinyal": "No sooner had",
     "sinyal_ipucu": "Zaman sinyali",
@@ -295,12 +300,13 @@
     "alinti": true,
     "soru_tr": "Eleştirenler reform hakkında ne düşünüyor?",
     "secenekler_tr": [
-      "Reform gerekli olabilir ama yeterli değildir.",
       "Reform tamamen gereksizdir.",
       "Reform yeterli ve gereklidir.",
-      "Reform henüz değerlendirilmemiştir."
+      "Reform henüz değerlendirilmemiştir.",
+      "Reform gerekli olabilir ama yeterli değildir.",
+      "Eleştirenler reformun yeterli olduğunu ama gerekli olmadığını düşünüyor."
     ],
-    "dogru_index": 0,
+    "dogru_index": 3,
     "aciklama_tr": "\"Far from sufficient\" = yeterli değil. \"While\" zıtlık oluşturuyor.",
     "sinyal": "While",
     "sinyal_ipucu": "Karşıtlık",
@@ -484,11 +490,12 @@
     "soru_tr": "Çalışmanın bulgularıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
       "Bulgular akademisyenler tarafından görmezden gelindi.",
-      "Bulgular kesin olmasa da akademisyenler arasında tartışma yarattı.",
+      "Bulgular kesin olduğu için akademisyenler arasında tartışma yarattı.",
+      "Bulgular kesin sonuçlar ortaya koydu.",
       "Tartışma bulgulardan önce başladı.",
-      "Bulgular kesin sonuçlar ortaya koydu."
+      "Bulgular kesin olmasa da akademisyenler arasında tartışma yarattı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "\"Far from conclusive\" = kesin değil + \"yet\" = zıtlık. Kesin değil AMA tartışma yarattı.",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -503,12 +510,13 @@
     "alinti": false,
     "soru_tr": "Araştırmacıların tutumu nedir?",
     "secenekler_tr": [
+      "Deney beklenen sonuçları verdiği için geleceğe dair iyimserdiler.",
       "Beklenmedik sonuçlara rağmen iyimserliklerini korudular.",
-      "Başarısız deney sonrasında umutsuzluğa kapıldılar.",
       "Beklenen sonuçlara ulaştılar.",
+      "Başarısız deney sonrasında umutsuzluğa kapıldılar.",
       "Deneyi tekrarlamaya karar verdiler."
     ],
-    "dogru_index": 0,
+    "dogru_index": 1,
     "aciklama_tr": "\"Although failed\" = zıtlık. Başarısız olsa da iyimserlikleri devam etti.",
     "sinyal": "Although",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -524,9 +532,10 @@
     "soru_tr": "Yeni politika hakkında ne doğrudur?",
     "secenekler_tr": [
       "Tanıtım çabalarına rağmen politika hiç popüler olmadı.",
-      "Politika kısmen popüler bulundu.",
+      "Hükümet tanıtmadığı için politika popüler olmadı.",
+      "Hükümet politikayı tanıtmaktan vazgeçti.",
       "Politika hükümet desteğiyle popüler oldu.",
-      "Hükümet politikayı tanıtmaktan vazgeçti."
+      "Politika kısmen popüler bulundu."
     ],
     "dogru_index": 0,
     "aciklama_tr": "\"Anything but popular\" = hiç popüler değil + \"despite\" = zıtlık. Çaba olmasına rağmen başarısız.",
@@ -543,12 +552,13 @@
     "alinti": false,
     "soru_tr": "Ekonomik toparlanma için ne söylenebilir?",
     "secenekler_tr": [
+      "Analistler hızlı toparlanmayı öngörmüştü.",
+      "Ekonomi toparlandı ama analistlerin beklediğinden daha yavaş oldu.",
       "Toparlanma analistlerin öngördüğü kadar yavaş oldu.",
-      "Uzun durgunluk öngörülmesine karşın ekonomi hızla toparlandı.",
       "Ekonomi toparlanamadı.",
-      "Analistler hızlı toparlanmayı öngörmüştü."
+      "Uzun durgunluk öngörülmesine karşın ekonomi hızla toparlandı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "\"Even though predicted recession\" = zıtlık. Durgunluk beklendi AMA hızlı toparlandı.",
     "sinyal": "even though",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -773,12 +783,13 @@
     "alinti": false,
     "soru_tr": "Araştırmacıların sonucuna göre şüpheli için ne söylenebilir?",
     "secenekler_tr": [
-      "Araştırmacılar şüpheliyi serbest bıraktı.",
+      "Şüphelinin olay yerinde bulunmuş olabileceği, ama bunun zayıf bir ihtimal olduğu sonucuna varıldı.",
+      "Şüphelinin olay yerinde olup olmadığı belirsizdir.",
       "Mevcut kanıtlara göre şüphelinin olay yerinde bulunmuş olması gerekir.",
       "Şüpheli kesinlikle olay yerinde değildi.",
-      "Şüphelinin olay yerinde olup olmadığı belirsizdir."
+      "Araştırmacılar şüpheliyi serbest bıraktı."
     ],
-    "dogru_index": 1,
+    "dogru_index": 2,
     "aciklama_tr": "\"Must have been\" = geçmişe güçlü çıkarım. Kanıtlara dayanarak bu sonuca varıldı.",
     "sinyal": "must have",
     "sinyal_ipucu": null,
@@ -795,8 +806,9 @@
     "secenekler_tr": [
       "Ekip kritik kararı almadan önce uzmanlarla danışmalıydı ama danışmadı.",
       "Uzmanlar ekibin kararını onayladı.",
-      "Ekip uzmanlarla danıştıktan sonra karar aldı.",
-      "Ekip doğru kararı aldı."
+      "Ekip doğru kararı aldı.",
+      "Ekibin uzmanlara danışması gerekmiyordu, bu yüzden danışmadı.",
+      "Ekip uzmanlarla danıştıktan sonra karar aldı."
     ],
     "dogru_index": 0,
     "aciklama_tr": "\"Should have consulted\" = danışmalıydı ama danışmadı. Geçmişe pişmanlık yapısı!",
@@ -834,12 +846,13 @@
     "alinti": false,
     "soru_tr": "Projenin yetersiz finansmanının sonucu nedir?",
     "secenekler_tr": [
-      "Ekip hedeflerine rağmen projeyi tamamladı.",
       "Ekip daha fazla fon talep etti.",
+      "Ekip bazı temel hedeflerden vazgeçti, bu da projenin fonlarının kesilmesine yol açtı.",
       "Hedefler revize edildi ama terk edilmedi.",
+      "Ekip hedeflerine rağmen projeyi tamamladı.",
       "Yetersiz fon nedeniyle ekip bazı temel hedeflerden vazgeçmek zorunda kaldı."
     ],
-    "dogru_index": 3,
+    "dogru_index": 4,
     "aciklama_tr": "\"Consequently\" = sonuç sinyali. Yetersiz fon → hedeflerin terk edilmesi.",
     "sinyal": "consequently",
     "sinyal_ipucu": "Sonuç sinyali",
@@ -877,8 +890,9 @@
     "secenekler_tr": [
       "Anlaşma, tarafların yükümlülüklerini belirtilen sürede yerine getirmesiyle geçerliliğini korur.",
       "Anlaşma tek taraflı olarak iptal edilebilir.",
-      "Belirtilen süre anlaşmanın geçerliliğini etkilemez.",
-      "Anlaşma her koşulda geçerlidir."
+      "Anlaşma her koşulda geçerlidir.",
+      "Taraflardan yalnızca birinin yükümlülüğünü yerine getirmesi anlaşmanın geçerli kalması için yeterlidir.",
+      "Belirtilen süre anlaşmanın geçerliliğini etkilemez."
     ],
     "dogru_index": 0,
     "aciklama_tr": "\"Provided that\" = şartıyla/koşuluyla. Yükümlülük yerine getirilirse geçerli.",
@@ -916,12 +930,13 @@
     "alinti": true,
     "soru_tr": "Müzakereler hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Taraflar anlaşmadan vazgeçti.",
-      "Müzakereler resmi olarak sona erdi.",
+      "Müzakereler tamamlanmak üzereydi.",
       "Tamamlanmaktan uzaktı ama taraflar iyimserdi.",
-      "Müzakereler tamamlanmak üzereydi."
+      "Müzakereler tamamlanmak üzere olduğu için taraflar iyimserdi.",
+      "Taraflar anlaşmadan vazgeçti.",
+      "Müzakereler resmi olarak sona erdi."
     ],
-    "dogru_index": 2,
+    "dogru_index": 1,
     "aciklama_tr": "\"Nowhere near completion\" = tamamlanmaktan çok uzak + \"yet\" = zıtlık.",
     "sinyal": "yet",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -1021,11 +1036,12 @@
     "soru_tr": "Teklif hakkında ne söylenebilir?",
     "secenekler_tr": [
       "Teorik olarak da hatalıdır.",
-      "Teoride mantıklı olsa da uygulamada neredeyse imkansızdır.",
       "Henüz test edilmemiştir.",
+      "Teoride mantıklı olsa da uygulamada neredeyse imkansızdır.",
+      "Uygulamada başarılı olsa da teoride tutarsızdır.",
       "Uygulaması son derece kolaydır."
     ],
-    "dogru_index": 1,
+    "dogru_index": 2,
     "aciklama_tr": "\"Next to impossible\" = neredeyse imkansız. \"While\" zıtlık kurar: teori iyi, uygulama zor.",
     "sinyal": "while",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -1124,12 +1140,13 @@
     "alinti": true,
     "soru_tr": "Birleşmenin sonucu hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Birleşme iptal edildi.",
-      "Kârı artırdı ve istihdamı korudu.",
+      "Kârı artırdı ama bir işten çıkarma dalgasına yol açtı.",
+      "Kârı artıramadığı gibi işten çıkarmalara da yol açtı.",
       "Yalnızca kârı etkiledi, istihdamı etkilemedi.",
-      "Kârı artıramadığı gibi işten çıkarmalara da yol açtı."
+      "Birleşme iptal edildi.",
+      "Kârı artırdı ve istihdamı korudu."
     ],
-    "dogru_index": 3,
+    "dogru_index": 1,
     "aciklama_tr": "\"Not only...but also\" = hem ...hem de. İki olumsuz sonuç birlikte verilir.",
     "sinyal": "Not only",
     "sinyal_ipucu": "Ekleyici zıtlık",
