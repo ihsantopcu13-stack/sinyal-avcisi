@@ -6,18 +6,20 @@
 //
 // parti.json biçimi: [{ "id": "q001", "e": "Beşinci şıkkın metni." }, ...]
 //
-// Kurallar (api/_sikKurallari.mjs): yeni şık HER ZAMAN sona (E) eklenir,
-// dogru_index DEĞİŞMEZ; E boş olamaz ve ilk 4 şıktan birinin kopyası
-// olamaz; yalnızca 4 şıklı sorulara eklenir; partide tek bir hata bile
-// varsa hiçbir şey yazılmaz. Uygulandıktan sonra index.html'deki SL_HAVUZ
-// mirror'ı scripts/generate-sl-havuz.mjs ile otomatik yeniden üretilir
+// Kurallar (api/_sikKurallari.mjs): yeni şık sona (E) eklenir; E boş
+// olamaz ve ilk 4 şıktan birinin kopyası olamaz; yalnızca 4 şıklı sorulara
+// eklenir; partide tek bir hata bile varsa hiçbir şey yazılmaz. Ardından
+// partinin şıkları tohumlu karıştırılır (partiyiKaristir): doğru cevaplar
+// A-E'ye dengeli dağılır, şık metinleri ve doğru cevap METNİ korunur.
+// Uygulandıktan sonra index.html'deki SL_HAVUZ mirror'ı
+// scripts/generate-sl-havuz.mjs ile otomatik yeniden üretilir
 // (tests/sot-mirror.test.mjs ikisinin senkron kaldığını doğrular).
 
 import { readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { eSikkiEkle, sikSayaci } from "../api/_sikKurallari.mjs";
+import { eSikkiEkle, partiyiKaristir, sikSayaci } from "../api/_sikKurallari.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, "..");
@@ -32,9 +34,19 @@ async function main() {
   const sorular = JSON.parse(ham);
   const ekler = JSON.parse(await readFile(path.resolve(partiYolu), "utf-8"));
 
-  const yeni = eSikkiEkle(sorular, ekler); // hata varsa fırlatır, hiçbir şey yazılmaz
+  const eklendi = eSikkiEkle(sorular, ekler); // hata varsa fırlatır, hiçbir şey yazılmaz
+  const idler = ekler.map((e) => e.id);
+  const yeni = partiyiKaristir(eklendi, idler);
   const s = sikSayaci(yeni);
   console.log(`Parti geçerli: ${ekler.length} soruya E şıkkı. Havuz sonrası: 4 şıklı ${s.dort}, 5 şıklı ${s.bes}.`);
+  const harf = (i) => String.fromCharCode(65 + i);
+  const partiDagilim = [0, 0, 0, 0, 0];
+  yeni.filter((q) => idler.includes(q.id)).forEach((q) => partiDagilim[q.dogru_index]++);
+  console.log(`Karıştırıldı — partide doğru cevap A/B/C/D/E = ${partiDagilim.join("/")}`);
+  for (const id of idler) {
+    const once = eklendi.find((q) => q.id === id), sonra = yeni.find((q) => q.id === id);
+    console.log(`  ${id}: ${harf(once.dogru_index)} → ${harf(sonra.dogru_index)}`);
+  }
   if (kuru) {
     console.log("--kuru: hiçbir dosyaya yazılmadı.");
     return;

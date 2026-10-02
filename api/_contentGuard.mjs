@@ -12,7 +12,7 @@
 // 5. Gramer doğrulaması (temel)
 // ============================================================
 
-import { soruBesinciSikHatasi } from './_sikKurallari.mjs';
+import { soruSikHatasi } from './_sikKurallari.mjs';
 
 // 30 tanınan AVCI sinyali
 export const SINYAL_WHITELIST = new Set([
@@ -61,10 +61,10 @@ export function soruDogrula(soru) {
     const bos = soru.secenekler_tr.filter(s => !s || s.trim().length < 2);
     if (bos.length > 0) hatalar.push(`${bos.length} şık boş veya çok kısa`);
     if (new Set(soru.secenekler_tr).size !== soru.secenekler_tr.length) hatalar.push('aynı şık metni birden fazla kez var');
-    // 5. şık (E): boş olamaz, ilk 4 şıktan birinin (büyük/küçük harf, boşluk,
-    // sondaki noktalama farkı gözetmeksizin) kopyası olamaz.
-    const eHatasi = soruBesinciSikHatasi(soru);
-    if (eHatasi) hatalar.push(eHatasi);
+    // Hiçbir şık boş olamaz, hiçbir iki şık (büyük/küçük harf, boşluk,
+    // sondaki noktalama farkı gözetmeksizin) birbirinin kopyası olamaz.
+    const sikHatasi = soruSikHatasi(soru);
+    if (sikHatasi) hatalar.push(sikHatasi);
   }
 
   // 3. Doğru şık indexi
@@ -96,13 +96,8 @@ export function soruDogrula(soru) {
     uyarilar.push('aciklama_tr çok kısa (min 20 karakter önerilen)');
   }
 
-  // 7. Şıklarda tekrar kontrolü
-  if (Array.isArray(soru.secenekler_tr) && soru.secenekler_tr.length === 4) {
-    const setSecenekler = new Set(soru.secenekler_tr.map(s => s.toLowerCase().trim()));
-    if (setSecenekler.size < soru.secenekler_tr.length) {
-      hatalar.push('Şıklar arasında tekrar var');
-    }
-  }
+  // 7. Şıklarda tekrar kontrolü: yukarıdaki soruSikHatasi (2. adım) tüm şık
+  // sayılarında, normalize ederek yapıyor (eskiden yalnızca 4 şıklıda vardı).
 
   // Sonuç
   let durum;
