@@ -86,10 +86,11 @@
     "alinti": true,
     "soru_tr": "Sosyologlar tabakalaşma için ne söyler?",
     "secenekler_tr": [
-      "Kültürel normlardan tamamen bağımsızdır.",
-      "Sadece kentsel alanlarda görülür.",
+      "Ekonomik bir olgudur.",
+      "Kültürel normları belirler ama onlardan etkilenmez.",
       "Kültürel normlarla yakından ilişkilidir.",
-      "Ekonomik bir olgudur."
+      "Kültürel normlardan tamamen bağımsızdır.",
+      "Sadece kentsel alanlarda görülür."
     ],
     "dogru_index": 2,
     "aciklama_tr": "\"Hardly operates independently\" = neredeyse hiç bağımsız değil.",
@@ -207,10 +208,11 @@
     "alinti": true,
     "soru_tr": "Politika hakkında ne doğrudur?",
     "secenekler_tr": [
-      "Politika uygulanmadı.",
-      "Tüm gruplar eşit şekilde etkilendi.",
       "Tamamen tarafsızdı.",
-      "Tarafsız değildi; dezavantajlı topluluklar daha çok etkilendi."
+      "Politika uygulanmadı.",
+      "Tarafsız değildi; en çok ayrıcalıklı kesimleri etkiledi.",
+      "Tarafsız değildi; dezavantajlı topluluklar daha çok etkilendi.",
+      "Tüm gruplar eşit şekilde etkilendi."
     ],
     "dogru_index": 3,
     "aciklama_tr": "\"Anything but neutral\" = tarafsız değil. Güçlü gizli olumsuz!",
@@ -370,9 +372,10 @@
     "soru_tr": "Tarım sübvansiyonlarının artırılmasıyla ne ilişkili?",
     "secenekler_tr": [
       "Kentleşme hızlandı.",
-      "Tarım üretimi düştü.",
       "Sübvansiyonlar etkisiz kaldı.",
-      "Kentleşme oranı azaldı."
+      "Kentleşme, sübvansiyonların azaltıldığı bölgelerde düştü.",
+      "Kentleşme oranı azaldı.",
+      "Tarım üretimi düştü."
     ],
     "dogru_index": 3,
     "aciklama_tr": "\"Consequently\" sonuç bildirir. \"Declined\" = azaldı. Sübvansiyon arttı, kentleşme düştü.",
@@ -450,12 +453,13 @@
     "alinti": true,
     "soru_tr": "Araştırmanın sosyal hareketlilik hakkındaki bulguları nedir?",
     "secenekler_tr": [
-      "Yaygın inancın aksine azalmıştır.",
       "Değişim gözlemlenmemiştir.",
       "Son yıllarda artmıştır.",
+      "Yaygın inancın aksine azalmıştır.",
+      "Yaygın inanca uygun olarak son yirmi yılda azalmıştır.",
       "Yalnızca gelişmiş ülkelerde düşmüştür."
     ],
-    "dogru_index": 0,
+    "dogru_index": 2,
     "aciklama_tr": "\"Contrary to popular belief\" = yaygın inancın aksine. \"Declined\" = azaldı.",
     "sinyal": "contrary to popular belief",
     "sinyal_ipucu": "Zıtlık",
@@ -712,12 +716,13 @@
     "alinti": false,
     "soru_tr": "Sosyal program hakkında ne söylenebilir?",
     "secenekler_tr": [
-      "Program önemli fonlarla hedeflerine ulaştı.",
       "Fon yetersizliği programın başarısını engelledi.",
+      "Program hedeflerine ulaştı ancak bunun için beklenenden fazla fon harcandı.",
       "Program hedeflerine kısmen ulaştı.",
+      "Program önemli fonlarla hedeflerine ulaştı.",
       "Önemli finansmana rağmen program hedeflerine ulaşmaktan uzak kaldı."
     ],
-    "dogru_index": 3,
+    "dogru_index": 4,
     "aciklama_tr": "\"Far from achieving\" = ulaşamadı + \"despite funding\" = zıtlık.",
     "sinyal": "despite",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -732,12 +737,13 @@
     "alinti": false,
     "soru_tr": "Kamuoyunun girişime desteği nasıldı?",
     "secenekler_tr": [
+      "Anketler desteğin olmayacağını gösterdi.",
       "Anketler büyük destek olacağını garantiledi.",
-      "İlk coşkuya rağmen kamuoyu desteği kesinlikle garantili değildi.",
       "Kamuoyu desteği hiç olmadı.",
-      "Anketler desteğin olmayacağını gösterdi."
+      "İlk anketlerde coşku görülmediği için destek garantili değildi.",
+      "İlk coşkuya rağmen kamuoyu desteği kesinlikle garantili değildi."
     ],
-    "dogru_index": 1,
+    "dogru_index": 4,
     "aciklama_tr": "\"By no means guaranteed\" = kesinlikle garantili değil + \"even though enthusiasm\" = zıtlık.",
     "sinyal": "even though",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -832,10 +838,11 @@
     "alinti": false,
     "soru_tr": "Nüfus artışının sonucu nedir?",
     "secenekler_tr": [
-      "Nüfus azalması konut fiyatlarını artırdı.",
+      "Konut fiyatları nüfus artışından bağımsız olarak yükseldi.",
       "On yıllık nüfus artışının sonucunda konut fiyatları görülmemiş seviyelere yükseldi.",
-      "Nüfus artışı konut fiyatlarını düşürdü.",
-      "Konut fiyatları nüfus artışından bağımsız olarak yükseldi."
+      "Nüfus azalması konut fiyatlarını artırdı.",
+      "Konut fiyatlarındaki artış nüfusun hızla büyümesine yol açtı.",
+      "Nüfus artışı konut fiyatlarını düşürdü."
     ],
     "dogru_index": 1,
     "aciklama_tr": "\"As a result\" = sonuç sinyali. Nüfus artışı → konut fiyatları arttı.",
@@ -973,12 +980,13 @@
     "alinti": true,
     "soru_tr": "Doğum oranlarındaki düşüşün sonucu nedir?",
     "secenekler_tr": [
+      "Ülkeler göçü tamamen durdurdu.",
       "Bazı ülkeler emeklilik sistemlerini gözden geçirdi.",
       "Doğum oranları yapay olarak artırıldı.",
       "Emeklilik sistemleri değişmeden kaldı.",
-      "Ülkeler göçü tamamen durdurdu."
+      "Doğum oranları arttığı için bazı ülkeler emeklilik sistemlerini değiştirdi."
     ],
-    "dogru_index": 0,
+    "dogru_index": 1,
     "aciklama_tr": "\"As a consequence of\" = sonucu olarak, nedensellik bildirir.",
     "sinyal": "As a consequence of",
     "sinyal_ipucu": "Sonuç sinyali",
@@ -1074,12 +1082,13 @@
     "alinti": true,
     "soru_tr": "Eleştirmenlerin ankete yönelik itirazı nedir?",
     "secenekler_tr": [
-      "Örneklem temsil edici değildi.",
-      "Sonuçlar tamamen genellenebilir bulundu.",
       "Örneklem temsil edici olsa da sonuçların genellenebilir olmadığını düşünüyorlar.",
-      "Anket hiç yapılmadı."
+      "Örneklem temsil edici değildi.",
+      "Anket hiç yapılmadı.",
+      "Örneklem temsil edici olduğu için sonuçların genellenebilir olduğunu düşünüyorlar.",
+      "Sonuçlar tamamen genellenebilir bulundu."
     ],
-    "dogru_index": 2,
+    "dogru_index": 0,
     "aciklama_tr": "\"Far from generalizable\" = genellenebilir değil. \"Even though representative\" zıtlık kurar.",
     "sinyal": "Even though",
     "sinyal_ipucu": "Zıtlık sinyali",
@@ -1175,12 +1184,13 @@
     "alinti": true,
     "soru_tr": "Kamuoyu desteği ile ilgili ne söylenebilir?",
     "secenekler_tr": [
-      "İlk açıklamadan bu yana istikrarlı biçimde arttı.",
-      "Açıklamadan önce zaten düşüktü.",
       "İlk açıklamadan bu yana belirgin biçimde azaldı.",
+      "Açıklamadan önce zaten düşüktü.",
+      "İlk açıklamadan bu yana istikrarlı biçimde arttı.",
+      "İlk açıklamada belirgin biçimde azaldı, sonra yeniden toparlandı.",
       "Hiç değişmedi."
     ],
-    "dogru_index": 2,
+    "dogru_index": 0,
     "aciklama_tr": "\"Dwindling steadily\" = istikrarlı biçimde azalan. \"Shifted markedly since\" = belirgin değişim, zamanla.",
     "sinyal": "since",
     "sinyal_ipucu": "Zaman sinyali",
