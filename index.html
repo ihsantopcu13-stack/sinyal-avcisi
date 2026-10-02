@@ -438,6 +438,19 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
    menülerin (nav 200) üstünde, modal'ların (.modal-ov 300+) altında. */
 .klod-geri-btn{background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;flex-shrink:0;transition:border-color .15s}
 .klod-geri-btn:hover{border-color:var(--signal);color:var(--signal)}
+/* YANLIŞ CEVAP AÇIKLAMA KUTUSU — soru içeren bütün bölümlerin ortak bileşeni (yanlisCevapKutusu). */
+.yc-kutu{display:block;margin-top:12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.4);border-left:4px solid var(--trap,#e03c3c);background:rgba(224,60,60,.07);color:var(--ink);font-size:14px;line-height:1.55;text-align:left}
+.yc-baslik{font-weight:800;color:var(--trap,#e03c3c);margin-bottom:8px}
+.yc-satir{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin:3px 0}
+.yc-satir span{font-size:12px;font-weight:700;letter-spacing:.02em;min-width:92px;color:var(--muted)}
+.yc-senin b{color:var(--trap,#e03c3c)}
+.yc-dogru-satir b{color:#16a34a}
+.yc-aciklama{margin-top:8px;padding-top:8px;border-top:1px dashed rgba(224,60,60,.3);color:var(--ink)}
+.yc-klod-btn{margin-top:10px;background:var(--sl);border:1px solid var(--signal);color:var(--signal);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
+.yc-klod-btn:hover{filter:brightness(1.12)}
+.yc-klod-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.yc-dogru{border-color:#16a34a!important;background:rgba(22,163,74,.14)!important;color:#16a34a!important}
+.yc-yanlis{border-color:var(--trap,#e03c3c)!important;background:rgba(224,60,60,.12)!important;color:var(--trap,#e03c3c)!important}
 .klod-hata{align-self:stretch;max-width:min(720px,100%);display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.45);background:rgba(224,60,60,.08);color:var(--ink);font-size:14px;line-height:1.5}
 .klod-hata-yazi{flex:1 1 220px;font-weight:600}
 .klod-hata-btn{background:var(--surface);border:1px solid rgba(224,60,60,.5);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
@@ -6677,7 +6690,7 @@ const SAT_HAVUZ=[
   {tip:'zaman',sent:'<span class="sat-highlight time" data-tip="Zaman sinyali!">No sooner had</span> the announcement been made <span class="sat-highlight time">than</span> the market reacted.',q:'Piyasa ne zaman tepki verdi?',opts:['Duyurudan önce piyasa tepki verdi.','Duyuru yapılır yapılmaz piyasa tepki verdi.','Piyasa duyuruyu bekledi.','Piyasa tepki vermedi.'],ans:1,fb:'"No sooner...than" = yapar yapmaz.',sinyal:'no sooner'},
   {sent:'The committee will approve the proposal ___ it meets the required standards.',q:'Boşluğu doğru doldurun:',opts:['provided that','despite','although','even if'],ans:0,fb:'"Provided that" = sadece...durumunda, kosul bildirir.',sinyal:'provided that'},
   {sent:'___ the new evidence, the court overturned the previous decision.',q:'Hangi seçenek doğrudur?',opts:['In spite of','In light of','Regardless of','Instead of'],ans:1,fb:'"In light of" = -e dayanarak, yeni bilgi isiginda.',sinyal:'in light of'},
-  {sent:'The scientist found the results puzzling, ___ they were consistent with the hypothesis.',q:'Doğru bağlacı seçin:',opts:['because','so','yet','therefore'],ans:2,fb:'"Yet" = zitlik bildirir, ancak anlami tasiyor.',sinyal:'yet'},
+  {sent:'The scientist found the results puzzling, ___ they were consistent with the hypothesis.',q:'Doğru bağlacı seçin:',opts:['because','so','yet','therefore'],ans:2,fb:'"Yet" = zıtlık bildirir, ancak anlamı taşıyor.',sinyal:'yet'},
   {sent:'___ stringent the regulations are, companies find ways to adapt.',q:'Hangi yapı doğrudur?',opts:['However','No matter how','Even though','Despite'],ans:1,fb:'"No matter how" + sifat = ne kadar...olursa olsun.',sinyal:'no matter how'},
   {sent:'The data suggests that ___ previously assumed, the correlation is negative.',q:'Doğru yapıyı seçin:',opts:['contrary to what was','despite what','although','whereas'],ans:0,fb:'"Contrary to what was assumed" = varsayilanin aksine.',sinyal:'contrary to'},
 ];
@@ -6717,7 +6730,7 @@ function satPratikRender(){
   },300);
 }
 function satSureDoIdi(){if(satAnswered)return;satAnswered=true;_satRtAnsweredSlot=satSoruIdx;const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];if(opts[soru.ans])opts[soru.ans].classList.add('ok');const fb=document.getElementById('sat-fb');if(fb){fb.className='sat-fb err';fb.textContent='⏱ Süre doldu! Doğru: '+soru.opts[soru.ans];}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
-function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;const _satRt=rtBitir(_satRtBaslangic);_satRtAnsweredSlot=satSoruIdx;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null,responseTimeMs:_satRt});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb err';fb.textContent='❌ '+soru.fb;}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null,responseTimeMs:_satRt});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
+function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;const _satRt=rtBitir(_satRtBaslangic);_satRtAnsweredSlot=satSoruIdx;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null,responseTimeMs:_satRt});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb';if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:(soru.q||'')+' '+soru.sent,secenekler:soru.opts,dogruIdx:dogru,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'SAT Metodu'});else{fb.className='sat-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null,responseTimeMs:_satRt});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
 function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}satPratikRender();}
 function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(245,166,35,.1);color:var(--signal);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
@@ -6834,6 +6847,7 @@ function dnav(el){
   const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
+  if(!txt.includes('KLOD'))_klodDonusGorunumu=null; // menüden başka yere gidildi: normal akış
   document.querySelector('.dash-inner')?.classList.toggle('dash-inner-klod',txt.includes('KLOD'));
   klodOdakAyarla(txt.includes('KLOD'),oncekiAktif);
   document.querySelectorAll('.dmod').forEach(m=>m.style.display='none');
@@ -6969,6 +6983,37 @@ function dnav(el){
 // Telefonun geri tuşu için girişte bir history kaydı eklenir; geri tuşu/Geri
 // butonu/Esc bu kaydı geri alır, popstate'te önceki sekmeye dönülür.
 let _klodOncekiItem=null,_klodScrollY=0,_klodPopSessiz=false;
+// "KLOD'la açıkla" (yanlış cevap kutusu) ile KLOD'a gelindiyse, önceki ekranın
+// görünüm durumu. Dönüşte bölüm YENİDEN ÇİZİLMEZ (soru/cevap işaretleri
+// korunur, cevap ikinci kez sayılmaz); sadece görünürlükler geri alınır.
+// Kullanıcı menüden başka yere giderse dnav() bu kaydı atar.
+let _klodDonusGorunumu=null;
+function klodDonusGorunumuSakla(){
+  const main=document.querySelector('.dash-main');
+  const parca=['.dash-karts','.dash-tabs','.dash-welcome','#sk-kart','#bugun-kart'].map(s=>{const e=(main&&main.querySelector(s))||document.querySelector(s);return [e,e?e.style.display:null];});
+  _klodDonusGorunumu={
+    dmod:[...document.querySelectorAll('.dmod')].map(m=>[m,m.style.display]),
+    parca,
+    dnItem:document.querySelector('.dn-item.active'),
+    dtab:document.querySelector('.dtab.active'),
+    aktifSoruModulu:typeof _aktifSoruModulu!=='undefined'?_aktifSoruModulu:null
+  };
+}
+function klodDonusGorunumuUygula(g){
+  const y=_klodScrollY;
+  klodOdakAyarla(false);
+  document.querySelector('.dash-inner')?.classList.remove('dash-inner-klod');
+  document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
+  if(g.dnItem&&document.contains(g.dnItem))g.dnItem.classList.add('active');
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  if(g.dtab&&document.contains(g.dtab))g.dtab.classList.add('active');
+  g.dmod.forEach(([m,d])=>{m.style.display=d;});
+  g.parca.forEach(([e,d])=>{if(e)e.style.display=d;});
+  // #mod-sinyal KLOD'un içeriğini taşıyor: Sinyal Lab görünüyorduysa asıl düğümleri geri tak
+  if(g.dmod.some(([m,d])=>m.id==='mod-sinyal'&&d&&d!=='none'))modSinyalAsilGeriYukle();
+  if(typeof _aktifSoruModulu!=='undefined')_aktifSoruModulu=g.aktifSoruModulu;
+  window.scrollTo(0,y);
+}
 function klodOdakAyarla(acik,oncekiAktif){
   const b=document.body,zatenAcik=b.classList.contains('klod-odak');
   if(acik&&!zatenAcik){
@@ -6983,6 +7028,7 @@ function klodOdakAyarla(acik,oncekiAktif){
 }
 function _klodOdakKapat(){
   if(!document.body.classList.contains('klod-odak'))return;
+  if(_klodDonusGorunumu){const g=_klodDonusGorunumu;_klodDonusGorunumu=null;klodDonusGorunumuUygula(g);return;}
   let hedef=_klodOncekiItem;
   if(!hedef||!document.contains(hedef)||hedef.textContent.includes('KLOD'))hedef=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Bugün'));
   const y=_klodScrollY;
@@ -7751,12 +7797,14 @@ function dAns(btn,correct){
   faz2GaEvent('question_answered',{question_id:__slQidAns,correct:Boolean(correct)});
   faz2GaEvent(correct?'answer_correct':'answer_wrong',{question_id:__slQidAns});
   if(correct){
-    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Doğru! '+soru.fb;
     streakSoruEkle('sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
     if(typeof konfeti==='function')konfeti();
   } else {
-    btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb';
+    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.sent+' '+soru.q,secenekler:soru.opts,dogruIdx:soru.ans,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Sinyal Lab'});
+    else{fb.className='dm-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
@@ -8145,35 +8193,35 @@ kkUpdateDashCard();
 // GUNLUK TUZAK — 30 soruluk havuz
 const TUZAK_HAVUZ=[
   {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"She would have attended the conference _____ she received the invitation in time."',opts:['A) if','B) had','C) unless','D) although'],dogru:1,fb:'3rd conditional devrik yapı: "if" düştüğünde "had" one çıkar.'},
-  {q:'Boşluğu doğru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e ragmen + tam cumle. Zitlik sinyali.'},
-  {q:'Anlamca en yakın seçenek hangisi?',sent:'"The findings were by no means conclusive."',opts:['A) tamamen kesin','B) kesinlikle kesin değil','C) bir ölçüde kesin','D) tartışmalı'],dogru:1,fb:'"By no means" = gizli olumsuz; kesinlikle degil.'},
-  {q:'Boşluğa hangisi gelmelidir?',sent:'"_____ the new policy, employees were given more flexibility."',opts:['A) Despite','B) Although','C) Under','D) However'],dogru:2,fb:'"Under + isim" = bir duzenleme altinda. Edat, baglac degil.'},
-  {q:'Modal yapıyı doğru tanımlayın:',sent:'"She must have forgotten the meeting."',opts:['A) Zorunluluk','B) Geçmişe dair güçlü çıkarım','C) Izin','D) Gelecek tahmin'],dogru:1,fb:'"Must have + V3" = gecmise dair kanita dayali guclu cıkarim. Zorunluluk degil!'},
-  {q:'Cümlede "far from" ne anlama gelir?',sent:'"The solution was far from perfect."',opts:['A) mükemmele yakın','B) mükemmeldi','C) mükemmel değildi','D) mükemmel olabilirdi'],dogru:2,fb:'"Far from" = gizli olumsuz. Anlaminda "degil" vardir.'},
-  {q:'Boşluğu doğru doldurun:',sent:'"The report was submitted _____ the deadline."',opts:['A) despite','B) prior to','C) although','D) however'],dogru:1,fb:'"Prior to" = once (edat). Zaman iliskisi kurar.'},
+  {q:'Boşluğu doğru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e rağmen + tam cümle. Zıtlık sinyali.'},
+  {q:'Anlamca en yakın seçenek hangisi?',sent:'"The findings were by no means conclusive."',opts:['A) tamamen kesin','B) kesinlikle kesin değil','C) bir ölçüde kesin','D) tartışmalı'],dogru:1,fb:'"By no means" = gizli olumsuz; kesinlikle değil.'},
+  {q:'Boşluğa hangisi gelmelidir?',sent:'"_____ the new policy, employees were given more flexibility."',opts:['A) Despite','B) Although','C) Under','D) However'],dogru:2,fb:'"Under + isim" = bir düzenleme altında. Edat, bağlaç değil.'},
+  {q:'Modal yapıyı doğru tanımlayın:',sent:'"She must have forgotten the meeting."',opts:['A) Zorunluluk','B) Geçmişe dair güçlü çıkarım','C) Izin','D) Gelecek tahmin'],dogru:1,fb:'"Must have + V3" = geçmişe dair kanıta dayalı güçlü çıkarım. Zorunluluk değil!'},
+  {q:'Cümlede "far from" ne anlama gelir?',sent:'"The solution was far from perfect."',opts:['A) mükemmele yakın','B) mükemmeldi','C) mükemmel değildi','D) mükemmel olabilirdi'],dogru:2,fb:'"Far from" = gizli olumsuz. Anlamında "değil" vardır.'},
+  {q:'Boşluğu doğru doldurun:',sent:'"The report was submitted _____ the deadline."',opts:['A) despite','B) prior to','C) although','D) however'],dogru:1,fb:'"Prior to" = önce (edat). Zaman ilişkisi kurar.'},
   {q:'Hangi seçenek doğruda?',sent:'"Had she known the truth, she _____ differently."',opts:['A) will behave','B) would behave','C) would have behaved','D) had behaved'],dogru:2,fb:'3rd conditional: "Had she known..." → "would have + V3"'},
-  {q:'"Hardly" kelimesinin anlamı nedir?',sent:'"The committee hardly considered the proposal."',opts:['A) Mutlaka','B) Neredeyse hic','C) Kesinlikle','D) Büyük ölçüde'],dogru:1,fb:'"Hardly" = gizli olumsuz; neredeyse hic. OSYM tuzak yapisi.'},
-  {q:'Doğru seçeneği bulun:',sent:'"The new regulation aims to _____ the impact of pollution."',opts:['A) amplify','B) mitigate','C) accelerate','D) neglect'],dogru:1,fb:'"Mitigate" = hafifletmek, azaltmak. OSYM akademik kelime.'},
-  {q:'Boşluğa hangi bağlaç gelir?',sent:'"_____ its flaws, the study was widely cited."',opts:['A) Because of','B) Despite','C) Unless','D) Whenever'],dogru:1,fb:'"Despite + isim" = -e ragmen. Zitlik sinyali.'},
-  {q:'"Notwithstanding" hangi anlamda kullanılır?',sent:'"Notwithstanding the difficulties, the project succeeded."',opts:['A) Nedeniyle','B) Buna ragmen','C) Bundan dolayı','D) Aksi halde'],dogru:1,fb:'"Notwithstanding" = buna ragmen / karsin. Resmi dilde despite ile esdeger.'},
-  {q:'Hangi seçenek modalın doğru anlamını verir?',sent:'"The patient might have reacted to the medication."',opts:['A) Kesinlikle reaksiyon gösterdi','B) Zorunlu olarak gösterdi','C) Belki reaksiyon göstermiş olabilir','D) Göstermeli'],dogru:2,fb:'"Might have + V3" = gecmise dair zayif ihtimal. "Must have" ile karistirmayin!'},
-  {q:'Boşluğu tamamlayın:',sent:'"The committee was _____ divided on the issue."',opts:['A) deeply','B) deep','C) depth','D) deepen'],dogru:0,fb:'"Deeply divided" = derin bicimde bolunmus. Sifati niteleyen zarf kullanilir.'},
-  {q:'Anlam sorusu - ne ifade eder?',sent:'"The results were anything but conclusive."',opts:['A) Sonuçlar tamamen kesin','B) Sonuçlar kesin değildi','C) Sonuçlar yeterliydi','D) Sonuçlar beklendik'],dogru:1,fb:'"Anything but" = ... degil. Guclu gizli olumsuz. "Far from" ile ayni islev.'},
-  {q:'Hangi seçenek doğruda?',sent:'"The findings suggest that the hypothesis _____ further testing."',opts:['A) require','B) requires','C) required','D) requiring'],dogru:1,fb:'Subject (hypothesis) tekil → "requires". Subject-verb agreement tuzagi!'},
-  {q:'Boşluğu tamamlayın:',sent:'"The law was enacted _____ protect consumers."',opts:['A) so as to','B) despite','C) although','D) however'],dogru:0,fb:'"So as to" = amaci ifade eder (= in order to). Amac baglaci.'},
+  {q:'"Hardly" kelimesinin anlamı nedir?',sent:'"The committee hardly considered the proposal."',opts:['A) Mutlaka','B) Neredeyse hic','C) Kesinlikle','D) Büyük ölçüde'],dogru:1,fb:'"Hardly" = gizli olumsuz; neredeyse hiç. ÖSYM tuzak yapısı.'},
+  {q:'Doğru seçeneği bulun:',sent:'"The new regulation aims to _____ the impact of pollution."',opts:['A) amplify','B) mitigate','C) accelerate','D) neglect'],dogru:1,fb:'"Mitigate" = hafifletmek, azaltmak. ÖSYM akademik kelime.'},
+  {q:'Boşluğa hangi bağlaç gelir?',sent:'"_____ its flaws, the study was widely cited."',opts:['A) Because of','B) Despite','C) Unless','D) Whenever'],dogru:1,fb:'"Despite + isim" = -e rağmen. Zıtlık sinyali.'},
+  {q:'"Notwithstanding" hangi anlamda kullanılır?',sent:'"Notwithstanding the difficulties, the project succeeded."',opts:['A) Nedeniyle','B) Buna ragmen','C) Bundan dolayı','D) Aksi halde'],dogru:1,fb:'"Notwithstanding" = buna rağmen / karşın. Resmi dilde despite ile eşdeğer.'},
+  {q:'Hangi seçenek modalın doğru anlamını verir?',sent:'"The patient might have reacted to the medication."',opts:['A) Kesinlikle reaksiyon gösterdi','B) Zorunlu olarak gösterdi','C) Belki reaksiyon göstermiş olabilir','D) Göstermeli'],dogru:2,fb:'"Might have + V3" = geçmişe dair zayıf ihtimal. "Must have" ile karıştırmayın!'},
+  {q:'Boşluğu tamamlayın:',sent:'"The committee was _____ divided on the issue."',opts:['A) deeply','B) deep','C) depth','D) deepen'],dogru:0,fb:'"Deeply divided" = derin biçimde bölünmüş. Sıfatı niteleyen zarf kullanılır.'},
+  {q:'Anlam sorusu - ne ifade eder?',sent:'"The results were anything but conclusive."',opts:['A) Sonuçlar tamamen kesin','B) Sonuçlar kesin değildi','C) Sonuçlar yeterliydi','D) Sonuçlar beklendik'],dogru:1,fb:'"Anything but" = ... değil. Güçlü gizli olumsuz. "Far from" ile aynı işlev.'},
+  {q:'Hangi seçenek doğruda?',sent:'"The findings suggest that the hypothesis _____ further testing."',opts:['A) require','B) requires','C) required','D) requiring'],dogru:1,fb:'Subject (hypothesis) tekil → "requires". Subject-verb agreement tuzağı!'},
+  {q:'Boşluğu tamamlayın:',sent:'"The law was enacted _____ protect consumers."',opts:['A) so as to','B) despite','C) although','D) however'],dogru:0,fb:'"So as to" = amacı ifade eder (= in order to). Amaç bağlacı.'},
   {q:'Modal yapı sorusu:',sent:'"You should have submitted the form earlier."',opts:['A) Formu gönderdin','B) Göndermeliydin ama göndermedin','C) Göndereceksin','D) Gönderebilirdin'],dogru:1,fb:'"Should have + V3" = gecmiste yapilmasi gerekirdi ama yapilmadi. Pismanlık yapisi.'},
-  {q:'Hangi kelime boşluğa uyar?',sent:'"The evidence was _____ to support the claim."',opts:['A) insufficient','B) sufficient','C) proficient','D) efficient'],dogru:0,fb:'"Insufficient" = yetersiz. "Insufficient to + V" kalibina dikkat.'},
-  {q:'Bağlaç sorusu:',sent:'"_____ the budget was limited, they completed the project."',opts:['A) Despite','B) Although','C) Because','D) Therefore'],dogru:1,fb:'"Although" + tam cumle = -e ragmen. "Despite" isim/V-ing ister.'},
-  {q:'Anlamca yakın seçenek hangisi?',sent:'"The policy is contingent on approval."',opts:['A) Onaydan bağımsız','B) Onaya bağlı','C) Onaya ragmen','D) Onay gerektirmeyen'],dogru:1,fb:'"Contingent on" = -e bagli, kosullu. Akademik metinlerde sik.'},
+  {q:'Hangi kelime boşluğa uyar?',sent:'"The evidence was _____ to support the claim."',opts:['A) insufficient','B) sufficient','C) proficient','D) efficient'],dogru:0,fb:'"Insufficient" = yetersiz. "Insufficient to + V" kalıbına dikkat.'},
+  {q:'Bağlaç sorusu:',sent:'"_____ the budget was limited, they completed the project."',opts:['A) Despite','B) Although','C) Because','D) Therefore'],dogru:1,fb:'"Although" + tam cümle = -e rağmen. "Despite" isim/V-ing ister.'},
+  {q:'Anlamca yakın seçenek hangisi?',sent:'"The policy is contingent on approval."',opts:['A) Onaydan bağımsız','B) Onaya bağlı','C) Onaya ragmen','D) Onay gerektirmeyen'],dogru:1,fb:'"Contingent on" = -e bağlı, koşullu. Akademik metinlerde sık.'},
   {q:'Hangi yapı yanlıştır?',sent:'A) Despite working hard / B) Despite she worked hard / C) Although she worked hard / D) Even though she worked hard',opts:['A) A sik','B) B yanlış','C) C doğru','D) D doğru'],dogru:1,fb:'"Despite" + isim/gerund. "Despite she worked" yanlış - sonrasında cümle gelmez!'},
-  {q:'Modal + have + V3 sorusu:',sent:'"The documents _____ been misplaced."',opts:['A) can','B) could have','C) should','D) might'],dogru:1,fb:'"Could have + V3" = gecmiste mumkun olmus olabilirdi.'},
-  {q:'Hangi kelime "azaltmak" anlamına gelir?',sent:'Bagdam: "The new policy will _____ emissions."',opts:['A) amplify','B) sustain','C) curtail','D) enhance'],dogru:2,fb:'"Curtail" = kismak, azaltmak. OSYM Fen/Sosyal metinlerinde sik.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The researcher\'s conclusion was _____ by subsequent studies."',opts:['A) refuted','B) stipulated','C) mitigated','D) amplified'],dogru:0,fb:'"Refute" = curutmek. "Subsequent" = sonraki. Ikisi birlikte OSYM kalibı.'},
+  {q:'Modal + have + V3 sorusu:',sent:'"The documents _____ been misplaced."',opts:['A) can','B) could have','C) should','D) might'],dogru:1,fb:'"Could have + V3" = geçmişte mümkün olmuş olabilirdi.'},
+  {q:'Hangi kelime "azaltmak" anlamına gelir?',sent:'Bagdam: "The new policy will _____ emissions."',opts:['A) amplify','B) sustain','C) curtail','D) enhance'],dogru:2,fb:'"Curtail" = kısmak, azaltmak. ÖSYM Fen/Sosyal metinlerinde sık.'},
+  {q:'Boşluğu tamamlayın:',sent:'"The researcher\'s conclusion was _____ by subsequent studies."',opts:['A) refuted','B) stipulated','C) mitigated','D) amplified'],dogru:0,fb:'"Refute" = çürütmek. "Subsequent" = sonraki. İkisi birlikte ÖSYM kalıbı.'},
   {q:'Inversion sorusu:',sent:'"Never _____ such a significant error in the data."',opts:['A) we have seen','B) have we seen','C) we had seen','D) had we been seeing'],dogru:1,fb:'"Never" başa gelince devrik yapı: Never + yardımcı + özne + V. ÖSYM tuzağı!'},
-  {q:'Hangi seçenek doğru anlamı verir?',sent:'"The council is reluctant to adopt the new measures."',opts:['A) istekli','B) isteksiz','C) zorunlu','D) kararlı'],dogru:1,fb:'"Reluctant" = isteksiz, cekingen. "Reluctant to + V" OSYM\'de sik.'},
-  {q:'Boşluğu tamamlayın:',sent:'"The results were _____ with previous findings."',opts:['A) consistent','B) consisted','C) consistency','D) consistently'],dogru:0,fb:'"Consistent with" = ile tutarli/uyumlu. Sifat (be + consistent) kalibi.'},
-  {q:'Tuzak soru - anlamine dikkat:',sent:'"The proposal was not without merit."',opts:['A) Tamamen değersizdi','B) Değerliydi','C) Tartışmalıydı','D) Değeri yoktu'],dogru:1,fb:'"Not without merit" = cift olumsuz = olumlu. Degersiz degildi → degerliydi!'},
-  {q:'Gerund / infinitive sorusu:',sent:'"She was accused of _____ the report."',opts:['A) to falsify','B) falsifying','C) falsify','D) having falsify'],dogru:1,fb:'"Accused of + V-ing". Edat (of) sonrasinda gerund gelir.'},
+  {q:'Hangi seçenek doğru anlamı verir?',sent:'"The council is reluctant to adopt the new measures."',opts:['A) istekli','B) isteksiz','C) zorunlu','D) kararlı'],dogru:1,fb:'"Reluctant" = isteksiz, çekingen. "Reluctant to + V" ÖSYM\'de sık.'},
+  {q:'Boşluğu tamamlayın:',sent:'"The results were _____ with previous findings."',opts:['A) consistent','B) consisted','C) consistency','D) consistently'],dogru:0,fb:'"Consistent with" = ile tutarlı/uyumlu. Sıfat (be + consistent) kalıbı.'},
+  {q:'Tuzak soru - anlamine dikkat:',sent:'"The proposal was not without merit."',opts:['A) Tamamen değersizdi','B) Değerliydi','C) Tartışmalıydı','D) Değeri yoktu'],dogru:1,fb:'"Not without merit" = çift olumsuz = olumlu. Değersiz değildi → değerliydi!'},
+  {q:'Gerund / infinitive sorusu:',sent:'"She was accused of _____ the report."',opts:['A) to falsify','B) falsifying','C) falsify','D) having falsify'],dogru:1,fb:'"Accused of + V-ing". Edat (of) sonrasında gerund gelir.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"It was not until the results were reviewed _____ the error was discovered."',opts:['A) that','B) when','C) which','D) then'],dogru:0,fb:'"It was not until... that" kalıbı: cleft (vurgu) yapı, boşluğa her zaman "that" gelir.'},
   {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"The data _____ by the research team last year is now publicly available."',opts:['A) collecting','B) collected','C) which collect','D) to collect'],dogru:1,fb:'İndirgenmiş edilgen ilgi cümlesi: "which was collected" → "collected".'},
   {q:'Modal yapıyı doğru yorumlayın:',sent:'"You need not have rewritten the entire report; a summary would have sufficed."',opts:['A) Raporu yeniden yazman gerekiyordu','B) Raporu yeniden yazman gerekmiyordu ama yazdın','C) Raporu yeniden yazmalısın','D) Rapor hâlâ eksik'],dogru:1,fb:'"Need not have + V3" = yapmana gerek yoktu ama yaptın. "Should have" ile karıştırılan bir tuzak yapı.'},
@@ -8201,42 +8249,42 @@ const TUZAK_HAVUZ=[
   {q:'Boşluğa en uygun kelimeyi seçin:',sent:'"Companies that fail to _____ with the new environmental standards will face heavy fines."',opts:['A) comply','B) conform','C) obey','D) abide'],dogru:0,fb:'"Comply with" = uymak, standart kelime öbeği. "Abide" ise "with" değil "by" edatıyla kullanılır.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The report _____ by the committee yesterday."',opts:['A) was reviewed','B) will be reviewed','C) is reviewed','D) has been reviewing'],dogru:0,fb:'"Yesterday" geçmiş zaman sinyali → Past Passive: was/were + V3 → "was reviewed".'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The contract _____ by the CEO tomorrow morning."',opts:['A) is signed','B) was signed','C) will be signed','D) will be sign'],dogru:2,fb:'"Tomorrow morning" gelecek zaman sinyali → Future Passive: will be + V3 → "will be signed" (V1 değil, V3!).'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ it was raining heavily, they decided to go for a picnic."',opts:['A) Although','B) Despite','C) Because','D) However'],dogru:0,fb:'Sonrasında S+V var → CÜMLE ister → Although. 🖼 Yağmur yağıyor ama pikniğe gidiyorlar.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The flight was cancelled _____ the thick fog."',opts:['A) because','B) because of','C) although','D) despite'],dogru:1,fb:'Sonrasında isim var → İSİM ister → because of. 🖼 Sis duvarı → uçak kalkamıyor.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen my uncle _____ I was a child."',opts:['A) for','B) when','C) since','D) while'],dogru:2,fb:'Present Perfect + başlangıç noktası → since. 🖼 Çocukluk = başlangıç çizgisi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If I _____ you, I would accept that job offer."',opts:['A) was','B) am','C) will be','D) were'],dogru:3,fb:'2. tip şart → If + were. 🖼 Hayali yer değişimi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The new hospital _____ by the mayor next month."',opts:['A) will be opened','B) opens','C) is opened','D) was opened'],dogru:0,fb:'"next month" + by → Future Passive → will be V3. 🖼 Kurdele kesme töreni.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The student _____ scored the highest mark is my cousin."',opts:['A) which','B) who','C) where','D) whose'],dogru:1,fb:'student = kişi → who. 🖼 Öğrenciye ok → en yüksek not.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She didn\'t study; _____, she passed with a high score."',opts:['A) therefore','B) moreover','C) however','D) because'],dogru:2,fb:'Noktalı virgül + virgül → sentence adverb + zıtlık → however. 🖼 Çalışmadı ama geçti.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"We won\'t be able to finish _____ you help us."',opts:['A) if','B) although','C) because','D) unless'],dogru:3,fb:'won\'t + koşul → unless. 🖼 Yardım yoksa kapı kilitli.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By the time the police arrived, the thieves _____ away."',opts:['A) had run','B) run','C) have run','D) were running'],dogru:0,fb:'by the time + Past → Past Perfect. 🖼 Polis geliyor, hırsızlar kaçmış.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"This is the house _____ Atatürk was born."',opts:['A) which','B) where','C) who','D) that'],dogru:1,fb:'house = yer → where. 🖼 Evin üstüne doğum yeri etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ being very tired, he continued to work."',opts:['A) Although','B) Because','C) Despite','D) Since'],dogru:2,fb:'Sonrasında V-ing → Despite. 🖼 Yorgunluk var ama çalışmaya devam.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Scientists argue _____ global warming is a serious threat."',opts:['A) which','B) what','C) about','D) that'],dogru:3,fb:'argue that + cümle → that-clause. 🖼 Bilim insanı konuşma balonu.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The car _____ I bought last year has started to give problems."',opts:['A) which','B) who','C) where','D) whose'],dogru:0,fb:'car = şey → which. 🖼 Araba + geçen yıl aldığım etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If she _____ earlier, she wouldn\'t have missed the bus."',opts:['A) got up','B) had got up','C) gets up','D) would get up'],dogru:1,fb:'"wouldn\'t have missed" → 3. tip → had V3. 🖼 Alarm çalmadı → otobüs kaçtı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Penicillin _____ by Alexander Fleming in 1928."',opts:['A) discovered','B) is discovered','C) was discovered','D) has discovered'],dogru:2,fb:'1928 + by → Past Passive → was V3. 🖼 1928 laboratuvar keşfi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I _____ in this city for ten years."',opts:['A) live','B) lived','C) am living','D) have lived'],dogru:3,fb:'for + süre + şimdiye bağlı → Present Perfect. 🖼 10 yıllık zaman çizgisi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"Some people like coffee, _____ others prefer tea."',opts:['A) while','B) because','C) so','D) unless'],dogru:0,fb:'Zıt tercih → while. 🖼 Biri kahve biri çay.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"He is a very talented musician; _____, he can play three instruments."',opts:['A) however','B) moreover','C) therefore','D) because'],dogru:1,fb:'Ek bilgi + noktalı virgül → moreover. 🖼 Yetenek + bonus bilgi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The report must _____ by the manager before noon."',opts:['A) sign','B) signed','C) be signed','D) be signing'],dogru:2,fb:'must + passive → must be V3. 🖼 Rapor + imza kaşesi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"We decided to stay at home _____ the weather was very cold."',opts:['A) because of','B) despite','C) although','D) because'],dogru:3,fb:'Sonrasında S+V → CÜMLE ister → because. 🖼 Soğuk hava → evde kalma kararı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ you work hard, you cannot succeed in this exam."',opts:['A) Unless','B) If','C) Although','D) Because'],dogru:0,fb:'Olumsuz koşul → Unless. 🖼 Çalışma yoksa kapı kilitli.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The man _____ car was stolen went to the police station."',opts:['A) who','B) whose','C) which','D) that'],dogru:1,fb:'Adamın arabası = sahiplik → whose. 🖼 Adam + onun arabası etiketi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I saw him while I _____ to the market."',opts:['A) walked','B) walk','C) was walking','D) have walked'],dogru:2,fb:'while + devam eden geçmiş → Past Continuous. 🖼 Yürüyüş filmi devam ederken.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The economy is growing; _____, unemployment is still high."',opts:['A) moreover','B) therefore','C) similarly','D) however'],dogru:3,fb:'Zıtlık + noktalı virgül → however. 🖼 Büyüme var ama işsizlik duvarı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"This problem can _____ easily if we work together."',opts:['A) be solved','B) solve','C) solved','D) be solving'],dogru:0,fb:'can + passive → can be V3. 🖼 Problem düğümü birlikte çözülüyor.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"My father _____ to Germany in 1990."',opts:['A) has gone','B) went','C) was going','D) had gone'],dogru:1,fb:'"in 1990" = kesin geçmiş → Past Simple. 🖼 1990 takvim yaprağı.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"I will call you as soon as I _____ home."',opts:['A) will arrive','B) arrived','C) arrive','D) am arriving'],dogru:2,fb:'Zaman bağlacı → gelecek anlamı olsa bile Present Simple. 🖼 Eve varınca telefon tuşu.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ the traffic was heavy, we arrived on time."',opts:['A) Despite','B) Because','C) Since','D) Although'],dogru:3,fb:'Sonrasında S+V + zıtlık → Although. 🖼 Trafik yoğun ama saatinde varış.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"It is a fact _____ smoking damages health."',opts:['A) that','B) which','C) what','D) if'],dogru:0,fb:'"fact that" + cümle kalıbı. 🖼 Gerçek etiketi + that cümlesi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"If water boils, it _____ into steam."',opts:['A) will turn','B) turns','C) turned','D) is turning'],dogru:1,fb:'Genel kural → 0. tip → Present Simple. 🖼 Kaynar şu → buhar.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ just _____ by the secretary."',opts:['A) had / been sent','B) is / sent','C) has / been sent','D) have / send'],dogru:2,fb:'"just" + yeni olmuş → Present Perfect Passive. 🖼 Mektup zarfı yeni postaya verildi.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"She is the writer _____ books are read all over the world."',opts:['A) who','B) which','C) that','D) whose'],dogru:3,fb:'Yazar + kitapları = sahiplik → whose. 🖼 Yazar + onun kitapları.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"He was driving too fast, _____ he had an accident."',opts:['A) so','B) because','C) although','D) however'],dogru:0,fb:'Sebep → sonuç → so. 🖼 Hız → domino → kaza.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"You _____ take your umbrella; it is raining outside."',opts:['A) must','B) should','C) can','D) will'],dogru:1,fb:'Tavsiye → should. 🖼 Yağmur → şemsiye hatırlatması.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"By 2050, scientists _____ a cure for cancer."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'"By 2050" deadline → Future Perfect. 🖼 2050 çizgisinin önünde bulunmuş işareti.'},
-  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ having a headache, she attended the meeting."',opts:['A) Although','B) Because of','C) Since','D) In spite of'],dogru:3,fb:'Sonrasında V-ing → In spite of / Despite. 🖼 Baş ağrısı var ama toplantıya gidiyor.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ it was raining heavily, they decided to go for a picnic."',opts:['A) Although','B) Despite','C) Because','D) However'],dogru:0,fb:'Sonrasında S+V var → CÜMLE ister → Although. 💭 Yağmur yağıyor ama pikniğe gidiyorlar.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The flight was cancelled _____ the thick fog."',opts:['A) because','B) because of','C) although','D) despite'],dogru:1,fb:'Sonrasında isim var → İSİM ister → because of. 💭 Sis duvarı → uçak kalkamıyor.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"I haven\'t seen my uncle _____ I was a child."',opts:['A) for','B) when','C) since','D) while'],dogru:2,fb:'Present Perfect + başlangıç noktası → since. 💭 Çocukluk = başlangıç çizgisi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"If I _____ you, I would accept that job offer."',opts:['A) was','B) am','C) will be','D) were'],dogru:3,fb:'2. tip şart → If + were. 💭 Hayali yer değişimi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The new hospital _____ by the mayor next month."',opts:['A) will be opened','B) opens','C) is opened','D) was opened'],dogru:0,fb:'"next month" + by → Future Passive → will be V3. 💭 Kurdele kesme töreni.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The student _____ scored the highest mark is my cousin."',opts:['A) which','B) who','C) where','D) whose'],dogru:1,fb:'student = kişi → who. 💭 Öğrenciye ok → en yüksek not.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"She didn\'t study; _____, she passed with a high score."',opts:['A) therefore','B) moreover','C) however','D) because'],dogru:2,fb:'Noktalı virgül + virgül → sentence adverb + zıtlık → however. 💭 Çalışmadı ama geçti.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"We won\'t be able to finish _____ you help us."',opts:['A) if','B) although','C) because','D) unless'],dogru:3,fb:'won\'t + koşul → unless. 💭 Yardım yoksa kapı kilitli.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"By the time the police arrived, the thieves _____ away."',opts:['A) had run','B) run','C) have run','D) were running'],dogru:0,fb:'by the time + Past → Past Perfect. 💭 Polis geliyor, hırsızlar kaçmış.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"This is the house _____ Atatürk was born."',opts:['A) which','B) where','C) who','D) that'],dogru:1,fb:'house = yer → where. 💭 Evin üstüne doğum yeri etiketi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ being very tired, he continued to work."',opts:['A) Although','B) Because','C) Despite','D) Since'],dogru:2,fb:'Sonrasında V-ing → Despite. 💭 Yorgunluk var ama çalışmaya devam.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Scientists argue _____ global warming is a serious threat."',opts:['A) which','B) what','C) about','D) that'],dogru:3,fb:'argue that + cümle → that-clause. 💭 Bilim insanı konuşma balonu.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The car _____ I bought last year has started to give problems."',opts:['A) which','B) who','C) where','D) whose'],dogru:0,fb:'car = şey → which. 💭 Araba + geçen yıl aldığım etiketi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"If she _____ earlier, she wouldn\'t have missed the bus."',opts:['A) got up','B) had got up','C) gets up','D) would get up'],dogru:1,fb:'"wouldn\'t have missed" → 3. tip → had V3. 💭 Alarm çalmadı → otobüs kaçtı.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Penicillin _____ by Alexander Fleming in 1928."',opts:['A) discovered','B) is discovered','C) was discovered','D) has discovered'],dogru:2,fb:'1928 + by → Past Passive → was V3. 💭 1928 laboratuvar keşfi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"I _____ in this city for ten years."',opts:['A) live','B) lived','C) am living','D) have lived'],dogru:3,fb:'for + süre + şimdiye bağlı → Present Perfect. 💭 10 yıllık zaman çizgisi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"Some people like coffee, _____ others prefer tea."',opts:['A) while','B) because','C) so','D) unless'],dogru:0,fb:'Zıt tercih → while. 💭 Biri kahve biri çay.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"He is a very talented musician; _____, he can play three instruments."',opts:['A) however','B) moreover','C) therefore','D) because'],dogru:1,fb:'Ek bilgi + noktalı virgül → moreover. 💭 Yetenek + bonus bilgi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The report must _____ by the manager before noon."',opts:['A) sign','B) signed','C) be signed','D) be signing'],dogru:2,fb:'must + passive → must be V3. 💭 Rapor + imza kaşesi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"We decided to stay at home _____ the weather was very cold."',opts:['A) because of','B) despite','C) although','D) because'],dogru:3,fb:'Sonrasında S+V → CÜMLE ister → because. 💭 Soğuk hava → evde kalma kararı.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ you work hard, you cannot succeed in this exam."',opts:['A) Unless','B) If','C) Although','D) Because'],dogru:0,fb:'Olumsuz koşul → Unless. 💭 Çalışma yoksa kapı kilitli.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The man _____ car was stolen went to the police station."',opts:['A) who','B) whose','C) which','D) that'],dogru:1,fb:'Adamın arabası = sahiplik → whose. 💭 Adam + onun arabası etiketi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"I saw him while I _____ to the market."',opts:['A) walked','B) walk','C) was walking','D) have walked'],dogru:2,fb:'while + devam eden geçmiş → Past Continuous. 💭 Yürüyüş filmi devam ederken.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The economy is growing; _____, unemployment is still high."',opts:['A) moreover','B) therefore','C) similarly','D) however'],dogru:3,fb:'Zıtlık + noktalı virgül → however. 💭 Büyüme var ama işsizlik duvarı.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"This problem can _____ easily if we work together."',opts:['A) be solved','B) solve','C) solved','D) be solving'],dogru:0,fb:'can + passive → can be V3. 💭 Problem düğümü birlikte çözülüyor.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"My father _____ to Germany in 1990."',opts:['A) has gone','B) went','C) was going','D) had gone'],dogru:1,fb:'"in 1990" = kesin geçmiş → Past Simple. 💭 1990 takvim yaprağı.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"I will call you as soon as I _____ home."',opts:['A) will arrive','B) arrived','C) arrive','D) am arriving'],dogru:2,fb:'Zaman bağlacı → gelecek anlamı olsa bile Present Simple. 💭 Eve varınca telefon tuşu.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ the traffic was heavy, we arrived on time."',opts:['A) Despite','B) Because','C) Since','D) Although'],dogru:3,fb:'Sonrasında S+V + zıtlık → Although. 💭 Trafik yoğun ama saatinde varış.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"It is a fact _____ smoking damages health."',opts:['A) that','B) which','C) what','D) if'],dogru:0,fb:'"fact that" + cümle kalıbı. 💭 Gerçek etiketi + that cümlesi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"If water boils, it _____ into steam."',opts:['A) will turn','B) turns','C) turned','D) is turning'],dogru:1,fb:'Genel kural → 0. tip → Present Simple. 💭 Kaynar şu → buhar.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"The letter _____ just _____ by the secretary."',opts:['A) had / been sent','B) is / sent','C) has / been sent','D) have / send'],dogru:2,fb:'"just" + yeni olmuş → Present Perfect Passive. 💭 Mektup zarfı yeni postaya verildi.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"She is the writer _____ books are read all over the world."',opts:['A) who','B) which','C) that','D) whose'],dogru:3,fb:'Yazar + kitapları = sahiplik → whose. 💭 Yazar + onun kitapları.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"He was driving too fast, _____ he had an accident."',opts:['A) so','B) because','C) although','D) however'],dogru:0,fb:'Sebep → sonuç → so. 💭 Hız → domino → kaza.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"You _____ take your umbrella; it is raining outside."',opts:['A) must','B) should','C) can','D) will'],dogru:1,fb:'Tavsiye → should. 💭 Yağmur → şemsiye hatırlatması.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"By 2050, scientists _____ a cure for cancer."',opts:['A) will find','B) have found','C) will have found','D) find'],dogru:2,fb:'"By 2050" deadline → Future Perfect. 💭 2050 çizgisinin önünde bulunmuş işareti.'},
+  {q:'Boşluğu doğru tamamlayın:',sent:'"_____ having a headache, she attended the meeting."',opts:['A) Although','B) Because of','C) Since','D) In spite of'],dogru:3,fb:'Sonrasında V-ing → In spite of / Despite. 💭 Baş ağrısı var ama toplantıya gidiyor.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The method is effective; _____, it is costly."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:0,fb:'İyi özellik → kötü özellik = ZITLIK → however.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The system failed; _____, a new model was developed."',opts:['A) however','B) therefore','C) moreover','D) although'],dogru:1,fb:'Sebep → sonuç → therefore.'},
   {q:'Boşluğu doğru tamamlayın:',sent:'"The solution is practical; _____, it requires training."',opts:['A) therefore','B) moreover','C) however','D) so'],dogru:2,fb:'Avantaj → dezavantaj = ZITLIK → however.'},
@@ -8339,12 +8387,14 @@ function tuzakAns(btn,correct,dogru){
   const opts=document.querySelectorAll('#tuzak-opts-inner .tuzak-opt');opts.forEach(o=>o.disabled=true);
   const fb=document.getElementById('tuzak-fb-inner'),soru=TUZAK_HAVUZ[tuzakIdx];
   if(correct){
-    btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Dogru! '+soru.fb;
+    btn.classList.add('ok');fb.className='tuzak-fb ok';fb.textContent='✅ Doğru! '+soru.fb;
     streakSoruEkle('tuzak');
     cevapKaydet({modul:'tuzak',soru:soru.sent,selectedOption:btn.textContent,correctOption:opts[dogru].textContent,isCorrect:true,topic:'tuzak',signal:null,responseTimeMs:_tuzakRt});
     if(typeof konfeti==='function')konfeti();
   } else {
-    btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb err';fb.textContent='❌ Yanlis. '+soru.fb;
+    btn.classList.add('err');opts[dogru].classList.add('ok');fb.className='tuzak-fb';
+    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.q+' '+soru.sent,secenekler:soru.opts,dogruIdx:dogru,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Günlük Tuzak'});
+    else{fb.className='tuzak-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     // Hata defterine ekle
     hataEkle(soru.sent, opts[Array.from(opts).indexOf(btn)].textContent, opts[dogru].textContent, 'tuzak');
@@ -9203,6 +9253,20 @@ function clCevapSec(i){
   ttsSpeak(tamMetin,'tr-TR',null,clHookMouth);
   if(typeof konuUstalikGuncelle==='function')konuUstalikGuncelle(k.baslik,i===k.cevap);
   if(typeof konuRadariCiz==='function')konuRadariCiz();
+  // Yanlış cevapta "KLOD'la açıkla" (tahta görünümü zaten doğru cevabı ve açıklamayı veriyor)
+  const blok=document.getElementById('cl-blok-cevap');
+  if(blok){
+    blok.querySelector('.yc-klod-btn')?.remove();
+    if(i!==k.cevap&&typeof yanlisCevapKlodaSor==='function'){
+      const b=document.createElement('button');b.type='button';b.className='yc-klod-btn';b.textContent="🎯 KLOD'la açıkla";
+      b.onclick=()=>{
+        // Canlı Ders sesi KLOD'un üstüne binmesin; tahtadaki yazı tamamlanmaya devam eder
+        ttsNesil++;if(window.speechSynthesis)speechSynthesis.cancel();if(pAudio)pAudio.pause();if(typeof clStopMouth==='function')clStopMouth();
+        yanlisCevapKlodaSor({soru:k.soru,secenekler:k.secenekler.map(ycSikEtiketi),dogruIdx:k.cevap,secilenIdx:i,bolum:'Canlı Ders — '+k.baslik});
+      };
+      blok.appendChild(b);
+    }
+  }
 }
 function clTekrarAnlat(){clOynatKonu(clIdx);}
 function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
@@ -9781,6 +9845,11 @@ function paragrafCevapla(pidx,sidx,oidx,dogru){
     fb.style.background=dogru_mu?'#0f2418':'#2a1414';
     fb.style.borderLeft='3px solid '+(dogru_mu?'#16a34a':'var(--trap)');
     fb.innerHTML=(dogru_mu?'✅ <b>Doğru!</b> ':'❌ <b>Yanlış.</b> ')+s.fb;
+    if(!dogru_mu&&typeof yanlisCevapKutusu==='function'){
+      fb.style.background='';fb.style.borderLeft='';
+      const btnlar=s.opts.map((_,i)=>document.getElementById('popt-'+pidx+'-'+sidx+'-'+i));
+      yanlisCevapKutusu({hedef:fb,soru:'Paragraf: '+(p.metin||'')+' SORU: '+s.q,secenekler:s.opts,dogruIdx:dogru_,secilenIdx:oidx,aciklama:s.fb,butonlar:btnlar,bolum:'Paragraf'});
+    }
   }
   
   if(dogru_mu){
@@ -10471,6 +10540,49 @@ const KLOD_YONTEM_ADIMLARI={gor:'GÖR',fiil:'FİİLİ BUL',svo:'S+V+O',sinyal:'S
 function klodYontemAdimi(adim){
   const ad=KLOD_YONTEM_ADIMLARI[adim];
   if(ad)avciKomutGonder(`AVCI adımı: ${ad}. Bu adımı kısa bir YDS cümlesi üzerinde anlat.`);
+}
+// ─── YANLIŞ CEVAP AÇIKLAMA KUTUSU ────────────────────────────────────────
+// Soru içeren bölümler yanlış cevapta bu ortak kutuyu gösterir: seçilen şık
+// kırmızı, doğru şık yeşil ve yazılı, varsa mevcut kısa açıklama, ve
+// "KLOD'la açıkla" butonu (avciKomutGonder altyapısı). Sadece GÖRÜNÜM:
+// cevap kaydı / hata defteri / XP her bölümün kendi kodunda kalır.
+function ycKacis(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function ycDuzMetin(s){
+  try{return (new DOMParser().parseFromString(String(s==null?'':s),'text/html').body.textContent||'').replace(/\s+/g,' ').trim();}
+  catch(e){return String(s==null?'':s);}
+}
+function ycSikEtiketi(metin,i){
+  const t=ycDuzMetin(metin);
+  return /^[A-E]\s*[).]/.test(t)?t:String.fromCharCode(65+i)+') '+t;
+}
+// o: {hedef, soru, secenekler, dogruIdx, secilenIdx, aciklama?, butonlar?, bolum?}
+function yanlisCevapKutusu(o){
+  const h=o&&o.hedef;if(!h)return;
+  const sec=(o.secenekler||[]).map(ycSikEtiketi);
+  (o.butonlar||[]).forEach((b,i)=>{if(!b)return;if(i===o.dogruIdx)b.classList.add('yc-dogru');else if(i===o.secilenIdx)b.classList.add('yc-yanlis');});
+  h.classList.add('yc-kutu');
+  h.style.display='block';
+  const aciklama=o.aciklama?String(o.aciklama).trim():'';
+  h.innerHTML='<div class="yc-baslik">❌ Yanlış cevap</div>'
+    +'<div class="yc-satir yc-senin"><span>Senin cevabın</span><b>'+ycKacis(sec[o.secilenIdx]||'')+'</b></div>'
+    +'<div class="yc-satir yc-dogru-satir"><span>Doğru cevap</span><b>'+ycKacis(sec[o.dogruIdx]||'')+'</b></div>'
+    +(aciklama?'<div class="yc-aciklama">'+(typeof _safeHTML==='function'?_safeHTML(aciklama):ycKacis(aciklama))+'</div>':'')
+    +'<button type="button" class="yc-klod-btn">🎯 KLOD\'la açıkla</button>';
+  h.querySelector('.yc-klod-btn').onclick=()=>yanlisCevapKlodaSor({soru:o.soru,secenekler:sec,dogruIdx:o.dogruIdx,secilenIdx:o.secilenIdx,bolum:o.bolum});
+}
+function yanlisCevapKlodaSor(v){
+  // KLOD'un giriş kutusu tek satırlık: satır sonu yerine ' | ' ile ayrılır
+  const parcalar=[
+    'Bu soruda yanlış cevap verdim, açıklar mısın?',
+    v.bolum?'Bölüm: '+v.bolum:'',
+    'Soru: '+ycDuzMetin(v.soru).slice(0,3000),
+    'Şıklar: '+v.secenekler.join(' / '),
+    'Benim cevabım: '+(v.secenekler[v.secilenIdx]||''),
+    'Doğru cevap: '+(v.secenekler[v.dogruIdx]||''),
+    'Neden yanlış olduğunu, doğru kuralı ve diğer şıkların tuzağını kısa anlat.'
+  ].filter(Boolean);
+  klodDonusGorunumuSakla();
+  avciKomutGonder(parcalar.join(' | '));
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
