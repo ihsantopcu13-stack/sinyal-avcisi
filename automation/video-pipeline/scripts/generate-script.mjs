@@ -103,9 +103,9 @@ export function veriKalitesiSorunu(soru) {
   if (!soru.soru_tr || !soru.soru_tr.trim()) return "bos_soru_tr";
   if (!soru.aciklama_tr || !soru.aciklama_tr.trim()) return "bos_aciklama_tr";
   if (!Array.isArray(soru.secenekler_tr)) return "secenekler_tr_yok";
-  // Geçiş dönemi: 4 şıklı eski sorular ve 5 şıklı (A-E) yeni sorular birlikte geçerli.
-  if (soru.secenekler_tr.length !== 4 && soru.secenekler_tr.length !== 5) {
-    return `secenekler_tr_4_veya_5_eleman_degil (${soru.secenekler_tr.length})`;
+  // YDS/YÖKDİL biçimi: tam 5 şık (A-E). 4 → 5 geçişi tamamlandı (#62-#67).
+  if (soru.secenekler_tr.length !== 5) {
+    return `secenekler_tr_5_eleman_degil (${soru.secenekler_tr.length})`;
   }
   if (soru.secenekler_tr.some((s) => typeof s !== "string" || !s.trim())) return "bos_secenek";
   if (!Number.isInteger(soru.dogru_index) || soru.dogru_index < 0 || soru.dogru_index >= soru.secenekler_tr.length) {

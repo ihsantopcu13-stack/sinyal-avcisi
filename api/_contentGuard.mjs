@@ -7,7 +7,7 @@
 // Kontroller:
 // 1. Doğru şık kontrolü (dogru_index geçerli mi)
 // 2. Sinyal whitelist eşleşmesi (30 tanınan sinyal)
-// 3. ÖSYM format kontrolü (4 veya 5 şık, İngilizce soru)
+// 3. ÖSYM format kontrolü (tam 5 şık A-E, İngilizce soru)
 // 4. Türkçe açıklama kontrolü
 // 5. Gramer doğrulaması (temel)
 // ============================================================
@@ -54,9 +54,9 @@ export function soruDogrula(soru) {
   if (!Array.isArray(soru.secenekler_tr)) {
     hatalar.push('secenekler_tr dizi değil');
   } else {
-    // Geçiş dönemi: 4 şıklı eski sorular ve 5 şıklı (A-E) yeni sorular birlikte geçerli.
-    if (soru.secenekler_tr.length !== 4 && soru.secenekler_tr.length !== 5) {
-      hatalar.push(`4 veya 5 şık gerekli, ${soru.secenekler_tr.length} var`);
+    // YDS/YÖKDİL biçimi: tam 5 şık (A-E). 4 → 5 geçişi tamamlandı (#62-#67).
+    if (soru.secenekler_tr.length !== 5) {
+      hatalar.push(`5 şık gerekli, ${soru.secenekler_tr.length} var`);
     }
     const bos = soru.secenekler_tr.filter(s => !s || s.trim().length < 2);
     if (bos.length > 0) hatalar.push(`${bos.length} şık boş veya çok kısa`);

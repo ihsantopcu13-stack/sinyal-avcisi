@@ -65,16 +65,16 @@ kontrol("1) Canonical dosya 83 soru içeriyor", sorular.length === 83, `uzunluk:
   kontrol("5b) sinyalli/null soru sayısı (83/0 bekleniyor)", sinyalli.length === 83 && sinyalsiz.length === 0, `sinyalli=${sinyalli.length} null=${sinyalsiz.length}`);
 }
 {
-  // Geçiş dönemi: 4 şıklı eski sorular ve 5 şıklı (A-E, YDS/YÖKDİL biçimi) yeni sorular birlikte geçerli.
-  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || (s.secenekler_tr.length !== 4 && s.secenekler_tr.length !== 5) || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
-  kontrol("6) Her soruda 4 veya 5 dolu seçenek var", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
+  // YDS/YÖKDİL biçimi: tam 5 şık (A-E). 4 → 5 geçişi tamamlandı (#62-#67).
+  const kotuSecenekler = sorular.filter((s) => !Array.isArray(s.secenekler_tr) || s.secenekler_tr.length !== 5 || s.secenekler_tr.some((o) => typeof o !== "string" || o.length === 0));
+  kontrol("6) Her soruda tam 5 dolu seçenek var (A-E)", kotuSecenekler.length === 0, kotuSecenekler.map((s) => s.id).join(", "));
   const tekrarli = sorular.filter((s) => Array.isArray(s.secenekler_tr) && new Set(s.secenekler_tr).size !== s.secenekler_tr.length);
   kontrol("6b) Hiçbir soruda aynı şık metni iki kez yok", tekrarli.length === 0, tekrarli.map((s) => s.id).join(", "));
 }
 {
-  // 4 → 5 şık geçiş sayacı (Aşama 3 partilerinin ilerlemesini gösterir).
+  // Şık sayısı sayacı: geçiş tamamlandı, 4 şıklı soru kalmamalı.
   const sayac = sikSayaci(sorular);
-  kontrol("6c) Şık sayısı sayacı: her soru 4 ya da 5 şıklı", sayac.diger === 0 && sayac.dort + sayac.bes === sorular.length,
+  kontrol("6c) Şık sayısı sayacı: her soru 5 şıklı, 4 şıklı soru yok", sayac.dort === 0 && sayac.diger === 0 && sayac.bes === sorular.length,
     `4 şıklı: ${sayac.dort}, 5 şıklı: ${sayac.bes}${sayac.diger ? `, diğer: ${sayac.diger}` : ""} (toplam ${sorular.length})`);
 }
 {
