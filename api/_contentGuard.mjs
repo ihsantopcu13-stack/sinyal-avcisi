@@ -7,10 +7,12 @@
 // Kontroller:
 // 1. Doğru şık kontrolü (dogru_index geçerli mi)
 // 2. Sinyal whitelist eşleşmesi (30 tanınan sinyal)
-// 3. ÖSYM format kontrolü (4 şık, İngilizce soru)
+// 3. ÖSYM format kontrolü (4 veya 5 şık, İngilizce soru)
 // 4. Türkçe açıklama kontrolü
 // 5. Gramer doğrulaması (temel)
 // ============================================================
+
+import { soruBesinciSikHatasi } from './_sikKurallari.mjs';
 
 // 30 tanınan AVCI sinyali
 export const SINYAL_WHITELIST = new Set([
@@ -59,6 +61,10 @@ export function soruDogrula(soru) {
     const bos = soru.secenekler_tr.filter(s => !s || s.trim().length < 2);
     if (bos.length > 0) hatalar.push(`${bos.length} şık boş veya çok kısa`);
     if (new Set(soru.secenekler_tr).size !== soru.secenekler_tr.length) hatalar.push('aynı şık metni birden fazla kez var');
+    // 5. şık (E): boş olamaz, ilk 4 şıktan birinin (büyük/küçük harf, boşluk,
+    // sondaki noktalama farkı gözetmeksizin) kopyası olamaz.
+    const eHatasi = soruBesinciSikHatasi(soru);
+    if (eHatasi) hatalar.push(eHatasi);
   }
 
   // 3. Doğru şık indexi
