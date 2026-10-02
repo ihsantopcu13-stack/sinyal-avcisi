@@ -133,7 +133,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .nav-logo{font-family:'IBM Plex Serif',serif;font-size:18px;cursor:pointer;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
 .nav-logo b{color:var(--signal);font-weight:400}
 .nav-links{display:flex;gap:24px}
-.nav-links span{font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s}
+.nav-links span{font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s;white-space:nowrap}
 .nav-links span:hover{color:var(--ink)}
 .btn-nav{background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;padding:9px 20px;border-radius:var(--r-sm);cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;letter-spacing:-.01em;transition:all var(--t-fast);box-shadow:var(--shadow-sm)}
 .btn-nav:hover{background:#1a1e2e;transform:translateY(-1px);box-shadow:var(--shadow-md)}
@@ -142,6 +142,10 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,
 .mmenu.open{display:flex}
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
+/* Menü 9 öğe (Medya JS ile eklenir): 1280px altında sığmaz → hamburger.
+   1281-1450px arası sıkışık → aralık ve yazı küçülür. */
+@media(max-width:1280px){.nav-links{display:none}.hamburger{display:block}}
+@media(min-width:1281px) and (max-width:1450px){.nav-links{gap:14px}.nav-links span{font-size:14px}}
 .hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
 .hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
 .hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 40%,rgba(10,13,19,.35),rgba(10,13,19,.88) 65%)}
@@ -307,6 +311,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .chat-input-row{border-top:1px solid var(--border);padding:14px 16px;display:flex;gap:10px;background:#12161f}
 .chat-in{flex:1;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:var(--surface);color:var(--ink);outline:none;transition:border-color .15s}
 .chat-in:focus{border-color:var(--signal)}
+.chat-klod-btn{flex:1;background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;border-radius:10px;padding:12px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(245,166,35,.35)}
 .chat-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#fff;width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:18px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(245,166,35,.35);transition:all .15s;flex-shrink:0}
 .ses{background:linear-gradient(135deg,#0c0e14,#161b2e);padding:80px 5vw;color:var(--ink)}
 .ses-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
@@ -1645,7 +1650,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <div class="msg k">Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?</div>
       <div class="msg k">"She must have left before the meeting started."</div>
     </div>
-    <div class="chat-input-row"><input class="chat-in" id="chat-in" placeholder="Cevabını yaz..." onkeydown="if(event.key=='Enter')sendChat()" aria-label="Cevabını yaz"><button class="chat-send" onclick="sendChat()">→</button></div>
+    <div class="chat-input-row"><button type="button" class="chat-klod-btn" onclick="anaKlodOdagaGec()">🎯 KLOD'a Sor</button></div>
   </div>
 </section>
 <section id="ses" class="ses">
@@ -6886,6 +6891,7 @@ function dnav(el){
     // KATMAN 5B — BİLİNÇLİ OLARAK tracker'a DOKUNULMUYOR: öğrenci Sinyal
     // Lab'dan "bu soruyu KLOD'a sorayım" diyerek gelmiş olabilir, o context
     // KLOD sekmesine geçince de geçerliliğini korumalı.
+    if(typeof _anaKlodDemoBaglam==='string')_anaKlodDemoBaglam=null; // sohbet yeniden çiziliyor: ekranda demo soru yok
     const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML=`
       <div class="klod-topbar">
@@ -7055,6 +7061,30 @@ document.addEventListener('keydown',e=>{
   if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
   klodOdakCik();
 });
+// ANA SAYFA KLOD KUTUSU → KLOD ODAK MODU — #klod bölümünde giriş kutusu yok,
+// "KLOD'a Sor" butonu KLOD'a Sor'u tam ekran odak modunda açar. Demo soru
+// oraya taşınır, öğrencinin ilk mesajı onun bağlamıyla gider
+// (_anaKlodDemoBaglam, dnavChat). #dnav-in'e odak AYNI dokunma olayı içinde
+// verilir: iOS klavyeyi yalnızca kullanıcı hareketinin içindeki focus() ile açar.
+// Geri/Esc/telefon geri tuşu klodDonusGorunumuSakla() kaydıyla ana sayfadaki
+// aynı kaydırma konumuna döner; dashboard'ın açık sekmesi değişmez.
+const ANA_KLOD_DEMO_CUMLE='She must have left before the meeting started.';
+let _anaKlodDemoBaglam=null;
+function anaKlodOdagaGec(){
+  const klodItem=[...document.querySelectorAll('.dn-item')].find(i=>i.textContent.includes('KLOD'));
+  if(!klodItem)return;
+  klodDonusGorunumuSakla();
+  dnav(klodItem); // senkron çizer: #dnav-chat ve #dnav-in hemen var
+  const body=document.getElementById('dnav-chat');
+  if(body){
+    body.innerHTML='';
+    ['Merhaba! Sana bir ÖSYM cümlesi göstereyim. "must have left" ne anlama geliyor?','"'+ANA_KLOD_DEMO_CUMLE+'"'].forEach(t=>{
+      const m=document.createElement('div');m.className='msg k';m.textContent=t;body.appendChild(m);
+    });
+  }
+  _anaKlodDemoBaglam='[Ana sayfadaki demo soru: "'+ANA_KLOD_DEMO_CUMLE+'" cümlesinde "must have left" ne anlama geliyor? Aşağıdaki mesaj bu soruya cevap ya da başka bir soru olabilir.] ';
+  document.getElementById('dnav-in')?.focus();
+}
 function dashPlaySes(i){pIdx=i;pUpdate();if(!pPlaying)playerToggle();document.getElementById('ses').scrollIntoView({behavior:'smooth'});}
 let dnavHistory=[];
 // TURBO #8-B — pedagoji kontrolcüsü durumu: sunucu her yanıtta döndürür, biz bir
@@ -7459,7 +7489,9 @@ async function dnavChat(){
   tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';
   body.appendChild(tp);body.scrollTop=body.scrollHeight;
   // İstek başarısız olursa bu kayıt geçmişten geri çıkarılır (bkz. catch)
-  const kullaniciKaydi={role:'user',content:val};
+  // Ana sayfa demo sorusundan gelindiyse ilk mesaj sorunun bağlamıyla gider
+  // (balonda yalnızca öğrencinin yazdığı görünür). Başarılı cevapta silinir.
+  const kullaniciKaydi={role:'user',content:(typeof _anaKlodDemoBaglam==='string'?_anaKlodDemoBaglam:'')+val};
   dnavHistory.push(kullaniciKaydi);
   try{
     // KATMAN 5 MVP-1 — AUTH FOUNDATION: varsa geçerli Supabase session
@@ -7658,8 +7690,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     if(!res.ok||!data)throw klodHataOlustur(res.ok?0:res.status,data);
     // KATMAN 5E — data.content artık (board_actions için tool_use
     // çağrılmışsa) metin dışında bloklar da içerebilir; index 0'ın HER
-    // ZAMAN metin olduğunu VARSAYMAK yerine gerçek metin bloğunu ARIYORUZ
-    // (sendChat()'in zaten kullandığı GÜVENLİ desenin aynısı).
+    // ZAMAN metin olduğunu VARSAYMAK yerine gerçek metin bloğunu ARIYORUZ.
     const cevap=data.content?.find(b=>b.type==='text')?.text||'';
     // 3. CHAIN OF THOUGHT — <düşünce> taglarını gizle ama koru
     const temizCevap=cevap.replace(/<düşünce>[\s\S]*?<\/düşünce>/g,'').trim();
@@ -7724,6 +7755,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
       body.appendChild(ti);
     }
     dnavHistory.push({role:'assistant',content:cevap});
+    if(typeof _anaKlodDemoBaglam==='string')_anaKlodDemoBaglam=null;
   } catch(err){
     tp.remove();
     // Cevapsız kullanıcı mesajı geçmişte kalmasın; "Tekrar dene" yeniden ekler.
@@ -8443,7 +8475,6 @@ const KB_GENEL=[
   'Bu bir koşul cümlesi. "If + had V3 → would have V3" — 3. tip koşul, geçmişe dair pişmanlık veya varsayım.',
   'Kelime tuzağına dikkat! ÖSYM bazen "effective" yerine "efficient" koyar — ikisi farklı anlam. Bağlamdan kontrol et.'
 ];
-let chatHistory=[],chatReplied=false;
 function renderMD(text){
   let t=text;
   // Başlıklar — sade sol çizgi
@@ -8469,29 +8500,6 @@ function renderMD(text){
   t=t.replace(/\n/g,'<br>');
   return t;
 }
-async function sendChat(){
-  const inp=document.getElementById('chat-in');const val=inp.value.trim();if(!val)return;
-  const body=document.getElementById('chat-body');
-  const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);inp.value='';inp.disabled=true;body.scrollTop=body.scrollHeight;
-  const tp=document.createElement('div');tp.className='msg k';tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';body.appendChild(tp);
-  chatHistory.push({role:'user',content:val});
-  try{
-    const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory})});
-    const data=await res.json();
-    const cevap=data.content?.find(b=>b.type==='text')?.text||'Bir hata oluştu, tekrar dene.';
-    tp.remove();
-    const km=document.createElement('div');km.className='msg k';km.innerHTML=_safeHTML(renderMD(cevap));body.appendChild(km);body.scrollTop=body.scrollHeight;
-    chatHistory.push({role:'assistant',content:cevap});
-    // TTS — KLOD cevabını sesli oku
-    const sesMetin=cevap.replace(/\*\*?|`|---+/g,'').replace(/\n/g,' ').trim();
-    ttsSpeak(sesMetin,'tr-TR',null);
-  }catch(e){
-    tp.remove();
-    const km=document.createElement('div');km.className='msg k';km.textContent='Bağlantı hatası, tekrar dene.';body.appendChild(km);
-  }
-  inp.disabled=false;inp.focus();
-}
-
 // PLAYER
 const PD=[
   {t:'KONU 1/19 - TENSES',en:'She has been studying for three hours.',tr:'3 saattir ders çalışıyor.'},
