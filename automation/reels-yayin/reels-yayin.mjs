@@ -1,7 +1,8 @@
 // ============================================================
 // REELS OTOMATİK YAYIN — Instagram (Graph API), Facebook Sayfası (Reels),
-// YouTube Shorts. GitHub Actions (reels-yayin.yml) günde 3 kez çalıştırır;
-// her çalışma kuyruktaki SIRADAKİ konuyu üç platforma sırayla gönderir.
+// YouTube Shorts. GitHub Actions (reels-yayin.yml) günde 3 kez (08:30, 13:00,
+// 21:00 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ konuyu üç platforma
+// sırayla gönderir.
 // ============================================================
 // Modlar (REELS_MOD):
 //   deneme  — HİÇBİR ŞEY PAYLAŞMAZ. Anahtarları, hesap bağlantılarını,

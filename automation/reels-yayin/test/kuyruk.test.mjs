@@ -22,6 +22,10 @@ for (const o of kuyruk.ogeler) {
   const etiketler = o.aciklama.match(/#[\p{L}\p{N}_]+/gu) || [];
   kontrol(`${k}: en fazla 5 hashtag`, etiketler.length <= 5, `(${etiketler.length})`);
   kontrol(`${k}: yapay zekâ beyanı satırı var`, o.aciklama.includes("yapay zekâ ile oluşturulmuştur"));
+  // Dayanaksız istatistik yok: "%80", "80%", "yüzde 80", "her 10 kişiden" gibi ifadeler yasak
+  const metinler = [o.aciklama, o.ilk_yorum, o.youtube.baslik, o.youtube.aciklama].join("\n");
+  const istatistik = metinler.match(/%\s*\d|\d+\s*%|yüzde\s*\d|\bher\s+\d+\s+(?:kişi|öğrenci|aday)/i);
+  kontrol(`${k}: istatistik iddiası yok`, !istatistik, istatistik ? `(«${istatistik[0]}»)` : "");
   kontrol(`${k}: ilk yorum dolu ve hashtag'siz`, typeof o.ilk_yorum === "string" && o.ilk_yorum.length > 10 && !o.ilk_yorum.includes("#"));
   kontrol(`${k}: YouTube başlığı 1–100 karakter`, o.youtube?.baslik && [...o.youtube.baslik].length <= 100, `(${[...(o.youtube?.baslik || "")].length})`);
   kontrol(`${k}: YouTube başlık/açıklamada < > yok`, !/[<>]/.test(o.youtube.baslik + o.youtube.aciklama));
