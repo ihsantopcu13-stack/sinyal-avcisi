@@ -1,0 +1,14 @@
+{
+  "name": "reels-yayin",
+  "private": true,
+  "type": "module",
+  "description": "Reels'leri Instagram (Graph API), Facebook Sayfası ve YouTube Shorts'a sırayla yayınlar",
+  "scripts": {
+    "deneme": "REELS_MOD=deneme node reels-yayin.mjs",
+    "test": "node test/kuyruk.test.mjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.8.0",
+    "googleapis": "^144.0.0"
+  }
+}
