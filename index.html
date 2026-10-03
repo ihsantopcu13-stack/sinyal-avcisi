@@ -10227,6 +10227,57 @@ function rozetBildirim(r){
 // ============================================================
 // PAYLAŞIM KARTI — Canvas ile 9:16 Instagram hikayesi
 // ============================================================
+// 1080x1920 hikaye kartı. Instagram arayüzü üst ve alt %15'i (288 px) kapattığı
+// için önemli yazılar 288-1632 px arasında; site adresi ve slogan telefonda
+// okunacak boyutta. Önizleme betiği bu fonksiyonu doğrudan buradan okur.
+function paylasimKartiCiz(ctx, baslik, alt, seri, xp) {
+  const W = 1080, H = 1920, GUVENLI_UST = 288, GUVENLI_ALT = H - 288, MAX_W = 900;
+  // Yazı MAX_W'ye sığmazsa font küçülür
+  const yaz = (metin, y, agirlik, boyut, aile, renk, enKucuk) => {
+    let b = boyut;
+    ctx.font = agirlik + ' ' + b + 'px ' + aile;
+    while (b > enKucuk && ctx.measureText(metin).width > MAX_W) { b -= 2; ctx.font = agirlik + ' ' + b + 'px ' + aile; }
+    ctx.fillStyle = renk;
+    ctx.fillText(metin, W / 2, y);
+  };
+  const cizgi = y => { ctx.strokeStyle = 'rgba(245,166,35,0.25)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(160, y); ctx.lineTo(920, y); ctx.stroke(); };
+  const SANS = 'IBM Plex Sans, sans-serif', MONO = 'IBM Plex Mono, monospace';
+
+  // Arkaplan gradient + üst/alt altın şerit (süs; güvenli alan dışında yazı yok)
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#0c0e14');
+  grad.addColorStop(0.5, '#111827');
+  grad.addColorStop(1, '#0c0e14');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#f5a623';
+  ctx.fillRect(0, 0, W, 8);
+  ctx.fillRect(0, H - 8, W, 8);
+  ctx.textAlign = 'center';
+
+  // Logo
+  yaz('SİNYAL AVCISI', GUVENLI_UST + 92, '700', 56, MONO, '#f5a623', 40);
+  yaz('YDS / YÖKDİL HAZIRLIK', GUVENLI_UST + 144, '400', 34, SANS, 'rgba(236,231,218,0.55)', 28);
+  cizgi(GUVENLI_UST + 192);
+
+  // İkon (emoji), başlık, alt metin
+  ctx.font = '220px serif';
+  ctx.fillStyle = '#ffffff'; // renkli emoji önceki yarı saydam rengin alfasını alıp soluk çıkmasın
+  ctx.fillText(baslik.split(' ')[0], W / 2, 780);
+  yaz(baslik.replace(/^\S+\s*/, ''), 900, '700', 72, SANS, '#ece7da', 44); // emoji'siz başlık
+  yaz(alt, 975, '400', 46, SANS, 'rgba(236,231,218,0.7)', 32);
+
+  // Seri ve XP
+  if (seri > 0) yaz('🔥 ' + seri + ' GÜN SERİ', 1110, '700', 48, MONO, '#f5a623', 36);
+  if (xp > 0) yaz('⭐ ' + xp + ' XP', 1180, '400', 40, MONO, 'rgba(236,231,218,0.6)', 32);
+
+  // Site adresi ve slogan: büyük, net, güvenli alanın içinde
+  cizgi(1290);
+  yaz('sinyal-avcisi.com', 1405, '700', 80, MONO, '#ece7da', 56);
+  yaz('Ücretsiz çalış · Sinyali yakala', 1490, '700', 52, SANS, '#f5a623', 40);
+  return GUVENLI_ALT; // 1632: bunun altına yazı konmaz
+}
+
 function paylasimKartiGoster(tip, baslik, alt) {
   // Eski modalı temizle
   document.getElementById('pk-modal')?.remove();
@@ -10240,119 +10291,142 @@ function paylasimKartiGoster(tip, baslik, alt) {
   canvas.height = 1920;
   canvas.style.cssText = 'max-width:min(340px,90vw);max-height:70vh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5)';
 
-  const btnRow = document.createElement('div');
-  btnRow.style.cssText = 'display:flex;gap:10px';
-
-  const btnIndir = document.createElement('button');
-  btnIndir.textContent = '⬇️ İndir';
-  btnIndir.style.cssText = 'background:#f5a623;color:#0c0e14;border:none;border-radius:10px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer';
+  // Paylaşım seçenekleri kart PNG'si hazır olunca `icerik` içine eklenir (bkz. alttaki PAYLAŞIM bölümü)
+  const panel = document.createElement('div');
+  panel.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:min(420px,92vw)';
+  const icerik = document.createElement('div');
+  icerik.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:10px;width:100%';
 
   const btnKapat = document.createElement('button');
   btnKapat.textContent = 'Kapat';
   btnKapat.style.cssText = 'background:rgba(255,255,255,.1);color:rgba(236,231,218,.7);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:12px 24px;font-size:15px;cursor:pointer';
 
   modal.appendChild(canvas);
-  btnRow.appendChild(btnIndir);
-  btnRow.appendChild(btnKapat);
-  modal.appendChild(btnRow);
+  panel.appendChild(icerik);
+  panel.appendChild(btnKapat);
+  modal.appendChild(panel);
   document.body.appendChild(modal);
 
-  // Canvas çiz
-  const ctx = canvas.getContext('2d');
-  const W = 1080, H = 1920;
-
-  // Arkaplan gradient
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, '#0c0e14');
-  grad.addColorStop(0.5, '#111827');
-  grad.addColorStop(1, '#0c0e14');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Altın çizgi üstte
-  ctx.fillStyle = '#f5a623';
-  ctx.fillRect(0, 0, W, 8);
-
-  // Logo
-  ctx.font = '700 52px IBM Plex Mono, monospace';
-  ctx.fillStyle = '#f5a623';
-  ctx.textAlign = 'center';
-  ctx.fillText('SİNYAL AVCISI', W/2, 160);
-
-  ctx.font = '400 32px IBM Plex Sans, sans-serif';
-  ctx.fillStyle = 'rgba(236,231,218,0.4)';
-  ctx.fillText('YDS / YÖKDİL HAZIRLIK', W/2, 210);
-
-  // Ayırıcı
-  ctx.strokeStyle = 'rgba(245,166,35,0.2)';
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(160, 260); ctx.lineTo(920, 260); ctx.stroke();
-
-  // İkon (emoji olarak)
-  ctx.font = '220px serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(baslik.split(' ')[0], W/2, 720);
-
-  // Başlık
-  ctx.font = '700 72px IBM Plex Sans, sans-serif';
-  ctx.fillStyle = '#ece7da';
-  ctx.textAlign = 'center';
-  const baslikMetin = baslik.replace(/^\S+\s*/, ''); // emoji'yi çıkar
-  ctx.fillText(baslikMetin, W/2, 840);
-
-  // Alt metin
-  ctx.font = '400 48px IBM Plex Sans, sans-serif';
-  ctx.fillStyle = 'rgba(236,231,218,0.6)';
-  ctx.fillText(alt, W/2, 920);
-
-  // Streak bilgisi
+  // Kart çizimi paylasimKartiCiz() içinde; fontlar inmeden çizilirse kart
+  // yedek fontla çıkıyordu, bu yüzden önce kullanılan fontları bekliyoruz.
   const sd = streakLoad();
-  if (sd.streak > 0) {
-    ctx.font = '700 48px IBM Plex Mono, monospace';
-    ctx.fillStyle = '#f5a623';
-    ctx.fillText('🔥 ' + sd.streak + ' GÜN SERİ', W/2, 1100);
-  }
+  const xpd = typeof xpLoad === 'function' ? xpLoad() : null;
+  const fontlar = document.fonts && document.fonts.load
+    ? Promise.all(['700 80px "IBM Plex Mono"', '400 34px "IBM Plex Sans"', '700 72px "IBM Plex Sans"'].map(f => document.fonts.load(f))).catch(() => {})
+    : Promise.resolve();
+  const cizildi = fontlar.then(() => paylasimKartiCiz(canvas.getContext('2d'), baslik, alt, sd.streak || 0, (xpd && xpd.toplam) || 0));
 
-  // XP
-  const xpd = xpLoad ? xpLoad() : null;
-  if (xpd && xpd.toplam > 0) {
-    ctx.font = '400 40px IBM Plex Mono, monospace';
-    ctx.fillStyle = 'rgba(236,231,218,0.5)';
-    ctx.fillText('⭐ ' + xpd.toplam + ' XP', W/2, 1180);
-  }
+  // ─── PAYLAŞIM ───────────────────────────────────────────────────────
+  // Kart BİR KEZ PNG dosyasına çevrilir; tüm butonlar aynı dosyayı kullanır.
+  // navigator.share tıklama anında SENKRON çağrılır: eskiden toBlob()
+  // geri çağrısı içinde çağrıldığı için Safari kullanıcı etkileşimini
+  // kaybediyor, paylaşım sessizce düşüyor, öğrenci tekrar basınca aynı
+  // dosya bir kez daha iniyordu.
+  // Mobil: dosya Web Share API ile paylaşılır (iPhone listesinde Instagram
+  // Hikaye/Gönderi çıkar); dosya paylaşımı yoksa "Rozeti kaydet" yedeği.
+  // Masaüstü: Windows paylaşım penceresi AÇILMAZ; kendi panelimiz gelir.
+  const SITE = 'https://sinyal-avcisi.com';
+  const paylasMetni = baslik + ' — ' + alt + '\n\nSinyal Avcısı ile YDS/YÖKDİL çalışıyorum: ' + SITE;
+  const kisaMetin = baslik + ' — ' + alt;
+  const dosyaAdi = 'sinyal-avcisi-' + tip + '.png';
+  const mobil = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+    || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent)); // iPadOS kendini Mac diye tanıtır
+  let kartDosyasi = null, kartUrl = null, indiriliyor = false;
 
-  // Alt çizgi
-  ctx.strokeStyle = 'rgba(245,166,35,0.2)';
-  ctx.beginPath(); ctx.moveTo(160, 1680); ctx.lineTo(920, 1680); ctx.stroke();
-
-  // URL
-  ctx.font = '400 40px IBM Plex Mono, monospace';
-  ctx.fillStyle = 'rgba(236,231,218,0.4)';
-  ctx.fillText('sinyal-avcisi.com', W/2, 1760);
-
-  ctx.font = '700 36px IBM Plex Sans, sans-serif';
-  ctx.fillStyle = 'rgba(245,166,35,0.7)';
-  ctx.fillText('Ücretsiz çalış · Sinyali yakala', W/2, 1820);
-
-  // İndir butonu
-  btnIndir.onclick = () => {
-    const link = document.createElement('a');
-    link.download = 'sinyal-avcisi-' + tip + '.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    // Web Share API (mobilde)
-    if (navigator.share && navigator.canShare) {
-      canvas.toBlob(blob => {
-        const file = new File([blob], 'sinyal-avcisi.png', {type:'image/png'});
-        if (navigator.canShare({files:[file]})) {
-          navigator.share({files:[file], title:'Sinyal Avcısı', text: baslik + ' — ' + alt + '\n\nsinyal-avcisi.com'}).catch(()=>{});
-        }
-      });
-    }
+  const pkBtn = (etiket, ana) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = etiket;
+    b.style.cssText = ana
+      ? 'width:100%;background:#f5a623;color:#0c0e14;border:none;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer'
+      : 'width:100%;background:rgba(255,255,255,.08);color:#ece7da;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600;cursor:pointer';
+    return b;
+  };
+  const pkNot = metin => {
+    const p = document.createElement('p');
+    p.textContent = metin;
+    p.style.cssText = 'margin:0;font-size:13px;color:rgba(236,231,218,.6);text-align:center;font-family:IBM Plex Sans,sans-serif';
+    return p;
   };
 
-  btnKapat.onclick = () => modal.remove();
-  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  // Bir tıklama = bir indirme (çift tıklama da tek dosya indirir)
+  function rozetiIndir() {
+    if (!kartUrl || indiriliyor) return;
+    indiriliyor = true;
+    const a = document.createElement('a');
+    a.href = kartUrl;
+    a.download = dosyaAdi;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => { indiriliyor = false; }, 1500);
+  }
+
+  function kaydetYedegi() {
+    if (icerik.querySelector('[data-pk="kaydet"]')) return;
+    const b = pkBtn('⬇️ Rozeti kaydet', true);
+    b.dataset.pk = 'kaydet';
+    b.onclick = rozetiIndir;
+    icerik.append(b, pkNot('Kaydettikten sonra Instagram hikayende paylaş.'));
+  }
+
+  function mobilPanel() {
+    const dosyaPaylasilir = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [kartDosyasi] }));
+    if (!dosyaPaylasilir) { kaydetYedegi(); return; }
+    const b = pkBtn('📤 Paylaş (Instagram, WhatsApp…)', true);
+    b.onclick = () => {
+      navigator.share({ files: [kartDosyasi], title: 'Sinyal Avcısı', text: paylasMetni })
+        .catch(e => { if (!e || e.name !== 'AbortError') kaydetYedegi(); }); // vazgeçmek hata değil
+    };
+    icerik.append(b);
+  }
+
+  function masaustuPanel() {
+    const u = encodeURIComponent(SITE), m = encodeURIComponent(paylasMetni), k = encodeURIComponent(kisaMetin);
+    const hedefler = [
+      ['WhatsApp', 'https://wa.me/?text=' + m],
+      ['Telegram', 'https://t.me/share/url?url=' + u + '&text=' + k],
+      ['X', 'https://twitter.com/intent/tweet?text=' + k + '&url=' + u],
+      ['Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + u],
+      ['LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + u],
+    ];
+    const izgara = document.createElement('div');
+    izgara.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%';
+    hedefler.forEach(([ad, href]) => {
+      const b = pkBtn(ad, false);
+      b.onclick = () => window.open(href, '_blank', 'noopener,noreferrer');
+      izgara.append(b);
+    });
+    const kopya = pkBtn('🔗 Linki kopyala', false);
+    kopya.onclick = () => {
+      const tamam = () => { kopya.textContent = '✅ Kopyalandı'; setTimeout(() => { kopya.textContent = '🔗 Linki kopyala'; }, 2000); };
+      const eski = () => {
+        const t = document.createElement('textarea');
+        t.value = SITE;
+        document.body.appendChild(t);
+        t.select();
+        try { if (document.execCommand('copy')) tamam(); } catch (e) {}
+        t.remove();
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(SITE).then(tamam, eski);
+      else eski();
+    };
+    izgara.append(kopya);
+    const indir = pkBtn('⬇️ Rozeti indir', true);
+    indir.onclick = rozetiIndir;
+    icerik.append(indir, izgara, pkNot('Instagram hikayesi için telefondan paylaş.'));
+  }
+
+  cizildi.then(() => canvas.toBlob(blob => {
+    if (!blob) { icerik.append(pkNot('Kart oluşturulamadı, lütfen tekrar dene.')); return; }
+    kartDosyasi = new File([blob], dosyaAdi, { type: 'image/png' });
+    kartUrl = URL.createObjectURL(blob);
+    (mobil ? mobilPanel : masaustuPanel)();
+  }, 'image/png'));
+
+  const kapat = () => { modal.remove(); if (kartUrl) URL.revokeObjectURL(kartUrl); };
+  btnKapat.onclick = kapat;
+  modal.addEventListener('click', e => { if (e.target === modal) kapat(); });
 }
 
 // Streak milestone paylaşımı — 3, 7, 10, 30 gün
