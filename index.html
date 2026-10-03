@@ -6918,14 +6918,15 @@ function dnav(el){
         <button class="klod-quick-chip" onclick="klodHizliAksiyon('hata')">📝 Hata Defterim</button>
       </div>
       <div class="klod-method-strip">
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('gor')" title="GÖR adımını anlat" aria-label="GÖR adımını anlat"><span class="klod-method-chip">GÖR</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('fiil')" title="FİİLİ BUL adımını anlat" aria-label="FİİLİ BUL adımını anlat"><span class="klod-method-chip">FİİLİ BUL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('svo')" title="S+V+O adımını anlat" aria-label="S+V+O adımını anlat"><span class="klod-method-chip">S+V+O</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sinyal')" title="SİNYALİ YAKALA adımını anlat" aria-label="SİNYALİ YAKALA adımını anlat"><span class="klod-method-chip">SİNYALİ YAKALA</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sagsol')" title="SAĞ/SOL KONTROL adımını anlat" aria-label="SAĞ/SOL KONTROL adımını anlat"><span class="klod-method-chip">SAĞ/SOL KONTROL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('sik')" title="ŞIK ELE adımını anlat" aria-label="ŞIK ELE adımını anlat"><span class="klod-method-chip">ŞIK ELE</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
-        <button type="button" class="klod-method-adim" onclick="klodYontemAdimi('anlam')" title="ANLAMI DOĞRULA adımını anlat" aria-label="ANLAMI DOĞRULA adımını anlat"><span class="klod-method-chip">ANLAMI DOĞRULA</span></button>
+        <button type="button" class="klod-method-adim" data-adim="gor" onclick="klodYontemAdimi('gor')" title="GÖR adımını anlat" aria-label="GÖR adımını anlat"><span class="klod-method-chip">GÖR</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="fiil" onclick="klodYontemAdimi('fiil')" title="FİİLİ BUL adımını anlat" aria-label="FİİLİ BUL adımını anlat"><span class="klod-method-chip">FİİLİ BUL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="svo" onclick="klodYontemAdimi('svo')" title="S+V+O adımını anlat" aria-label="S+V+O adımını anlat"><span class="klod-method-chip">S+V+O</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="sinyal" onclick="klodYontemAdimi('sinyal')" title="SİNYALİ YAKALA adımını anlat" aria-label="SİNYALİ YAKALA adımını anlat"><span class="klod-method-chip">SİNYALİ YAKALA</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="sagsol" onclick="klodYontemAdimi('sagsol')" title="SAĞ/SOL KONTROL adımını anlat" aria-label="SAĞ/SOL KONTROL adımını anlat"><span class="klod-method-chip">SAĞ/SOL KONTROL</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="sik" onclick="klodYontemAdimi('sik')" title="ŞIK ELE adımını anlat" aria-label="ŞIK ELE adımını anlat"><span class="klod-method-chip">ŞIK ELE</span></button><span class="klod-method-arrow" aria-hidden="true">→</span>
+        <button type="button" class="klod-method-adim" data-adim="anlam" onclick="klodYontemAdimi('anlam')" title="ANLAMI DOĞRULA adımını anlat" aria-label="ANLAMI DOĞRULA adımını anlat"><span class="klod-method-chip">ANLAMI DOĞRULA</span></button>
       </div>
+      <div class="klod-govde">
       <div class="klod-ws">
         <div class="klod-msgs" id="dnav-chat">
           <div class="msg k">Merhaba! 👋 Takıldığın bir yapı, kelime veya çözemediğin bir cümle varsa yaz — KLOD analiz eder.</div>
@@ -6937,7 +6938,11 @@ function dnav(el){
           <button class="chat-send klod-send" onclick="dnavChat()">Gönder →</button>
         </div>
       </div>
+      <aside class="klod-soru-karti" id="klod-soru-karti" aria-live="polite" aria-label="Aktif soru"></aside>
+      </div>
     `;
+    // Sağ sütun: aktif Sinyal Lab sorusu (varsa). Renkler sadece KLOD açıkladıkça gelir.
+    klodSoruKartiBaslat();
     // KATMAN 5K — VOICE-LITE fail-open: mic butonu bu innerHTML DOM'a
     // yazıldıktan HEMEN SONRA var oluyor (KLOD sekmesi lazy-render
     // edildiği için sayfa yüklenirken henüz yok) - SR yoksa burada
@@ -7264,6 +7269,7 @@ function avciBoardVurgula(metin){
 }
 function avciBoardActionUygula(action){
   if(!action||typeof action!=='object'||typeof action.type!=='string')return;
+  try{klodKartAksiyon(action);}catch(e){} // KLOD sağ sütun kartı (fail-open)
   switch(action.type){
     case 'HIGHLIGHT_SIGNAL':{
       const sent=document.getElementById('sl-sent');
@@ -7700,6 +7706,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     const km=document.createElement('div');km.className='msg k';
     km.innerHTML=_safeHTML(renderMD(temizCevap));
     body.appendChild(km);body.scrollTop=body.scrollHeight;
+    try{const _adim=klodAdimTahmin(temizCevap);if(_adim)klodAdimVurgula(_adim);}catch(e){} // adım çubuğu vurgusu (yalnız görsel)
     // KATMAN 5K — VOICE-LITE: metin cevabı ZATEN render edildi (yukarıda),
     // şimdi AYNI güvenli/final metni (temizCevap - board action JSON'u
     // DEĞİL, öğrenciye gösterilen <düşünce> etiketleri temizlenmiş metin)
@@ -10634,7 +10641,94 @@ function klodHizliAksiyon(tip){
 const KLOD_YONTEM_ADIMLARI={gor:'GÖR',fiil:'FİİLİ BUL',svo:'S+V+O',sinyal:'SİNYALİ YAKALA',sagsol:'SAĞ/SOL KONTROL',sik:'ŞIK ELE',anlam:'ANLAMI DOĞRULA'};
 function klodYontemAdimi(adim){
   const ad=KLOD_YONTEM_ADIMLARI[adim];
-  if(ad)avciKomutGonder(`AVCI adımı: ${ad}. Bu adımı kısa bir YDS cümlesi üzerinde anlat.`);
+  if(ad){klodAdimVurgula(adim);avciKomutGonder(`AVCI adımı: ${ad}. Bu adımı kısa bir YDS cümlesi üzerinde anlat.`);}
+}
+// ============================================================
+// KLOD SAĞ SÜTUN — AKTİF SORU KARTI + ADIM VURGUSU (2026-10-03)
+// ============================================================
+// Kart, Sinyal Lab'da açık olan soruyu (slCurrentSoru) gösterir. Soru
+// bankasında S/V/O verisi yok ve TAHTA ZAMANLAMASI kuralı gereği cevap
+// öğrenci denemeden gösterilmez: cümle başta beyazdır, S/V/O renkleri
+// SADECE server'ın doğruladığı SHOW_SVO / HIGHLIGHT_VERB aksiyonlarıyla
+// gelir. Her metin textContent ile yazılır (LLM metni HTML olarak
+// yorumlanmaz). Adım vurgusu yalnız görseldir, AVCI akışını etkilemez.
+let _klodKartRoller={};
+// KLOD sekmesi her çizildiğinde: renkleri sıfırla, kartı çiz, soru varsa GÖR adımını vurgula.
+// Tracker'ı (_aktifSoruModulu) SADECE OKUR; dnav() KLOD dalı ona hiç dokunmaz (bkz. avci-klod-context S4).
+function klodSoruKartiBaslat(){
+  _klodKartRoller={};
+  klodSoruKartiCiz();
+  klodAdimVurgula(_aktifSoruModulu==='sinyal_lab'&&slCurrentSoru?'gor':null);
+}
+function klodSoruKartiCiz(){
+  const kart=document.getElementById('klod-soru-karti');
+  if(!kart)return;
+  const h=(etiket,sinif,metin)=>{const e=document.createElement(etiket);if(sinif)e.className=sinif;if(metin!=null)e.textContent=metin;return e;};
+  const duz=t=>String(t||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+  kart.textContent='';
+  kart.append(h('div','klod-kart-etiket','AKTİF SORU'));
+  const soru=(_aktifSoruModulu==='sinyal_lab'&&slCurrentSoru)?slCurrentSoru:null;
+  if(!soru){
+    kart.append(h('p','klod-kart-bos',"Şu an açık bir soru yok. Sinyal Lab'da bir soru açıp KLOD'a gelirsen burada görünür; ya da AVCI MASTER ile başla."));
+    const b=h('button','klod-kart-btn','🏹 AVCI MASTER BAŞLA');b.type='button';b.onclick=()=>klodHizliAksiyon('master');
+    kart.append(b);
+    return;
+  }
+  const cumle=h('p','klod-kart-cumle');
+  klodKartCumleDoldur(cumle,duz(soru.sent));
+  kart.append(cumle);
+  const acik=[['S','Özne'],['V','Fiil'],['O','Nesne']].filter(([r])=>_klodKartRoller[r]);
+  if(acik.length){const lj=h('div','klod-kart-lejant');acik.forEach(([r,ad])=>lj.append(h('span','klod-rol-'+r.toLowerCase(),'■ '+ad)));kart.append(lj);}
+  if(soru.q)kart.append(h('p','klod-kart-soru',duz(soru.q)));
+  if(Array.isArray(soru.opts)&&soru.opts.length){const ol=h('ol','klod-kart-siklar');soru.opts.slice(0,5).forEach(o=>ol.append(h('li',null,duz(o))));kart.append(ol);}
+}
+// Açıklanan rol metinlerini cümlede bulup (büyük/küçük harf duyarsız, çakışmasız) renkli span'lerle sarar
+function klodKartCumleDoldur(el,metin){
+  const kucuk=metin.toLowerCase();const araliklar=[];
+  for(const r of['S','V','O']){
+    const t=String(_klodKartRoller[r]||'').trim();if(!t)continue;
+    const i=kucuk.indexOf(t.toLowerCase());if(i<0)continue;
+    if(araliklar.some(a=>i<a.b&&i+t.length>a.a))continue;
+    araliklar.push({a:i,b:i+t.length,r});
+  }
+  araliklar.sort((x,y)=>x.a-y.a);
+  let k=0;
+  for(const a of araliklar){
+    if(a.a>k)el.append(document.createTextNode(metin.slice(k,a.a)));
+    const sp=document.createElement('span');sp.className='klod-rol-'+a.r.toLowerCase();sp.textContent=metin.slice(a.a,a.b);el.append(sp);
+    k=a.b;
+  }
+  if(k<metin.length)el.append(document.createTextNode(metin.slice(k)));
+}
+function klodAdimVurgula(adim){
+  document.querySelectorAll('.klod-method-adim').forEach(b=>{
+    const on=!!adim&&b.dataset.adim===adim;
+    b.classList.toggle('aktif',on);
+    if(on)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');
+  });
+}
+const KLOD_AKSIYON_ADIMI={HIGHLIGHT_VERB:'fiil',SHOW_SVO:'svo',HIGHLIGHT_SIGNAL:'sinyal',SHOW_LEFT_RIGHT:'sagsol',ELIMINATE_OPTION:'sik',SHOW_AVCI_REFLEX:'anlam'};
+function klodKartAksiyon(a){
+  if(!document.getElementById('klod-soru-karti'))return;
+  if(a.type==='SHOW_SVO'){
+    for(const[r,k]of[['S','subject'],['V','verb'],['O','object']])if(typeof a[k]==='string'&&a[k].trim())_klodKartRoller[r]=a[k].trim().slice(0,200);
+  }else if(a.type==='HIGHLIGHT_VERB'&&typeof a.text==='string'&&a.text.trim()){
+    _klodKartRoller.V=a.text.trim().slice(0,200);
+  }else if(a.type==='CLEAR_BOARD'){
+    _klodKartRoller={};
+  }
+  if(KLOD_AKSIYON_ADIMI[a.type])klodAdimVurgula(KLOD_AKSIYON_ADIMI[a.type]);
+  klodSoruKartiCiz();
+}
+// KLOD cevabının SON soru cümlesinden hangi AVCI adımında olunduğunu tahmin eder (talimat her mesajın tek bir mikro-soruyla bitmesini istiyor)
+function klodAdimTahmin(metin){
+  const t=String(metin||'').toLocaleLowerCase('tr-TR');
+  const sorular=t.split('?').slice(0,-1);
+  const son=sorular.length?sorular[sorular.length-1]:'';
+  if(!son)return null;
+  const kurallar=[['sik',/şık|seçenek|\bele(r|yebilir|mek)?\b/],['sagsol',/sağ|sol\b|boşluktan (önce|sonra)/],['sinyal',/sinyal|bağlaç/],['svo',/özne|nesne|s\+v\+o|iskelet/],['fiil',/fiil|yüklem/],['anlam',/anlam/]];
+  for(const[adim,re]of kurallar)if(re.test(son))return adim;
+  return null;
 }
 // ─── YANLIŞ CEVAP AÇIKLAMA KUTUSU ────────────────────────────────────────
 // Soru içeren bölümler yanlış cevapta bu ortak kutuyu gösterir: seçilen şık
@@ -16990,5 +17084,77 @@ setTimeout(gunlukSync, 10000);
 
 })();
 </script>
+<style id="tipografi-duzen-katmani">
+/* =====================================================================
+   TİPOGRAFİ & DÜZEN KATMANI (2026-10-03)
+   Sayfadaki TÜM <style> bloklarından SONRA gelir: aynı özgüllükteki
+   kuralları sırası sayesinde ezer. Modüllerin kendi küçük px boyutlarını
+   (#xxx-modul .yy-sub{font-size:11px}) ezmek için YALNIZCA açıklama
+   yazılarının boyutunda !important kullanılır.
+   ===================================================================== */
+
+/* 1) Temel yazı ve gri yazı kontrastı (koyu zeminde #8b93a3 → #aeb6c4) */
+:root{--muted:#aeb6c4;--km-muted:#a7afbd}
+body{font-size:17px;line-height:1.6}
+p,li{line-height:1.6}
+:is([class$="-desc"],[class*="-desc "],[class$="-sub"],[class*="-sub "],[class$="-subtitle"],[class$="-note"],[class*="-note "],
+    [class$="-hint"],[class*="-hint "],[class$="-ex-tr"],[class$="-aciklama"],[class$="-formula-sub"]){font-size:16px!important;line-height:1.6}
+.p-tr,.ok-kelime-tr,.fon-tr{font-size:15px!important}
+
+/* 2) İçerik sütunu: masaüstünde ~1100 px ortalı; uzun metinler ~720 px */
+.hero,.klod,.dash-inner,.nasil-inner,.ses-inner,.sosyal-inner,.hedef-inner,.alan-cards{max-width:1100px;margin-left:auto;margin-right:auto}
+.dash-inner.dash-inner-klod{max-width:1680px}
+[id$="-modul"] :is([class$="-lesson-header"],[class$="-progress-wrap"],[class$="-nav-row"]){max-width:720px!important}
+[id$="-modul"] [class$="-header"] p,.hayir-metin,.klod-desc{max-width:720px!important}
+.msg{max-width:min(82%,720px)}
+
+/* 3) AHA Kartları: geniş kartlar, taşmayan, okunaklı sans-serif yazı */
+#aha-karti-modul .ahk-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+#aha-karti-modul .ahk-card{height:250px}
+#aha-karti-modul .ahk-card-face{overflow-y:auto;overflow-wrap:anywhere;word-break:break-word;hyphens:auto;padding:18px}
+#aha-karti-modul :is(.ahk-card-num,.ahk-card-formula,.ahk-info-label,.ahk-info-row,.ahk-header-badge){font-family:'IBM Plex Sans',sans-serif}
+#aha-karti-modul .ahk-card-num{font-size:13px}
+#aha-karti-modul .ahk-card-title{font-size:18px;line-height:1.35}
+#aha-karti-modul .ahk-card-formula{font-size:16px;line-height:1.5}
+#aha-karti-modul .ahk-card-example{font-size:15px!important;line-height:1.55}
+#aha-karti-modul .ahk-card-hint{font-size:14px!important}
+#aha-karti-modul .ahk-info-row{font-size:15px}
+
+/* 4) Dokunma hedefi: butonlar en az 44 px */
+button,.btn,input[type="button"],input[type="submit"],a[role="button"],div[role="button"]{min-height:44px}
+
+/* 5) KLOD: iki sütun (sol sohbet, sağ aktif soru kartı) + aktif adım vurgusu */
+.klod-method-strip{font-size:13px}
+.klod-method-adim.aktif .klod-method-chip{background:var(--signal);color:#0c0e14;font-weight:700}
+.klod-govde{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:20px;align-items:stretch}
+body.klod-odak .klod-govde{flex:1;min-height:0;grid-template-rows:minmax(0,1fr)}
+body.klod-odak .klod-govde .klod-ws{height:100%;min-height:0}
+.klod-soru-karti{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:12px}
+.klod-kart-etiket{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--signal)}
+.klod-kart-cumle{font-size:19px;line-height:1.6;color:var(--ink);font-weight:500;margin:0;overflow-wrap:anywhere}
+.klod-kart-soru{font-size:16px;color:var(--muted);margin:0}
+.klod-kart-siklar{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font-size:16px;color:var(--ink)}
+.klod-kart-siklar li::marker{color:var(--signal);font-weight:700}
+.klod-kart-bos{font-size:16px;color:var(--muted);margin:0}
+.klod-kart-btn{background:linear-gradient(135deg,#047857,#065f46);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.klod-kart-lejant{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;font-weight:700}
+.klod-rol-s{color:#4da3ff}.klod-rol-v{color:#34d399}.klod-rol-o{color:#ff9f1c}
+.klod-kart-cumle :is(.klod-rol-s,.klod-rol-v,.klod-rol-o){font-weight:700}
+
+/* 6) Mobil: içerik ızgaraları tek sütun */
+@media(max-width:900px){
+  .klod-govde{grid-template-columns:1fr}
+  body.klod-odak .klod-govde{grid-template-rows:auto minmax(0,1fr)}
+  .klod-soru-karti{order:-1;max-height:32vh;padding:12px 14px;gap:8px}
+  .klod-kart-cumle{font-size:17px}
+}
+@media(max-width:700px){
+  .hero,.demo-opts,.hedef-grid,.ekitap-inner,.klod,.ses-inner,.dash-karts,.dm-opts,.sat-opts,.cl-secenekler,
+  .ok-grid,.ok-quiz-secenekler,.fon-karsilastirma,.ist-kpi-grid,.aoy-stat-row,.radar-legend,
+  #aha-karti-modul .ahk-grid,[id$="-modul"] :is([class$="-word-grid"],[class$="-kelime-grid"],.dna-grid,.tg-grid,.kb-grid){grid-template-columns:1fr!important}
+  #aha-karti-modul .ahk-card{height:220px}
+  .msg{max-width:92%}
+}
+</style>
 </body>
 </html>
