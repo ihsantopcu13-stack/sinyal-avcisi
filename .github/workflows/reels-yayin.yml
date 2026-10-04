@@ -10,7 +10,7 @@ on:
     # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
     - cron: "30 5 * * *"  # 08:30 TR
     - cron: "0 10 * * *"  # 13:00 TR
-    - cron: "0 18 * * *"  # 21:00 TR (20:00'deki günlük video hattıyla çakışmasın)
+    - cron: "0 17 * * *"  # 20:00 TR
   workflow_dispatch:
     inputs:
       mod:

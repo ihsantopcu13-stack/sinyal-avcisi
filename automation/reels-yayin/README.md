@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| Takvim | Her gün **08:30, 13:00, 21:00** (TR). Her çalışma kuyruktaki **sıradaki konuyu** Instagram ve Facebook'a gönderir, YouTube'a da bekleyen sırasıyla yükler; 40 konu ≈ 14 gün. GitHub zamanlanmış işleri birkaç dakika gecikebilir. 21:00 seçildi çünkü günlük video hattı (`video-pipeline.yml`) 20:00'de Instagram'a Reels gönderiyor. |
+| Takvim | Her gün **08:30, 13:00, 20:00** (TR). Her çalışma kuyruktaki **sıradaki konuyu** Instagram ve Facebook'a gönderir, YouTube'a da bekleyen sırasıyla yükler; 40 konu ≈ 14 gün. GitHub zamanlanmış işleri birkaç dakika gecikebilir. Not: günlük video hattı (`video-pipeline.yml`) da 20:00'de Instagram'a Reels gönderiyor. |
 | Güvenlik kilidi | Zamanlanmış çalışmalar repo değişkeni **`REELS_YAYIN=acik`** olmadıkça yalnızca **deneme** yapar. Elle çalıştırmada varsayılan mod da `deneme`. |
 | Deneme modu | Hiçbir şey paylaşmaz. Anahtarları, Buffer'daki Instagram ve Facebook kanallarını, Buffer şemasının desteklediği alanları (Facebook Reels, ilk yorum), YouTube token'ını ve sıradaki konunun videosunu kontrol eder; gönderilecek açıklamayı loga yazar. |
 | Medya | GitHub Release **`reels-medya-v1`** (`konuXX.mp4`). Buffer'a Release'in herkese açık adresi verilir (günlük video hattı da böyle çalışıyor); YouTube'a dosyanın kendisi yüklenir. |
