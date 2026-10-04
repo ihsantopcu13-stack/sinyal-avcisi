@@ -10,7 +10,7 @@ on:
     # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
     - cron: "30 5 * * *"  # 08:30 TR
     - cron: "0 10 * * *"  # 13:00 TR
-    - cron: "0 17 * * *"  # 20:00 TR
+    - cron: "30 14 * * *" # 17:30 TR (günlük video hattı 20:00'de)
   workflow_dispatch:
     inputs:
       mod:
@@ -34,6 +34,8 @@ jobs:
         working-directory: automation/reels-yayin
     env:
       REELS_MOD: ${{ github.event_name == 'workflow_dispatch' && inputs.mod || (vars.REELS_YAYIN == 'acik' && 'yayinla' || 'deneme') }}
+      # YouTube yüklemesi yalnız REELS_YOUTUBE=acik iken; kapalıyken konular bekleyen listesinde birikir
+      REELS_YOUTUBE: ${{ vars.REELS_YOUTUBE }}
     steps:
       - uses: actions/checkout@v4
 

@@ -11,6 +11,13 @@ export const MAX_DENEME = 3;
 export const BUFFER_PLATFORMLARI = ["instagram", "facebook"];
 export const YT_CALISMA_BASINA = 2;
 
+// YouTube yüklemesi yalnız repo değişkeni REELS_YOUTUBE=acik iken denenir. Kapalıyken konular yine
+// youtube_bekleyen listesine eklenir (liste korunur), yükleme denenmez ve çalışma YouTube yüzünden
+// başarısız sayılmaz. Bağlantı düzelince REELS_YOUTUBE=acik → bekleyenler sırayla yüklenir.
+export function youtubeAcik(env) {
+  return String(env.REELS_YOUTUBE || "").trim() === "acik";
+}
+
 export function durumHazirla(durum) {
   durum.konular ||= {};
   durum.youtube_bekleyen ||= [];

@@ -1,7 +1,7 @@
 // ============================================================
 // REELS OTOMATİK YAYIN — Instagram ve Facebook Sayfası (Buffer üzerinden),
 // YouTube Shorts (YouTube Data API). GitHub Actions (reels-yayin.yml) günde
-// 3 kez (08:30, 13:00, 20:00 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ
+// 3 kez (08:30, 13:00, 17:30 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ
 // konuyu üç platforma sırayla gönderir.
 // ============================================================
 // Modlar (REELS_MOD):
@@ -36,7 +36,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, siradaki, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, siradaki, youtubeAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -152,17 +152,21 @@ async function youtubeAuth() {
 
 async function deneme(kuyruk, durum) {
   const sonuc = [];
-  // gerekenler: bu kontrolün ihtiyaç duyduğu anahtarlar; biri yoksa API hiç çağrılmaz
-  const kontrol = async (ad, fn, gerekenler = []) => {
+  // gerekenler: bu kontrolün ihtiyaç duyduğu anahtarlar; biri yoksa API hiç çağrılmaz.
+  // kritik=false: sonuç raporlanır ama çalışmayı başarısız saymaz (YouTube bekletilirken).
+  const kontrol = async (ad, fn, gerekenler = [], kritik = true) => {
+    const isaret = kritik ? "✘" : "⚠";
     const yok = gerekenler.filter((k) => !env[k]);
-    if (yok.length) { sonuc.push({ ad, ok: false }); log(`✘ ${ad}: atlandı — eksik anahtar: ${yok.join(", ")}`); return; }
-    try { const m = await fn(); sonuc.push({ ad, ok: true }); log(`✔ ${ad}: ${m}`); }
-    catch (e) { sonuc.push({ ad, ok: false }); log(`✘ ${ad}: ${e.message}`); }
+    if (yok.length) { sonuc.push({ ad, ok: false, kritik }); log(`${isaret} ${ad}: atlandı — eksik anahtar: ${yok.join(", ")}`); return; }
+    try { const m = await fn(); sonuc.push({ ad, ok: true, kritik }); log(`✔ ${ad}: ${m}`); }
+    catch (e) { sonuc.push({ ad, ok: false, kritik }); log(`${isaret} ${ad}: ${e.message}${kritik ? "" : " (bilgi: YouTube bekletiliyor, çalışmayı başarısız saymaz)"}`); }
   };
   const BUF = ["BUFFER_ACCESS_TOKEN"], YT = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN"];
+  const ytAcik = youtubeAcik(env);
+  log(`YouTube yüklemesi: ${ytAcik ? "AÇIK" : "BEKLETİLİYOR (REELS_YOUTUBE≠acik) — konular bekleyen listesinde birikir"}`);
 
   await kontrol("Anahtarlar", async () => {
-    const eksik = [...BUF, ...YT, "GITHUB_TOKEN"].filter((k) => !env[k]);
+    const eksik = [...BUF, ...(ytAcik ? YT : []), "GITHUB_TOKEN"].filter((k) => !env[k]);
     if (eksik.length) throw new Error("eksik: " + eksik.join(", "));
     return "hepsi tanımlı";
   });
@@ -200,7 +204,7 @@ async function deneme(kuyruk, durum) {
     if (!r.ok) throw new Error(`tokeninfo ${r.status}: ${JSON.stringify(info)}`);
     if (!String(info.scope || "").includes("youtube.upload")) throw new Error(`token'da youtube.upload izni yok: ${info.scope}`);
     return "refresh token geçerli, youtube.upload izni var";
-  }, YT);
+  }, YT, ytAcik);
 
   const bekleyen = youtubeSiradakiler(durum, Infinity);
   log(`YouTube bekleyen: ${bekleyen.length ? bekleyen.map((k) => `Konu ${k}`).join(", ") : "yok"} (çalışma başına en fazla ${YT_CALISMA_BASINA} yüklenir)`);
@@ -209,7 +213,7 @@ async function deneme(kuyruk, durum) {
     log("Instagram/Facebook kuyruğu bitti.");
   } else {
     const { oge } = s;
-    const kalan = [...s.kalan, "youtube (bekleyen sırasıyla)"];
+    const kalan = [...s.kalan, ytAcik ? "youtube (bekleyen sırasıyla)" : "youtube (bekletiliyor)"];
     await kontrol(`Medya (Konu ${oge.konu})`, async () => {
       const a = await releaseAssetleri();
       if (!a[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
@@ -224,8 +228,10 @@ async function deneme(kuyruk, durum) {
     log("Kapak: videonun ilk karesi · YouTube: sentetik içerik beyanı = EVET, çocuklara özel = HAYIR, kategori = Eğitim");
   }
 
-  const hata = sonuc.filter((x) => !x.ok);
-  log(`\nDENEME SONUCU: ${sonuc.length - hata.length}/${sonuc.length} kontrol geçti. Hiçbir şey paylaşılmadı.`);
+  const kritikler = sonuc.filter((x) => x.kritik);
+  const hata = kritikler.filter((x) => !x.ok);
+  const bilgi = sonuc.filter((x) => !x.kritik && !x.ok).map((x) => x.ad);
+  log(`\nDENEME SONUCU: ${kritikler.length - hata.length}/${kritikler.length} kontrol geçti${bilgi.length ? ` (bilgi amaçlı başarısız: ${bilgi.join(", ")})` : ""}. Hiçbir şey paylaşılmadı.`);
   if (hata.length) process.exitCode = 1;
 }
 
@@ -291,8 +297,9 @@ async function youtubeYayinla(oge, assetler) {
 
 async function yayinla(kuyruk, durum) {
   const s = siradaki(kuyruk, durum);
-  const ytSira = () => youtubeSiradakiler(durum);
-  if (!s && !ytSira().length) { log("Kuyruk bitti: Instagram/Facebook ve YouTube'da bekleyen konu yok."); return; }
+  const ytAcik = youtubeAcik(env);
+  const ytSira = () => (ytAcik ? youtubeSiradakiler(durum) : []);
+  if (!s && !ytSira().length) { log(`Instagram/Facebook kuyruğu bitti; YouTube ${ytAcik ? "bekleyeni yok" : "bekletiliyor"}.`); return; }
   const assetler = await releaseAssetleri();
   const kaydet = () => writeFile(DURUM_YOLU, JSON.stringify(durum, null, 2) + "\n");
   let hataVar = false;
@@ -325,7 +332,9 @@ async function yayinla(kuyruk, durum) {
     await kaydet();
   }
 
-  // 2) YouTube: bekleyenler eskiden yeniye; ilk hatada durur (bağlantı sorunu tüm konuları etkiler)
+  // 2) YouTube: bekleyenler eskiden yeniye; ilk hatada durur (bağlantı sorunu tüm konuları etkiler).
+  //    REELS_YOUTUBE≠acik iken denenmez; konular bekleyen listesinde kalır.
+  if (!ytAcik) log(`YouTube bekletiliyor (REELS_YOUTUBE≠acik): bekleyen ${durum.youtube_bekleyen.map((k) => `Konu ${k}`).join(", ") || "yok"}`);
   const ytListe = ytSira();
   if (ytListe.length) log(`YouTube bekleyen: ${durum.youtube_bekleyen.map((k) => `Konu ${k}`).join(", ")} → bu çalışmada: ${ytListe.join(", ")}`);
   for (const konu of ytListe) {
