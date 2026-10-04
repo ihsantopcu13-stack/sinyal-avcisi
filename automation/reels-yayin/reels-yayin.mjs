@@ -38,7 +38,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, youtubeAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -106,8 +106,9 @@ async function bufferSemasi() {
   }
 }
 
-// "ilk yorum" alanının Buffer'daki adı (şemada varsa)
+// "ilk yorum" alanının Buffer'daki adı (şemada varsa VE BUFFER_ILK_YORUM=acik ise)
 function ilkYorumAlani(servisSemasi) {
+  if (!ilkYorumAcik(env)) return null; // Buffer ücretsiz planı ilk yorumu reddediyor ("requires a paid plan")
   return (servisSemasi?.alanlar ?? []).find((a) => /^first_?comment$/i.test(a)) || null;
 }
 
@@ -194,7 +195,7 @@ async function deneme(kuyruk, durum) {
     return [
       `Instagram alanları: ${ig?.alanlar?.join(", ") || "yok"} (tür: ${ig?.typeDegerleri?.join("/") || "?"})`,
       `Facebook alanları: ${fb?.alanlar?.join(", ") || "yok"} (tür: ${fb?.typeDegerleri?.join("/") || "?"})`,
-      `ilk yorum: Instagram=${ilkYorumAlani(ig) || "desteklenmiyor"}, Facebook=${ilkYorumAlani(fb) || "desteklenmiyor"}`,
+      ilkYorumAcik(env) ? `ilk yorum: Instagram=${ilkYorumAlani(ig) || "desteklenmiyor"}, Facebook=${ilkYorumAlani(fb) || "desteklenmiyor"}` : "ilk yorum: gönderilmiyor (BUFFER_ILK_YORUM≠acik)",
       `Instagram yapay zekâ etiketi (isAiGenerated): ${ig?.alanlar?.includes("isAiGenerated") ? "işaretlenecek" : "desteklenmiyor"}`,
     ].join(" | ");
   }, BUF);
@@ -227,7 +228,7 @@ async function deneme(kuyruk, durum) {
     for (const x of plan) log(`  Konu ${x.konu} — ${istanbulSaati(x.dueAt)} → ${x.platformlar.join(", ")}${x.yeni ? "" : " (eksik platform)"}`);
     log(`YouTube: ${ytAcik ? "bekleyen sırasıyla yüklenir" : "bekletiliyor (konular bekleyen listesine girer)"}`);
     log("İlk konunun açıklaması:\n" + ilk.aciklama);
-    log("İlk yorum:\n" + ilk.ilk_yorum);
+    log(ilkYorumAcik(env) ? "İlk yorum:\n" + ilk.ilk_yorum : "İlk yorum Buffer'a gönderilmez (BUFFER_ILK_YORUM≠acik); mini test elle yorumlanır.");
   }
 
   const kritikler = sonuc.filter((x) => x.kritik);

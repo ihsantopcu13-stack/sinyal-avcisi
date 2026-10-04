@@ -28,6 +28,11 @@ export function youtubeAcik(env) {
   return String(env.REELS_YOUTUBE || "").trim() === "acik";
 }
 
+// Buffer "ilk yorum" ücretli plan özelliği: yalnız BUFFER_ILK_YORUM=acik iken gönderilir
+export function ilkYorumAcik(env) {
+  return String(env.BUFFER_ILK_YORUM || "").trim() === "acik";
+}
+
 export function durumHazirla(durum) {
   durum.konular ||= {};
   durum.youtube_bekleyen ||= [];
