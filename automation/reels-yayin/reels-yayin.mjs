@@ -16,15 +16,17 @@
 // aynı yaklaşım). Video GitHub Release'teki herkese açık adresiyle verilir
 // (günlük video hattı da Buffer'a bu adresleri veriyor). Buffer Instagram'da
 // kapak görseli kabul etmiyor; kapak videonun ilk karesi (kanca kartı) olur.
-// Instagram'ın "AI bilgisi" etiketi API'de yok; yapay zekâ beyanı açıklamada.
-// Facebook Reels türü ve "ilk yorum" alanları Buffer şemasından (introspection)
-// okunur; şema desteklemiyorsa o alan gönderilmez.
+// Instagram'ın yapay zekâ etiketi Buffer'ın isAiGenerated alanıyla işaretlenir;
+// beyan ayrıca açıklamada da yazar. Facebook Reels türü, "ilk yorum" ve
+// isAiGenerated alanları Buffer şemasından (introspection) okunur; şema
+// desteklemiyorsa o alan gönderilmez.
 // YouTube: dosya yüklenir, "değiştirilmiş/sentetik içerik" beyanı
 // (status.containsSyntheticMedia) işaretlenir.
 //
-// İlerleme data/durum.json'da platform platform tutulur: bir platform
-// başarısız olursa diğerleri tekrar gönderilmez, sadece o platform bir
-// sonraki çalışmada yeniden denenir (en fazla MAX_DENEME kez).
+// İlerleme data/durum.json'da platform platform tutulur (kurallar:
+// kuyruk-mantigi.mjs). Instagram/Facebook kuyruğu YouTube'u BEKLEMEZ;
+// YouTube'a gidemeyen konular durum.youtube_bekleyen listesinde kalır ve
+// YouTube düzelince eskiden yeniye yüklenir (hiçbir konu kalıcı atlanmaz).
 //
 // Gerekli env: BUFFER_ACCESS_TOKEN, YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET,
 //   YOUTUBE_REFRESH_TOKEN, GITHUB_TOKEN, GITHUB_REPOSITORY
@@ -34,6 +36,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, siradaki, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -43,8 +46,6 @@ const INDIRME_DIZINI = path.join(__dirname, ".medya");
 const MOD = (process.env.REELS_MOD || "deneme").trim();
 const RELEASE_TAG = "reels-medya-v1";
 const BUFFER_URL = "https://api.buffer.com";
-const MAX_DENEME = 3;
-const PLATFORMLAR = ["instagram", "facebook", "youtube"];
 
 const env = process.env;
 
@@ -147,17 +148,6 @@ async function youtubeAuth() {
   return { google, client };
 }
 
-// ---------------- kuyruk ----------------
-
-function siradaki(kuyruk, durum) {
-  for (const oge of kuyruk.ogeler) {
-    const d = durum.konular?.[oge.konu] || {};
-    const kalan = PLATFORMLAR.filter((p) => !d[p]?.tamam && (d[p]?.deneme || 0) < MAX_DENEME);
-    if (kalan.length) return { oge, kalan };
-  }
-  return null;
-}
-
 // ---------------- DENEME MODU ----------------
 
 async function deneme(kuyruk, durum) {
@@ -199,6 +189,7 @@ async function deneme(kuyruk, durum) {
       `Instagram alanları: ${ig?.alanlar?.join(", ") || "yok"} (tür: ${ig?.typeDegerleri?.join("/") || "?"})`,
       `Facebook alanları: ${fb?.alanlar?.join(", ") || "yok"} (tür: ${fb?.typeDegerleri?.join("/") || "?"})`,
       `ilk yorum: Instagram=${ilkYorumAlani(ig) || "desteklenmiyor"}, Facebook=${ilkYorumAlani(fb) || "desteklenmiyor"}`,
+      `Instagram yapay zekâ etiketi (isAiGenerated): ${ig?.alanlar?.includes("isAiGenerated") ? "işaretlenecek" : "desteklenmiyor"}`,
     ].join(" | ");
   }, BUF);
   await kontrol("YouTube", async () => {
@@ -211,11 +202,14 @@ async function deneme(kuyruk, durum) {
     return "refresh token geçerli, youtube.upload izni var";
   }, YT);
 
+  const bekleyen = youtubeSiradakiler(durum, Infinity);
+  log(`YouTube bekleyen: ${bekleyen.length ? bekleyen.map((k) => `Konu ${k}`).join(", ") : "yok"} (çalışma başına en fazla ${YT_CALISMA_BASINA} yüklenir)`);
   const s = siradaki(kuyruk, durum);
   if (!s) {
-    log("Kuyruk bitti: yayınlanacak konu yok.");
+    log("Instagram/Facebook kuyruğu bitti.");
   } else {
-    const { oge, kalan } = s;
+    const { oge } = s;
+    const kalan = [...s.kalan, "youtube (bekleyen sırasıyla)"];
     await kontrol(`Medya (Konu ${oge.konu})`, async () => {
       const a = await releaseAssetleri();
       if (!a[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
@@ -258,7 +252,9 @@ async function instagramYayinla(oge, videoUrl, kanallar, sema) {
   const ig = { type: E("reel"), shouldShareToFeed: true };
   const yorum = ilkYorumAlani(sema?.instagram);
   if (yorum) ig[yorum] = oge.ilk_yorum;
-  return { ...(await bufferGonder(kanallar.instagram, oge, videoUrl, { instagram: ig })), ilkYorum: Boolean(yorum) };
+  const yzEtiketi = Boolean(sema?.instagram?.alanlar?.includes("isAiGenerated"));
+  if (yzEtiketi) ig.isAiGenerated = true; // Instagram'ın yapay zekâ etiketi
+  return { ...(await bufferGonder(kanallar.instagram, oge, videoUrl, { instagram: ig })), ilkYorum: Boolean(yorum), yzEtiketi };
 }
 
 async function facebookYayinla(oge, videoUrl, kanallar, sema) {
@@ -295,37 +291,62 @@ async function youtubeYayinla(oge, assetler) {
 
 async function yayinla(kuyruk, durum) {
   const s = siradaki(kuyruk, durum);
-  if (!s) { log("Kuyruk bitti: yayınlanacak konu yok."); return; }
-  const { oge, kalan } = s;
-  log(`YAYIN: Konu ${oge.konu} — ${oge.baslik} → ${kalan.join(", ")}`);
-
+  const ytSira = () => youtubeSiradakiler(durum);
+  if (!s && !ytSira().length) { log("Kuyruk bitti: Instagram/Facebook ve YouTube'da bekleyen konu yok."); return; }
   const assetler = await releaseAssetleri();
-  if (!assetler[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
-  const videoUrl = assetler[oge.video].browser_download_url;
-  const bufferGerekli = kalan.some((p) => p !== "youtube");
-  const kanallar = bufferGerekli ? await bufferKanallari() : {};
-  const sema = bufferGerekli ? await bufferSemasi() : null;
-
-  const islem = {
-    instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema),
-    facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema),
-    youtube: () => youtubeYayinla(oge, assetler),
-  };
-  const d = (durum.konular[oge.konu] ||= {});
+  const kaydet = () => writeFile(DURUM_YOLU, JSON.stringify(durum, null, 2) + "\n");
   let hataVar = false;
-  for (const p of kalan) {
-    const kayit = (d[p] ||= { deneme: 0 });
+
+  // 1) Instagram + Facebook: sıradaki konu (YouTube'u beklemez)
+  if (s) {
+    const { oge, kalan } = s;
+    log(`YAYIN: Konu ${oge.konu} — ${oge.baslik} → ${kalan.join(", ")}`);
+    if (!assetler[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
+    const videoUrl = assetler[oge.video].browser_download_url;
+    const kanallar = await bufferKanallari();
+    const sema = await bufferSemasi();
+    const islem = { instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema), facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema) };
+    const d = (durum.konular[oge.konu] ||= {});
+    for (const p of kalan) {
+      const kayit = (d[p] ||= { deneme: 0 });
+      kayit.deneme += 1;
+      try {
+        Object.assign(kayit, await islem[p](), { tamam: true, zaman: new Date().toISOString() });
+        delete kayit.hata;
+        log(`✔ ${p}: Buffer ${kayit.id} (${kayit.durum}, ${kayit.zamanlandi})`);
+      } catch (e) {
+        kayit.hata = e.message.slice(0, 500);
+        hataVar = true;
+        log(`✘ ${p} (deneme ${kayit.deneme}/${MAX_DENEME}): ${e.message}`);
+      }
+      await kaydet();
+    }
+    youtubeBekleyeneEkle(durum, oge.konu); // YouTube ayrı sırada
+    await kaydet();
+  }
+
+  // 2) YouTube: bekleyenler eskiden yeniye; ilk hatada durur (bağlantı sorunu tüm konuları etkiler)
+  const ytListe = ytSira();
+  if (ytListe.length) log(`YouTube bekleyen: ${durum.youtube_bekleyen.map((k) => `Konu ${k}`).join(", ")} → bu çalışmada: ${ytListe.join(", ")}`);
+  for (const konu of ytListe) {
+    const oge = kuyruk.ogeler.find((o) => o.konu === konu);
+    const kayit = ((durum.konular[konu] ||= {}).youtube ||= { deneme: 0 });
     kayit.deneme += 1;
     try {
-      Object.assign(kayit, await islem[p](), { tamam: true, zaman: new Date().toISOString() });
+      if (!oge) throw new Error(`Konu ${konu} kuyrukta yok`);
+      if (!assetler[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
+      Object.assign(kayit, await youtubeYayinla(oge, assetler), { tamam: true, zaman: new Date().toISOString() });
       delete kayit.hata;
-      log(`✔ ${p}: ${kayit.link || `Buffer ${kayit.id} (${kayit.durum}, ${kayit.zamanlandi})`}`);
+      youtubeTamamlandi(durum, konu);
+      log(`✔ youtube (Konu ${konu}): ${kayit.link} (${kayit.gizlilik})`);
+      await kaydet();
     } catch (e) {
       kayit.hata = e.message.slice(0, 500);
       hataVar = true;
-      log(`✘ ${p} (deneme ${kayit.deneme}/${MAX_DENEME}): ${e.message}`);
+      log(`✘ youtube (Konu ${konu}, deneme ${kayit.deneme}): ${e.message} — konu bekleyende kalır`);
+      await kaydet();
+      break;
     }
-    await writeFile(DURUM_YOLU, JSON.stringify(durum, null, 2) + "\n"); // her platformdan sonra kaydet
   }
   if (hataVar) process.exitCode = 1;
 }
@@ -333,8 +354,7 @@ async function yayinla(kuyruk, durum) {
 // ---------------- giriş ----------------
 
 const kuyruk = await jsonOku(KUYRUK_YOLU, { ogeler: [] });
-const durum = await jsonOku(DURUM_YOLU, {});
-durum.konular ||= {};
+const durum = durumHazirla(await jsonOku(DURUM_YOLU, {}));
 log(`Mod: ${MOD} — kuyrukta ${kuyruk.ogeler.length} konu`);
 if (MOD === "yayinla") await yayinla(kuyruk, durum);
 else await deneme(kuyruk, durum);

@@ -44,8 +44,8 @@ jobs:
       - name: Bağımlılıkları kur
         run: npm install --no-audit --no-fund
 
-      - name: Kuyruğu doğrula
-        run: node test/kuyruk.test.mjs
+      - name: Kuyruğu ve ilerleme kurallarını doğrula
+        run: node test/kuyruk.test.mjs && node test/durum.test.mjs
 
       - name: "Reels (${{ env.REELS_MOD }})"
         run: node reels-yayin.mjs
