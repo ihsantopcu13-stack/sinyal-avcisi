@@ -1,6 +1,8 @@
 name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 
-# Günde 3 kez sıradaki konuyu üç platforma gönderir.
+# Günde bir kez (21:00 TR) çalışır; önündeki yayın saatlerini (bugünün kalanı + yarın;
+# 08:30, 13:00, 17:30 İstanbul) sıradaki konularla doldurup Buffer'a TAM O SAAT için zamanlar.
+# GitHub zamanlanmış işleri saatlerce geciktirebildiği için yayın saatini Buffer tutar.
 # GÜVENLİK KİLİDİ: zamanlanmış çalışmalar repo değişkeni REELS_YAYIN=acik
 # olmadıkça SADECE deneme yapar (hiçbir şey paylaşmaz, bağlantıları test eder).
 # Elle çalıştırmada varsayılan mod da "deneme"dir.
@@ -8,9 +10,7 @@ name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 on:
   schedule:
     # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
-    - cron: "30 5 * * *"  # 08:30 TR
-    - cron: "0 10 * * *"  # 13:00 TR
-    - cron: "30 14 * * *" # 17:30 TR (günlük video hattı 20:00'de)
+    - cron: "0 18 * * *"  # 21:00 TR — ertesi günün 08:30, 13:00, 17:30 gönderilerini zamanlar
   workflow_dispatch:
     inputs:
       mod:

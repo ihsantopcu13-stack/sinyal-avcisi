@@ -1,8 +1,10 @@
 // ============================================================
 // REELS OTOMATİK YAYIN — Instagram ve Facebook Sayfası (Buffer üzerinden),
 // YouTube Shorts (YouTube Data API). GitHub Actions (reels-yayin.yml) günde
-// 3 kez (08:30, 13:00, 17:30 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ
-// konuyu üç platforma sırayla gönderir.
+// bir kez (21:00 TR) çalıştırır; çalışma önündeki yayın saatlerini (bugünün
+// kalanı + yarın; 08:30, 13:00, 17:30 İstanbul) sıradaki konularla doldurup
+// Buffer'a TAM O SAAT için zamanlanmış gönderir. GitHub'ın zamanlanmış işleri
+// saatlerce geciktirmesi yayın saatini etkilemez (kurallar: kuyruk-mantigi.mjs).
 // ============================================================
 // Modlar (REELS_MOD):
 //   deneme  — HİÇBİR ŞEY PAYLAŞMAZ. Anahtarları, Buffer'daki Instagram ve
@@ -36,7 +38,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, siradaki, youtubeAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, youtubeAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -208,24 +210,24 @@ async function deneme(kuyruk, durum) {
 
   const bekleyen = youtubeSiradakiler(durum, Infinity);
   log(`YouTube bekleyen: ${bekleyen.length ? bekleyen.map((k) => `Konu ${k}`).join(", ") : "yok"} (çalışma başına en fazla ${YT_CALISMA_BASINA} yüklenir)`);
-  const s = siradaki(kuyruk, durum);
-  if (!s) {
-    log("Instagram/Facebook kuyruğu bitti.");
+  const plan = planla(kuyruk, durum, new Date());
+  if (!plan.length) {
+    log("Önümüzdeki yayın saatleri zaten dolu ya da kuyruk bitti: Buffer'a gönderilecek yeni bir şey yok.");
   } else {
-    const { oge } = s;
-    const kalan = [...s.kalan, ytAcik ? "youtube (bekleyen sırasıyla)" : "youtube (bekletiliyor)"];
-    await kontrol(`Medya (Konu ${oge.konu})`, async () => {
+    const ilk = kuyruk.ogeler.find((o) => o.konu === plan[0].konu);
+    await kontrol(`Medya (${plan.map((x) => `Konu ${x.konu}`).join(", ")})`, async () => {
       const a = await releaseAssetleri();
-      if (!a[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
-      const r = await fetch(a[oge.video].browser_download_url, { method: "HEAD", redirect: "follow" });
+      const eksik = plan.map((x) => kuyruk.ogeler.find((o) => o.konu === x.konu).video).filter((v) => !a[v]);
+      if (eksik.length) throw new Error(`Release'te eksik: ${eksik.join(", ")}`);
+      const r = await fetch(a[ilk.video].browser_download_url, { method: "HEAD", redirect: "follow" });
       if (!r.ok) throw new Error(`herkese açık adres erişilemiyor: ${r.status}`);
-      return `${oge.video} (${(a[oge.video].size / 1e6).toFixed(1)} MB), herkese açık adres erişilebilir`;
+      return `${plan.length} video Release'te, herkese açık adres erişilebilir`;
     }, ["GITHUB_TOKEN", "GITHUB_REPOSITORY"]);
-    log(`\n—— Sıradaki: Konu ${oge.konu} — ${oge.baslik} → ${kalan.join(", ")} ——`);
-    log("Instagram/Facebook açıklaması:\n" + oge.aciklama);
-    log("İlk yorum (Buffer destekliyorsa):\n" + oge.ilk_yorum);
-    log(`YouTube başlık: ${oge.youtube.baslik}`);
-    log("Kapak: videonun ilk karesi · YouTube: sentetik içerik beyanı = EVET, çocuklara özel = HAYIR, kategori = Eğitim");
+    log("\n—— Bu çalışma yayın modunda olsaydı Buffer'a şunlar ZAMANLANIRDI ——");
+    for (const x of plan) log(`  Konu ${x.konu} — ${istanbulSaati(x.dueAt)} → ${x.platformlar.join(", ")}${x.yeni ? "" : " (eksik platform)"}`);
+    log(`YouTube: ${ytAcik ? "bekleyen sırasıyla yüklenir" : "bekletiliyor (konular bekleyen listesine girer)"}`);
+    log("İlk konunun açıklaması:\n" + ilk.aciklama);
+    log("İlk yorum:\n" + ilk.ilk_yorum);
   }
 
   const kritikler = sonuc.filter((x) => x.kritik);
@@ -237,12 +239,16 @@ async function deneme(kuyruk, durum) {
 
 // ---------------- YAYIN ----------------
 
-function dueAtIso() { return new Date(Date.now() + 60_000).toISOString(); } // Buffer geçmiş dueAt'i reddediyor
+// "2026-10-05T05:30:00.000Z" → "5 Eki 08:30" (İstanbul)
+function istanbulSaati(iso) {
+  return new Date(iso).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
 
-async function bufferGonder(kanal, oge, videoUrl, metadata) {
+// dueAt: Buffer'ın yayınlayacağı TAM saat (planla() verir; GitHub'ın gecikmesinden bağımsız)
+async function bufferGonder(kanal, oge, videoUrl, metadata, dueAt) {
   const input = {
     text: oge.aciklama, channelId: kanal.id, schedulingType: E("automatic"), mode: E("customScheduled"),
-    dueAt: dueAtIso(), assets: [{ video: { url: videoUrl } }],
+    dueAt, assets: [{ video: { url: videoUrl } }],
   };
   if (metadata) input.metadata = metadata;
   const d = await buffer(`mutation { createPost(input: ${gql(input)}) {
@@ -253,17 +259,17 @@ async function bufferGonder(kanal, oge, videoUrl, metadata) {
   return { id: r.post.id, durum: r.post.status, zamanlandi: r.post.dueAt };
 }
 
-async function instagramYayinla(oge, videoUrl, kanallar, sema) {
+async function instagramYayinla(oge, videoUrl, kanallar, sema, dueAt) {
   if (!kanallar.instagram) throw new Error("Buffer'da Instagram kanalı yok");
   const ig = { type: E("reel"), shouldShareToFeed: true };
   const yorum = ilkYorumAlani(sema?.instagram);
   if (yorum) ig[yorum] = oge.ilk_yorum;
   const yzEtiketi = Boolean(sema?.instagram?.alanlar?.includes("isAiGenerated"));
   if (yzEtiketi) ig.isAiGenerated = true; // Instagram'ın yapay zekâ etiketi
-  return { ...(await bufferGonder(kanallar.instagram, oge, videoUrl, { instagram: ig })), ilkYorum: Boolean(yorum), yzEtiketi };
+  return { ...(await bufferGonder(kanallar.instagram, oge, videoUrl, { instagram: ig }, dueAt)), ilkYorum: Boolean(yorum), yzEtiketi };
 }
 
-async function facebookYayinla(oge, videoUrl, kanallar, sema) {
+async function facebookYayinla(oge, videoUrl, kanallar, sema, dueAt) {
   if (!kanallar.facebook) throw new Error("Buffer'da Facebook Sayfası kanalı yok");
   const fbSema = sema?.facebook;
   const reelVar = !sema || (fbSema?.typeDegerleri ?? []).some((t) => t.toLowerCase() === "reel");
@@ -272,11 +278,11 @@ async function facebookYayinla(oge, videoUrl, kanallar, sema) {
   const yorum = ilkYorumAlani(fbSema);
   if (yorum) fb[yorum] = oge.ilk_yorum;
   try {
-    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, Object.keys(fb).length ? { facebook: fb } : null)), tur: reelVar ? "reel" : "video", ilkYorum: Boolean(yorum) };
+    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, Object.keys(fb).length ? { facebook: fb } : null, dueAt)), tur: reelVar ? "reel" : "video", ilkYorum: Boolean(yorum) };
   } catch (e) {
     if (sema || !reelVar) throw e;
     log("Facebook Reels metadata'sı kabul edilmedi, normal video gönderisi deneniyor:", e.message);
-    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, null)), tur: "video", ilkYorum: false };
+    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, null, dueAt)), tur: "video", ilkYorum: false };
   }
 }
 
@@ -296,40 +302,53 @@ async function youtubeYayinla(oge, assetler) {
 }
 
 async function yayinla(kuyruk, durum) {
-  const s = siradaki(kuyruk, durum);
+  const plan = planla(kuyruk, durum, new Date());
   const ytAcik = youtubeAcik(env);
   const ytSira = () => (ytAcik ? youtubeSiradakiler(durum) : []);
-  if (!s && !ytSira().length) { log(`Instagram/Facebook kuyruğu bitti; YouTube ${ytAcik ? "bekleyeni yok" : "bekletiliyor"}.`); return; }
+  if (!plan.length && !ytSira().length) { log(`Buffer'a gönderilecek yeni bir şey yok; YouTube ${ytAcik ? "bekleyeni yok" : "bekletiliyor"}.`); return; }
   const assetler = await releaseAssetleri();
   const kaydet = () => writeFile(DURUM_YOLU, JSON.stringify(durum, null, 2) + "\n");
   let hataVar = false;
+  const zamanlanan = [];
 
-  // 1) Instagram + Facebook: sıradaki konu (YouTube'u beklemez)
-  if (s) {
-    const { oge, kalan } = s;
-    log(`YAYIN: Konu ${oge.konu} — ${oge.baslik} → ${kalan.join(", ")}`);
-    if (!assetler[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
-    const videoUrl = assetler[oge.video].browser_download_url;
+  // 1) Instagram + Facebook: önümüzdeki yayın saatleri, Buffer'a TAM saatle zamanlanır
+  if (plan.length) {
     const kanallar = await bufferKanallari();
     const sema = await bufferSemasi();
-    const islem = { instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema), facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema) };
-    const d = (durum.konular[oge.konu] ||= {});
-    for (const p of kalan) {
-      const kayit = (d[p] ||= { deneme: 0 });
-      kayit.deneme += 1;
-      try {
-        Object.assign(kayit, await islem[p](), { tamam: true, zaman: new Date().toISOString() });
-        delete kayit.hata;
-        log(`✔ ${p}: Buffer ${kayit.id} (${kayit.durum}, ${kayit.zamanlandi})`);
-      } catch (e) {
-        kayit.hata = e.message.slice(0, 500);
-        hataVar = true;
-        log(`✘ ${p} (deneme ${kayit.deneme}/${MAX_DENEME}): ${e.message}`);
+    for (const x of plan) {
+      const oge = kuyruk.ogeler.find((o) => o.konu === x.konu);
+      log(`ZAMANLA: Konu ${oge.konu} — ${oge.baslik} → ${istanbulSaati(x.dueAt)} (${x.platformlar.join(", ")})`);
+      const d = (durum.konular[oge.konu] ||= {});
+      d.slot = x.slot;
+      if (!assetler[oge.video]) { log(`✘ Release'te ${oge.video} yok`); hataVar = true; atamaSonucu(durum, oge.konu); await kaydet(); continue; }
+      const videoUrl = assetler[oge.video].browser_download_url;
+      const islem = {
+        instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema, x.dueAt),
+        facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema, x.dueAt),
+      };
+      for (const p of x.platformlar) {
+        const kayit = (d[p] ||= { deneme: 0 });
+        kayit.deneme += 1;
+        try {
+          Object.assign(kayit, await islem[p](), { tamam: true, gonderildi: new Date().toISOString() });
+          delete kayit.hata;
+          zamanlanan.push({ konu: oge.konu, saat: istanbulSaati(kayit.zamanlandi || x.dueAt), platform: p, id: kayit.id, durum: kayit.durum });
+          log(`  ✔ ${p}: Buffer ${kayit.id} (${kayit.durum}, ${istanbulSaati(kayit.zamanlandi || x.dueAt)})`);
+        } catch (e) {
+          kayit.hata = e.message.slice(0, 500);
+          hataVar = true;
+          log(`  ✘ ${p} (deneme ${kayit.deneme}/${MAX_DENEME}): ${e.message}`);
+        }
+        await kaydet(); // her gönderimden sonra: aynı konu asla iki kez gönderilmesin
       }
+      atamaSonucu(durum, oge.konu); // hiçbir platform gitmediyse saat bırakılır
+      if (d.slot) youtubeBekleyeneEkle(durum, oge.konu);
       await kaydet();
     }
-    youtubeBekleyeneEkle(durum, oge.konu); // YouTube ayrı sırada
-    await kaydet();
+  }
+  if (zamanlanan.length) {
+    log("\n—— BUFFER'DA ZAMANLANAN GÖNDERİLER ——");
+    for (const z of zamanlanan) log(`  Konu ${z.konu} | ${z.saat} | ${z.platform} | Buffer ${z.id} (${z.durum})`);
   }
 
   // 2) YouTube: bekleyenler eskiden yeniye; ilk hatada durur (bağlantı sorunu tüm konuları etkiler).

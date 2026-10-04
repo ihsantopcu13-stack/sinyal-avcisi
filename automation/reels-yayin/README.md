@@ -6,7 +6,9 @@
 
 | | |
 |---|---|
-| Takvim | Her gün **08:30, 13:00, 17:30** (TR). Her çalışma kuyruktaki **sıradaki konuyu** Instagram ve Facebook'a gönderir, YouTube'a da bekleyen sırasıyla yükler; 40 konu ≈ 14 gün. GitHub zamanlanmış işleri birkaç dakika gecikebilir. Günlük video hattı (`video-pipeline.yml`) 20:00'de ayrı çalışır. |
+| Takvim | Yayın saatleri her gün **08:30, 13:00, 17:30** (İstanbul); 40 konu ≈ 14 gün. İş akışı günde **bir kez, 21:00'de** çalışır ve önündeki saatleri (bugünün kalanı + yarın) sıradaki konularla doldurup Buffer'a **tam o saat için zamanlanmış** gönderir. GitHub bu repoda zamanlanmış işleri 2–6 saat geç başlatabildiği için saati Buffer tutar; gecikme yayın saatini etkilemez. Günlük video hattı (`video-pipeline.yml`) 20:00'de ayrı çalışır. |
+| Çift gönderim yok | Her konu bir kez bir saate atanır (`durum.json` → `konular[k].slot`) ve her Buffer gönderiminden hemen sonra kaydedilir; aynı konu iki kez gönderilmez. |
+| Kaçan çalışma | Bir gün çalışma olmazsa sonraki çalışma kaldığı konudan devam eder: geçmiş boş saatler doldurulmaz (rastgele saatte yayın olmaz), hiçbir konu atlanmaz. Bir platform başarısızsa yalnız o platform yeniden denenir (saati hâlâ gelecekteyse aynı saate, geçtiyse 15 dk sonrasına). Hiçbir platforma gidemeyen konunun saati bırakılır, sonraki ilk boş saate geçer. |
 | Güvenlik kilidi | Zamanlanmış çalışmalar repo değişkeni **`REELS_YAYIN=acik`** olmadıkça yalnızca **deneme** yapar. Elle çalıştırmada varsayılan mod da `deneme`. |
 | Deneme modu | Hiçbir şey paylaşmaz. Anahtarları, Buffer'daki Instagram ve Facebook kanallarını, Buffer şemasının desteklediği alanları (Facebook Reels, ilk yorum), YouTube token'ını ve sıradaki konunun videosunu kontrol eder; gönderilecek açıklamayı loga yazar. |
 | Medya | GitHub Release **`reels-medya-v1`** (`konuXX.mp4`). Buffer'a Release'in herkese açık adresi verilir (günlük video hattı da böyle çalışıyor); YouTube'a dosyanın kendisi yüklenir. |
@@ -17,7 +19,7 @@
 | Yapay zekâ beyanı | Instagram'da Buffer'ın `isAiGenerated` alanıyla etiket; ayrıca her açıklamada "🤖 Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur." satırı. YouTube'da sentetik içerik beyanı. |
 | YouTube anahtarı | YouTube yüklemesi yalnız repo değişkeni **`REELS_YOUTUBE=acik`** iken denenir. Değişken yoksa/başka değerdeyse yükleme **bekletilir**: konular `youtube_bekleyen` listesinde birikir, deneme modundaki YouTube kontrolü bilgi olarak raporlanır ve çalışmayı kırmızıya çevirmez. YouTube bağlantısı düzelince `gh variable set REELS_YOUTUBE --body acik`. |
 | YouTube bekleyen listesi | Instagram/Facebook YouTube'u **beklemez**. YouTube'a gidemeyen konular `durum.json` → `youtube_bekleyen` listesine girer, **kalıcı atlanmaz**; YouTube düzelince eskiden yeniye, çalışma başına en fazla 2 yüklenir (YouTube kotası günde ~6 yükleme). Bir çalışmada ilk YouTube hatasında o çalışmanın YouTube denemeleri durur. Kurallar: `kuyruk-mantigi.mjs`, testi: `test/durum.test.mjs`. |
-| Hata | Instagram/Facebook bağımsız: biri başarısız olursa diğeri tekrar gönderilmez, yalnız o platform sonraki çalışmada yeniden denenir (en fazla 3 kez; sonra o konu için bırakılır). İlerleme `data/durum.json`'a commit edilir. Buffer gönderileri ~1 dk sonrasına zamanlanır; Buffer'ın kendi yayın sonucu Buffer panelinde görünür. |
+| Hata | Instagram/Facebook bağımsız: biri başarısız olursa diğeri tekrar gönderilmez, yalnız o platform sonraki çalışmada yeniden denenir (en fazla 3 kez; sonra o konu için bırakılır). İlerleme `data/durum.json`'a commit edilir. Buffer'ın kendi yayın sonucu Buffer panelinde görünür. |
 
 Kuyruk (`data/kuyruk.json`) yerelde `yds-video-fabrikasi-space\kuyruk_olustur.py` ile üretilir; her çalışmada `test/kuyruk.test.mjs` platform kurallarını (≤2200 karakter, ≤5 hashtag, YouTube başlığı ≤100, yapay zekâ satırı, istatistik iddiası yok…) doğrular.
 
