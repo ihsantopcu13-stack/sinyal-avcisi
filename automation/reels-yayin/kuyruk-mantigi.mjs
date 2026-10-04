@@ -83,6 +83,20 @@ export function atamaSonucu(durum, konu) {
   if (d && !BUFFER_PLATFORMLARI.some((p) => d[p]?.tamam)) delete d.slot;
 }
 
+// KUYRUK AZALDI: saate atanmamış konu sayısı eşiğe inince çalışma kırmızı biter (uyarı).
+// Günde 3 saat dolduğu için eşik 6 ≈ 2 günlük pay. Saati bırakılan başarısız konu da kalan sayılır.
+// planlanan: bu çalışmada atanacak ama durum'a henüz yazılmamış konular (deneme modu için).
+export const KALAN_UYARI_ESIGI = 6;
+
+export function kuyrukUyarisi(kuyruk, durum, planlanan = [], esik = KALAN_UYARI_ESIGI) {
+  const atanan = new Map(planlanan.map((p) => [p.konu, p.slot]));
+  const slotu = (k) => durum.konular[k]?.slot || atanan.get(k);
+  const kalan = kuyruk.ogeler.filter((o) => !slotu(o.konu)).map((o) => o.konu);
+  if (kalan.length > esik) return null;
+  const sonSlot = kuyruk.ogeler.map((o) => slotu(o.konu)).filter(Boolean).sort().at(-1) || null;
+  return { kalan, sonSlot, esik };
+}
+
 export function youtubeBekleyeneEkle(durum, konu) {
   if (durum.konular[konu]?.youtube?.tamam) return;
   if (!durum.youtube_bekleyen.includes(konu)) durum.youtube_bekleyen.push(konu);
