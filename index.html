@@ -1374,6 +1374,21 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </style>
 </head>
 <body class="dark-mode">
+<div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
+<script>
+// YDS/2 başvuru uyarısı: 8 Ekim 2026 23:59 (İstanbul) sonrası kendiliğinden kaybolur (sayfa açıkken de).
+// Sabit nav'ın üstünde durur; nav ve sayfa bandın yüksekliği kadar aşağı kayar (içeriği kapatmaz).
+(function(){
+  var SON=Date.parse('2026-10-08T23:59:59+03:00'),el=document.getElementById('ydsk2-uyari'),kok=document.documentElement;
+  if(!el)return;
+  if(Date.now()>SON){el.remove();return;}
+  el.hidden=false;
+  var olc=function(){kok.style.setProperty('--uyari-h',el.offsetHeight+'px');};
+  kok.classList.add('uyari-acik');olc();window.addEventListener('resize',olc);
+  if(window.ResizeObserver)new ResizeObserver(olc).observe(el); // yazı tipi yüklenince yükseklik değişir
+  setTimeout(function(){el.remove();kok.classList.remove('uyari-acik');window.removeEventListener('resize',olc);},SON-Date.now());
+})();
+</script>
 <!-- PWA Banner -->
 <div class="pwa-banner" id="pwa-banner">
   <span style="font-size:24px">📱</span>
@@ -1505,7 +1520,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <li><span>3</span>Bugünkü görevin</li>
     </ol>
     <div style="margin-top:14px;font-size:14px;color:var(--ink)">📅 Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
-    <div style="margin-top:10px;font-size:13px;color:var(--muted)">🎯 Kasım YDS/YÖKDİL'e <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı</div>
+    <div style="margin-top:10px;font-size:13px;color:var(--muted)">🎯 YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
     <style>
       .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
       .hero-adimlar li{display:flex;align-items:center;gap:8px}
@@ -12425,11 +12440,15 @@ function erisilebilirlikToggle(){
 (function(){
   const wa=document.createElement('a');
   wa.id='wa-destek-btn';
-  wa.href='https://wa.me/905XXXXXXXXX?text=Sinyal%20Avcısı%20hakkında%20bilgi%20almak%20istiyorum';
+  // Destek: Instagram DM (id CSS'te kullanıldığı için aynı kaldı)
+  wa.href='https://ig.me/m/sinyalavcisi.yds';
   wa.target='_blank';
-  wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,.4);text-decoration:none;font-size:24px;transition:transform .2s';
-  wa.innerHTML='💬';
-  wa.title='WhatsApp Destek';
+  wa.rel='noopener';
+  wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(214,36,159,.4);text-decoration:none;font-size:24px;transition:transform .2s';
+  // Instagram DM simgesi (kağıt uçak)
+  wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M22 3 9.2 10.1M22 3l-7.4 18-3.2-7.7L3 10.1z"/></svg>';
+  wa.title='Instagram\'dan mesaj gönder';
+  wa.setAttribute('aria-label','Instagram\'dan mesaj gönder (@sinyalavcisi.yds)');
   wa.onmouseover=()=>wa.style.transform='scale(1.1)';
   wa.onmouseout=()=>wa.style.transform='scale(1)';
   document.body.appendChild(wa);
@@ -17301,6 +17320,14 @@ body.pwa-acik{padding-bottom:72px}
   #aha-karti-modul .ahk-card-formula{font-size:14px}
   #aha-karti-modul .ahk-card-example{font-size:13px!important}
 }
+
+/* 8) YDS/2 başvuru uyarı bandı (8 Ekim 23:59'a kadar; JS ekler/kaldırır) */
+.ydsk2-uyari{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--signal);color:#0a0f0c;font-size:14px;font-weight:600;line-height:1.35;text-align:center;padding:7px 12px}
+.ydsk2-uyari a{color:#0a0f0c;font-weight:800;text-decoration:underline;text-underline-offset:2px}
+html.uyari-acik nav{top:var(--uyari-h,0px)}
+html.uyari-acik body{padding-top:var(--uyari-h,0px)}
+body.klod-odak .ydsk2-uyari{display:none}
+@media(max-width:700px){.ydsk2-uyari{font-size:13px;padding:6px 10px}}
 </style>
 </body>
 </html>
