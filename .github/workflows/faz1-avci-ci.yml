@@ -154,6 +154,9 @@ jobs:
       - name: index.html inline script sözdizimi testi (build kontrolü)
         run: node tests/index-html-syntax.test.mjs
 
+      - name: KLOD açıklama (Sinyal Lab yanlış cevap) önbellek + JSON doğrulama testi
+        run: node tests/klod-aciklama.test.mjs
+
       - name: Site + YouTube/Instagram yayın zinciri bağlantısı testi
         run: node tests/published-content.test.mjs
 

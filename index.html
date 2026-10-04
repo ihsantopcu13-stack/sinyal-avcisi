@@ -454,6 +454,19 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .yc-klod-btn{margin-top:10px;background:var(--sl);border:1px solid var(--signal);color:var(--signal);border-radius:9px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:filter .15s}
 .yc-klod-btn:hover{filter:brightness(1.12)}
 .yc-klod-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.yc-klod-kart{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(224,60,60,.3)}
+.yc-klod-yukleniyor{color:var(--muted);font-size:13px}
+.yc-klod-baslik{font-weight:800;color:var(--signal);margin-bottom:6px}
+.yc-klod-bolum{margin:8px 0}
+.yc-klod-etiket{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--muted);margin-bottom:2px}
+.yc-klod-eleme{list-style:none;margin:0;padding:0}
+.yc-klod-eleme-satir{padding:5px 8px;border-radius:8px;margin:3px 0}
+.yc-klod-secilen{background:rgba(224,60,60,.14);border-left:3px solid var(--trap,#e03c3c)}
+.yc-klod-rozet{display:inline-block;font-size:11px;font-weight:700;color:var(--trap,#e03c3c);border:1px solid var(--trap,#e03c3c);border-radius:6px;padding:0 6px;margin-left:4px}
+.yc-klod-ipucu{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--sl);border:1px solid var(--signal)}
+.yc-klod-not{margin-top:8px;font-size:12px;color:var(--muted)}
+.yc-klod-hata{color:var(--trap,#e03c3c);font-size:13px}
+.yc-klod-sohbet{margin-top:10px;background:none;border:none;padding:4px 0;color:var(--signal);font-size:13px;font-weight:700;text-decoration:underline;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .yc-dogru{border-color:#16a34a!important;background:rgba(22,163,74,.14)!important;color:#16a34a!important}
 .yc-yanlis{border-color:var(--trap,#e03c3c)!important;background:rgba(224,60,60,.12)!important;color:var(--trap,#e03c3c)!important}
 .klod-hata{align-self:stretch;max-width:min(720px,100%);display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 14px;border-radius:12px;border:1px solid rgba(224,60,60,.45);background:rgba(224,60,60,.08);color:var(--ink);font-size:14px;line-height:1.5}
@@ -7868,7 +7881,7 @@ function dAns(btn,correct){
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb';
-    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.sent+' '+soru.q,secenekler:soru.opts,dogruIdx:soru.ans,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Sinyal Lab'});
+    if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.sent+' '+soru.q,secenekler:soru.opts,dogruIdx:soru.ans,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Sinyal Lab',soruId:soru.id});
     else{fb.className='dm-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
@@ -10841,7 +10854,9 @@ function ycSikEtiketi(metin,i){
   const t=ycDuzMetin(metin);
   return /^[A-E]\s*[).]/.test(t)?t:String.fromCharCode(65+i)+') '+t;
 }
-// o: {hedef, soru, secenekler, dogruIdx, secilenIdx, aciklama?, butonlar?, bolum?}
+// o: {hedef, soru, secenekler, dogruIdx, secilenIdx, aciklama?, butonlar?, bolum?, soruId?}
+// soruId SADECE Sinyal Lab'dan gelir: buton sohbete gitmek yerine yerinde
+// KLOD açıklama kartını açar (klodAciklamaKartiAc). Diğer bölümler aynen.
 function yanlisCevapKutusu(o){
   const h=o&&o.hedef;if(!h)return;
   const sec=(o.secenekler||[]).map(ycSikEtiketi);
@@ -10854,7 +10869,57 @@ function yanlisCevapKutusu(o){
     +'<div class="yc-satir yc-dogru-satir"><span>Doğru cevap</span><b>'+ycKacis(sec[o.dogruIdx]||'')+'</b></div>'
     +(aciklama?'<div class="yc-aciklama">'+(typeof _safeHTML==='function'?_safeHTML(aciklama):ycKacis(aciklama))+'</div>':'')
     +'<button type="button" class="yc-klod-btn">🎯 KLOD\'la açıkla</button>';
-  h.querySelector('.yc-klod-btn').onclick=()=>yanlisCevapKlodaSor({soru:o.soru,secenekler:sec,dogruIdx:o.dogruIdx,secilenIdx:o.secilenIdx,bolum:o.bolum});
+  const sohbeteSor=()=>yanlisCevapKlodaSor({soru:o.soru,secenekler:sec,dogruIdx:o.dogruIdx,secilenIdx:o.secilenIdx,bolum:o.bolum});
+  const btn=h.querySelector('.yc-klod-btn');
+  if(o.soruId){h.dataset.ycSoru=o.soruId;btn.onclick=()=>klodAciklamaKartiAc(h,btn,o.soruId,o.secilenIdx,sohbeteSor);}
+  else btn.onclick=sohbeteSor;
+}
+// ============================================================
+// KLOD AÇIKLAMA KARTI — SADECE Sinyal Lab (2026-10-04)
+// ============================================================
+// /api/klod mode:'aciklama' — istemci yalnızca soru_id gönderir; soru,
+// şıklar ve doğru cevap sunucuda canonical sorular.json'dan okunur.
+// Açıklama soru başına bir kez üretilip klod_aciklama tablosunda saklanır.
+async function klodAciklamaKartiAc(h,btn,soruId,secilenIdx,sohbeteSor){
+  btn.disabled=true;
+  let kart=h.querySelector('.yc-klod-kart');
+  if(!kart){kart=document.createElement('div');kart.className='yc-klod-kart';h.appendChild(kart);}
+  kart.innerHTML='<div class="yc-klod-yukleniyor">🎯 KLOD açıklıyor…</div>';
+  // Bu arada sonraki soruya geçildiyse eski cevap yeni kutuya yazılmaz
+  const hala=()=>kart.isConnected&&h.dataset.ycSoru===soruId;
+  let veri=null,hata=null;
+  try{
+    const r=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'aciklama',soru_id:soruId})});
+    const j=await r.json().catch(()=>null);
+    if(r.ok&&j&&j.aciklama)veri=j.aciklama;
+    else hata=(j&&(j.error||j.message))||'KLOD şu an açıklama üretemedi. Biraz sonra tekrar dene.';
+  }catch(e){hata='Bağlantı hatası. İnternetini kontrol edip tekrar dene.';}
+  if(!hala())return;
+  kart.innerHTML='';
+  if(veri){
+    btn.remove();
+    kart.innerHTML=klodAciklamaKartHtml(veri,secilenIdx);
+  } else {
+    btn.disabled=false;
+    const y=document.createElement('div');y.className='yc-klod-hata';y.textContent='⚠️ '+hata;kart.appendChild(y);
+  }
+  const sohbet=document.createElement('button');sohbet.type='button';sohbet.className='yc-klod-sohbet';sohbet.textContent='💬 Sohbette sor';
+  sohbet.onclick=sohbeteSor;
+  kart.appendChild(sohbet);
+}
+function klodAciklamaKartHtml(a,secilenIdx){
+  const secilenHarf=String.fromCharCode(65+secilenIdx);
+  const bolum=(baslik,metin)=>'<div class="yc-klod-bolum"><div class="yc-klod-etiket">'+baslik+'</div><div>'+ycKacis(metin)+'</div></div>';
+  const eleme=(Array.isArray(a.eleme)?a.eleme:[]).map(e=>{
+    const secilen=e.sik===secilenHarf;
+    return '<li class="yc-klod-eleme-satir'+(secilen?' yc-klod-secilen':'')+'"><b>'+ycKacis(e.sik)+')</b> '+ycKacis(e.neden)+(secilen?' <span class="yc-klod-rozet">Senin seçimin</span>':'')+'</li>';
+  }).join('');
+  return '<div class="yc-klod-baslik">🎯 KLOD açıklıyor — doğru cevap '+ycKacis(a.dogru)+'</div>'
+    +bolum('🧱 Yapı',a.yapi)
+    +bolum('📡 Sinyal',a.sinyal)
+    +'<div class="yc-klod-bolum"><div class="yc-klod-etiket">❌ Eleme</div><ul class="yc-klod-eleme">'+eleme+'</ul></div>'
+    +'<div class="yc-klod-ipucu"><div class="yc-klod-etiket">⚡ AVCI ipucu</div><div>'+ycKacis(a.avci_ipucu)+'</div></div>'
+    +(a.emin===false?'<div class="yc-klod-not">KLOD bu açıklamadan tam emin değil; doğru cevap yukarıdaki anahtardır.</div>':'');
 }
 function yanlisCevapKlodaSor(v){
   // KLOD'un giriş kutusu tek satırlık: satır sonu yerine ' | ' ile ayrılır
