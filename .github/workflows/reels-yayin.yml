@@ -1,0 +1,66 @@
+name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
+
+# Günde 3 kez sıradaki konuyu üç platforma gönderir.
+# GÜVENLİK KİLİDİ: zamanlanmış çalışmalar repo değişkeni REELS_YAYIN=acik
+# olmadıkça SADECE deneme yapar (hiçbir şey paylaşmaz, bağlantıları test eder).
+# Elle çalıştırmada varsayılan mod da "deneme"dir.
+
+on:
+  schedule:
+    # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
+    - cron: "30 5 * * *"  # 08:30 TR
+    - cron: "0 10 * * *"  # 13:00 TR
+    - cron: "0 18 * * *"  # 21:00 TR (20:00'deki günlük video hattıyla çakışmasın)
+  workflow_dispatch:
+    inputs:
+      mod:
+        description: "deneme = hiçbir şey paylaşmadan test et · yayinla = gerçekten paylaş"
+        type: choice
+        options: [deneme, yayinla]
+        default: deneme
+
+concurrency:
+  group: reels-yayin
+  cancel-in-progress: false
+
+jobs:
+  reels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write # yayın ilerlemesini (data/durum.json) commit etmek için
+    defaults:
+      run:
+        working-directory: automation/reels-yayin
+    env:
+      REELS_MOD: ${{ github.event_name == 'workflow_dispatch' && inputs.mod || (vars.REELS_YAYIN == 'acik' && 'yayinla' || 'deneme') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Bağımlılıkları kur
+        run: npm install --no-audit --no-fund
+
+      - name: Kuyruğu doğrula
+        run: node test/kuyruk.test.mjs
+
+      - name: "Reels (${{ env.REELS_MOD }})"
+        run: node reels-yayin.mjs
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: İlerlemeyi commit'le
+        if: always() && env.REELS_MOD == 'yayinla'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/durum.json
+          git diff --staged --quiet || git commit -m "chore: reels yayın ilerlemesi [skip ci]"
+          git pull --rebase --autostash && git push

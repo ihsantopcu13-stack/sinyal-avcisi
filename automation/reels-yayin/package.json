@@ -1,0 +1,13 @@
+{
+  "name": "reels-yayin",
+  "private": true,
+  "type": "module",
+  "description": "Reels'leri Instagram ve Facebook Sayfası (Buffer) ile YouTube Shorts'a sırayla yayınlar",
+  "scripts": {
+    "deneme": "REELS_MOD=deneme node reels-yayin.mjs",
+    "test": "node test/kuyruk.test.mjs"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
