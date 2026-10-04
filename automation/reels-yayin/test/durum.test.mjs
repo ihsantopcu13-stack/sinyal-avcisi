@@ -1,7 +1,7 @@
 // Zamanlama ve kuyruk kuralları: tam saatte Buffer zamanlaması, aynı konu asla iki kez,
 // kaçan gün sonrası kaldığı yerden devam, YouTube bekleyen listesi.
 import {
-  durumHazirla, planla, atamaSonucu, gelecekSlotlar, youtubeAcik,
+  durumHazirla, planla, atamaSonucu, gelecekSlotlar, youtubeAcik, ilkYorumAcik,
   youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, MAX_DENEME,
 } from "../kuyruk-mantigi.mjs";
 
@@ -90,6 +90,13 @@ const isle = (d, plan, basarisiz = {}) => {
   kontrol("REELS_YOUTUBE yoksa kapalı", youtubeAcik({}) === false);
   kontrol("REELS_YOUTUBE=kapali → kapalı", youtubeAcik({ REELS_YOUTUBE: "kapali" }) === false);
   kontrol("REELS_YOUTUBE=acik → açık", youtubeAcik({ REELS_YOUTUBE: "acik" }) === true);
+}
+
+// ---- Buffer ilk yorum (ücretli plan) ----
+{
+  kontrol("BUFFER_ILK_YORUM yoksa ilk yorum gönderilmez", ilkYorumAcik({}) === false);
+  kontrol("BUFFER_ILK_YORUM=kapali → gönderilmez", ilkYorumAcik({ BUFFER_ILK_YORUM: "kapali" }) === false);
+  kontrol("BUFFER_ILK_YORUM=acik → gönderilir", ilkYorumAcik({ BUFFER_ILK_YORUM: "acik" }) === true);
 }
 
 console.log(`${toplam - hata}/${toplam} kontrol geçti`);

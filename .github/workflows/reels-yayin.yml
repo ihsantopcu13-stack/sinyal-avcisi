@@ -36,6 +36,8 @@ jobs:
       REELS_MOD: ${{ github.event_name == 'workflow_dispatch' && inputs.mod || (vars.REELS_YAYIN == 'acik' && 'yayinla' || 'deneme') }}
       # YouTube yüklemesi yalnız REELS_YOUTUBE=acik iken; kapalıyken konular bekleyen listesinde birikir
       REELS_YOUTUBE: ${{ vars.REELS_YOUTUBE }}
+      # Buffer "ilk yorum" ücretli plan özelliği: yalnız BUFFER_ILK_YORUM=acik iken gönderilir
+      BUFFER_ILK_YORUM: ${{ vars.BUFFER_ILK_YORUM }}
     steps:
       - uses: actions/checkout@v4
 
