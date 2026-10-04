@@ -2,54 +2,125 @@
   "konular": {
     "1": {
       "instagram": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
+        "deneme": 2,
+        "id": "6ac1f0a28dc991c73c6d2392",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-04T10:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:26.468Z"
       },
       "facebook": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
-      }
+        "deneme": 2,
+        "id": "6ac1f0a2814d657011e5ebd4",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-04T10:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:27.084Z"
+      },
+      "slot": "2026-10-04T13:00:00+03:00"
     },
     "2": {
       "instagram": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
+        "deneme": 2,
+        "id": "6ac1f0a37d53b827e0fdbd58",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-04T14:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:27.766Z"
       },
       "facebook": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
-      }
+        "deneme": 2,
+        "id": "6ac1f0a4814d657011e5ec07",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-04T14:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:28.414Z"
+      },
+      "slot": "2026-10-04T17:30:00+03:00"
     },
     "3": {
       "instagram": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
+        "deneme": 2,
+        "id": "6ac1f0a4ad7fd83bc513c02f",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T05:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:29.124Z"
       },
       "facebook": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
-      }
+        "deneme": 2,
+        "id": "6ac1f0a55829d2489a0802e6",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T05:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:29.783Z"
+      },
+      "slot": "2026-10-05T08:30:00+03:00"
     },
     "4": {
       "instagram": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
+        "deneme": 2,
+        "id": "6ac1f0a65829d2489a08032d",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T10:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:30.364Z"
       },
       "facebook": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
-      }
+        "deneme": 2,
+        "id": "6ac1f0a68dc991c73c6d23e6",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T10:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:30.974Z"
+      },
+      "slot": "2026-10-05T13:00:00+03:00"
     },
     "5": {
       "instagram": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
+        "deneme": 2,
+        "id": "6ac1f0a78dc991c73c6d2416",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T14:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:31.684Z"
       },
       "facebook": {
-        "deneme": 1,
-        "hata": "Buffer post oluşturulamadı: Invalid post: First comment requires a paid plan. Please upgrade to use this feature."
-      }
+        "deneme": 2,
+        "id": "6ac1f0a85829d2489a08037f",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-05T14:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-04T06:22:32.208Z"
+      },
+      "slot": "2026-10-05T17:30:00+03:00"
     }
   },
-  "youtube_bekleyen": []
+  "youtube_bekleyen": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ]
 }
