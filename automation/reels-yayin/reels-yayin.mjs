@@ -1,7 +1,7 @@
 // ============================================================
 // REELS OTOMATİK YAYIN — Instagram ve Facebook Sayfası (Buffer üzerinden),
 // YouTube Shorts (YouTube Data API). GitHub Actions (reels-yayin.yml) günde
-// 3 kez (08:30, 13:00, 21:00 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ
+// 3 kez (08:30, 13:00, 20:00 TR) çalıştırır; her çalışma kuyruktaki SIRADAKİ
 // konuyu üç platforma sırayla gönderir.
 // ============================================================
 // Modlar (REELS_MOD):
