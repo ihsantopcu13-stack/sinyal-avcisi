@@ -38,7 +38,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -385,5 +385,20 @@ async function yayinla(kuyruk, durum) {
 const kuyruk = await jsonOku(KUYRUK_YOLU, { ogeler: [] });
 const durum = durumHazirla(await jsonOku(DURUM_YOLU, {}));
 log(`Mod: ${MOD} — kuyrukta ${kuyruk.ogeler.length} konu`);
+// Deneme modu durum'a yazmaz: bu çalışmada atanacak konular ayrıca verilir
+const planlanan = MOD === "yayinla" ? [] : planla(kuyruk, durum, new Date()).filter((p) => p.yeni);
 if (MOD === "yayinla") await yayinla(kuyruk, durum);
 else await deneme(kuyruk, durum);
+
+// Gönderimler bittikten sonra: kuyruk azaldıysa çalışma kırmızı biter (gönderilenleri etkilemez,
+// durum.json commit adımı always() ile yine çalışır)
+const uyari = kuyrukUyarisi(kuyruk, durum, planlanan);
+if (uyari) {
+  const { kalan, sonSlot, esik } = uyari;
+  const mesaj = `Kuyrukta ${kalan.length} atanmamış konu kaldı${kalan.length ? ` (Konu ${kalan.join(", ")})` : ""}, eşik ${esik}.`
+    + (sonSlot ? ` Son atanan yayın saati: ${istanbulSaati(sonSlot)}.` : "")
+    + " Yeni konuları kuyruk.json'a ve Release'e ekle; eklenmezse bu saatten sonra yayın durur.";
+  log(`\n⚠️ KUYRUK AZALDI: ${mesaj}`);
+  console.log(`::error title=Reels kuyruğu azaldı::${mesaj}`);
+  process.exitCode = 1;
+}

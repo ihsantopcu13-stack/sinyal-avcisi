@@ -3,6 +3,7 @@
 import {
   durumHazirla, planla, atamaSonucu, gelecekSlotlar, youtubeAcik, ilkYorumAcik,
   youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, MAX_DENEME,
+  kuyrukUyarisi, KALAN_UYARI_ESIGI,
 } from "../kuyruk-mantigi.mjs";
 
 let toplam = 0, hata = 0;
@@ -74,6 +75,60 @@ const isle = (d, plan, basarisiz = {}) => {
   const plan = planla(kuyruk, d, ist("2026-10-05 09:00"));
   // 5 Ekim 13:00 ve 17:30 Konu 2 ve 3'te dolu → Konu 1 ilk boş saate (6 Ekim 08:30), sonra 4, 5
   kontrol("başarısız konu sonraki ilk boş saate gider", ozet(plan) === "1@10-06T08:30 4@10-06T13:00 5@10-06T17:30" && plan[0].yeni, ozet(plan));
+}
+
+// ---- Kuyruk azaldı uyarısı (eşik 6 ≈ 2 günlük pay) ----
+{
+  kontrol("eşik 6", KALAN_UYARI_ESIGI === 6);
+  const k10 = { ogeler: Array.from({ length: 10 }, (_, i) => ({ konu: i + 1 })) };
+  const ata = (n) => durumHazirla({ konular: Object.fromEntries(Array.from({ length: n }, (_, i) => [i + 1, { slot: `2026-10-${String(5 + i).padStart(2, "0")}T08:30:00+03:00` }])) });
+  kontrol("hiç atama yok (10 kalan): uyarı yok", kuyrukUyarisi(k10, ata(0)) === null);
+  kontrol("7 kalan: uyarı yok", kuyrukUyarisi(k10, ata(3)) === null);
+  const u6 = kuyrukUyarisi(k10, ata(4));
+  kontrol("6 kalan: uyarı", u6?.kalan.join() === "5,6,7,8,9,10" && u6.sonSlot === "2026-10-08T08:30:00+03:00", JSON.stringify(u6));
+  const u0 = kuyrukUyarisi(k10, ata(10));
+  kontrol("kuyruk bitti (0 kalan): uyarı sürer", u0?.kalan.length === 0 && u0.sonSlot === "2026-10-14T08:30:00+03:00", JSON.stringify(u0));
+  const d = ata(5);
+  delete d.konular[2].slot; // ikisi de başarısız → saati bırakıldı
+  const ub = kuyrukUyarisi(k10, d);
+  kontrol("saati bırakılan konu kalan sayılır", ub?.kalan.join() === "2,6,7,8,9,10", JSON.stringify(ub));
+  const d5 = ata(5);
+  d5.konular[99] = { slot: "2026-12-31T17:30:00+03:00" };
+  const u5 = kuyrukUyarisi(k10, d5);
+  kontrol("kuyrukta olmayan konu sayılmaz", u5?.kalan.join() === "6,7,8,9,10" && u5.sonSlot === "2026-10-09T08:30:00+03:00", JSON.stringify(u5));
+  // Deneme modu: durum'a yazılmamış ama bu çalışmada atanacak konular atanmış sayılır
+  const p = [{ konu: 4, slot: "2026-10-20T13:00:00+03:00" }];
+  const ud = kuyrukUyarisi(k10, ata(3), p);
+  kontrol("deneme: planlanan konu atanmış sayılır", ud?.kalan.join() === "5,6,7,8,9,10" && ud.sonSlot === "2026-10-20T13:00:00+03:00", JSON.stringify(ud));
+}
+{
+  // Gerçek takvim: Konu 1–5 4 Eki 09:22'de, sonra her gün 21:00 çalışması
+  const calistir = (kuyrukN, sonGun) => {
+    const k = { ogeler: Array.from({ length: kuyrukN }, (_, i) => ({ konu: i + 1 })) };
+    const d = durumHazirla({});
+    isle(d, planla(k, d, ist("2026-10-04 09:22")));
+    const kirmizi = [];
+    for (let g = 4; g <= sonGun; g++) {
+      const gun = `2026-10-${String(g).padStart(2, "0")}`;
+      isle(d, planla(k, d, ist(`${gun} 21:00`)));
+      const u = kuyrukUyarisi(k, d);
+      if (u) kirmizi.push({ gun, ...u });
+    }
+    return { d, kirmizi };
+  };
+  const { d, kirmizi } = calistir(40, 18);
+  kontrol("Konu 31 → 14 Eki 13:00", d.konular[31].slot === "2026-10-14T13:00:00+03:00", d.konular[31].slot);
+  kontrol("Konu 40 → 17 Eki 13:00 (17:30 boş kalır)", d.konular[40].slot === "2026-10-17T13:00:00+03:00", d.konular[40].slot);
+  const ilk = kirmizi[0];
+  kontrol("40 konuyla ilk kırmızı: 14 Eki 21:00, kalan 36–40, son saat 15 Eki 17:30",
+    ilk?.gun === "2026-10-14" && ilk.kalan.join() === "36,37,38,39,40" && ilk.sonSlot === "2026-10-15T17:30:00+03:00", JSON.stringify(ilk));
+  kontrol("14 Eki'den sonra her çalışma kırmızı", kirmizi.map((x) => x.gun.slice(8)).join() === "14,15,16,17,18", kirmizi.map((x) => x.gun).join());
+  // 41–77, 16 Eki 21:00 çalışmasından önce eklenirse: o çalışma 39, 40, 41'i atar, uyarı kalkar, boşluk olmaz
+  const k77 = { ogeler: Array.from({ length: 77 }, (_, i) => ({ konu: i + 1 })) };
+  const d2 = calistir(40, 15).d;
+  isle(d2, planla(k77, d2, ist("2026-10-16 21:00")));
+  kontrol("77 konuya çıkınca uyarı kalkar", kuyrukUyarisi(k77, d2) === null);
+  kontrol("Konu 41 → 17 Eki 17:30 (boşluk yok)", d2.konular[41]?.slot === "2026-10-17T17:30:00+03:00", d2.konular[41]?.slot);
 }
 
 // ---- YouTube ----
