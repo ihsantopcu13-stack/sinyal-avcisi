@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| Takvim | Her gün **08:30, 13:00, 21:00** (TR). Her çalışma kuyruktaki **sıradaki konuyu** üç platforma gönderir; 30 konu ≈ 10 gün. GitHub zamanlanmış işleri birkaç dakika gecikebilir. |
+| Takvim | Her gün **08:30, 13:00, 21:00** (TR). Her çalışma kuyruktaki **sıradaki konuyu** üç platforma gönderir; 40 konu ≈ 14 gün. GitHub zamanlanmış işleri birkaç dakika gecikebilir. |
 | Güvenlik kilidi | Zamanlanmış çalışmalar repo değişkeni **`REELS_YAYIN=acik`** olmadıkça yalnızca **deneme** yapar. Elle çalıştırmada varsayılan mod da `deneme`. |
 | Deneme modu | Hiçbir şey paylaşmaz. Anahtarları, Instagram hesabını ve yayın iznini, Facebook Sayfası token'ını, YouTube token'ını, Vercel Blob'u ve sıradaki konunun medya dosyalarını kontrol eder; gönderilecek açıklamayı loga yazar. |
 | Medya | Kaynak: GitHub Release **`reels-medya-v1`** (`konuXX.mp4`, `konuXX_kapak.png`). Instagram/Facebook herkese açık **doğrudan** adres istediği için dosya yayın anında **Vercel Blob**'a kopyalanır (bir kez). YouTube'a dosyanın kendisi yüklenir. |
