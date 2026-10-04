@@ -11,6 +11,7 @@ import { costGuard } from './_costGuard.mjs';
 import { originIzinliMi, klodGovdesiniDogrula, toplamKarakter, SINIRLAR } from './_requestGuard.mjs';
 import * as Pedagoji from './_avciPedagogy.mjs';
 import { KLOD_CHAT_SYSTEM_PROMPT } from './_klodChatPrompt.mjs';
+import { klodAciklamaIsle } from './_klodAciklama.mjs';
 
 // RAG — gerçek soru bankası. data/sorular.json (bu dosya) TEK canonical
 // source-of-truth'tur — frontend (index.html'deki SL_HAVUZ) ve video
@@ -827,6 +828,12 @@ export default async function handler(req, res) {
   if (!rlGun.allowed) {
     res.setHeader('Retry-After', Math.ceil(rlGun.retryAfterMs / 1000));
     return res.status(429).json({ error: 'Günlük istek sınırına ulaşıldı. Yarın tekrar deneyin.' });
+  }
+
+  // Sinyal Lab yanlış cevap açıklaması — kendi doğrulaması, önbelleği ve
+  // costGuard'ı olan ayrı dal (bkz. _klodAciklama.mjs). Sohbet akışı etkilenmez.
+  if (req.body && req.body.mode === 'aciklama') {
+    return klodAciklamaIsle(req, res, { havuz: SORU_HAVUZU, costGuard });
   }
 
   // Boyut / biçim sınırları — model çağrısından ve costGuard'ın sayaç
