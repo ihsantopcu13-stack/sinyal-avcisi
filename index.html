@@ -661,7 +661,7 @@ body.streak-acik .dash{padding-top:116px}
 .zorluk-badge.orta{background:#2e2410;color:#d97706}
 .zorluk-badge.zor{background:#2a1414;color:var(--trap)}
 /* PWA install banner */
-.pwa-banner{display:none;position:fixed;bottom:0;inset:auto 0;background:var(--surface);color:var(--ink);padding:14px 5vw;z-index:400;flex-direction:row;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.1)}
+.pwa-banner{display:none;position:fixed;left:0;right:0;top:auto;bottom:0;background:var(--surface);color:var(--ink);padding:14px 5vw;z-index:400;flex-direction:row;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.1)}
 .pwa-banner.show{display:flex}
   /* ============ SAT METODU STİLLERİ ============ */
 .sat-hero{background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden}
@@ -1377,9 +1377,9 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <!-- PWA Banner -->
 <div class="pwa-banner" id="pwa-banner">
   <span style="font-size:24px">📱</span>
-  <div class="pwa-banner-text"><b>Uygulamaya ekle</b>Sinyal Avcısı'nı ana ekranına ekle, uygulama gibi kullan</div>
+  <div class="pwa-banner-text"><b>Uygulamaya ekle</b><span class="pwa-banner-aciklama">Sinyal Avcısı'nı ana ekranına ekle, uygulama gibi kullan</span></div>
   <button class="pwa-install-btn" onclick="pwaInstall()">Ekle</button>
-  <button class="pwa-close-btn" onclick="pwaBannerKapat()">✕</button>
+  <button class="pwa-close-btn" onclick="pwaBannerKapat()" aria-label="Kapat (7 gün gösterme)">✕</button>
 </div>
 <nav>
   <div class="nav-logo" onclick="goTo('hero')" role="button" tabindex="0">
@@ -10761,7 +10761,8 @@ function klodSoruKartiCiz(){
   const acik=[['S','Özne'],['V','Fiil'],['O','Nesne']].filter(([r])=>_klodKartRoller[r]);
   if(acik.length){const lj=h('div','klod-kart-lejant');acik.forEach(([r,ad])=>lj.append(h('span','klod-rol-'+r.toLowerCase(),'■ '+ad)));kart.append(lj);}
   if(soru.q)kart.append(h('p','klod-kart-soru',duz(soru.q)));
-  if(Array.isArray(soru.opts)&&soru.opts.length){const ol=h('ol','klod-kart-siklar');soru.opts.slice(0,5).forEach(o=>ol.append(h('li',null,duz(o))));kart.append(ol);}
+  // Şıklar A–E (harf CSS'teki upper-alpha'dan gelir; metinde zaten "A)" varsa çift olmasın)
+  if(Array.isArray(soru.opts)&&soru.opts.length){const ol=h('ol','klod-kart-siklar');soru.opts.slice(0,5).forEach(o=>ol.append(h('li',null,duz(o).replace(/^[A-E][).]\s+/,''))));kart.append(ol);}
 }
 // Açıklanan rol metinlerini cümlede bulup (büyük/küçük harf duyarsız, çakışmasız) renkli span'lerle sarar
 function klodKartCumleDoldur(el,metin){
@@ -11335,17 +11336,43 @@ function pwaAlreadyInstalled(){
 function pwaIsIOS(){
   return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
 }
+// "Uygulamaya ekle" bandı: ilk ziyarette DEĞİL, 2. ziyaretten itibaren gösterilir;
+// kapatılınca (ya da kurulum diyaloğu reddedilince) 7 gün gösterilmez. Ziyaret:
+// 30 dakikadan uzun aradan sonra yapılan yeni giriş (sekme sayısından bağımsız).
+const PWA_KAPATMA_SURESI=7*24*60*60*1000;
+const PWA_ZIYARET_ARASI=30*60*1000;
+const PWA_ZIYARET_SAYISI=(function(){
+  try{
+    const simdi=Date.now(),son=+localStorage.getItem('sa_son_gorulme')||0;
+    let n=+localStorage.getItem('sa_ziyaret')||0;
+    if(simdi-son>PWA_ZIYARET_ARASI){n++;localStorage.setItem('sa_ziyaret',String(n));}
+    localStorage.setItem('sa_son_gorulme',String(simdi));
+    return n;
+  }catch(e){return 1;}
+})();
+function pwaBanneriGosterebilir(){
+  if(PWA_ZIYARET_SAYISI<2)return false;
+  try{
+    if(localStorage.getItem('sa_pwa_kuruldu')==='1')return false;
+    // Eski kalıcı "kapatıldı" kaydı: 7 günlük süre şimdiden başlar
+    if(localStorage.getItem('sa_pwa_dismissed')==='1'){localStorage.removeItem('sa_pwa_dismissed');localStorage.setItem('sa_pwa_kapatma',String(Date.now()));}
+    return Date.now()-(+localStorage.getItem('sa_pwa_kapatma')||0)>=PWA_KAPATMA_SURESI;
+  }catch(e){return true;}
+}
+function pwaKapatmaKaydet(){
+  try{localStorage.setItem('sa_pwa_kapatma',String(Date.now()));}catch(e){}
+}
 function pwaBanner(show){
   const b=document.getElementById('pwa-banner');
   if(!b)return;
   b.classList.toggle('show',show);
-  document.body.style.paddingBottom=show?'70px':'0';
+  document.body.classList.toggle('pwa-acik',show); // alt boşluk ve sohbet balonu CSS'te kayar
 }
 function pwaBannerKapat(){
-  // Kullanıcı banner'ı bilinçli kapattı — bir daha rahatsız etme (nav'daki
-  // küçük "Yükle" butonu yine de kalıcı olarak erişilebilir kalır).
+  // Kullanıcı bandı kapattı — 7 gün gösterme (nav'daki küçük "Yükle" butonu
+  // yine de erişilebilir kalır).
   pwaBanner(false);
-  try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+  pwaKapatmaKaydet();
 }
 
 // Chromium tabanlı tarayıcılar (Chrome/Edge/Samsung Internet vb.)
@@ -11356,9 +11383,7 @@ window.addEventListener('beforeinstallprompt',e=>{
   pwaPromptUsed=false;
   const btn=document.getElementById('pwa-btn');
   if(btn)btn.style.display='flex'; // nav'daki buton her zaman erişilebilir olsun
-  let dismissed=false;
-  try{dismissed=localStorage.getItem('sa_pwa_dismissed')==='1';}catch(err){}
-  if(!dismissed){
+  if(pwaBanneriGosterebilir()){
     setTimeout(()=>{if(pwaPrompt&&!pwaPromptUsed)pwaBanner(true);},8000);
   }
 });
@@ -11369,7 +11394,7 @@ window.addEventListener('appinstalled',()=>{
   pwaPrompt=null;
   const btn=document.getElementById('pwa-btn');
   if(btn)btn.style.display='none';
-  try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+  try{localStorage.setItem('sa_pwa_kuruldu','1');}catch(e){}
 });
 
 // iOS Safari `beforeinstallprompt` desteklemez — kendi akışımızı kuruyoruz
@@ -11377,9 +11402,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(!pwaIsIOS()||pwaAlreadyInstalled())return;
   const btn=document.getElementById('pwa-btn');
   if(btn)btn.style.display='flex';
-  let dismissed=false;
-  try{dismissed=localStorage.getItem('sa_pwa_dismissed')==='1';}catch(err){}
-  if(!dismissed)setTimeout(()=>pwaBanner(true),8000);
+  if(pwaBanneriGosterebilir())setTimeout(()=>pwaBanner(true),8000);
 });
 
 async function pwaInstall(){
@@ -11395,8 +11418,8 @@ async function pwaInstall(){
   if(r.outcome==='accepted'){
     pwaBanner(false);
   } else {
-    // Kullanıcı native diyalogda reddetti — tekrar sıkıştırmayalım
-    try{localStorage.setItem('sa_pwa_dismissed','1');}catch(e){}
+    // Kullanıcı native diyalogda reddetti — 7 gün sıkıştırmayalım
+    pwaKapatmaKaydet();
     pwaBanner(false);
   }
   pwaPrompt=null;
@@ -17235,6 +17258,48 @@ body.klod-odak .klod-govde .klod-ws{height:100%;min-height:0}
   #aha-karti-modul .ahk-grid,[id$="-modul"] :is([class$="-word-grid"],[class$="-kelime-grid"],.dna-grid,.tg-grid,.kb-grid){grid-template-columns:1fr!important}
   #aha-karti-modul .ahk-card{height:220px}
   .msg{max-width:92%}
+}
+
+/* 7) Mobil düzeltmeler: "Uygulamaya ekle" alt çubuğu, sohbet balonu alt boşluğu,
+      KLOD aktif soru kartı (tüm şıklar, A–E), AHA Kartları 2 sütun */
+.pwa-banner-aciklama{display:block}
+body.pwa-acik{padding-bottom:72px}
+.klod-kart-siklar{list-style-type:upper-alpha}
+@media(max-width:900px){
+  /* Alt katmanlar: alt menü (64 px, yeni ziyaretçide yok) + açıksa uygulama çubuğu + balon payı */
+  :root{--alt-nav:64px;--pwa-h:0px;--balon-pay:64px}
+  html.yeni-ziyaretci{--alt-nav:0px}
+  body.pwa-acik{--pwa-h:56px}
+  body{padding-bottom:calc(var(--alt-nav) + var(--pwa-h) + var(--balon-pay) + env(safe-area-inset-bottom))!important}
+  .pwa-banner{bottom:calc(var(--alt-nav) + env(safe-area-inset-bottom));padding:4px 6px 4px 14px;gap:8px}
+  .pwa-banner > span:first-child{font-size:18px!important}
+  .pwa-banner-text b{font-size:15px;margin:0}
+  .pwa-banner-aciklama{display:none}
+  .pwa-install-btn{padding:6px 16px}
+  #wa-destek-btn{right:12px!important;bottom:calc(var(--alt-nav) + var(--pwa-h) + 12px + env(safe-area-inset-bottom))!important;width:44px!important;height:44px!important;font-size:20px!important}
+  #scroll-top-btn{left:12px!important;bottom:calc(var(--alt-nav) + var(--pwa-h) + 12px + env(safe-area-inset-bottom))!important}
+  /* KLOD: kart doğal yüksekliğinde, tüm şıklar görünür; sohbet en az 240 px, ikisi birlikte kayar */
+  .klod-soru-karti{max-height:none;overflow:visible;min-height:auto}
+  /* Odak modunda en altta yazma alanı var: uygulama çubuğu onu kapatmasın */
+  body.klod-odak .pwa-banner{display:none!important}
+  body.klod-odak .klod-govde{grid-template-rows:auto minmax(240px,1fr);overflow-y:auto}
+  /* Kart uzunsa yazma satırı ekranın altına itilmesin: kaydırma alanının altına yapışık */
+  body.klod-odak .klod-input-row{position:sticky;bottom:0;z-index:2;background:var(--paper)}
+}
+@media(max-width:700px){
+  /* AHA Kartları: 2 sütun; kapalı kart ön yüz kadar (en fazla ~100 px), çevrilince arka yüz kadar uzar */
+  #aha-karti-modul .ahk-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}
+  #aha-karti-modul .ahk-card,#aha-karti-modul .ahk-card-inner{height:auto}
+  #aha-karti-modul .ahk-card-front{position:relative;min-height:72px;max-height:100px;padding:10px 8px;gap:4px}
+  #aha-karti-modul .ahk-card.ahk-flipped .ahk-card-front{position:absolute;inset:0;max-height:none}
+  #aha-karti-modul .ahk-card.ahk-flipped .ahk-card-back{position:relative;inset:auto}
+  #aha-karti-modul .ahk-card-back{padding:10px 8px;gap:6px}
+  #aha-karti-modul .ahk-card-num{font-size:11px}
+  #aha-karti-modul .ahk-card-title{font-size:14.5px;line-height:1.3}
+  /* "tıkla →" mobilde yok (modül açıklaması zaten söylüyor); 3 satırlık başlık da 100 px'e sığar */
+  #aha-karti-modul .ahk-card-front .ahk-card-hint{display:none}
+  #aha-karti-modul .ahk-card-formula{font-size:14px}
+  #aha-karti-modul .ahk-card-example{font-size:13px!important}
 }
 </style>
 </body>
