@@ -272,7 +272,7 @@
     else if (fark_ <= 30) yorum = "Zorlu ama mümkün. Her günü atlamadan bitirmen gerekiyor.";
     else yorum = `Çok iddialı bir sıçrama. Hedefini koru ama ara hedefin <b>${Math.min(100, Math.round(ayar.mevcut + 30))}</b> olsun; denemelerde onu geçince bir sonraki basamağa bak.`;
     const ad = String(ayar.ad || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return `${ad ? ad + ", " : ""}${ayar.mevcut} →${hedef} puan için <b>${d} doğru daha</b> gerekiyor, sınava <b>${N} gün</b> var. ${yorum}`;
+    return `${ad ? ad + ", " : ""}${ayar.mevcut} → ${hedef} puan için <b>${d} doğru daha</b> gerekiyor, sınava <b>${N} gün</b> var. ${yorum}`;
   }
 
   // ---- çizim ----
