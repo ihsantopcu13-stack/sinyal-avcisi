@@ -39,7 +39,8 @@
   "rewrites": [
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/ucretsiz-rehber", "destination": "/ucretsiz-rehber.html" }
+    { "source": "/ucretsiz-rehber", "destination": "/ucretsiz-rehber.html" },
+    { "source": "/hedef-rota", "destination": "/hedef-rota.html" }
   ],
   "redirects": [
     {
