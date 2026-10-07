@@ -1392,7 +1392,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 // YDS/2 başvuru uyarısı: 8 Ekim 2026 23:59 (İstanbul) sonrası kendiliğinden kaybolur (sayfa açıkken de).
 // Sabit nav'ın üstünde durur; nav ve sayfa bandın yüksekliği kadar aşağı kayar (içeriği kapatmaz).
 (function(){
-  var SON=Date.parse('2026-10-08T23:59:59+03:00'),el=document.getElementById('ydsk2-uyari'),kok=document.documentElement;
+  var SON=Date.parse('2026-10-01T00:00:00+03:00'),el=document.getElementById('ydsk2-uyari'),kok=document.documentElement;
   if(!el)return;
   if(Date.now()>SON){el.remove();return;}
   el.hidden=false;
