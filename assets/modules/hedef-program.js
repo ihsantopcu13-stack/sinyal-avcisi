@@ -407,8 +407,9 @@ function ciz(scrollKoru){
 
 // ----- kurulum -----
 let kurTaslak=null;
+let disDeger=null; // URL'den gelen ön değerler (bkz. urlIleAc); yalnız program henüz yokken kullanılır
 function kurulumHTML(p){
-  kurTaslak=Object.assign({sonPuan:'',hedefPuan:60,tarih:varsayilanTarih(),sinav:'YDS',gunlukDk:120},p||{});
+  kurTaslak=Object.assign({sonPuan:'',hedefPuan:60,tarih:varsayilanTarih(),sinav:'YDS',gunlukDk:120},p?{}:(disDeger||{}),p||{});
   const secim=(ad,deger,liste)=>`<div class="hp-secim" data-ad="${ad}">${liste.map(([v,l])=>`<button type="button" data-v="${v}" class="${String(kurTaslak[ad])===String(v)?'sec':''}">${l}</button>`).join('')}</div>`;
   return `
   <div class="hp-kart">
@@ -895,6 +896,20 @@ document.addEventListener('click',e=>{
   if(el){e.preventDefault();hpAc('bugun');}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.getElementById('hp-overlay');if(o&&o.classList.contains('acik'))hpKapat();}});
-function baslat(){pillGuncelle();heroGuncelle();}
+// URL ile açma: /#hedef-program ya da /?hedef=65&puan=25 (ör. hedef-rota sayfasından).
+// Program yoksa kurulum formu bu değerlerle dolu açılır; program varsa hiçbir şey
+// üzerine yazılmaz, program açılır. Okunan parametreler adres çubuğundan temizlenir.
+function urlIleAc(){
+  const u=new URL(location.href);
+  const sayi=(ad,min)=>{const v=parseFloat(u.searchParams.get(ad));return isFinite(v)&&v>=min&&v<=100?v:null;};
+  const hedef=sayi('hedef',1), puan=sayi('puan',0);
+  const hashIle=u.hash==='#hedef-program';
+  if(!hashIle&&!u.searchParams.has('hedef')&&!u.searchParams.has('puan'))return;
+  if(!lsOku()){disDeger={};if(hedef!==null)disDeger.hedefPuan=hedef;if(puan!==null)disDeger.sonPuan=puan;}
+  u.searchParams.delete('hedef');u.searchParams.delete('puan');if(hashIle)u.hash='';
+  try{history.replaceState(history.state,'',u.pathname+u.search+u.hash);}catch(e){}
+  hpAc('bugun');
+}
+function baslat(){pillGuncelle();heroGuncelle();urlIleAc();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',baslat);else baslat();
 })();
