@@ -17389,7 +17389,7 @@ body.pwa-acik{padding-bottom:72px}
 /* 8) YDS/2 başvuru uyarı bandı (8 Ekim 23:59'a kadar; JS ekler/kaldırır) */
 .ydsk2-uyari{position:fixed;top:0;left:0;right:0;z-index:201;background:var(--signal);color:#0a0f0c;font-size:14px;font-weight:600;line-height:1.35;text-align:center;padding:7px 12px}
 .ydsk2-uyari a{color:#0a0f0c;font-weight:800;text-decoration:underline;text-underline-offset:2px}
-html.uyari-acik nav{top:var(--uyari-h,0px)}
+html.uyari-acik nav:not(.mobile-bottom-nav){top:var(--uyari-h,0px)}
 html.uyari-acik body{padding-top:var(--uyari-h,0px)}
 body.klod-odak .ydsk2-uyari{display:none}
 @media(max-width:700px){.ydsk2-uyari{font-size:13px;padding:6px 10px}}
