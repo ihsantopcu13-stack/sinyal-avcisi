@@ -1,0 +1,63 @@
+name: Telegram — Reels kanala gönderim
+
+# Reels hattının Instagram/Facebook'a zamanladığı konuları, yayın saati gelince
+# Telegram kanalına (t.me/sinyalavcisiyds) video olarak gönderir.
+# Telegram Bot API zamanlama desteklemediği için saatlik çalışır; saati gelmiş ve
+# 12 saatten eski olmayan konuları gönderir (kurallar: automation/telegram-yayin).
+# Reels hattına dokunmaz: kendi ilerlemesini data/telegram-durum.json'da tutar.
+# GÜVENLİK KİLİDİ: repo değişkeni TELEGRAM_YAYIN=acik olmadıkça SADECE deneme yapar.
+
+on:
+  schedule:
+    # UTC; 05:20–18:20 UTC = 08:20–21:20 TR. Yayın saatleri 08:30 / 13:00 / 17:30 TR.
+    - cron: "20 5-18 * * *"
+  workflow_dispatch:
+    inputs:
+      mod:
+        description: "deneme = hiçbir şey göndermeden test et · yayinla = gerçekten gönder"
+        type: choice
+        options: [deneme, yayinla]
+        default: deneme
+
+concurrency:
+  group: telegram-reels
+  cancel-in-progress: false
+
+jobs:
+  telegram:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # gönderim ilerlemesini (data/telegram-durum.json) commit etmek için
+    defaults:
+      run:
+        working-directory: automation/telegram-yayin
+    env:
+      TELEGRAM_MOD: ${{ github.event_name == 'workflow_dispatch' && inputs.mod || (vars.TELEGRAM_YAYIN == 'acik' && 'yayinla' || 'deneme') }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Kuralları doğrula
+        run: node test/telegram.test.mjs
+
+      - name: "Reels → Telegram (${{ env.TELEGRAM_MOD }})"
+        run: node reels-telegram.mjs
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: İlerlemeyi commit'le
+        if: always() && env.TELEGRAM_MOD == 'yayinla'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/telegram-durum.json
+          git diff --staged --quiet && exit 0
+          git commit -m "chore: telegram reels ilerlemesi [skip ci]"
+          for i in 1 2 3; do git pull --rebase --autostash && git push && exit 0; sleep 5; done
+          exit 1
