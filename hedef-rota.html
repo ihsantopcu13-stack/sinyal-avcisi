@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-  <!-- GA4 — mevcut measurement ID; yalnız sayfa görüntüleme ve "rota_olusturuldu" (puan/isim gönderilmez) -->
+  <!-- GA4 — mevcut measurement ID; yalnız sayfa görüntüleme, "rota_olusturuldu" ve "programa_aktar" (puan/isim gönderilmez) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -86,6 +86,7 @@
     .d.exam{background:var(--signal);color:#1a1205;border-color:var(--signal)}
     .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
     .note{font-size:13px;color:var(--muted);margin:0}
+    .btn-link{display:block;text-align:center;text-decoration:none}
     @media (max-width:420px){.form{grid-template-columns:1fr}}
   </style>
 </head>
@@ -149,6 +150,11 @@
         <h2>Takvim</h2>
         <div class="strip" id="strip"></div>
         <div class="legend"><span>Yeşil: tamamlandı</span><span>Turuncu çerçeve: deneme günü</span><span>Turuncu: sınav</span></div>
+      </section>
+
+      <section class="card">
+        <a class="btn btn-link" id="aktar" href="/">Programımı sitede kur →</a>
+        <p class="note">Sitede soru havuzu, deneme takibi ve puan grafiğiyle devam et.</p>
       </section>
 
       <div class="navrow">
@@ -353,6 +359,10 @@
     document.getElementById("gercek").innerHTML = gercekcilik();
     secili = bugunGun();
     ust(); ciz(); tablo(); denemeler();
+    // Sitedeki Hedef Programı'na köprü: /?hedef=Y&puan=X ("puanım yok" ise puan gönderilmez)
+    const q = new URLSearchParams({ hedef: String(ayar.hedef) });
+    if (ayar.mevcut != null) q.set("puan", String(ayar.mevcut));
+    document.getElementById("aktar").href = "/?" + q.toString();
   }
 
   // ---- form ----
@@ -374,6 +384,7 @@
     rotaGoster();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
+  $("aktar").addEventListener("click", () => { try { gtag("event", "programa_aktar", { hedef: ayar.hedef }); } catch {} });
   $("degistir").addEventListener("click", () => { formDoldur(); $("rota").hidden = true; $("kur").hidden = false; });
   $("sifirla").addEventListener("click", () => { $("sifirlaOnay").hidden = false; });
   $("sifirlaHayir").addEventListener("click", () => { $("sifirlaOnay").hidden = true; });
