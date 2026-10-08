@@ -492,13 +492,11 @@ function kaynakKoduSadelestir(src) {
   kontrol("50) manuel token endpoint URL'i (oauth2.googleapis.com/token) artık bu dosyada elle inşa edilmiyor", !kaynakHamLib.includes("https://oauth2.googleapis.com/token"));
 }
 
-// ---- TEST: her iki YouTube workflow'u aynı üç env adını kullanıyor (recovery aracının hedefi doğru) ----
+// ---- TEST: YouTube secret'larını kullanan tek workflow (reels-yayin) aynı üç env adını kullanıyor (recovery aracının hedefi doğru) ----
 {
-  const weeklyYml = readFileSync(path.join(ROOT, ".github", "workflows", "weekly-signals-publish.yml"), "utf-8");
-  const dailyYml = readFileSync(path.join(ROOT, ".github", "workflows", "video-pipeline.yml"), "utf-8");
+  const reelsYml = readFileSync(path.join(ROOT, ".github", "workflows", "reels-yayin.yml"), "utf-8");
   for (const name of REQUIRED_ENV_NAMES) {
-    kontrol(`42.${name}) weekly workflow secrets.${name} kullanıyor`, weeklyYml.includes(`secrets.${name}`));
-    kontrol(`43.${name}) daily workflow secrets.${name} kullanıyor`, dailyYml.includes(`secrets.${name}`));
+    kontrol(`42.${name}) reels-yayin workflow secrets.${name} kullanıyor`, reelsYml.includes(`secrets.${name}`));
   }
 }
 
