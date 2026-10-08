@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YDS Çıkmış Sorular: Soru Tipleri ve Çözüm Mantığı — Sinyal Avcısı</title>
+  <meta name="description" content="YDS çıkmış sorularını ezberlemek yerine okumayı öğren: soru tiplerinin mantığı, ÖSYM'nin tekrar eden tuzakları ve çıkmış soruyla doğru çalışma yöntemi. Ücretsiz pratik.">
+  <link rel="canonical" href="https://sinyal-avcisi.com/yds-cikmis-sorular">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://sinyal-avcisi.com/yds-cikmis-sorular">
+  <meta property="og:title" content="YDS Çıkmış Sorular: Soru Tipleri ve Çözüm Mantığı">
+  <meta property="og:description" content="Çıkmış soruları ezberleme, ÖSYM'nin tekrar eden sinyallerini oku. Soru tipi soru tipi çalışma yöntemi.">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- GA4 — mevcut measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <style>
+    :root {
+      --bg: #0c0e14;
+      --surface: #13161f;
+      --border: #1e2233;
+      --signal: #f5a623;
+      --signal-dim: rgba(245,166,35,.15);
+      --text: #ece7da;
+      --muted: #7a8399;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 17px; line-height: 1.7; }
+    a { color: var(--signal); }
+    .nav { position: sticky; top: 0; z-index: 10; background: rgba(12,14,20,.94); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .nav-logo { font-weight: 800; font-size: 15px; color: var(--signal); text-decoration: none; }
+    .nav-back { font-size: 13px; color: var(--muted); }
+    .page { max-width: 720px; margin: 0 auto; padding: 0 16px 64px; }
+    header { padding: 40px 0 8px; }
+    .tag { display: inline-block; background: var(--signal-dim); border: 1px solid rgba(245,166,35,.3); color: var(--signal); font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: .05em; margin-bottom: 14px; }
+    h1 { font-size: clamp(28px, 6vw, 40px); line-height: 1.2; font-weight: 800; letter-spacing: -.02em; margin-bottom: 14px; }
+    h2 { font-size: 22px; font-weight: 800; margin: 36px 0 10px; }
+    p, ul, ol { margin-bottom: 14px; }
+    ul, ol { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    .lead { font-size: 18px; color: #d6d0c2; }
+    .cta { background: var(--surface); border: 1px solid rgba(245,166,35,.35); border-radius: 14px; padding: 22px; margin: 32px 0; }
+    .cta h2 { margin-top: 0; }
+    .btn { display: inline-block; background: var(--signal); color: #0c0e14; font-weight: 800; padding: 14px 24px; border-radius: 10px; text-decoration: none; margin-top: 6px; }
+    .ilgili { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 20px; }
+    .ilgili ul { list-style: none; padding: 0; }
+    footer { text-align: center; font-size: 13px; color: var(--muted); padding: 24px 16px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="/">🏹 Sinyal Avcısı</a>
+  <a class="nav-back" href="/">Ana Sayfa →</a>
+</nav>
+
+<main class="page">
+  <header>
+    <div class="tag">YDS · ÇIKMIŞ SORU REHBERİ</div>
+    <h1>YDS Çıkmış Sorular: Ezberleme, Mantığını Oku</h1>
+    <p class="lead">YDS'ye hazırlanan hemen herkes bir noktada çıkmış soru setlerine yönelir. Bu doğru bir karar, ama çoğu aday çıkmış soruyu yanlış kullanır: soruları tek tek çözüp cevap anahtarına bakar ve bir sonraki sete geçer. Oysa çıkmış sorunun asıl değeri, ÖSYM'nin aynı mantığı yıllardır nasıl tekrar ettiğini göstermesidir.</p>
+  </header>
+
+  <h2>Çıkmış sorular neden bu kadar değerli?</h2>
+  <p>YDS 80 sorudan ve 180 dakikadan oluşur; yanlış cevaplar doğruları götürmez ve her doğru cevap puanına eşit katkı yapar. Sınavın formatı yıllardır büyük ölçüde sabit kaldığı için soru tipleri de öngörülebilirdir. Kelime, dilbilgisi, cloze test, cümle tamamlama, çeviri, okuma, diyalog ve paragraf soruları her sınavda benzer kalıplarla karşına çıkar.</p>
+  <p>Bu öngörülebilirlik büyük bir avantajdır. Aynı cümle hiçbir zaman ikinci kez sorulmaz, ama aynı <strong>tuzak</strong> sorulur. "Although" ile kurulmuş bir zıtlık cümlesinde boşluğa yine bir zıtlık bağlacı gelmesi gerektiğini fark eden aday, o soruyu cümleyi tamamen çevirmeden çözer. Çıkmış soru çalışmanın amacı, işte bu tekrar eden ipuçlarını, yani <strong>sinyalleri</strong> görmeyi öğrenmektir.</p>
+
+  <h2>Soru tiplerine göre ne aramalısın?</h2>
+  <ul>
+    <li><strong>Kelime soruları:</strong> Boşluğun etrafındaki kelimeler, gereken anlamın yönünü verir. Olumlu mu, olumsuz mu, bir artış mı, bir azalma mı? Önce yönü belirle, sonra şıklara bak.</li>
+    <li><strong>Dilbilgisi soruları:</strong> Zaman uyumu en sık sınanan konudur. Cümledeki "since", "by the time", "for" gibi zaman ifadeleri, hangi yapının geleceğini neredeyse tek başına söyler.</li>
+    <li><strong>Cloze test:</strong> Paragrafın akışı belirleyicidir. Bir önceki cümle ile boşluktan sonraki cümle arasındaki ilişki (neden-sonuç, zıtlık, ekleme) doğru bağlacı gösterir.</li>
+    <li><strong>Cümle tamamlama:</strong> Verilen yarım cümlenin bağlacı ve zamanı, doğru şıkkın bağlacını ve zamanını sınırlar. Zaman uyumsuz şıkları elemek çoğu zaman cevabı bırakır.</li>
+    <li><strong>Çeviri:</strong> Ana fikir ve cümlenin öğesi (özne, yüklem, zaman) önce kontrol edilir. Ayrıntıya takılmadan, anlamı değiştiren tek kelimeyi bulan şıkları ele.</li>
+    <li><strong>Okuma ve paragraf soruları:</strong> Soru kökü ne istediğini söyler. Yazarın tutumu soruluyorsa sıfatlara ve zarflara; ana fikir soruluyorsa giriş ve sonuç cümlelerine bak.</li>
+  </ul>
+
+  <h2>Çıkmış soruyla doğru çalışma yöntemi</h2>
+  <ol>
+    <li><strong>Süre tutarak çöz.</strong> Gerçek sınavda soru başına ortalama iki dakikadan biraz fazla zamanın var. Pratikte de bu baskıya alış.</li>
+    <li><strong>Yanlışı değil, nedenini kaydet.</strong> "Bu soruyu yanlış yaptım" yerine "zıtlık sinyalini kaçırdım" ya da "zaman uyumuna bakmadım" yaz. Hatanın türü, tek tek hatalardan çok daha öğreticidir.</li>
+    <li><strong>Aynı tuzağı tekrar ara.</strong> Bir hata türünü tespit ettikten sonra, o türün geçtiği başka soruları bilerek çöz. Beyin kalıbı ancak tekrarla otomatikleştirir.</li>
+    <li><strong>Doğru yaptığın soruyu da sorgula.</strong> Şans eseri doğru yaptığın soru, sınavda yanlışa dönüşebilir. Doğru cevabın neden doğru olduğunu tek cümleyle açıklayabiliyor musun?</li>
+    <li><strong>Deneme ile konu çalışmasını dengele.</strong> Sürekli tam deneme çözmek, eksiklerini kapatmana yetmez. Zayıf olduğun soru tipine haftanın büyük kısmını ayır.</li>
+  </ol>
+
+  <h2>En sık düşülen hatalar</h2>
+  <p>Birinci hata, her cümleyi baştan sona Türkçeye çevirmeye çalışmaktır. Bu hem zaman kaybettirir hem de anlamı bilmediğin tek bir kelimede seni kilitler. İkinci hata, cevap anahtarına bakıp "aslında biliyordum" demektir; bu his, öğrenmenin değil tanımanın hissidir. Üçüncü hata ise yalnızca en yeni sınavlara odaklanmaktır. Eski sınavlar da aynı mantıkla hazırlandığı için en az yenileri kadar değerlidir.</p>
+  <p>Çıkmış soruları sinyal mantığıyla okumayı öğrendiğinde, hiç görmediğin bir soruda bile "bu soru bana neyi sınıyor?" sorusunu sorabilirsin. Sınavda fark yaratan beceri tam olarak budur.</p>
+
+  <section class="cta">
+    <h2>Çıkmış soru mantığıyla ücretsiz pratik yap</h2>
+    <p>Sinyal Avcısı'nda soru bankası, ÖSYM'nin tekrar eden kalıplarına göre düzenlenmiş sorular sunar. 5 soruluk kısa testle seviyeni ve zayıf noktanı gör, ardından yapay zeka mentor KLOD her hatanın nedenini Türkçe açıklasın. Kayıt yok, ücret yok.</p>
+    <a class="btn" href="/?utm_source=seo&amp;utm_medium=landing&amp;utm_campaign=yds_cikmis_sorular">🎯 Seviyemi Öğren — Ücretsiz</a>
+  </section>
+
+  <section class="ilgili">
+    <h2>İlgili rehberler</h2>
+    <ul>
+      <li>→ <a href="/yokdil-sinyal-kelimeler">YÖKDİL Sinyal Kelimeler: Soruyu Çözdüren Bağlaçlar</a></li>
+      <li>→ <a href="/yds-sinav-teknikleri">YDS Sınav Teknikleri: Zaman Yönetimi ve Eleme Stratejisi</a></li>
+      <li>→ <a href="/ucretsiz-rehber">Ücretsiz Sinyal Rehberi ve 5 Soruluk AVCI Teşhisi</a></li>
+      <li>→ <a href="/hedef-rota">Hedef Puan Rotası: Sana özel günlük çalışma planı</a></li>
+      <li>→ <a href="/">Sinyal Avcısı ana sayfa</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  © Sinyal Avcısı · <a href="/">Ana Sayfa</a> · <a href="/privacy">Gizlilik</a> · <a href="/terms">Kullanım Şartları</a>
+</footer>
+</body>
+</html>
