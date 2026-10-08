@@ -34,5 +34,15 @@ for (const ad of REHBERLER) {
   kontrol(`/${ad} hedef dosyası repoda mevcut`, existsSync(path.join(ROOT, `${ad}.html`)));
 }
 
+// ---- TEST: hover'dan çıkınca bağlantı rengi başlangıç rengine (.62) döner ----
+{
+  const donusler = [...footer.matchAll(/onmouseout="this\.style\.color='([^']+)'"/g)].map((m) => m[1]);
+  kontrol(
+    "footer: onmouseout rengi başlangıç rengiyle aynı",
+    donusler.length > 0 && donusler.every((r) => r === "rgba(236,231,218,.62)"),
+    donusler.join(", ")
+  );
+}
+
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
 if (basarisiz > 0) process.exit(1);
