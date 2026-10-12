@@ -48,9 +48,25 @@ await test("Reels açıklaması: biyografi yerine site, sınır içinde", () => 
   assert.ok(reelsAciklamasi("a".repeat(2000)).length <= CAPTION_SINIR);
 });
 
-await test("gerçek kuyruktaki tüm açıklamalar Telegram sınırına sığar", async () => {
-  const k = JSON.parse(await readFile(new URL("../../reels-yayin/data/kuyruk.json", import.meta.url), "utf-8"));
-  for (const o of k.ogeler) assert.ok(reelsAciklamasi(o.aciklama).length <= CAPTION_SINIR, `Konu ${o.konu}`);
+await test("Reels açıklaması: kanalda yorum yok → 'yoruma yaz' düşünme çağrısına çevrilir", () => {
+  assert.equal(
+    reelsAciklamasi("Soru? 👇 Cevabını yoruma yaz!\n\nLink biyografide."),
+    "Soru? 🤔 Cevabını düşün, sonra izle.\n\n👉 sinyal-avcisi.com"
+  );
+});
+
+const gercekKuyruk = JSON.parse(await readFile(new URL("../../reels-yayin/data/kuyruk.json", import.meta.url), "utf-8"));
+
+await test("gerçek kuyruktaki tüm açıklamalar Telegram sınırına sığar", () => {
+  for (const o of gercekKuyruk.ogeler) assert.ok(reelsAciklamasi(o.aciklama).length <= CAPTION_SINIR, `Konu ${o.konu}`);
+});
+
+await test("gerçek kuyruk: Telegram metninde 'yoruma yaz' kalmaz", () => {
+  for (const o of gercekKuyruk.ogeler) assert.doesNotMatch(reelsAciklamasi(o.aciklama), /yoruma? yaz/i, `Konu ${o.konu}`);
+});
+
+await test("gerçek kuyruk: hiçbir açıklama 1024'te kesilmez (hashtag'ler kaybolmaz)", () => {
+  for (const o of gercekKuyruk.ogeler) assert.ok(!reelsAciklamasi(o.aciklama).endsWith("…"), `Konu ${o.konu} kesildi`);
 });
 
 await test("Günün Sorusu: cevap spoiler içinde, HTML kaçışlı", () => {
