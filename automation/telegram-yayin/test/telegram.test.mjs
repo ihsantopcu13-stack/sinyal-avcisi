@@ -51,7 +51,7 @@ await test("Reels açıklaması: biyografi yerine site, sınır içinde", () => 
 await test("Reels açıklaması: kanalda yorum yok → 'yoruma yaz' düşünme çağrısına çevrilir", () => {
   assert.equal(
     reelsAciklamasi("Soru? 👇 Cevabını yoruma yaz!\n\nLink biyografide."),
-    "Soru? 🤔 Önce kendin düşün, sonra izle.\n\n👉 sinyal-avcisi.com"
+    "Soru? 🤔 Cevabını düşün, sonra izle.\n\n👉 sinyal-avcisi.com"
   );
 });
 

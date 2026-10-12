@@ -49,7 +49,7 @@ export function reelsSec(kuyruk, reelsDurum, tg, simdi, pencereSaat = PENCERE_SA
 export function reelsAciklamasi(aciklama) {
   let metin = String(aciklama ?? "")
     .replace(/Link biyografide\.?/g, `👉 ${SITE}`)
-    .replace(/👇 Cevabını yoruma yaz!/g, "🤔 Önce kendin düşün, sonra izle.")
+    .replace(/👇 Cevabını yoruma yaz!/g, "🤔 Cevabını düşün, sonra izle.")
     .trim();
   if (metin.length > CAPTION_SINIR) metin = metin.slice(0, CAPTION_SINIR - 1).trimEnd() + "…";
   return metin;
