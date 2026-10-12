@@ -109,3 +109,18 @@ export function youtubeSiradakiler(durum, adet = YT_CALISMA_BASINA) {
 export function youtubeTamamlandi(durum, konu) {
   durum.youtube_bekleyen = durum.youtube_bekleyen.filter((k) => k !== konu);
 }
+
+const SITE_URL = "https://sinyal-avcisi.com";
+
+// Facebook'ta "biyografi" yok → cümle site adresine çevrilir (düz metin; tıklanabilirliği Facebook belirler).
+// Instagram metni ve bufferGonder etkilenmez: yalnız facebookYayinla çağırır.
+export function facebookAciklamasi(aciklama) {
+  return String(aciklama ?? "")
+    .replace(/\.\s*Link biyografide\.?/g, `: ${SITE_URL}`)
+    .replace(/Link biyografide\.?/g, SITE_URL);
+}
+
+// YouTube'da "biyografi" yok; açıklamada site adresi zaten ayrı satırda var → cümle çıkarılır.
+export function youtubeAciklamasi(aciklama) {
+  return String(aciklama ?? "").replace(/[ \t]*Link biyografide\.?/g, "");
+}

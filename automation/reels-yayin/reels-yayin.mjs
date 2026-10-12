@@ -38,7 +38,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -272,6 +272,8 @@ async function instagramYayinla(oge, videoUrl, kanallar, sema, dueAt) {
 
 async function facebookYayinla(oge, videoUrl, kanallar, sema, dueAt) {
   if (!kanallar.facebook) throw new Error("Buffer'da Facebook Sayfası kanalı yok");
+  // Yeni nesne (kopya): asıl oge değişmez → Instagram ham aciklama'yı almaya devam eder
+  const fbOge = { ...oge, aciklama: facebookAciklamasi(oge.aciklama) };
   const fbSema = sema?.facebook;
   const reelVar = !sema || (fbSema?.typeDegerleri ?? []).some((t) => t.toLowerCase() === "reel");
   const fb = {};
@@ -279,11 +281,11 @@ async function facebookYayinla(oge, videoUrl, kanallar, sema, dueAt) {
   const yorum = ilkYorumAlani(fbSema);
   if (yorum) fb[yorum] = oge.ilk_yorum;
   try {
-    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, Object.keys(fb).length ? { facebook: fb } : null, dueAt)), tur: reelVar ? "reel" : "video", ilkYorum: Boolean(yorum) };
+    return { ...(await bufferGonder(kanallar.facebook, fbOge, videoUrl, Object.keys(fb).length ? { facebook: fb } : null, dueAt)), tur: reelVar ? "reel" : "video", ilkYorum: Boolean(yorum) };
   } catch (e) {
     if (sema || !reelVar) throw e;
     log("Facebook Reels metadata'sı kabul edilmedi, normal video gönderisi deneniyor:", e.message);
-    return { ...(await bufferGonder(kanallar.facebook, oge, videoUrl, null, dueAt)), tur: "video", ilkYorum: false };
+    return { ...(await bufferGonder(kanallar.facebook, fbOge, videoUrl, null, dueAt)), tur: "video", ilkYorum: false };
   }
 }
 
@@ -294,7 +296,7 @@ async function youtubeYayinla(oge, assetler) {
   const r = await yt.videos.insert({
     part: "snippet,status",
     requestBody: {
-      snippet: { title: oge.youtube.baslik, description: oge.youtube.aciklama, categoryId: "27", defaultLanguage: "tr", defaultAudioLanguage: "tr" },
+      snippet: { title: oge.youtube.baslik, description: youtubeAciklamasi(oge.youtube.aciklama), categoryId: "27", defaultLanguage: "tr", defaultAudioLanguage: "tr" },
       status: { privacyStatus: "public", selfDeclaredMadeForKids: false, containsSyntheticMedia: true },
     },
     media: { body: createReadStream(yerel) },
