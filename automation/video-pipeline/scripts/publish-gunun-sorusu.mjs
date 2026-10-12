@@ -10,7 +10,7 @@
 //     hiç atılmıyor (bilinen Buffer sorunu).
 //   - Facebook: mutation'ın kendisi reddediliyor — "First comment
 //     requires a paid plan" (bu Buffer hesabının planında yok).
-// Bu yüzden kart "yoruma bak" DEMEZ ("Önce çöz — cevap aşağıda 👇"): gerçek
+// Bu yüzden kart "yoruma bak" DEMEZ ("Önce çöz, sonra cevaba bak 🎯"): gerçek
 // bir yorum hiçbir platformda atılamıyor — cevap her iki platformda da caption'ın
 // İÇİNE, birkaç boş satırla "kaydırmadan önce düşün" boşluğu bırakılarak
 // ekleniyor. Gerçekten Buffer planı yükseltilirse Facebook için
