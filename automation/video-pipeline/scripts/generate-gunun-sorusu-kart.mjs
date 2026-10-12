@@ -132,7 +132,7 @@ export function kartHtmlUret(soru) {
 
     <!-- footer CTA -->
     <div style="display:flex;align-items:center;justify-content:center;gap:12px;background:#f5a623;color:#0d1b3e;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;letter-spacing:.01em;padding:18px 32px;border-radius:999px;box-shadow:0 16px 40px rgba(245,166,35,.3)">
-      Cevap için yoruma bak 👇
+      Önce çöz — cevap aşağıda 👇
     </div>
 
   </div>
