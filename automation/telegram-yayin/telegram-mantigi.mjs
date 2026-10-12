@@ -44,9 +44,13 @@ export function reelsSec(kuyruk, reelsDurum, tg, simdi, pencereSaat = PENCERE_SA
 }
 
 // Reels açıklaması Telegram'a uyarlanır: Instagram'a özgü "Link biyografide." yerine site adresi.
+// Telegram kanalında yorum yok → "yoruma yaz" çağrısı düşünme çağrısına çevrilir.
 // Düz metin gönderilir (parse_mode yok) — kaçış hatası riski olmasın.
 export function reelsAciklamasi(aciklama) {
-  let metin = String(aciklama ?? "").replace(/Link biyografide\.?/g, `👉 ${SITE}`).trim();
+  let metin = String(aciklama ?? "")
+    .replace(/Link biyografide\.?/g, `👉 ${SITE}`)
+    .replace(/👇 Cevabını yoruma yaz!/g, "🤔 Önce kendin düşün, sonra izle.")
+    .trim();
   if (metin.length > CAPTION_SINIR) metin = metin.slice(0, CAPTION_SINIR - 1).trimEnd() + "…";
   return metin;
 }
