@@ -268,9 +268,15 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .step:last-child{border-bottom:none}
 .step-num{font-family:'IBM Plex Serif',serif;font-size:52px;color:rgba(245,166,35,.12);font-style:italic;line-height:1;letter-spacing:-.03em}
 .step-title{font-size:19px;font-weight:600;margin-bottom:10px}
-.step-desc{font-size:16px;color:var(--ink);line-height:1.7;margin-bottom:14px}
-.step-tags{display:flex;gap:7px;flex-wrap:wrap}
-.stag{font-size:15px;font-weight:600;background:var(--sl);color:var(--signal);padding:5px 14px;border-radius:20px;letter-spacing:.01em;border:1px solid rgba(245,166,35,.15)}
+.step-desc{font-size:16px;color:var(--ink);line-height:1.6}
+/* Nasıl Çalışır (3 adım, 2026-10-14): mobilde daha sıkı; yazı 16 px'in altına inmez */
+@media(max-width:700px){
+  .nasil{padding:56px 5vw}
+  .nasil-header{margin-bottom:28px}
+  .step{grid-template-columns:44px 1fr;gap:16px;padding:22px 0}
+  .step-num{font-size:40px}
+  .step-title{margin-bottom:6px}
+}
 .ekitap{background:var(--signal);padding:72px 5vw;color:#0a0f0c}
 .ekitap-inner{max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .ekitap h2{font-family:'IBM Plex Serif',serif;font-size:clamp(24px,3vw,38px);line-height:1.2;margin-bottom:14px}
@@ -1695,11 +1701,9 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="nasil-inner">
     <div class="nasil-header"><div class="eyebrow" style="color:var(--signal)">Nasıl Çalışır?</div><div class="section-title">Gelişinin ilk gününden sınav sabahına</div></div>
     <div>
-      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Seviyeni öğren</div><div class="step-desc">"Seviyemi Öğren" butonuna bas, sınavını seç, 5 kısa soru çöz. Seviyeni ve zayıf noktanı hemen gör.</div><div class="step-tags"><span class="stag">2 dakika</span><span class="stag">Kayıt yok</span><span class="stag">Tamamen ücretsiz</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Bugünkü görevini yap</div><div class="step-desc">Test sonucuna göre sana tek bir görev veriyoruz. ÖSYM formatındaki sorularda bağlaçlar, tuzak ifadeler ve kilit kelimeler renkli işaretli.</div><div class="step-tags"><span class="stag">Sinyal bağlacı</span><span class="stag">Tuzak</span><span class="stag">Kilit kelime</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takıldıysan KLOD devreye giriyor</div><div class="step-desc">Bir soruyu yanlış çözdün ya da mantığını anlayamadın. KLOD'a yazıyorsun.</div><div class="step-tags"><span class="stag">Türkçe açıklama</span><span class="stag">S+V+O haritası</span><span class="stag">ÖSYM tuzak analizi</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">04</div><div><div class="step-title">Otobüste Ses Kurs, yatmadan Günlük Tuzak</div><div class="step-desc">19 konuluk Ses Kurs. İngilizce + Türkçe. Gece yatmadan 60 saniye Günlük Tuzak.</div><div class="step-tags"><span class="stag">en-US + tr-TR</span><span class="stag">0.7x - 1.5x hız</span><span class="stag">Günlük tuzak</span></div></div></div>
-      <div class="step scroll-reveal"><div class="step-num">05</div><div><div class="step-title">Haftalık rapor kartın geliyor</div><div class="step-desc">Kaç soru çözdün, hangi yapıda hata yaptın, tahmini puanın ne.</div><div class="step-tags"><span class="stag">Net analizi</span><span class="stag">Puan tahmini</span><span class="stag">Story görseli</span></div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">01</div><div><div class="step-title">Seviyeni ölç</div><div class="step-desc">5 kısa soruyla 2 dakikada seviyeni ve zayıf noktanı gör.</div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">02</div><div><div class="step-title">Bugünkü görevini yap</div><div class="step-desc">Sonucuna göre tek bir görev al; sorulardaki sinyaller renkli işaretli.</div></div></div>
+      <div class="step scroll-reveal"><div class="step-num">03</div><div><div class="step-title">Takılınca KLOD'a sor</div><div class="step-desc">Anlamadığın soruyu yaz, KLOD Türkçe ve adım adım açıklasın.</div></div></div>
     </div>
   </div>
 </section>
