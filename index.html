@@ -1697,7 +1697,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </div>
     <div class="yorumlar" id="yorumlar-track"></div>
     <div style="text-align:center;margin-top:20px">
-      <button onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">✍️ Deneyimini Paylaş</button>
+      <button id="yorum-paylas-btn" onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">✍️ Deneyimini Paylaş</button>
     </div>
   </div>
 </section>
@@ -6637,7 +6637,11 @@ async function testimonialleriYukle(){
       .limit(12);
     if(error)return;
     // Onaylı yorum yoksa liste boş kalır (.yorumlar:empty gizler); "Deneyimini Paylaş" butonu görünür
-    if(!data||data.length===0)return;
+    if(!data||data.length===0){
+      const btn=document.getElementById('yorum-paylas-btn');
+      if(btn)btn.textContent='✍️ İlk deneyimi sen paylaş';
+      return;
+    }
     data.forEach(t=>{
       const div=document.createElement('div');
       div.className='yorum';
