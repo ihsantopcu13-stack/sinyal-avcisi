@@ -492,6 +492,35 @@ body.klod-odak .klod-input-row{flex-shrink:0}
   body.klod-odak #dnav-mic-btn,body.klod-odak #dnav-stop-btn{padding:10px!important}
   body.klod-odak .klod-send{height:44px;padding:0 14px}
 }
+/* KLOD ODAK MODU (2026-10-14) — body.klod-odak'ın içinde ikinci kademe:
+   body.klod-tam iken üst başlık, hızlı butonlar ve AKTİF SORU kartı gizlenir;
+   AVCI adım şeridi + sohbet ~900 px ortalanmış kolonda tam yükseklik.
+   Aç/kapat: klodTamDegistir() (sağ üst ⤢/✕ Odak butonu), Esc, klodTamOtomatik(). */
+.klod-tam-btn{display:none}
+body.klod-odak .klod-tam-btn{display:inline-flex;align-items:center;gap:6px;position:absolute;top:max(14px,env(safe-area-inset-top));right:max(24px,env(safe-area-inset-right));z-index:5;background:var(--surface);border:1px solid var(--border);color:var(--ink);border-radius:9px;padding:0 12px;min-height:40px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap;transition:border-color .15s}
+body.klod-odak .klod-tam-btn:hover{border-color:var(--signal);color:var(--signal)}
+body.klod-odak .klod-tam-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+body.klod-odak.klod-tam .klod-tam-btn{border-color:var(--signal);color:var(--signal);background:var(--sl)}
+body.klod-odak .klod-topbar{padding-right:96px}
+body.klod-odak.klod-tam .klod-topbar,body.klod-odak.klod-tam .klod-quick-row,body.klod-odak.klod-tam .klod-soru-karti{display:none!important}
+body.klod-odak.klod-tam .klod-method-strip,body.klod-odak.klod-tam .klod-govde{width:100%;max-width:900px;margin-left:auto;margin-right:auto}
+body.klod-odak.klod-tam .klod-method-strip{margin-bottom:12px}
+body.klod-odak.klod-tam .klod-govde{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);overflow:hidden}
+body.klod-odak.klod-tam .klod-msgs .msg{font-size:18px;line-height:1.75;max-width:min(820px,92%)}
+body.klod-odak.klod-tam .klod-input{font-size:17px;height:52px}
+body.klod-odak.klod-tam .klod-send{height:52px}
+@media(max-width:1124px){
+  /* Şerit sağ üstteki Odak butonunun altına girmesin */
+  body.klod-odak.klod-tam .klod-method-strip{width:auto;margin-left:max(0px,calc((100% - 900px)/2));margin-right:92px}
+}
+@media(max-width:900px){
+  body.klod-odak .klod-tam-btn{top:max(10px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));padding:0 10px}
+  body.klod-odak .klod-topbar{padding-right:84px}
+  body.klod-odak.klod-tam .klod-method-strip{margin-left:0;margin-right:84px;margin-bottom:8px}
+  body.klod-odak.klod-tam .klod-msgs .msg{font-size:17px;max-width:94%}
+  body.klod-odak.klod-tam .klod-input{font-size:16px;height:48px}
+  body.klod-odak.klod-tam .klod-send{height:48px}
+}
 .kk{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:56px 32px;text-align:center;cursor:pointer;min-height:260px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px;transition:border-color .15s}
 .kk:hover{border-color:var(--signal)}
 .kk-word{font-family:'IBM Plex Serif',serif;font-weight:800;font-size:clamp(34px,6vw,56px);line-height:1.15;margin-bottom:10px;color:var(--ink)}
@@ -6931,6 +6960,7 @@ function dnav(el){
     if(typeof _anaKlodDemoBaglam==='string')_anaKlodDemoBaglam=null; // sohbet yeniden çiziliyor: ekranda demo soru yok
     const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     t.innerHTML=`
+      <button class="klod-tam-btn" id="klod-tam-btn" type="button" onclick="klodTamDegistir()" aria-pressed="false" aria-label="Odak Modunu aç" title="Odak Modu: tam ekran çalış">⤢ Odak</button>
       <div class="klod-topbar">
         <div class="klod-topbar-main">
           <button class="klod-geri-btn" type="button" onclick="klodOdakCik()" aria-label="KLOD odak modundan çık">← Geri</button>
@@ -6980,6 +7010,7 @@ function dnav(el){
     `;
     // Sağ sütun: aktif Sinyal Lab sorusu (varsa). Renkler sadece KLOD açıkladıkça gelir.
     klodSoruKartiBaslat();
+    klodTamButonGuncelle();
     // KATMAN 5K — VOICE-LITE fail-open: mic butonu bu innerHTML DOM'a
     // yazıldıktan HEMEN SONRA var oluyor (KLOD sekmesi lazy-render
     // edildiği için sayfa yüklenirken henüz yok) - SR yoksa burada
@@ -7070,9 +7101,11 @@ function klodOdakAyarla(acik,oncekiAktif){
   const b=document.body,zatenAcik=b.classList.contains('klod-odak');
   if(acik&&!zatenAcik){
     _klodOncekiItem=oncekiAktif||null;_klodScrollY=window.scrollY;
+    _klodTamElleKapandi=false;
     b.classList.add('klod-odak');
     try{history.pushState({klodOdak:1},'');}catch(e){}
   }else if(!acik&&zatenAcik){
+    klodTamAyarla(false);
     b.classList.remove('klod-odak');
     // Başka yoldan (menü, Ctrl+K) çıkıldıysa fazladan kalan history kaydını geri al
     if(history.state&&history.state.klodOdak){_klodPopSessiz=true;history.back();}
@@ -7080,6 +7113,7 @@ function klodOdakAyarla(acik,oncekiAktif){
 }
 function _klodOdakKapat(){
   if(!document.body.classList.contains('klod-odak'))return;
+  klodTamAyarla(false);
   if(_klodDonusGorunumu){const g=_klodDonusGorunumu;_klodDonusGorunumu=null;klodDonusGorunumuUygula(g);return;}
   let hedef=_klodOncekiItem;
   if(!hedef||!document.contains(hedef)||hedef.textContent.includes('KLOD'))hedef=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Bugün'));
@@ -7101,8 +7135,65 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('arama-modal')?.classList.contains('acik'))return;
   if(document.getElementById('ia-overlay')?.classList.contains('acik'))return;
   if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
+  // Odak Modu açıksa Esc önce yalnız onu kapatır; ikinci Esc KLOD'dan çıkar
+  if(document.body.classList.contains('klod-tam')){_klodTamElleKapandi=true;klodTamAyarla(false);return;}
   klodOdakCik();
 });
+// ODAK MODU (2026-10-14) — bkz. CSS "KLOD ODAK MODU". body.klod-tam yalnız
+// body.klod-odak açıkken anlamlı. Tarayıcı tam ekranı (Fullscreen API)
+// opsiyonel: yoksa/reddedilirse sessizce yalnız CSS modu kalır (iPhone vb.).
+// Öğrenci Odak'ı elle kapattıysa, KLOD'dan çıkana kadar mesaj gönderimi onu
+// yeniden açmaz; AVCI MASTER BAŞLA ve yanlış cevabı KLOD'a sorma (zorla) açar.
+var _klodTamFS=false,_klodTamElleKapandi=false; // var: dnav() yükleme sırasında çağrılırsa TDZ olmasın
+function klodTamButonGuncelle(){
+  const btn=document.getElementById('klod-tam-btn');if(!btn)return;
+  const acik=document.body.classList.contains('klod-tam');
+  btn.textContent=acik?'✕ Odak':'⤢ Odak';
+  btn.setAttribute('aria-pressed',acik?'true':'false');
+  btn.setAttribute('aria-label',acik?'Odak Modunu kapat':'Odak Modunu aç');
+  btn.title=acik?'Odak Modunu kapat (Esc)':'Odak Modu: tam ekran çalış';
+}
+function klodTamTarayiciAc(){
+  const el=document.documentElement,iste=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(!iste||document.fullscreenElement||document.webkitFullscreenElement)return;
+  try{
+    const p=iste.call(el);_klodTamFS=true;
+    if(p&&typeof p.catch==='function')p.catch(()=>{_klodTamFS=false;});
+  }catch(e){_klodTamFS=false;}
+}
+function klodTamTarayiciKapat(){
+  if(!_klodTamFS)return;
+  _klodTamFS=false;
+  const cik=document.exitFullscreen||document.webkitExitFullscreen;
+  if(!cik||!(document.fullscreenElement||document.webkitFullscreenElement))return;
+  try{const p=cik.call(document);if(p&&typeof p.catch==='function')p.catch(()=>{});}catch(e){}
+}
+function klodTamAyarla(acik){
+  const b=document.body;
+  if(acik&&!b.classList.contains('klod-odak'))return;
+  if(acik!==b.classList.contains('klod-tam')){
+    b.classList.toggle('klod-tam',acik);
+    if(acik)klodTamTarayiciAc();else klodTamTarayiciKapat();
+    if(acik){const c=document.getElementById('dnav-chat');if(c)c.scrollTop=c.scrollHeight;}
+  }
+  klodTamButonGuncelle();
+}
+function klodTamDegistir(){
+  const acik=!document.body.classList.contains('klod-tam');
+  _klodTamElleKapandi=!acik;
+  klodTamAyarla(acik);
+}
+function klodTamOtomatik(zorla){
+  if(zorla)_klodTamElleKapandi=false;
+  else if(_klodTamElleKapandi)return;
+  klodTamAyarla(true);
+}
+// Tarayıcı tam ekranından Esc/sistem jestiyle çıkılırsa Odak Modu da kapanır
+['fullscreenchange','webkitfullscreenchange'].forEach(ad=>document.addEventListener(ad,()=>{
+  if(!_klodTamFS||document.fullscreenElement||document.webkitFullscreenElement)return;
+  _klodTamFS=false;
+  if(document.body.classList.contains('klod-tam')){_klodTamElleKapandi=true;klodTamAyarla(false);}
+}));
 // ANA SAYFA KLOD KUTUSU → KLOD ODAK MODU — #klod bölümünde giriş kutusu yok,
 // "KLOD'a Sor" butonu KLOD'a Sor'u tam ekran odak modunda açar. Demo soru
 // oraya taşınır, öğrencinin ilk mesajı onun bağlamıyla gider
@@ -7469,6 +7560,7 @@ async function dnavChat(){
   const body=(hedef&&hedef.body)||document.getElementById('dnav-chat');
   if(typeof klodHataTemizle==='function')klodHataTemizle(body);
   if(!tekrar&&!hedef){const um=document.createElement('div');um.className='msg u';um.textContent=val;body.appendChild(um);}
+  if(!hedef&&typeof klodTamOtomatik==='function')klodTamOtomatik(false); // soru gönderildi: Odak Modu
   inp.value=bekleyenGirdi;inp.disabled=true;body.scrollTop=body.scrollHeight;
 
   // KATMAN 5H — CANONICAL NEXT QUESTION BRIDGE: öğrencinin AÇIK/deterministik
@@ -10724,6 +10816,7 @@ function avciKomutGonder(komut){
   // dnav() sekmeyi açar (önceki aktif sekmeyi de Geri için kendisi kaydeder).
   const klodAcik=!!(klodItem&&klodItem.classList.contains('active')&&document.getElementById('dnav-chat'));
   if(!klodAcik&&klodItem)dnav(klodItem);
+  if(komut==='AVCI MASTER BAŞLA')klodTamOtomatik(true);
   setTimeout(()=>{
     // KLOD sesli okurken: önce sesi durdur (⏹ ile aynı), sonra komutu gönder.
     // Hâlâ yanıt bekleniyorsa (THINKING) komut gönderilmez, kutuya da yazılmaz.
@@ -10939,6 +11032,7 @@ function yanlisCevapKlodaSor(v){
   ].filter(Boolean);
   klodDonusGorunumuSakla();
   avciKomutGonder(parcalar.join(' | '));
+  klodTamOtomatik(true); // soru Sinyal Lab/bölümden KLOD'a geldi: Odak Modu
 }
 function streakKusursuz(){let d=streakLoad();d.kusursuzTur=(d.kusursuzTur||0)+1;rozetKontrol(d);streakSave(d);}
 
