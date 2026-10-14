@@ -7539,6 +7539,12 @@ async function dnavChat(){
   // (balonda yalnızca öğrencinin yazdığı görünür). Başarılı cevapta silinir.
   const kullaniciKaydi={role:'user',content:(typeof _anaKlodDemoBaglam==='string'?_anaKlodDemoBaglam:'')+val};
   dnavHistory.push(kullaniciKaydi);
+  // İSTEMCİ ZAMAN AŞIMI: /api/klod yanıt vermezse (ör. mobil bağlantı yarıda koptu) istek
+  // KLOD_ZAMAN_ASIMI_MS sonra iptal edilir → catch: hata kutusu + Tekrar dene, tur IDLE, girdi açık.
+  // AbortController/setTimeout yoksa (eski tarayıcı) zaman aşımı olmaz, davranış eskisi gibi.
+  const _zAc=typeof AbortController==='function'?new AbortController():null;
+  let _zZaman=null;
+  const _zBitir=()=>{if(_zZaman!==null&&typeof clearTimeout==='function')clearTimeout(_zZaman);_zZaman=null;};
   try{
     // KATMAN 5 MVP-1 — AUTH FOUNDATION: varsa geçerli Supabase session
     // token'ı Authorization header'ı olarak eklenir. sb hazır değilse/
@@ -7559,8 +7565,10 @@ async function dnavChat(){
     // dışı) — diğer modüller aktifken bu null döner, context alanı hiç
     // eklenmez, davranış context-öncesiyle BİREBİR aynı kalır.
     const _aktifBaglam=avciAktifSinyalLabBaglamiAl();
+    if(_zAc&&typeof setTimeout==='function')_zZaman=setTimeout(()=>_zAc.abort(),typeof KLOD_ZAMAN_ASIMI_MS==='number'?KLOD_ZAMAN_ASIMI_MS:45000);
     const res=await fetch('/api/klod',{
       method:'POST',
+      signal:_zAc?_zAc.signal:undefined,
       headers:Object.assign({'Content-Type':'application/json'},_dnavToken?{'Authorization':'Bearer '+_dnavToken}:{}),
       body:JSON.stringify({
         messages:dnavHistory,
@@ -7739,7 +7747,8 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // HTTP hatası (429/400/500…), JSON olmayan yanıt veya boş metin → hata
     // kutusu (catch). Bunlar KLOD cevabı gibi gösterilmez/okunmaz/geçmişe yazılmaz.
     let data=null;
-    try{data=await res.json();}catch(e){data=null;}
+    try{data=await res.json();}catch(e){data=null;if(e&&e.name==='AbortError')throw e;}
+    _zBitir();
     if(!res.ok||!data)throw klodHataOlustur(res.ok?0:res.status,data);
     // KATMAN 5E — data.content artık (board_actions için tool_use
     // çağrılmışsa) metin dışında bloklar da içerebilir; index 0'ın HER
@@ -7811,6 +7820,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     dnavHistory.push({role:'assistant',content:cevap});
     if(typeof _anaKlodDemoBaglam==='string')_anaKlodDemoBaglam=null;
   } catch(err){
+    _zBitir();
     tp.remove();
     // Cevapsız kullanıcı mesajı geçmişte kalmasın; "Tekrar dene" yeniden ekler.
     const kayitIdx=dnavHistory.indexOf(kullaniciKaydi);
@@ -7829,6 +7839,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
 // API başarısız olduğunda KLOD balonu yerine ayrı görünümlü kutu. Geçmişe
 // yazılmaz, sesli okunmaz. Ekranda en fazla bir tane olur.
 var _dnavTekrarMetni=null,_dnavHedef=null;
+var KLOD_ZAMAN_ASIMI_MS=45000; // dnavChat /api/klod istemci zaman aşımı (chat: Haiku, max_tokens 700)
 function klodHataOlustur(status,data){
   const e=new Error('KLOD API hatası'+(status?' ('+status+')':''));
   e.klodStatus=status||0;
@@ -7836,6 +7847,7 @@ function klodHataOlustur(status,data){
   return e;
 }
 function klodHataTuru(err){
+  if(err&&err.name==='AbortError')return 'zaman_asimi';
   const st=err&&err.klodStatus,msj=(err&&err.klodMesaj)||'';
   if(st===429)return /günlük/i.test(msj)?'gunluk':'yogun';
   if(st===400)return msj==='Mesaj çok uzun'?'uzun_mesaj':'uzun_sohbet';
@@ -7849,6 +7861,7 @@ function klodHataGoster(body,tur,sunucuMesaji,sonMesaj,hedef){
   if(!body)return;
   const METIN={
     genel:'KLOD şu an yanıt veremiyor. Birkaç saniye sonra tekrar dene.',
+    zaman_asimi:'KLOD yanıt vermedi — bağlantın yavaş olabilir. Tekrar dene.',
     yogun:'Çok fazla istek. 1 dakika sonra tekrar dene.',
     gunluk:sunucuMesaji||'Günlük KLOD limitine ulaştın. Yarın devam edebilirsin.',
     uzun_sohbet:'Konuşma çok uzadı. Yeni sohbet başlat.',
@@ -7859,7 +7872,7 @@ function klodHataGoster(body,tur,sunucuMesaji,sonMesaj,hedef){
   const yazi=document.createElement('div');yazi.className='klod-hata-yazi';yazi.textContent='⚠️ '+(METIN[tur]||METIN.genel);
   kutu.appendChild(yazi);
   const buton=(etiket,fn)=>{const b=document.createElement('button');b.type='button';b.className='klod-hata-btn';b.textContent=etiket;b.onclick=fn;kutu.appendChild(b);};
-  if(tur==='genel'||tur==='yogun')buton('↻ Tekrar dene',()=>{kutu.remove();_dnavTekrarMetni=sonMesaj;_dnavHedef=hedef||null;dnavChat();});
+  if(tur==='genel'||tur==='yogun'||tur==='zaman_asimi')buton('↻ Tekrar dene',()=>{kutu.remove();_dnavTekrarMetni=sonMesaj;_dnavHedef=hedef||null;dnavChat();});
   if(tur==='uzun_sohbet')buton('Yeni sohbet',()=>klodYeniSohbet(sonMesaj));
   body.appendChild(kutu);body.scrollTop=body.scrollHeight;
 }
@@ -9378,7 +9391,7 @@ function clHocaBalon(tur,icerik,html){
 function clHocaIlet(gorunen,gonderilen){
   const i=document.getElementById('cl-hoca-in'),c=document.getElementById('cl-hoca-chat');
   if(!i||!c||typeof dnavChat!=='function'){clHocaBalon('k','AVCI Hoca şu an kullanılamıyor.',false);return false;}
-  if(typeof dnavTurnState!=='undefined'&&dnavTurnState!=='IDLE'){clHocaBalon('k','AVCI Hoca şu an konuşuyor/düşünüyor — biraz bekle ya da ⏹ Dur\'a basıp tekrar dene.',false);return false;}
+  if(typeof dnavTurnState!=='undefined'&&dnavTurnState!=='IDLE'){clHocaBalon('k','AVCI Hoca şu an konuşuyor/düşünüyor — cevap bitince tekrar dene.',false);return false;}
   clHocaBalon('u',gorunen,false);
   i.value=gonderilen;
   _dnavHedef={inp:i,body:c};
