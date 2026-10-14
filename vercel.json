@@ -43,7 +43,8 @@
     { "source": "/hedef-rota", "destination": "/hedef-rota.html" },
     { "source": "/yds-cikmis-sorular", "destination": "/yds-cikmis-sorular.html" },
     { "source": "/yokdil-sinyal-kelimeler", "destination": "/yokdil-sinyal-kelimeler.html" },
-    { "source": "/yds-sinav-teknikleri", "destination": "/yds-sinav-teknikleri.html" }
+    { "source": "/yds-sinav-teknikleri", "destination": "/yds-sinav-teknikleri.html" },
+    { "source": "/api/testimonial-bildirim", "destination": "/api/admin-testimonials?kaynak=webhook" }
   ],
   "redirects": [
     {

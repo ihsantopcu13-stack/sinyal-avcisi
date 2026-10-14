@@ -5,6 +5,9 @@
 //
 // Supabase Database Webhook (testimonials tablosu, INSERT) bu ucu çağırır:
 //   POST /api/testimonial-bildirim
+// Ayrı bir Vercel fonksiyonu DEĞİL (Hobby planı 12 fonksiyon sınırı): vercel.json bu
+// adresi /api/admin-testimonials?kaynak=webhook'a yönlendirir; admin-testimonials.mjs
+// webhook isteğini admin koduna HİÇ girmeden en başta buraya devreder.
 //   Header: x-webhook-secret: <TESTIMONIAL_WEBHOOK_SECRET>
 //   Gövde (Supabase): { type: 'INSERT', table: 'testimonials', record: {...} }
 //
@@ -85,7 +88,7 @@ async function telegramaGonder(token, chatId, metin) {
   }
 }
 
-export default async function handler(req, res) {
+export async function testimonialBildirimHandler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Yalnız POST' });

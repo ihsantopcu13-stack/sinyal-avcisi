@@ -1,9 +1,9 @@
-// api/testimonial-bildirim.mjs — yeni yorum Telegram bildirimi.
+// api/_testimonialBildirim.mjs — yeni yorum Telegram bildirimi (/api/testimonial-bildirim).
 // Gizli anahtar doğrulaması, düz metin (enjeksiyonsuz) mesaj, @kanal engeli
 // ve "Telegram hatası yorum akışını bozmaz" davranışını doğrular.
 // Ağ çağrısı yok: global fetch sahte.
 
-import handler, { gizliDogru, metniTemizle, mesajOlustur } from "../api/testimonial-bildirim.mjs";
+import { testimonialBildirimHandler as handler, gizliDogru, metniTemizle, mesajOlustur } from "../api/_testimonialBildirim.mjs";
 
 let toplam = 0;
 let basarisiz = 0;
