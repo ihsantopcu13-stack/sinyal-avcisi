@@ -13,6 +13,8 @@
 // GET  /api/admin-testimonials            → onay bekleyen yorumları listeler
 // POST /api/admin-testimonials {id,action} → action: 'approve' | 'reject'
 
+import { testimonialBildirimHandler } from './_testimonialBildirim.mjs';
+
 const SUPABASE_URL = 'https://scqczkyiyshmczzmlshl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_RDVMnTcB60LjI8n6gBI1Pw__9YVVZHp';
 
@@ -50,7 +52,23 @@ async function requireAdmin(req, res) {
   return serviceRoleKey;
 }
 
+// WEBHOOK AYRIMI: /api/testimonial-bildirim (vercel.json → ?kaynak=webhook) ya da
+// x-webhook-secret başlığı taşıyan HER istek, admin koduna (requireAdmin, onay/red/
+// silme) HİÇ girmeden webhook işleyicisine gider ve orada biter. Webhook işleyicisi
+// yalnız gizli anahtarı doğrulayıp Telegram bildirimi atabilir; Supabase'e yazamaz.
+export function webhookIstegiMi(req) {
+  const q = req.query || {};
+  let kaynak = q.kaynak;
+  if (kaynak === undefined && typeof req.url === 'string') {
+    try { kaynak = new URL(req.url, 'http://x').searchParams.get('kaynak'); } catch (_) {}
+  }
+  const basliklar = req.headers || {};
+  return kaynak === 'webhook' || basliklar['x-webhook-secret'] !== undefined;
+}
+
 export default async function handler(req, res) {
+  if (webhookIstegiMi(req)) return testimonialBildirimHandler(req, res);
+
   const serviceRoleKey = await requireAdmin(req, res);
   if (!serviceRoleKey) return; // requireAdmin zaten uygun hata yanıtını gönderdi
 
