@@ -4,8 +4,9 @@
 // Bu köprü, öğrenci İSTERSE (kendi tetikler; otomatik model çağrısı YOK) soru aşamasında
 // yazılı AVCI Hoca diyaloğunu Canlı Ders ekranından ayrılmadan yürütmesini sağlar:
 //   - mesaj GERÇEK dnavChat() üzerinden MEVCUT /api/klod (mode:'chat') yoluna gider
-//     (yeni endpoint/model/prompt/state YOK; dnavChat DEĞİŞMEDİ)
-//   - dnavChat'in render ettiği cevap düğümü (.msg.k) Canlı Ders paneline yansır
+//     (yeni endpoint/model/prompt YOK); dnavChat'e _dnavHedef ile Canlı Ders'in kutusu/paneli verilir
+//   - cevap, yazma göstergesi ve hata kutusu doğrudan Canlı Ders paneline yazılır; KLOD ekranı
+//     (#dnav-in/#dnav-chat) açık olmak ZORUNDA DEĞİL
 //   - tur bitince sistem öğrenciyi BEKLER (yeni istek yok), eşzamanlı ikinci istek yok
 //   - Canlı Ders'in eski içeriği/anlatımı/seçenek davranışı AYNEN kalır
 // Gerçek dnavChat kaynağı index.html'den BİREBİR çıkarılıp Node vm'de GERÇEKTEN
@@ -54,7 +55,7 @@ const BRIDGE = slice("// ==== CANLI DERS ↔ AVCI HOCA (KATMAN 5) KÖPRÜSÜ ===
   kontrol("S4) Yeni panel MEVCUT soru bloğunun İÇİNDE (ekrandan ayrılmadan): seçeneklerden sonra, cevap bloğundan önce; girdi + Gönder mevcut", (() => { const a = CL_MODUL_HTML_FN.indexOf('id="cl-secenekler"'); const p = CL_MODUL_HTML_FN.indexOf('id="cl-hoca"'); const c = CL_MODUL_HTML_FN.indexOf('id="cl-blok-cevap"'); return a > 0 && p > a && p < c && /id="cl-hoca-in"/.test(CL_MODUL_HTML_FN) && /id="cl-hoca-gonder"/.test(CL_MODUL_HTML_FN) && /onclick="clHocaGonder\(\)"/.test(CL_MODUL_HTML_FN) && /onclick="clHocaBaslat\(\)"/.test(CL_MODUL_HTML_FN); })());
   kontrol("S5) Eski anlatım akışı DEĞİŞMEDİ: açıklama -> örnek -> soru zinciri ve TTS çağrıları duruyor; soru aşamasına SADECE typeof-korumalı 1 kanca eklendi", /ttsSpeak\(k\.aciklama,'tr-TR',\(\)=>clAsamaOrnek\(k\),clHookMouth\)/.test(html) && /ttsSpeak\(k\.ornekEn,'en-US',\(\)=>clAsamaSoru\(k\),clHookMouth\)/.test(html) && /ttsSpeak\(k\.soru,'en-US',null,clHookMouth\)/.test(html) && (html.match(/if\(typeof clHocaGoster==='function'\)clHocaGoster\(\);/g) || []).length === 1 && (CL_ASAMA_FN.match(/if\(typeof clHocaSifirla==='function'\)clHocaSifirla\(\);/g) || []).length === 1);
   kontrol("S6) Canlı Ders seçenek davranışı (clCevapSec: anında cevap+açıklama+TTS+ustalık) AYNEN", /Yanlış, doğru cevap:/.test(CL_CEVAP_FN) && /ttsSpeak\(tamMetin,'tr-TR',null,clHookMouth\)/.test(CL_CEVAP_FN) && /konuUstalikGuncelle\(k\.baslik,i===k\.cevap\)/.test(CL_CEVAP_FN) && !/clHoca/.test(CL_CEVAP_FN));
-  kontrol("S7) dnavChat DEĞİŞMEDİ/bağlanmadı: köprüye ait hiçbir şey dnavChat içinde yok; TEK tanım", !/clHoca/.test(DNAVCHAT_FN) && (html.match(/async function dnavChat\(\)\{/g) || []).length === 1 && /if\(dnavTurnState!=='IDLE'\)return;\s*\n\s*dnavTurnState='THINKING';/.test(DNAVCHAT_FN));
+  kontrol("S7) dnavChat köprüye bağımlı değil: köprüye ait hiçbir şey (clHoca*) dnavChat içinde yok; TEK tanım; tur kilidi yerinde", !/clHoca/.test(DNAVCHAT_FN) && (html.match(/async function dnavChat\(\)\{/g) || []).length === 1 && /if\(dnavTurnState!=='IDLE'\)return;\s*\n\s*dnavTurnState='THINKING';/.test(DNAVCHAT_FN));
   const kod = BRIDGE.split("\n").filter((l) => !/^\s*\/\//.test(l)).join("\n");
   kontrol("S8) Yeni AI endpoint/model/ağ çağrısı YOK: köprüde fetch/XMLHttpRequest/'/api'/anthropic/klod/sendBeacon yok", !/fetch\(|XMLHttpRequest|\/api|anthropic|klod|sendBeacon|WebSocket|EventSource/i.test(kod));
   kontrol("S9) Güvenlik: köprüde eval/new Function/document.write/secret/service_role/DB/storage YOK; öğrenci metni SADECE textContent ile balona yazılıyor", !/\beval\(|new Function\(|document\.write|sk-ant|service_role|supabase|localStorage|sessionStorage|\.rpc\(/i.test(kod) && /clHocaBalon\('u',gorunen,false\)/.test(kod) && /if\(html\)d\.innerHTML=icerik;else d\.textContent=icerik;/.test(kod));
@@ -68,20 +69,23 @@ class FakeEl {
   constructor() { this.children = []; this.className = ""; this.textContent = ""; this._html = ""; this.style = {}; this.value = ""; this.disabled = false; this.scrollTop = 0; this.scrollHeight = 0; this._focus = 0; this.observers = []; }
   get innerHTML() { return this._html; }
   set innerHTML(v) { this._html = v; if (v === "") this.children.length = 0; }
-  appendChild(el) { this.children.push(el); const yeni = el; this.observers.forEach((cb) => Promise.resolve().then(() => cb([{ addedNodes: [yeni] }]))); }
-  remove() {}
+  appendChild(el) { this.children.push(el); el._ebeveyn = this; const yeni = el; this.observers.forEach((cb) => Promise.resolve().then(() => cb([{ addedNodes: [yeni] }]))); }
+  remove() { const p = this._ebeveyn; if (!p) return; const i = p.children.indexOf(this); if (i >= 0) p.children.splice(i, 1); this._ebeveyn = null; }
   focus() { this._focus++; }
 }
 
 const TEST_HARNESS = `
 function __t_turnState(){return dnavTurnState;}
-function __t_bekliyor(){return clHocaBekliyor;}
 `;
 const FULL_SRC = STATE_DECL + "\n" + DNAVCHAT_FN + "\n" + VOICE_FN_SRC + "\n" + CL_DATA + "\nlet clIdx=0,clTypeTimer=null;\n" + BRIDGE + "\n" + TEST_HARNESS;
 
-function sandboxKur({ yanitlar = ["Boşluktan sonra ne geliyor?"], bekletFetch = false } = {}) {
+// klodEkraniYok: gerçek sayfada #dnav-in/#dnav-chat yalnız KLOD sekmesi açıkken var
+// (dnav() 'KLOD' dalı çizer, Dashboard'a dönünce silinir) — Canlı Ders'e doğrudan gelen
+// öğrencinin durumu. hataSayisi: ilk N /api/klod isteği HTTP 500 döner.
+function sandboxKur({ yanitlar = ["Boşluktan sonra ne geliyor?"], bekletFetch = false, klodEkraniYok = false, hataSayisi = 0 } = {}) {
   const el = {};
-  for (const id of ["dnav-in", "dnav-chat", "cl-hoca", "cl-hoca-chat", "cl-hoca-giris", "cl-hoca-baslat", "cl-hoca-in", "dnav-mic-btn"]) el[id] = new FakeEl();
+  const idler = ["dnav-in", "dnav-chat", "cl-hoca", "cl-hoca-chat", "cl-hoca-giris", "cl-hoca-baslat", "cl-hoca-in", "dnav-mic-btn"];
+  for (const id of idler) if (!(klodEkraniYok && (id === "dnav-in" || id === "dnav-chat"))) el[id] = new FakeEl();
   el["cl-hoca"].style.display = "none";
   el["cl-hoca-chat"].style.display = "none";
   el["cl-hoca-giris"].style.display = "none";
@@ -104,11 +108,11 @@ function sandboxKur({ yanitlar = ["Boşluktan sonra ne geliyor?"], bekletFetch =
     avciAktifSinyalLabBaglamiAl: () => null,
     avciSonrakiSoruKomutuMu: () => false,
     avciSinyalPratikKomutuMu: () => false,
-    MutationObserver: class { constructor(cb) { this.cb = cb; } observe(hedef) { hedef.observers.push(this.cb); } },
     setTimeout: (fn, ms) => { const t = setTimeout(fn, ms); if (t && t.unref) t.unref(); return t; },
     fetch: async (url, opts) => {
       fetchCagrilari.push({ url, body: JSON.parse(opts.body) });
       if (bekletFetch) await new Promise((r) => { serbest = r; });
+      if (fetchCagrilari.length <= hataSayisi) return { ok: false, status: 500, json: async () => ({ error: "Sunucu hatası" }) };
       const metin = yanitlar[Math.min(yanitSira++, yanitlar.length - 1)];
       return { ok: true, json: async () => ({ content: [{ type: "text", text: metin }] }) };
     },
@@ -134,8 +138,8 @@ const balonlar = (t, tur) => t.el["cl-hoca-chat"].children.filter((c) => c.class
   kontrol("3) mevcut Katman 5 öğretmen prompt'u (dnavChat system) gidiyor; gönderilen ilk mesaj Canlı Ders sorusunu + seçenekleri taşıyor; cevap anahtarı (cevap indexi/açıklaması) GİTMİYOR", /AVCI YEDI ADIM/.test(b.system) && /SOCRATIC TEK ADIM KURALI/.test(b.system) && b.messages.length === 1 && b.messages[0].role === "user" && /Canlı Ders sorusu/.test(b.messages[0].content) && /______ the traffic was terrible/.test(b.messages[0].content) && /B\) Although/.test(b.messages[0].content) && !/Boşluktan sonra «the traffic was terrible»|cevapAciklama|cevap:1/.test(JSON.stringify(b)) && b.context === null);
   kontrol("4) tur sürerken (THINKING) yeni istek YOK; öğrenci balonu temiz metinle (textContent) görünüyor", t.context.__t_turnState() === "THINKING" && balonlar(t, "u").length === 1 && balonlar(t, "u")[0].textContent === "Bu soruyu birlikte çözelim." && balonlar(t, "u")[0].innerHTML === "");
   await bekle(40);
-  kontrol("5) AVCI Hoca cevabı Canlı Ders panelinde GÖRÜNÜYOR (dnavChat'in render ettiği düğüm yansıtıldı); yazma göstergesi ('...') yansıtılmadı: TAM 1 öğretmen balonu", balonlar(t, "k").length === 1 && /Boşluktan sonra ne geliyor/.test(balonlar(t, "k")[0].innerHTML) && !/chat-typing/.test(balonlar(t, "k")[0].innerHTML));
-  kontrol("6) tur bitince sistem ÖĞRENCİYİ BEKLER: dnavTurnState IDLE, yeni istek YOK (hâlâ 1), cevap alanı yeniden açık ve odakta, bekleme bayrağı kapalı", t.context.__t_turnState() === "IDLE" && t.fetchCagrilari.length === 1 && t.el["cl-hoca-in"].disabled === false && t.el["cl-hoca-in"]._focus >= 1 && t.context.__t_bekliyor() === false);
+  kontrol("5) AVCI Hoca cevabı Canlı Ders panelinde GÖRÜNÜYOR (dnavChat doğrudan panele yazdı); yazma göstergesi ('...') tur bitince panelden kaldırıldı: TAM 1 öğretmen balonu", balonlar(t, "k").length === 1 && /Boşluktan sonra ne geliyor/.test(balonlar(t, "k")[0].innerHTML) && !t.el["cl-hoca-chat"].children.some((c) => /chat-typing/.test(c.innerHTML)));
+  kontrol("6) tur bitince sistem ÖĞRENCİYİ BEKLER: dnavTurnState IDLE, yeni istek YOK (hâlâ 1), cevap alanı yeniden açık ve odakta", t.context.__t_turnState() === "IDLE" && t.fetchCagrilari.length === 1 && t.el["cl-hoca-in"].disabled === false && t.el["cl-hoca-in"]._focus >= 1);
   // ---- Tur 2: öğrenci cevabını yazar ve Gönder der ----
   t.el["cl-hoca-in"].value = "Cümle.";
   t.context.clHocaGonder();
@@ -155,7 +159,7 @@ const balonlar = (t, tur) => t.el["cl-hoca-chat"].children.filter((c) => c.class
   kontrol("10) HTML içeren öğrenci metni balona textContent olarak yazılır (innerHTML BOŞ) — enjeksiyon YOK", xssBalon && xssBalon.textContent === "<img src=x onerror=alert(1)>" && xssBalon.innerHTML === "");
   // ---- topic değişimi sıfırlar ----
   t.context.clHocaSifirla();
-  kontrol("11) konu değişince/tekrar anlatınca clHocaSifirla: panel gizlenir, sohbet temizlenir, 'birlikte çöz' butonu geri gelir, girdi açık, bekleme bayrağı kapalı", t.el["cl-hoca"].style.display === "none" && t.el["cl-hoca-chat"].children.length === 0 && t.el["cl-hoca-giris"].style.display === "none" && t.el["cl-hoca-baslat"].style.display === "inline-block" && t.el["cl-hoca-in"].disabled === false && t.context.__t_bekliyor() === false);
+  kontrol("11) konu değişince/tekrar anlatınca clHocaSifirla: panel gizlenir, sohbet temizlenir, 'birlikte çöz' butonu geri gelir, girdi açık", t.el["cl-hoca"].style.display === "none" && t.el["cl-hoca-chat"].children.length === 0 && t.el["cl-hoca-giris"].style.display === "none" && t.el["cl-hoca-baslat"].style.display === "inline-block" && t.el["cl-hoca-in"].disabled === false);
 }
 
 // ---- Tur devam ederken ikinci gönderim / başka sekme cevabı ----
@@ -169,18 +173,51 @@ const balonlar = (t, tur) => t.el["cl-hoca-chat"].children.filter((c) => c.class
   kontrol("13) bekleyen tur bitince cevap gösterilir ve girdi yeniden açılır", balonlar(t, "k").some((c) => /Boşluktan/.test(c.innerHTML)) && t.el["cl-hoca-in"].disabled === false);
 }
 {
-  const t = sandboxKur();
-  // KLOD sekmesindeki (Canlı Ders'ten BAĞIMSIZ) bir cevap köprü tetiklenmeden yansıtılmaz
+  const t = sandboxKur({ yanitlar: ["Boşluktan sonra ne geliyor?", "KLOD sekmesi cevabı"] });
+  // İki ekran birbirine yazmaz: Canlı Ders turu KLOD ekranına, KLOD turu Canlı Ders paneline düşmez
   t.context.clHocaBaslat();
   await bekle(40);
+  const klodaYazilan = t.el["dnav-chat"].children.length;
   const once = balonlar(t, "k").length;
-  const dis = new FakeEl(); dis.className = "msg k"; dis.innerHTML = "başka bir cevap";
-  t.el["dnav-chat"].appendChild(dis);
-  await bekle(10);
-  kontrol("14) bekleme bayrağı kapalıyken düşen .msg.k (ör. KLOD sekmesi/uyarı) Canlı Ders paneline YANSITILMAZ", balonlar(t, "k").length === once);
+  t.el["dnav-in"].value = "KLOD sekmesinden soru";
+  t.context.dnavChat();
+  await bekle(40);
+  kontrol("14) ekranlar ayrık: Canlı Ders turu #dnav-chat'e hiçbir şey yazmaz; KLOD sekmesindeki tur (hedefsiz dnavChat) Canlı Ders paneline düşmez", klodaYazilan === 0 && balonlar(t, "k").length === once && t.el["dnav-chat"].children.some((c) => /KLOD sekmesi cevabı/.test(c.innerHTML)), `dnav-chat'e yazılan=${klodaYazilan}`);
   t.context.clHocaSifirla();
   const t2 = sandboxKur();
   kontrol("15) köprü hiç başlatılmadıysa hiçbir istek/DOM değişikliği yok (otomatik model çağrısı YOK)", t2.fetchCagrilari.length === 0 && t2.el["cl-hoca-chat"].children.length === 0);
+}
+
+// ---- KLOD sekmesi hiç açılmadan (canlı sitedeki "AVCI Hoca şu an kullanılamıyor" hatası) ----
+{
+  const t = sandboxKur({ klodEkraniYok: true, yanitlar: ["Boşluktan sonra ne geliyor?"] });
+  t.context.clHocaGoster();
+  t.context.clHocaBaslat();
+  await bekle(40);
+  const kullanilamiyor = t.el["cl-hoca-chat"].children.some((c) => /kullanılamıyor/.test(c.textContent));
+  kontrol("16) KLOD ekranı (#dnav-in/#dnav-chat) YOKKEN 'birlikte çöz' çalışır: 'kullanılamıyor' YOK, TAM 1 /api/klod isteği, cevap Canlı Ders panelinde, girdi açık", !kullanilamiyor && t.fetchCagrilari.length === 1 && t.fetchCagrilari[0].url === "/api/klod" && balonlar(t, "k").some((c) => /Boşluktan sonra ne geliyor/.test(c.innerHTML)) && t.el["cl-hoca-in"].disabled === false, `kullanılamıyor=${kullanilamiyor}, istek=${t.fetchCagrilari.length}`);
+}
+// ---- API hatası Canlı Ders panelinde görünür; "Tekrar dene" aynı panele yazar ----
+{
+  const t = sandboxKur({ hataSayisi: 1, yanitlar: ["Boşluktan sonra ne geliyor?"] });
+  t.context.clHocaGoster();
+  t.context.clHocaBaslat();
+  await bekle(40);
+  const hataKutusu = t.el["cl-hoca-chat"].children.find((c) => c.className === "klod-hata");
+  kontrol("17) API 500 → hata kutusu Canlı Ders panelinde görünür, tur IDLE, girdi açık (90 sn kilit yok)", !!hataKutusu && t.context.__t_turnState() === "IDLE" && t.el["cl-hoca-in"].disabled === false, `hata kutusu panelde=${!!hataKutusu}, girdi kapalı=${t.el["cl-hoca-in"].disabled}`);
+  const tekrar = hataKutusu && hataKutusu.children.find((c) => c.className === "klod-hata-btn");
+  if (tekrar) tekrar.onclick();
+  await bekle(40);
+  kontrol("18) 'Tekrar dene' → 2. /api/klod isteği aynı mesajla gider, cevap Canlı Ders panelinde görünür", t.fetchCagrilari.length === 2 && t.fetchCagrilari[1].body.messages.at(-1).content === t.fetchCagrilari[0].body.messages.at(-1).content && balonlar(t, "k").some((c) => /Boşluktan sonra ne geliyor/.test(c.innerHTML)), `tekrar butonu=${!!tekrar}, istek=${t.fetchCagrilari.length}`);
+}
+// ---- KLOD sekmesi (hedefsiz dnavChat) eskisi gibi kendi ekranına yazar ----
+{
+  const t = sandboxKur({ yanitlar: ["KLOD cevabı"] });
+  t.el["dnav-in"].value = "KLOD'a soru";
+  t.context.dnavChat();
+  await bekle(40);
+  const klodBalonlari = t.el["dnav-chat"].children.map((c) => c.className + ":" + (c.textContent || c.innerHTML));
+  kontrol("19) KLOD sekmesi DEĞİŞMEDİ: hedefsiz dnavChat() öğrenci ve cevap balonunu #dnav-chat'e yazar, Canlı Ders paneline hiçbir şey yazılmaz", klodBalonlari.includes("msg u:KLOD'a soru") && klodBalonlari.includes("msg k:KLOD cevabı") && t.el["cl-hoca-chat"].children.length === 0 && t.el["dnav-in"].disabled === false, klodBalonlari.join(" | "));
 }
 
 console.log(`\n${toplam - basarisiz}/${toplam} kontrol geçti`);
