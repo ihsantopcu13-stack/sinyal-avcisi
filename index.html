@@ -237,7 +237,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .yorum{flex-shrink:0;width:280px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-sm);transition:all var(--t-med)}
 .yorum:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .yorum-stars{color:#f59e0b;font-size:16px;margin-bottom:8px}
-.yorum-bos{width:100%;flex-shrink:1;text-align:center;padding:32px 20px;color:var(--muted);font-size:15px}
+.yorumlar:empty{display:none} /* onaylı yorum yokken (ya da yüklenirken) liste yer kaplamaz */
 .yorum-text{font-size:15px;color:var(--ink);line-height:1.6;font-style:italic;margin-bottom:12px}
 .yorum-kisi{display:flex;align-items:center;gap:8px}
 .yorum-av{width:28px;height:28px;border-radius:50%;background:var(--sl);display:grid;place-items:center;font-size:16px;font-weight:700;color:var(--signal);flex-shrink:0}
@@ -6636,10 +6636,8 @@ async function testimonialleriYukle(){
       .order('created_at',{ascending:false})
       .limit(12);
     if(error)return;
-    if(!data||data.length===0){
-      track.innerHTML='<div class="yorum-bos">Henüz yorum yok, ilk sen yaz! ✍️</div>';
-      return;
-    }
+    // Onaylı yorum yoksa liste boş kalır (.yorumlar:empty gizler); "Deneyimini Paylaş" butonu görünür
+    if(!data||data.length===0)return;
     data.forEach(t=>{
       const div=document.createElement('div');
       div.className='yorum';
