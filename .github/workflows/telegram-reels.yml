@@ -18,6 +18,11 @@ on:
         type: choice
         options: [deneme, yayinla]
         default: deneme
+      konu:
+        description: "İsteğe bağlı: yalnız bu konu numarası (ör. 26), 12 saat sınırı olmadan. Zaten gönderildiyse hiçbir şey göndermez. Boş = normal seçim."
+        type: string
+        required: false
+        default: ""
 
 concurrency:
   group: telegram-reels
@@ -50,6 +55,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TELEGRAM_KONU: ${{ github.event_name == 'workflow_dispatch' && inputs.konu || '' }}
 
       - name: İlerlemeyi commit'le
         if: always() && env.TELEGRAM_MOD == 'yayinla'

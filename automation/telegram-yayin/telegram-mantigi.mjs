@@ -82,6 +82,26 @@ export function reelsSec(kuyruk, reelsDurum, tg, simdi, pencereSaat = PENCERE_SA
   return secilen.sort((a, b) => a.slotMs - b.slotMs).slice(0, adet).map(({ konu, slot }) => ({ konu, slot }));
 }
 
+// Elle tek konu (workflow_dispatch "konu" alanı): yalnız o konu, 12 saat penceresi YOK.
+// Diğer kurallar reelsSec ile aynı: saati gelmiş, Instagram/Facebook'a gitmiş, kuyrukta var,
+// deneme hakkı bitmemiş. Telegram'da "tamam" kaydı varsa hiçbir şey seçilmez (çift paylaşım yok).
+// Döner: { secilen: [{konu, slot}] } ya da { secilen: [], neden }
+export function tekKonuSec(konuGirdi, kuyruk, reelsDurum, tg, simdi) {
+  const metin = String(konuGirdi ?? "").trim();
+  if (!/^[1-9]\d*$/.test(metin)) return { secilen: [], neden: `geçersiz konu numarası: "${metin}"`, gecersiz: true };
+  const konu = Number(metin);
+  const d = reelsDurum?.konular?.[konu];
+  const t = tg.konular[konu];
+  if (t?.tamam) return { secilen: [], neden: `Konu ${konu} zaten gönderildi (Telegram mesaj ${t.mesaj_id ?? "?"}) — hiçbir şey gönderilmeyecek` };
+  if (!kuyruk.ogeler.some((o) => o.konu === konu)) return { secilen: [], neden: `Konu ${konu} kuyrukta yok` };
+  const slotMs = Date.parse(d?.slot ?? "");
+  if (!Number.isFinite(slotMs)) return { secilen: [], neden: `Konu ${konu} bir yayın saatine atanmamış` };
+  if (slotMs > simdi.getTime()) return { secilen: [], neden: `Konu ${konu} yayın saati henüz gelmedi` };
+  if (!(d.instagram?.tamam || d.facebook?.tamam)) return { secilen: [], neden: `Konu ${konu} Instagram/Facebook'a gitmemiş` };
+  if ((t?.deneme ?? 0) >= MAX_DENEME) return { secilen: [], neden: `Konu ${konu} deneme hakkı bitti (${t.deneme}/${MAX_DENEME})` };
+  return { secilen: [{ konu, slot: d.slot }] };
+}
+
 // Reels açıklaması Telegram'a uyarlanır: Instagram'a özgü "Link biyografide." yerine site adresi.
 // Telegram kanalında yorum yok → "yoruma yaz" çağrısı düşünme çağrısına çevrilir.
 // Düz metin gönderilir (parse_mode yok) — kaçış hatası riski olmasın.

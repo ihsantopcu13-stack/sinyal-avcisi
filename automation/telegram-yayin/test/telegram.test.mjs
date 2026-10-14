@@ -127,4 +127,32 @@ await test("özet: başarılı sayısı ve düşen konuların sebebi", () => {
   assert.match(m, /Konu 26 düştü: konu26\.mp4 indirilemedi: 500/);
 });
 
+// ---- elle tek konu (workflow_dispatch "konu") ----
+const { tekKonuSec } = await import("../telegram-mantigi.mjs");
+
+await test("tek konu: 12 saat penceresi dışındaki konu seçilir", () => {
+  const r = tekKonuSec("1", kuyruk, reels, tgDurumHazirla({}), simdi); // Konu 1 normalde çok eski
+  assert.deepEqual(r.secilen, [{ konu: 1, slot: reels.konular[1].slot }]);
+  assert.deepEqual(reelsSec(kuyruk, reels, tgDurumHazirla({}), simdi).map((s) => s.konu), [2, 3]);
+});
+
+await test("tek konu: yalnız o konu seçilir (diğer saati gelmişler değil)", () => {
+  assert.deepEqual(tekKonuSec(" 3 ", kuyruk, reels, tgDurumHazirla({}), simdi).secilen.map((s) => s.konu), [3]);
+});
+
+await test("tek konu: 'gönderildi' kaydı varsa hiçbir şey seçilmez", () => {
+  const r = tekKonuSec("2", kuyruk, reels, tgDurumHazirla({ konular: { 2: { tamam: true, mesaj_id: 9 } } }), simdi);
+  assert.equal(r.secilen.length, 0);
+  assert.match(r.neden, /zaten gönderildi/);
+});
+
+await test("tek konu: geçersiz/uygunsuz girdiler seçilmez", () => {
+  const bos = tgDurumHazirla({});
+  for (const g of ["abc", "0", "-2", "2.5", "2;rm"]) assert.ok(tekKonuSec(g, kuyruk, reels, bos, simdi).gecersiz, g);
+  assert.match(tekKonuSec("4", kuyruk, reels, bos, simdi).neden, /henüz gelmedi/);
+  assert.match(tekKonuSec("5", kuyruk, reels, bos, simdi).neden, /gitmemiş/);
+  assert.match(tekKonuSec("99", kuyruk, reels, bos, simdi).neden, /kuyrukta yok/);
+  assert.match(tekKonuSec("2", kuyruk, reels, tgDurumHazirla({ konular: { 2: { deneme: MAX_DENEME } } }), simdi).neden, /deneme hakkı/);
+});
+
 console.log(`\n${t} test geçti`);
