@@ -23,7 +23,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { telegramIstemci } from "./telegram-istemci.mjs";
-import { modBelirle, tgDurumHazirla, reelsSec, reelsAciklamasi, hataOlustur, yenidenDene, ozetMetni, MAX_DENEME, VIDEO_SINIR, SITE } from "./telegram-mantigi.mjs";
+import { modBelirle, tgDurumHazirla, reelsSec, tekKonuSec, reelsAciklamasi, hataOlustur, yenidenDene, ozetMetni, MAX_DENEME, VIDEO_SINIR, SITE } from "./telegram-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REELS_DATA = path.join(__dirname, "..", "reels-yayin", "data");
@@ -145,8 +145,23 @@ const tg = telegramIstemci(env.TELEGRAM_BOT_TOKEN);
 const kuyruk = await jsonOku(path.join(REELS_DATA, "kuyruk.json"), { ogeler: [] });
 const reelsDurum = await jsonOku(path.join(REELS_DATA, "durum.json"), { konular: {} });
 const tgDurum = tgDurumHazirla(await jsonOku(TG_DURUM_YOLU, {}));
-const secilen = reelsSec(kuyruk, reelsDurum, tgDurum, new Date());
-log(`Mod: ${MOD} — saati gelmiş ${secilen.length} konu${secilen.length ? `: ${secilen.map((s) => `Konu ${s.konu}`).join(", ")}` : ""}`);
+// TELEGRAM_KONU (workflow_dispatch "konu" alanı) doluysa yalnız o konu, 12 saat penceresi olmadan
+const TEK_KONU = (env.TELEGRAM_KONU || "").trim();
+let secilen;
+if (TEK_KONU) {
+  const sonuc = tekKonuSec(TEK_KONU, kuyruk, reelsDurum, tgDurum, new Date());
+  secilen = sonuc.secilen;
+  log(`Mod: ${MOD} — elle tek konu: ${TEK_KONU}`);
+  if (sonuc.neden) {
+    log(`Gönderim yok: ${sonuc.neden}`);
+    // "zaten gönderildi" yeşil biter (yapılacak iş yok); geçersiz/uygunsuz konu kırmızı
+    if (!/zaten gönderildi/.test(sonuc.neden)) process.exitCode = 1;
+  }
+} else {
+  secilen = reelsSec(kuyruk, reelsDurum, tgDurum, new Date());
+  log(`Mod: ${MOD} — saati gelmiş ${secilen.length} konu${secilen.length ? `: ${secilen.map((s) => `Konu ${s.konu}`).join(", ")}` : ""}`);
+}
+if (TEK_KONU && !secilen.length) process.exit(process.exitCode ?? 0);
 try {
   if (MOD === "yayinla") await yayinla(tg, kuyruk, secilen, tgDurum);
   else await deneme(tg, kuyruk, secilen);
