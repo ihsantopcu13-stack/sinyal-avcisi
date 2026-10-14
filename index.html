@@ -806,6 +806,10 @@ body.dark-mode{
   color:var(--ink);
 }
 body.dark-mode nav{background:rgba(10,13,19,.97);border-bottom-color:rgba(245,166,35,.16)}
+/* Footer "Rehberler" bağlantı grubu da bir <nav>: yukarıdaki genel nav (ana menü)
+   kuralları onu ekranın üstüne sabitleyip ana menüyü kapatıyordu. Footer'da normal
+   akışta kalsın. Bu satır body.dark-mode nav'dan sonra gelmeli (aynı özgüllük). */
+footer nav.footer-rehberler{position:static;inset:auto;height:auto;z-index:auto;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:0;padding:0;justify-content:flex-start}
 body.dark-mode .demo-card{background:#0f2a1a;border-color:#1f4a30}
 body.dark-mode .demo-card::before{opacity:.5}
 body.dark-mode .fc{background:#0f2a1a;border-color:#1f4a30}
@@ -6301,7 +6305,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <a href="/privacy" style="color:rgba(236,231,218,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(236,231,218,.62)'">Gizlilik Politikası</a>
     <a href="/terms" style="color:rgba(236,231,218,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(236,231,218,.62)'">Kullanım Şartları</a>
   </div>
-  <nav aria-label="Rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
+  <nav class="footer-rehberler" aria-label="Rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
     <span style="color:var(--signal);font-weight:700">📚 Rehberler</span>
     <a href="/yds-cikmis-sorular" style="color:rgba(236,231,218,.62);text-decoration:none">YDS çıkmış sorular nasıl çalışılır</a>
     <a href="/yokdil-sinyal-kelimeler" style="color:rgba(236,231,218,.62);text-decoration:none">YÖKDİL sinyal kelimeler</a>
