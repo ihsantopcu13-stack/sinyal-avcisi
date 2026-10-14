@@ -375,8 +375,6 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .tam-ekran-btn{position:absolute;top:0;right:0;z-index:50;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:36px;height:36px;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,color .15s}
 .tam-ekran-btn:hover{border-color:var(--signal);color:var(--signal)}
-.dmod:fullscreen{zoom:1.3;background:var(--paper);padding:44px 5vw 24px;overflow-y:auto}
-.dmod:fullscreen .tam-ekran-btn{top:12px;right:5vw}
 .dm-eye{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
 .dm-sent{font-size:16px;line-height:1.8;margin-bottom:12px;font-weight:500}
 .dm-q{font-size:15px;font-weight:600;margin-bottom:8px}
@@ -520,6 +518,34 @@ body.klod-odak.klod-tam .klod-send{height:52px}
   body.klod-odak.klod-tam .klod-msgs .msg{font-size:17px;max-width:94%}
   body.klod-odak.klod-tam .klod-input{font-size:16px;height:48px}
   body.klod-odak.klod-tam .klod-send{height:48px}
+}
+/* SAF ODAK — ortak tam sayfa çalışma modu (2026-10-14), JS çekirdeği safOdak*.
+   body.saf-odak iken hedef kutu ([data-saf-odak-aktif]) tam sayfa olur; içerik
+   ~900 px ortalanmış kolonda bir kademe büyük; menüler ve yüzen butonlar gizlenir.
+   Kutudaki ⛶ (.tam-ekran-btn[data-saf-odak-btn]) Odak'ta sağ üstte küçük, silik ✕ olur.
+   Süre sayacı, şıklar ve cevap butonları içeriğin parçası: hiçbiri gizlenmez. */
+body.saf-odak{overflow:hidden}
+body.saf-odak nav,body.saf-odak .mmenu,body.saf-odak #mobileBottomNav,body.saf-odak .mbn-sheet,body.saf-odak .mbn-sheet-backdrop,body.saf-odak #scroll-top-btn,body.saf-odak #wa-destek-btn,body.saf-odak #ap-banner,body.saf-odak .pwa-banner,body.saf-odak #scroll-progress{display:none!important}
+body.saf-odak [data-saf-odak-aktif]{position:fixed;inset:0;z-index:250;display:block!important;margin:0!important;max-width:none!important;border-radius:0!important;background:var(--paper)!important;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;animation:none;padding:max(56px,calc(env(safe-area-inset-top) + 48px)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))!important}
+body.saf-odak [data-saf-odak-aktif] > :not(.tam-ekran-btn){max-width:820px;margin-left:auto;margin-right:auto;zoom:1.1}
+body.saf-odak [data-saf-odak-aktif] .tam-ekran-btn[data-saf-odak-btn]{position:fixed;top:max(10px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));z-index:260;width:40px;height:40px;min-height:40px;font-size:16px;background:transparent;border-color:transparent;color:var(--muted);opacity:.55}
+body.saf-odak [data-saf-odak-aktif] .tam-ekran-btn[data-saf-odak-btn]:hover,body.saf-odak [data-saf-odak-aktif] .tam-ekran-btn[data-saf-odak-btn]:focus-visible{opacity:1;background:var(--surface);border-color:var(--border);color:var(--signal)}
+/* Alt sabit kontroller */
+body.saf-odak #mod-sinyal #sl-next-btn{position:sticky;bottom:max(12px,env(safe-area-inset-bottom));box-shadow:0 4px 14px rgba(0,0,0,.35)}
+/* Ekrana özel: gizlenen başlıklar, ortalanan iç kolonlar */
+body.saf-odak #paragraf-icerik-container > div{max-width:none!important}
+body.saf-odak #paragraf-icerik-container > div > div:first-child{display:none}
+body.saf-odak #mod-canliders > .dm-eye{display:none}
+body.saf-odak #mod-sat .sat-hero{display:none}
+body.saf-odak #svo-icerik{max-width:none!important}
+#mod-svo:not([data-saf-odak-aktif]) #svo-tabs{padding-right:44px} /* ⛶ sekmelerin üstüne binmesin */
+#aoy-container:not([data-saf-odak-aktif]){position:relative} /* Odak dışında ⛶ kutunun sağ üstünde */
+body.saf-odak #mod-canliders .cl-kontrol{position:sticky;bottom:0;z-index:2;background:var(--paper);margin-top:12px;padding:12px 0 max(12px,env(safe-area-inset-bottom))}
+body.saf-odak #mod-kelime #kk-actions{position:sticky;bottom:0;z-index:2;background:var(--paper);padding:12px 0 max(12px,env(safe-area-inset-bottom))}
+@media(max-width:900px){
+  body.saf-odak [data-saf-odak-aktif]{padding:max(52px,calc(env(safe-area-inset-top) + 44px)) max(14px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))!important}
+  body.saf-odak [data-saf-odak-aktif] > :not(.tam-ekran-btn){zoom:1.06}
+  body.saf-odak [data-saf-odak-aktif] .tam-ekran-btn[data-saf-odak-btn]{right:max(8px,env(safe-area-inset-right))}
 }
 .kk{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:56px 32px;text-align:center;cursor:pointer;min-height:260px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px;transition:border-color .15s}
 .kk:hover{border-color:var(--signal)}
@@ -1848,7 +1874,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <div class="dtab" onclick="dtab(this,'puananaliz')" role="button" tabindex="0">📊 Puan Analizörü</div>
         </div>
         <div class="dmod" id="mod-sinyal">
-          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-sinyal')" title="Tam ekran">⛶</button>
+          <button class="tam-ekran-btn" data-saf-odak-btn="sinyal" onclick="tamEkranAcKapat('mod-sinyal')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
             <span id="sl-eyebrow-text">Genel - YDS Metni - Soru 1/15</span>
             <span class="adaptif-badge adaptif-orta" id="adaptif-seviye-badge">⚡ ORTA</span>
@@ -1862,7 +1888,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <button id="sl-next-btn" onclick="slSonraki()" style="display:none;margin-top:10px;background:var(--sl);border:none;color:var(--signal);padding:7px 16px;border-radius:7px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Sonraki soru →</button>
         </div>
         <div class="dmod" id="mod-kelime" style="display:none">
-          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-kelime')" title="Tam ekran">⛶</button>
+          <button class="tam-ekran-btn" data-saf-odak-btn="kelime" onclick="tamEkranAcKapat('mod-kelime')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div class="dm-eye" id="kk-eyebrow">Spaced Repetition — yükleniyor...</div>
           <div class="kk" id="kk" onclick="kkFlip()" role="button" tabindex="0">
             <div id="kk-front"><div class="kk-word" id="kk-word-front" onmouseenter="if(kkCurrent&&window.ttsKaraoke)ttsKaraoke(kkCurrent.en,this,null,{ttsFn:ttsEleven,lang:'en-US'})" title="Üzerine gel — sesli dinle 🔊"></div><div class="kk-hint">Tıkla — Türkçe gör · Kelimenin üzerine gel — sesli dinle 🔊</div></div>
@@ -1880,16 +1906,16 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           </div>
         </div>
         <div class="dmod" id="mod-tuzak" style="display:none">
-          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-tuzak')" title="Tam ekran">⛶</button>
+          <button class="tam-ekran-btn" data-saf-odak-btn="tuzak" onclick="tamEkranAcKapat('mod-tuzak')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div class="dm-eye" id="tuzak-tarih-lbl">Günlük Tuzak — yükleniyor...</div>
           <div id="tuzak-container"></div>
         </div>
-        <div class="dmod" id="mod-sat" style="display:none"><div id="sat-icerik"></div></div>
+        <div class="dmod" id="mod-sat" style="display:none"><button class="tam-ekran-btn" data-saf-odak-btn="sat" onclick="tamEkranAcKapat('mod-sat')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button><div id="sat-icerik"></div></div>
         <div class="dmod" id="mod-paragraf" style="display:none">
-          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-paragraf')" title="Tam ekran">⛶</button>
+          <button class="tam-ekran-btn" data-saf-odak-btn="paragraf" onclick="tamEkranAcKapat('mod-paragraf')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div id="paragraf-icerik-container"></div>
         </div>
-        <div class="dmod" id="mod-svo" style="display:none;background:linear-gradient(135deg,#0f2a1a,#0f2418);border-radius:16px;padding:4px"><div id="svo-icerik-container"></div></div>
+        <div class="dmod" id="mod-svo" style="display:none;background:linear-gradient(135deg,#0f2a1a,#0f2418);border-radius:16px;padding:4px"><button class="tam-ekran-btn" data-saf-odak-btn="svo" onclick="tamEkranAcKapat('mod-svo')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button><div id="svo-icerik-container"></div></div>
         <div class="dmod" id="mod-teknik" style="display:none;background:linear-gradient(135deg,#0f2a1a,#241a30);border-radius:16px;padding:4px"><div id="teknik-icerik-container"></div></div>
         <div class="dmod" id="mod-avci" style="display:none">
   <!-- AVCI ÖĞRENME YOLU WIDGET — izole, #aoy- prefix, mevcut sisteme dokunmaz -->
@@ -6062,7 +6088,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- CANLI DERS (yeşil tahta — sesli + yazarak anlatım) -->
         <div class="dmod" id="mod-canliders" style="display:none">
-          <button class="tam-ekran-btn" onclick="tamEkranAcKapat('mod-canliders')" title="Tam ekran">⛶</button>
+          <button class="tam-ekran-btn" data-saf-odak-btn="canliders" onclick="tamEkranAcKapat('mod-canliders')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div class="dm-eye">🎓 CANLI DERS — Yeşil tahtada sesli konu anlatımı</div>
           <div id="canliders-container"></div>
         </div>
@@ -6814,24 +6840,16 @@ function satPaylas(yuzde){
   else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#16a34a;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clearInterval(satTimer);satPratikRender();}
-// Ders modüllerini tam ekran yapma/çıkma — Canlı Ders, Sinyal Lab, Günlük Tuzak,
-// Kelime Kartları, Paragraf modülü butonlarından çağrılır. ESC ile çıkış tarayıcının
-// kendi varsayılan davranışı, ekstra kod gerekmiyor.
-function tamEkranAcKapat(modId){
-  const el=document.getElementById(modId);
-  if(!el)return;
-  if(document.fullscreenElement){
-    document.exitFullscreen();
-  } else if(el.requestFullscreen){
-    el.requestFullscreen().catch(()=>{});
-  }
-}
+// Modüllerdeki ⛶ butonu (Sinyal Lab, Kelime Kartları, Günlük Tuzak, Paragraf,
+// Canlı Ders): artık ortak SAF ODAK çekirdeğine gider ('mod-tuzak' → 'tuzak').
+function tamEkranAcKapat(modId){safOdakDegistir(String(modId).replace(/^mod-/,''));}
 // KATMAN 5B — AKTİF SORU MODÜLÜ TRACKER: 'sinyal_lab' | null. Sadece
 // dtab()/dnav() tarafından, gerçek navigasyon olaylarına göre güncellenir
 // (bkz. her iki fonksiyonun içindeki yorumlar). dnavChat() her çağrıda bu
 // değişkeni CANLI okur — cache/snapshot YOK.
 let _aktifSoruModulu=null;
 function dtab(el,mod){
+  if(typeof safOdakEkranDegisti==='function')safOdakEkranDegisti(); // açık Odak Modu kapanır
   // KATMAN 5B — AKTİF SORU MODÜLÜ TRACKER (2026-09-18): dnavChat()'in
   // Sinyal Lab context'ini SADECE gerçekten Sinyal Lab görünürken
   // göndermesi için tek, merkezi güncelleme noktası. mod!=='sinyal' olan
@@ -6919,6 +6937,7 @@ function modSinyalAsilGeriYukle(){
   t.innerHTML='';t.appendChild(_modSinyalAsil);_modSinyalAsil=null;
 }
 function dnav(el){
+  if(typeof safOdakEkranDegisti==='function')safOdakEkranDegisti(); // açık Odak Modu kapanır
   const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
@@ -7101,7 +7120,7 @@ function klodOdakAyarla(acik,oncekiAktif){
   const b=document.body,zatenAcik=b.classList.contains('klod-odak');
   if(acik&&!zatenAcik){
     _klodOncekiItem=oncekiAktif||null;_klodScrollY=window.scrollY;
-    _klodTamElleKapandi=false;
+    safOdakSifirla('klod');
     b.classList.add('klod-odak');
     try{history.pushState({klodOdak:1},'');}catch(e){}
   }else if(!acik&&zatenAcik){
@@ -7136,15 +7155,136 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('ia-overlay')?.classList.contains('acik'))return;
   if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
   // Odak Modu açıksa Esc önce yalnız onu kapatır; ikinci Esc KLOD'dan çıkar
-  if(document.body.classList.contains('klod-tam')){_klodTamElleKapandi=true;klodTamAyarla(false);return;}
+  if(safOdakAcikMi('klod')){safOdakElleKapat('klod');return;}
   klodOdakCik();
 });
-// ODAK MODU (2026-10-14) — bkz. CSS "KLOD ODAK MODU". body.klod-tam yalnız
-// body.klod-odak açıkken anlamlı. Tarayıcı tam ekranı (Fullscreen API)
-// opsiyonel: yoksa/reddedilirse sessizce yalnız CSS modu kalır (iPhone vb.).
-// Öğrenci Odak'ı elle kapattıysa, KLOD'dan çıkana kadar mesaj gönderimi onu
-// yeniden açmaz; AVCI MASTER BAŞLA ve yanlış cevabı KLOD'a sorma (zorla) açar.
-var _klodTamFS=false,_klodTamElleKapandi=false; // var: dnav() yükleme sırasında çağrılırsa TDZ olmasın
+// SAF ODAK — ortak tam sayfa çalışma modu çekirdeği (2026-10-14). Her ekran
+// safOdakKaydet(ad,ayar) ile kaydolur; açma/kapama, tarayıcı tam ekranı
+// (Fullscreen API, opsiyonel: yoksa/reddedilirse sessizce yalnız CSS modu
+// kalır — iPhone vb.), Esc, telefon geri tuşu ve "elle kapatıldı" durumu
+// burada, ekran başına ayrı tutulur. Aynı anda tek ekran açık olabilir.
+// Öğrenci bir ekranda Odak'ı elle kapattıysa, o ekrandan çıkana kadar
+// otomatik tetikleyiciler onu yeniden açmaz; zorla=true olanlar açar.
+// ayar: hedef() → tam sayfa olacak kutu; kosul() → açılabilir mi;
+//   sinif → kendi body sınıfı (KLOD: 'klod-tam'); yoksa body.saf-odak +
+//   hedefte [data-saf-odak-aktif] (bkz. CSS "SAF ODAK");
+//   gecmis → telefon geri tuşu için history kaydı; butonGuncelle; acilinca.
+var _safOdakEkranlar={},_safOdakAcik=null,_safOdakFS=false,_safOdakPopSessiz=false,_safOdakGezinti=false; // var: dnav() yükleme sırasında çağrılırsa TDZ olmasın
+function safOdakKaydet(ad,ayar){_safOdakEkranlar[ad]=Object.assign({elleKapandi:false},ayar);}
+function safOdakAcikMi(ad){return _safOdakAcik===ad;}
+function _safOdakTarayiciAc(){
+  const el=document.documentElement,iste=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(!iste||document.fullscreenElement||document.webkitFullscreenElement)return;
+  try{
+    const p=iste.call(el);_safOdakFS=true;
+    if(p&&typeof p.catch==='function')p.catch(()=>{_safOdakFS=false;});
+  }catch(e){_safOdakFS=false;}
+}
+function _safOdakTarayiciKapat(){
+  if(!_safOdakFS)return;
+  _safOdakFS=false;
+  const cik=document.exitFullscreen||document.webkitExitFullscreen;
+  if(!cik||!(document.fullscreenElement||document.webkitFullscreenElement))return;
+  try{const p=cik.call(document);if(p&&typeof p.catch==='function')p.catch(()=>{});}catch(e){}
+}
+function safOdakButonGuncelle(ad){
+  const e=_safOdakEkranlar[ad];if(!e)return;
+  if(e.butonGuncelle){e.butonGuncelle();return;}
+  const acik=_safOdakAcik===ad;
+  document.querySelectorAll('[data-saf-odak-btn="'+ad+'"]').forEach(btn=>{
+    btn.textContent=acik?'✕':'⛶';
+    btn.setAttribute('aria-pressed',acik?'true':'false');
+    btn.setAttribute('aria-label',acik?'Odak Modundan çık':'Odak Modu: tam ekran çalış');
+    btn.title=acik?'Odak Modundan çık (Esc)':'Odak Modu: tam ekran çalış';
+  });
+}
+function safOdakAyarla(ad,acik){
+  const e=_safOdakEkranlar[ad];if(!e)return;
+  const b=document.body;
+  if(acik){
+    if(e.kosul&&!e.kosul())return;
+    const hedef=e.hedef&&e.hedef();if(!hedef)return;
+    if(_safOdakAcik&&_safOdakAcik!==ad)safOdakAyarla(_safOdakAcik,false);
+    if(_safOdakAcik!==ad){
+      _safOdakAcik=ad;
+      if(e.sinif)b.classList.add(e.sinif);
+      else{e._hedef=hedef;hedef.setAttribute('data-saf-odak-aktif','');hedef.scrollTop=0;b.classList.add('saf-odak');}
+      _safOdakTarayiciAc();
+      if(e.gecmis){try{history.pushState({safOdak:ad},'');}catch(_){}}
+      if(e.acilinca)e.acilinca(hedef);
+    }
+  }else if(_safOdakAcik===ad){
+    _safOdakAcik=null;
+    if(e.sinif)b.classList.remove(e.sinif);
+    else{b.classList.remove('saf-odak');if(e._hedef)e._hedef.removeAttribute('data-saf-odak-aktif');e._hedef=null;}
+    _safOdakTarayiciKapat();
+    // Elle kapanınca kendi history kaydımızı geri al. Gezinme sırasında (dnav/dtab)
+    // geri ALINMAZ, yalnız etkisizleştirilir: history.back() eşzamansızdır ve hemen
+    // ardından KLOD'un pushState'i gelirse onu geri alıp KLOD'u kapatırdı.
+    if(e.gecmis&&history.state&&history.state.safOdak===ad){
+      if(_safOdakGezinti){try{history.replaceState(null,'');}catch(_){}}
+      else{_safOdakPopSessiz=true;history.back();}
+    }
+  }
+  safOdakButonGuncelle(ad);
+}
+function safOdakDegistir(ad){
+  const e=_safOdakEkranlar[ad];if(!e)return;
+  const acik=_safOdakAcik!==ad;
+  e.elleKapandi=!acik;
+  safOdakAyarla(ad,acik);
+}
+function safOdakElleKapat(ad){
+  const e=_safOdakEkranlar[ad];if(!e)return;
+  e.elleKapandi=true;safOdakAyarla(ad,false);
+}
+function safOdakOtomatik(ad,zorla){
+  const e=_safOdakEkranlar[ad];if(!e)return;
+  if(zorla)e.elleKapandi=false;
+  else if(e.elleKapandi)return;
+  safOdakAyarla(ad,true);
+}
+function safOdakSifirla(ad){if(_safOdakEkranlar[ad])_safOdakEkranlar[ad].elleKapandi=false;}
+// dtab()/dnav() başında: ekran değişiyor → açık genel Odak kapanır, "elle
+// kapatıldı" kayıtları sıfırlanır. KLOD (kendi sınıfı olan) kendi akışını yönetir.
+function safOdakEkranDegisti(){
+  if(_safOdakAcik&&!_safOdakEkranlar[_safOdakAcik].sinif){
+    _safOdakGezinti=true;
+    try{safOdakAyarla(_safOdakAcik,false);}finally{_safOdakGezinti=false;}
+  }
+  Object.keys(_safOdakEkranlar).forEach(ad=>{if(!_safOdakEkranlar[ad].sinif)_safOdakEkranlar[ad].elleKapandi=false;});
+}
+// Tarayıcı tam ekranından Esc/sistem jestiyle çıkılırsa Odak Modu da kapanır
+['fullscreenchange','webkitfullscreenchange'].forEach(ad=>document.addEventListener(ad,()=>{
+  if(!_safOdakFS||document.fullscreenElement||document.webkitFullscreenElement)return;
+  _safOdakFS=false;
+  if(_safOdakAcik)safOdakElleKapat(_safOdakAcik);
+}));
+// Genel ekranlarda Esc ve telefon geri tuşu Odak'tan çıkar (KLOD'unki yukarıda)
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!_safOdakAcik||_safOdakEkranlar[_safOdakAcik].sinif)return;
+  if(document.getElementById('arama-modal')?.classList.contains('acik'))return;
+  if(document.getElementById('ia-overlay')?.classList.contains('acik'))return;
+  if(document.getElementById('ders-modal')?.classList.contains('open'))return;
+  if([...document.querySelectorAll('.modal-ov')].some(m=>getComputedStyle(m).display!=='none'))return;
+  safOdakElleKapat(_safOdakAcik);
+});
+window.addEventListener('popstate',()=>{
+  if(_safOdakPopSessiz){_safOdakPopSessiz=false;return;}
+  if(_safOdakAcik&&_safOdakEkranlar[_safOdakAcik].gecmis)safOdakElleKapat(_safOdakAcik);
+});
+// Yeniden çizilen içerikler (Öğrenme Yolu) için ⛶ butonunu kutunun başına ekler
+function safOdakButonEkle(kutu,ad){
+  if(!kutu||kutu.querySelector(':scope > [data-saf-odak-btn="'+ad+'"]'))return;
+  const btn=document.createElement('button');
+  btn.type='button';btn.className='tam-ekran-btn';btn.dataset.safOdakBtn=ad;
+  btn.onclick=()=>safOdakDegistir(ad);
+  kutu.insertBefore(btn,kutu.firstChild);
+  safOdakButonGuncelle(ad);
+}
+// KLOD — ODAK MODU: body.klod-tam yalnız body.klod-odak açıkken anlamlı (bkz.
+// CSS "KLOD ODAK MODU"). KLOD'dan çıkana kadar mesaj gönderimi elle kapatılan
+// Odak'ı yeniden açmaz; AVCI MASTER BAŞLA ve yanlış cevabı KLOD'a sorma (zorla) açar.
 function klodTamButonGuncelle(){
   const btn=document.getElementById('klod-tam-btn');if(!btn)return;
   const acik=document.body.classList.contains('klod-tam');
@@ -7153,47 +7293,38 @@ function klodTamButonGuncelle(){
   btn.setAttribute('aria-label',acik?'Odak Modunu kapat':'Odak Modunu aç');
   btn.title=acik?'Odak Modunu kapat (Esc)':'Odak Modu: tam ekran çalış';
 }
-function klodTamTarayiciAc(){
-  const el=document.documentElement,iste=el.requestFullscreen||el.webkitRequestFullscreen;
-  if(!iste||document.fullscreenElement||document.webkitFullscreenElement)return;
-  try{
-    const p=iste.call(el);_klodTamFS=true;
-    if(p&&typeof p.catch==='function')p.catch(()=>{_klodTamFS=false;});
-  }catch(e){_klodTamFS=false;}
+safOdakKaydet('klod',{
+  sinif:'klod-tam',
+  hedef:()=>document.getElementById('mod-sinyal'),
+  kosul:()=>document.body.classList.contains('klod-odak'),
+  butonGuncelle:klodTamButonGuncelle,
+  acilinca:()=>{const c=document.getElementById('dnav-chat');if(c)c.scrollTop=c.scrollHeight;}
+});
+function klodTamAyarla(acik){safOdakAyarla('klod',acik);}
+function klodTamDegistir(){safOdakDegistir('klod');}
+function klodTamOtomatik(zorla){safOdakOtomatik('klod',zorla);}
+// SAF ODAK — çalışma ekranları. Panel modülleri (#mod-<ad>) yalnız ekranda
+// görünürken açılabilir. #mod-sinyal yalnız Sinyal Lab içeriğini taşırken
+// (KLOD/Raporlar/Ses Kurs da aynı kutuya yazılıyor, bkz. dnav()).
+function _safOdakGorunur(el){return !!el&&el.getClientRects().length>0;}
+safOdakKaydet('sinyal',{gecmis:true,
+  hedef:()=>document.getElementById('mod-sinyal'),
+  kosul:()=>!document.body.classList.contains('klod-odak')&&!!document.querySelector('#mod-sinyal #sl-sent')&&_safOdakGorunur(document.getElementById('mod-sinyal'))});
+function _safOdakModulKaydet(ad){
+  safOdakKaydet(ad,{gecmis:true,hedef:()=>document.getElementById('mod-'+ad),kosul:()=>_safOdakGorunur(document.getElementById('mod-'+ad))});
 }
-function klodTamTarayiciKapat(){
-  if(!_klodTamFS)return;
-  _klodTamFS=false;
-  const cik=document.exitFullscreen||document.webkitExitFullscreen;
-  if(!cik||!(document.fullscreenElement||document.webkitFullscreenElement))return;
-  try{const p=cik.call(document);if(p&&typeof p.catch==='function')p.catch(()=>{});}catch(e){}
-}
-function klodTamAyarla(acik){
-  const b=document.body;
-  if(acik&&!b.classList.contains('klod-odak'))return;
-  if(acik!==b.classList.contains('klod-tam')){
-    b.classList.toggle('klod-tam',acik);
-    if(acik)klodTamTarayiciAc();else klodTamTarayiciKapat();
-    if(acik){const c=document.getElementById('dnav-chat');if(c)c.scrollTop=c.scrollHeight;}
-  }
-  klodTamButonGuncelle();
-}
-function klodTamDegistir(){
-  const acik=!document.body.classList.contains('klod-tam');
-  _klodTamElleKapandi=!acik;
-  klodTamAyarla(acik);
-}
-function klodTamOtomatik(zorla){
-  if(zorla)_klodTamElleKapandi=false;
-  else if(_klodTamElleKapandi)return;
-  klodTamAyarla(true);
-}
-// Tarayıcı tam ekranından Esc/sistem jestiyle çıkılırsa Odak Modu da kapanır
-['fullscreenchange','webkitfullscreenchange'].forEach(ad=>document.addEventListener(ad,()=>{
-  if(!_klodTamFS||document.fullscreenElement||document.webkitFullscreenElement)return;
-  _klodTamFS=false;
-  if(document.body.classList.contains('klod-tam')){_klodTamElleKapandi=true;klodTamAyarla(false);}
-}));
+_safOdakModulKaydet('tuzak');
+_safOdakModulKaydet('kelime');
+_safOdakModulKaydet('paragraf');
+_safOdakModulKaydet('canliders');
+_safOdakModulKaydet('sat');
+_safOdakModulKaydet('svo');
+// Öğrenme Yolu: yalnız açık ders / mini test / sonuç ekranında. Bu çizimler
+// safOdakAoyHazirla() ile ⛶ butonunu ekler; liste ekranında (aoyAc) buton yok.
+safOdakKaydet('aoy',{gecmis:true,
+  hedef:()=>document.getElementById('aoy-container'),
+  kosul:()=>{const k=document.getElementById('aoy-container');return _safOdakGorunur(k)&&!!k.querySelector(':scope > [data-saf-odak-btn="aoy"]');}});
+function safOdakAoyHazirla(el,ac){safOdakButonEkle(el,'aoy');if(ac)safOdakOtomatik('aoy');}
 // ANA SAYFA KLOD KUTUSU → KLOD ODAK MODU — #klod bölümünde giriş kutusu yok,
 // "KLOD'a Sor" butonu KLOD'a Sor'u tam ekran odak modunda açar. Demo soru
 // oraya taşınır, öğrencinin ilk mesajı onun bağlamıyla gider
@@ -9449,8 +9580,9 @@ function clCevapSec(i){
     }
   }
 }
-function clTekrarAnlat(){clOynatKonu(clIdx);}
-function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);}
+// Öğrenci dersi kendisi oynatınca (Tekrar Anlat / Sonraki Konu) Odak Modu açılır
+function clTekrarAnlat(){clOynatKonu(clIdx);if(typeof safOdakOtomatik==='function')safOdakOtomatik('canliders');}
+function clSonrakiKonu(){clOynatKonu((clIdx+1)%CL_KONULAR.length);if(typeof safOdakOtomatik==='function')safOdakOtomatik('canliders');}
 
 // ==== CANLI DERS ↔ AVCI HOCA (KATMAN 5) KÖPRÜSÜ ====
 // Canlı Ders'in yeşil tahta anlatımı/sorusu AYNEN kalır. Öğrenci, soru aşamasında İSTERSE
@@ -11484,6 +11616,7 @@ function hataTekrar(id){
   fb.style.cssText='background:#2e2410;border:1px solid #d97706;border-radius:8px;padding:10px 14px;font-size:15px;margin-bottom:10px;color:#fbbf24;';
   fb.innerHTML=`🔁 <b>Hata tekrarı:</b> "${h.soru.substring(0,50)}..." — Doğru cevap: <b>${h.dogruCevap}</b>`;
   const cont=document.getElementById('tuzak-container');if(cont)cont.insertAdjacentElement('afterbegin',fb);
+  if(typeof safOdakOtomatik==='function')safOdakOtomatik('tuzak',true); // hata tekrarı: Odak Modu
 }
 
 // ============================================================
@@ -13493,6 +13626,7 @@ function bugunKartiRender(){
 function bugunGorevGit(dnAra){
   const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes(dnAra));
   if(item)item.click();
+  if(dnAra==='Sinyal Lab'&&typeof safOdakOtomatik==='function')safOdakOtomatik('sinyal',true); // "Göreve Başla": Odak Modu
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
 
@@ -16862,6 +16996,7 @@ function aoyDersAc(dersId){
     </div>
   </div>
   `;
+  if(typeof safOdakAoyHazirla==='function')safOdakAoyHazirla(el,true); // ders açıldı: Odak Modu
 }
 
 // ─── KLOD'A SOR: mevcut dnavChat motorunu kullan ─────────────────────────
@@ -16976,6 +17111,7 @@ function _aoyMiniTestRender(el){
     </button>
   </div>
   `;
+  if(typeof safOdakAoyHazirla==='function')safOdakAoyHazirla(el,false);
 }
 
 function aoyMiniTestCevap(secilen, dogru){
@@ -17088,6 +17224,7 @@ function _aoyMiniTestSonuc(el){
     </div>
   </div>
   `;
+  if(typeof safOdakAoyHazirla==='function')safOdakAoyHazirla(el,false);
   _aoyMiniTestState=null;
 }
 
