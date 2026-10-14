@@ -3,7 +3,10 @@
 // Token hiçbir hata mesajına ya da loga yazılmaz.
 // ============================================================
 
+import { hataOlustur } from "./telegram-mantigi.mjs";
+
 const API = "https://api.telegram.org";
+const ZAMAN_ASIMI_MS = 90_000; // takılan istek sonsuza dek beklemesin (zaman aşımı = geçici hata)
 
 export function telegramIstemci(token) {
   if (!token) throw new Error("TELEGRAM_BOT_TOKEN tanımlı değil");
@@ -15,10 +18,11 @@ export function telegramIstemci(token) {
     try {
       res = await fetch(`${API}/bot${token}/${metod}`, {
         method: "POST",
+        signal: AbortSignal.timeout(ZAMAN_ASIMI_MS),
         ...(form ? { body: govde } : { headers: { "Content-Type": "application/json" }, body: JSON.stringify(govde) }),
       });
     } catch (e) {
-      throw new Error(`Telegram ${metod}: bağlantı hatası (${gizle(e.message)})`);
+      throw hataOlustur(`Telegram ${metod}: bağlantı hatası (${gizle(e.message)})`, { gecici: true });
     }
     const json = await res.json().catch(() => ({}));
     if (json.ok) return json.result;
@@ -27,7 +31,7 @@ export function telegramIstemci(token) {
       await new Promise((r) => setTimeout(r, (bekle + 1) * 1000));
       return cagir(metod, govde, false);
     }
-    throw new Error(`Telegram ${metod}: ${res.status} ${gizle(json.description ?? "bilinmeyen hata")}`);
+    throw hataOlustur(`Telegram ${metod}: ${res.status} ${gizle(json.description ?? "bilinmeyen hata")}`, { status: res.status });
   }
 
   // Bot kanalda mesaj atabilir mi? (deneme modunda ve gönderimden önce)

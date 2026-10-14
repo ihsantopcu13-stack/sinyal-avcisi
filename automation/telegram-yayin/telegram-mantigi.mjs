@@ -10,6 +10,45 @@ export const MESAJ_SINIR = 4096;      // Telegram düz mesaj sınırı
 export const VIDEO_SINIR = 49 * 1024 * 1024; // Bot API dosya yükleme sınırı 50 MB; pay bırakıldı
 export const SITE = "sinyal-avcisi.com";
 
+export const YENIDEN_BEKLEME_SN = [5, 15, 45]; // geçici hatada yeniden denemeden önce beklemeler
+
+// Hata nesnesi: status (HTTP kodu) ve gecici (bağlantı/zaman aşımı) yeniden deneme kararı için taşınır
+export function hataOlustur(mesaj, { status, gecici } = {}) {
+  const e = new Error(mesaj);
+  if (status !== undefined) e.status = status;
+  if (gecici) e.gecici = true;
+  return e;
+}
+
+// Geçici: bağlantı hatası, zaman aşımı, 5xx, 408, 429. Kalıcı (404, 400, 403…): yeniden denenmez.
+export function geciciMi(e) {
+  if (e?.gecici) return true;
+  const s = e?.status;
+  return typeof s === "number" && (s >= 500 || s === 408 || s === 429);
+}
+
+// is() geçici hatayla düşerse beklemeler kadar yeniden dener; kalıcı hatayı hemen fırlatır.
+export async function yenidenDene(is, { beklemeler = YENIDEN_BEKLEME_SN, uyku = (ms) => new Promise((r) => setTimeout(r, ms)), ad = "işlem", log = () => {} } = {}) {
+  for (let i = 0; ; i++) {
+    try {
+      return await is();
+    } catch (e) {
+      if (i >= beklemeler.length || !geciciMi(e)) throw e;
+      log(`  ↻ ${ad}: geçici hata (${e.message}) — ${beklemeler[i]} sn sonra yeniden deneme ${i + 1}/${beklemeler.length}`);
+      await uyku(beklemeler[i] * 1000);
+    }
+  }
+}
+
+// Çalışma sonu özeti: başarılı/düşen konular ve kısa sebepleri
+export function ozetMetni(sonuclar) {
+  const iyi = sonuclar.filter((s) => s.tamam);
+  const kotu = sonuclar.filter((s) => !s.tamam);
+  const satirlar = [`ÖZET: ${iyi.length}/${sonuclar.length} konu gönderildi${iyi.length ? ` (${iyi.map((s) => `Konu ${s.konu}`).join(", ")})` : ""}.`];
+  for (const s of kotu) satirlar.push(`  ✘ Konu ${s.konu} düştü: ${String(s.hata ?? "").slice(0, 160)}`);
+  return satirlar.join("\n");
+}
+
 export function modBelirle(env) {
   return (env.TELEGRAM_MOD || "deneme").trim() === "yayinla" ? "yayinla" : "deneme";
 }
