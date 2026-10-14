@@ -10,7 +10,9 @@
 //
 // Gerekli ortam değişkenleri (Vercel > Settings > Environment Variables):
 //   TELEGRAM_BOT_TOKEN           — mevcut yayın botunun token'ı (automation/telegram-yayin ile aynı bot)
-//   TELEGRAM_CHAT_ID             — admin'in ÖZEL sohbeti (sayısal id). Herkese açık kanal DEĞİL:
+//   TELEGRAM_ADMIN_CHAT_ID       — admin'in ÖZEL sohbeti (sayısal id). Yayın otomasyonunun
+//                                  TELEGRAM_CHAT_ID'sinden (GitHub Actions, herkese açık kanal) AYRI;
+//                                  onu okumaz/değiştirmez. Herkese açık kanal DEĞİL:
 //                                  onaylanmamış yorumlar kanala düşmesin diye '@kanal' biçimi reddedilir.
 //   TESTIMONIAL_WEBHOOK_SECRET   — Supabase webhook'unun header'da gönderdiği paylaşılan gizli anahtar
 //
@@ -104,14 +106,14 @@ export default async function handler(req, res) {
   }
 
   const token = process.env.TELEGRAM_BOT_TOKEN || '';
-  const chatId = String(process.env.TELEGRAM_CHAT_ID || '').trim();
+  const chatId = String(process.env.TELEGRAM_ADMIN_CHAT_ID || '').trim();
   if (!token || !chatId) {
-    console.error('testimonial-bildirim: TELEGRAM_BOT_TOKEN veya TELEGRAM_CHAT_ID tanımlı değil');
+    console.error('testimonial-bildirim: TELEGRAM_BOT_TOKEN veya TELEGRAM_ADMIN_CHAT_ID tanımlı değil');
     return res.status(200).json({ ok: true, gonderildi: false });
   }
   if (chatId.startsWith('@')) {
     // '@kanal' herkese açık bir kanal: onaylanmamış yorum oraya gönderilmez
-    console.error('testimonial-bildirim: TELEGRAM_CHAT_ID bir @kanal; özel sohbet id’si olmalı — gönderilmedi');
+    console.error('testimonial-bildirim: TELEGRAM_ADMIN_CHAT_ID bir @kanal; özel sohbet id’si olmalı — gönderilmedi');
     return res.status(200).json({ ok: true, gonderildi: false });
   }
 

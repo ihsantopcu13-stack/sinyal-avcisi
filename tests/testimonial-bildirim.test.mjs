@@ -18,7 +18,7 @@ const TOKEN = "123456:TEST_TOKEN_GIZLI";
 const KAYIT = { isim: "Ayşe", unvan: "YDS adayı", yorum: "Çok faydalı.", yildiz: 4, onaylandi: false };
 
 function ortam(degerler) {
-  for (const k of ["TESTIMONIAL_WEBHOOK_SECRET", "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"]) delete process.env[k];
+  for (const k of ["TESTIMONIAL_WEBHOOK_SECRET", "TELEGRAM_BOT_TOKEN", "TELEGRAM_ADMIN_CHAT_ID", "TELEGRAM_CHAT_ID"]) delete process.env[k];
   Object.assign(process.env, degerler);
 }
 function sahteRes() {
@@ -41,7 +41,7 @@ async function cagir({ method = "POST", secret = SIR, body = { type: "INSERT", t
   await handler({ method, headers: secret === null ? {} : { "x-webhook-secret": secret }, body }, res);
   return res;
 }
-const tamOrtam = { TESTIMONIAL_WEBHOOK_SECRET: SIR, TELEGRAM_BOT_TOKEN: TOKEN, TELEGRAM_CHAT_ID: "987654321" };
+const tamOrtam = { TESTIMONIAL_WEBHOOK_SECRET: SIR, TELEGRAM_BOT_TOKEN: TOKEN, TELEGRAM_ADMIN_CHAT_ID: "987654321" };
 
 // 1) yöntem ve gizli anahtar
 ortam(tamOrtam);
@@ -95,9 +95,12 @@ kontrol("20) token hiçbir loga yazılmadı", loglar.length > 0 && loglar.every(
 fetchDavranis = async () => ({ status: 200, json: async () => ({ ok: true }) });
 
 // 6) yapılandırma
-ortam({ ...tamOrtam, TELEGRAM_CHAT_ID: "@sinyalavcisiyds" });
+ortam({ ...tamOrtam, TELEGRAM_ADMIN_CHAT_ID: "@sinyalavcisiyds" });
 r = await cagir();
-kontrol("21) TELEGRAM_CHAT_ID bir @kanal → gönderilmedi (onaysız yorum kanala düşmez), 200", r.kod === 200 && r.govde.gonderildi === false && fetchCagrilari.length === 0);
+kontrol("21) TELEGRAM_ADMIN_CHAT_ID bir @kanal → gönderilmedi (onaysız yorum kanala düşmez), 200", r.kod === 200 && r.govde.gonderildi === false && fetchCagrilari.length === 0);
+ortam({ TESTIMONIAL_WEBHOOK_SECRET: SIR, TELEGRAM_BOT_TOKEN: TOKEN, TELEGRAM_CHAT_ID: "@sinyalavcisiyds" });
+r = await cagir();
+kontrol("23) yayın otomasyonunun TELEGRAM_CHAT_ID'si kullanılmaz (yalnız TELEGRAM_ADMIN_CHAT_ID)", r.kod === 200 && r.govde.gonderildi === false && fetchCagrilari.length === 0);
 ortam({ ...tamOrtam, TELEGRAM_BOT_TOKEN: "" });
 r = await cagir();
 kontrol("22) bot token yok → 200, gönderilmedi", r.kod === 200 && r.govde.gonderildi === false && fetchCagrilari.length === 0);
