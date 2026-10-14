@@ -1696,7 +1696,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <div><div class="stat-num">0 TL</div><div class="stat-lbl">Ücret</div></div>
     </div>
     <div class="yorumlar" id="yorumlar-track"></div>
-    <div style="text-align:center;margin-top:20px">
+    <div id="yorum-paylas-kutu" hidden style="text-align:center;margin-top:20px">
       <button id="yorum-paylas-btn" onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">✍️ Deneyimini Paylaş</button>
     </div>
   </div>
@@ -6636,12 +6636,11 @@ async function testimonialleriYukle(){
       .order('created_at',{ascending:false})
       .limit(12);
     if(error)return;
-    // Onaylı yorum yoksa liste boş kalır (.yorumlar:empty gizler); "Deneyimini Paylaş" butonu görünür
-    if(!data||data.length===0){
-      const btn=document.getElementById('yorum-paylas-btn');
-      if(btn)btn.textContent='✍️ İlk deneyimi sen paylaş';
-      return;
-    }
+    // Onaylı yorum yoksa liste boş kalır (.yorumlar:empty gizler) ve "Deneyimini Paylaş" kutusu
+    // gizli kalır (yorum onay akışı hazır olana kadar); yorum varsa kutu gösterilir.
+    if(!data||data.length===0)return;
+    const kutu=document.getElementById('yorum-paylas-kutu');
+    if(kutu)kutu.hidden=false;
     data.forEach(t=>{
       const div=document.createElement('div');
       div.className='yorum';
