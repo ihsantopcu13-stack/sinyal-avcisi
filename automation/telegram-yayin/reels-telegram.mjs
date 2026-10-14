@@ -23,7 +23,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { telegramIstemci } from "./telegram-istemci.mjs";
-import { modBelirle, tgDurumHazirla, reelsSec, reelsAciklamasi, MAX_DENEME, VIDEO_SINIR, SITE } from "./telegram-mantigi.mjs";
+import { modBelirle, tgDurumHazirla, reelsSec, reelsAciklamasi, hataOlustur, yenidenDene, ozetMetni, MAX_DENEME, VIDEO_SINIR, SITE } from "./telegram-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REELS_DATA = path.join(__dirname, "..", "reels-yayin", "data");
@@ -45,17 +45,31 @@ async function ghApi(yol, secenek = {}) {
   });
 }
 
+// Geçici hatalarda (5xx, zaman aşımı, bağlantı) 5/15/45 sn arayla yeniden dener; 404 gibi kalıcıda denemez
+const dene = (ad, is) => yenidenDene(is, { ad, log });
+
 async function releaseAssetleri() {
-  const res = await ghApi(`/releases/tags/${RELEASE_TAG}`);
-  if (!res.ok) throw new Error(`GitHub Release "${RELEASE_TAG}" bulunamadı (${res.status})`);
-  const rel = await res.json();
-  return Object.fromEntries((rel.assets || []).map((a) => [a.name, a]));
+  return dene("Release listesi", async () => {
+    let res;
+    try { res = await ghApi(`/releases/tags/${RELEASE_TAG}`, { signal: AbortSignal.timeout(30_000) }); }
+    catch (e) { throw hataOlustur(`GitHub Release "${RELEASE_TAG}": bağlantı hatası (${e.message})`, { gecici: true }); }
+    if (!res.ok) throw hataOlustur(`GitHub Release "${RELEASE_TAG}" bulunamadı (${res.status})`, { status: res.status });
+    const rel = await res.json();
+    return Object.fromEntries((rel.assets || []).map((a) => [a.name, a]));
+  });
 }
 
 async function assetIndir(asset) {
-  const res = await fetch(asset.url, { headers: { Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: "application/octet-stream" } });
-  if (!res.ok) throw new Error(`${asset.name} indirilemedi: ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+  return dene(`${asset.name} indirme`, async () => {
+    try {
+      const res = await fetch(asset.url, { headers: { Authorization: `Bearer ${env.GITHUB_TOKEN}`, Accept: "application/octet-stream" }, signal: AbortSignal.timeout(60_000) });
+      if (!res.ok) throw hataOlustur(`${asset.name} indirilemedi: ${res.status}`, { status: res.status });
+      return Buffer.from(await res.arrayBuffer());
+    } catch (e) {
+      if (e.status !== undefined) throw e;
+      throw hataOlustur(`${asset.name} indirilemedi: bağlantı hatası (${e.message})`, { gecici: true });
+    }
+  });
 }
 
 // Video 50 MB'tan büyükse Telegram kabul etmez → metin + site bağlantısı gönderilir
@@ -63,18 +77,18 @@ async function konuGonder(tg, oge, asset) {
   const aciklama = reelsAciklamasi(oge.aciklama);
   if (asset.size > VIDEO_SINIR) {
     log(`  ⚠ ${oge.video} ${(asset.size / 1048576).toFixed(1)} MB — Telegram sınırını aşıyor, yalnız metin gönderiliyor`);
-    const m = await tg.mesajGonder(CHAT_ID, `${aciklama}\n\n▶️ Videosu: ${SITE}`.slice(0, 4096));
+    const m = await dene("Telegram metin", () => tg.mesajGonder(CHAT_ID, `${aciklama}\n\n▶️ Videosu: ${SITE}`.slice(0, 4096)));
     return { mesaj_id: m.message_id, tur: "metin" };
   }
   const buf = await assetIndir(asset);
-  const m = await tg.videoGonder(CHAT_ID, buf, oge.video, { caption: aciklama });
+  const m = await dene("Telegram video", () => tg.videoGonder(CHAT_ID, buf, oge.video, { caption: aciklama }));
   return { mesaj_id: m.message_id, tur: "video" };
 }
 
 async function deneme(tg, kuyruk, secilen) {
   let hata = false;
   try {
-    const k = await tg.kanalKontrol(CHAT_ID);
+    const k = await dene("Telegram kanal kontrolü", () => tg.kanalKontrol(CHAT_ID));
     log(`✔ Telegram: ${k.bot} → "${k.kanal}" (${k.tur}), mesaj gönderme izni var`);
   } catch (e) { hata = true; log(`✘ Telegram kanalı: ${tg.gizle(e.message)}`); }
 
@@ -99,10 +113,11 @@ async function deneme(tg, kuyruk, secilen) {
 
 async function yayinla(tg, kuyruk, secilen, tgDurum) {
   if (!secilen.length) { log("Saati gelmiş, Telegram'a gidecek Reels yok."); return; }
-  await tg.kanalKontrol(CHAT_ID);
+  await dene("Telegram kanal kontrolü", () => tg.kanalKontrol(CHAT_ID));
   const assetler = await releaseAssetleri();
   const kaydet = () => writeFile(TG_DURUM_YOLU, JSON.stringify(tgDurum, null, 2) + "\n");
-  let hata = false;
+  const sonuclar = [];
+  // Bir konu düşse de döngü sürer; düşen konu tamam işaretlenmez → sonraki çalışmada yeniden denenir
   for (const s of secilen) {
     const oge = kuyruk.ogeler.find((o) => o.konu === s.konu);
     const kayit = (tgDurum.konular[s.konu] ||= { deneme: 0 });
@@ -111,15 +126,17 @@ async function yayinla(tg, kuyruk, secilen, tgDurum) {
       if (!assetler[oge.video]) throw new Error(`Release'te ${oge.video} yok`);
       Object.assign(kayit, await konuGonder(tg, oge, assetler[oge.video]), { tamam: true, slot: s.slot, zaman: new Date().toISOString() });
       delete kayit.hata;
+      sonuclar.push({ konu: s.konu, tamam: true });
       log(`✔ Konu ${s.konu} — ${oge.baslik} (${istanbul(s.slot)}) → Telegram mesaj ${kayit.mesaj_id} (${kayit.tur})`);
     } catch (e) {
       kayit.hata = tg.gizle(e.message).slice(0, 500);
-      hata = true;
+      sonuclar.push({ konu: s.konu, tamam: false, hata: kayit.hata });
       log(`✘ Konu ${s.konu} (deneme ${kayit.deneme}/${MAX_DENEME}): ${kayit.hata}`);
     }
     await kaydet(); // her gönderimden sonra: aynı konu iki kez gitmesin
   }
-  if (hata) process.exitCode = 1;
+  log("\n" + ozetMetni(sonuclar));
+  if (sonuclar.some((s) => !s.tamam)) process.exitCode = 1; // tüm konular denendikten sonra kırmızı
 }
 
 // ---------------- giriş ----------------

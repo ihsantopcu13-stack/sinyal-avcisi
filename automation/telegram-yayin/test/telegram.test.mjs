@@ -85,4 +85,46 @@ await test("Günün Sorusu: uzun metin kart + ayrı mesaja bölünür", () => {
   assert.ok(ekMesaj && ekMesaj.includes("<tg-spoiler>"));
 });
 
+// ---- yeniden deneme ----
+const { geciciMi, yenidenDene, hataOlustur, ozetMetni, YENIDEN_BEKLEME_SN } = await import("../telegram-mantigi.mjs");
+
+await test("geçici/kalıcı hata ayrımı", () => {
+  assert.ok(geciciMi(hataOlustur("x", { status: 500 })));
+  assert.ok(geciciMi(hataOlustur("x", { status: 503 })));
+  assert.ok(geciciMi(hataOlustur("x", { gecici: true })));
+  assert.ok(!geciciMi(hataOlustur("x", { status: 404 })));
+  assert.ok(!geciciMi(hataOlustur("x", { status: 400 })));
+  assert.ok(!geciciMi(new Error("bilinmeyen")));
+});
+
+await test("geçici hata: 5/15/45 sn bekleyerek yeniden dener, sonra başarır", async () => {
+  const beklenen = [];
+  let n = 0;
+  const sonuc = await yenidenDene(async () => { if (++n < 3) throw hataOlustur("500", { status: 500 }); return "ok"; }, { uyku: async (ms) => beklenen.push(ms) });
+  assert.equal(sonuc, "ok");
+  assert.equal(n, 3);
+  assert.deepEqual(beklenen, [5000, 15000]);
+  assert.deepEqual(YENIDEN_BEKLEME_SN, [5, 15, 45]);
+});
+
+await test("geçici hata sürerse 3 yeniden denemeden sonra fırlatır", async () => {
+  const beklenen = [];
+  let n = 0;
+  await assert.rejects(yenidenDene(async () => { n++; throw hataOlustur("bağlantı", { gecici: true }); }, { uyku: async (ms) => beklenen.push(ms) }), /bağlantı/);
+  assert.equal(n, 4);
+  assert.deepEqual(beklenen, [5000, 15000, 45000]);
+});
+
+await test("kalıcı hata (404) yeniden denenmez", async () => {
+  let n = 0;
+  await assert.rejects(yenidenDene(async () => { n++; throw hataOlustur("404", { status: 404 }); }, { uyku: async () => assert.fail("beklememeli") }), /404/);
+  assert.equal(n, 1);
+});
+
+await test("özet: başarılı sayısı ve düşen konuların sebebi", () => {
+  const m = ozetMetni([{ konu: 26, tamam: false, hata: "konu26.mp4 indirilemedi: 500" }, { konu: 27, tamam: true }, { konu: 28, tamam: true }]);
+  assert.match(m, /2\/3 konu gönderildi \(Konu 27, Konu 28\)/);
+  assert.match(m, /Konu 26 düştü: konu26\.mp4 indirilemedi: 500/);
+});
+
 console.log(`\n${t} test geçti`);
