@@ -42,9 +42,26 @@ const GORSEL_TIPLERI = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/w
 // xml_output/structured dalları bu yüzden artık dışarıdan tetiklenemez.
 const IZINLI_MODLAR = new Set(['chat', 'sinyal_analiz']);
 
+// Dal takma adı önizlemeleri (sinyal-avcisi-git-<dal>-sinyal-avcisi.vercel.app)
+// joker desenle DEĞİL, Vercel'in her deploy'a verdiği kendi adresleriyle tam
+// eşleşir: "git-<dal>-<takım>" kısmındaki tireler yüzünden joker desen, takım
+// adı "x-sinyal-avcisi" olan başka bir hesabın adreslerini de kabul ederdi.
+function kendiOnizlemeAdresleri() {
+  return [process.env.VERCEL_BRANCH_URL, process.env.VERCEL_URL]
+    .filter(Boolean)
+    .map((h) => 'https://' + h);
+}
+
 export function originIzinliMi(origin) {
   if (!origin) return true; // tarayıcı dışı istemci — bkz. yukarıdaki not
-  return IZINLI_ORIGINLER.has(origin) || IZINLI_ORIGIN_DESENLERI.some((d) => d.test(origin));
+  return IZINLI_ORIGINLER.has(origin) || IZINLI_ORIGIN_DESENLERI.some((d) => d.test(origin)) ||
+    kendiOnizlemeAdresleri().includes(origin);
+}
+
+// Origin yoksa Referer'ın origin'i kullanılır; ikisi de yoksa null döner.
+export function istekKaynagi(req) {
+  if (req.headers.origin) return req.headers.origin;
+  try { return req.headers.referer ? new URL(req.headers.referer).origin : null; } catch { return 'gecersiz'; }
 }
 
 // Hata varsa Türkçe mesaj döner, yoksa null.
