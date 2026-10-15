@@ -5,7 +5,20 @@
 // yönlendirme istemci tarafında ttsSpeak() içinde dil tespitiyle yapılır.)
 // ============================================================
 
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { rateLimit } from './_rateLimit.mjs';
+import { originIzinliMi, istekKaynagi } from './_requestGuard.mjs';
+
+// Tarayıcı dışı (Origin/Referer'sız) istekler için: TTS_ADMIN_TOKEN tanımlıysa
+// X-Admin-Token zorunlu; tanımlı değilse eski davranış (izin) sürer.
+function adminTokenGecerli(req) {
+  const beklenen = process.env.TTS_ADMIN_TOKEN;
+  if (!beklenen) return true;
+  const gelen = req.headers['x-admin-token'];
+  if (typeof gelen !== 'string' || !gelen) return false;
+  const h = (s) => createHash('sha256').update(s).digest();
+  return timingSafeEqual(h(gelen), h(beklenen));
+}
 
 // "George - Warm, Captivating Storyteller" (ElevenLabs premade, en-GB) —
 // kullanıcının 2026-09-11'de onayladığı kalıcı anlatıcı ses (önceki Murat,
@@ -16,6 +29,11 @@ const DEFAULT_VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb';
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const kaynak = istekKaynagi(req);
+  if (kaynak ? !originIzinliMi(kaynak) : !adminTokenGecerli(req)) {
+    return res.status(kaynak ? 403 : 401).json({ error: kaynak ? 'İzin verilmeyen kaynak' : 'Yetkisiz istek' });
   }
 
   const rl = rateLimit(req, { key: 'tts-eleven', limit: 30, windowMs: 60_000 });

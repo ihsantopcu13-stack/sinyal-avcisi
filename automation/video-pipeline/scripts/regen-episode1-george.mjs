@@ -42,7 +42,7 @@ async function ffprobeDuration(filePath) {
 async function ttsGeorge(text, outPath) {
   const res = await fetch("https://sinyal-avcisi.com/api/tts-eleven", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...(process.env.TTS_ADMIN_TOKEN ? { "X-Admin-Token": process.env.TTS_ADMIN_TOKEN } : {}) },
     body: JSON.stringify({ text, speed: 1.0 }),
   });
   if (!res.ok) throw new Error(`TTS hata: ${res.status} ${await res.text()}`);
