@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07090d" />
+  <meta name="description" content="YDS/YÖKDİL sorularını fotoğraftan okuyup sinyalleri yakalayan, şıkları eleyen ve sesli çözüm üreten Sinyal Avcısı uygulaması." />
+  <title>Sinyal Avcısı — Soru Laboratuvarı</title>
+  <style>
+    :root {
+      --bg:#07090d; --panel:#10141c; --panel2:#151b25; --line:#263141;
+      --text:#f5f7fb; --muted:#98a5b8; --yellow:#ffd83d; --green:#48e39a;
+      --red:#ff5c71; --blue:#6ab8ff; --shadow:0 24px 70px rgba(0,0,0,.42);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at 12% 0%,rgba(255,216,61,.09),transparent 28%),radial-gradient(circle at 94% 18%,rgba(72,227,154,.08),transparent 26%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input,textarea{font:inherit} button{cursor:pointer}
+    .shell{width:min(1440px,100%);margin:auto;padding:20px 24px 60px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 0 24px}
+    .brand{display:flex;align-items:center;gap:13px}.target{width:46px;height:46px;border:2px solid var(--yellow);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 28px rgba(255,216,61,.22);position:relative}.target:before,.target:after{content:"";position:absolute;background:var(--yellow)}.target:before{width:58px;height:2px}.target:after{height:58px;width:2px}.target i{width:13px;height:13px;background:var(--red);border-radius:50%;box-shadow:0 0 16px var(--red);z-index:1}
+    .brand h1{font-size:18px;margin:0;letter-spacing:.02em}.brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .badge{border:1px solid rgba(72,227,154,.35);background:rgba(72,227,154,.08);color:var(--green);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:800;white-space:nowrap}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:stretch;margin-bottom:24px}
+    .hero-copy,.hero-flow{background:linear-gradient(145deg,rgba(20,26,36,.96),rgba(12,15,21,.96));border:1px solid var(--line);border-radius:26px;padding:30px;box-shadow:var(--shadow)}
+    .eyebrow{color:var(--yellow);font-size:12px;font-weight:900;letter-spacing:.17em;text-transform:uppercase}.hero h2{font-size:clamp(32px,4.8vw,68px);line-height:.96;letter-spacing:-.055em;margin:14px 0 18px;max-width:850px}.hero h2 span{color:var(--yellow)}.hero-copy>p{color:#bac4d3;font-size:16px;line-height:1.65;max-width:740px;margin:0}
+    .flow-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.flow-title strong{font-size:15px}.live-dot{display:flex;align-items:center;gap:7px;color:var(--green);font-size:12px}.live-dot i{width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green)}
+    .flow{display:grid;gap:9px}.flow-step{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}.flow-step b{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(255,216,61,.1);color:var(--yellow);font-size:12px}.flow-step span{font-size:13px}.flow-step small{color:var(--muted);margin-left:auto}
+    .tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 12px;scrollbar-width:none;position:sticky;top:0;background:linear-gradient(var(--bg) 80%,transparent);z-index:10}.tab{border:1px solid var(--line);background:#0e1219;color:var(--muted);padding:10px 14px;border-radius:12px;font-size:13px;font-weight:800;white-space:nowrap}.tab.active{color:#111;background:var(--yellow);border-color:var(--yellow)}
+    .workspace{display:grid;grid-template-columns:minmax(310px,.82fr) minmax(450px,1.18fr);gap:20px}.card{background:linear-gradient(180deg,rgba(17,22,31,.98),rgba(12,16,23,.98));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 21px;border-bottom:1px solid var(--line)}.card-head h3{font-size:15px;margin:0}.num{font-size:11px;background:rgba(255,216,61,.12);color:var(--yellow);border:1px solid rgba(255,216,61,.24);padding:5px 8px;border-radius:8px;font-weight:900}.card-body{padding:20px}
+    .upload{border:1px dashed #455267;border-radius:18px;padding:22px;text-align:center;background:rgba(255,255,255,.018);transition:.2s}.upload.drag{border-color:var(--yellow);background:rgba(255,216,61,.05)}.upload-icon{font-size:30px}.upload h4{margin:8px 0 5px}.upload p{color:var(--muted);font-size:12px;line-height:1.5;margin:0 0 15px}.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}.btn{border:1px solid var(--line);background:#171e29;color:var(--text);border-radius:11px;padding:10px 13px;font-weight:850;font-size:13px}.btn:hover{transform:translateY(-1px);border-color:#526078}.btn.primary{background:var(--yellow);border-color:var(--yellow);color:#141414}.btn.green{background:var(--green);border-color:var(--green);color:#062416}.btn.red{color:#fff;background:rgba(255,92,113,.12);border-color:rgba(255,92,113,.38)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .preview{display:none;margin-top:14px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff;max-height:310px}.preview img{display:block;width:100%;height:100%;object-fit:contain}.ocr-label{display:flex;justify-content:space-between;align-items:center;margin:17px 0 8px;font-size:12px;font-weight:900}.ocr-label span{color:var(--muted);font-weight:600}.ocr{width:100%;min-height:245px;resize:vertical;border:1px solid var(--line);border-radius:13px;background:#090c11;color:#e9edf4;padding:14px;line-height:1.55;font-size:13px;outline:none}.ocr:focus{border-color:var(--yellow);box-shadow:0 0 0 3px rgba(255,216,61,.08)}
+    .status{margin-top:12px;color:var(--muted);font-size:12px;min-height:18px}.status.good{color:var(--green)}.status.bad{color:var(--red)}
+    .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.signal-box{border:1px solid var(--line);border-radius:16px;padding:16px;background:rgba(255,255,255,.018)}.signal-box h4{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px}.sentence{line-height:1.9;font-size:16px}.mark-yellow{background:rgba(255,216,61,.15);color:var(--yellow);border-bottom:2px solid var(--yellow);padding:2px 3px}.mark-green{background:rgba(72,227,154,.12);color:var(--green);border-bottom:2px solid var(--green);padding:2px 3px}.mark-red{background:rgba(255,92,113,.1);color:#ff92a1;text-decoration:line-through;padding:2px 3px}.svo{display:flex;gap:8px;flex-wrap:wrap}.chip{border-radius:10px;padding:8px 10px;font-size:12px;font-weight:850}.chip.s{background:rgba(106,184,255,.1);color:var(--blue)}.chip.v{background:rgba(72,227,154,.1);color:var(--green)}.chip.o{background:rgba(255,216,61,.1);color:var(--yellow)}
+    .rule{grid-column:1/-1;border-left:3px solid var(--yellow);background:rgba(255,216,61,.055);padding:13px 15px;border-radius:0 12px 12px 0;color:#dce3ec;font-size:13px;line-height:1.55}.rule b{color:var(--yellow)}
+    .coach-challenge{margin-top:15px;padding:15px;border:1px solid rgba(255,216,61,.28);border-radius:15px;background:linear-gradient(135deg,rgba(255,216,61,.08),rgba(255,255,255,.018))}.coach-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.coach-top small{color:var(--yellow);font-weight:900;letter-spacing:.1em}.coach-top b{display:block;margin-top:5px;font-size:13px;line-height:1.5}.solution-state{flex:0 0 auto;border:1px solid rgba(255,216,61,.3);border-radius:999px;padding:6px 9px;color:var(--yellow);font-size:9px;font-weight:900}.coach-challenge .actions{justify-content:flex-start;margin-top:11px}.coach-feedback{font-size:12px;line-height:1.55;color:var(--muted);margin-top:10px;min-height:18px}.coach-feedback.good{color:var(--green)}.coach-feedback.bad{color:#ff9baa}
+    .options{display:grid;gap:9px;margin-top:14px}.option{appearance:none;width:100%;color:var(--text);text-align:left;display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:13px;background:#0c1017}.option .letter{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:#1c2431;font-weight:900}.option .why{font-size:11px;color:var(--muted);margin-top:3px}.option.bad{border-color:rgba(255,92,113,.27)}.option.bad .letter{color:var(--red);background:rgba(255,92,113,.1)}.option.good{border-color:rgba(72,227,154,.5);box-shadow:0 0 0 2px rgba(72,227,154,.055)}.option.good .letter{color:#061f14;background:var(--green)}.verdict{font-size:11px;font-weight:900}.bad .verdict{color:var(--red)}.good .verdict{color:var(--green)}
+    .student-mode .option.bad,.student-mode .option.good{border-color:var(--line);box-shadow:none}.student-mode .option.bad .letter,.student-mode .option.good .letter{color:var(--text);background:#1c2431}.student-mode .option .why,.student-mode .option .verdict,.student-mode .result-banner{display:none}.student-mode .option:hover{border-color:var(--yellow);background:rgba(255,216,61,.045);transform:translateY(-1px)}.student-mode .option.picked-wrong{border-color:rgba(255,92,113,.7);background:rgba(255,92,113,.075)}.student-mode .option.picked-wrong .letter{color:var(--red);background:rgba(255,92,113,.12)}.student-mode .mark-yellow,.student-mode .mark-green,.student-mode .chip.v{font-size:0}.student-mode .mark-yellow:after{content:'____ last December by NASA';font-size:16px;color:var(--yellow)}.student-mode .mark-green:after{content:'____';font-size:16px;color:var(--green)}.student-mode .chip.v:after{content:'V · ?';font-size:12px;color:var(--green)}
+    .result-banner{margin-top:14px;border-radius:15px;padding:15px;background:linear-gradient(90deg,rgba(72,227,154,.13),rgba(72,227,154,.03));border:1px solid rgba(72,227,154,.3);display:flex;align-items:center;gap:12px}.result-banner strong{color:var(--green)}.result-banner p{margin:3px 0 0;color:#c4cfdb;font-size:12px}
+    .lower{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}.lesson-contract{margin-bottom:16px;padding:14px;border:1px solid rgba(72,227,154,.24);border-radius:15px;background:rgba(72,227,154,.045)}.lesson-contract>small{color:var(--green);font-weight:900;letter-spacing:.1em}.lesson-contract>strong{display:block;margin:5px 0 11px;font-size:13px;line-height:1.5}.gain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.gain{padding:8px 6px;border-radius:9px;background:#0b1016;border:1px solid var(--line);color:var(--muted);font-size:10px;font-weight:800;text-align:center}.gain.done{color:var(--green);border-color:rgba(72,227,154,.42);background:rgba(72,227,154,.08)}.gain.done:before{content:'✓ ';}.voice-row{display:flex;align-items:center;gap:13px;flex-wrap:wrap}.voice-orb{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(72,227,154,.1);border:1px solid rgba(72,227,154,.28);font-size:20px}.voice-meta{flex:1;min-width:180px}.voice-meta b{font-size:13px}.voice-meta p{margin:4px 0;color:var(--muted);font-size:11px}.voice-select{width:100%;margin-top:9px;border:1px solid var(--line);border-radius:9px;background:#090c11;color:var(--text);padding:8px 10px;font-size:11px}.teacher-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}.teacher-tools .btn{padding:10px 8px;font-size:11px}.teacher-tools .btn.active{color:#101216;background:var(--yellow);border-color:var(--yellow)}.teacher-stage{margin:13px 0;padding:15px;border-radius:15px;background:rgba(106,184,255,.06);border:1px solid rgba(106,184,255,.18)}.teacher-stage span{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.1em}.teacher-stage p{margin:7px 0 0;color:#e1e7ef;font-size:13px;line-height:1.65;min-height:44px}.teacher-path{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}.teacher-path i{height:4px;border-radius:9px;background:#273142}.teacher-path i.on{background:var(--yellow);box-shadow:0 0 10px rgba(255,216,61,.3)}.progress{height:5px;background:#242e3e;border-radius:99px;overflow:hidden;margin-top:8px}.progress i{display:block;width:0;height:100%;background:var(--green);transition:width .35s}.micro-check{margin-top:13px;padding:13px;border:1px solid var(--line);border-radius:13px;background:#0b0f15}.micro-check b{display:block;font-size:12px;margin-bottom:9px}.micro-check .actions{justify-content:flex-start}.check-feedback{font-size:11px;line-height:1.5;color:var(--muted);margin-top:9px;min-height:17px}.check-feedback.good{color:var(--green)}.check-feedback.bad{color:var(--red)}.memory-card{margin-top:12px;padding:13px;border:1px solid rgba(255,216,61,.25);border-radius:13px;background:rgba(255,216,61,.045)}.memory-card small{color:var(--yellow);font-weight:900}.memory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}.memory-grid span{font-size:10px;line-height:1.45;color:#cdd6e2;padding:8px;border-radius:8px;background:#0c1118}.memory-grid b{color:var(--text)}.teaching-focus{animation:teacherFocus 1.15s ease-in-out infinite alternate}@keyframes teacherFocus{from{box-shadow:0 0 0 1px rgba(255,216,61,.15)}to{box-shadow:0 0 0 4px rgba(255,216,61,.24),0 0 24px rgba(255,216,61,.13)}}.video-wrap{display:grid;grid-template-columns:132px 1fr;gap:15px;align-items:center}.phone{aspect-ratio:9/16;border-radius:17px;padding:8px;background:#050608;border:1px solid #313b4b;box-shadow:inset 0 0 0 3px #111823}.phone-screen{height:100%;border-radius:11px;background:radial-gradient(circle at top right,rgba(255,216,61,.16),transparent 35%),#0b0f15;padding:12px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}.phone-screen small{font-size:6px;color:var(--yellow);font-weight:900}.phone-q{font-size:7px;line-height:1.4;font-weight:800}.phone-signal{font-size:6px;color:var(--green);border:1px solid rgba(72,227,154,.3);border-radius:6px;padding:6px}.phone-bottom{font-size:6px;color:#9eabba}.video-copy p{color:var(--muted);font-size:12px;line-height:1.55}.video-copy .btn{margin-top:6px}.video-copy .btn.is-speaking{background:var(--red);border-color:var(--red);color:#fff}.video-status{display:flex;align-items:center;gap:7px;min-height:18px;margin-top:9px;color:var(--muted);font-size:10px;line-height:1.4}.video-status.live{color:var(--green)}.sound-wave{display:inline-flex;align-items:center;gap:2px;height:12px}.sound-wave i{display:block;width:2px;height:4px;border-radius:2px;background:currentColor}.video-status.live .sound-wave i{animation:soundWave .65s ease-in-out infinite alternate}.video-status.live .sound-wave i:nth-child(2){animation-delay:.16s;height:9px}.video-status.live .sound-wave i:nth-child(3){animation-delay:.32s;height:6px}@keyframes soundWave{to{height:12px}}
+    .generated{display:grid;gap:10px}.gen-q{border:1px solid var(--line);border-radius:14px;padding:13px;background:#0c1017}.gen-q h4{font-size:12px;line-height:1.55;margin:0 0 10px}.gen-tag{display:inline-block;color:var(--yellow);font-size:9px;font-weight:900;margin-bottom:6px}.gen-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.gen-opt{border:1px solid var(--line);background:#141b25;color:#dce3ec;border-radius:9px;padding:8px;text-align:left;font-size:10px}.gen-opt:hover{border-color:var(--yellow)}.gen-opt.wrong{border-color:var(--red);color:#ff9baa}.gen-opt.right{border-color:var(--green);color:var(--green);background:rgba(72,227,154,.07)}.gen-feedback{font-size:10px;line-height:1.5;color:var(--muted);margin-top:9px;min-height:15px}.gen-feedback.good{color:var(--green)}.gen-feedback.bad{color:#ff9baa}.learning-locked .phone-bottom{font-size:0}.learning-locked .phone-bottom:after{content:'Cevap, siz seçtikten sonra açılacak';font-size:6px;color:#9eabba}
+    .empty{padding:28px 10px;text-align:center;color:var(--muted);font-size:13px}.footer{display:flex;justify-content:space-between;gap:20px;color:#69778b;font-size:11px;padding:26px 4px 0}.hidden{display:none!important}
+    @media(max-width:980px){.hero,.workspace,.lower{grid-template-columns:1fr}.hero h2{font-size:48px}.hero-flow{padding:22px}.workspace{gap:16px}.left{order:0}.right{order:1}}
+    @media(max-width:620px){.shell{padding:12px 12px 40px}.topbar{padding-bottom:14px}.brand p{display:none}.badge{font-size:10px;padding:7px 9px}.hero-copy,.hero-flow{padding:20px;border-radius:19px}.hero h2{font-size:39px}.hero-copy>p{font-size:14px}.analysis-grid{grid-template-columns:1fr}.rule{grid-column:auto}.card{border-radius:18px}.card-head,.card-body{padding:16px}.teacher-tools{grid-template-columns:1fr 1fr}.gain-grid{grid-template-columns:1fr 1fr}.video-wrap{grid-template-columns:110px 1fr}.gen-options{grid-template-columns:1fr}.footer{flex-direction:column}.flow-step small{display:none}}
+  </style>
+</head>
+<body class="learning-locked">
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="target"><i></i></div><div><h1>SİNYAL AVCISI</h1><p>AVCI ÖSYM DNA MOTORU · SORU LABORATUVARI</p></div></div>
+      <div class="badge">ÖRNEK DERS</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Fotoğrafı yükle · Sinyali yakala</div>
+        <h2>Çevirme. <span>Yapıyı gör.</span><br/>Şıkkı avla.</h2>
+        <p>YDS/YÖKDİL sorusunu fotoğraftan alır, cümlenin iskeletini çıkarır, kritik sinyalleri gösterir, tuzak şıkları eler ve çözümü sesli derse dönüştürür.</p>
+      </div>
+      <div class="hero-flow">
+        <div class="flow-title"><strong>TEK SORU · 5 ÇIKTI</strong><span class="live-dot"><i></i> Sistem hazır</span></div>
+        <div class="flow">
+          <div class="flow-step"><b>01</b><span>Fotoğrafı oku</span><small>OCR</small></div>
+          <div class="flow-step"><b>02</b><span>Sinyalleri işaretle</span><small>S+V+O</small></div>
+          <div class="flow-step"><b>03</b><span>Şıkları ele</span><small>AVCI</small></div>
+          <div class="flow-step"><b>04</b><span>Sesli video hazırla</span><small>9:16</small></div>
+          <div class="flow-step"><b>05</b><span>Benzer soru üret</span><small>TEKRAR</small></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="Uygulama adımları">
+      <button class="tab active" data-go="uploadCard">1 · Soru</button>
+      <button class="tab" data-go="analysisCard">2 · Sinyaller</button>
+      <button class="tab" data-go="optionsArea">3 · Şık eleme</button>
+      <button class="tab" data-go="voiceCard">4 · Sesli video</button>
+      <button class="tab" data-go="similarCard">5 · Benzer sorular</button>
+    </nav>
+
+    <section class="workspace">
+      <article class="card left" id="uploadCard">
+        <div class="card-head"><h3>SORUYU İÇERİ AL</h3><span class="num">01</span></div>
+        <div class="card-body">
+          <div class="upload" id="dropZone">
+            <div class="upload-icon">⌁</div><h4>Soru fotoğrafını bırakın</h4>
+            <p>JPG veya PNG · Net, düz ve iyi ışıklı fotoğraf en iyi sonucu verir.</p>
+            <div class="actions"><button class="btn primary" id="chooseBtn">Fotoğraf Seç</button><button class="btn" id="sampleBtn">Örnek Soruyu Aç</button></div>
+            <input id="fileInput" type="file" accept="image/png,image/jpeg" hidden />
+          </div>
+          <div class="preview" id="preview"><img id="previewImg" alt="Yüklenen soru fotoğrafı" /></div>
+          <div class="ocr-label"><b>OKUNAN / DÜZENLENEBİLİR METİN</b><span>İngilizce OCR</span></div>
+          <textarea class="ocr" id="ocrText" spellcheck="false" aria-label="Sorunun OCR metni"></textarea>
+          <div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="btn green" id="analyzeBtn">Sinyalleri Yakala</button><button class="btn" id="clearBtn">Temizle</button></div>
+          <div class="status good" id="ocrStatus">Örnek soru hazır. “Sinyalleri Yakala”ya basın.</div>
+        </div>
+      </article>
+
+      <article class="card right" id="analysisCard">
+        <div class="card-head"><h3>AVCI ÇÖZÜMLEMESİ</h3><span class="num">02–03</span></div>
+        <div class="card-body" id="analysisEmpty"><div class="empty">Analiz için soldaki sarı düğmeye basın.<br/>Sistem önce fiili ve cümle iskeletini bulacak.</div></div>
+        <div class="card-body hidden student-mode" id="analysisResult">
+          <div class="analysis-grid">
+            <div class="signal-box"><h4>Yapısal sinyaller</h4><div class="sentence">The James Webb Space Telescope, <span class="mark-yellow">launched last December by NASA</span>, <span class="mark-green">is</span> the largest and most powerful telescope ever sent into space.</div></div>
+            <div class="signal-box"><h4>S + V + O iskeleti</h4><div class="svo"><span class="chip s">S · The telescope</span><span class="chip v">V · is</span><span class="chip o">O · the largest telescope</span></div><p style="font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0 0">Virgüllerin arası ana cümlenin parçası değil; teleskopu açıklayan kısaltılmış edilgen yan yapıdır.</p></div>
+            <div class="rule"><b>AVCI REFLEKSİ:</b> “by + yapan kişi” görünce edilgen anlam ve V3 ara. Ana cümlenin fiili boşsa ikinci boşluk çekimli fiil olmalı. Anlamı en son doğrula.</div>
+          </div>
+          <div class="coach-challenge" id="coachChallenge">
+            <div class="coach-top"><div><small>SIRA SENDE · HOCA CEVABINI BEKLİYOR</small><b>Birinci boşluğun sağına bak. En güçlü sinyali bul ve şıkkını seç.</b></div><span class="solution-state" id="solutionState">🔒 CEVAP GİZLİ</span></div>
+            <div class="actions"><button class="btn" id="hintBtn">💡 İpucu İste</button><button class="btn" id="revealBtn">👨‍🏫 Hocadan Çözümü Gör</button></div>
+            <div class="coach-feedback" id="coachFeedback">Önce siz düşünün. Yanlış seçerseniz hoca doğru cevabı hemen söylemeden düşünce hatanızı gösterecek.</div>
+          </div>
+          <div class="options" id="optionsArea">
+            <button class="option bad" data-answer="A"><span class="letter">A</span><span><b>launching / was</b><span class="why">“by NASA” ile active -ing uyuşmaz; “was” güncel tanımı bozar.</span></span><span class="verdict">ELENDİ</span></button>
+            <button class="option bad" data-answer="B"><span class="letter">B</span><span><b>to be launched / has been</b><span class="why">Geçmişte tamamlanmış “last December” için amaç/gelecek yapısı olmaz.</span></span><span class="verdict">ELENDİ</span></button>
+            <button class="option good" data-answer="C"><span class="letter">C</span><span><b>launched / is</b><span class="why">V3 edilgen kısaltma + ana cümlede güncel gerçek.</span></span><span class="verdict">DOĞRU</span></button>
+            <button class="option bad" data-answer="D"><span class="letter">D</span><span><b>to launch / will be</b><span class="why">Teleskop NASA’yı fırlatmaz; ayrıca olay gelecekte değil.</span></span><span class="verdict">ELENDİ</span></button>
+            <button class="option bad" data-answer="E"><span class="letter">E</span><span><b>having launched / would be</b><span class="why">Etken anlam ve varsayımsal “would” cümleye uymuyor.</span></span><span class="verdict">ELENDİ</span></button>
+          </div>
+          <div class="result-banner" id="resultBanner"><div style="font-size:26px">✓</div><div><strong>CEVAP: C</strong><p>Çeviri yapmadan iki sinyal: <b>by NASA → V3</b>, ana cümle → <b>is</b>.</p></div></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="lower">
+      <article class="card" id="voiceCard">
+        <div class="card-head"><h3>ÖĞRETMEN MODU + SESLİ DERS</h3><span class="num">04</span></div>
+        <div class="card-body">
+          <div class="lesson-contract"><small>BU DERSİN KAZANIMI</small><strong>Ders sonunda cevabı ezberlemek yerine dört işi tek başınıza yapabileceksiniz:</strong><div class="gain-grid"><span class="gain" data-gain="0">Fiili bul</span><span class="gain" data-gain="1">Yapıyı tanı</span><span class="gain" data-gain="2">Sinyali söyle</span><span class="gain" data-gain="3">Şıkkı gerekçelendir</span></div></div>
+          <div class="voice-row"><div class="voice-orb">🎓</div><div class="voice-meta"><b>George öğretmen anlatımı</b><p>Önce fiil, sonra yapı, ardından sinyal ve şık eleme.</p><div class="voice-select" id="voiceProvider" aria-live="polite">Sesli anlatım yakında</div><div class="progress"><i id="voiceProgress"></i></div></div><button class="btn green" id="speakBtn" disabled>▶ George ile Anlat</button></div>
+          <div class="teacher-tools" aria-label="Anlatım seçenekleri">
+            <button class="btn" data-lesson="quick">⚡ 45 Saniyede Çöz</button>
+            <button class="btn active" data-lesson="teacher">👨‍🏫 Hoca Gibi Anlat</button>
+            <button class="btn" data-lesson="simple">🧩 Daha Basit Anlat</button>
+            <button class="btn" data-action="repeat">🔁 Tekrar Anlat</button>
+            <button class="btn" data-action="slow">🐢 Yavaş Seslendir</button>
+            <button class="btn" data-go-teacher="similarCard">🎯 Benzer Soru Çöz</button>
+          </div>
+          <div style="margin:-7px 0 15px"><button class="btn" data-lesson="until" style="width:100%;padding:10px 8px;font-size:11px">⏳ Zaman Sinyali Dersi</button></div>
+          <div class="teacher-stage" aria-live="polite"><span id="teacherStep">DERS HAZIR · HOCA MODU</span><p id="teacherLine">Hocam, önce fiili bulacağız. Sonra boşluğun sağına bakıp sinyalle şıkları eleyeceğiz.</p><div class="teacher-path" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+          <div class="micro-check" id="microCheck">
+            <b>Transfer kontrolü: “built by engineers” görürseniz boşluktaki fiilin hangi biçimini ararsınız?</b>
+            <div class="actions"><button class="btn" data-check="wrong">V-ing</button><button class="btn" data-check="right">V3</button><button class="btn" data-check="wrong">to + V1</button></div>
+            <div class="check-feedback" id="checkFeedback">Kuralı yeni bir örneğe taşıyın; sonra hoca gerekçesini açıklasın.</div>
+          </div>
+          <div class="memory-card hidden" id="memoryCard"><small>AVCI HAFIZA KARTI</small><div class="memory-grid"><span><b>Sinyal:</b> by + yapan kişi</span><span><b>Karar:</b> edilgen yapı</span><span><b>Fiil biçimi:</b> V3</span><span><b>Son kontrol:</b> Ana fiil ayrıca var mı?</span></div></div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:20px 0" />
+          <div class="video-wrap"><div class="phone"><div class="phone-screen" id="phoneScreen"><small>SİNYAL AVCISI</small><div class="phone-q">The James Webb Space Telescope, ____ last December by NASA, ____ the largest...</div><div class="phone-signal" id="phoneSignal">🎯 by NASA → EDİLGEN → V3</div><div class="phone-bottom" id="phoneBottom">CEVAP: C · launched / is</div></div></div><div class="video-copy"><b>George sesli Reels / Shorts</b><p>9:16 düzen, büyük altyazı, sarı sinyal, yeşil doğru cevap ve gerçek ElevenLabs George anlatımı. Başka sese otomatik geçilmez.</p><button class="btn primary" id="videoBtn" disabled>🔊 George ile Sesli Oynat</button><div class="video-status" id="videoStatus" aria-live="polite"><span class="sound-wave" aria-hidden="true"><i></i><i></i><i></i></span><span>Sesli anlatım yakında</span></div></div></div>
+        </div>
+      </article>
+
+      <article class="card" id="similarCard">
+        <div class="card-head"><h3>BENZER SORU ANTRENMANI</h3><span class="num">05</span></div>
+        <div class="card-body"><div class="generated" id="generated"><div class="empty">Aynı sinyal yapısından yeni sorular üretin.</div></div><div class="actions" style="justify-content:flex-start;margin-top:14px"><button class="btn primary" id="generateBtn">3 Benzer Soru Üret</button><button class="btn" id="untilBtn">⏳ Zaman Sinyali Soruları</button><button class="btn" id="saveBtn">Çalışmayı Kaydet</button></div><div class="status" id="saveStatus"></div></div>
+      </article>
+    </section>
+
+    <footer class="footer"><span>Sinyal Avcısı · Çeviri değil, yapı ve sinyal refleksi.</span><span>Beta 1.1 · Öğreten Hoca Modu</span><span>Örnek soru üzerinde çalışır</span></footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script>
+    const sample = `The James Webb Space Telescope, ____ last December by NASA, ____ the largest and most powerful telescope ever sent into space.\n\nA) launching / was\nB) to be launched / has been\nC) launched / is\nD) to launch / will be\nE) having launched / would be`;
+    const lessons = {
+      teacher:[
+        {label:'1 · BUGÜNKÜ HEDEF',text:'Hocam, bu derste cevabı ezberlemeyeceğiz. Fiili bulmayı, yapıyı tanımayı, sinyali söylemeyi ve yanlış şıkkı gerekçesiyle elemeyi öğreneceğiz.',pause:520,focus:'.lesson-contract',gain:0},
+        {label:'2 · SİNYAL',text:'Önce birinci boşluğun sağına bakın. Last December ve by NASA sözlerini görüyoruz. En güçlü işaretimiz by NASA.',pause:620,focus:'.mark-yellow',gain:2},
+        {label:'3 · KURAL',text:'By artı işi yapan kişi, edilgen yapıyı gösterir. Edilgen kısaltmada fiilin üçüncü hâlini ararız.',pause:650,focus:'.rule',gain:1},
+        {label:'4 · NEDEN',text:'Çünkü fırlatma işini teleskop yapmadı. NASA yaptı. Teleskop fırlatıldı. Yani özne işi yapan değil, işten etkilenendir.',pause:700,focus:'.sentence'},
+        {label:'5 · NASIL TANIRIM',text:'Kendinize şu soruyu sorun: İşi özne mi yaptı, yoksa işi başkası mı yaptı? Başkası yaptıysa edilgen yapı ve V üç arayın.',pause:650,focus:'.rule'},
+        {label:'6 · S ARTI V ARTI O',text:'Şimdi ana cümleye dönün. Özne teleskop. Ana fiil ikinci boşlukta. Yani ikinci boşluk çekimli bir fiil istemek zorunda.',pause:650,focus:'.svo',gain:0},
+        {label:'7 · ÖSYM TUZAĞI',text:'ÖSYM size anlamı yakın görünen ing, to ve would biçimlerini gösterebilir. Biz görüntüye değil; özne, fiil ve sinyale bakacağız.',pause:650,focus:'.options'},
+        {label:'8 · ŞİMDİ SEN',text:'Cevabı ben söylemiyorum. Üç, iki, bir. Birinci boşluk için edilgen biçimi, ikinci boşluk için ana fiili birlikte düşünün ve şıkkınızı seçin.',pause:0,focus:'.options',waitForAnswer:true}
+      ],
+      quick:[
+        {label:'1 · FİİLİ BUL',text:'Ana cümlenin fiili boş. Güncel gerçek olduğu için ikinci boşluk is.',pause:350,focus:'.chip.v'},
+        {label:'2 · SİNYALİ BUL',text:'Birinci boşluğun sağındaki by NASA, edilgen yapı sinyalidir.',pause:350,focus:'.mark-yellow'},
+        {label:'3 · ŞIKKI ELE',text:'Edilgen yapı için V üç, yani launched gerekir. Launched ve is yalnızca C şıkkında.',pause:350,focus:'.option.good'},
+        {label:'4 · REFLEKS',text:'Cevap C. By artı yapan kişi; edilgen yapı; V üç.',pause:0,focus:'.result-banner'}
+      ],
+      simple:[
+        {label:'1 · ÇOK BASİT BAŞLAYALIM',text:'Hocam, bu cümlede iki boşluk var. Biz yalnızca iki küçük işaret arayacağız.',pause:600,focus:'.sentence'},
+        {label:'2 · KİM YAPTI',text:'NASA teleskobu fırlattı. Teleskop, NASA tarafından fırlatıldı. Yani işi teleskop yapmadı.',pause:700,focus:'.mark-yellow'},
+        {label:'3 · KISA KURAL',text:'İşi başkası yaptıysa edilgen yapı vardır. By NASA sözünü görünce fiilin üçüncü hâlini arıyoruz.',pause:650,focus:'.rule'},
+        {label:'4 · ANA FİİL',text:'Virgüllerin dışına bakın. Özne teleskop; ana fiil ikinci boşlukta olmalı.',pause:650,focus:'.svo'},
+        {label:'5 · ŞİMDİ SEN',text:'Ben cevabı söylemeden siz seçin. By NASA için V üç; ana cümle için çekimli fiil arayın.',pause:0,focus:'.options',waitForAnswer:true}
+      ],
+      until:[
+        {label:'1 · SİNYAL',text:'Zaman bağlacı görürseniz durun. Until, when, before gibi bir bağlaçtan sonra geçmiş zamanlı bir fiil varsa, bu sizin sinyalinizdir.',pause:620,focus:'.sentence'},
+        {label:'2 · KURAL',text:'Yan cümlenin fiili geçmiş zamandaysa, ana cümle de geçmiş zamanda olmalıdır. Şimdiki zaman, gelecek ve have has kalıpları bu sinyale uymaz.',pause:650,focus:'.rule'},
+        {label:'3 · KİM YAPTI',text:'Sonra özneye bakın. Özne işi yapıyorsa etken, işten etkileniyorsa edilgen yapı arayın. Boşluktan sonra nesne varsa etken olma ihtimali yüksektir.',pause:650,focus:'.svo'},
+        {label:'4 · ŞİMDİ SEN',text:'Cevabı ben söylemiyorum. Aşağıdaki Zaman Sinyali sorularından birini açın. Önce bağlaçtan sonraki fiile bakın, sonra özneyi sorgulayın ve şıkkınızı seçin.',pause:0,focus:'#generated'}
+      ]
+    };
+    const el = id => document.getElementById(id);
+    const fileInput=el('fileInput'), preview=el('preview'), previewImg=el('previewImg'), ocrText=el('ocrText'), status=el('ocrStatus');
+    ocrText.value=sample;
+    el('chooseBtn').onclick=()=>fileInput.click();
+    el('sampleBtn').onclick=()=>{ocrText.value=sample;preview.style.display='none';setStatus('Örnek soru yüklendi. Analize hazır.',true)};
+    el('clearBtn').onclick=()=>{ocrText.value='';preview.style.display='none';el('analysisResult').classList.add('hidden');el('analysisEmpty').classList.remove('hidden');setStatus('Alan temizlendi.',false)};
+    function setStatus(msg,good){status.textContent=msg;status.className='status '+(good?'good':'')}
+    async function readFile(file){
+      if(!file) return;
+      if(!/image\/(png|jpeg)/.test(file.type)){setStatus('Yalnızca JPG veya PNG yükleyin.',false);status.classList.add('bad');return}
+      previewImg.src=URL.createObjectURL(file);preview.style.display='block';setStatus('Fotoğraf açıldı. İngilizce metin okunuyor…',false);
+      if(!window.Tesseract){setStatus('OCR bağlantısı kurulamadı. Metni kutuya yapıştırıp devam edebilirsiniz.',false);return}
+      try{
+        const out=await Tesseract.recognize(file,'eng',{logger:m=>{if(m.status==='recognizing text') setStatus('Metin okunuyor: %'+Math.round((m.progress||0)*100),false)}});
+        const clean=(out.data.text||'').trim(); if(clean) ocrText.value=clean;
+        setStatus(clean?'Fotoğraftaki metin okundu. Gerekirse düzeltip analiz edin.':'Metin seçilemedi; kutuya elle yazabilirsiniz.',!!clean);
+      }catch(err){setStatus('OCR tamamlanamadı. Metni elle düzenleyip analize devam edin.',false)}
+    }
+    fileInput.onchange=e=>readFile(e.target.files[0]);
+    const dz=el('dropZone'); ['dragenter','dragover'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add('drag')})); ['dragleave','drop'].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove('drag')})); dz.addEventListener('drop',e=>readFile(e.dataTransfer.files[0]));
+    let solutionRevealed=false,hintLevel=0,wrongAttempts=0;
+    const diagnoses={
+      A:'SİNYALİ GÖREMEME · “launching” etken biçimdir. “by NASA” ise işi NASA’nın yaptığını gösterir. Cevabı açmadan bir kez daha deneyin.',
+      B:'BİLGİ EKSİĞİ · “to be launched” amaç veya gelecek yönü taşır; “last December” tamamlanmış bir zamanı gösterir. Zaman sinyalini yeniden kontrol edin.',
+      D:'ACELE / YANLIŞ YÖNTEM · “to launch” özneyi işi yapan gibi gösterir; “will be” ise geçmişteki olayla uyuşmaz. Özne işi yaptı mı, etkilendi mi?',
+      E:'FAZLA KARMAŞIKLAŞTIRMA · “having launched” etken anlam taşır; “would” için de cümlede varsayım desteği yok. En güçlü işarete geri dönün: by NASA.'
+    };
+    function markGain(index){const item=document.querySelector('[data-gain="'+index+'"]');if(item)item.classList.add('done')}
+    function resetLearningMode(){
+      solutionRevealed=false;hintLevel=0;wrongAttempts=0;document.body.classList.add('learning-locked');
+      el('analysisResult').classList.add('student-mode');document.querySelectorAll('[data-answer]').forEach(b=>b.classList.remove('picked-wrong'));
+      document.querySelectorAll('[data-gain]').forEach(x=>x.classList.remove('done'));el('memoryCard').classList.add('hidden');
+      el('solutionState').textContent='🔒 CEVAP GİZLİ';el('hintBtn').disabled=false;el('revealBtn').disabled=false;
+      el('coachFeedback').className='coach-feedback';el('coachFeedback').textContent='Önce siz düşünün. Yanlış seçerseniz hoca doğru cevabı hemen söylemeden düşünce hatanızı gösterecek.';
+    }
+    function revealSolution(reason='teacher'){
+      if(solutionRevealed)return;solutionRevealed=true;document.body.classList.remove('learning-locked');el('analysisResult').classList.remove('student-mode');
+      el('solutionState').textContent='🔓 ÇÖZÜM AÇIK';el('hintBtn').disabled=true;el('revealBtn').disabled=true;el('memoryCard').classList.remove('hidden');
+      [0,1,2,3].forEach(markGain);const f=el('coachFeedback');f.className='coach-feedback good';
+      f.textContent=reason==='correct'?'✓ Doğru hocam. Sadece cevabı değil, yolu da buldunuz: by NASA → edilgen → V3; ana cümle → çekimli fiil.':'Hoca çözümü açtı. Şimdi her elenen şıkkın altındaki kısa gerekçeyi okuyun; sonra transfer sorusunu çözün.';
+      el('teacherStep').textContent='CEVAP + GEREKÇE';el('teacherLine').textContent='Doğru cevap C. Asıl kazanım şu: by artı yapan kişi görünce edilgen biçimi, ana cümlede ise çekimli fiili arıyoruz. Çeviri en son kontrol.';
+    }
+    function chooseMainAnswer(letter,button){
+      if(solutionRevealed)return;
+      if(letter==='C'){
+        revealSolution('correct');
+        if(teacherAwaitingAnswer)speakTeacherFeedback(true);
+        setTimeout(()=>el('resultBanner').scrollIntoView({behavior:'smooth',block:'center'}),120);
+      }else{
+        wrongAttempts++;button.classList.add('picked-wrong');const f=el('coachFeedback');f.className='coach-feedback bad';f.textContent='✗ '+diagnoses[letter];
+        el('teacherStep').textContent='HATA TÜRÜNÜ YAKALADIM';el('teacherLine').textContent=diagnoses[letter];
+        if(teacherAwaitingAnswer)speakTeacherFeedback(false,letter);
+      }
+    }
+    document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>chooseMainAnswer(b.dataset.answer,b));
+    el('hintBtn').onclick=()=>{
+      const hints=['1. ipucu: Boşluğun yalnız soluna değil, hemen sağına bakın.','2. ipucu: “by NASA”, işi yapan kişiyi gösteriyor. Özne işi yapan değil.','3. ipucu: Birinci boşlukta edilgen V3; ikinci boşlukta ana cümlenin çekimli fiili birlikte aranmalı.'];
+      const f=el('coachFeedback');f.className='coach-feedback';f.textContent=hints[Math.min(hintLevel,hints.length-1)];hintLevel++;markGain(2);if(hintLevel>=hints.length)el('hintBtn').disabled=true;
+    };
+    el('revealBtn').onclick=()=>revealSolution('teacher');
+    el('analyzeBtn').onclick=()=>{
+      if(ocrText.value.trim().length<20){setStatus('Önce soru metnini ekleyin.',false);status.classList.add('bad');return}
+      resetLearningMode();el('analysisEmpty').classList.add('hidden');el('analysisResult').classList.remove('hidden');setStatus('Sinyaller bulundu. Doğru cevap siz seçene kadar gizli.',true);activate(1);el('analysisCard').scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    function activate(i){document.querySelectorAll('.tab').forEach((b,n)=>b.classList.toggle('active',n===i))}
+    document.querySelectorAll('.tab').forEach((b,i)=>b.onclick=()=>{activate(i);el(b.dataset.go).scrollIntoView({behavior:'smooth',block:'start'})});
+    let speaking=false, lessonRun=0, selectedLesson='teacher', speechRate=.95, currentSegments=lessons.teacher,teacherAwaitingAnswer=false;
+    let georgeReady=false,activeAudio=null,activeRequest=null;
+    const georgeAudioCache=new Map();
+    function setGeorgeControls(ready,message){
+      georgeReady=ready;el('speakBtn').disabled=!ready;el('videoBtn').disabled=!ready;
+      el('voiceProvider').textContent=message;setVideoStatus(message,ready);
+    }
+    function checkGeorge(){
+      // Sessiz mod: ses servisine istek atılmaz; dersler yazılı olarak adım adım ilerler.
+      setGeorgeControls(false,'Sesli anlatım yakında');
+      document.querySelector('[data-action="slow"]').disabled=true;
+    }
+    function speakLabel(text){if(georgeReady)el('speakBtn').textContent=text}
+    function stopGeorge(){
+      if(activeRequest){activeRequest.abort();activeRequest=null}
+      if(activeAudio){activeAudio.pause();activeAudio.removeAttribute('src');activeAudio.load();activeAudio=null}
+    }
+    async function playGeorge(text){
+      if(!georgeReady){await new Promise(resolve=>setTimeout(resolve,Math.max(2600,text.length*55)));return}
+      stopGeorge();const cacheKey=speechRate+'|'+text;let audioUrl=georgeAudioCache.get(cacheKey);
+      if(!audioUrl){
+        activeRequest=new AbortController();
+        const response=await fetch('/api/george',{method:'POST',headers:{'content-type':'application/json',accept:'audio/mpeg'},body:JSON.stringify({text,speed:speechRate}),signal:activeRequest.signal});
+        activeRequest=null;
+        if(!response.ok){let message='George sesi üretilemedi';try{const data=await response.json();if(data.error)message=data.error}catch(error){}throw new Error(message)}
+        audioUrl=URL.createObjectURL(await response.blob());georgeAudioCache.set(cacheKey,audioUrl);
+      }
+      const audio=new Audio(audioUrl);activeAudio=audio;
+      await new Promise((resolve,reject)=>{audio.onended=resolve;audio.onerror=()=>reject(new Error('George sesi oynatılamadı'));audio.play().catch(reject)});
+      if(activeAudio===audio)activeAudio=null;
+    }
+    checkGeorge();
+    function startLesson(mode=selectedLesson){
+      if(typeof videoSpeaking!=='undefined'&&videoSpeaking){videoRun++;stopGeorge();finishVideoVoice(false)}
+      if(speaking){lessonRun++;stopGeorge();finishVoice(false);return}
+      selectedLesson=mode;currentSegments=lessons[mode];teacherAwaitingAnswer=false;
+      document.querySelectorAll('[data-lesson]').forEach(b=>b.classList.toggle('active',b.dataset.lesson===mode));
+      if(mode==='until')el('untilBtn').click();
+      speaking=true;lessonRun++;const run=lessonRun;speakLabel('■ Dersi Durdur');speakLessonPart(0,run)
+    }
+    el('speakBtn').onclick=()=>startLesson(selectedLesson);
+    document.querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>{if(speaking){lessonRun++;stopGeorge();speaking=false}startLesson(b.dataset.lesson)});
+    document.querySelector('[data-action="repeat"]').onclick=()=>{if(speaking){lessonRun++;stopGeorge();speaking=false}startLesson(selectedLesson)};
+    document.querySelector('[data-action="slow"]').onclick=e=>{speechRate=speechRate===.78?.95:.78;e.currentTarget.classList.toggle('active',speechRate===.78);if(speaking){lessonRun++;stopGeorge();speaking=false}startLesson(selectedLesson)};
+    document.querySelector('[data-go-teacher]').onclick=e=>{const target=el(e.currentTarget.dataset.goTeacher);target.scrollIntoView({behavior:'smooth',block:'start'});el('generateBtn').click()};
+    async function speakLessonPart(index,run){
+      if(!speaking||run!==lessonRun)return;
+      if(index>=currentSegments.length){finishVoice(true);return}
+      const part=currentSegments[index];el('teacherStep').textContent=part.label;el('teacherLine').textContent=part.text;el('voiceProgress').style.width=Math.round(index/currentSegments.length*100)+'%';
+      if(Number.isInteger(part.gain))markGain(part.gain);
+      document.querySelectorAll('.teaching-focus').forEach(x=>x.classList.remove('teaching-focus'));const focus=document.querySelector(part.focus);if(focus)focus.classList.add('teaching-focus');
+      document.querySelectorAll('.teacher-path i').forEach((dot,i)=>dot.classList.toggle('on',i<=Math.floor(index/currentSegments.length*4)));
+      try{
+        await playGeorge(part.text);if(!speaking||run!==lessonRun)return;
+        if(part.waitForAnswer){speaking=false;teacherAwaitingAnswer=true;speakLabel('✓ Şıkkınızı Seçin');el('voiceProgress').style.width='88%';el('coachChallenge').scrollIntoView({behavior:'smooth',block:'center'});return}
+        setTimeout(()=>speakLessonPart(index+1,run),part.pause)
+      }catch(error){if(error.name!=='AbortError'){el('teacherStep').textContent='GEORGE SES HATASI';el('teacherLine').textContent=error.message}finishVoice(false)}
+    }
+    function finishVoice(done){speaking=false;document.querySelectorAll('.teaching-focus').forEach(x=>x.classList.remove('teaching-focus'));el('speakBtn').textContent='▶ George ile Anlat';el('voiceProgress').style.width=done?'100%':'0%';if(done){el('teacherStep').textContent='DERS TAMAMLANDI · TRANSFER ZAMANI';if(selectedLesson==='quick')revealSolution('teacher');el('teacherLine').textContent=selectedLesson==='until'?'Avcı refleksi: until + geçmiş fiil → ana cümle geçmiş zaman; sonra özne yapan mı, yapılan mı? Şimdi Zaman Sinyali sorularından birini çöz.':'Avcı refleksi: by + yapan kişi → edilgen yapı → V3. Şimdi aynı kuralı yeni örneğe taşıyın.';el(selectedLesson==='until'?'similarCard':'microCheck').scrollIntoView({behavior:'smooth',block:'center'})}}
+    function speakTeacherFeedback(correct,letter=''){
+      teacherAwaitingAnswer=false;const text=correct?'Aferin hocam. Doğru cevap C. Fakat asıl önemli olan yolunuz: by NASA sinyalini gördünüz, edilgen V üçü aradınız ve ana fiili ayrıca kontrol ettiniz.':'Henüz cevabı açmıyorum. '+diagnoses[letter];
+      if(!georgeReady)return;speaking=true;el('speakBtn').textContent='■ George Açıklıyor';
+      playGeorge(text).then(()=>{speaking=false;el('speakBtn').textContent='▶ George ile Anlat';if(correct){el('voiceProgress').style.width='100%';el('microCheck').scrollIntoView({behavior:'smooth',block:'center'})}else teacherAwaitingAnswer=true}).catch(error=>{speaking=false;el('speakBtn').textContent='▶ George ile Anlat';el('teacherLine').textContent=error.message;if(!correct)teacherAwaitingAnswer=true})
+    }
+    document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{const correct=b.dataset.check==='right';document.querySelectorAll('[data-check]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=el('checkFeedback');f.className='check-feedback '+(correct?'good':'bad');f.textContent=correct?'✓ Doğru hocam. “by + yapan kişi” edilgen yapıyı gösterir; fiilin V3 biçimini ararız.':'Bir daha bakalım: işi özne değil, engineers yapıyor. Özne işten etkileniyorsa edilgen yapı ve V3 gerekir.';if(correct){markGain(1);markGain(2);el('memoryCard').classList.remove('hidden')}else{el('teacherStep').textContent='BİR KEZ DAHA, DAHA BASİT';el('teacherLine').textContent='Engineers yaptı; yapı onlar tarafından yapıldı. İşi başkası yaptıysa edilgen yapı vardır.'}});
+    const videoNarration=[
+      {signal:'1 · FİİLİ BUL',bottom:'Ana fiil ikinci boşlukta',text:'Hocam, önce fiili buluyoruz. Ana cümlenin çekimli fiili ikinci boşlukta olmalı.'},
+      {signal:'2 · SİNYALİ YAKALA',bottom:'by NASA → işi yapan belli',text:'Şimdi birinci boşluğun sağına bakın. By NASA, işi yapan kişiyi gösteriyor.'},
+      {signal:'3 · YAPIYI TANIMLA',bottom:'Edilgen yapı → V3',text:'Teleskop işi yapmadı, NASA tarafından fırlatıldı. Bu nedenle edilgen yapı ve fiilin üçüncü hâli gerekir.'},
+      {signal:'4 · ŞIKKI ELE',bottom:'launched + is → yalnız C',text:'Birinci boşluk launched, ikinci boşluk is olmalı. Bu ikisi yalnızca C şıkkında birlikte bulunuyor.'},
+      {signal:'🎯 AVCI REFLEKSİ',bottom:'CEVAP: C · launched / is',text:'Doğru cevap C. Avcı refleksi: By artı yapan kişi, edilgen yapı, V üç. Çeviri en son kontrol.'}
+    ];
+    let videoRun=0,videoSpeaking=false;
+    function setVideoStatus(text,live=false){const box=el('videoStatus');box.classList.toggle('live',live);box.querySelector('span:last-child').textContent=text}
+    function finishVideoVoice(done){videoSpeaking=false;el('videoBtn').classList.remove('is-speaking');el('videoBtn').textContent='🔊 George ile Sesli Oynat';el('phoneSignal').textContent='🎯 by NASA → EDİLGEN → V3';el('phoneBottom').textContent='CEVAP: C · launched / is';setVideoStatus(done?'George sesli anlatım tamamlandı ✓':'Sesli video durduruldu',false)}
+    async function speakVideoPart(index,run){
+      if(!videoSpeaking||run!==videoRun)return;
+      if(index>=videoNarration.length){finishVideoVoice(true);return}
+      const part=videoNarration[index],screen=el('phoneScreen');el('phoneSignal').textContent=part.signal;el('phoneBottom').textContent=part.bottom;setVideoStatus('George anlatıyor · '+(index+1)+' / '+videoNarration.length,true);
+      screen.animate([{transform:'scale(1)',filter:'brightness(1)'},{transform:'scale(1.025)',filter:'brightness(1.18)'},{transform:'scale(1)',filter:'brightness(1)'}],{duration:1200,easing:'ease-in-out'});
+      [el('phoneSignal'),el('phoneBottom')].forEach((c,i)=>c.animate([{opacity:.2,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{delay:i*140,duration:420,fill:'both'}));
+      try{await playGeorge(part.text);if(videoSpeaking&&run===videoRun)setTimeout(()=>speakVideoPart(index+1,run),220)}catch(error){if(error.name!=='AbortError')setVideoStatus(error.message,false);finishVideoVoice(false)}
+    }
+    el('videoBtn').onclick=()=>{
+      if(!georgeReady){setVideoStatus('George bağlı değil · ElevenLabs anahtarı gerekli',false);return}
+      if(videoSpeaking){videoRun++;stopGeorge();finishVideoVoice(false);return}
+      if(speaking){lessonRun++;stopGeorge();finishVoice(false)}
+      videoRun++;videoSpeaking=true;const run=videoRun;el('videoBtn').classList.add('is-speaking');el('videoBtn').textContent='■ Sesli Videoyu Durdur';setVideoStatus('George hazırlanıyor…',true);speakVideoPart(0,run)
+    };
+    const qs=[
+      {q:'The ancient temple, ____ by archaeologists in 2024, ____ thousands of visitors every year.',options:['A) discovering / attract','B) discovered / attracts','C) to discover / attracted','D) having discovered / will attract','E) discover / is attracting'],answer:1,why:'B · by archaeologists → V3; tekil özne → attracts'},
+      {q:'The new policy, ____ after months of debate, ____ intended to reduce inequality.',options:['A) adopted / is','B) adopting / was','C) to adopt / has','D) having adopted / will','E) adopt / would'],answer:0,why:'A · edilgen V3 + ana cümlenin çekimli fiili is'},
+      {q:'The satellite, ____ into orbit last week, ____ valuable climate data today.',options:['A) launching / sent','B) to launch / sends','C) launched / sends','D) having launched / would send','E) launch / is sent'],answer:2,why:'C · geçmişte tamamlanan edilgen iş → launched; güncel işlev → sends'}
+    ];
+    const untilQs=[
+      {q:'The construction of the new bridge ____ until the floods in the region ended last spring.', options:['A) is postponed','B) was postponed','C) has been postponed','D) will be postponed','E) would postpone'], answer:1, why:'B · until + ended (geçmiş) → ana cümle geçmiş; inşaat ertelenen taraf → edilgen: was postponed'},
+      {q:'The new medicine ____ only to hospitals until the authorities allowed its sale to pharmacies in 2021.', options:['A) has been sold','B) will be sold','C) was sold','D) is sold','E) had sold'], answer:2, why:'C · until + allowed (geçmiş) → geçmiş zaman; ilaç satılan taraf → edilgen: was sold'},
+      {q:'The engineers ____ the project until the funding problems were solved in 2020.', options:['A) were delayed','B) have delayed','C) will delay','D) delayed','E) delay'], answer:3, why:'D · until + were solved (geçmiş) → geçmiş; "the project" nesnesi var, özne işi yapıyor → etken: delayed'}
+    ];
+    let activeQs=qs,activeHint='Bu şık olmadı. Doğru cevabı açmadım; “by + yapan kişi” ve ana fiili yeniden kontrol edin.';
+    function renderGenQs(set,hint){
+      activeQs=set;activeHint=hint;
+      el('generated').innerHTML=set.map((q,i)=>`<article class="gen-q" data-question="${i}"><span class="gen-tag">HEDEF SORU ${i+1} · CEVAP GİZLİ</span><h4>${q.q}</h4><div class="gen-options">${q.options.map((o,j)=>`<button class="gen-opt" data-gen-answer="${j}">${o}</button>`).join('')}</div><div class="gen-feedback">Önce sinyali bulun, sonra şıkkı seçin.</div></article>`).join('');
+    }
+    el('untilBtn').onclick=()=>renderGenQs(untilQs,'Bu şık olmadı. Doğru cevabı açmadım; bağlaçtan sonraki fiilin zamanına ve öznenin işi yapıp yapmadığına yeniden bakın.');
+    el('generateBtn').onclick=()=>{
+      activeQs=qs;activeHint='Bu şık olmadı. Doğru cevabı açmadım; “by + yapan kişi” ve ana fiili yeniden kontrol edin.';
+      el('generated').innerHTML=qs.map((q,i)=>`<article class="gen-q" data-question="${i}"><span class="gen-tag">HEDEF SORU ${i+1} · CEVAP GİZLİ</span><h4>${q.q}</h4><div class="gen-options">${q.options.map((o,j)=>`<button class="gen-opt" data-gen-answer="${j}">${o}</button>`).join('')}</div><div class="gen-feedback">Önce sinyali bulun, sonra şıkkı seçin.</div></article>`).join('');
+      el('generateBtn').textContent='Yeni Set Üretildi ✓';setTimeout(()=>el('generateBtn').textContent='3 Benzer Soru Üret',1400)
+    };
+    el('generated').addEventListener('click',e=>{
+      const button=e.target.closest('[data-gen-answer]');if(!button)return;const card=button.closest('[data-question]'),q=activeQs[Number(card.dataset.question)],picked=Number(button.dataset.genAnswer),feedback=card.querySelector('.gen-feedback');
+      if(picked===q.answer){button.classList.add('right');feedback.className='gen-feedback good';feedback.textContent='✓ '+q.why;card.querySelectorAll('.gen-opt').forEach(x=>x.disabled=true)}
+      else{button.classList.add('wrong');button.disabled=true;feedback.className='gen-feedback bad';feedback.textContent=activeHint}
+    });
+    el('saveBtn').onclick=()=>{const rec={date:new Date().toISOString(),question:ocrText.value.slice(0,120),answer:'C',topic:'Participle / Passive reduction'};const arr=JSON.parse(localStorage.getItem('avci_records')||'[]');arr.unshift(rec);localStorage.setItem('avci_records',JSON.stringify(arr.slice(0,30)));el('saveStatus').textContent='Çalışma bu cihazda kaydedildi · Toplam '+Math.min(arr.length,30)+' kayıt';el('saveStatus').className='status good'};
+  </script>
+</body>
+</html>
