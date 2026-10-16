@@ -264,9 +264,7 @@
       el('voiceProvider').textContent=message;setVideoStatus(message,ready);
     }
     function checkGeorge(){
-      // Sessiz mod: ses servisine istek atılmaz; dersler yazılı olarak adım adım ilerler.
-      setGeorgeControls(false,'Sesli anlatım yakında');
-      document.querySelector('[data-action="slow"]').disabled=true;
+      setGeorgeControls(true,'George sesli anlatım hazır');
     }
     function speakLabel(text){if(georgeReady)el('speakBtn').textContent=text}
     function stopGeorge(){
@@ -278,7 +276,7 @@
       stopGeorge();const cacheKey=speechRate+'|'+text;let audioUrl=georgeAudioCache.get(cacheKey);
       if(!audioUrl){
         activeRequest=new AbortController();
-        const response=await fetch('/api/george',{method:'POST',headers:{'content-type':'application/json',accept:'audio/mpeg'},body:JSON.stringify({text,speed:speechRate}),signal:activeRequest.signal});
+        const response=await fetch('/api/tts-eleven',{method:'POST',headers:{'content-type':'application/json',accept:'audio/mpeg'},body:JSON.stringify({text,speed:speechRate}),signal:activeRequest.signal});
         activeRequest=null;
         if(!response.ok){let message='George sesi üretilemedi';try{const data=await response.json();if(data.error)message=data.error}catch(error){}throw new Error(message)}
         audioUrl=URL.createObjectURL(await response.blob());georgeAudioCache.set(cacheKey,audioUrl);
@@ -340,7 +338,7 @@
       try{await playGeorge(part.text);if(videoSpeaking&&run===videoRun)setTimeout(()=>speakVideoPart(index+1,run),220)}catch(error){if(error.name!=='AbortError')setVideoStatus(error.message,false);finishVideoVoice(false)}
     }
     el('videoBtn').onclick=()=>{
-      if(!georgeReady){setVideoStatus('George bağlı değil · ElevenLabs anahtarı gerekli',false);return}
+      if(!georgeReady){setVideoStatus('Sesli anlatım şu an kullanılamıyor',false);return}
       if(videoSpeaking){videoRun++;stopGeorge();finishVideoVoice(false);return}
       if(speaking){lessonRun++;stopGeorge();finishVoice(false)}
       videoRun++;videoSpeaking=true;const run=videoRun;el('videoBtn').classList.add('is-speaking');el('videoBtn').textContent='■ Sesli Videoyu Durdur';setVideoStatus('George hazırlanıyor…',true);speakVideoPart(0,run)
