@@ -72,7 +72,7 @@ const DNAVCHAT_SRC = slice("async function dnavChat(){", "function dAns(btn,corr
   // IDLE'a döndürmek için, bkz. tests/avci-turn-controller.test.mjs) —
   // ttsSpeak()'in KENDİSİ hâlâ AYNI, sadece çağıran taraftan üçüncü
   // argüman artık null değil bir callback.
-  kontrol("16) mevcut ttsSpeak() reuse ediliyor (yeni bir TTS fonksiyonu YAZILMADI)", /ttsSpeak\(temizCevap,null,_dnavSpeakingBitir\)/.test(TTS_CALL_BLOK));
+  kontrol("16) mevcut ttsSpeak() reuse ediliyor (yeni bir TTS fonksiyonu YAZILMADI)", /ttsSpeak\(temizCevap,'tr-TR',_dnavSpeakingBitir\)/.test(TTS_CALL_BLOK));
   kontrol("17) yeni bir TTS provider/fonksiyon TANIMLANMADI (bu blokta function tanımı YOK)", !/function\s+tts/.test(TTS_CALL_BLOK));
   kontrol("18) bu blokta yeni bir fetch()/endpoint çağrısı YOK (mevcut /api/tts, /api/tts-eleven zaten ttsSpeak içinde)", !/fetch\(/.test(TTS_CALL_BLOK));
   kontrol("19) yeni TTS endpoint dosyası oluşturulmadı (api/tts.mjs ve api/tts-eleven.mjs hâlâ mevcut, başka yeni tts-* dosyası yok)", (() => {
@@ -80,9 +80,9 @@ const DNAVCHAT_SRC = slice("async function dnavChat(){", "function dAns(btn,corr
     const ttsFiles = files.filter((f) => f.includes("tts"));
     return ttsFiles.length === 2 && ttsFiles.includes("tts.mjs") && ttsFiles.includes("tts-eleven.mjs");
   })());
-  kontrol("20) metin ÖNCE render ediliyor, TTS SONRA çağrılıyor (kaynak sırası)", html.indexOf("km.innerHTML=renderMD(temizCevap);") < html.indexOf("ttsSpeak(temizCevap,null,_dnavSpeakingBitir)"));
+  kontrol("20) metin ÖNCE render ediliyor, TTS SONRA çağrılıyor (kaynak sırası)", html.indexOf("km.innerHTML=renderMD(temizCevap);") < html.indexOf("ttsSpeak(temizCevap,'tr-TR',_dnavSpeakingBitir)"));
   kontrol("21) TTS çağrısı await EDİLMİYOR (fire-and-forget)", !/await\s+ttsSpeak\(temizCevap/.test(DNAVCHAT_SRC));
-  kontrol("22) TTS çağrısı try/catch ile sarılmış (senkron hata chat'i bloklamaz)", /try\{[\s\S]{0,20}const _ttsSonuc=ttsSpeak\(temizCevap,null,_dnavSpeakingBitir\);/.test(TTS_CALL_BLOK));
+  kontrol("22) TTS çağrısı try/catch ile sarılmış (senkron hata chat'i bloklamaz)", /try\{[\s\S]{0,20}const _ttsSonuc=ttsSpeak\(temizCevap,'tr-TR',_dnavSpeakingBitir\);/.test(TTS_CALL_BLOK));
   kontrol("23) TTS promise'ine .catch() bağlanmış (asenkron ret de yakalanır, unhandled rejection YOK)", /\.catch\(_dnavSpeakingBitir\)/.test(TTS_CALL_BLOK));
   kontrol("24) TTS çağrısı temizCevap (öğrenciye gösterilen GÜVENLİ final metin) kullanıyor — board_actions/JSON DEĞİL", /ttsSpeak\(temizCevap/.test(TTS_CALL_BLOK) && !/board_actions/.test(TTS_CALL_BLOK) && !/JSON\.stringify/.test(TTS_CALL_BLOK));
 }

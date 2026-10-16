@@ -8031,7 +8031,7 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     // Admin'de mevcut otomatik okuma kapalı: yerine KLOD ADMIN SES ARAÇLARI'ndaki anahtar var.
     if(typeof ttsSpeak==='function'&&globalThis._klodAdmin!==true){
       try{
-        const _ttsSonuc=ttsSpeak(temizCevap,null,_dnavSpeakingBitir);
+        const _ttsSonuc=ttsSpeak(temizCevap,'tr-TR',_dnavSpeakingBitir);
         if(_ttsSonuc&&typeof _ttsSonuc.then==='function'){
           _ttsSonuc.then((sonuc)=>{if(!sonuc)_dnavSpeakingBitir();}).catch(_dnavSpeakingBitir);
         } else {
