@@ -7041,6 +7041,7 @@ function dnav(el){
     // Sağ sütun: aktif Sinyal Lab sorusu (varsa). Renkler sadece KLOD açıkladıkça gelir.
     klodSoruKartiBaslat();
     klodTamButonGuncelle();
+    if(typeof klodAdminUiKur==='function')klodAdminUiKur(); // yalnız admin: tam ekran + 🔊 Dinle + otomatik okuma
     // KATMAN 5K — VOICE-LITE fail-open: mic butonu bu innerHTML DOM'a
     // yazıldıktan HEMEN SONRA var oluyor (KLOD sekmesi lazy-render
     // edildiği için sayfa yüklenirken henüz yok) - SR yoksa burada
@@ -8027,9 +8028,10 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     if(benimTurNesil===dnavTurNesil){dnavTurnState='SPEAKING';dnavMicGorselGuncelle();}
     let _dnavSpeakingBitmis=false;
     const _dnavSpeakingBitir=()=>{if(_dnavSpeakingBitmis)return;_dnavSpeakingBitmis=true;if(benimTurNesil===dnavTurNesil){dnavTurnState='IDLE';dnavMicGorselGuncelle();}};
-    if(typeof ttsSpeak==='function'){
+    // Admin'de mevcut otomatik okuma kapalı: yerine KLOD ADMIN SES ARAÇLARI'ndaki anahtar var.
+    if(typeof ttsSpeak==='function'&&globalThis._klodAdmin!==true){
       try{
-        const _ttsSonuc=ttsSpeak(temizCevap,null,_dnavSpeakingBitir);
+        const _ttsSonuc=ttsSpeak(temizCevap,'tr-TR',_dnavSpeakingBitir);
         if(_ttsSonuc&&typeof _ttsSonuc.then==='function'){
           _ttsSonuc.then((sonuc)=>{if(!sonuc)_dnavSpeakingBitir();}).catch(_dnavSpeakingBitir);
         } else {
@@ -8938,6 +8940,136 @@ if(window.speechSynthesis){
     window.speechSynthesis.speak(u);
     window.removeEventListener('click', warmup);
   }, {once:true});
+}
+
+// ─── KLOD ADMIN SES ARAÇLARI — yalnızca ADMIN_EMAILS'teki hesaba görünür ───
+// Yetki sunucuda doğrulanır (/api/admin-users?check=1); e-posta listesi istemciye
+// gelmez. Admin değilse hiçbir şey eklenmez. Admin için mevcut otomatik okuma
+// (dnavChat → ttsSpeak) kapanır; yerine varsayılan KAPALI anahtar + 🔊 Dinle gelir.
+// İstekler sırayla ve en az 6,5 sn arayla gider (dakikada 10 istek/IP sınırı).
+window._klodAdmin=false;
+const KLOD_SES_MAX_OTO=15,KLOD_SES_ARALIK_MS=6500,KLOD_SES_MAX_KARAKTER=600;
+const _klodSesCache=new Map(); // metin → blob URL, oturum boyunca
+let _klodAdminKontrol=null; // {token, sonuc: Promise<boolean>}
+let _klodSesAudio=null,_klodSesBtn=null,_klodSesSonIstek=0,_klodSesKuyruk=Promise.resolve();
+let _klodOtoAcik=false,_klodOtoNesil=null,_klodOtoSayi=0;
+try{_klodOtoSayi=+sessionStorage.getItem('klod_oto_okuma')||0;}catch(e){}
+
+async function klodAdminMi(){
+  try{
+    const istemci=await adminSbBekle(8000);
+    const {data}=await istemci.auth.getSession();
+    const s=data&&data.session;
+    if(!s||!s.user||s.user.is_anonymous)return false;
+    if(_klodAdminKontrol&&_klodAdminKontrol.token===s.access_token)return _klodAdminKontrol.sonuc;
+    const sonuc=fetch('/api/admin-users?check=1',{headers:{'Authorization':'Bearer '+s.access_token}}).then(r=>r.ok,()=>false);
+    _klodAdminKontrol={token:s.access_token,sonuc};
+    return sonuc;
+  }catch(e){return false;}
+}
+function klodAdminStil(){
+  if(document.getElementById('klod-admin-stil'))return;
+  const st=document.createElement('style');st.id='klod-admin-stil';
+  st.textContent='.klod-admin-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-size:13px;color:var(--muted)}'
+    +'.klod-admin-bar button,.klod-dinle-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:13px;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif}'
+    +'.klod-admin-bar button:hover,.klod-dinle-btn:hover{border-color:var(--signal);color:var(--signal)}'
+    +'.klod-admin-oto{display:inline-flex;align-items:center;gap:6px;cursor:pointer}'
+    +'.klod-admin-durum{color:var(--signal)}'
+    +'.klod-dinle-btn{align-self:flex-start;margin-top:-6px;font-size:12px;padding:3px 9px}'
+    +'.klod-ws.klod-admin-tam{position:fixed;inset:0;z-index:9500;height:auto!important;min-height:0;background:var(--paper);padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}'
+    +'html.klod-admin-tam-acik{overflow:hidden}';
+  document.head.appendChild(st);
+}
+function klodSesDurum(metin){document.querySelectorAll('.klod-admin-durum').forEach(e=>{e.textContent=metin||'';});}
+function klodSesDurdur(){
+  if(_klodSesAudio){_klodSesAudio.pause();_klodSesAudio=null;}
+  if(_klodSesBtn){_klodSesBtn.textContent='🔊 Dinle';_klodSesBtn=null;}
+}
+// Sıralı kuyruk: aynı anda tek istek, iki istek arası en az KLOD_SES_ARALIK_MS.
+function klodSesAl(metin){
+  if(_klodSesCache.has(metin))return Promise.resolve(_klodSesCache.get(metin));
+  const p=_klodSesKuyruk.then(async()=>{
+    if(_klodSesCache.has(metin))return _klodSesCache.get(metin);
+    const bekle=_klodSesSonIstek+KLOD_SES_ARALIK_MS-Date.now();
+    if(bekle>0)await new Promise(r=>setTimeout(r,bekle));
+    _klodSesSonIstek=Date.now();
+    const r=await fetch('/api/tts-eleven',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:metin})});
+    if(!r.ok)throw new Error('tts '+r.status);
+    const url=URL.createObjectURL(await r.blob());
+    _klodSesCache.set(metin,url);
+    return url;
+  });
+  _klodSesKuyruk=p.catch(()=>{});
+  return p;
+}
+async function klodSesCal(btn,metin){
+  if(_klodSesBtn===btn){klodSesDurdur();return;}
+  klodSesDurdur();klodSesDurum('');
+  _klodSesBtn=btn;btn.textContent='⏹ Durdur';
+  try{
+    const url=await klodSesAl(metin);
+    if(_klodSesBtn!==btn)return; // beklerken durduruldu ya da başka cevap seçildi
+    const a=new Audio(url);_klodSesAudio=a;
+    a.onended=()=>{if(_klodSesAudio===a)klodSesDurdur();};
+    await new Promise((ok,hata)=>{a.onerror=hata;a.play().then(ok,hata);});
+  }catch(e){
+    if(_klodSesBtn===btn){klodSesDurdur();klodSesDurum('Ses şu an kullanılamıyor');}
+  }
+}
+function klodOtoAyarla(acik){
+  _klodOtoAcik=!!acik;
+  document.querySelectorAll('.klod-admin-oto input').forEach(cb=>{cb.checked=_klodOtoAcik;});
+  if(_klodOtoAcik)klodSesDurum('');
+}
+function klodDinleEkle(msg,otomatik){
+  if(msg.dataset.klodDinle)return;
+  const metin=(msg.innerText||msg.textContent||'').trim().slice(0,KLOD_SES_MAX_KARAKTER);
+  if(metin.length<2)return;
+  msg.dataset.klodDinle='1';
+  const btn=document.createElement('button');btn.type='button';btn.className='klod-dinle-btn';btn.textContent='🔊 Dinle';
+  btn.onclick=()=>klodSesCal(btn,metin);
+  msg.after(btn);
+  if(!otomatik||!_klodOtoAcik)return;
+  if(_klodOtoSayi>=KLOD_SES_MAX_OTO){klodOtoAyarla(false);klodSesDurum('Otomatik okuma sınırına ulaştı');return;}
+  _klodOtoSayi++;try{sessionStorage.setItem('klod_oto_okuma',String(_klodOtoSayi));}catch(e){}
+  klodSesCal(btn,metin);
+  if(_klodOtoSayi>=KLOD_SES_MAX_OTO){klodOtoAyarla(false);klodSesDurum('Otomatik okuma sınırına ulaştı');}
+}
+async function klodAdminUiKur(){
+  const chat=document.getElementById('dnav-chat');if(!chat)return;
+  if(!document.querySelector('.klod-ws.klod-admin-tam'))document.documentElement.classList.remove('klod-admin-tam-acik');
+  if(!(await klodAdminMi()))return;
+  if(!document.contains(chat))return; // beklerken KLOD yeniden çizildi; yeni çizim kendi çağrısını yapar
+  window._klodAdmin=true;
+  klodAdminStil();
+  const ws=chat.closest('.klod-ws');
+  if(ws&&!ws.querySelector('.klod-admin-bar')){
+    const bar=document.createElement('div');bar.className='klod-admin-bar';
+    bar.innerHTML='<button type="button" class="klod-admin-tam-btn" aria-pressed="false">⛶ Tam ekran</button>'
+      +'<label class="klod-admin-oto"><input type="checkbox"> Otomatik okuma</label>'
+      +'<span class="klod-admin-durum" aria-live="polite"></span>';
+    ws.insertBefore(bar,ws.firstChild);
+    bar.querySelector('.klod-admin-tam-btn').onclick=e=>{
+      const acik=ws.classList.toggle('klod-admin-tam');
+      document.documentElement.classList.toggle('klod-admin-tam-acik',acik);
+      e.currentTarget.setAttribute('aria-pressed',String(acik));
+      e.currentTarget.textContent=acik?'🗗 Küçült':'⛶ Tam ekran';
+    };
+    const cb=bar.querySelector('input');cb.checked=_klodOtoAcik;cb.onchange=()=>klodOtoAyarla(cb.checked);
+  }
+  chat.querySelectorAll('.msg.k').forEach(m=>klodDinleEkle(m,false));
+  if(chat._klodAdminGozcu)return;
+  _klodOtoNesil=typeof dnavTurNesil!=='undefined'?dnavTurNesil:null;
+  // Yeni KLOD balonu: 🔊 Dinle ekle; yeni bir tur (dnavTurNesil arttı) cevabıysa otomatik oku.
+  const gozcu=new MutationObserver(kayitlar=>{
+    kayitlar.forEach(k=>k.addedNodes.forEach(n=>{
+      if(!(n instanceof HTMLElement)||!n.matches('.msg.k'))return;
+      const nesil=typeof dnavTurNesil!=='undefined'?dnavTurNesil:null;
+      const yeniTur=nesil!==_klodOtoNesil;_klodOtoNesil=nesil;
+      klodDinleEkle(n,yeniTur);
+    }));
+  });
+  gozcu.observe(chat,{childList:true});chat._klodAdminGozcu=gozcu;
 }
 
 // ─── TTS KARAOKE — ses çalarken kelime kelime highlight ────────────────────
