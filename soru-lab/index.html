@@ -274,6 +274,9 @@
     async function playGeorge(text){
       if(!georgeReady){await new Promise(resolve=>setTimeout(resolve,Math.max(2600,text.length*55)));return}
       stopGeorge();const cacheKey=speechRate+'|'+text;let audioUrl=georgeAudioCache.get(cacheKey);
+      // Önceden üretilmiş mp3 (1.00 hızında) varsa onu çal; yavaş modda (.78) ya da mp3 açılamazsa canlı servise düş.
+      let hazir=false;
+      if(!audioUrl&&speechRate!==.78&&!playGeorge.bozuk?.has(text)){playGeorge.manifest??=fetch('/soru-lab/audio/manifest.json').then(r=>r.ok?r.json():{}).catch(()=>({}));const file=(await playGeorge.manifest)[text];if(file){audioUrl='/soru-lab/audio/'+file;hazir=true}}
       if(!audioUrl){
         activeRequest=new AbortController();
         const response=await fetch('/api/tts-eleven',{method:'POST',headers:{'content-type':'application/json',accept:'audio/mpeg'},body:JSON.stringify({text,speed:speechRate}),signal:activeRequest.signal});
@@ -282,7 +285,8 @@
         audioUrl=URL.createObjectURL(await response.blob());georgeAudioCache.set(cacheKey,audioUrl);
       }
       const audio=new Audio(audioUrl);activeAudio=audio;
-      await new Promise((resolve,reject)=>{audio.onended=resolve;audio.onerror=()=>reject(new Error('George sesi oynatılamadı'));audio.play().catch(reject)});
+      try{await new Promise((resolve,reject)=>{audio.onended=resolve;audio.onerror=()=>reject(new Error('George sesi oynatılamadı'));audio.play().catch(reject)})}
+      catch(error){if(hazir&&activeAudio===audio){(playGeorge.bozuk??=new Set).add(text);activeAudio=null;return playGeorge(text)}throw error}
       if(activeAudio===audio)activeAudio=null;
     }
     checkGeorge();
