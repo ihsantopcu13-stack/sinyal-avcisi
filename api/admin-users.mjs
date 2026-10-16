@@ -59,6 +59,11 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Bu hesabın admin yetkisi yok' });
     }
 
+    // ?check=1 → sadece "admin mi?" sorusu (KLOD admin araçları); liste çekilmez.
+    if (req.query?.check === '1') {
+      return res.status(200).json({ admin: true });
+    }
+
     // 3. Yetki onaylandı — kullanıcı listesini service role key ile çek (RLS bypass, sadece burada)
     const listRes = await fetch(
       `${SUPABASE_URL}/rest/v1/profiles?select=id,email,ad,created_at&order=created_at.desc&limit=100`,
