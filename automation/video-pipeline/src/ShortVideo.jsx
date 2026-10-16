@@ -9,6 +9,7 @@ import {
   spring,
 } from "remotion";
 import { renderWithHighlight } from "./captionUtils.jsx";
+import { ReelEndCta } from "./ReelEndCta.jsx";
 
 // Koyu yeşil zemin + turkuaz vurgu + beyaz ana metin
 const BG = "linear-gradient(135deg,#0a2e1a,#04140b)";
@@ -51,7 +52,7 @@ function CaptionLine({ text, active }) {
   );
 }
 
-export const ShortVideo = ({ captions, brand, audioFile }) => {
+export const ShortVideo = ({ captions, brand, audioFile, endCta }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
   const currentSeconds = frame / fps;
@@ -105,6 +106,10 @@ export const ShortVideo = ({ captions, brand, audioFile }) => {
           </div>
         </AbsoluteFill>
       </Sequence>
+
+      {/* Son 2 sn takip CTA'sı — yalnız endCta'lı (yeni) render-props'ta.
+          bottom=520: IG/TikTok alt yazı + buton alanının üstünde kalır. */}
+      {endCta && <ReelEndCta totalFrames={durationInFrames} bottom={520} />}
     </AbsoluteFill>
   );
 };

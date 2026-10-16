@@ -136,6 +136,7 @@ export async function audioUret() {
     durationInSeconds,
     audioFile: "audio.mp3",
     brand: { title: "SİNYAL AVCISI", cta: "Ücretsiz dene → sinyal-avcisi.com" },
+    endCta: true, // son 2 sn ReelEndCta (yalnız yeni üretilen günlük videolar)
   };
   await writeFile(path.join(OUT_DIR, "render-props.json"), JSON.stringify(renderProps, null, 2), "utf-8");
 
