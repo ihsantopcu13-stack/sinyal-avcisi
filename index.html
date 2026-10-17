@@ -192,7 +192,7 @@ mark.avci-board-vurgu{background:rgba(72,227,154,.28);color:inherit;border-radiu
   bottom:calc(100% + 10px);
   left:50%;
   transform:translateX(-50%);
-  background:#f6fcf8;
+  background:#0f3d28;
   color:#fff;
   font-size:13px;
   font-weight:600;
@@ -211,7 +211,7 @@ mark.avci-board-vurgu{background:rgba(72,227,154,.28);color:inherit;border-radiu
   left:50%;
   transform:translateX(-50%);
   border:5px solid transparent;
-  border-top-color:#f6fcf8;
+  border-top-color:#0f3d28;
   z-index:100;
 }
 .demo-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
@@ -339,7 +339,7 @@ mark.avci-board-vurgu{background:rgba(72,227,154,.28);color:inherit;border-radiu
 .p-play{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:var(--signal);color:#f6fcf8;font-size:18px;display:grid;place-items:center}
 .p-speeds{display:flex;gap:4px;justify-content:center;margin-top:12px}
 .p-speed{background:rgba(255,255,255,.07);border:none;color:rgba(23,55,42,.62);font-family:'IBM Plex Mono',monospace;font-size:15px;padding:4px 10px;border-radius:12px;cursor:pointer}
-.p-speed.active{background:var(--signal);color:#f6fcf8}
+.p-speed.active{background:var(--signal);color:#0f3d28}
 .dash{padding:72px 5vw;background:var(--paper)}
 .dash-inner{max-width:1200px;margin:0 auto}
 .dash-header{text-align:center;margin-bottom:36px}
@@ -611,7 +611,7 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 .sinyal-opt-kirmizi{animation:sinyalKirmiziYanip .7s ease-in-out 3;background:#fde8ea;border-color:var(--trap);color:var(--trap)}
 .sinyal-opt-sari{animation:sinyalSariTitre .4s ease-in-out 2;background:#e9f9f0;border-color:#d97706;color:#d97706}
 .sinyal-opt-turuncu{animation:sinyalSariTitre .4s ease-in-out 2;background:#2a1c10;border-color:#ea580c;color:#ea580c}
-.sinyal-opt-yesil{animation:sinyalYesilParla 1.4s ease-in-out infinite;background:#eaf7ef;border-color:#16a34a;color:#4ade80}
+.sinyal-opt-yesil{animation:sinyalYesilParla 1.4s ease-in-out infinite;background:#eaf7ef;border-color:#16a34a;color:#1f9d63}
 @keyframes sinyalKirmiziYanip{0%,100%{opacity:1}50%{opacity:.35}}
 @keyframes sinyalSariTitre{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
 @keyframes sinyalYesilParla{0%,100%{box-shadow:0 0 0 rgba(34,197,94,0)}50%{box-shadow:0 0 20px rgba(34,197,94,.65)}}
@@ -778,13 +778,13 @@ body.streak-acik .dash{padding-top:116px}
 .sat-prog-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s}
 .sat-prog-dot.done{background:#22c55e}
 .sat-prog-dot.active{background:var(--signal)}
-.sat-score-card{background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:12px;padding:20px;text-align:center;color:#fff}
+.sat-score-card{background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:12px;padding:20px;text-align:center;color:var(--ink)}
 .sat-score-num{font-family:'IBM Plex Serif',serif;font-size:52px;color:#2c6e4f;line-height:1}
-.sat-score-label{font-size:16px;color:rgba(255,255,255,.62);margin-bottom:14px}
+.sat-score-label{font-size:16px;color:var(--muted);margin-bottom:14px}
 .sat-stat-row{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
 .sat-stat{background:rgba(72,227,154,.16);border-radius:8px;padding:10px 16px;text-align:center}
 .sat-stat-val{font-size:20px;font-weight:700;color:#2c6e4f}
-.sat-stat-lbl{font-size:10px;color:rgba(255,255,255,.62);margin-top:2px}
+.sat-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px}
 .pwa-banner-text{flex:1;font-size:15px}
 .pwa-banner-text b{display:block;font-size:16px;font-weight:600;margin-bottom:2px}
 .pwa-install-btn{background:var(--signal);color:#f6fcf8;border:none;border-radius:8px;padding:9px 18px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
@@ -1020,11 +1020,11 @@ body.dark-mode .sp-hafta{border-bottom-color:#cdeedc}
 }
 .bugun-eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
-  text-transform:uppercase;color:#48e39a;margin-bottom:8px;
+  text-transform:uppercase;color:#1f9d63;margin-bottom:8px;
   display:flex;align-items:center;gap:6px;position:relative;
 }
 .bugun-baslik{font-size:19px;font-weight:700;line-height:1.4;margin-bottom:6px;color:#17372a;position:relative}
-.bugun-baslik b{color:#48e39a}
+.bugun-baslik b{color:#1f9d63}
 .bugun-alt{font-size:12.5px;color:rgba(23,55,42,.62);margin-bottom:16px;position:relative}
 .bugun-cta{
   display:inline-flex;align-items:center;gap:8px;background:#48e39a;color:#1a0e02;
@@ -1077,7 +1077,7 @@ body.dark-mode .sp-hafta{border-bottom-color:#cdeedc}
 .hata-kategori{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:700;margin-bottom:6px}
 .hk-sinyal{background:#ffffff;color:#1d4ed8}
 .hk-kelime{background:#efeafd;color:#7c3aed}
-.hk-yapisal{background:#eaf7ef;color:#4ade80}
+.hk-yapisal{background:#eaf7ef;color:#1f9d63}
 .hk-dikkat{background:#e9f9f0;color:#c2410c}
 .hata-aciklama{font-size:13px;color:var(--muted);line-height:1.6}
 .hata-ipucu{font-size:12px;color:var(--signal-dark);margin-top:6px;font-weight:600}
@@ -1469,7 +1469,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
 </head>
-<body class="dark-mode">
+<body>
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
 <script>
 // YDS/2 başvuru uyarısı: 8 Ekim 2026 23:59 (İstanbul) sonrası kendiliğinden kaybolur (sayfa açıkken de).
@@ -1607,7 +1607,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         YDS &amp; YÖKDİL · TAMAMEN ÜCRETSİZ
       </span>
     </div>
-    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em style="color:#48e39a;font-style:normal">2 dakikada seviyeni öğren.</em></h1>
+    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em style="color:#1f9d63;font-style:normal">2 dakikada seviyeni öğren.</em></h1>
     <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px">5 kısa soru çöz; seviyeni, zayıf noktanı ve sana özel <strong>bugünkü görevini</strong> gör. Kayıt yok, kredi kartı yok.</p>
     <div class="hero-btns">
       <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Seviyemi Öğren — Ücretsiz <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
@@ -1734,7 +1734,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section id="ekitap" class="ekitap">
   <div class="ekitap-inner">
     <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(246,252,248,.8);margin-bottom:14px">Ücretsiz E-Kitap</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(15,61,40,.8);margin-bottom:14px">Ücretsiz E-Kitap</div>
       <h2>30 Günlük Metin Fetih Kılavuzu</h2>
       <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
       <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
@@ -1824,7 +1824,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')" role="button" tabindex="0">📐 S+V+O</div>
             <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🃏 Kelime Kartları</div>
             <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')" role="button" tabindex="0">🏹 Avcı Master</div>
-            <div class="dn-item" onclick="aoyAc()" role="button" tabindex="0" style="background:linear-gradient(135deg,rgba(72,227,154,.12),rgba(72,227,154,.05));border:1px solid rgba(72,227,154,.3);border-radius:10px;color:var(--signal-dark);font-weight:800">🗺️ Öğrenme Yolu <span style="font-size:9px;background:var(--signal);color:#f6fcf8;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+            <div class="dn-item" onclick="aoyAc()" role="button" tabindex="0" style="background:linear-gradient(135deg,rgba(72,227,154,.12),rgba(72,227,154,.05));border:1px solid rgba(72,227,154,.3);border-radius:10px;color:var(--signal-dark);font-weight:800">🗺️ Öğrenme Yolu <span style="font-size:9px;background:var(--signal);color:#0f3d28;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
           </div>
 
           <!-- BÖLÜM 3: KLOD -->
@@ -1952,7 +1952,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px">
     <div id="avci-zayif-alanlarim"></div>
 
-    <div style="background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:10px;padding:14px;color:#fff;margin-bottom:4px">
+    <div style="background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:10px;padding:14px;color:var(--ink);margin-bottom:4px">
       <div style="font-family:'IBM Plex Serif',serif;font-size:16px;color:#2c6e4f;margin-bottom:6px">🏹 AVCI MASTER ANA PRENSİBİ</div>
       <div style="font-size:14px;color:rgba(255,255,255,.7);line-height:1.8">
         1️⃣ SORU TÜRÜNÜ TANI → 2️⃣ SİNYALİ BUL → 3️⃣ YAPIYI TANI → 4️⃣ SAĞ/SOL KONTROL → 5️⃣ S+V+O → 6️⃣ ŞIKLARI ELE → 7️⃣ SON İKİDE KRİTİK FARKI BUL → 8️⃣ KANITLA → 🎯 CEVABI AVLA
@@ -2057,7 +2057,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       </div>
     </div>
 
-    <div style="background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:10px;padding:14px;color:#fff">
+    <div style="background:linear-gradient(135deg,#ffffff,#efeafd);border-radius:10px;padding:14px;color:var(--ink)">
       <div style="font-size:15px;font-weight:700;color:#2c6e4f;margin-bottom:8px">💎 ALTIN KURALLAR</div>
       <div style="font-size:14px;line-height:2;color:rgba(255,255,255,.8)">
         1. Her kelimeyi bilmek zorunda değilim.<br>
@@ -6192,8 +6192,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <!-- Avcı Akademisi -->
     <div style="background:linear-gradient(135deg,#efeafd,#ffffff);border-radius:16px;padding:32px;margin-bottom:32px">
       <div class="eyebrow" style="color:#1f9d63;margin-bottom:8px">Avcı Akademisi</div>
-      <div style="font-family:'IBM Plex Serif',serif;font-size:24px;color:#fff;margin-bottom:8px">ÖSYM Tuzak Videoları</div>
-      <div style="font-size:15px;color:rgba(255,255,255,.62);margin-bottom:20px">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
+      <div style="font-family:'IBM Plex Serif',serif;font-size:24px;color:var(--ink);margin-bottom:8px">ÖSYM Tuzak Videoları</div>
+      <div style="font-size:15px;color:var(--muted);margin-bottom:20px">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px" id="avci-akademi-grid"></div>
     </div>
 
@@ -6238,7 +6238,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <tbody>
         <tr style="border-bottom:1px solid var(--border);background:#e9f9f0">
           <td style="padding:14px 16px;font-size:15px;font-weight:700;color:#1f9d63">💰 Ücret</td>
-          <td style="padding:14px 16px;text-align:center;background:#eaf7ef;font-size:15px;font-weight:800;color:#4ade80">TAMAMEN ÜCRETSİZ</td>
+          <td style="padding:14px 16px;text-align:center;background:#eaf7ef;font-size:15px;font-weight:800;color:#1f9d63">TAMAMEN ÜCRETSİZ</td>
         </tr>
         <tr style="border-bottom:1px solid var(--border)">
           <td style="padding:14px 16px;font-size:15px">Sinyal metodolojisi</td>
@@ -6298,8 +6298,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <div class="hayir-baslik" style="position:relative;padding:14px 0">
       <div aria-hidden="true" style="position:absolute;left:50%;top:50%;width:460px;max-width:92vw;height:220px;background:radial-gradient(ellipse at center,rgba(72,227,154,.22),transparent 72%);filter:blur(18px);pointer-events:none;z-index:0;animation:hayirGlow 5s ease-in-out infinite"></div>
       <div style="position:relative;z-index:1">
-        <div style="font-family:'IBM Plex Serif',serif;font-weight:500;font-size:clamp(26px,4vw,42px);line-height:1.45;color:#fff">"Kim ilim yoluna girerse, Allah ona cennetin yolunu kolaylaştırır."</div>
-        <div style="font-family:'IBM Plex Serif',serif;font-style:italic;font-size:clamp(16px,2vw,19px);color:#48e39a;margin-top:14px;letter-spacing:.01em">— Hz. Muhammed (s.a.v.)</div>
+        <div style="font-family:'IBM Plex Serif',serif;font-weight:500;font-size:clamp(26px,4vw,42px);line-height:1.45;color:var(--ink)">"Kim ilim yoluna girerse, Allah ona cennetin yolunu kolaylaştırır."</div>
+        <div style="font-family:'IBM Plex Serif',serif;font-style:italic;font-size:clamp(16px,2vw,19px);color:#1f9d63;margin-top:14px;letter-spacing:.01em">— Hz. Muhammed (s.a.v.)</div>
       </div>
     </div>
     <p class="hayir-metin">
@@ -6836,7 +6836,7 @@ function satModGoster(){
   if(satMod<3){
     const s=SAT_SINYALLER[satMod];
     const ornekler={zitlik:'"The experiment was successful, <span class="sat-highlight">despite</span> the initial failures."',olumsuz:'"The results were <span class="sat-highlight trap">far from</span> conclusive."',zaman:'"She <span class="sat-highlight time">must have left</span> before the announcement."'};
-    el.innerHTML=`<div class="sat-signal-card"><div class="sat-signal-title">${s.icon} ${s.baslik}</div><div class="sat-signal-words">${s.kelimeler.map(k=>`<span class="sat-word-tag ${s.tip}">${k}</span>`).join('')}</div><div class="sat-rule">💡 ${s.kural}</div></div><div class="sat-akis"><span class="sat-akis-step">1️⃣ Sinyali gör</span><span class="sat-akis-arrow">→</span><span class="sat-akis-step">2️⃣ Şıkta ara</span><span class="sat-akis-arrow">→</span><span class="sat-akis-step">3️⃣ İşaretle, geç</span></div><div class="sat-soru-sent">${ornekler[s.id]||''}</div><button onclick="satModSec(${satMod+1<3?satMod+1:3})" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:8px;padding:9px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">${satMod<2?'Sonraki sinyal →':'Pratik yap →'}</button>`;
+    el.innerHTML=`<div class="sat-signal-card"><div class="sat-signal-title">${s.icon} ${s.baslik}</div><div class="sat-signal-words">${s.kelimeler.map(k=>`<span class="sat-word-tag ${s.tip}">${k}</span>`).join('')}</div><div class="sat-rule">💡 ${s.kural}</div></div><div class="sat-akis"><span class="sat-akis-step">1️⃣ Sinyali gör</span><span class="sat-akis-arrow">→</span><span class="sat-akis-step">2️⃣ Şıkta ara</span><span class="sat-akis-arrow">→</span><span class="sat-akis-step">3️⃣ İşaretle, geç</span></div><div class="sat-soru-sent">${ornekler[s.id]||''}</div><button onclick="satModSec(${satMod+1<3?satMod+1:3})" style="background:var(--signal);color:#0f3d28;border:none;border-radius:8px;padding:9px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">${satMod<2?'Sonraki sinyal →':'Pratik yap →'}</button>`;
   } else {satPratikRender();}
 }
 function satPratikRender(){
@@ -6862,7 +6862,7 @@ function satPratikRender(){
 function satSureDoIdi(){if(satAnswered)return;satAnswered=true;_satRtAnsweredSlot=satSoruIdx;const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];if(opts[soru.ans])opts[soru.ans].classList.add('ok');const fb=document.getElementById('sat-fb');if(fb){fb.className='sat-fb err';fb.textContent='⏱ Süre doldu! Doğru: '+soru.opts[soru.ans];}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
 function satAns(btn,correct,dogru){if(satAnswered)return;satAnswered=true;const _satRt=rtBitir(_satRtBaslangic);_satRtAnsweredSlot=satSoruIdx;clearInterval(satTimer);const opts=document.querySelectorAll('#sat-opts .sat-opt');opts.forEach(o=>o.disabled=true);const soru=SAT_HAVUZ[satSoruIdx];const fb=document.getElementById('sat-fb');if(correct){btn.classList.add('ok');satDogruSayisi++;if(fb){fb.className='sat-fb ok';fb.textContent='⚡ Doğru! '+soru.fb;}streakSoruEkle('sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:true,topic:'paragraf',signal:null,responseTimeMs:_satRt});}else{btn.classList.add('err');if(opts[dogru])opts[dogru].classList.add('ok');if(fb){fb.className='sat-fb';if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:(soru.q||'')+' '+soru.sent,secenekler:soru.opts,dogruIdx:dogru,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'SAT Metodu'});else{fb.className='sat-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}}hataEkle(soru.sent.replace(/<[^>]*>/g,''),btn.textContent,soru.opts[dogru],'sat');cevapKaydet({modul:'sat',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[dogru],isCorrect:false,topic:'paragraf',signal:null,responseTimeMs:_satRt});}const nb=document.getElementById('sat-next');if(nb)nb.style.display='inline-block';}
 function satSonraki(){satSoruIdx++;if(satSoruIdx>=SAT_HAVUZ.length){satBitisEkrani();return;}satPratikRender();}
-function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(72,227,154,.1);color:var(--signal-dark);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
+function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementById('sat-mod-icerik');if(!el)return;const yuzde=Math.round(satDogruSayisi/SAT_HAVUZ.length*100);const mesaj=yuzde>=80?'🏆 Mükemmel! SAT Ustasısın!':yuzde>=60?'💪 İyi! Biraz daha pratik yap.':'📚 Devam et, sinyal gözün açılıyor.';el.innerHTML=`<div class="sat-score-card"><div class="sat-score-num">${yuzde}%</div><div class="sat-score-label">Doğruluk oranı</div><div class="sat-stat-row"><div class="sat-stat"><div class="sat-stat-val">${satDogruSayisi}</div><div class="sat-stat-lbl">Doğru</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length-satDogruSayisi}</div><div class="sat-stat-lbl">Yanlış</div></div><div class="sat-stat"><div class="sat-stat-val">${SAT_HAVUZ.length}</div><div class="sat-stat-lbl">Toplam</div></div></div><div style="font-size:16px;margin-bottom:16px">${mesaj}</div><button onclick="satYenidenBasla()" style="background:var(--signal);color:#0f3d28;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-right:8px">🔄 Tekrar Yap</button><button onclick="satModSec(0)" style="background:rgba(72,227,154,.1);color:var(--signal-dark);border:1px solid var(--signal);border-radius:8px;padding:10px 24px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">📖 Tekrar Öğren</button><button onclick="satPaylas(${yuzde})" style="background:#e1306c;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-left:8px">📸 Paylaş</button></div>`;}
 function satPaylas(yuzde){
   const metin='⚡ SAT Metodunda %'+yuzde+' doğruluk oranı yakaladım!\n\n🎯 ÖSYM tuzaklarını 2 saniyede çözmeyi öğreniyorum.\ndespite, far from, must have... Artık bunlar beni kandıramaz!\n\n💙 Bu platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — SAT Metodu %'+yuzde+' Doğruluk!',text:metin,url:'https://sinyal-avcisi.com'});}
@@ -7083,8 +7083,8 @@ function dnav(el){
     const t=document.getElementById('mod-sinyal');modSinyalAsilSakla(t);t.style.display='block';
     const xd=xpLoad();const s=seviyeAl(xd.toplam);const sonraki=SEVIYE_TABLOSU.find(sv=>sv.min>xd.toplam)||SEVIYE_TABLOSU[SEVIYE_TABLOSU.length-1];const yuzde=sonraki&&sonraki.min>s.min?Math.min(((xd.toplam-s.min)/(sonraki.min-s.min))*100,100):100;
     t.innerHTML=`<div class="dm-eye">📈 RAPORLAR — XP & LİDERLİK</div>
-<div style="background:#ffffff;border-radius:12px;padding:16px;margin-bottom:12px;color:#fff">
-  <div style="font-size:10px;color:rgba(255,255,255,.62);margin-bottom:8px;letter-spacing:.08em">XP DURUMUN</div>
+<div style="background:#ffffff;border-radius:12px;padding:16px;margin-bottom:12px;color:var(--ink)">
+  <div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.08em">XP DURUMUN</div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <div style="font-size:18px;font-weight:700;color:${s.renk}">${s.ad}</div>
     <div style="font-size:28px;font-weight:700;color:#2c6e4f">${xd.toplam} XP</div>
@@ -12129,8 +12129,8 @@ function medyaRender(){
         <div style="font-size:44px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))">${k.ikon}</div>
       </div>
       <div style="padding:16px">
-        <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.4;letter-spacing:-.01em">${k.baslik}</div>
-        <div style="font-size:15px;color:rgba(165,180,252,.7);line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
+        <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.4;letter-spacing:-.01em">${k.baslik}</div>
+        <div style="font-size:15px;color:#5f7a6b;line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
         <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:color-mix(in srgb,${k.renk} 60%,#fff)">▶ Canlı Derste İzle</div>
       </div>
     </div>
@@ -12140,8 +12140,8 @@ function medyaRender(){
   if(aGrid)aGrid.innerHTML=AVCI_AKADEMI.map((a,i)=>`
     <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(72,227,154,.28);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(129,140,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'" role="button" tabindex="0">
       <div style="font-family:monospace;font-size:10px;color:#1f9d63;margin-bottom:6px">BÖLÜM ${a.no}</div>
-      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">${a.konu}</div>
-      <div style="font-size:14px;color:rgba(255,255,255,.62);margin-bottom:8px">${a.aciklama}</div>
+      <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">${a.konu}</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:8px">${a.aciklama}</div>
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:14px;color:#1f9d63">▶ ${a.sure}</span>
         <span style="font-size:10px;background:rgba(129,140,248,.2);color:#1f9d63;padding:2px 8px;border-radius:4px">İZLE</span>
@@ -12768,7 +12768,7 @@ function miniQuizGoster(){
     }
     function bitis(){
       try{localStorage.setItem('sa_mini_quiz_son',bugun);}catch(e){}
-      overlay.innerHTML='<div style="background:var(--surface);border-radius:20px;max-width:360px;width:100%;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:12px">'+(dogru===3?'🏆':dogru===2?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:22px;margin-bottom:8px">'+doğru+'/3 Doğru</div><p style="font-size:15px;color:var(--muted);margin-bottom:20px">Yarın tekrar gel!</p><button onclick="document.getElementById(mini-quiz-overlay).style.display=none" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Harika!</button></div>';
+      overlay.innerHTML='<div style="background:var(--surface);border-radius:20px;max-width:360px;width:100%;padding:32px;text-align:center"><div style="font-size:48px;margin-bottom:12px">'+(dogru===3?'🏆':dogru===2?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:22px;margin-bottom:8px">'+doğru+'/3 Doğru</div><p style="font-size:15px;color:var(--muted);margin-bottom:20px">Yarın tekrar gel!</p><button onclick="document.getElementById(mini-quiz-overlay).style.display=none" style="background:var(--signal);color:#0f3d28;border:none;border-radius:10px;padding:10px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Harika!</button></div>';
       if(typeof xpKazan==='function')xpKazan('tuzak',1);
     }
     render();
@@ -12808,7 +12808,7 @@ function sinavSimulatoruAc(){
   overlay.style.cssText='position:fixed;inset:0;background:var(--paper);z-index:10000;overflow-y:auto;font-family:IBM Plex Sans,sans-serif'; // Hedef Programı (10000) ve kurtarma kodu kutusu (9999) ile aynı/üst katman
   let soruHtml='';
   sorular.forEach((s,idx)=>{soruHtml+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px"><div style="font-size:14px;color:var(--signal-dark);font-weight:700;margin-bottom:8px">SORU '+(idx+1)+'</div><div style="font-size:14px;line-height:1.8;background:var(--paper);border-radius:8px;padding:10px 12px;margin-bottom:8px">'+s.sent+'</div><div style="font-size:15px;font-weight:600;margin-bottom:10px">'+s.q+'</div><div id="sim-opts-'+idx+'" style="display:flex;flex-direction:column;gap:6px">'+s.opts.map((o,i)=>'<button data-si="'+idx+'" data-oi="'+i+'" style="text-align:left;padding:10px 14px;border:1px solid #cdeedc;border-radius:8px;font-size:15px;cursor:pointer;background:var(--surface);font-family:IBM Plex Sans,sans-serif">'+String.fromCharCode(65+i)+') '+o+'</button>').join('')+'</div></div>';});
-  overlay.innerHTML='<div style="background:var(--surface);color:#fff;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10"><div style="font-family:IBM Plex Serif,serif;font-size:clamp(14px,4vw,18px);line-height:1.25;min-width:0">Sinyal Avcısı — <span style=color:var(--contrast)>Deneme Sınavı</span></div><div style="display:flex;align-items:center;gap:clamp(8px,2.5vw,16px);flex-shrink:0"><div id="sim-sure" style="font-family:IBM Plex Mono,monospace;font-size:clamp(16px,4.6vw,20px);color:#2c6e4f;white-space:nowrap">180:00</div><button id="btn-bitir" style="background:var(--trap);color:#fff;border:none;border-radius:8px;padding:8px clamp(10px,3vw,16px);white-space:nowrap;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Bitir</button><button id="btn-cik" style="background:rgba(72,227,154,.28);color:#fff;border:none;border-radius:8px;padding:8px clamp(10px,3vw,16px);white-space:nowrap;font-size:15px;cursor:pointer">✕ Çık</button></div></div><div style="max-width:900px;margin:0 auto;padding:32px 5vw"><div style="display:flex;flex-direction:column;gap:20px">'+soruHtml+'</div><div style="margin-top:32px;text-align:center"><button id="btn-bitir2" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📊 Sınavı Tamamla</button></div></div>';
+  overlay.innerHTML='<div style="background:var(--surface);color:#fff;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10"><div style="font-family:IBM Plex Serif,serif;font-size:clamp(14px,4vw,18px);line-height:1.25;min-width:0">Sinyal Avcısı — <span style=color:var(--contrast)>Deneme Sınavı</span></div><div style="display:flex;align-items:center;gap:clamp(8px,2.5vw,16px);flex-shrink:0"><div id="sim-sure" style="font-family:IBM Plex Mono,monospace;font-size:clamp(16px,4.6vw,20px);color:#2c6e4f;white-space:nowrap">180:00</div><button id="btn-bitir" style="background:var(--trap);color:#fff;border:none;border-radius:8px;padding:8px clamp(10px,3vw,16px);white-space:nowrap;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Bitir</button><button id="btn-cik" style="background:rgba(72,227,154,.28);color:#fff;border:none;border-radius:8px;padding:8px clamp(10px,3vw,16px);white-space:nowrap;font-size:15px;cursor:pointer">✕ Çık</button></div></div><div style="max-width:900px;margin:0 auto;padding:32px 5vw"><div style="display:flex;flex-direction:column;gap:20px">'+soruHtml+'</div><div style="margin-top:32px;text-align:center"><button id="btn-bitir2" style="background:var(--signal);color:#0f3d28;border:none;border-radius:12px;padding:16px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📊 Sınavı Tamamla</button></div></div>';
   document.body.appendChild(overlay);
   overlay.querySelectorAll('[data-si]').forEach(btn=>{
     btn.onclick=()=>{
@@ -12825,7 +12825,7 @@ function sinavSimulatoruAc(){
     // YDS/YÖKDİL: yanlış doğruyu GÖTÜRMEZ — puan = doğru oranı × 100
     const puan=Math.round((d/sorular.length)*100);
     if(typeof hpDenemeKaydet==='function')hpDenemeKaydet(d,sorular.length);
-    overlay.innerHTML='<div style="max-width:600px;margin:60px auto;padding:5vw;text-align:center"><div style="font-size:64px;margin-bottom:20px">'+(puan>=70?'🏆':puan>=50?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:32px;margin-bottom:8px">Sınav Tamamlandı!</div><div style="font-size:48px;font-weight:700;color:var(--signal-dark);margin-bottom:24px">'+puan+' Puan</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px"><div style="background:#eaf7ef;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#16a34a">'+d+'</div><div style="font-size:14px;color:var(--muted)">Doğru</div></div><div style="background:#fde8ea;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--trap)">'+y+'</div><div style="font-size:14px;color:var(--muted)">Yanlış</div></div><div style="background:#ffffff;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--muted)">'+b+'</div><div style="font-size:14px;color:var(--muted)">Boş</div></div><div style="background:var(--sl);border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--signal-dark)">'+Math.round(d*80/sorular.length)+'</div><div style="font-size:14px;color:var(--muted)">80 üzerinden doğru</div></div></div><button onclick="this.parentElement.parentElement.remove()" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Platforma Dön</button></div>';
+    overlay.innerHTML='<div style="max-width:600px;margin:60px auto;padding:5vw;text-align:center"><div style="font-size:64px;margin-bottom:20px">'+(puan>=70?'🏆':puan>=50?'💪':'📚')+'</div><div style="font-family:IBM Plex Serif,serif;font-size:32px;margin-bottom:8px">Sınav Tamamlandı!</div><div style="font-size:48px;font-weight:700;color:var(--signal-dark);margin-bottom:24px">'+puan+' Puan</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px"><div style="background:#eaf7ef;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:#16a34a">'+d+'</div><div style="font-size:14px;color:var(--muted)">Doğru</div></div><div style="background:#fde8ea;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--trap)">'+y+'</div><div style="font-size:14px;color:var(--muted)">Yanlış</div></div><div style="background:#ffffff;border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--muted)">'+b+'</div><div style="font-size:14px;color:var(--muted)">Boş</div></div><div style="background:var(--sl);border-radius:12px;padding:16px"><div style="font-size:28px;font-weight:700;color:var(--signal-dark)">'+Math.round(d*80/sorular.length)+'</div><div style="font-size:14px;color:var(--muted)">80 üzerinden doğru</div></div></div><button onclick="this.parentElement.parentElement.remove()" style="background:var(--signal);color:#0f3d28;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Platforma Dön</button></div>';
     if(typeof xpKazan==='function')xpKazan('sat',3);
   }
   overlay.querySelector('#btn-bitir').onclick=bitir;
@@ -12868,7 +12868,7 @@ function sinavSimulatoruAc(){
 (function(){
   const saved=localStorage.getItem('sa_dark');
   const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if(saved==='1'||(saved===null&&prefersDark)){
+  if(false && (saved==='1'||(saved===null&&prefersDark))){
     document.body.classList.add('dark-mode');
   }
 })();
@@ -13022,7 +13022,7 @@ function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomod
     div.style.cssText='position:fixed;bottom:0;inset:auto 0;background:var(--surface);border-top:1px solid #cdeedc;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
     div.innerHTML=`<div style="font-size:15px;color:var(--muted);flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="#" style="color:var(--signal-dark)">KVKK Aydınlatma Metni</a></div>
       <div style="display:flex;gap:8px;flex-shrink:0">
-        <button onclick="localStorage.setItem('sa_cookie_ok','1');this.parentElement.parentElement.remove()" style="background:var(--signal);color:#f6fcf8;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
+        <button onclick="localStorage.setItem('sa_cookie_ok','1');this.parentElement.parentElement.remove()" style="background:var(--signal);color:#0f3d28;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
         <button onclick="this.parentElement.parentElement.remove()" style="background:#ffffff;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;color:var(--ink)">Reddet</button>
       </div>`;
     document.body.appendChild(div);
@@ -14862,7 +14862,7 @@ function ingDersAc(el){const detay=el.querySelector('.ing-ders-detay');const che
 
 function ingPratikKlod(konu,gorev){const chatIn=document.getElementById('chat-in');if(chatIn){chatIn.value=`${konu} konusunda pratik yapmak istiyorum. Görev: "${gorev}" — Türkçe açıkla, İngilizce örnekler ver.`;}document.querySelector('.dn-item[onclick*="klod"]')?.click()||dtab(document.querySelector('.dtab[onclick*="sinyal"]'),'sinyal');}
 
-async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#4ade80">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=_safeHTML(metin.replace(/\n/g,'<br>'));xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
+async function dilaSor(){const input=document.getElementById('dila-input');const cevap=document.getElementById('dila-cevap');if(!input?.value.trim())return;cevap.innerHTML='<span style="color:#1f9d63">⏳ DILA düşünüyor...</span>';const soru=input.value;input.value='';try{const res=await fetch('/api/klod',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`Sen DILA adında Türk öğrencilere İngilizce öğreten bir AI mentorsun. Türkçe açıkla, İngilizce örnekler ver. Kısa ve net ol (max 120 kelime). Soru: ${soru}`}]})});const data=await res.json();const metin=data?.content?.[0]?.text||data?.message||'Cevap alınamadı.';cevap.innerHTML=_safeHTML(metin.replace(/\n/g,'<br>'));xpKazan('sinyal',streakLoad().gun||1);}catch(e){cevap.innerHTML='<span style="color:var(--trap)">Bağlantı hatası. Tekrar dene.</span>';}}
 let konusmaRecognition=null;
 function konusmaSesTaniBaslat(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;const micBtn=document.getElementById('konusma-mic-btn');const input=document.getElementById('konusma-input');if(!konusmaRecognition){konusmaRecognition=new SR();konusmaRecognition.lang='en-US';konusmaRecognition.interimResults=false;konusmaRecognition.maxAlternatives=1;konusmaRecognition.onresult=function(e){input.value=e.results[0][0].transcript;};konusmaRecognition.onend=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};konusmaRecognition.onerror=function(){micBtn.style.animation='';micBtn.style.background='#0a0c1480';micBtn.style.color='#22d3ee';};}
   micBtn.style.animation='pulse 1s ease infinite';micBtn.style.background='#22d3ee30';micBtn.style.color='#22d3ee';
