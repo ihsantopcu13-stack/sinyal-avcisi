@@ -277,6 +277,21 @@ mark.avci-board-vurgu{background:rgba(72,227,154,.28);color:inherit;border-radiu
   .step-num{font-size:40px}
   .step-title{margin-bottom:6px}
 }
+/* Nasil Calisir: kompakt — masaustunde 3 sutun, mobilde siki liste */
+.nasil{padding:48px 5vw}
+.nasil-header{margin-bottom:24px}
+.nasil-inner>div:last-child{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nasil .step{grid-template-columns:1fr;gap:4px;align-items:start;padding:18px 20px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.nasil .step:last-child{border:1px solid var(--border)}
+.nasil .step-num{font-size:30px;color:#48e39a;font-style:italic}
+.nasil .step-title{font-size:18px;margin-bottom:4px}
+@media(max-width:700px){
+  .nasil{padding:36px 5vw}
+  .nasil-inner>div:last-child{grid-template-columns:1fr;gap:10px}
+  .nasil .step{grid-template-columns:36px 1fr;gap:12px;align-items:center;padding:12px 14px}
+  .nasil .step-num{font-size:26px}
+  .nasil .step-title{font-size:17px;margin-bottom:2px}
+}
 .ekitap{background:var(--signal);padding:72px 5vw;color:#0f3d28}
 .ekitap-inner{max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .ekitap h2{font-family:'IBM Plex Serif',serif;font-size:clamp(24px,3vw,38px);line-height:1.2;margin-bottom:14px}
