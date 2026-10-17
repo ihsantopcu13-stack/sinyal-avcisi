@@ -868,20 +868,20 @@ export const LESSONS = [
   lesson({
     id: "not-only-but-also", epNum: 31, audioFolder: "master-31",
     hookTitle: "NOT ONLY...BUT ALSO TUZAĞI!",
-    kuralLines: ["İki yapıyı paralel bağlar, vurgu yapar","Fiil ve yapı sırası kritiktir"],
+    kuralLines: ["Not only başa gelirse yardımcı fiil öne gelir","But kısmında sıra normal, iki kısım paralel"],
     narration: {
       hook: "Aynı anda iki şeyi söylemek istiyorsanız, not only...but also'nun sırrını bilmelisiniz!",
-      kural: "Not only + yapı A, but also + yapı B şeklinde kullanılır. Burada yapı A ve yapı B dilbilgisel olarak aynı türde olmalıdır — ikisi de isim öbeği, ikisi de fiil öbeği veya ikisi de sıfat olabilir. Fiil konusu değişirse, fiil de değişebilir ama paralel yapı bozulmamalıdır.",
+      kural: "Not only + yapı A, but also + yapı B şeklinde kullanılır. Burada yapı A ve yapı B dilbilgisel olarak aynı türde olmalıdır — ikisi de isim öbeği, ikisi de fiil öbeği, ikisi de sıfat veya ikisi de tam cümle olabilir. Not only cümlenin başına gelirse ilk kısım devrik olur: yardımcı fiil özneden önce gelir (did she complete). But kısmında sıra normaldir ve also genelde özneden sonra gelir (but she also helped).",
       neden: "İngilizce, denge ve simetri sevdiği için paralel yapıları tercih eder. Not only...but also, dinleyiciye 'iki şey de önemli' mesajı verir ve cümleyi ritmik kılar. Sağında ve solunda aynı gramer kategorisi aranır.",
-      tuzak: "Sınav, not only'den sonra bir yapı, but also'dan sonra farklı bir yapı sunarak öğrenciyi paralel yapıyı bozmaya teşvik eder.",
-      ornek: "Not only is she intelligent, but also she is kind. Burada 'is she intelligent' ve 'she is kind' paralel yapıdır — her ikisi de özne + fiil + sıfat şeklindedir.",
+      tuzak: "Sınav, not only cümle başındayken düz sıralı bir şık (she completed) koyarak veya iki kısmı farklı yapıda sunarak öğrenciyi yanıltır.",
+      ornek: "Not only is she intelligent, but she is also kind. Burada ilk kısım devrik (is she intelligent), but kısmı normal sırada (she is also kind). İki kısım da sıfatla biter, yani yapı paraleldir.",
       soru: "Aşağıdaki cümlede not only...but also yapısını doğru kullanan seçeneği bulun.",
-      cozum: "Not only'den sonra gelen yapı ile but also'dan sonra gelen yapı dilbilgisel olarak aynı türde olmalıdır. Fiil konusu değişirse, fiil de değişebilir ama yapının kategorisi aynı kalmalıdır.",
-      avci: "Not only → yapı A, but also → yapı A (paralel) | Fiil konusu değişse bile yapı türü aynı kalmalı!",
+      cozum: "Not only cümle başında olduğu için ilk kısımda yardımcı fiil öne gelir ve fiil yalın kalır: did she complete. But kısmında sıra normaldir ve iki kısım aynı yapıda olmalıdır.",
+      avci: "Not only başta → yardımcı fiil öne | But → normal sıra, also özneden sonra | İki kısım paralel!",
     },
     nedenBadge: "PARALEL YAPININ GÜCÜ",
     nedenText: "Not only...but also, iki benzer yapıyı bağlayarak ikincisine daha fazla vurgu katar ve cümleyi dengeli tutar.",
-    tuzakText: "ÖSYM, fiil konumunu değiştirerek veya paralel yapıyı bozarak yanlış seçenekler sunar.",
+    tuzakText: "ÖSYM, not only başta olduğu hâlde düz sıralı şıklar koyarak veya paralel yapıyı bozarak yanlış seçenekler sunar.",
     examples: [
   {
     "parts": [
@@ -894,11 +894,11 @@ export const LESSONS = [
         "style": "verb"
       },
       {
-        "text": ", but also",
+        "text": ", but",
         "style": "trap"
       },
       {
-        "text": "he speaks French fluently",
+        "text": "he also speaks French fluently",
         "style": "plain"
       }
     ]
@@ -914,43 +914,43 @@ export const LESSONS = [
         "style": "verb"
       },
       {
-        "text": ", but also",
+        "text": ", but",
         "style": "trap"
       },
       {
-        "text": "it is educational",
+        "text": "it is also educational",
         "style": "plain"
       }
     ]
   }
 ],
     breakdown: [
-      { text: "Not only'den sonra ters yapı (inversion) gelebilir: Does he...?", color: Y },
-      { text: "But also'dan sonra normal yapı gelir: he speaks...", color: G },
+      { text: "Not only cümle başındaysa ters yapı (inversion) gelir: does he speak...", color: Y },
+      { text: "But kısmında normal sıra gelir: but he also speaks...", color: G },
       { text: "Paralel yapı: her iki kısım da aynı gramer kategorisinde olmalı", color: G }
     ],
-    question: { sentence: "Not only _____ the project on time, but also she delivered exceptional results.", options: ["A) she completed","B) did she complete","C) she did complete","D) completing"] },
+    question: { sentence: "Not only _____ the project on time, but she also delivered exceptional results.", options: ["A) she completed","B) did she complete","C) she did complete","D) completing"] },
     answerLabel: "B) DID SHE COMPLETE",
-    cozumText: "Not only'den sonra ters yapı (inversion) kullanılır: did she complete.",
-    avciKodu: "Not only → TERS YAPIYI KONTROL ET (does/did/is vb. öne gelir) | But also → normal yapı | Paralel tutarlılık zorunlu!",
+    cozumText: "Not only cümle başında olduğu için ters yapı (inversion) kullanılır: did she complete.",
+    avciKodu: "Not only başta → TERS YAPIYI KONTROL ET (does/did/is vb. öne gelir) | But → normal sıra, also özneden sonra | Paralel tutarlılık zorunlu!",
   }),
   lesson({
     id: "neither-nor", epNum: 32, audioFolder: "master-32",
     hookTitle: "NEITHER...NOR TUZAĞI!",
-    kuralLines: ["Neither...nor olumsuz seçim sunar","Fiil her zaman tekil olur"],
+    kuralLines: ["Neither...nor iki seçeneği birlikte reddeder","Fiil, nor'dan sonraki isme uyar"],
     narration: {
       hook: "İki şeyi aynı anda reddetmek istediğinde İngilizce'de hangi yapı kullanırsın?",
-      kural: "Neither...nor, iki isim veya isim öbeğini bağlayarak her ikisini de olumsuz yapar. Bu yapıda fiil daima tekil (singular) olur, çünkü 'hiçbiri' anlamı taşır. Örneğin: 'Neither Ali nor Veli' — ikisinden hiçbiri, yani tekil.",
-      neden: "Sağında ve solunda iki seçenek vardır, ama neither...nor bunları birleştirerek tek bir olumsuz birim oluşturur. Gramer açısından bu, 'ne bu ne de o' demek olduğu için tekil fiil alır.",
-      tuzak: "ÖSYM, neither...nor'un yanına çoğul fiil koyarak veya neither'i yanlış yerde (ortada, başında) göstererek öğrenciyi yanıltır.",
-      ornek: "Cümle: 'Neither the manager nor the assistant was available.' — manager ve assistant iki kişi olsa da, neither...nor yapısı onları birlikte reddediyor, bu yüzden 'was' (tekil) kullanılır.",
+      kural: "Neither...nor, iki isim veya isim öbeğini bağlayarak ikisini birlikte olumsuz yapar: ne o ne de bu. Fiil, kendisine en yakın isme, yani nor'dan sonraki isme uyar. Örneğin: 'Neither the teacher nor the students were ready' — yakın isim students çoğul, fiil de çoğul.",
+      neden: "Fiil, kendisine en yakın özneye bakar. Bu yüzden neither...nor cümlesinde belirleyici olan ilk isim değil, nor'dan sonra gelen isimdir. Sıra değişirse fiil de değişir.",
+      tuzak: "ÖSYM, fiili ilk isme göre çekilmiş bir şıkkı doğru gibi göstererek öğrenciyi yanıltır.",
+      ornek: "Cümle: 'Neither the manager nor the assistant was available.' — nor'dan sonraki isim the assistant tekil, bu yüzden 'was' kullanılır. 'Neither the manager nor the assistants were available' olsaydı fiil çoğul olurdu.",
       soru: "Aşağıdaki cümlede boşluğa hangi fiil gelmelidir?",
-      cozum: "Neither...nor yapısı iki seçeneği birlikte olumsuz yapar ve gramer olarak tekil kabul edilir. Bu yüzden 'was' doğru, 'were' yanlıştır.",
-      avci: "Neither...nor = hiçbiri → TEKİL FİİL ⚡ Sağ ve sol ikisi de reddedilir, ama sayı açısından 'bir' olur.",
+      cozum: "Fiil, nor'dan sonraki isme uyar. Burada yakın isim 'the nurse' tekil ve cümle geçmiş zamanda (yesterday). Bu yüzden 'was' doğru, 'were' yanlıştır.",
+      avci: "Neither...nor → nor'dan sonraki isme bak ⚡ Yakın isim tekilse tekil, çoğulsa çoğul fiil.",
     },
-    nedenBadge: "ÇİFT OLUMSUZLUK KÖPRÜSÜ",
-    nedenText: "Neither...nor yapısı iki seçeneği birlikte reddeder; gramer olarak tekil fiil gerektirir çünkü 'hiçbiri' anlamı taşır.",
-    tuzakText: "ÖSYM, çoğul fiil koyan şıkları doğru göstererek veya neither'i yanlış konumlandırarak kandırır.",
+    nedenBadge: "YAKIN İSİM KURALI",
+    nedenText: "Neither...nor iki seçeneği birlikte reddeder; fiil, kendisine en yakın isme (nor'dan sonraki) uyar.",
+    tuzakText: "ÖSYM, fiili ilk isme göre çekilmiş şıkları doğru göstererek kandırır.",
     examples: [
   {
     "parts": [
@@ -987,7 +987,7 @@ export const LESSONS = [
         "style": "trap"
       },
       {
-        "text": "the student",
+        "text": "the teacher",
         "style": "plain"
       },
       {
@@ -995,29 +995,29 @@ export const LESSONS = [
         "style": "trap"
       },
       {
-        "text": "the teacher",
+        "text": "the students",
         "style": "plain"
       },
       {
-        "text": "has",
+        "text": "were",
         "style": "verb"
       },
       {
-        "text": "completed the assignment.",
+        "text": "ready.",
         "style": "plain"
       }
     ]
   }
 ],
     breakdown: [
-      { text: "Neither...nor iki ismi bağlar ve her ikisini reddeder", color: G },
-      { text: "Fiil daima tekil (is, has, was) olur", color: Y },
-      { text: "Trap: Çoğul fiil (are, have) seçmek yanlıştır", color: R }
+      { text: "Neither...nor iki ismi bağlar ve ikisini birlikte reddeder", color: G },
+      { text: "Fiil nor'dan sonraki isme uyar: tea → is, the students → were", color: Y },
+      { text: "Tuzak: ilk isme bakarak fiil seçmek", color: R }
     ],
     question: { sentence: "Neither the doctor nor the nurse _____ able to attend the emergency meeting yesterday.", options: ["A) were","B) are","C) was","D) have been"] },
     answerLabel: "C) WAS",
-    cozumText: "Neither...nor tekil fiil alır; geçmiş zaman için 'was' doğru.",
-    avciKodu: "Neither...nor → Tekil Fiil ⚡ | Sağ + Sol = Hiçbiri (1 birim) | was/is/has ✓ | were/are/have ✗",
+    cozumText: "Yakın isim 'the nurse' tekil; geçmiş zaman için 'was' doğru.",
+    avciKodu: "Neither...nor → nor'dan sonraki isme bak ⚡ | Yakın isim tekil → is/has/was | Yakın isim çoğul → are/have/were | İlk isme bakma ✗",
   }),
   lesson({
     id: "either-or", epNum: 33, audioFolder: "master-33",
