@@ -375,7 +375,7 @@ mark.avci-board-vurgu{background:rgba(72,227,154,.28);color:inherit;border-radiu
 .dk-action{font-size:15px;font-weight:600;color:var(--signal-dark);margin-top:5px;cursor:pointer}
 .dash-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .dtab{font-size:16px;font-weight:600;color:var(--muted);padding:8px 14px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0}
-.dtab.active{color:#34d399;border-bottom-color:#34d399}
+.dtab.active{color:#1f9d63;border-bottom-color:#48e39a}
 .dtab-raporlar-mobil{display:none}
 .dmod{animation:fadein .2s ease;position:relative}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -1036,25 +1036,25 @@ body.dark-mode .sp-hafta{border-bottom-color:#cdeedc}
 .bugun-dots{display:flex;gap:6px;margin-top:16px;position:relative}
 .bugun-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:background-color .2s ease}
 .bugun-dot.tamam{background:#48e39a}
-.bugun-kart.tamamlandi{border-color:rgba(52,211,153,.35);border-left-color:#34d399}
-.bugun-kart.tamamlandi .bugun-eyebrow{color:#34d399}
-.bugun-kart.tamamlandi .bugun-baslik{color:#34d399}
-.bugun-kart.tamamlandi .bugun-cta{background:rgba(52,211,153,.16);color:#34d399;border:1px solid rgba(52,211,153,.4)}
+.bugun-kart.tamamlandi{border-color:rgba(52,211,153,.35);border-left-color:#1f9d63}
+.bugun-kart.tamamlandi .bugun-eyebrow{color:#1f9d63}
+.bugun-kart.tamamlandi .bugun-baslik{color:#1f9d63}
+.bugun-kart.tamamlandi .bugun-cta{background:rgba(52,211,153,.16);color:#1f9d63;border:1px solid rgba(52,211,153,.4)}
 .bugun-kart.tamamlandi .bugun-dot.tamam{background:#34d399}
 @media(max-width:600px){.bugun-kart{padding:16px}}
 
 /* ACİL KURTARMA KARTI — Dashboard */
-.sk-kart{background:linear-gradient(135deg,#7f1d1d,#efeafd);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(127,29,29,.25)}
+.sk-kart{background:#ffffff;border:1.5px solid rgba(239,68,68,.45);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:var(--ink);cursor:pointer;position:relative;overflow:hidden;box-shadow:0 6px 18px rgba(239,68,68,.10)}
 .sk-kart:hover{transform:translateY(-1px)}
-.sk-kart-baslik{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.sk-kart-alt{font-size:12px;color:rgba(255,255,255,.62);margin-bottom:14px}
+.sk-kart-baslik{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:4px;color:#b91c1c}
+.sk-kart-alt{font-size:12px;color:var(--muted);margin-bottom:14px}
 .sk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px}
-.sk-stat{background:rgba(72,227,154,.16);border-radius:10px;padding:10px;text-align:center}
-.sk-stat-val{font-family:'IBM Plex Serif',serif;font-size:20px;line-height:1}
-.sk-stat-lbl{font-size:10px;color:rgba(255,255,255,.8);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
-.sk-check-mini{margin-top:12px;font-size:12px;color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.sk-check-bar{flex:1;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
-.sk-check-fill{height:100%;background:#34d399;border-radius:3px;transition:width .3s}
+.sk-stat{background:#fdeeee;border-radius:10px;padding:10px;text-align:center}
+.sk-stat-val{font-family:'IBM Plex Serif',serif;font-size:20px;line-height:1;color:var(--ink)}
+.sk-stat-lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.03em}
+.sk-check-mini{margin-top:12px;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sk-check-bar{flex:1;height:6px;background:#fde2e2;border-radius:3px;overflow:hidden}
+.sk-check-fill{height:100%;background:#ef4444;border-radius:3px;transition:width .3s}
 @media(max-width:600px){.sk-kart{padding:16px}}
 @keyframes konfetiDus{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
 
@@ -7102,7 +7102,7 @@ function dnav(el){
       <div style="font-size:10px;color:rgba(255,255,255,.62)">Bu Hafta XP</div>
     </div>
     <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px">
-      <div style="font-size:20px;font-weight:700;color:#34d399">${xd.toplam}</div>
+      <div style="font-size:20px;font-weight:700;color:#1f9d63">${xd.toplam}</div>
       <div style="font-size:10px;color:rgba(255,255,255,.62)">Toplam XP</div>
     </div>
   </div>
@@ -12425,7 +12425,7 @@ function adminPanelAc(kullanicilar) {
           <div style="font-size:12px;color:var(--muted);margin-top:4px">Toplam Kullanıcı</div>
         </div>
         <div style="background:#ffffff;border-radius:12px;padding:16px;text-align:center">
-          <div style="font-size:28px;font-weight:700;color:#34d399" id="adm-bugun">-</div>
+          <div style="font-size:28px;font-weight:700;color:#1f9d63" id="adm-bugun">-</div>
           <div style="font-size:12px;color:var(--muted);margin-top:4px">Bugün Katılan</div>
         </div>
         <div style="background:#ffffff;border-radius:12px;padding:16px;text-align:center">
@@ -13659,7 +13659,7 @@ function sinavPlanimOlustur(kaydet){
       <div class="sp-strateji-metin">
         YDS/YÖKDİL'de <b>yanlış doğruyu götürmez</b>; her doğru <b>1,25 puan</b>.<br>
         Strateji: <b>Hiçbir soruyu boş bırakma</b> — boş = kesin 0, tahmin = %20 şans.<br>
-        <span style="color:#34d399;font-weight:800">${hedefPuan} puan = ${v.gerekliDogruBosStrateji} doğru</span>
+        <span style="color:#1f9d63;font-weight:800">${hedefPuan} puan = ${v.gerekliDogruBosStrateji} doğru</span>
       </div>
     </div>
     <div class="sp-grid" style="margin-top:16px">
@@ -14693,7 +14693,7 @@ function dilavcisiGunlukHedefGuncelle() {
   if (streakEl) streakEl.textContent = veri.streak;
   if (xpEl) xpEl.textContent = veri.xp;
   if (tamEl) tamEl.textContent = veri.tamamlanan.length;
-  if (hedefMetin) hedefMetin.innerHTML = veri.gunlukIlerleme >= hedef ? '<span style="color:#34d399">Bugünkü hedef tamam! 🎉</span>' : `${veri.gunlukIlerleme}/${hedef} ders tamamla`;
+  if (hedefMetin) hedefMetin.innerHTML = veri.gunlukIlerleme >= hedef ? '<span style="color:#1f9d63">Bugünkü hedef tamam! 🎉</span>' : `${veri.gunlukIlerleme}/${hedef} ders tamamla`;
 }
 
 function dilavcisiDersTamamlandi(dersId) {
@@ -17678,8 +17678,8 @@ setTimeout(gunlukSync, 10000);
    yazılarının boyutunda !important kullanılır.
    ===================================================================== */
 
-/* 1) Temel yazı ve gri yazı kontrastı (koyu zeminde #5f7a6b → #aeb6c4) */
-:root{--muted:#aeb6c4;--km-muted:#a7afbd}
+/* 1) Temel yazı ve gri yazı kontrastı (acik zeminde okunur koyu yesil-gri) */
+:root{--muted:#4f6b5c;--km-muted:#4f6b5c}
 body{font-size:17px;line-height:1.6}
 p,li{line-height:1.6}
 :is([class$="-desc"],[class*="-desc "],[class$="-sub"],[class*="-sub "],[class$="-subtitle"],[class$="-note"],[class*="-note "],
@@ -17723,7 +17723,7 @@ body.klod-odak .klod-govde .klod-ws{height:100%;min-height:0}
 .klod-kart-bos{font-size:16px;color:var(--muted);margin:0}
 .klod-kart-btn{background:linear-gradient(135deg,#047857,#065f46);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .klod-kart-lejant{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;font-weight:700}
-.klod-rol-s{color:#4da3ff}.klod-rol-v{color:#34d399}.klod-rol-o{color:#ff9f1c}
+.klod-rol-s{color:#4da3ff}.klod-rol-v{color:#1f9d63}.klod-rol-o{color:#ff9f1c}
 .klod-kart-cumle :is(.klod-rol-s,.klod-rol-v,.klod-rol-o){font-weight:700}
 
 /* 6) Mobil: içerik ızgaraları tek sütun */
