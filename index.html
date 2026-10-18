@@ -1396,6 +1396,25 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
   .fc-btn{font-size:14px}
 }
 
+
+/* Panel: altın çerçeve + hafif hareket */
+@keyframes dkGiris{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes dkParilti{0%,70%{left:-60%}100%{left:130%}}
+.dk{position:relative;overflow:hidden;border:1px solid rgba(212,175,55,.55)!important;transition:transform var(--t-med),box-shadow var(--t-med),border-color var(--t-med);animation:dkGiris .5s ease both}
+.dk:nth-child(2){animation-delay:.08s}.dk:nth-child(3){animation-delay:.16s}.dk:nth-child(4){animation-delay:.24s}
+.dk::after{content:'';position:absolute;top:0;left:-60%;width:50%;height:2px;background:linear-gradient(90deg,transparent,#d4af37,transparent);animation:dkParilti 5s ease-in-out infinite;pointer-events:none}
+.dk:nth-child(2)::after{animation-delay:1.2s}.dk:nth-child(3)::after{animation-delay:2.4s}.dk:nth-child(4)::after{animation-delay:3.6s}
+.dk:hover{transform:translateY(-4px);border-color:#d4af37!important;box-shadow:0 10px 28px rgba(212,175,55,.18)}
+.dk-sub,.dk-val{overflow-wrap:anywhere}
+.sk-kart{border-color:rgba(212,175,55,.55)!important}
+.sk-kart,.bugun-kart{transition:transform var(--t-med),box-shadow var(--t-med)}
+.sk-kart:hover,.bugun-kart:hover{box-shadow:0 10px 28px rgba(212,175,55,.15)}
+.dash-ui{border-color:rgba(212,175,55,.55)!important}
+.dash-tabs{scrollbar-color:rgba(212,175,55,.6) transparent}
+.dash-tabs::-webkit-scrollbar{height:4px}
+.dash-tabs::-webkit-scrollbar-track{background:transparent}
+.dash-tabs::-webkit-scrollbar-thumb{background:rgba(212,175,55,.6);border-radius:2px}
+@media(prefers-reduced-motion:reduce){.dk,.dk::after{animation:none}.dk:hover{transform:none}}
 </style>
 <script type="application/ld+json">
 {
