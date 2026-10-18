@@ -367,7 +367,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .dash-welcome b{color:var(--ink)}
 .dash-karts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .dk{border-radius:10px;padding:13px;border:1px solid var(--border);background:var(--surface)}
-.dk-icon{font-size:18px;margin-bottom:6px}
+.dk-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:#d4af37;border:1px solid rgba(212,175,55,.45);border-radius:9px;background:rgba(212,175,55,.08)}
 .dk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
 .dk-val{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .dk-sub{font-size:15px;color:var(--muted)}
@@ -1882,31 +1882,31 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         </div>
         <div class="sk-kart" id="sk-kart" onclick="sinavKurtarmaKartaGit()" role="button" tabindex="0"></div>
         <div class="dash-karts">
-          <div class="dk blue"><div class="dk-icon">🎯</div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandı</div><div class="dk-action" onclick="dashKartGit('Sinyal Lab')" role="button" tabindex="0">Soru çöz →</div></div>
-          <div class="dk purple"><div class="dk-icon">⚠️</div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val" id="dk-zayif-val">—</div><div class="dk-sub" id="dk-zayif-sub">Yükleniyor...</div><div class="dk-action" id="dk-zayif-act" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da çalış →</div></div>
-          <div class="dk green"><div class="dk-icon">📊</div><div class="dk-lbl" id="dk-puan-lbl">Puanın</div><div class="dk-val">—</div><div class="dk-sub">Yükleniyor...</div><div class="dk-action" id="dk-puan-act" style="display:none" onclick="dashPuanAnalizAc()" role="button" tabindex="0">Puanını hesapla →</div></div>
-          <div class="dk amber"><div class="dk-icon">🃏</div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div><div class="dk-action" onclick="dashKartGit('Kelime Kartları')" role="button" tabindex="0">Kartları çalış →</div></div>
+          <div class="dk blue"><div class="dk-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></div><div class="dk-lbl">Günlük Hedef</div><div class="dk-val">30 soru</div><div class="dk-bar"><div class="dk-fill"></div></div><div class="dk-sub">0 / 30 tamamlandı</div><div class="dk-action" onclick="dashKartGit('Sinyal Lab')" role="button" tabindex="0">Soru çöz →</div></div>
+          <div class="dk purple"><div class="dk-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg></div><div class="dk-lbl">Zayıf Yapı</div><div class="dk-val" id="dk-zayif-val">—</div><div class="dk-sub" id="dk-zayif-sub">Yükleniyor...</div><div class="dk-action" id="dk-zayif-act" onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" role="button" tabindex="0">Sinyal Lab'da çalış →</div></div>
+          <div class="dk green"><div class="dk-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></div><div class="dk-lbl" id="dk-puan-lbl">Puanın</div><div class="dk-val">—</div><div class="dk-sub">Yükleniyor...</div><div class="dk-action" id="dk-puan-act" style="display:none" onclick="dashPuanAnalizAc()" role="button" tabindex="0">Puanını hesapla →</div></div>
+          <div class="dk amber"><div class="dk-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="13" height="17" rx="2"/><path d="M8 7h5"/><path d="M8 11h5"/><path d="M20 7v12a2 2 0 0 1-2 2H9"/></svg></div><div class="dk-lbl">Bugün Kelime</div><div class="dk-val" id="dk-kelime-bugun">-</div><div class="dk-sub" id="dk-kelime-durum">Yükleniyor...</div><div class="dk-action" onclick="dashKartGit('Kelime Kartları')" role="button" tabindex="0">Kartları çalış →</div></div>
         </div>
         <div class="dash-tabs">
           <div class="dtab active" onclick="dtab(this,'sinyal')" role="button" tabindex="0">Sinyal Lab</div>
-          <div class="dtab dtab-raporlar-mobil" onclick="dnav(this)" role="button" tabindex="0">📈 Raporlar</div>
+          <div class="dtab dtab-raporlar-mobil" onclick="dnav(this)" role="button" tabindex="0">Raporlar</div>
           <div class="dtab" onclick="dtab(this,'kelime')" role="button" tabindex="0">Kelime Kartları</div>
           <div class="dtab" onclick="dtab(this,'tuzak')" role="button" tabindex="0">Günlük Tuzak</div>
-          <div class="dtab" onclick="dtab(this,'sat')" role="button" tabindex="0">⚡ SAT Metodu</div>
-          <div class="dtab" onclick="dtab(this,'paragraf')" role="button" tabindex="0">📖 Paragraf</div>
-          <div class="dtab" onclick="dtab(this,'svo')" role="button" tabindex="0">📐 S+V+O</div>
-          <div class="dtab" onclick="dtab(this,'teknik')" role="button" tabindex="0">🧠 Öğrenme</div>
-          <div class="dtab" onclick="dtab(this,'hatalar')" role="button" tabindex="0">📝 Hata Defteri</div>
-          <div class="dtab" onclick="dtab(this,'avci')" role="button" tabindex="0">🏹 Avcı Master</div>
-          <div class="dtab" onclick="dtab(this,'radar')" role="button" tabindex="0">🎯 Zayıf Alan Radarı</div>
-          <div class="dtab" onclick="dtab(this,'plan')" role="button" tabindex="0">📅 Çalışma Planım</div>
-          <div class="dtab" onclick="dtab(this,'lider')" role="button" tabindex="0">🏆 Liderlik</div>
-          <div class="dtab" onclick="dtab(this,'mikro')" role="button" tabindex="0">🎬 Mini Dersler</div>
-          <div class="dtab" onclick="dtab(this,'dilavcisi')" role="button" tabindex="0">🌍 Dil Avcısı</div>
-          <div class="dtab" onclick="dtab(this,'istatistik')" role="button" tabindex="0">📊 İstatistiklerim</div>
-          <div class="dtab" onclick="dtab(this,'canliders')" role="button" tabindex="0">🎓 Canlı Ders</div>
-          <div class="dtab" onclick="dtab(this,'sinavplanim')" role="button" tabindex="0">🚨 Acil Kurtarma Planı</div>
-          <div class="dtab" onclick="dtab(this,'puananaliz')" role="button" tabindex="0">📊 Puan Analizörü</div>
+          <div class="dtab" onclick="dtab(this,'sat')" role="button" tabindex="0">SAT Metodu</div>
+          <div class="dtab" onclick="dtab(this,'paragraf')" role="button" tabindex="0">Paragraf</div>
+          <div class="dtab" onclick="dtab(this,'svo')" role="button" tabindex="0">S+V+O</div>
+          <div class="dtab" onclick="dtab(this,'teknik')" role="button" tabindex="0">Öğrenme</div>
+          <div class="dtab" onclick="dtab(this,'hatalar')" role="button" tabindex="0">Hata Defteri</div>
+          <div class="dtab" onclick="dtab(this,'avci')" role="button" tabindex="0">Avcı Master</div>
+          <div class="dtab" onclick="dtab(this,'radar')" role="button" tabindex="0">Zayıf Alan Radarı</div>
+          <div class="dtab" onclick="dtab(this,'plan')" role="button" tabindex="0">Çalışma Planım</div>
+          <div class="dtab" onclick="dtab(this,'lider')" role="button" tabindex="0">Liderlik</div>
+          <div class="dtab" onclick="dtab(this,'mikro')" role="button" tabindex="0">Mini Dersler</div>
+          <div class="dtab" onclick="dtab(this,'dilavcisi')" role="button" tabindex="0">Dil Avcısı</div>
+          <div class="dtab" onclick="dtab(this,'istatistik')" role="button" tabindex="0">İstatistiklerim</div>
+          <div class="dtab" onclick="dtab(this,'canliders')" role="button" tabindex="0">Canlı Ders</div>
+          <div class="dtab" onclick="dtab(this,'sinavplanim')" role="button" tabindex="0">Acil Kurtarma Planı</div>
+          <div class="dtab" onclick="dtab(this,'puananaliz')" role="button" tabindex="0">Puan Analizörü</div>
         </div>
         <div class="dmod" id="mod-sinyal">
           <button class="tam-ekran-btn" data-saf-odak-btn="sinyal" onclick="tamEkranAcKapat('mod-sinyal')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
@@ -13724,7 +13724,7 @@ function sinavKurtarmaKartRender(){
   const checklistTamamlanan=SP_CHECKLIST_ITEMS.filter(i=>checklistVeri.items[i.key]).length;
   const yuzde=Math.round((checklistTamamlanan/SP_CHECKLIST_ITEMS.length)*100);
   kartEl.innerHTML=`
-    <div class="sk-kart-baslik">🚨 Acil Kurtarma Planı</div>
+    <div class="sk-kart-baslik">Acil Kurtarma Planı</div>
     <div class="sk-kart-alt">${(typeof spAyarVarMi==='function'&&!spAyarVarMi())?'Örnek plan — kendi puanını girmek için Devam Et\'e bas · ':''}${v.mevcutPuan} → ${v.hedefPuan} puan · ${v.tarihStr.split('-').reverse().join('.')}'a kadar</div>
     <div class="sk-grid">
       <div class="sk-stat"><div class="sk-stat-val">${v.kalanGun}</div><div class="sk-stat-lbl">Gün Kaldı</div></div>
