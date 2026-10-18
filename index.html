@@ -132,20 +132,25 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--paper);color:var(--
 nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(10,13,19,.97);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(226,224,216,.8);display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
 .nav-logo{font-family:'IBM Plex Serif',serif;font-size:18px;cursor:pointer;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
 .nav-logo b{color:var(--signal);font-weight:400}
-.nav-links{display:flex;gap:24px}
+.nav-links{display:flex;gap:24px;align-items:center}
 .nav-links span{font-size:15px;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s;white-space:nowrap}
 .nav-links span:hover{color:var(--ink)}
 .btn-nav{background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;padding:9px 20px;border-radius:var(--r-sm);cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;letter-spacing:-.01em;transition:all var(--t-fast);box-shadow:var(--shadow-sm)}
 .btn-nav:hover{background:#0f2a1a;transform:translateY(-1px);box-shadow:var(--shadow-md)}
-.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:16px}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:16px;color:var(--ink)}
+.nav-dd{position:relative}
+.nav-dd-menu{display:none;position:absolute;top:100%;left:-16px;margin-top:10px;min-width:190px;flex-direction:column;background:rgba(10,15,12,.98);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.45)}
+.nav-dd-menu::before{content:'';position:absolute;inset:-12px 0 auto;height:12px}
+.nav-dd:hover .nav-dd-menu,.nav-dd:focus-within .nav-dd-menu{display:flex}
+.nav-dd-menu span{display:block;padding:9px 12px;border-radius:6px}
+.nav-dd-menu span:hover{background:var(--surface)}
+.nav-dd-menu a{text-decoration:none}
 .mmenu{display:none;position:fixed;top:56px;inset:auto 0;background:rgba(10,13,19,.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:199;padding:8px 5vw 16px;flex-direction:column}
 .mmenu.open{display:flex}
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
-/* Menü 9 öğe (Medya JS ile eklenir): 1280px altında sığmaz → hamburger.
-   1281-1450px arası sıkışık → aralık ve yazı küçülür. */
-@media(max-width:1280px){.nav-links{display:none}.hamburger{display:block}}
-@media(min-width:1281px) and (max-width:1450px){.nav-links{gap:14px}.nav-links span{font-size:14px}}
+/* Menü 5 öğe (ikincil sayfalar Kaynaklar altında): 900px'e kadar sığar, altında hamburger. */
+@media(min-width:901px) and (max-width:1100px){.nav-links{gap:16px}}
 .hero{min-height:100vh;padding:168px 5vw 80px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;max-width:1200px;margin:0 auto;overflow:hidden}
 .hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.55}
 .hero::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 50% 40%,rgba(10,13,19,.35),rgba(10,13,19,.88) 65%)}
@@ -277,17 +282,17 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
   .step-num{font-size:40px}
   .step-title{margin-bottom:6px}
 }
-.ekitap{background:var(--signal);padding:72px 5vw;color:#0a0f0c}
+.ekitap{background:var(--surface);padding:72px 5vw;color:var(--ink);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .ekitap-inner{max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .ekitap h2{font-family:'IBM Plex Serif',serif;font-size:clamp(24px,3vw,38px);line-height:1.2;margin-bottom:14px}
-.ekitap-desc{font-size:15px;color:rgba(10,15,12,.85);line-height:1.7;margin-bottom:22px}
+.ekitap-desc{font-size:15px;color:rgba(236,231,218,.8);line-height:1.7;margin-bottom:22px}
 .ekitap-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.ekitap-list li{font-size:15px;color:rgba(10,15,12,.9);display:flex;gap:8px}
-.ekitap-list li::before{content:'→';color:#0a0f0c;flex-shrink:0}
+.ekitap-list li{font-size:15px;color:rgba(236,231,218,.9);display:flex;gap:8px}
+.ekitap-list li::before{content:'→';color:var(--signal);flex-shrink:0}
 .ekitap-form{display:flex;gap:8px;flex-wrap:wrap}
-.ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:rgba(255,255,255,.45);color:#0a0f0c;outline:none}
-.ekitap-submit{background:var(--surface);color:var(--signal);font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
-.ekitap-note{font-size:15px;color:rgba(10,15,12,.8);margin-top:8px}
+.ekitap-input{flex:1;min-width:190px;border:none;border-radius:8px;padding:12px 14px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;background:var(--paper);color:var(--ink);outline:none;border:1px solid var(--border)}
+.ekitap-submit{background:var(--signal);color:#0a0f0c;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;padding:12px 22px;border-radius:8px;border:none;cursor:pointer}
+.ekitap-note{font-size:15px;color:var(--muted);margin-top:8px}
 .ekitap-mockup{display:flex;justify-content:center}
 .ekitap-mockup img{width:100%;max-width:320px;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.12)}
 .klod{padding:80px 5vw;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
@@ -319,7 +324,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .chat-in:focus{border-color:var(--signal)}
 .chat-klod-btn{flex:1;background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#0a0f0c;border-radius:10px;padding:12px 16px;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(245,166,35,.35)}
 .chat-send{background:linear-gradient(135deg,var(--signal),var(--signal-dark));border:none;color:#0a0f0c;width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:18px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(245,166,35,.35);transition:all .15s;flex-shrink:0}
-.ses{background:linear-gradient(135deg,#0a0f0c,#161b2e);padding:80px 5vw;color:var(--ink)}
+.ses{background:linear-gradient(135deg,#0a0f0c,#0f2418);padding:80px 5vw;color:var(--ink)}
 .ses-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
 .ses-desc{font-size:15px;color:rgba(236,231,218,.62);line-height:1.7;margin:12px 0 28px}
 .ses-modes{display:flex;flex-direction:column;gap:10px}
@@ -361,11 +366,7 @@ mark.avci-board-vurgu{background:rgba(245,166,35,.28);color:inherit;border-radiu
 .dash-welcome{font-size:16px;color:var(--muted);margin-bottom:16px}
 .dash-welcome b{color:var(--ink)}
 .dash-karts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-.dk{border-radius:10px;padding:13px;border:1px solid var(--border)}
-.dk.blue{background:linear-gradient(135deg,#0f2a1a,#0f2a1a);border-color:rgba(59,130,246,.25)}
-.dk.purple{background:linear-gradient(135deg,#241a30,#241a30);border-color:rgba(124,58,237,.25)}
-.dk.green{background:linear-gradient(135deg,#0f2418,#0f2418);border-color:rgba(34,197,94,.3)}
-.dk.amber{background:linear-gradient(135deg,#2e2410,#2e2410);border-color:rgba(245,158,11,.25)}
+.dk{border-radius:10px;padding:13px;border:1px solid var(--border);background:var(--surface)}
 .dk-icon{font-size:18px;margin-bottom:6px}
 .dk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
 .dk-val{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
@@ -827,10 +828,6 @@ body.dark-mode .msg.k{background:#0f2a1a;border-color:#1f4a30}
 body.dark-mode .msg.u{background:linear-gradient(135deg,#0f2a1a,#2a1f4a)}
 body.dark-mode .dash-ui{background:#0f2a1a;border-color:#1f4a30}
 body.dark-mode .dk{background:#0f2a1a;border-color:#1f4a30}
-body.dark-mode .dk.blue{background:linear-gradient(135deg,#0f2a1a,#141e40)}
-body.dark-mode .dk.green{background:linear-gradient(135deg,#0f2a1f,#0f3020)}
-body.dark-mode .dk.amber{background:linear-gradient(135deg,#2a1f00,#2a2000)}
-body.dark-mode .dk.purple{background:linear-gradient(135deg,#1a0f2a,#1f0f30)}
 body.dark-mode .sss-item{border-bottom-color:#1f4a30}
 body.dark-mode .yorum{background:#0f2a1a;border-color:#1f4a30}
 body.dark-mode .modal{background:#0f2a1a}
@@ -1026,7 +1023,7 @@ body.dark-mode .sp-hafta{border-bottom-color:#1f4a30}
 @media(max-width:600px){.bugun-kart{padding:16px}}
 
 /* ACİL KURTARMA KARTI — Dashboard */
-.sk-kart{background:linear-gradient(135deg,#7f1d1d,#1e1b4b);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(127,29,29,.25)}
+.sk-kart{background:linear-gradient(135deg,#2a1414,#0f2a1a);border:1px solid rgba(239,68,68,.35);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#fff;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .sk-kart:hover{transform:translateY(-1px)}
 .sk-kart-baslik{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .sk-kart-alt{font-size:12px;color:rgba(255,255,255,.62);margin-bottom:14px}
@@ -1484,21 +1481,27 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     Sinyal <b>Avcısı</b>
   </div>
   <div class="nav-links">
-    <span onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:700">🎯 Hedef Programı</span>
     <span onclick="goTo('nasil')" role="button" tabindex="0">Nasıl Çalışır?</span>
+    <span onclick="hpAc()" role="button" tabindex="0">Hedef Programı</span>
     <span onclick="goTo('klod')" role="button" tabindex="0">KLOD</span>
-    <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
-    <span onclick="goTo('ekitap')" role="button" tabindex="0">E-Kitap</span>
+    <div class="nav-dd">
+      <span class="nav-dd-btn" role="button" tabindex="0" aria-haspopup="true">Kaynaklar ▾</span>
+      <div class="nav-dd-menu">
+        <span onclick="sinavSimulatoruAc()" role="button" tabindex="0">Deneme Sınavı</span>
+        <span onclick="if(typeof ahkGit==='function')ahkGit()" role="button" tabindex="0">AHA Kartları</span>
+        <a href="/soru-lab/"><span>Soru Lab</span></a>
+        <span onclick="goTo('ses')" role="button" tabindex="0">Ses Kurs</span>
+        <span onclick="goTo('ekitap')" role="button" tabindex="0">E-Kitap</span>
+        <span onclick="goTo('medya')" data-medya="1" role="button" tabindex="0">Medya</span>
+      </div>
+    </div>
     <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
-    <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">📝 Deneme</span>
-    <span onclick="if(typeof ahkGit==='function')ahkGit()" style="color:#5b8fff;font-weight:700" role="button" tabindex="0">🃏 AHA Kartları</span>
-    <a href="/soru-lab/" style="text-decoration:none"><span>🔬 Soru Lab</span></a>
   </div>
   <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Ara (Ctrl+K)">🔍</button>
   <button id="pwa-btn" onclick="pwaInstall()" style="display:none;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px">📱 Yükle</button>
 <button onclick="erisilebilirlikToggle()" id="a11y-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Yazı boyutunu büyüt/küçült" aria-pressed="false">A+</button>
 <button onclick="bildirimToggle()" id="notif-btn" style="display:none;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;margin-right:6px" title="Bildirimleri aç/kapat" aria-pressed="false">🔕</button>
-<button class="btn-nav" onclick="basla()" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#0a0f0c">🎯 Hemen Başla</button>
+<button class="btn-nav" onclick="basla()" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#0a0f0c">Hemen Başla</button>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
 </nav>
 
@@ -1558,15 +1561,18 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="streak-badges" id="streak-badges"></div>
 </div>
 <div class="mmenu" id="mmenu">
-  <a onclick="toggleMenu();globalAramaAc()">🔍 Ara</a>
-  <a onclick="closeMenu();hpAc()" style="color:var(--signal);font-weight:700">🎯 Hedef Programım</a>
+  <a onclick="toggleMenu();globalAramaAc()">Ara</a>
   <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
+  <a onclick="closeMenu();hpAc()">Hedef Programım</a>
   <a onclick="closeMenuGoTo('klod')">KLOD</a>
+  <a onclick="closeMenu();sinavSimulatoruAc()">Deneme Sınavı</a>
+  <a onclick="closeMenu();if(typeof ahkGit==='function')ahkGit()">AHA Kartları</a>
+  <a href="/soru-lab/" style="text-decoration:none">Soru Lab</a>
   <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
   <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
+  <a onclick="closeMenuGoTo('medya')">Medya</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
-  <a href="/soru-lab/" style="text-decoration:none">🔬 Soru Lab</a>
-  <a onclick="closeMenu();basla()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
+  <a onclick="closeMenu();basla()">Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
   <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
@@ -1716,7 +1722,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section id="ekitap" class="ekitap">
   <div class="ekitap-inner">
     <div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(10,15,12,.8);margin-bottom:14px">Ücretsiz E-Kitap</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:14px">Ücretsiz E-Kitap</div>
       <h2>30 Günlük Metin Fetih Kılavuzu</h2>
       <p class="ekitap-desc">37 sayfalık PDF rehber. Sinyal metodolojisinin tüm adımları, bağlaç haritaları, modal perfect rehberi ve günlük çalışma planı.</p>
       <ul class="ekitap-list"><li>Bağlaç sinyal haritaları</li><li>Modal perfect tuzak rehberi</li><li>30 günlük çalışma planı</li><li>ÖSYM en sık tuzak listesi</li></ul>
@@ -1793,49 +1799,49 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <div class="dash-nav">
 
           <!-- BÖLÜM 1: BUGÜN -->
-          <div class="dn-item active" onclick="dnav(this)" role="button" tabindex="0">☀️ Bugün</div>
-          <div class="dn-item" onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:800">🎯 Hedef Programım</div>
+          <div class="dn-item active" onclick="dnav(this)" role="button" tabindex="0">Bugün</div>
+          <div class="dn-item" onclick="hpAc()" role="button" tabindex="0" style="color:var(--signal);font-weight:800">Hedef Programım</div>
 
           <!-- BÖLÜM 2: ÇALIŞ -->
           <div class="dn-group" data-grup="calis">
-            <div class="dn-group-baslik">📚 Çalış</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🔬 Sinyal Lab</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🎯 Günlük Tuzak</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">⚡ SAT Metodu</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[4],'paragraf')" role="button" tabindex="0">📖 Paragraf</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')" role="button" tabindex="0">📐 S+V+O</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🃏 Kelime Kartları</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')" role="button" tabindex="0">🏹 Avcı Master</div>
-            <div class="dn-item" onclick="aoyAc()" role="button" tabindex="0" style="background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(245,166,35,.05));border:1px solid rgba(245,166,35,.3);border-radius:10px;color:var(--signal);font-weight:800">🗺️ Öğrenme Yolu <span style="font-size:9px;background:var(--signal);color:#0a0f0c;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+            <div class="dn-group-baslik">Çalış</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">Sinyal Lab</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">Günlük Tuzak</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">SAT Metodu</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[4],'paragraf')" role="button" tabindex="0">Paragraf</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[5],'svo')" role="button" tabindex="0">S+V+O</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">Kelime Kartları</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[8],'avci')" role="button" tabindex="0">Avcı Master</div>
+            <div class="dn-item" onclick="aoyAc()" role="button" tabindex="0" style="background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(245,166,35,.05));border:1px solid rgba(245,166,35,.3);border-radius:10px;color:var(--signal);font-weight:800">Öğrenme Yolu <span style="font-size:9px;background:var(--signal);color:#0a0f0c;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
           </div>
 
           <!-- BÖLÜM 3: KLOD -->
           <div class="dn-group" data-grup="klod">
-            <div class="dn-group-baslik">🤖 KLOD</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🤖 KLOD'a Sor</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')" role="button" tabindex="0">🎓 Canlı Ders</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="background:linear-gradient(135deg,#7c3aed15,#a78bfa15);border:1px solid #a78bfa40;border-radius:10px;color:#a78bfa;font-weight:800" role="button" tabindex="0">🌍 DİL AVCISI <span style="font-size:9px;background:#a78bfa;color:#0a0f0c;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
+            <div class="dn-group-baslik">KLOD</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">KLOD'a Sor</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[15],'canliders')" role="button" tabindex="0">Canlı Ders</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[13],'dilavcisi')" style="font-weight:700" role="button" tabindex="0">Dil Avcısı <span style="font-size:9px;background:var(--signal);color:#0a0f0c;padding:2px 6px;border-radius:8px;margin-left:4px">YENİ</span></div>
           </div>
 
           <!-- BÖLÜM 4: GELİŞİMİM -->
           <div class="dn-group" data-grup="gelisim">
-            <div class="dn-group-baslik">📈 Gelişimim</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">📈 Raporlar</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[7],'hatalar')" role="button" tabindex="0">📝 Hata Defteri</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')" role="button" tabindex="0">🎯 Zayıf Alan Radarı</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')" role="button" tabindex="0">📊 İstatistiklerim</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')" role="button" tabindex="0">🏆 Liderlik</div>
+            <div class="dn-group-baslik">Gelişimim</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">Raporlar</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[7],'hatalar')" role="button" tabindex="0">Hata Defteri</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[9],'radar')" role="button" tabindex="0">Zayıf Alan Radarı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[14],'istatistik')" role="button" tabindex="0">İstatistiklerim</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[11],'lider')" role="button" tabindex="0">Liderlik</div>
           </div>
 
           <!-- BÖLÜM 5: KÜTÜPHANE -->
           <div class="dn-group" data-grup="kutuphane">
-            <div class="dn-group-baslik">📂 Kütüphane</div>
-            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">🎧 Ses Kurs</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[6],'teknik')" role="button" tabindex="0">🧠 Öğrenme Teknikleri</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')" role="button" tabindex="0">🎬 Mini Dersler</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')" role="button" tabindex="0">📅 Çalışma Planım</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')" role="button" tabindex="0">🚨 Acil Kurtarma Planı</div>
-            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[17],'puananaliz')" role="button" tabindex="0">📊 Puan Analizörü</div>
+            <div class="dn-group-baslik">Kütüphane</div>
+            <div class="dn-item" onclick="dnav(this)" role="button" tabindex="0">Ses Kurs</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[6],'teknik')" role="button" tabindex="0">Öğrenme Teknikleri</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[12],'mikro')" role="button" tabindex="0">Mini Dersler</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[10],'plan')" role="button" tabindex="0">Çalışma Planım</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[16],'sinavplanim')" role="button" tabindex="0">Acil Kurtarma Planı</div>
+            <div class="dn-item" onclick="dnav(this);dtab(document.querySelectorAll('.dtab')[17],'puananaliz')" role="button" tabindex="0">Puan Analizörü</div>
           </div>
 
         </div>
@@ -1877,7 +1883,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <div class="dtab" onclick="dtab(this,'plan')" role="button" tabindex="0">📅 Çalışma Planım</div>
           <div class="dtab" onclick="dtab(this,'lider')" role="button" tabindex="0">🏆 Liderlik</div>
           <div class="dtab" onclick="dtab(this,'mikro')" role="button" tabindex="0">🎬 Mini Dersler</div>
-          <div class="dtab" onclick="dtab(this,'dilavcisi')" style="color:#a78bfa;font-weight:800" role="button" tabindex="0">🌍 Dil Avcısı</div>
+          <div class="dtab" onclick="dtab(this,'dilavcisi')" role="button" tabindex="0">🌍 Dil Avcısı</div>
           <div class="dtab" onclick="dtab(this,'istatistik')" role="button" tabindex="0">📊 İstatistiklerim</div>
           <div class="dtab" onclick="dtab(this,'canliders')" role="button" tabindex="0">🎓 Canlı Ders</div>
           <div class="dtab" onclick="dtab(this,'sinavplanim')" role="button" tabindex="0">🚨 Acil Kurtarma Planı</div>
@@ -6152,7 +6158,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </section>
 
 <!-- MEDYA MERKEZİ -->
-<section id="medya" style="padding:80px 5vw;background:linear-gradient(135deg,#0a0f0c 0%,#0f2a1a 30%,#1e1b4b 60%,#312e81 100%);position:relative;overflow:hidden"><div style="position:absolute;top:-100px;right:5%;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.3),transparent 65%);pointer-events:none;animation:floatGlow 6s ease-in-out infinite"></div><div style="position:absolute;bottom:-100px;left:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(236,72,153,.2),transparent 65%);pointer-events:none;animation:floatGlow 8s ease-in-out infinite reverse"></div><div style="position:absolute;top:40%;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.15),transparent 65%);pointer-events:none;animation:floatGlow 10s ease-in-out infinite"></div>
+<section id="medya" style="padding:80px 5vw;background:linear-gradient(135deg,#0a0f0c 0%,#0f2a1a 30%,#0f2418 60%,#0f2a1a 100%);position:relative;overflow:hidden"><div style="position:absolute;top:-100px;right:5%;width:500px;height:500px;background:radial-gradient(circle,rgba(245,166,35,.10),transparent 65%);pointer-events:none;animation:floatGlow 6s ease-in-out infinite"></div><div style="position:absolute;bottom:-100px;left:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(31,74,48,.35),transparent 65%);pointer-events:none;animation:floatGlow 8s ease-in-out infinite reverse"></div><div style="position:absolute;top:40%;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(31,74,48,.25),transparent 65%);pointer-events:none;animation:floatGlow 10s ease-in-out infinite"></div>
   <div style="max-width:1020px;margin:0 auto">
     <div style="text-align:center;margin-bottom:48px">
       <div class="eyebrow" style="color:var(--signal)">Medya Merkezi</div>
@@ -6172,7 +6178,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </div>
 
     <!-- Avcı Akademisi -->
-    <div style="background:linear-gradient(135deg,#1e1b4b,#0f2a1a);border-radius:16px;padding:32px;margin-bottom:32px">
+    <div style="background:linear-gradient(135deg,#0f2418,#0f2a1a);border-radius:16px;padding:32px;margin-bottom:32px">
       <div class="eyebrow" style="color:#ffcb73;margin-bottom:8px">Avcı Akademisi</div>
       <div style="font-family:'IBM Plex Serif',serif;font-size:24px;color:#fff;margin-bottom:8px">ÖSYM Tuzak Videoları</div>
       <div style="font-size:15px;color:rgba(255,255,255,.62);margin-bottom:20px">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
@@ -6191,7 +6197,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     </div>
     <style>
       #medya-icerik.medya-kapali{max-height:560px;overflow:hidden;position:relative}
-      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#1e1b4b);pointer-events:none}
+      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#0f2418);pointer-events:none}
     </style>
     <script>
       function medyaTumunuGoster(){
@@ -12105,14 +12111,14 @@ function medyaRender(){
   const grid=document.getElementById('medya-grid');
   if(!grid)return;
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
-    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0f2a1a,#1e1b4b);border-radius:20px;overflow:hidden;border:1px solid rgba(129,140,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(99,102,241,.5),0 0 30px rgba(99,102,241,.2)';this.style.borderColor='rgba(129,140,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(79,70,229,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(129,140,248,.25)'" role="button" tabindex="0">
+    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0f2a1a,#0f2418);border-radius:20px;overflow:hidden;border:1px solid rgba(245,166,35,.16);transition:all .3s;box-shadow:0 4px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(245,166,35,.22),0 0 30px rgba(245,166,35,.10)';this.style.borderColor='rgba(245,166,35,.45)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(245,166,35,.16)'" role="button" tabindex="0">
       <div style="position:relative;padding:28px 20px;background:linear-gradient(135deg,${k.renk}22,transparent);display:flex;align-items:center;justify-content:center;overflow:hidden">
         <div style="position:absolute;top:10px;left:14px;background:color-mix(in srgb,${k.renk||'#f5a623'} 35%,#0a0f0c);border:1px solid ${k.renk||'#f5a623'};color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">🎓 CANLI DERS</div>
         <div style="font-size:44px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))">${k.ikon}</div>
       </div>
       <div style="padding:16px">
         <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.4;letter-spacing:-.01em">${k.baslik}</div>
-        <div style="font-size:15px;color:rgba(165,180,252,.7);line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
+        <div style="font-size:15px;color:rgba(236,231,218,.7);line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
         <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:color-mix(in srgb,${k.renk} 60%,#fff)">▶ Canlı Derste İzle</div>
       </div>
     </div>
@@ -12120,13 +12126,13 @@ function medyaRender(){
 
   const aGrid=document.getElementById('avci-akademi-grid');
   if(aGrid)aGrid.innerHTML=AVCI_AKADEMI.map((a,i)=>`
-    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(129,140,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'" role="button" tabindex="0">
+    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(245,166,35,.10)'" onmouseout="this.style.background='rgba(255,255,255,.06)'" role="button" tabindex="0">
       <div style="font-family:monospace;font-size:10px;color:#ffcb73;margin-bottom:6px">BÖLÜM ${a.no}</div>
       <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px">${a.konu}</div>
       <div style="font-size:14px;color:rgba(255,255,255,.62);margin-bottom:8px">${a.aciklama}</div>
       <div style="display:flex;justify-content:space-between;align-items:center">
         <span style="font-size:14px;color:#ffcb73">▶ ${a.sure}</span>
-        <span style="font-size:10px;background:rgba(129,140,248,.2);color:#ffcb73;padding:2px 8px;border-radius:4px">İZLE</span>
+        <span style="font-size:10px;background:rgba(245,166,35,.14);color:#ffcb73;padding:2px 8px;border-radius:4px">İZLE</span>
       </div>
     </div>
   `).join('');
@@ -12190,7 +12196,7 @@ function avciAkademiOyna(i){
     medyaCanliDersGit(klIdx);
     return;
   }
-  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('DİL AVCISI'));
+  const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Dil Avcısı'));
   if(item)item.click();
   setTimeout(()=>{
     const el=document.getElementById('anlama-modul');
@@ -12220,17 +12226,10 @@ function podcastOyna(i){
   speechSynthesis.speak(u);
 }
 
-// Nav'a Medya linki ekle
+// Medya bölümünü doldur (nav'daki Medya linki Kaynaklar menüsünde sabit)
 window.addEventListener('DOMContentLoaded',()=>{
   medyaRender();
   sonYayinlarRender();
-  const navLinks=document.querySelector('.nav-links');
-  if(navLinks&&!navLinks.querySelector('[data-medya]')){
-    const span=document.createElement('span');
-    span.textContent='Medya';span.setAttribute('data-medya','1');
-    span.onclick=()=>goTo('medya');
-    navLinks.insertBefore(span,navLinks.children[0]);
-  }
 });
 
 let exitShown=false;
@@ -12884,9 +12883,9 @@ function erisilebilirlikToggle(){
   wa.href='https://ig.me/m/sinyalavcisi.yds';
   wa.target='_blank';
   wa.rel='noopener';
-  wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285aeb 90%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(214,36,159,.4);text-decoration:none;font-size:24px;transition:transform .2s';
+  wa.style.cssText='position:fixed;bottom:24px;right:80px;z-index:400;width:48px;height:48px;background:var(--surface);border:1px solid rgba(245,166,35,.45);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.35);text-decoration:none;font-size:24px;transition:transform .2s';
   // Instagram DM simgesi (kağıt uçak)
-  wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M22 3 9.2 10.1M22 3l-7.4 18-3.2-7.7L3 10.1z"/></svg>';
+  wa.innerHTML='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M22 3 9.2 10.1M22 3l-7.4 18-3.2-7.7L3 10.1z"/></svg>';
   wa.title='Instagram\'dan mesaj gönder';
   wa.setAttribute('aria-label','Instagram\'dan mesaj gönder (@sinyalavcisi.yds)');
   wa.onmouseover=()=>wa.style.transform='scale(1.1)';
