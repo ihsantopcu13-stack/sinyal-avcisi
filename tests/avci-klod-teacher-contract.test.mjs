@@ -9,6 +9,7 @@ import handler from "../api/klod.mjs";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -21,7 +22,7 @@ function kontrol(ad, sonuc, detay) {
   console.log(`[${sonuc ? "PASS" : "FAIL"}] ${ad}${detay !== undefined ? " — " + detay : ""}`);
 }
 
-const html = readFileSync(path.join(ROOT, "index.html"), "utf-8").replace(/\r\n/g, "\n");
+const html = indexKaynak().replace(/\r\n/g, "\n");
 
 // dnavChat() içindeki system template literal'ı (backtick'ler arası) çıkar.
 // Not: prompt içinde backtick yok, bu yüzden ilk kapanış backtick'i doğru sınır.

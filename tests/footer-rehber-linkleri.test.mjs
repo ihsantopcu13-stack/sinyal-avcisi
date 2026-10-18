@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -19,7 +20,7 @@ function kontrol(ad, sonuc, detay) {
 }
 
 const REHBERLER = ["yds-cikmis-sorular", "yokdil-sinyal-kelimeler", "yds-sinav-teknikleri", "ucretsiz-rehber", "hedef-rota"];
-const indexHtml = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+const indexHtml = indexKaynak();
 const footerler = indexHtml.match(/<footer>[\s\S]*?<\/footer>/g) || [];
 const footer = footerler[0] || "";
 

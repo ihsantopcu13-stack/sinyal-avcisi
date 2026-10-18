@@ -19,6 +19,7 @@ import * as P from "../api/_avciPedagogy.mjs";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -298,7 +299,7 @@ try {
 {
   const modul = readFileSync(path.join(ROOT, "api", "_avciPedagogy.mjs"), "utf-8").replace(/\r\n/g, "\n");
   const klod = readFileSync(path.join(ROOT, "api", "klod.mjs"), "utf-8").replace(/\r\n/g, "\n");
-  const html = readFileSync(path.join(ROOT, "index.html"), "utf-8").replace(/\r\n/g, "\n");
+  const html = indexKaynak().replace(/\r\n/g, "\n");
   const kodOnly = modul.split("\n").filter((l) => !/^\s*\/\//.test(l)).join("\n");
   kontrol("53) AYRI değerlendirici/sızıntı hakemi model çağrısı YOK: modülde ağ/fetch/anahtar/uç nokta yok; miniLLM/ogrenciHakemi/sizintiHakemi tanımı yok (modül + klod)", !/fetch\(|api\.anthropic\.com|process\.env|x-api-key|AbortSignal/.test(kodOnly) && !/miniLLM|ogrenciHakemi|sizintiHakemi|DEGERLENDIRICI|SIZINTI HAKEMI/.test(modul + klod));
   kontrol("54) klod.mjs: Anthropic uç noktası HÂLÂ TEK, max_tokens HÂLÂ TEK satır (chat 700 değişmedi), yeni sağlayıcı/DB/eval YOK", (klod.match(/api\.anthropic\.com/g) || []).length === 1 && (klod.match(/max_tokens:/g) || []).length === 1 && /mode === 'chat' \? 700 : 350/.test(klod) && !/eval\(|new Function\(|child_process/.test(klod + kodOnly));

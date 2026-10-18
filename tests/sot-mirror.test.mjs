@@ -17,6 +17,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildSlHavuz, buildSlHavuzSource } from "../scripts/sl-havuz-generator.mjs";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,7 +42,7 @@ const canonicalPath = path.join(__dirname, "..", "api", "data", "sorular.json");
 const canonical = JSON.parse(readFileSync(canonicalPath, "utf-8"));
 
 const htmlPath = path.join(__dirname, "..", "index.html");
-const html = readFileSync(htmlPath, "utf-8").replace(/\r\n/g, "\n");
+const html = indexKaynak().replace(/\r\n/g, "\n");
 const havuzBody = extractBetween(html, "const SL_HAVUZ=[", "\n];\n");
 const embeddedSlHavuz = new Function(`return [${havuzBody}];`)();
 

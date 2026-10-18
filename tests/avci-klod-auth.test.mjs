@@ -11,6 +11,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -210,7 +211,7 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
 
 // ---- index.html: dnavChat auth header eklemesi DILA/response_time/Katman4'e dokunmadı ----
 {
-  const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+  const html = indexKaynak();
   const dnavChatMatch = html.match(/async function dnavChat\(\)\{[\s\S]*?\r?\n\}\r?\n/);
   const dnavChatGovde = dnavChatMatch ? dnavChatMatch[0] : "";
   kontrol("31) dnavChat() TAM OLARAK 1 kez tanımlı (duplicate YOK)", (html.match(/async function dnavChat\(\)\{/g) || []).length === 1);
@@ -229,7 +230,7 @@ process.env.ANTHROPIC_API_KEY = orijinalKey;
 // diğer avci-*.test.mjs dosyalarıyla AYNI desen.
 // ============================================================
 {
-  const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+  const html = indexKaynak();
   const dnavChatMatch = html.match(/async function dnavChat\(\)\{[\s\S]*?\r?\n\}\r?\n/);
   const dnavChatSrc = dnavChatMatch[0];
 

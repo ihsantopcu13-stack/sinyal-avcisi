@@ -3,7 +3,9 @@
 // activate'teki temizlik, v3'te biriken API yanıtlarıyla birlikte eski
 // önbelleği siler.
 const CACHE_NAME = 'sinyal-avcisi-v4';
-const CACHE_URLS = ['/', '/index.html'];
+// /js/ana.js: index.html'den ayrılan ana betik. Çevrimdışı açılışta sayfa
+// betiksiz kalmasın diye HTML ile birlikte önbelleğe alınır.
+const CACHE_URLS = ['/', '/index.html', '/js/ana.js'];
 
 self.addEventListener('install', e => {
   self.skipWaiting(); // yeni SW'yi hemen aktif et — eski sekmelerin kapanmasını bekleme
@@ -39,7 +41,9 @@ self.addEventListener('fetch', e => {
   const isHtmlNav = req.mode === 'navigate' ||
     (req.method === 'GET' && (req.headers.get('accept') || '').includes('text/html'));
 
-  if (isHtmlNav) {
+  // Ana betik HTML'le aynı sürümde olmalı (HTML'deki id'lere, onclick'lere
+  // bağlı). Bu yüzden /assets/ gibi cache-first DEĞİL, HTML gibi network-first.
+  if (isHtmlNav || url.pathname === '/js/ana.js') {
     // NETWORK-FIRST: sayfa her zaman güncel gelsin, sadece çevrimdışıyken
     // cache'e düş. Eskiden cache-first idi — bu, her deploy'dan sonra
     // kullanıcıları eski, önbelleğe alınmış bir sürümde SÜRESİZ

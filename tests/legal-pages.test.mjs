@@ -5,6 +5,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -78,7 +79,7 @@ const termsHtml = existsSync(path.join(ROOT, "terms.html")) ? readFileSync(path.
 
 // ---- TEST: ana sayfa footer'ında privacy/terms linkleri var ----
 {
-  const indexHtml = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+  const indexHtml = indexKaynak();
   kontrol("11) index.html footer'ında /privacy linki var", /href="\/privacy"/.test(indexHtml));
   kontrol("12) index.html footer'ında /terms linki var", /href="\/terms"/.test(indexHtml));
 }

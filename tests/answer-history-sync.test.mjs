@@ -15,6 +15,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -93,7 +94,7 @@ function kontrol(ad, sonuc, detay) {
   kontrol("14k) rollback dosyasında sadece 2 DROP ifadesi var (fazlası yok)", (rb.match(/^drop /gm) || []).length === 2);
 }
 
-const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+const html = indexKaynak();
 
 // ---- TEST: eski dar-kapsamlı mekanizma tamamen kaldırıldı (regresyon kilidi) ----
 {

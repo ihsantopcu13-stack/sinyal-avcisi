@@ -2,8 +2,8 @@
 //
 // Çalıştırma: node scripts/generate-sl-havuz.mjs
 //
-// api/data/sorular.json (TEK canonical kaynak) okunur, index.html
-// içindeki "const SL_HAVUZ=[ ... ];" bloğu bununla değiştirilir. SL_HAVUZ
+// api/data/sorular.json (TEK canonical kaynak) okunur, js/ana.js
+// (ana sayfanın index.html'den ayrılmış ana betiği) içindeki "const SL_HAVUZ=[ ... ];" bloğu bununla değiştirilir. SL_HAVUZ
 // artık elle düzenlenmez — bir soru değiştiğinde/eklendiğinde önce
 // api/data/sorular.json güncellenir, sonra bu script çalıştırılır.
 //
@@ -19,7 +19,7 @@ import { buildSlHavuzSource } from "./sl-havuz-generator.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, "..");
-const INDEX_HTML = path.join(REPO_ROOT, "index.html");
+const INDEX_HTML = path.join(REPO_ROOT, "js", "ana.js");
 const CANONICAL_PATH = path.join(REPO_ROOT, "api", "data", "sorular.json");
 
 const START_MARKER = "const SL_HAVUZ=[";
@@ -32,7 +32,7 @@ async function main() {
   const html = await readFile(INDEX_HTML, "utf-8");
   const dosyaCRLFKullaniyor = html.includes("\r\n");
   const startIdx = html.indexOf(START_MARKER);
-  if (startIdx === -1) throw new Error("SL_HAVUZ bulunamadı — index.html değişmiş olabilir.");
+  if (startIdx === -1) throw new Error("SL_HAVUZ bulunamadı — js/ana.js değişmiş olabilir.");
   const endIdx = html.indexOf(END_MARKER, startIdx);
   if (endIdx === -1) throw new Error("SL_HAVUZ dizisinin sonu bulunamadı.");
 

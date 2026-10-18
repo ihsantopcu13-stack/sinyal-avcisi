@@ -10,6 +10,7 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -22,7 +23,7 @@ function kontrol(ad, sonuc, detay) {
   console.log(`[${sonuc ? "PASS" : "FAIL"}] ${ad}${detay !== undefined ? " — " + detay : ""}`);
 }
 
-const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+const html = indexKaynak();
 
 // type="application/ld+json" (JSON-LD) ve src= ile yüklenen harici
 // script'ler hariç, sayfadaki TÜM inline <script> bloklarını topla.
