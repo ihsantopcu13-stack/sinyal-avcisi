@@ -1415,6 +1415,13 @@ nav,.demo-card,.chat-ui,.chat-input-row,.chat-in,.msg,.dash-ui,.dk,.sss-item,.yo
 .dash-tabs::-webkit-scrollbar-track{background:transparent}
 .dash-tabs::-webkit-scrollbar-thumb{background:rgba(212,175,55,.6);border-radius:2px}
 @media(prefers-reduced-motion:reduce){.dk,.dk::after{animation:none}.dk:hover{transform:none}}
+
+/* Seçim rengi ve canlı hero vurgusu */
+::selection{background:rgba(245,166,35,.4);color:#fff}
+.hero-vurgu{font-style:normal!important;color:#ffc53d;background:linear-gradient(100deg,#ffb020 0%,#ffe27a 45%,#ffb020 55%,#ff9a1f 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:heroParilti 6s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(255,176,32,.25))}
+.hero-vurgu::selection{-webkit-text-fill-color:#fff}
+@keyframes heroParilti{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.hero-vurgu{animation:none}}
 </style>
 <script type="application/ld+json">
 {
@@ -1614,19 +1621,19 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         YDS &amp; YÖKDİL · TAMAMEN ÜCRETSİZ
       </span>
     </div>
-    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em style="color:#f5a623;font-style:normal">2 dakikada seviyeni öğren.</em></h1>
+    <h1 style="font-size:clamp(30px,4vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:10px 0 16px">YDS/YÖKDİL'e bugün başla.<br><em class="hero-vurgu">2 dakikada seviyeni öğren.</em></h1>
     <p class="hero-sub" style="font-size:17px;line-height:1.65;max-width:520px;margin-bottom:22px">5 kısa soru çöz; seviyeni, zayıf noktanı ve sana özel <strong>bugünkü görevini</strong> gör. Kayıt yok, kredi kartı yok.</p>
     <div class="hero-btns">
-      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">🎯 Seviyemi Öğren — Ücretsiz <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
+      <button class="btn-primary" id="hero-basla-btn" onclick="basla()" style="font-size:17px;padding:17px 34px;border-radius:12px">Seviyemi Öğren — Ücretsiz <span style="display:inline-block;animation:arrowBounce 1s ease infinite">→</span></button>
     </div>
     <ol class="hero-adimlar" aria-label="Nasıl başlarsın">
       <li><span>1</span>5 soruluk hızlı test</li>
       <li><span>2</span>Seviyen ve zayıf noktan</li>
       <li><span>3</span>Bugünkü görevin</li>
     </ol>
-    <div style="margin-top:14px;font-size:14px;color:var(--ink)">📅 Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
-    <div style="margin-top:6px;font-size:14px;color:var(--muted)">🧭 Kayıt olmadan hızlı bir plan mı istersin? <a href="/hedef-rota" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Puan Rotanı çıkar →</a></div>
-    <div style="margin-top:10px;font-size:13px;color:var(--muted)">🎯 YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
+    <div style="margin-top:14px;font-size:14px;color:var(--ink)">Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
+    <div style="margin-top:6px;font-size:14px;color:var(--muted)">Kayıt olmadan hızlı bir plan mı istersin? <a href="/hedef-rota" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Puan Rotanı çıkar →</a></div>
+    <div style="margin-top:10px;font-size:13px;color:var(--muted)">YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
     <style>
       .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
       .hero-adimlar li{display:flex;align-items:center;gap:8px}
