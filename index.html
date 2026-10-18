@@ -15012,7 +15012,11 @@ function iaAc(){
   iaAlanRender();
   document.getElementById('ia-overlay').classList.add('acik');
 }
-function iaKapat(){document.getElementById('ia-overlay').classList.remove('acik');}
+function iaKapat(){
+  document.getElementById('ia-overlay').classList.remove('acik');
+  // Test bittiyse bekleyen kurtarma kodunu şimdi göster (sonuç ekranını örtmesin)
+  if(typeof window.apBekleyenKoduGoster==='function')window.apBekleyenKoduGoster();
+}
 function iaAtla(){
   iaKapat();
   document.documentElement.classList.remove('yeni-ziyaretci');
@@ -17484,11 +17488,26 @@ function anonIdAl(){
   return id;
 }
 
+// Kod, kaybedecek bir ilerleme olunca gösterilir: seviye testi bitti ya da
+// XP kazanıldı. İlk girişte hiçbir şey yapmamış ziyaretçinin önüne çıkmaz.
+function ilerlemeVar(){
+  if(lsGet('sa_ilk_adim')) return true;
+  const xpd = (typeof xpLoad === 'function') ? xpLoad() : null;
+  return !!(xpd && xpd.toplam > 0);
+}
+
+// Gösterilmeyi bekleyen kod varsa ve ilerleme oluştuysa göster
+function bekleyenKoduGoster(){
+  const kod = lsGet(APC_KEY);
+  if(kod && lsGet(APC_ONAY_KEY) && ilerlemeVar()) kurtarmaKoduGoster(kod);
+}
+window.apBekleyenKoduGoster = bekleyenKoduGoster;
+
 // Sunucuya profil oluştur/getir
 async function profilBaslat(){
   const anon_id = anonIdAl();
   const mevcutKod = lsGet(APC_KEY);
-  if(mevcutKod && lsGet(APC_ONAY_KEY)) kurtarmaKoduGoster(mevcutKod);
+  bekleyenKoduGoster();
 
   try{
     const res = await fetch('/api/anon-profile', {
@@ -17505,9 +17524,11 @@ async function profilBaslat(){
       lsSet(APC_KEY, profile.recovery_code);
     }
 
-    // İlk kez profil oluşturulduysa kodu göster
+    // İlk kez profil oluşturulduysa kodu göstermeyi beklet; ilerleme
+    // oluşunca (ör. seviye testi kapanınca) bekleyenKoduGoster çıkarır.
     if(!mevcutKod && profile.recovery_code){
-      kurtarmaKoduGoster(profile.recovery_code);
+      lsSet(APC_ONAY_KEY, '1');
+      bekleyenKoduGoster();
     }
   } catch(_){ /* network yoksa sessizce geç */ }
 }
