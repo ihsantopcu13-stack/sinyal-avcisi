@@ -1569,9 +1569,19 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <a onclick="closeMenu();basla()" style="color:var(--signal);font-weight:700">🎯 Hemen Başla</a>
 </div>
 <section id="hero" class="hero">
-  <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
-    <source src="assets/hero-bg.mp4" type="video/mp4">
+  <video class="hero-bg-video" muted loop playsinline preload="none" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
+    <source data-src="assets/hero-bg.mp4" type="video/mp4">
   </video>
+  <script>
+  // Arka plan videosu sadece masaüstünde yüklenir (mobilde CSS ile gizli; ~165 KB tasarruf)
+  (function(){
+    var v=document.querySelector('.hero-bg-video');if(!v)return;
+    var c=navigator.connection;
+    if(!matchMedia('(min-width:901px)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches||(c&&c.saveData))return;
+    var s=v.querySelector('source[data-src]');s.src=s.getAttribute('data-src');v.load();
+    var p=v.play();if(p&&p.catch)p.catch(function(){});
+  })();
+  </script>
   <div class="hero-floaters" aria-hidden="true">
     <span class="hero-float-q" style="left:2%;top:3%;font-size:40px;animation-delay:0s;animation-duration:7s">?</span>
     <span class="hero-float-q" style="left:93%;top:5%;font-size:46px;animation-delay:1.2s;animation-duration:9s">?</span>
