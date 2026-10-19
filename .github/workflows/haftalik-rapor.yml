@@ -41,7 +41,8 @@ jobs:
       - name: Raporu hazırla ve gönder
         run: node index.mjs
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # URL gizli bilgi değil; secret yoksa repo variable'dan al
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
