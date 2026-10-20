@@ -237,7 +237,7 @@ function sandboxKur({ srVarMi = true } = {}) {
   t.micBtn.style.background = "#22d3ee30";
   const sr = t.srSinifOrneği();
   sr.onend();
-  kontrol("57) onend mic buton animasyonunu/rengini GERÇEKTEN sıfırlıyor", t.micBtn.style.animation === "" && t.micBtn.style.background === "#0a0c1480");
+  kontrol("57) onend mic buton animasyonunu/rengini GERÇEKTEN sıfırlıyor", t.micBtn.style.animation === "" && t.micBtn.style.background === "#05070d80");
 }
 
 // 58-59) SR YOKKEN: fonksiyon crash ETMİYOR, input/mic'e HİÇ dokunmuyor (fail-open, gerçek çalıştırmayla kanıtlandı)
