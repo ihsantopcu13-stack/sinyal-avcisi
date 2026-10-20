@@ -8529,7 +8529,7 @@ function kkAnswer(q){
 }
 kkUpdateDashCard();
 
-// GUNLUK TUZAK — 30 soruluk havuz
+// GUNLUK TUZAK — soru havuzu
 const TUZAK_HAVUZ=[
   {q:'Hangi seçenek cümleyi doğru tamamlar?',sent:'"She would have attended the conference _____ she received the invitation in time."',opts:['A) if','B) had','C) unless','D) although'],dogru:1,fb:'3rd conditional devrik yapı: "if" düştüğünde "had" one çıkar.'},
   {q:'Boşluğu doğru doldurun:',sent:'"The experiment failed _____ the conditions were optimal."',opts:['A) despite','B) however','C) even though','D) whereas'],dogru:2,fb:'"Even though" = -e rağmen + tam cümle. Zıtlık sinyali.'},
@@ -9791,7 +9791,7 @@ function sinavGeriSayim(){
 }
 
 // ============================================================
-// SİNYAL LAB — 15 soruluk havuz + sonraki soru
+// SİNYAL LAB — soru havuzu + sonraki soru
 // ============================================================
 const SL_HAVUZ=[
   {id:"q001",sinyal:"despite",eye:"Genel - YDS Metni",sent:"\"The appellate court ruled that, <span class=\"s-sig\" data-tip=\"Zıtlık sinyali\">despite</span> the irregularities, the verdict was <span class=\"s-trap\" data-tip=\"Tuzak: kesinlikle değil\">by no means</span> <span class=\"s-key\">invalid</span>.\"",q:"Bu metne göre mahkeme kararı hakkında ne söylenebilir?",opts:["Karar kesinlikle geçersiz bulundu.","Usul hataları kararı geçersiz kıldı.","Mahkeme yeniden yargılama istedi.","Usul hatalarına rağmen karar geçerliliğini korudu.","Karar geçerliliğini korudu çünkü usulde hiçbir hata yapılmamıştı."],ans:3,fb:"\"Despite\" = zıtlık, \"by no means invalid\" = kesinlikle geçersiz değil."},
@@ -10836,7 +10836,7 @@ function paylasimKartiGoster(tip, baslik, alt) {
   modal.addEventListener('click', e => { if (e.target === modal) kapat(); });
 }
 
-// Streak milestone paylaşımı — 3, 7, 10, 30 gün
+// Streak milestone paylaşımı (eşikler: milestonlar dizisi)
 function streakMilestonKontrol(gun) {
   const milestonlar = [3, 7, 10, 14, 21, 30, 50, 100];
   if (!milestonlar.includes(gun)) return;
