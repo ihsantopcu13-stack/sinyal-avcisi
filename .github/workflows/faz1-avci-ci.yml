@@ -105,6 +105,8 @@ jobs:
           node --check tests/avci-pedagogy-controller.test.mjs
           node --check api/_klodChatPrompt.mjs
           node --check tests/klod-chat-prompt-senkron.test.mjs
+          node --check tests/footer-rehber-linkleri.test.mjs
+          node --check tests/sw-cache.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -264,3 +266,9 @@ jobs:
 
       - name: CANLI DERS ↔ AVCI HOCA köprüsü — gerçek dnavChat + köprü (vm), yeni endpoint/model YOK, gerçek ağ yok
         run: node tests/canli-ders-avci-hoca.test.mjs
+
+      - name: Footer rehber bağlantıları — gerçek <a href>, hedef dosyalar, hover çıkış rengi (statik, gerçek ağ yok)
+        run: node tests/footer-rehber-linkleri.test.mjs
+
+      - name: Service worker önbellek kapsamı — /api/ önbelleğe girmez, CACHE_NAME, eski önbellek temizliği (vm, gerçek ağ yok)
+        run: node tests/sw-cache.test.mjs
