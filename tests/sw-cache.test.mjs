@@ -7,7 +7,7 @@
 //   (admin listeleri, anon-profile kurtarma yanıtları cihazda kalmasın).
 // - HTML (navigate) network-first; yalnızca res.ok yanıtlar önbelleğe girer.
 // - Önbelleğe HTML dışında yalnızca /assets/ ve /manifest.json girer.
-// - CACHE_NAME v4 → activate eski (v3) önbelleği siler.
+// - CACHE_NAME v5 → activate eski (v3, v4) önbellekleri siler.
 
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
@@ -90,7 +90,7 @@ const tumOnbellekUrlleri = (env) => [...env.depolar.values()].flatMap((d) => [..
 
 {
   const env = ortamKur();
-  kontrol("1) CACHE_NAME 'sinyal-avcisi-v4'", vm.runInContext("CACHE_NAME", env.ctx) === "sinyal-avcisi-v4");
+  kontrol("1) CACHE_NAME 'sinyal-avcisi-v5'", vm.runInContext("CACHE_NAME", env.ctx) === "sinyal-avcisi-v5");
 }
 
 {
@@ -139,7 +139,7 @@ const tumOnbellekUrlleri = (env) => [...env.depolar.values()].flatMap((d) => [..
 
 {
   const env = ortamKur({ cevrimdisi: true });
-  await env.ctx.caches.open("sinyal-avcisi-v4").then((c) => c.put(`${ORIGIN}/`, new SahteYanit("eski-sayfa")));
+  await env.ctx.caches.open("sinyal-avcisi-v5").then((c) => c.put(`${ORIGIN}/`, new SahteYanit("eski-sayfa")));
   const res = await fetchTetikle(env, istek("/sat", { mode: "navigate", accept: "text/html" }));
   kontrol("11) çevrimdışıyken HTML önbellekteki '/' sayfasına düşüyor", res?.govde === "eski-sayfa");
 }
@@ -147,12 +147,13 @@ const tumOnbellekUrlleri = (env) => [...env.depolar.values()].flatMap((d) => [..
 {
   const env = ortamKur();
   await env.ctx.caches.open("sinyal-avcisi-v3").then((c) => c.put(`${ORIGIN}/api/admin-users`, new SahteYanit("eski-admin")));
-  await env.ctx.caches.open("sinyal-avcisi-v4");
+  await env.ctx.caches.open("sinyal-avcisi-v4").then((c) => c.put(`${ORIGIN}/api/anon-profile`, new SahteYanit("eski-profil")));
+  await env.ctx.caches.open("sinyal-avcisi-v5");
   let bekle;
   env.dinleyiciler.activate({ waitUntil: (p) => { bekle = p; } });
   await bekle;
   const adlar = [...env.depolar.keys()];
-  kontrol("12) activate eski v3 önbelleğini (biriken API yanıtlarıyla) siliyor", !adlar.includes("sinyal-avcisi-v3") && adlar.includes("sinyal-avcisi-v4"), `kalan: ${adlar.join(", ")}`);
+  kontrol("12) activate eski v3 ve v4 önbelleklerini (biriken API yanıtlarıyla) siliyor, v5'i koruyor", !adlar.includes("sinyal-avcisi-v3") && !adlar.includes("sinyal-avcisi-v4") && adlar.includes("sinyal-avcisi-v5"), `kalan: ${adlar.join(", ")}`);
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
