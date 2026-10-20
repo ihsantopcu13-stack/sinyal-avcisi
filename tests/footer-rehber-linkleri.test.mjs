@@ -39,7 +39,7 @@ for (const ad of REHBERLER) {
   const donusler = [...footer.matchAll(/onmouseout="this\.style\.color='([^']+)'"/g)].map((m) => m[1]);
   kontrol(
     "footer: onmouseout rengi başlangıç rengiyle aynı",
-    donusler.length > 0 && donusler.every((r) => r === "rgba(236,231,218,.62)"),
+    donusler.length > 0 && donusler.every((r) => r === "rgba(220,227,236,.62)"),
     donusler.join(", ")
   );
 }
