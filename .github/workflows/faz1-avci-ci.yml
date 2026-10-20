@@ -62,6 +62,8 @@ jobs:
           node --check automation/video-pipeline/tests/publication-state.test.mjs
           node --check api/published-content.mjs
           node --check tests/index-html-syntax.test.mjs
+          node --check tests/ana-betik-ayri-dosya.test.mjs
+          node --check js/ana.js
           node --check tests/published-content.test.mjs
           node --check tests/answer-history-sync.test.mjs
           node --check tests/answer-history-execution.test.mjs
@@ -153,6 +155,9 @@ jobs:
 
       - name: index.html inline script sözdizimi testi (build kontrolü)
         run: node tests/index-html-syntax.test.mjs
+
+      - name: Ana betik ayrı dosyada (js/ana.js senkron yükleniyor, SW network-first)
+        run: node tests/ana-betik-ayri-dosya.test.mjs
 
       - name: KLOD açıklama (Sinyal Lab yanlış cevap) önbellek + JSON doğrulama testi
         run: node tests/klod-aciklama.test.mjs

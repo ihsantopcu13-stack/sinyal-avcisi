@@ -19,6 +19,7 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -44,7 +45,7 @@ const htmlPath = path.join(__dirname, "..", "index.html");
 // \r\n -> \n normalize: Windows'ta git core.autocrlf checkout'ta CRLF'e
 // çevirebiliyor (CI'nin Linux runner'ında bu olmuyor) — marker eşleşmesi
 // satır sonu stilinden bağımsız olmalı.
-const html = readFileSync(htmlPath, "utf-8").replace(/\r\n/g, "\n");
+const html = indexKaynak().replace(/\r\n/g, "\n");
 
 // ---- Gerçek SL_HAVUZ verisini çıkar (kopyalama değil, doğrudan kaynaktan) ----
 const havuzBody = extractBetween(html, "const SL_HAVUZ=[", "\n];\n");

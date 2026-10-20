@@ -6,6 +6,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -50,7 +51,7 @@ function kontrol(ad, sonuc, detay) {
 
 // ---- TEST: index.html — sonYayinlarRender güvenli şekilde wired ----
 {
-  const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+  const html = indexKaynak();
   kontrol("12) sonYayinlarRender fonksiyonu tanımlı", /function sonYayinlarRender\(\)/.test(html));
   kontrol("13) DOMContentLoaded içinde çağrılıyor (medyaRender ile birlikte)", /medyaRender\(\);\s*\n\s*sonYayinlarRender\(\);/.test(html));
   kontrol("14) /api/published-content endpoint'ine fetch atıyor", /fetch\(['"]\/api\/published-content['"]\)/.test(html));

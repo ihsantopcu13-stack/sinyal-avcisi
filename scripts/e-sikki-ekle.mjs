@@ -16,7 +16,7 @@
 // eklenir; partide tek bir hata bile varsa hiçbir şey yazılmaz. Ardından
 // partinin şıkları tohumlu karıştırılır (partiyiKaristir): doğru cevaplar
 // A-E'ye dengeli dağılır, şık metinleri ve doğru cevap METNİ korunur.
-// Uygulandıktan sonra index.html'deki SL_HAVUZ mirror'ı
+// Uygulandıktan sonra js/ana.js'teki SL_HAVUZ mirror'ı
 // scripts/generate-sl-havuz.mjs ile otomatik yeniden üretilir
 // (tests/sot-mirror.test.mjs ikisinin senkron kaldığını doğrular).
 

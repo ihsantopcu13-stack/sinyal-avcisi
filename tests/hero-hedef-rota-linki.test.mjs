@@ -5,6 +5,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -17,7 +18,7 @@ function kontrol(ad, sonuc, detay) {
   console.log(`[${sonuc ? "PASS" : "FAIL"}] ${ad}${detay !== undefined ? " — " + detay : ""}`);
 }
 
-const indexHtml = readFileSync(path.join(ROOT, "index.html"), "utf-8");
+const indexHtml = indexKaynak();
 const hero = (indexHtml.match(/<section id="hero"[\s\S]*?<\/section>/) || [""])[0];
 const satir = hero.split("\n").find((s) => s.includes('href="/hedef-rota"')) || "";
 const link = satir.match(/<a href="\/hedef-rota"[^>]*>([^<]+)<\/a>/);

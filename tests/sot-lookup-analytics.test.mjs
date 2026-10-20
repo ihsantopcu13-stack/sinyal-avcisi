@@ -14,6 +14,7 @@ import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexKaynak } from "./_index-kaynak.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -36,7 +37,7 @@ function extractBetween(text, startMarker, endMarker) {
 }
 
 const htmlPath = path.join(__dirname, "..", "index.html");
-const html = readFileSync(htmlPath, "utf-8").replace(/\r\n/g, "\n");
+const html = indexKaynak().replace(/\r\n/g, "\n");
 
 const havuzBody = extractBetween(html, "const SL_HAVUZ=[", "\n];\n");
 const SL_HAVUZ = new Function(`return [${havuzBody}];`)();

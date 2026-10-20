@@ -91,7 +91,7 @@ kontrol("5) soruSikHatasi: kopyasız şıklarda hata yok; KARIŞMIŞ konumlardak
 // klasör yapısıyla tmp'ye kopyalanır; sorular.json, gerçek ilk 6 sorudan son
 // çeldiricisi düşürülerek türetilmiş 4 şıklı kayıtlarla değiştirilir.
 const CLI_DOSYALARI = ["scripts/e-sikki-ekle.mjs", "scripts/generate-sl-havuz.mjs", "scripts/sl-havuz-generator.mjs",
-  "api/_sikKurallari.mjs", "index.html"];
+  "api/_sikKurallari.mjs", "index.html", "js/ana.js"];
 function dortSikliSahteVeri() {
   const gercek = JSON.parse(readFileSync(path.join(ROOT, "api", "data", "sorular.json"), "utf-8"));
   return gercek.slice(0, 6).map((s) => {
@@ -117,7 +117,7 @@ function geciciRepo(onEk) {
   const tmp = geciciRepo("sa-e-sikki-");
   const cli = path.join(tmp, "scripts", "e-sikki-ekle.mjs");
   const veriYolu = path.join(tmp, "api", "data", "sorular.json");
-  const htmlYolu = path.join(tmp, "index.html");
+  const htmlYolu = path.join(tmp, "js", "ana.js");
   const veriOnce = readFileSync(veriYolu);
   const htmlOnce = readFileSync(htmlYolu);
   const ilk = JSON.parse(veriOnce.toString("utf-8"))[0];
@@ -133,7 +133,7 @@ function geciciRepo(onEk) {
     try { execFileSync(process.execPath, [cli, hatali, "--kuru"], { encoding: "utf-8", stdio: "pipe" }); }
     catch (e) { kod = e.status; hataCikti = String(e.stderr); }
     kontrol("18) CLI: kopya E'li parti exit 1 ile reddediliyor", kod === 1 && /A şıkkının kopyası/.test(hataCikti), `exit=${kod}`);
-    kontrol("19) CLI --kuru ve reddedilen parti sonrası sorular.json ve index.html bayt bayt AYNI",
+    kontrol("19) CLI --kuru ve reddedilen parti sonrası sorular.json ve js/ana.js bayt bayt AYNI",
       readFileSync(veriYolu).equals(veriOnce) && readFileSync(htmlYolu).equals(htmlOnce));
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -142,7 +142,7 @@ function geciciRepo(onEk) {
 {
   // Gerçek repoda: zaten 5 şıklı soruya E eklemeye çalışan parti (--kuru OLMADAN) yazmadan reddediliyor
   const veriYolu = path.join(ROOT, "api", "data", "sorular.json");
-  const htmlYolu = path.join(ROOT, "index.html");
+  const htmlYolu = path.join(ROOT, "js", "ana.js");
   const veriOnce = readFileSync(veriYolu);
   const htmlOnce = readFileSync(htmlYolu);
   const besSikli = JSON.parse(veriOnce.toString("utf-8")).find((s) => s.secenekler_tr.length === 5);
@@ -154,7 +154,7 @@ function geciciRepo(onEk) {
       let kod = 0, hataCikti = "";
       try { execFileSync(process.execPath, [path.join(ROOT, "scripts", "e-sikki-ekle.mjs"), parti], { encoding: "utf-8", stdio: "pipe" }); }
       catch (e) { kod = e.status; hataCikti = String(e.stderr); }
-      kontrol("19b) gerçek repo: 5 şıklı soruya E eklenmiyor (exit 1), sorular.json ve index.html bayt bayt AYNI",
+      kontrol("19b) gerçek repo: 5 şıklı soruya E eklenmiyor (exit 1), sorular.json ve js/ana.js bayt bayt AYNI",
         kod === 1 && /zaten 5 şıklı/.test(hataCikti) && readFileSync(veriYolu).equals(veriOnce) && readFileSync(htmlYolu).equals(htmlOnce), `exit=${kod}`);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
@@ -184,8 +184,8 @@ function geciciRepo(onEk) {
     const digerleri = veriSonra.filter((s) => !hedefler.some((h) => h.id === s.id));
     kontrol("21) CLI yazma: partide olmayan sorular değişmedi",
       JSON.stringify(digerleri) === JSON.stringify(veriOnce.filter((s) => !hedefler.some((h) => h.id === s.id))));
-    const html = readFileSync(path.join(tmp, "index.html"), "utf-8");
-    kontrol("22) CLI yazma: SL_HAVUZ mirror'ı otomatik yeniden üretildi (E metni index.html'de)",
+    const html = readFileSync(path.join(tmp, "js", "ana.js"), "utf-8");
+    kontrol("22) CLI yazma: SL_HAVUZ mirror'ı otomatik yeniden üretildi (E metni js/ana.js'te)",
       hedefler.every((h) => html.includes(eMetni(h))));
   } finally {
     rmSync(tmp, { recursive: true, force: true });
