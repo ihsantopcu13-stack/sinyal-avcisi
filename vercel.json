@@ -43,6 +43,7 @@
     { "source": "/ucretsiz-rehber", "destination": "/ucretsiz-rehber.html" },
     { "source": "/hedef-rota", "destination": "/hedef-rota.html" },
     { "source": "/50-puan-programi", "destination": "/50-puan-programi.html" },
+    { "source": "/puan-hedefi", "destination": "/puan-hedefi.html" },
     { "source": "/yds-cikmis-sorular", "destination": "/yds-cikmis-sorular.html" },
     { "source": "/yokdil-sinyal-kelimeler", "destination": "/yokdil-sinyal-kelimeler.html" },
     { "source": "/yds-sinav-teknikleri", "destination": "/yds-sinav-teknikleri.html" },
