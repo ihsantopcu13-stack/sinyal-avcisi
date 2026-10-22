@@ -22,6 +22,10 @@
 | Hata | Instagram/Facebook bağımsız: biri başarısız olursa diğeri tekrar gönderilmez, yalnız o platform sonraki çalışmada yeniden denenir (en fazla 3 kez; sonra o konu için bırakılır). İlerleme `data/durum.json`'a commit edilir. Buffer'ın kendi yayın sonucu Buffer panelinde görünür. |
 | Kuyruk azaldı | Saate atanmamış konu sayısı **6 veya altına** inince (`KALAN_UYARI_ESIGI`, günde 3 saatle ≈ 2 günlük pay) çalışma, gönderimler bittikten sonra **kırmızı biter**: logda ve iş özetinde kalan konular ve son atanan yayın saati yazar. Gönderilenler ve `durum.json` commit'i etkilenmez. Yeni konular `kuyruk.json`'a ve Release'e eklenene kadar her çalışma kırmızı biter. Saati bırakılan başarısız konu da kalan sayılır. |
 
+## Tekrar turu (konu 101–140)
+
+Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla ikinci kez sıraya girer: konu `100 + n`, `"tekrar": n`. Videolar `tasarim/yenile.py` ile eski videodan üretilir (fotoğraf yok, sarı başlık, 3-2-1 sayacı, TAKİP ET kartı, −14 LUFS) ve `reels-tekrar-medya.yml` ile Release'e **üzerine yazmadan** yüklenir. Tekrar konuları YouTube'a gitmez (ders orada zaten var).
+
 Kuyruk (`data/kuyruk.json`) yerelde `yds-video-fabrikasi-space\kuyruk_olustur.py` ile üretilir; her çalışmada `test/kuyruk.test.mjs` platform kurallarını (≤2200 karakter, ≤5 hashtag, YouTube başlığı ≤100, yapay zekâ satırı, istatistik iddiası yok…) doğrular.
 
 Gerekli secret'lar (hepsi zaten tanımlı): `BUFFER_ACCESS_TOKEN`, `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`. `GITHUB_TOKEN` otomatik gelir.

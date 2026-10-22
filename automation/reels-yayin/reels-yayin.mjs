@@ -345,7 +345,8 @@ async function yayinla(kuyruk, durum) {
         await kaydet(); // her gönderimden sonra: aynı konu asla iki kez gönderilmesin
       }
       atamaSonucu(durum, oge.konu); // hiçbir platform gitmediyse saat bırakılır
-      if (d.slot) youtubeBekleyeneEkle(durum, oge.konu);
+      // Tekrar turu (oge.tekrar) YouTube'a gitmez: aynı ders orada zaten var
+      if (d.slot && !oge.tekrar) youtubeBekleyeneEkle(durum, oge.konu);
       await kaydet();
     }
   }

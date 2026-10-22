@@ -50,6 +50,13 @@ for (const o of kuyruk.ogeler) {
   uyar(`${k}: Instagram metninde "Link biyografide." var`, /biyografi/i.test(o.aciklama));
   uyar(`${k}: YouTube açıklamasında sinyal-avcisi.com var`, yt.includes("sinyal-avcisi.com"));
 }
+// Tekrar turu: asıl konu kuyrukta olmalı, başlık aynı kalmalı
+for (const o of kuyruk.ogeler.filter((x) => x.tekrar !== undefined)) {
+  const asil = kuyruk.ogeler.find((x) => x.konu === o.tekrar && x.tekrar === undefined);
+  kontrol(`Konu ${o.konu}: tekrar ettiği konu (${o.tekrar}) kuyrukta`, !!asil);
+  kontrol(`Konu ${o.konu}: başlık asıl konuyla aynı`, asil?.baslik === o.baslik);
+  kontrol(`Konu ${o.konu}: tekrar numarası 100 + asıl konu`, o.konu === 100 + o.tekrar);
+}
 kontrol("durum.json biçimi", typeof durum === "object" && typeof (durum.konular ?? {}) === "object");
 
 console.log(`${toplam - hata}/${toplam} kontrol geçti (${kuyruk.ogeler.length} konu)${uyari ? `, ${uyari} uyarı` : ""}`);
