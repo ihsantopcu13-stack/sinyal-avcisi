@@ -1117,50 +1117,50 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 /* GÜNÜN DENEMESİ — her gün 5 soruluk süreli mini YDS denemesi (koyu yeşil + nane) */
 .gd-perde{position:fixed;inset:0;z-index:100000;background:rgba(3,10,7,.78);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
 .gd-perde[hidden]{display:none}
-.gd-panel{width:100%;max-width:640px;background:linear-gradient(160deg,#0b1f17,#0f2a1f 140%);border:1px solid rgba(110,231,183,.28);border-radius:18px;padding:22px 24px;color:#e6f2ec;font-family:'IBM Plex Sans',sans-serif;box-shadow:0 18px 48px rgba(0,0,0,.45)}
+.gd-panel{width:100%;max-width:640px;background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-radius:18px;padding:22px 24px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif;box-shadow:0 18px 48px rgba(0,0,0,.45)}
 .gd-ust{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-.gd-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7}
-.gd-kapat{background:none;border:1px solid rgba(110,231,183,.3);border-radius:8px;color:#e6f2ec;font-family:inherit;font-size:13px;padding:4px 10px;cursor:pointer}
+.gd-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7}
+.gd-kapat{background:none;border:1px solid rgba(110,231,183,.5);border-radius:8px;color:#ffffff;font-family:inherit;font-size:14px;padding:4px 10px;cursor:pointer}
 .gd-kapat:hover{border-color:#6ee7b7}
-.gd-sure{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#6ee7b7;background:rgba(110,231,183,.08);border:1px solid rgba(110,231,183,.25);border-radius:8px;padding:3px 10px}
+.gd-sure{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:#6ee7b7;background:rgba(110,231,183,.08);border:1px solid rgba(110,231,183,.25);border-radius:8px;padding:3px 10px}
 .gd-sure.az{color:#fca5a5;border-color:rgba(252,165,165,.45);background:rgba(252,165,165,.08)}
 .gd-baslik{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:6px}
-.gd-alt{font-size:14px;color:rgba(230,242,236,.72);line-height:1.6;margin-bottom:14px}
-.gd-bilgi{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:18px;font-size:14px}
+.gd-alt{font-size:15.5px;color:#d5e9df;line-height:1.6;margin-bottom:14px}
+.gd-bilgi{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:18px;font-size:16px;line-height:1.5}
 .gd-bilgi li{padding-left:14px;position:relative}
 .gd-bilgi li::before{content:'';position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#6ee7b7}
-.gd-not{font-size:12px;color:rgba(230,242,236,.55);margin-top:12px;line-height:1.5}
+.gd-not{font-size:13.5px;color:#b9d6c8;margin-top:12px;line-height:1.5}
 .gd-btn{background:#6ee7b7;color:#0b1f17;border:none;border-radius:10px;padding:11px 20px;font-weight:700;font-size:15px;font-family:inherit;cursor:pointer}
 .gd-btn:hover{background:#86efc4}
-.gd-btn.ikincil{background:transparent;color:#e6f2ec;border:1px solid rgba(110,231,183,.35)}
+.gd-btn.ikincil{background:transparent;color:#ffffff;border:1px solid rgba(110,231,183,.55)}
 .gd-btn.ikincil:hover{border-color:#6ee7b7}
 .gd-btn:disabled{opacity:.4;cursor:default}
 .gd-noktalar{display:flex;gap:6px;margin-bottom:14px}
-.gd-nokta{flex:1;height:30px;border-radius:8px;border:1px solid rgba(110,231,183,.25);background:transparent;color:rgba(230,242,236,.7);font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer}
+.gd-nokta{flex:1;height:34px;border-radius:8px;border:1px solid rgba(110,231,183,.45);background:transparent;color:#f4fbf7;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;cursor:pointer}
 .gd-nokta.dolu{background:rgba(110,231,183,.16);color:#e6f2ec}
 .gd-nokta.aktif{border-color:#6ee7b7;box-shadow:0 0 0 1px #6ee7b7 inset;color:#e6f2ec}
-.gd-cumle{font-size:16px;line-height:1.7;background:rgba(0,0,0,.22);border:1px solid rgba(110,231,183,.14);border-radius:12px;padding:14px 16px;margin-bottom:12px}
-.gd-soru{font-size:15px;font-weight:600;margin-bottom:10px}
+.gd-cumle{font-size:18px;line-height:1.65;color:#ffffff;background:#06140e;border:1px solid rgba(110,231,183,.4);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.gd-soru{font-size:17px;font-weight:700;color:#ffffff;margin-bottom:10px}
 .gd-siklar{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.gd-sik{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:rgba(110,231,183,.05);border:1px solid rgba(110,231,183,.16);border-radius:10px;padding:10px 12px;color:inherit;font-family:inherit;font-size:14px;line-height:1.5;cursor:pointer}
+.gd-sik{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:#102a1f;border:1px solid rgba(110,231,183,.38);border-radius:10px;padding:12px 14px;color:#ffffff;font-family:inherit;font-size:16px;line-height:1.5;cursor:pointer}
 .gd-sik:hover{border-color:rgba(110,231,183,.45)}
-.gd-sik.secili{background:rgba(110,231,183,.18);border-color:#6ee7b7}
+.gd-sik.secili{background:#6ee7b7;border-color:#6ee7b7;color:#0b1f17;font-weight:600}.gd-sik.secili .gd-harf{color:#0b1f17}
 .gd-harf{flex:none;font-family:'IBM Plex Mono',monospace;font-weight:700;color:#6ee7b7}
 .gd-alt-bar{display:flex;justify-content:space-between;gap:10px}
 .gd-skor{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
 .gd-skor-sayi{font-size:44px;font-weight:800;color:#6ee7b7;line-height:1}
-.gd-skor-etiket{font-size:15px;color:rgba(230,242,236,.75)}
+.gd-skor-etiket{font-size:16px;color:#d5e9df}
 .gd-ozet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 18px}
-.gd-ozet div{background:rgba(110,231,183,.06);border:1px solid rgba(110,231,183,.15);border-radius:10px;padding:8px;text-align:center;font-size:12px;color:rgba(230,242,236,.65)}
-.gd-ozet b{display:block;font-size:18px;color:#e6f2ec}
-.gd-aciklama{border:1px solid rgba(110,231,183,.18);border-left:3px solid #6ee7b7;border-radius:12px;padding:14px 16px;margin-bottom:12px;background:rgba(0,0,0,.18)}
-.gd-aciklama-ust{font-size:13px;font-weight:700;margin-bottom:8px}
-.gd-aciklama-ust span{font-weight:400;color:rgba(230,242,236,.6)}
-.gd-satir{font-size:13.5px;line-height:1.6;margin-bottom:8px}
+.gd-ozet div{background:#102a1f;border:1px solid rgba(110,231,183,.3);border-radius:10px;padding:8px;text-align:center;font-size:13.5px;color:#d5e9df}
+.gd-ozet b{display:block;font-size:20px;color:#ffffff}
+.gd-aciklama{border:1px solid rgba(110,231,183,.35);border-left:4px solid #6ee7b7;border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#06140e}
+.gd-aciklama-ust{font-size:15px;font-weight:700;margin-bottom:8px}
+.gd-aciklama-ust span{font-weight:400;color:#b9d6c8}
+.gd-satir{font-size:15.5px;line-height:1.6;color:#ffffff;margin-bottom:8px}
 .gd-satir:last-child{margin-bottom:0}
-.gd-etiket{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#6ee7b7;margin-right:6px}
+.gd-etiket{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6ee7b7;margin-right:6px}
 .gd-satir.tuzak .gd-etiket{color:#fca5a5}
-.gd-cevaplar{font-size:12.5px;color:rgba(230,242,236,.7);margin-top:4px}
+.gd-cevaplar{font-size:14px;color:#d5e9df;margin-top:4px}
 @media(max-width:600px){.gd-panel{padding:18px 16px}.gd-baslik{font-size:19px}.gd-ozet{grid-template-columns:repeat(2,1fr)}}
 
 /* ACİL KURTARMA KARTI — Dashboard */
