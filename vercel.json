@@ -34,7 +34,8 @@
     }
   ],
   "crons": [
-    { "path": "/api/cron-streak-risk", "schedule": "0 18 * * *" }
+    { "path": "/api/cron-streak-risk", "schedule": "0 18 * * *" },
+    { "path": "/api/cron-streak-risk?tur=sabah", "schedule": "0 6 * * *" }
   ],
   "rewrites": [
     { "source": "/privacy", "destination": "/privacy.html" },

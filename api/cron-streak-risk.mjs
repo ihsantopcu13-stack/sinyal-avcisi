@@ -6,6 +6,12 @@
 // Bugün henüz çalışmamış ama aktif bir serisi olan kullanıcılara
 // "serini kaybetme" push bildirimi gönderir.
 //
+// ?tur=sabah ile (06:00 UTC = Türkiye 09:00) aynı fonksiyon "sabah listen
+// hazır" bildirimini gönderir: son 7 günde çalışmış ve bildirime izin vermiş
+// kullanıcılara. Listenin kendisi kişiye özeldir ve tarayıcıda (index.html →
+// sabahListesiRender) cevap geçmişinden kurulur; bildirim sadece öğrenciyi
+// panele geri çağırır. Ayrı dosya değil: Vercel Hobby 12 fonksiyon sınırında.
+//
 // GÜVENLİK: Vercel, projede bir CRON_SECRET ortam değişkeni tanımlıysa
 // cron isteklerine otomatik olarak `Authorization: Bearer $CRON_SECRET`
 // header'ı ekler. Bu header doğrulanmadan hiçbir gönderim yapılmaz —
@@ -14,6 +20,40 @@
 import { fetchSubscriptionsForUsers, sendPushToSubscriptions } from './_push.mjs';
 
 const SUPABASE_URL = 'https://scqczkyiyshmczzmlshl.supabase.co';
+const SABAH_AKTIF_GUN = 7;
+
+export const SABAH_PAYLOAD = {
+  title: 'Sabah listen hazır',
+  body: 'Bugün sana özel 4 adım seni bekliyor. 10 dakikada bitir.',
+  url: '/#dashboard',
+  tag: 'sinyal-avcisi-sabah-listesi',
+};
+
+function istekTuru(req) {
+  if (req.query && req.query.tur) return String(req.query.tur);
+  try { return new URL(req.url, 'http://x').searchParams.get('tur') || ''; } catch (e) { return ''; }
+}
+
+async function sabahListesiGonder(serviceRoleKey, res) {
+  const sinir = new Date(Date.now() - SABAH_AKTIF_GUN * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  // Son 7 günde en az bir kez çalışmış kullanıcılar
+  const actRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/user_activity?select=user_id&last_active_date=gte.${sinir}`,
+    { headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` } }
+  );
+  if (!actRes.ok) {
+    const err = await actRes.text();
+    console.error('cron-sabah-listesi: activity fetch error', err);
+    return res.status(500).json({ error: 'Aktivite verisi alınamadı' });
+  }
+  const aktifler = await actRes.json();
+  if (aktifler.length === 0) {
+    return res.status(200).json({ success: true, tur: 'sabah', aktif: 0, sent: 0 });
+  }
+  const subs = await fetchSubscriptionsForUsers(serviceRoleKey, aktifler.map(a => a.user_id));
+  const sonuc = await sendPushToSubscriptions(subs, SABAH_PAYLOAD, serviceRoleKey);
+  return res.status(200).json({ success: true, tur: 'sabah', aktif: aktifler.length, ...sonuc });
+}
 
 export default async function handler(req, res) {
   const authHeader = req.headers.authorization || '';
@@ -34,6 +74,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    if (istekTuru(req) === 'sabah') return await sabahListesiGonder(serviceRoleKey, res);
+
     const bugun = new Date().toISOString().split('T')[0];
 
     // Aktif serisi olup bugün henüz çalışmamış kullanıcılar

@@ -1094,6 +1094,27 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .bugun-kart.tamamlandi .bugun-dot.tamam{background:#22c55e}
 @media(max-width:600px){.bugun-kart{padding:16px}}
 
+/* SABAH LİSTEN — her sabah kişiye özel kısa çalışma listesi (koyu yeşil + nane) */
+.sabah-kart{background:linear-gradient(150deg,#0b1f17,#0f2a1f 130%);border:1px solid rgba(110,231,183,.28);border-left:3px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin-bottom:14px;color:#e6f2ec;box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.sabah-ust{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.sabah-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7}
+.sabah-sayac{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6ee7b7;white-space:nowrap}
+.sabah-baslik{font-size:18px;font-weight:700;line-height:1.4;margin-bottom:4px}
+.sabah-alt{font-size:12.5px;color:rgba(230,242,236,.65);margin-bottom:12px}
+.sabah-liste{list-style:none;display:flex;flex-direction:column;gap:8px}
+.sabah-madde{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(110,231,183,.06);border:1px solid rgba(110,231,183,.16);border-radius:10px;padding:10px 12px;color:inherit;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;transition:background-color .15s ease,border-color .15s ease}
+.sabah-madde:hover{background:rgba(110,231,183,.12);border-color:rgba(110,231,183,.4)}
+.sabah-kutu{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(110,231,183,.55);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0b1f17}
+.sabah-madde-metin{flex:1;display:flex;flex-direction:column;gap:2px}
+.sabah-madde-baslik{font-size:14px;font-weight:600}
+.sabah-madde-alt{font-size:12px;color:rgba(230,242,236,.6)}
+.sabah-ok{flex:none;font-size:13px;color:#6ee7b7;font-weight:700}
+.sabah-madde.tamam{background:transparent;border-color:rgba(110,231,183,.12)}
+.sabah-madde.tamam .sabah-kutu{background:#6ee7b7;border-color:#6ee7b7}
+.sabah-madde.tamam .sabah-madde-baslik{text-decoration:line-through;color:rgba(230,242,236,.55)}
+.sabah-madde.tamam .sabah-ok{visibility:hidden}
+@media(max-width:600px){.sabah-kart{padding:16px}}
+
 /* ACİL KURTARMA KARTI — Dashboard */
 .sk-kart{background:linear-gradient(135deg,#0d1624,#131f30);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#f8fafc;cursor:pointer;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(239,68,68,.45),0 8px 24px rgba(0,0,0,.3)}
 .sk-kart:hover{transform:translateY(-1px)}
@@ -1923,6 +1944,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <div class="dash-main">
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
         <div class="bugun-kart" id="bugun-kart"></div>
+        <div class="sabah-kart" id="sabah-kart" aria-live="polite"></div>
         <!-- AVCI ÖĞRENME YOLU — Dashboard mini CTA kartı -->
         <div id="aoy-dash-cta" onclick="aoyAc()" role="button" tabindex="0" style="display:none;cursor:pointer;background:linear-gradient(150deg,#0d1624,#131f30 130%);border:1px solid rgba(56,189,248,.32);border-radius:16px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden">
           <div style="font-size:11px;font-weight:700;color:var(--signal);letter-spacing:.1em;margin-bottom:4px"><span class="dk-motion-icon" aria-hidden="true">🗺️</span> AVCI ÖĞRENME YOLU</div>
@@ -7042,12 +7064,14 @@ function dnav(el){
   main.querySelector('.dash-welcome').style.display='none';
   const skKartEl=document.getElementById('sk-kart');if(skKartEl)skKartEl.style.display='none';
   const bugunKartEl=document.getElementById('bugun-kart');if(bugunKartEl)bugunKartEl.style.display='none';
+  const sabahKartEl=document.getElementById('sabah-kart');if(sabahKartEl)sabahKartEl.style.display='none';
   if(txt.includes('Dashboard')||txt.includes('Bugün')){
     // KATMAN 5B — Dashboard varsayılan olarak Sinyal Lab'ı gösterir (dtab[0] aktif)
     _aktifSoruModulu='sinyal_lab';
     main.querySelector('.dash-karts').style.display='grid';main.querySelector('.dash-tabs').style.display='flex';main.querySelector('.dash-welcome').style.display='block';
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
+    if(sabahKartEl){sabahKartEl.style.display='block';if(typeof sabahListesiRender==='function')sabahListesiRender();}
     modSinyalAsilGeriYukle();
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
@@ -11512,6 +11536,7 @@ function cevapKaydet(opts){
     if(d.length>200)d=d.slice(0,200); // hata defterinden (30) daha geniş ama sınırsız değil
     cevapGecmisiSave(d);
     cevapSunucuyaSenkronla(kayit);
+    if(typeof sabahListesiRender==='function')sabahListesiRender(); // tamamlanan maddeyi işaretle
   }catch(e){}
 }
 
@@ -13876,6 +13901,106 @@ function bugunGorevGit(dnAra){
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
 
+// ─── SABAH LİSTEN — her sabah kişiye özel 4 maddelik çalışma listesi ──────
+// "Günün Sorusu"nun kişiye özel hali. Kaynak bu cihazdaki cevap geçmişi
+// (sa_cevap_gecmisi): son kaçan Sinyal Lab sorusu, en düşük doğruluklu
+// sinyalden sorular ve kelime tekrarı. Liste günde bir kez kurulur ve
+// sa_sabah_listesi'nde saklanır, gün içinde değişmez. Maddeler, ilgili
+// cevap bugün kaydedilince (cevapKaydet) kendiliğinden işaretlenir.
+const SABAH_KELIME_HEDEF=5;
+function sabahTohum(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
+function sabahBugunBasi(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();}
+function sabahListesiKur(bugun){
+  const gecmis=cevapGecmisiLoad();
+  const slVar=id=>SL_HAVUZ.some(s=>s.id===id);
+  // cevapKaydet aynı soruyu tekilleştirip en yeni kaydı başa koyar: her soru için tek, güncel satır.
+  const slGecmis=gecmis.filter(h=>h.modul==='sinyal'&&h.questionId&&slVar(h.questionId));
+  const cozulenDogru=new Set(slGecmis.filter(h=>h.isCorrect).map(h=>h.questionId));
+  const kullanilan=new Set();
+  const maddeler=[];
+  let tohum=sabahTohum(bugun);
+  const sec=liste=>{if(!liste.length)return null;const s=liste[tohum%liste.length];tohum=sabahTohum(bugun+':'+tohum);return s;};
+
+  // En zayıf sinyal: en az 1 yanlışı olanlar arasında doğruluğu en düşük olan.
+  const sinyaller={};
+  slGecmis.forEach(h=>{const k=h.signal;if(!k)return;sinyaller[k]=sinyaller[k]||{sinyal:k,dogru:0,toplam:0};sinyaller[k].toplam++;if(h.isCorrect)sinyaller[k].dogru++;});
+  const zayif=Object.values(sinyaller).filter(z=>z.dogru<z.toplam).sort((a,b)=>(a.dogru/a.toplam)-(b.dogru/b.toplam)||b.toplam-a.toplam)[0]||null;
+
+  // 1) Kaçan soru: hâlâ doğru çözülmemiş en yeni Sinyal Lab yanlışı.
+  const kacan=slGecmis.find(h=>!h.isCorrect);
+  if(kacan){
+    kullanilan.add(kacan.questionId);
+    maddeler.push({tip:'soru',qid:kacan.questionId,baslik:'Kaçan soruyu tekrar çöz',alt:'Son yanlışın · '+(kacan.signal||'Sinyal Lab')});
+  }
+  // 2-3) Zayıf sinyalden henüz doğru çözülmemiş sorular; veri yoksa günün sorusu.
+  const aday=s=>!kullanilan.has(s.id)&&!cozulenDogru.has(s.id);
+  const hedefSayi=kacan?2:3;
+  for(let i=0;i<hedefSayi;i++){
+    let soru=null,alt='';
+    if(zayif){soru=sec(SL_HAVUZ.filter(s=>s.sinyal===zayif.sinyal&&aday(s)));if(soru)alt='Zayıf sinyalin · '+zayif.sinyal;}
+    if(!soru){soru=sec(SL_HAVUZ.filter(aday))||sec(SL_HAVUZ.filter(s=>!kullanilan.has(s.id)));if(soru)alt='Sinyal · '+soru.sinyal;}
+    if(!soru)break;
+    kullanilan.add(soru.id);
+    maddeler.push({tip:'soru',qid:soru.id,baslik:maddeler.some(m=>m.gunun)?'1 soru daha çöz':'Günün Sorusu',alt,gunun:true});
+  }
+  // 4) Kelime tekrarı.
+  maddeler.push({tip:'kelime',baslik:SABAH_KELIME_HEDEF+' kelime kartı tekrar et',alt:'Kelime Kartları'});
+  return{tarih:bugun,zayif:zayif?{sinyal:zayif.sinyal,oran:Math.round(zayif.dogru/zayif.toplam*100)}:null,veriVar:slGecmis.length>0,maddeler};
+}
+function sabahListesiYukle(){
+  const bugun=sinavChecklistBugunAnahtari();
+  let v=null;
+  try{v=JSON.parse(localStorage.getItem('sa_sabah_listesi'));}catch(e){v=null;}
+  if(!v||v.tarih!==bugun||!Array.isArray(v.maddeler)){
+    v=sabahListesiKur(bugun);
+    try{localStorage.setItem('sa_sabah_listesi',JSON.stringify(v));}catch(e){}
+  }
+  return v;
+}
+function sabahMaddeTamamMi(m,bugunGecmis){
+  if(m.tip==='soru')return bugunGecmis.some(h=>h.questionId===m.qid);
+  if(m.tip==='kelime')return bugunGecmis.filter(h=>h.modul==='kelime').length>=SABAH_KELIME_HEDEF;
+  return false;
+}
+function sabahListesiRender(){
+  const kartEl=document.getElementById('sabah-kart');
+  if(!kartEl||typeof SL_HAVUZ==='undefined')return;
+  const v=sabahListesiYukle();
+  const bas=sabahBugunBasi();
+  const bugunGecmis=cevapGecmisiLoad().filter(h=>h.answeredAt&&new Date(h.answeredAt).getTime()>=bas);
+  const durum=v.maddeler.map(m=>sabahMaddeTamamMi(m,bugunGecmis));
+  const biten=durum.filter(Boolean).length;
+  const toplam=v.maddeler.length;
+  const tarihMetni=new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'});
+  const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const baslik=biten===toplam?'Bugünün listesi bitti. Yarın sabah yenisi hazır.':'Bugün sana özel '+toplam+' adım';
+  const alt=v.zayif?'En zayıf sinyalin: <b>'+esc(v.zayif.sinyal)+'</b> (%'+v.zayif.oran+' doğru). Liste ona göre seçildi.':(v.veriVar?'Liste son cevaplarına göre seçildi.':'Birkaç soru çözünce liste senin yanlışlarına göre şekillenir.');
+  kartEl.innerHTML=`
+    <div class="sabah-ust"><div class="sabah-eyebrow">Sabah listen · ${esc(tarihMetni)}</div><div class="sabah-sayac">${biten}/${toplam}</div></div>
+    <div class="sabah-baslik">${baslik}</div>
+    <div class="sabah-alt">${alt}</div>
+    <ol class="sabah-liste">${v.maddeler.map((m,i)=>`
+      <li><button type="button" class="sabah-madde${durum[i]?' tamam':''}" onclick="sabahMaddeAc(${i})" aria-label="${esc(m.baslik)}${durum[i]?' (tamamlandı)':''}">
+        <span class="sabah-kutu" aria-hidden="true">${durum[i]?'✓':''}</span>
+        <span class="sabah-madde-metin"><span class="sabah-madde-baslik">${esc(m.baslik)}</span><span class="sabah-madde-alt">${esc(m.alt)}</span></span>
+        <span class="sabah-ok" aria-hidden="true">Başla →</span>
+      </button></li>`).join('')}
+    </ol>`;
+}
+function sabahMaddeAc(i){
+  const m=sabahListesiYukle().maddeler[i];
+  if(!m)return;
+  if(m.tip==='kelime'){bugunGorevGit('Kelime Kartları');return;}
+  const idx=SL_HAVUZ.findIndex(s=>s.id===m.qid);
+  if(idx<0)return;
+  const tab=document.querySelectorAll('.dtab')[0];
+  if(tab)dtab(tab,'sinyal');
+  slIdx=idx;
+  window.__slDeepLinkSoru=SL_HAVUZ[idx]; // slRender bu soruyu bir kez gösterir
+  slRender();
+  document.getElementById('mod-sinyal')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 // ─── PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* ─────────────────────────────────
 const PA_BOLUMLER=[
   {key:'sosyal',etiket:'Sosyal Bilimler',aktif:true},
@@ -14085,6 +14210,7 @@ function paPromptKopyala(btn){
 setTimeout(()=>{
   sinavKurtarmaKartRender();
   bugunKartiRender();
+  sabahListesiRender();
   sinavGunlukMesajGoster();
 },2000);
 
