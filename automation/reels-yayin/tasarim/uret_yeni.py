@@ -112,7 +112,7 @@ def cumle_parcalari(k, cevapli):
     return [(w, BEYAZ) for w in kel], ([(w, NANE) for w in k["dogru"].split()] if cevapli else [])
 
 
-def kare(k, asama, sayac=None):
+def kare(k, asama, sayac=None, tr=None):
     im = Image.new("RGB", (W, H), ZEMIN); d = ImageDraw.Draw(im)
     bas = baslik_metni(k); n = 64
     while f(n).getlength(bas) > 1000: n -= 2
@@ -129,14 +129,27 @@ def kare(k, asama, sayac=None):
     fn, s, ara = sigdir([(w, BEYAZ) for w in k["kanca"].split()], 900, 190, 52, 34)
     satir_ciz(d, s, fn, 580 - len(s) * ara / 2, ara)
     ana, ek = cumle_parcalari(k, asama != "kanca")
-    alan = 470 if not ek else 250
+    # Türkçe alt satır (turkce.py): cevap açıklanınca kartın altında; cümle alanı daralır
+    tr = tr if asama in ("kural", "tuzak") else None
+    alt = 1200
+    if tr:
+        ft, st, arat = sigdir([(w, GRI) for w in tr.split()], 900, 150, 38, 28)
+        alt = 1200 - len(st) * arat - 56
+    alan = (470 if not ek else 250) - (1200 - alt)
     fn, s, ara = sigdir(ana, 920, alan, 64, 30)
-    y = (720 if ek else 952 - len(s) * ara / 2)
+    y = (720 if ek else (952 if not tr else (712 + alt) / 2) - len(s) * ara / 2)
     y = satir_ciz(d, s, fn, y, ara)
     if ek:
         d.line([140, y + 10, 940, y + 10], fill=NANE, width=3)
-        fn2, s2, ara2 = sigdir(ek, 920, 1200 - y - 30, 56, 30)
+        fn2, s2, ara2 = sigdir(ek, 920, alt - y - 30, 56, 30)
         satir_ciz(d, s2, fn2, y + 30, ara2)
+    if tr:
+        fe = f(24); et = "TÜRKÇESİ"
+        ew = fe.getlength(et)
+        d.line([140, alt + 22, (W - ew) / 2 - 20, alt + 22], fill=NANE, width=2)
+        d.line([(W + ew) / 2 + 20, alt + 22, 940, alt + 22], fill=NANE, width=2)
+        d.text(((W - ew) / 2, alt + 8), et, font=fe, fill=NANE)
+        satir_ciz(d, st, ft, alt + 50, arat)
     # alt bölüm
     if asama == "kanca":
         if sayac:

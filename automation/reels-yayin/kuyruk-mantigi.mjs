@@ -130,7 +130,19 @@ export function youtubeAciklamasi(aciklama) {
 export function kapakliVideoAdi(video) {
   return String(video).replace(/\.mp4$/, "-kapak.mp4");
 }
+// TÜRKÇE ALT SATIR: tasarim/turkce.py cümlenin Türkçe anlamı eklenmiş "konuXX-tr.mp4"yi Release'e koyar
+// (konu101-nane.mp4 → konu101-tr.mp4). Varsa asıl video yerine o kullanılır; kapak da onun üstüne yapılır.
+export function turkceVideoAdi(video) {
+  return String(video).replace(/-nane\.mp4$/, ".mp4").replace(/\.mp4$/, "-tr.mp4");
+}
+export function asilVideo(video, assetler) {
+  const tr = turkceVideoAdi(video);
+  return assetler[tr] ? tr : video;
+}
+// Sıra: Türkçe+kapak > kapak > Türkçe > asıl video (profil ızgarasında kapak öncelikli)
 export function paylasilacakVideo(video, assetler) {
-  const kapakli = kapakliVideoAdi(video);
-  return assetler[kapakli] ? kapakli : video;
+  for (const ad of [kapakliVideoAdi(turkceVideoAdi(video)), kapakliVideoAdi(video), turkceVideoAdi(video)]) {
+    if (assetler[ad]) return ad;
+  }
+  return video;
 }

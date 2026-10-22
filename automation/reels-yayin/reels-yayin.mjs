@@ -39,7 +39,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo, asilVideo } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -293,7 +293,7 @@ async function facebookYayinla(oge, videoUrl, kanallar, sema, dueAt) {
 async function youtubeYayinla(oge, assetler) {
   const { google, client } = await youtubeAuth();
   const yt = google.youtube({ version: "v3", auth: client });
-  const yerel = await assetIndir(assetler[oge.video]);
+  const yerel = await assetIndir(assetler[asilVideo(oge.video, assetler)]);  // Türkçe satırlı varsa o
   const r = await yt.videos.insert({
     part: "snippet,status",
     requestBody: {
@@ -325,10 +325,10 @@ async function yayinla(kuyruk, durum) {
       const d = (durum.konular[oge.konu] ||= {});
       d.slot = x.slot;
       if (!assetler[oge.video]) { log(`✘ Release'te ${oge.video} yok`); hataVar = true; atamaSonucu(durum, oge.konu); await kaydet(); continue; }
-      // Instagram/Facebook kapaklı videoyu alır (varsa); YouTube asıl videoyu yükler
+      // Instagram/Facebook kapaklı ve Türkçe satırlı videoyu alır (varsa); YouTube kapaksızını yükler
       const paylasilan = paylasilacakVideo(oge.video, assetler);
       const videoUrl = assetler[paylasilan].browser_download_url;
-      if (paylasilan !== oge.video) log(`  kapaklı video: ${paylasilan}`);
+      if (paylasilan !== oge.video) log(`  paylaşılan video: ${paylasilan}`);
       const islem = {
         instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema, x.dueAt),
         facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema, x.dueAt),

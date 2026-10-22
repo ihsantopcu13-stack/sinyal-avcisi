@@ -5,6 +5,7 @@ Buffer, Instagram'a kapak görseli iletemiyor (thumbnailUrl → "Invalid post");
 kapak olarak videonun ilk karesini alır. Bu yüzden kapak, videonun başına çok kısa
 (KAPAK_SN) bir kare olarak eklenir ve "konuXX-kapak.mp4" adıyla Release'e konur.
 reels-yayin.mjs bu dosya varsa onu, yoksa asıl videoyu paylaşır. Asıl video hiç değişmez.
+Türkçe alt satırlı sürüm (turkce.py, "konuXX-tr.mp4") varsa kapak onun başına eklenir.
 
 Tasarım: koyu yeşil zemin, nane yeşili vurgu (sarı yok, emoji yok). Başlık ve soru,
 profil ızgarasının kırptığı orta 3:4 alanın içinde (y 240–1680).
@@ -48,6 +49,11 @@ def baslik_metni(b):
 
 def kapak_adi(video):
     return video.replace(".mp4", "-kapak.mp4")
+
+
+def tr_adi(video):
+    # Türkçe alt satırlı sürüm (turkce.py): konu58.mp4 → konu58-tr.mp4, konu101-nane.mp4 → konu101-tr.mp4
+    return video.replace("-nane.mp4", ".mp4").replace(".mp4", "-tr.mp4")
 
 
 def soru(o):
@@ -151,20 +157,24 @@ def main():
         print(__doc__); sys.exit(1)
     durum = json.load(open(DURUM, encoding="utf-8"))["konular"]
     varolan = set(gh("release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name").split())
-    # Saati atanmış (Buffer'a gitmiş) konular atlanır; yalnız sıradakiler
-    eksik = [o for o in kuyruk if not durum.get(str(o["konu"]), {}).get("slot")
-             and o["video"] in varolan and kapak_adi(o["video"]) not in varolan]
+    # Saati atanmış (Buffer'a gitmiş) konular atlanır; yalnız sıradakiler.
+    # Türkçe satırlı sürüm varsa kapak onun üstüne yapılır (konuXX-tr-kapak.mp4).
+    eksik = []
+    for o in kuyruk:
+        kaynak = tr_adi(o["video"]) if tr_adi(o["video"]) in varolan else o["video"]
+        if not durum.get(str(o["konu"]), {}).get("slot") and kaynak in varolan and kapak_adi(kaynak) not in varolan:
+            eksik.append((o, kaynak))
     print(f"{len(eksik)} konunun kapaklı videosu eksik")
     with tempfile.TemporaryDirectory() as tmp:
-        for o in eksik:
-            gh("release", "download", ETIKET, "-p", o["video"], "-D", tmp, "--clobber")
+        for o, kaynak in eksik:
+            gh("release", "download", ETIKET, "-p", kaynak, "-D", tmp, "--clobber")
             png = os.path.join(cikti, f"kapak{o['konu']}.png")
-            hedef = os.path.join(cikti, kapak_adi(o["video"]))
+            hedef = os.path.join(cikti, kapak_adi(kaynak))
             kapak_ciz(o, png)
-            kapakli_video(o, os.path.join(tmp, o["video"]), png, hedef)
+            kapakli_video(o, os.path.join(tmp, kaynak), png, hedef)
             if "--yukle" in arg:
                 gh("release", "upload", ETIKET, hedef)  # --clobber yok: üzerine yazmaz
-            print(f"✔ Konu {o['konu']}: {kapak_adi(o['video'])}")
+            print(f"✔ Konu {o['konu']}: {kapak_adi(kaynak)}")
 
 
 if __name__ == "__main__":
