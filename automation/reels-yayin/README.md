@@ -26,6 +26,10 @@
 
 Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla ikinci kez sıraya girer: konu `100 + n`, `"tekrar": n`. Videolar `tasarim/yenile.py` ile eski videodan üretilir (fotoğraf yok, sarı başlık, 3-2-1 sayacı, TAKİP ET kartı, −14 LUFS) ve `reels-tekrar-medya.yml` ile Release'e **üzerine yazmadan** yüklenir. Tekrar konuları YouTube'a gitmez (ders orada zaten var).
 
+## Yeni konular (56, 57, 59–63, 68–77)
+
+Metinler `tasarim/yeni-konular.json`'da (22 Ekim 2026'da onaylandı). `tasarim/uret_yeni.py` nane yeşili şablonla video üretir (OpenAI TTS sesi, −14 LUFS) ve `--kuyruk` ile kuyruk kayıtlarını yazar. `reels-yeni-konular.yml`: PR'da konu 68 örneğini `reels-onizleme` ön sürümüne koyar; main'de eksik videoları `reels-medya-v1`'e üzerine yazmadan yükler.
+
 Kuyruk (`data/kuyruk.json`) yerelde `yds-video-fabrikasi-space\kuyruk_olustur.py` ile üretilir; her çalışmada `test/kuyruk.test.mjs` platform kurallarını (≤2200 karakter, ≤5 hashtag, YouTube başlığı ≤100, yapay zekâ satırı, istatistik iddiası yok…) doğrular.
 
 Gerekli secret'lar (hepsi zaten tanımlı): `BUFFER_ACCESS_TOKEN`, `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`. `GITHUB_TOKEN` otomatik gelir.
