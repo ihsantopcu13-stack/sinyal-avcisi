@@ -124,3 +124,13 @@ export function facebookAciklamasi(aciklama) {
 export function youtubeAciklamasi(aciklama) {
   return String(aciklama ?? "").replace(/[ \t]*Link biyografide\.?/g, "");
 }
+
+// KAPAK: Buffer Instagram'a kapak görseli iletemiyor; Instagram ilk kareyi kapak yapar. tasarim/kapak.py
+// başına kapak karesi eklenmiş "konuXX-kapak.mp4"yi Release'e koyar. Varsa o paylaşılır, yoksa asıl video.
+export function kapakliVideoAdi(video) {
+  return String(video).replace(/\.mp4$/, "-kapak.mp4");
+}
+export function paylasilacakVideo(video, assetler) {
+  const kapakli = kapakliVideoAdi(video);
+  return assetler[kapakli] ? kapakli : video;
+}

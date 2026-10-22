@@ -51,6 +51,19 @@ jobs:
       - name: Kuyruğu ve ilerleme kurallarını doğrula
         run: node test/kuyruk.test.mjs && node test/durum.test.mjs
 
+      # Sıradaki konuların kapaklı videolarını (tasarim/kapak.py) üretip Release'e koyar; yalnız
+      # eksik olanlar, üzerine yazmaz. Başarısız olursa yayın asıl videoyla sürer.
+      - name: Kapaklı videoları hazırla
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          pip install --quiet Pillow
+          python3 tasarim/kapak.py --hepsi --yukle
+
       - name: "Reels (${{ env.REELS_MOD }})"
         run: node reels-yayin.mjs
         env:

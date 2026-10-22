@@ -3,7 +3,7 @@
 import {
   durumHazirla, planla, atamaSonucu, gelecekSlotlar, youtubeAcik, ilkYorumAcik,
   youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, MAX_DENEME,
-  kuyrukUyarisi, KALAN_UYARI_ESIGI,
+  kuyrukUyarisi, KALAN_UYARI_ESIGI, kapakliVideoAdi, paylasilacakVideo,
 } from "../kuyruk-mantigi.mjs";
 
 let toplam = 0, hata = 0;
@@ -152,6 +152,13 @@ const isle = (d, plan, basarisiz = {}) => {
   kontrol("BUFFER_ILK_YORUM yoksa ilk yorum gönderilmez", ilkYorumAcik({}) === false);
   kontrol("BUFFER_ILK_YORUM=kapali → gönderilmez", ilkYorumAcik({ BUFFER_ILK_YORUM: "kapali" }) === false);
   kontrol("BUFFER_ILK_YORUM=acik → gönderilir", ilkYorumAcik({ BUFFER_ILK_YORUM: "acik" }) === true);
+}
+
+// ---- Kapaklı video ----
+{
+  kontrol("kapaklı ad", kapakliVideoAdi("konu45.mp4") === "konu45-kapak.mp4");
+  kontrol("kapaklı varsa o paylaşılır", paylasilacakVideo("konu45.mp4", { "konu45.mp4": {}, "konu45-kapak.mp4": {} }) === "konu45-kapak.mp4");
+  kontrol("kapaklı yoksa asıl video", paylasilacakVideo("konu45.mp4", { "konu45.mp4": {} }) === "konu45.mp4");
 }
 
 console.log(`${toplam - hata}/${toplam} kontrol geçti`);

@@ -12,7 +12,8 @@
 | Güvenlik kilidi | Zamanlanmış çalışmalar repo değişkeni **`REELS_YAYIN=acik`** olmadıkça yalnızca **deneme** yapar. Elle çalıştırmada varsayılan mod da `deneme`. |
 | Deneme modu | Hiçbir şey paylaşmaz. Anahtarları, Buffer'daki Instagram ve Facebook kanallarını, Buffer şemasının desteklediği alanları (Facebook Reels, ilk yorum), YouTube token'ını ve sıradaki konunun videosunu kontrol eder; gönderilecek açıklamayı loga yazar. |
 | Medya | GitHub Release **`reels-medya-v1`** (`konuXX.mp4`). Buffer'a Release'in herkese açık adresi verilir (günlük video hattı da böyle çalışıyor); YouTube'a dosyanın kendisi yüklenir. |
-| Instagram (Buffer) | Reels, akışta da paylaşılır, **yapay zekâ etiketi işaretli** (`isAiGenerated: true`). **Kapak: videonun ilk karesi** (Buffer Instagram'da kapak görseli kabul etmiyor; ilk kare zaten kanca kartı). |
+| Instagram (Buffer) | Reels, akışta da paylaşılır, **yapay zekâ etiketi işaretli** (`isAiGenerated: true`). Kapak: aşağıdaki **Kapak** satırına bak. |
+| Kapak | Instagram kapağı ilk kareden alır, Buffer kapak görseli kabul etmez. Bu yüzden her çalışmada `tasarim/kapak.py` sıradaki konulara büyük başlıklı kapak karesi (0,12 sn) ekler ve `konuXX-kapak.mp4` olarak Release'e koyar (üzerine yazmaz). Instagram/Facebook bu dosyayı alır; yoksa asıl videoyu. YouTube asıl videoyu yükler. Örnek kapak: `python3 tasarim/kapak.py --ornek 68`. |
 | Facebook (Buffer) | Buffer şeması destekliyorsa Reels, değilse normal video gönderisi. |
 | İlk yorum | Buffer şemasında "first comment" alanı varsa mini test ilk yorum olarak gider; yoksa gönderilmez (deneme modu hangisi olduğunu raporlar). |
 | YouTube | `containsSyntheticMedia: true` (**değiştirilmiş/sentetik içerik beyanı**), çocuklara özel değil, kategori Eğitim, herkese açık. |
