@@ -17,7 +17,7 @@
 
 export const MAX_DENEME = 3;
 export const BUFFER_PLATFORMLARI = ["instagram", "facebook"];
-export const YT_CALISMA_BASINA = 2;
+export const YT_CALISMA_BASINA = 3;
 export const SLOTLAR = ["08:30", "13:00", "17:30"]; // İstanbul saati (UTC+3, yaz saati uygulaması yok)
 export const ON_SURE_DK = 15; // Buffer'a verilen saat en az bu kadar ileride olmalı
 
