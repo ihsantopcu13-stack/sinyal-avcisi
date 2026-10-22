@@ -1163,6 +1163,23 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .gd-cevaplar{font-size:14px;color:#d5e9df;margin-top:4px}
 @media(max-width:600px){.gd-panel{padding:18px 16px}.gd-baslik{font-size:19px}.gd-ozet{grid-template-columns:repeat(2,1fr)}}
 
+/* YANLIŞ DEFTERİ — 1, 3 ve 7 gün tekrarı (koyu yeşil + nane) */
+.yd-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin:12px 0 18px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
+.yd-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
+.yd-baslik{font-size:21px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.yd-alt{font-size:16px;color:#d5e9df;line-height:1.6;margin-bottom:12px}
+.yd-alt b{color:#ffffff}
+.yd-ozet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.yd-ozet div{background:#102a1f;border:1px solid rgba(110,231,183,.3);border-radius:10px;padding:8px;text-align:center;font-size:13.5px;color:#d5e9df}
+.yd-ozet b{display:block;font-size:22px;color:#ffffff}
+.yd-not{font-size:14px;color:#b9d6c8;margin-top:12px;line-height:1.5}
+.gd-sik.yd-dogru{background:#6ee7b7;border-color:#6ee7b7;color:#0b1f17;font-weight:600}.gd-sik.yd-dogru .gd-harf{color:#0b1f17}
+.gd-sik.yd-yanlis{border-color:#fca5a5;background:rgba(252,165,165,.12)}
+.gd-sik:disabled{cursor:default}
+.yd-sonuc{font-size:17px;font-weight:700;color:#fca5a5;margin-bottom:12px}
+.yd-sonuc.ok{color:#6ee7b7}
+@media(max-width:600px){.yd-kart{padding:16px}.yd-ozet{grid-template-columns:repeat(2,1fr)}}
+
 /* ACİL KURTARMA KARTI — Dashboard */
 .sk-kart{background:linear-gradient(135deg,#0d1624,#131f30);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#f8fafc;cursor:pointer;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(239,68,68,.45),0 8px 24px rgba(0,0,0,.3)}
 .sk-kart:hover{transform:translateY(-1px)}
@@ -2220,6 +2237,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </div>
 <div class="dmod" id="mod-hatalar" style="display:none">
           <div class="dm-eye">HATA DEFTERİ — Yanlış cevapladıkların</div>
+          <div class="yd-kart" id="yd-kart"></div>
+          <div class="dm-eye" style="margin-top:4px">Tüm hata kayıtları</div>
           <div id="hata-liste-container"></div>
         </div>
 
@@ -7085,7 +7104,7 @@ function dtab(el,mod){
   if(mod==='sinyal'&&typeof modSinyalAsilGeriYukle==='function')modSinyalAsilGeriYukle();
   // KLOD odak modu açıkken kod yoluyla başka sekmeye geçilirse odaktan da çık
   if(document.body.classList.contains('klod-odak')&&typeof klodOdakAyarla==='function'){klodOdakAyarla(false);document.querySelector('.dash-inner')?.classList.remove('dash-inner-klod');}
-  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar')hataDefteriniGoster();if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
+  const t=document.getElementById('mod-'+mod);if(t){t.style.display='block';if(mod=='kelime')kkShow();if(mod=='tuzak')tuzakRender();if(mod=='hatalar'){hataDefteriniGoster();ydKartRender();}if(mod=='avci')avciZayifAlanlarimRender();if(mod=='sat')satRender();if(mod=='sinavplanim')sinavPlanimRender();if(mod=='puananaliz')puanAnaliziRender();}
 }
 // #mod-sinyal hem Sinyal Lab'ın kendisi hem de KLOD/Raporlar/Ses Kurs'un
 // yazıldığı alan. Başka içerik yazılmadan önce Sinyal Lab'ın canlı DOM
@@ -11588,6 +11607,7 @@ function cevapKaydet(opts){
     d.unshift(kayit);
     if(d.length>200)d=d.slice(0,200); // hata defterinden (30) daha geniş ama sınırsız değil
     cevapGecmisiSave(d);
+    if(typeof ydCevapIsle==='function')ydCevapIsle(kayit); // yanlış defteri: 1-3-7 gün takvimi
     cevapSunucuyaSenkronla(kayit);
     if(typeof sabahListesiRender==='function')sabahListesiRender(); // tamamlanan maddeyi işaretle
   }catch(e){}
@@ -13980,15 +14000,21 @@ function sabahListesiKur(bugun){
   slGecmis.forEach(h=>{const k=h.signal;if(!k)return;sinyaller[k]=sinyaller[k]||{sinyal:k,dogru:0,toplam:0};sinyaller[k].toplam++;if(h.isCorrect)sinyaller[k].dogru++;});
   const zayif=Object.values(sinyaller).filter(z=>z.dogru<z.toplam).sort((a,b)=>(a.dogru/a.toplam)-(b.dogru/b.toplam)||b.toplam-a.toplam)[0]||null;
 
-  // 1) Kaçan soru: hâlâ doğru çözülmemiş en yeni Sinyal Lab yanlışı.
-  const kacan=slGecmis.find(h=>!h.isCorrect);
+  // 1) Yanlış defteri: tekrar günü gelen sorular (1-3-7 gün). Yoksa kaçan soru:
+  // hâlâ doğru çözülmemiş en yeni Sinyal Lab yanlışı.
+  const vadeli=typeof ydVadeliler==='function'?ydVadeliler(bugun):[];
+  if(vadeli.length){
+    vadeli.forEach(k=>kullanilan.add(k.qid));
+    maddeler.push({tip:'defter',baslik:'Yanlış defterinden '+vadeli.length+' soruyu tekrar çöz',alt:'Tekrar günü geldi · 1, 3 ve 7 gün kuralı'});
+  }
+  const kacan=vadeli.length?null:slGecmis.find(h=>!h.isCorrect);
   if(kacan){
     kullanilan.add(kacan.questionId);
     maddeler.push({tip:'soru',qid:kacan.questionId,baslik:'Kaçan soruyu tekrar çöz',alt:'Son yanlışın · '+(kacan.signal||'Sinyal Lab')});
   }
   // 2-3) Zayıf sinyalden henüz doğru çözülmemiş sorular; veri yoksa günün sorusu.
   const aday=s=>!kullanilan.has(s.id)&&!cozulenDogru.has(s.id);
-  const hedefSayi=kacan?2:3;
+  const hedefSayi=(kacan||vadeli.length)?2:3;
   for(let i=0;i<hedefSayi;i++){
     let soru=null,alt='';
     if(zayif){soru=sec(SL_HAVUZ.filter(s=>s.sinyal===zayif.sinyal&&aday(s)));if(soru)alt='Zayıf sinyalin · '+zayif.sinyal;}
@@ -14022,6 +14048,7 @@ function sabahMaddeTamamMi(m,bugunGecmis){
   if(m.tip==='soru')return bugunGecmis.some(h=>h.questionId===m.qid);
   if(m.tip==='kelime')return bugunGecmis.filter(h=>h.modul==='kelime').length>=SABAH_KELIME_HEDEF;
   if(m.tip==='deneme')return gdBugunBittiMi();
+  if(m.tip==='defter')return typeof ydVadeliler==='function'&&ydVadeliler(sinavChecklistBugunAnahtari()).length===0;
   return false;
 }
 function sabahListesiRender(){
@@ -14054,6 +14081,7 @@ function sabahMaddeAc(i){
   if(!m)return;
   if(m.tip==='kelime'){bugunGorevGit('Kelime Kartları');return;}
   if(m.tip==='deneme'){gunlukDenemeAc();return;}
+  if(m.tip==='defter'){ydTekrarAc();return;}
   const idx=SL_HAVUZ.findIndex(s=>s.id===m.qid);
   if(idx<0)return;
   const tab=document.querySelectorAll('.dtab')[0];
@@ -14062,6 +14090,179 @@ function sabahMaddeAc(i){
   window.__slDeepLinkSoru=SL_HAVUZ[idx]; // slRender bu soruyu bir kez gösterir
   slRender();
   document.getElementById('mod-sinyal')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── YANLIŞ DEFTERİ — yanlış sorular 1, 3 ve 7 gün sonra tekrar ────────────
+// Kaynak cevapKaydet: Sinyal Lab sorusu (SL_HAVUZ, questionId'li) yanlış
+// cevaplanınca deftere düşer ve ertesi gün tekrar zamanı gelir. Tekrar
+// günü gelmiş soruyu doğru çözersen bir sonraki tekrara geçer: aralar 1, 2
+// ve 4 gün, yani yanlıştan 1, 3 ve 7 gün sonra. Üçü de doğruysa soru
+// öğrenildi sayılır. Tekrarda yine yanlış yaparsan takvim baştan başlar.
+// Gün dolmadan verilen doğru cevap takvimi ilerletmez. Durum
+// sa_yanlis_defteri'nde, ilk açılışta eski cevap geçmişinden doldurulur.
+const YD_ARALIK=[1,2,4];
+function ydGunEkle(anahtar,n){
+  const [y,a,g]=anahtar.split('-').map(Number);
+  const d=new Date(y,a-1,g+n);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function ydTarihAnahtari(iso){
+  const d=new Date(iso);
+  if(isNaN(d))return null;
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function ydSave(v){try{localStorage.setItem('sa_yanlis_defteri',JSON.stringify(v));}catch(e){}}
+function ydLoad(){
+  let v=null;
+  try{v=JSON.parse(localStorage.getItem('sa_yanlis_defteri'));}catch(e){v=null;}
+  if(!v||typeof v.kayitlar!=='object'||!v.kayitlar){
+    // İlk açılış: cevap geçmişindeki son denemesi yanlış olan Sinyal Lab soruları.
+    v={kayitlar:{}};
+    cevapGecmisiLoad().forEach(h=>{
+      if(h.modul!=='sinyal'||!h.questionId||h.isCorrect||v.kayitlar[h.questionId])return;
+      const gun=ydTarihAnahtari(h.answeredAt);if(!gun)return;
+      v.kayitlar[h.questionId]={qid:h.questionId,yanlisTarih:gun,adim:0,siradaki:ydGunEkle(gun,YD_ARALIK[0]),ogrenildi:false};
+    });
+    ydSave(v);
+  }
+  return v;
+}
+function ydSoruVar(qid){return typeof SL_HAVUZ!=='undefined'&&SL_HAVUZ.some(s=>s.id===qid);}
+function ydCevapIsle(kayit){
+  if(!kayit||kayit.modul!=='sinyal'||!kayit.questionId)return;
+  const v=ydLoad();
+  const bugun=sinavChecklistBugunAnahtari();
+  const k=v.kayitlar[kayit.questionId];
+  if(!kayit.isCorrect){
+    v.kayitlar[kayit.questionId]={qid:kayit.questionId,yanlisTarih:bugun,adim:0,siradaki:ydGunEkle(bugun,YD_ARALIK[0]),ogrenildi:false};
+  }else if(k&&!k.ogrenildi&&k.siradaki<=bugun){
+    k.adim++;
+    if(k.adim>=YD_ARALIK.length){k.ogrenildi=true;k.siradaki=null;}
+    else k.siradaki=ydGunEkle(bugun,YD_ARALIK[k.adim]);
+  }else return;
+  ydSave(v);
+  if(typeof ydKartRender==='function')ydKartRender();
+}
+function ydVadeliler(bugun){
+  return Object.values(ydLoad().kayitlar)
+    .filter(k=>!k.ogrenildi&&k.siradaki&&k.siradaki<=bugun&&ydSoruVar(k.qid))
+    .sort((a,b)=>a.siradaki<b.siradaki?-1:a.siradaki>b.siradaki?1:0);
+}
+function ydOzet(bugun){
+  const hepsi=Object.values(ydLoad().kayitlar).filter(k=>ydSoruVar(k.qid));
+  const bekleyen=hepsi.filter(k=>!k.ogrenildi&&k.siradaki);
+  const yarin=ydGunEkle(bugun,1),hafta=ydGunEkle(bugun,7);
+  const gelecek=bekleyen.filter(k=>k.siradaki>bugun).map(k=>k.siradaki).sort();
+  return{
+    bugun:bekleyen.filter(k=>k.siradaki<=bugun).length,
+    yarin:bekleyen.filter(k=>k.siradaki===yarin).length,
+    hafta:bekleyen.filter(k=>k.siradaki>bugun&&k.siradaki<=hafta).length,
+    ogrenilen:hepsi.filter(k=>k.ogrenildi).length,
+    toplam:hepsi.length,
+    siradakiGun:gelecek[0]||null
+  };
+}
+function ydGunMetni(anahtar){
+  const [y,a,g]=anahtar.split('-').map(Number);
+  return new Date(y,a-1,g).toLocaleDateString('tr-TR',{day:'numeric',month:'long',weekday:'long'});
+}
+function ydKartRender(){
+  const el=document.getElementById('yd-kart');
+  if(!el||typeof SL_HAVUZ==='undefined')return;
+  const o=ydOzet(sinavChecklistBugunAnahtari());
+  let alt;
+  if(o.bugun)alt=`Bugün <b>${o.bugun} soru</b> seni bekliyor. Çöz, sonra bir sonraki tekrara geçsin.`;
+  else if(o.siradakiGun)alt=`Bugün tekrar yok. Sıradaki tekrar: <b>${gdEsc(ydGunMetni(o.siradakiGun))}</b>.`;
+  else if(o.toplam)alt='Defterdeki tüm soruları öğrendin. Yeni yanlışlar buraya düşer.';
+  else alt='Henüz yanlış yok. Sinyal Lab ya da günün denemesinde yanlış yaptığın soru buraya düşer.';
+  el.innerHTML=`
+    <div class="yd-eyebrow">Yanlış defteri</div>
+    <div class="yd-baslik">${o.bugun?'Tekrar zamanı: '+o.bugun+' soru':'Yanlışların burada tekrar eder'}</div>
+    <div class="yd-alt">${alt}</div>
+    <div class="yd-ozet">
+      <div><b>${o.bugun}</b>Bugün</div>
+      <div><b>${o.yarin}</b>Yarın</div>
+      <div><b>${o.hafta}</b>7 gün içinde</div>
+      <div><b>${o.ogrenilen}</b>Öğrenildi</div>
+    </div>
+    ${o.bugun?`<button type="button" class="gd-btn" onclick="ydTekrarAc()">Tekrara başla</button>`:''}
+    <div class="yd-not">Kural: yanlış yaptığın soru 1, 3 ve 7 gün sonra tekrar gelir. Üçünü de doğru yaparsan öğrenildi sayılır. Tekrarda yanlış yaparsan takvim baştan başlar.</div>`;
+}
+let _ydOturum=null;
+function ydPerde(){
+  let el=document.getElementById('yd-perde');
+  if(!el){
+    el=document.createElement('div');el.id='yd-perde';el.className='gd-perde';el.hidden=true;
+    el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Yanlış defteri tekrarı');
+    el.innerHTML='<div class="gd-panel" id="yd-panel"></div>';
+    el.addEventListener('click',e=>{if(e.target===el)ydKapat();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)ydKapat();});
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function ydTekrarAc(){
+  if(typeof SL_HAVUZ==='undefined')return;
+  const ids=ydVadeliler(sinavChecklistBugunAnahtari()).map(k=>k.qid);
+  _ydOturum={ids,i:0,secim:null,dogru:0};
+  ydPerde().hidden=false;
+  document.body.style.overflow='hidden';
+  faz2GaEvent('yanlis_defteri_basla',{soru:ids.length});
+  ydRender();
+}
+function ydKapat(){
+  const el=document.getElementById('yd-perde');if(el)el.hidden=true;
+  document.body.style.overflow='';
+  _ydOturum=null;
+  ydKartRender();
+  if(typeof sabahListesiRender==='function')sabahListesiRender();
+}
+function ydSec(i){
+  const o=_ydOturum;if(!o||o.secim!==null)return;
+  const s=SL_HAVUZ.find(x=>x.id===o.ids[o.i]);if(!s)return;
+  o.secim=i;
+  if(i===s.ans)o.dogru++;
+  cevapKaydet({questionId:s.id,modul:'sinyal',soru:s.q,selectedOption:s.opts[i],correctOption:s.opts[s.ans],isCorrect:i===s.ans,topic:'Yanlış defteri',signal:s.sinyal});
+  ydRender();
+}
+function ydSonraki(){const o=_ydOturum;if(!o)return;o.i++;o.secim=null;ydRender();}
+function ydRender(){
+  const panel=document.getElementById('yd-panel');const o=_ydOturum;
+  if(!panel||!o)return;
+  const ust=`<div class="gd-ust"><div class="gd-eyebrow">Yanlış defteri · tekrar</div><button type="button" class="gd-kapat" onclick="ydKapat()" aria-label="Kapat">Kapat</button></div>`;
+  if(!o.ids.length){
+    panel.innerHTML=ust+`<div class="gd-baslik">Bugün tekrar yok</div><div class="gd-alt">Tekrar günü gelen soru kalmadı.</div><button type="button" class="gd-btn" onclick="ydKapat()">Kapat</button>`;
+    return;
+  }
+  if(o.i>=o.ids.length){
+    const yanlis=o.ids.length-o.dogru;
+    panel.innerHTML=ust+`
+      <div class="gd-skor"><div class="gd-skor-sayi">${o.dogru}/${o.ids.length}</div><div class="gd-skor-etiket">doğru</div></div>
+      <div class="gd-alt">${o.dogru?'Doğru yaptıkların bir sonraki tekrar gününe geçti. ':''}${yanlis?yanlis+' soru yarın tekrar gelir.':'Bugünün tekrarı bitti.'}</div>
+      <button type="button" class="gd-btn" onclick="ydKapat()">Kapat</button>`;
+    return;
+  }
+  const s=SL_HAVUZ.find(x=>x.id===o.ids[o.i]);
+  if(!s){ydSonraki();return;}
+  const k=ydLoad().kayitlar[s.id];
+  const c=gdCumleCoz(s);
+  const cevaplandi=o.secim!==null;
+  const sinif=i=>!cevaplandi?'':i===s.ans?' yd-dogru':i===o.secim?' yd-yanlis':'';
+  let sonuc='';
+  if(cevaplandi){
+    const dogruMu=o.secim===s.ans;
+    const yeni=ydLoad().kayitlar[s.id];
+    const durum=!dogruMu?'Yarın tekrar gelecek. Takvim baştan başladı.':yeni&&yeni.ogrenildi?'Üç tekrar da tamam. Bu soru öğrenildi.':yeni&&yeni.siradaki?'Sıradaki tekrar: '+gdEsc(ydGunMetni(yeni.siradaki))+'.':'';
+    sonuc=`<div class="yd-sonuc${dogruMu?' ok':''}">${dogruMu?'Doğru.':'Yanlış.'} ${durum}</div>
+      ${dogruMu?'':`<div class="gd-aciklama">${gdAciklamaSatirlari(s)}</div>`}
+      <div class="gd-alt-bar"><span></span><button type="button" class="gd-btn" onclick="ydSonraki()">${o.i===o.ids.length-1?'Bitir':'Sonraki'}</button></div>`;
+  }
+  panel.innerHTML=ust+`
+    <div class="gd-eyebrow" style="margin-bottom:8px">Soru ${o.i+1}/${o.ids.length} · ${k?(k.adim+1)+'. tekrar':''}</div>
+    <div class="gd-cumle" lang="en">${gdEsc(c.duz)}</div>
+    <div class="gd-soru">${gdEsc(s.q)}</div>
+    <div class="gd-siklar">${s.opts.map((op,i)=>`<button type="button" class="gd-sik${sinif(i)}" onclick="ydSec(${i})"${cevaplandi?' disabled':''}><span class="gd-harf">${GD_HARFLER[i]})</span><span>${gdEsc(op)}</span></button>`).join('')}</div>
+    ${sonuc}`;
 }
 
 // ─── GÜNÜN DENEMESİ — her gün 5 soruluk süreli mini YDS denemesi ──────────
@@ -14115,6 +14316,16 @@ function gdCumleCoz(soru){
     tuzak:trap?trap.textContent.trim():'',
     tuzakIpucu:trap?(trap.getAttribute('data-tip')||'').replace(/^Tuzak:\s*/i,''):''
   };
+}
+// Kural → Örnek → Tuzak satırları. Günün denemesi ve yanlış defteri ortak kullanır.
+function gdAciklamaSatirlari(s){
+  const k=gdCumleCoz(s);
+  const kural=`<b>${gdEsc(s.sinyal)}</b>${k.sinyalIpucu?' — '+gdEsc(k.sinyalIpucu):''}. ${gdEsc(s.fb)}`;
+  const ornek=`<i lang="en">${gdEsc(k.duz)}</i>${s.tr?'<br>Türkçesi: '+gdEsc(s.tr):''}`;
+  const tuzak=k.tuzakIpucu?(k.tuzak?'<b>'+gdEsc(k.tuzak)+'</b>: ':'')+gdEsc(k.tuzakIpucu):'Sinyal kelimesini atlayıp şıkkı cümlenin genel havasına göre seçmek.';
+  return `<div class="gd-satir"><span class="gd-etiket">Kural</span>${kural}</div>
+      <div class="gd-satir"><span class="gd-etiket">Örnek</span>${ornek}</div>
+      <div class="gd-satir tuzak"><span class="gd-etiket">Tuzak</span>${tuzak}</div>`;
 }
 function gdPerde(){
   let el=document.getElementById('gd-perde');
@@ -14228,15 +14439,9 @@ function gdRender(){
   const yorum=dogru===GD_SORU_SAYISI?'Hepsi doğru. Yarın yeni set seni bekliyor.':dogru>=3?'İyi gidiyor. Aşağıdaki '+(GD_SORU_SAYISI-dogru)+' soruya bak.':'Aşağıdaki açıklamaları oku, yarın tekrar dene.';
   const kartlar=sorular.map((s,i)=>{
     const c=v.cevaplar[i];if(c===s.ans)return'';
-    const k=gdCumleCoz(s);
-    const kural=`<b>${gdEsc(s.sinyal)}</b>${k.sinyalIpucu?' — '+gdEsc(k.sinyalIpucu):''}. ${gdEsc(s.fb)}`;
-    const ornek=`<i lang="en">${gdEsc(k.duz)}</i>${s.tr?'<br>Türkçesi: '+gdEsc(s.tr):''}`;
-    const tuzak=k.tuzakIpucu?(k.tuzak?'<b>'+gdEsc(k.tuzak)+'</b>: ':'')+gdEsc(k.tuzakIpucu):'Sinyal kelimesini atlayıp şıkkı cümlenin genel havasına göre seçmek.';
     return `<div class="gd-aciklama">
       <div class="gd-aciklama-ust">Soru ${i+1} <span>· ${c===null?'boş':'yanlış'}</span></div>
-      <div class="gd-satir"><span class="gd-etiket">Kural</span>${kural}</div>
-      <div class="gd-satir"><span class="gd-etiket">Örnek</span>${ornek}</div>
-      <div class="gd-satir tuzak"><span class="gd-etiket">Tuzak</span>${tuzak}</div>
+      ${gdAciklamaSatirlari(s)}
       <div class="gd-cevaplar">${c===null?'Boş bıraktın.':'Senin cevabın: '+GD_HARFLER[c]+') '+gdEsc(s.opts[c])}<br>Doğrusu: ${GD_HARFLER[s.ans]}) ${gdEsc(s.opts[s.ans])}</div>
     </div>`;
   }).join('');
