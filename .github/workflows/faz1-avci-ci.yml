@@ -275,3 +275,6 @@ jobs:
 
       - name: Günün denemesi — tarihe göre 5 soru, 7,5 dk süre, sabah listesi maddesi, Kural → Örnek → Tuzak (vm, gerçek ağ yok)
         run: node tests/gunluk-deneme.test.mjs
+
+      - name: 50 puan programı — gün sonu sınavı soruları ve kilit (ağ yok)
+        run: node tests/program-50.test.mjs
