@@ -17,7 +17,8 @@
 // Instagram/Facebook: Buffer GraphQL API (upload-instagram-buffer.mjs ile
 // aynı yaklaşım). Video GitHub Release'teki herkese açık adresiyle verilir
 // (günlük video hattı da Buffer'a bu adresleri veriyor). Buffer Instagram'da
-// kapak görseli kabul etmiyor; kapak videonun ilk karesi (kanca kartı) olur.
+// kapak görseli kabul etmiyor; kapak videonun ilk karesi olur. Bu yüzden Release'te
+// "konuXX-kapak.mp4" (tasarim/kapak.py: başına kapak karesi eklenmiş) varsa o paylaşılır.
 // Instagram'ın yapay zekâ etiketi Buffer'ın isAiGenerated alanıyla işaretlenir;
 // beyan ayrıca açıklamada da yazar. Facebook Reels türü, "ilk yorum" ve
 // isAiGenerated alanları Buffer şemasından (introspection) okunur; şema
@@ -38,7 +39,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -324,7 +325,10 @@ async function yayinla(kuyruk, durum) {
       const d = (durum.konular[oge.konu] ||= {});
       d.slot = x.slot;
       if (!assetler[oge.video]) { log(`✘ Release'te ${oge.video} yok`); hataVar = true; atamaSonucu(durum, oge.konu); await kaydet(); continue; }
-      const videoUrl = assetler[oge.video].browser_download_url;
+      // Instagram/Facebook kapaklı videoyu alır (varsa); YouTube asıl videoyu yükler
+      const paylasilan = paylasilacakVideo(oge.video, assetler);
+      const videoUrl = assetler[paylasilan].browser_download_url;
+      if (paylasilan !== oge.video) log(`  kapaklı video: ${paylasilan}`);
       const islem = {
         instagram: () => instagramYayinla(oge, videoUrl, kanallar, sema, x.dueAt),
         facebook: () => facebookYayinla(oge, videoUrl, kanallar, sema, x.dueAt),
