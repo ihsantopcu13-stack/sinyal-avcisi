@@ -93,6 +93,29 @@
     .verdict{font-size:15px;color:var(--soft)}
     .verdict.good{color:var(--mint);font-weight:700}
     .btn{display:block;text-align:center;text-decoration:none;font:700 17px var(--f-body);background:var(--mint);color:var(--mint-ink);border:0;border-radius:12px;padding:14px 16px}
+    .d.kilit{opacity:.4}
+    .kilitkutu{border:1px dashed var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+    .tasks.kilitli{opacity:.45}
+    .tasks.kilitli label{cursor:default}
+    .kapi{border-top:1px solid var(--border);padding-top:16px;display:flex;flex-direction:column;gap:12px}
+    .kapi .btn{width:100%;cursor:pointer}
+    .kapi .btn:disabled{opacity:.5;cursor:default}
+    .kapi-inp{font:inherit;font-size:18px;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;max-width:220px}
+    .sorular{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:18px}
+    .soru{font-weight:600;margin-bottom:8px}
+    .secenek{display:flex;flex-direction:column;gap:8px}
+    .secenek button{font:inherit;font-size:17px;text-align:left;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer}
+    .secenek button.secili{border:2px solid var(--mint);background:var(--mint-dim)}
+    .secenek button.dogru{border:2px solid var(--mint);background:var(--mint-dim);color:var(--text)}
+    .secenek button.yanlis{border:2px solid var(--trap);color:var(--text)}
+    .secenek button:disabled{cursor:default;opacity:1}
+    .ipucu{font-size:17px;color:var(--text);background:var(--surface2);border-radius:12px;padding:12px 14px;line-height:1.6}
+    .ipucu .k{font:500 13px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mint)}
+    .ipucu .k.tzk{color:var(--trap)}
+    .ipucu i{font-style:normal;font-weight:700;color:var(--mint)}
+    .sonuc{display:flex;flex-direction:column;gap:10px}
+    .gecti{font-size:20px;font-weight:700;color:var(--mint)}
+    .kaldi{font-size:18px;font-weight:600;color:var(--trap)}
     .note{font-size:16px;color:var(--soft)}
     @media (max-width:420px){.stat b{font-size:26px}.haftalar li{flex-direction:column;gap:2px}}
   </style>
@@ -104,7 +127,7 @@
   <header>
     <div class="eyebrow">22 Ekim → 22 Kasım · 32 gün</div>
     <h1>22 Kasım'a 50 Puan Programı</h1>
-    <p class="lead">50 puan için 80 sorudan 40 doğru yeter. Her gün yaklaşık 2,5 saat. Görevleri işaretle; ilerlemen sadece bu cihazda kalır.</p>
+    <p class="lead">50 puan için 80 sorudan 40 doğru yeter. Her gün yaklaşık 2,5 saat. Her günün sonunda kısa bir sınav var: geçmeden sonraki gün açılmaz. İlerlemen sadece bu cihazda kalır.</p>
   </header>
 
   <div class="uyari"><b>Varsayım:</b> Sınav 22 Kasım 2026, 80 soru, her doğru 1,25 puan, yanlış doğruyu götürmüyor. Tarihi ve formatı mutlaka ÖSYM'den kontrol et.</div>
@@ -115,20 +138,24 @@
     <div class="stat"><b id="sTamam">0</b><span>gün tamamlandı</span></div>
   </div>
 
+  <div class="uyari" id="geride" hidden></div>
+
   <section class="today" aria-live="polite">
     <header>
       <div><div class="eyebrow" id="tTarih"></div><h2 id="tBaslik">Bugün</h2></div>
       <span class="faz" id="tFaz"></span>
     </header>
+    <div class="kilitkutu" id="kilit" hidden><p></p><button class="ghost" type="button">O güne git →</button></div>
     <ul class="tasks" id="tasks"></ul>
     <div class="sinyal" id="sinyal" hidden></div>
+    <div class="kapi" id="kapi" hidden></div>
     <div class="navrow"><button class="ghost" id="geri" type="button">← Önceki</button><button class="ghost" id="bugun" type="button">Bugün</button><button class="ghost" id="ileri" type="button">Sonraki →</button></div>
   </section>
 
   <section class="card">
     <h2>Takvim</h2>
     <div class="strip" id="strip"></div>
-    <div class="legend"><span>Dolu: tamamlandı</span><span>Kesik çerçeve: tam deneme</span><span>Beyaz: sınav</span></div>
+    <div class="legend"><span>Dolu: geçildi</span><span>Soluk: kilitli</span><span>Kesik çerçeve: tam deneme</span><span>Beyaz: sınav</span></div>
   </section>
 
   <section class="card">
@@ -210,6 +237,131 @@
     27:["Karşılaştırma: the more ... the more","\"the + karşılaştırma, the + karşılaştırma\" iki yarıda da the ister. as ... as eşitlik bildirir.","<i>The more</i> you read, <i>the faster</i> you get.","İkinci yarıda the eksik olan şık. Bir de as ... as arasına \"more\" koyan şık hep yanlış."]
   };
 
+  /* SORU-BASLA — gün sonu sınavı soruları. İlk şık doğru (ekranda karıştırılır); 17. gün şıkları sabit, doğru indeks 3. eleman. */
+  const SORU = {
+    1:[["She ____ in Ankara since 2015.",["has lived","lives","lived","is living"]],
+       ["We ____ each other for ten years, and we are still friends.",["have known","knew","know","had known"]],
+       ["It is three years since he ____ his job.",["left","has left","leaves","had left"]],
+       ["I ____ him since we were at school.",["haven't seen","didn't see","don't see","wasn't seeing"]],
+       ["The company ____ steadily over the last five years.",["has grown","grows","grew up","is growing"]],
+       ["They ____ married in 2010 and have lived here ever since.",["got","have got","get","had got"]]],
+    2:[["By the time we reached the station, the train ____.",["had left","has left","leaves","will leave"]],
+       ["By the time you get home, I ____ dinner.",["will have cooked","had cooked","have cooked","cooked"]],
+       ["By the end of this year, she ____ her degree.",["will have completed","had completed","completes","has completed"]],
+       ["When I arrived at the party, most guests ____ already.",["had gone","have gone","will go","go"]],
+       ["By the time the firefighters ____, the building had burned down.",["arrived","arrive","have arrived","will arrive"]],
+       ["By 2030, scientists ____ a cure, many experts believe.",["will have found","had found","have found","found"]]],
+    3:[["The new hospital ____ by the minister next year.",["will be opened","will open","opens","is opening"]],
+       ["An earthquake ____ in the region last night.",["occurred","was occurred","has been occurred","is occurred"]],
+       ["Thousands of books ____ in this library every year.",["are borrowed","borrow","are borrowing","have borrowed"]],
+       ["The results of the study ____ yet.",["haven't been published","haven't published","didn't publish","aren't publishing"]],
+       ["English ____ in many countries around the world.",["is spoken","speaks","is speaking","has spoken"]],
+       ["The problem ____ before the meeting started.",["had been solved","had solved","has solved","solved"]]],
+    5:[["____ the heavy traffic, we arrived on time.",["Despite","Although","Even though","However"]],
+       ["____ she was tired, she kept working.",["Although","Despite","In spite of","Because of"]],
+       ["He failed the exam ____ studying hard.",["in spite of","although","even though","but"]],
+       ["____ the fact that it was raining, the match continued.",["Despite","Although","Even though","Because"]],
+       ["The plan was expensive. ____, the board approved it.",["Nevertheless","Despite","Although","Because"]],
+       ["____ he is rich, he lives in a small flat.",["Even though","Despite","In spite of","Due to"]]],
+    6:[["The flight was delayed ____ the fog.",["due to","because","so that","therefore"]],
+       ["She stayed at home ____ she was ill.",["because","because of","due to","so"]],
+       ["Prices increased sharply; ____, demand fell.",["therefore","because","due to","so that"]],
+       ["He saved money ____ he could buy a car.",["so that","because of","due to","therefore"]],
+       ["The roads were closed ____ heavy snow.",["because of","because","so that","thus"]],
+       ["The data were incomplete, and ____ the results were not reliable.",["thus","because","due to","so that"]]],
+    7:[["The scientist ____ discovered the vaccine won a prize.",["who","which","whose","where"]],
+       ["This is the house ____ roof was damaged in the storm.",["whose","which","who","that"]],
+       ["Istanbul, ____ is the largest city in Turkey, attracts millions of tourists.",["which","that","who","where"]],
+       ["The town ____ I grew up has changed a lot.",["where","which","who","whose"]],
+       ["The topic about ____ we talked was difficult.",["which","that","who","where"]],
+       ["Students ____ attend regularly get better results.",["who","which","whose","whom"]]],
+    8:[["The ground is wet. It ____ last night.",["must have rained","should have rained","can't have rained","needn't have rained"]],
+       ["You ____ me earlier; now it is too late.",["should have told","must have told","can't have told","may tell"]],
+       ["She ____ the letter; she was abroad at the time.",["can't have written","must have written","should have written","has to write"]],
+       ["I'm not sure where he is. He ____ the earlier bus.",["may have taken","must take","should have taken","can't take"]],
+       ["We ____ so much food; half of it was left.",["needn't have cooked","must have cooked","can't have cooked","mustn't cook"]],
+       ["He looks exhausted. He ____ all night.",["must have worked","should have worked","can't have worked","needn't have worked"]]],
+    9:[["If I ____ more time, I would learn Spanish.",["had","have","will have","had had"]],
+       ["If she had studied harder, she ____ the exam.",["would have passed","would pass","will pass","passed"]],
+       ["You won't succeed ____ you work regularly.",["unless","if","provided that","as long as"]],
+       ["If it rains tomorrow, we ____ the trip.",["will cancel","would cancel","would have cancelled","cancelled"]],
+       ["You can borrow my car ____ you drive carefully.",["provided that","unless","even if","otherwise"]],
+       ["Had I known about the problem, I ____ you.",["would have helped","will help","would help","helped"]]],
+    10:[["The drug was effective in tests. ____, it caused serious side effects.",["However","Therefore","Moreover","For example"]],
+       ["Many birds migrate in winter. Swallows, ____, fly thousands of kilometres to Africa.",["for instance","however","therefore","instead"]],
+       ["The city has excellent museums. ____, its food is famous.",["In addition","However","As a result","Otherwise"]],
+       ["Sales dropped for three months. ____, the shop closed.",["As a result","Moreover","For example","Nevertheless"]],
+       ["Researchers expected higher scores; ____, the results were disappointing.",["however","similarly","moreover","therefore"]],
+       ["Exercise improves physical health. ____, it reduces stress.",["Furthermore","However","Otherwise","Instead"]]],
+    12:[["When the guests arrived, ____.",["we were still preparing dinner","we are preparing dinner","we will prepare dinner","we have prepared dinner"]],
+       ["Although the government has taken several measures, ____.",["unemployment is still rising","unemployment had risen","unemployment would rise","unemployment will have risen"]],
+       ["If the weather had been better, ____.",["we would have gone hiking","we will go hiking","we go hiking","we would go hiking yesterday"]],
+       ["____ by the time the police arrived.",["The thieves had escaped","The thieves escape","The thieves will escape","The thieves have escaped"]],
+       ["Since the new law was introduced, ____.",["crime rates have fallen","crime rates fall","crime rates had fallen","crime rates will fall"]],
+       ["While I was walking home, ____.",["it started to rain","it starts to rain","it will start to rain","it has started to rain"]]],
+    13:[["Although the task was difficult, ____.",["she finished it on time","she gave up immediately","it was very hard","nobody could do it"]],
+       ["Because the tickets were cheap, ____.",["the concert sold out quickly","few people came","nobody wanted them","the concert was cancelled"]],
+       ["Despite his injury, ____.",["he played the whole match","he couldn't play","he stayed in bed","he left the team"]],
+       ["____, so the meeting was postponed.",["The manager was ill","The manager was present","Everyone was ready","The room was available"]],
+       ["Even though he earns a lot, ____.",["he never saves any money","he is rich","he buys expensive things","he has a big house"]],
+       ["As the population grows, ____.",["the demand for housing increases","houses become cheaper","fewer schools are needed","cities get smaller"]]],
+    14:[["The project has been delayed due to a lack of funding.",["Proje, fon eksikliği nedeniyle ertelendi.","Proje, fon eksikliğine rağmen ertelendi.","Proje, fon eksikliği yüzünden ertelenecek.","Proje ertelenince fon eksikliği oluştu."]],
+       ["Although the results were promising, further research is needed.",["Sonuçlar umut verici olsa da daha fazla araştırma gerekiyor.","Sonuçlar umut verici olduğu için daha fazla araştırma gerekiyor.","Daha fazla araştırma yapılırsa sonuçlar umut verici olur.","Sonuçlar umut verici değildi, bu yüzden araştırma gerekiyor."]],
+       ["Many species may disappear unless urgent action is taken.",["Acil önlem alınmazsa birçok tür yok olabilir.","Acil önlem alındığı için birçok tür yok oldu.","Acil önlem alınsa bile birçok tür yok olacak.","Birçok tür yok olduğu için acil önlem alınmalı."]],
+       ["The museum, which was built in 1900, attracts many visitors.",["1900'de inşa edilen müze birçok ziyaretçi çekiyor.","Müze 1900'de birçok ziyaretçi çekmişti.","Birçok ziyaretçi 1900'de müzeyi inşa etti.","Müze 1900'den beri inşa ediliyor ve ziyaretçi çekiyor."]],
+       ["Scientists have discovered a new planet.",["Bilim insanları yeni bir gezegen keşfetti.","Bilim insanları yeni bir gezegen keşfedecek.","Yeni bir gezegen bilim insanlarını keşfetti.","Bilim insanları yeni bir gezegen keşfetmek istiyor."]],
+       ["The more you practise, the more confident you become.",["Ne kadar çok pratik yaparsan o kadar özgüvenli olursun.","Çok pratik yaptığın için özgüvenlisin.","Pratik yapmazsan özgüvenini kaybedersin.","Özgüvenli olmak için pratik yapmalısın."]]],
+    15:[["Yağmur yağmasına rağmen maç oynandı.",["Although it was raining, the match was played.","Because it was raining, the match was played.","The match was cancelled although it was raining.","If it rains, the match will be played."]],
+       ["Hasta olduğu için toplantıya katılmadı.",["He didn't attend the meeting because he was ill.","Although he was ill, he attended the meeting.","He became ill after attending the meeting.","He attended the meeting so that he wouldn't be ill."]],
+       ["Köprü geçen yıl inşa edildi.",["The bridge was built last year.","The bridge has built last year.","They will build the bridge next year.","The bridge builds last year."]],
+       ["Ne kadar çok okursan, kelime bilgin o kadar artar.",["The more you read, the more your vocabulary grows.","You read more because your vocabulary grows.","If you read, your vocabulary grew.","Your vocabulary grows although you read."]],
+       ["Daha fazla çalışsaydım sınavı geçerdim.",["If I had studied more, I would have passed the exam.","If I study more, I will pass the exam.","I passed the exam because I studied more.","Although I studied more, I didn't pass the exam."]],
+       ["Bu sorun henüz çözülmedi.",["This problem hasn't been solved yet.","This problem was solved yesterday.","This problem hasn't solved yet.","This problem will be solved soon."]]],
+    16:[["Plastic waste is a growing problem. ____ These particles are now found even in drinking water.",["Over time, plastic breaks down into tiny particles.","Plastic was invented in the early 1900s.","Many people prefer glass bottles.","Recycling centres are open on weekdays."]],
+       ["Sleep is essential for memory. ____ This is why students who sleep well often perform better.",["During sleep, the brain organises what we learned during the day.","Some animals sleep standing up.","Coffee is popular among students.","Many people dream in colour."]],
+       ["Bees play a key role in agriculture. ____ Without them, many crops would fail.",["They pollinate a large share of the crops we eat.","Honey has been used as medicine for centuries.","Some people are afraid of bees.","Bees live in colonies with a queen."]],
+       ["Electric cars are becoming more popular. ____ However, charging stations are still limited in many areas.",["Their prices have fallen in recent years.","Petrol cars were invented earlier.","Many cars are red.","Traffic is heavy in cities."]],
+       ["Many languages are disappearing. ____ When a language dies, a unique way of seeing the world is lost.",["Experts say hundreds of languages have very few speakers left.","English is spoken in many countries.","Learning a language takes time.","Dictionaries are useful tools."]],
+       ["Regular exercise benefits the heart. ____ As a result, the risk of heart disease decreases.",["It strengthens the heart muscle and lowers blood pressure.","Many gyms are expensive.","Football is a popular sport.","Some people exercise in the morning."]]],
+    17:[["(I) Coffee originated in Ethiopia. (II) It later spread to Yemen and the Middle East. (III) Tea is very popular in China. (IV) By the 17th century, coffee had reached Europe.",["I","II","III","IV"],2],
+       ["(I) Sleep helps the body repair itself. (II) Many hotels offer special pillows. (III) During deep sleep, tissues grow and recover. (IV) Lack of sleep slows down this repair process.",["I","II","III","IV"],1],
+       ["(I) Honeybees communicate through dance. (II) The 'waggle dance' shows other bees where food is. (III) The angle of the dance indicates the direction of the food. (IV) Honey prices have risen sharply this year.",["I","II","III","IV"],3],
+       ["(I) The Internet has changed how we learn. (II) Students can now access lectures online. (III) The first computers were very large machines. (IV) Online courses allow people to study at their own pace.",["I","II","III","IV"],2],
+       ["(I) Volcanoes form where tectonic plates meet. (II) Some volcanoes are near popular hotels. (III) Magma rises through cracks in the Earth's crust. (IV) When pressure builds up, an eruption occurs.",["I","II","III","IV"],1],
+       ["(I) Reading regularly improves vocabulary. (II) Readers meet new words in context. (III) Over time, these words become part of their active vocabulary. (IV) Libraries were first built in ancient times.",["I","II","III","IV"],3]],
+    19:[["'In 2010, the city opened its first bike lane. Within five years, cycling had doubled.' What happened after the bike lane opened?",["Cycling increased.","The bike lane was closed.","Cars were banned.","Fewer people cycled."]],
+       ["'Although the drug reduced pain, it did not cure the disease.' The drug ____.",["eased the pain but was not a cure","cured the disease","increased the pain","was never tested"]],
+       ["'Most participants preferred the new design, but older users found it confusing.' Which is true?",["Some older users had difficulty with the design.","All participants disliked the design.","Older users liked it most.","Nobody tried the new design."]],
+       ["'The museum is free on Mondays, while on other days visitors pay 50 lira.' Which is true?",["Visitors pay nothing on Mondays.","The museum is closed on Mondays.","It always costs 50 lira.","It is free every day."]],
+       ["'Unlike earlier studies, this research found no link between diet and memory.' This research ____.",["disagreed with previous findings","confirmed earlier studies","proved diet improves memory","was about sleep"]],
+       ["'The village's population fell from 2,000 to 500 as young people moved to cities.' Why did the population fall?",["Young people moved to cities.","Many babies were born.","The village grew.","Tourists left."]]],
+    20:[["Ali is not as tall as his brother.",["His brother is taller than Ali.","Ali is taller than his brother.","Ali and his brother are the same height.","Ali's brother is shorter."]],
+       ["She had hardly arrived when the phone rang.",["The phone rang just after she arrived.","She arrived long after the phone rang.","The phone never rang.","She arrived because the phone rang."]],
+       ["Unless you hurry, you will miss the bus.",["If you don't hurry, you will miss the bus.","If you hurry, you will miss the bus.","You missed the bus although you hurried.","You will catch the bus without hurrying."]],
+       ["It is the most difficult exam I have ever taken.",["I have never taken a more difficult exam.","I have taken many more difficult exams.","The exam was easy.","I have never taken an exam."]],
+       ["No sooner had we left than it started to snow.",["It started to snow as soon as we left.","It snowed long before we left.","We left because it was snowing.","It never snowed."]],
+       ["He was too tired to continue.",["He was so tired that he couldn't continue.","He was tired but continued.","He continued because he was tired.","He wasn't tired enough to stop."]]],
+    21:[["'Since the new factory opened, the fish population in the river has dropped sharply.' It can be inferred that ____.",["the factory may be affecting the river","the factory always cleans the river","fish never live in rivers","all rivers are polluted"]],
+       ["'Sales of umbrellas rose during the rainy month.' It can be inferred that ____.",["rain may increase umbrella sales","umbrellas are never sold in summer","everyone bought an umbrella","umbrella prices fell"]],
+       ["'Some students who used the app improved their scores.' Which is supported?",["The app may help some students.","The app helps all students.","Every student used the app.","The app lowers scores."]],
+       ["'The author spent ten years researching the book.' It can be inferred that ____.",["the book required a lot of work","the book is very short","the author always writes quickly","the book was never published"]],
+       ["'Despite warnings from experts, the bridge was opened early, and cracks appeared within a month.' It can be inferred that ____.",["the experts' concerns may have been justified","the bridge was perfect","the experts approved the early opening","cracks are always normal"]],
+       ["'The restaurant is usually full, so booking is recommended.' It can be inferred that ____.",["it can be hard to get a table without booking","the restaurant is always empty","booking is impossible","the food is bad"]]],
+    24:[["She enjoys ____ novels.",["reading","to read","read","to reading"]],
+       ["They decided ____ the meeting.",["to postpone","postponing","postpone","postponed"]],
+       ["I look forward to ____ you.",["seeing","see","to see","saw"]],
+       ["He avoided ____ the question.",["answering","to answer","answer","answered"]],
+       ["We managed ____ the project on time.",["to finish","finishing","finish","finished"]],
+       ["She is used to ____ early.",["getting up","get up","got up","to get up"]]],
+    27:[["____ you start, the sooner you will finish.",["The earlier","Earlier","The earliest","As early"]],
+       ["This book is not as interesting ____ the first one.",["as","than","so","like"]],
+       ["The more you practise, ____ you become.",["the better","better","the best","best"]],
+       ["Today is ____ day of the year so far.",["the hottest","hotter","the hotter","hottest than"]],
+       ["Her new flat is much ____ than the old one.",["bigger","more big","biggest","the biggest"]],
+       ["He runs ____ fast as his brother.",["as","so","more","than"]]]
+  };
+  /* SORU-BITIS */
+
   const sabit = () => ["Sabah listen + Günün denemesi (15 dk)", "Ana sayfada panelini aç. Kaçan sorun, zayıf sinyalin ve 5 soruluk süreli deneme orada."];
   const defter = (ek) => ["Yanlış defteri (15 dk)", ek || "Bugünkü her yanlış için: soru, doğru cevap, kaçırdığın sinyal."];
 
@@ -259,38 +411,173 @@
     return "Son düzlük";
   }
 
+  // ---- kilit: bir gün, önceki günün sınavı geçilmeden açılmaz ----
+  const TEKRAR = [23, 26, 29, 30];       // karışık sınav: o güne kadarki tüm konulardan
+  const SORU_SAYI = 5, GECME = 4;        // 5 sorudan en az 4 doğru (%80)
   let isaret = store.get("isaret", {});
   let deneme = store.get("deneme", {});
-  let secili = bugunGun();
+  let gecti = store.get("gecti", {});
+  let sinav = null;                      // { g, sorular:[{q, opts, dogru}], cevap:[] , bitti }
   const $ = (id) => document.getElementById(id);
 
-  function durum(g){ const n = gorevler(g).length, a = (isaret[g] || []).filter(Boolean).length; return a === 0 ? "" : a >= n ? "full" : "part"; }
+  const kapiTuru = (g) => g === N ? "" : SORU[g] ? "sinav" : TEKRAR.includes(g) ? "karisik" : DENEME.includes(g) ? "deneme" : "gorev";
+  const acik = (g) => g === 1 || !!gecti[g - 1];
+  const ilkGecilmemis = () => { for (let g = 1; g < N; g++) if (!gecti[g]) return g; return N; };
+  const gidilecek = () => Math.min(bugunGun(), ilkGecilmemis());
+  const gorevlerTamam = (g) => { const n = gorevler(g).length; return (isaret[g] || []).filter(Boolean).length >= n; };
+  const karistir = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  function sinavKur(g){
+    let havuz;
+    if (SORU[g]) havuz = SORU[g].map((s) => [g, s]);
+    else havuz = Object.keys(SORU).map(Number).filter((k) => k < g).flatMap((k) => SORU[k].map((s) => [k, s]));
+    const sorular = karistir(havuz).slice(0, SORU_SAYI).map(([k, [q, opts, sabitDogru]]) => {
+      if (sabitDogru !== undefined) return { k, q, opts, dogru: sabitDogru };
+      const sira = karistir(opts.map((_, i) => i));
+      return { k, q, opts: sira.map((i) => opts[i]), dogru: sira.indexOf(0) };
+    });
+    sinav = { g, sorular, cevap: [], bitti: false };
+  }
+
+  function gecir(g){
+    if (gecti[g]) return;
+    gecti[g] = true; store.set("gecti", gecti);
+    try { gtag("event", "program_gun_gecti", { gun: g }); } catch {}
+  }
+
+  function kapiCiz(g){
+    const k = $("kapi"), tur = kapiTuru(g); k.innerHTML = "";
+    if (!tur || !acik(g)) { k.hidden = true; return; }
+    k.hidden = false;
+    const h = document.createElement("h3"), p = document.createElement("p");
+    k.append(h, p);
+    if (gecti[g] && !(sinav && sinav.g === g && sinav.bitti)) {
+      h.textContent = "Gün tamam";
+      p.textContent = g + 1 === N ? "Sınav günü açıldı." : (g + 1) + ". gün açıldı.";
+      const b = document.createElement("button"); b.className = "btn"; b.type = "button"; b.textContent = "Sonraki güne geç →";
+      b.onclick = () => { secili = g + 1; ciz(); kaydir(); };
+      k.appendChild(b); return;
+    }
+    if (tur === "gorev") {
+      h.textContent = "Günü bitir";
+      p.textContent = "Tüm görevleri işaretleyince sonraki gün açılır.";
+      return;
+    }
+    if (tur === "deneme") {
+      h.textContent = "Deneme sonucunu yaz";
+      p.textContent = "Görevleri işaretle ve doğru sayını yaz. İkisi tamam olunca sonraki gün açılır.";
+      const inp = document.createElement("input"); inp.type = "number"; inp.min = 0; inp.max = 80; inp.placeholder = "Doğru sayısı";
+      inp.className = "kapi-inp"; inp.value = deneme[g] ?? ""; inp.setAttribute("aria-label", "Deneme doğru sayısı");
+      inp.addEventListener("change", () => {
+        const x = parseInt(inp.value, 10);
+        if (Number.isNaN(x)) delete deneme[g]; else deneme[g] = Math.min(80, Math.max(0, x));
+        store.set("deneme", deneme); denemeler(); kontrolEt(g);
+      });
+      k.appendChild(inp); return;
+    }
+    h.textContent = tur === "sinav" ? "Gün sonu sınavı" : "Tekrar sınavı";
+    if (!gorevlerTamam(g)) {
+      p.textContent = `Önce görevleri bitir. Sonra ${SORU_SAYI} soruluk sınav açılır. Geçmek için en az ${GECME} doğru lazım. Geçmeden sonraki gün açılmaz.`;
+      return;
+    }
+    if (!sinav || sinav.g !== g) {
+      p.textContent = `${SORU_SAYI} soru. Geçmek için en az ${GECME} doğru. ${tur === "karisik" ? "Sorular şimdiye kadarki tüm konulardan." : "Sorular bugünün konusundan."}`;
+      const b = document.createElement("button"); b.className = "btn"; b.type = "button"; b.textContent = "Sınavı başlat";
+      b.onclick = () => { sinavKur(g); kapiCiz(g); };
+      k.appendChild(b); return;
+    }
+    p.textContent = sinav.bitti ? "" : "Her soruda bir şık seç, sonra bitir.";
+    const ol = document.createElement("ol"); ol.className = "sorular";
+    sinav.sorular.forEach((s, i) => {
+      const li = document.createElement("li");
+      const q = document.createElement("p"); q.className = "soru"; q.textContent = s.q; li.appendChild(q);
+      const sec = document.createElement("div"); sec.className = "secenek"; sec.setAttribute("role", "group");
+      s.opts.forEach((o, j) => {
+        const b = document.createElement("button"); b.type = "button"; b.textContent = o;
+        if (sinav.cevap[i] === j) b.classList.add("secili");
+        if (sinav.bitti) { b.disabled = true; if (j === s.dogru) b.classList.add("dogru"); else if (sinav.cevap[i] === j) b.classList.add("yanlis"); }
+        else b.onclick = () => { sinav.cevap[i] = j; kapiCiz(g); };
+        sec.appendChild(b);
+      });
+      li.appendChild(sec);
+      ol.appendChild(li);
+    });
+    k.appendChild(ol);
+    const sonuc = document.createElement("div"); sonuc.className = "sonuc";
+    if (!sinav.bitti) {
+      const b = document.createElement("button"); b.className = "btn"; b.type = "button"; b.textContent = "Sınavı bitir";
+      const eksik = sinav.sorular.length - sinav.cevap.filter((x) => x !== undefined).length;
+      b.disabled = eksik > 0; if (eksik) b.textContent = `Sınavı bitir (${eksik} soru boş)`;
+      b.onclick = () => {
+        sinav.bitti = true;
+        const d = sinav.sorular.filter((s, i) => sinav.cevap[i] === s.dogru).length;
+        sinav.dogru = d; if (d >= GECME) gecir(g);
+        ust(); kapiCiz(g); serit(); k.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      sonuc.appendChild(b);
+    } else {
+      const ok = sinav.dogru >= GECME;
+      const m = document.createElement("p"); m.className = ok ? "gecti" : "kaldi";
+      m.textContent = ok ? `${sinav.dogru}/${SORU_SAYI}. Geçtin.` : `${sinav.dogru}/${SORU_SAYI}. Geçmek için ${GECME} lazım. Yanlışlarını ve tuzakları oku, sonra tekrar dene.`;
+      sonuc.appendChild(m);
+      if (!ok) {
+        const konular = [...new Set(sinav.sorular.filter((x, i) => sinav.cevap[i] !== x.dogru).map((x) => x.k))].filter((x) => KONU[x]);
+        konular.forEach((x) => {
+          const t = document.createElement("div"); t.className = "ipucu";
+          t.innerHTML = `<b>${KONU[x][0]}</b><br><span class="k">Kural</span> ${KONU[x][1]}<br><span class="k tzk">Tuzak</span> ${KONU[x][3]}`;
+          sonuc.appendChild(t);
+        });
+      }
+      const b = document.createElement("button"); b.className = "btn"; b.type = "button";
+      if (ok) { b.textContent = g + 1 === N ? "Sınav gününe geç →" : "Sonraki güne geç →"; b.onclick = () => { sinav = null; secili = g + 1; ciz(); kaydir(); }; }
+      else { b.textContent = "Tekrar dene"; b.onclick = () => { sinavKur(g); kapiCiz(g); }; }
+      sonuc.appendChild(b);
+    }
+    k.appendChild(sonuc);
+  }
+
+  function kontrolEt(g){
+    const tur = kapiTuru(g);
+    if (!gecti[g] && gorevlerTamam(g) && (tur === "gorev" || (tur === "deneme" && deneme[g] !== undefined))) gecir(g);
+    ust(); serit(); kapiCiz(g);
+  }
+
+  let secili = gidilecek();
+  const kaydir = () => document.querySelector(".today").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  function durum(g){ return gecti[g] ? "full" : (isaret[g] || []).some(Boolean) ? "part" : ""; }
 
   function ciz(){
-    const g = secili;
+    const g = secili, kilitli = !acik(g);
     $("tTarih").textContent = fmt(tarih(g));
     $("tBaslik").textContent = g === N ? "Sınav günü" : (g === bugunGun() ? "Bugün · " : "") + g + ". gün";
-    $("tFaz").textContent = DENEME.includes(g) ? "Tam deneme günü" : faz(g);
-    const ul = $("tasks"); ul.innerHTML = "";
+    $("tFaz").textContent = kilitli ? "Kilitli" : DENEME.includes(g) ? "Tam deneme günü" : faz(g);
+    const kb = $("kilit"); kb.hidden = !kilitli;
+    if (kilitli) {
+      const ilk = ilkGecilmemis();
+      kb.querySelector("p").textContent = `Bu gün kilitli. Önce ${ilk}. günü bitir${SORU[ilk] || TEKRAR.includes(ilk) ? " ve sınavını geç" : ""}.`;
+      kb.querySelector("button").onclick = () => { secili = ilk; ciz(); };
+    }
+    const ul = $("tasks"); ul.innerHTML = ""; ul.classList.toggle("kilitli", kilitli);
     gorevler(g).forEach(([baslik, aciklama], i) => {
       const li = document.createElement("li"), id = "g" + g + "t" + i, on = !!(isaret[g] || [])[i];
       const lab = document.createElement("label"); lab.htmlFor = id; if (on) lab.className = "done";
-      const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = id; cb.checked = on;
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.id = id; cb.checked = on; cb.disabled = kilitli;
       const sp = document.createElement("span");
       const tb = document.createElement("span"); tb.className = "tb"; tb.textContent = baslik; sp.appendChild(tb);
       if (aciklama) { const sm = document.createElement("small"); sm.textContent = aciklama; sp.appendChild(sm); }
       lab.append(cb, sp); li.appendChild(lab); ul.appendChild(li);
       cb.addEventListener("change", () => {
         (isaret[g] ||= [])[i] = cb.checked; store.set("isaret", isaret);
-        lab.classList.toggle("done", cb.checked); ust(); serit();
-        if (cb.checked && durum(g) === "full") { try { gtag("event", "program_gorev", { gun: g }); } catch {} }
+        lab.classList.toggle("done", cb.checked); kontrolEt(g);
       });
     });
     const k = KONU[g], kutu = $("sinyal");
-    if (k) {
+    if (k && !kilitli) {
       kutu.hidden = false;
       kutu.innerHTML = `<h3>${k[0]}</h3><p><span class="k">Kural</span>${k[1]}</p><p><span class="k">Örnek</span>${k[2]}</p><p class="tz"><span class="k">Tuzak</span>${k[3]}</p>`;
     } else kutu.hidden = true;
+    kapiCiz(g);
     $("geri").disabled = g <= 1;
     $("ileri").disabled = g >= N;
     serit();
@@ -300,8 +587,10 @@
     const b = bugunGun();
     $("sGun").textContent = b;
     $("sKalan").textContent = Math.max(0, N - b);
-    let n = 0; for (let g = 1; g <= N; g++) if (durum(g) === "full") n++;
-    $("sTamam").textContent = n;
+    $("sTamam").textContent = Object.keys(gecti).filter((g) => gecti[g]).length;
+    const geride = ilkGecilmemis() < b;
+    $("geride").hidden = !geride;
+    if (geride) $("geride").textContent = `Takvimde ${b}. gündesin ama ${ilkGecilmemis()}. gün henüz bitmedi. Sırayla devam et; aynı gün birden fazla günü bitirebilirsin.`;
   }
 
   function serit(){
@@ -309,9 +598,9 @@
     for (let g = 1; g <= N; g++) {
       const b = document.createElement("button");
       b.type = "button"; b.textContent = tarih(g).getDate();
-      b.className = "d " + durum(g) + (DENEME.includes(g) ? " deneme" : "") + (g === N ? " sinav" : "") + (g === secili ? " now" : "");
-      b.setAttribute("aria-label", g + ". gün, " + fmt(tarih(g)));
-      b.addEventListener("click", () => { secili = g; ciz(); document.querySelector(".today").scrollIntoView({ behavior: "smooth", block: "start" }); });
+      b.className = "d " + durum(g) + (acik(g) ? "" : " kilit") + (DENEME.includes(g) ? " deneme" : "") + (g === N ? " sinav" : "") + (g === secili ? " now" : "");
+      b.setAttribute("aria-label", g + ". gün, " + fmt(tarih(g)) + (acik(g) ? "" : ", kilitli"));
+      b.addEventListener("click", () => { secili = g; ciz(); kaydir(); });
       el.appendChild(b);
     }
   }
@@ -323,22 +612,23 @@
       const lab = document.createElement("label"); lab.htmlFor = "m" + g;
       lab.innerHTML = `<b>${fmt(tarih(g), { day:"numeric", month:"long" })}</b>${g === 4 ? " · giriş" : ""}`;
       const inp = document.createElement("input"); inp.type = "number"; inp.id = "m" + g; inp.min = 0; inp.max = 80; inp.placeholder = "Doğru sayısı"; inp.value = deneme[g] ?? "";
+      inp.disabled = !acik(g);
       const out = document.createElement("div"); out.className = "verdict";
       const yaz = () => {
         const x = parseInt(inp.value, 10);
-        if (Number.isNaN(x)) { out.textContent = ""; out.className = "verdict"; return; }
+        if (Number.isNaN(x)) { out.textContent = acik(g) ? "" : "Kilitli"; out.className = "verdict"; return; }
         const v = Math.min(80, Math.max(0, x)), eksik = Math.max(0, 40 - v);
         out.textContent = "≈ " + (v * 1.25).toFixed(2).replace(".", ",") + " puan · " + (eksik ? `${eksik} doğru daha` : "50 tuttu");
         out.className = "verdict" + (eksik ? "" : " good");
       };
-      inp.addEventListener("input", () => { const x = parseInt(inp.value, 10); if (Number.isNaN(x)) delete deneme[g]; else deneme[g] = x; store.set("deneme", deneme); yaz(); });
+      inp.addEventListener("change", () => { const x = parseInt(inp.value, 10); if (Number.isNaN(x)) delete deneme[g]; else deneme[g] = Math.min(80, Math.max(0, x)); store.set("deneme", deneme); yaz(); if (g === secili) kontrolEt(g); else { const k = kapiTuru(g); if (!gecti[g] && gorevlerTamam(g) && k === "deneme" && deneme[g] !== undefined) { gecir(g); ust(); serit(); } } });
       yaz(); d.append(lab, inp, out); el.appendChild(d);
     });
   }
 
   $("geri").onclick = () => { secili = Math.max(1, secili - 1); ciz(); };
   $("ileri").onclick = () => { secili = Math.min(N, secili + 1); ciz(); };
-  $("bugun").onclick = () => { secili = bugunGun(); ciz(); };
+  $("bugun").onclick = () => { secili = gidilecek(); ciz(); };
 
   ust(); ciz(); denemeler();
 })();
