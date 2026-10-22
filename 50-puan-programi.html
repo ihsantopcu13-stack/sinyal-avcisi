@@ -196,7 +196,7 @@
 
   <section class="card">
     <h2>Her günün sabit kısmı sitede</h2>
-    <p class="note">Ana sayfada panelini aç: <b>Sabah listen</b>, <b>Günün denemesi</b> (5 soru, 7,5 dk) ve <b>Sinyal Lab</b> orada.</p>
+    <p class="note">Ana sayfada panelini aç: <b>Sabah listen</b>, <b>Günün denemesi</b> (5 soru, 7,5 dk), <b>Günün okuma parçası</b> (3 soru, 6 dk) ve <b>Sinyal Lab</b> orada. <a href="/#okuma">Okuma parçasını aç</a></p>
     <a class="btn" href="/">Panele git →</a>
   </section>
 </main>
@@ -364,7 +364,7 @@
   };
   /* SORU-BITIS */
 
-  const sabit = () => ["Sabah listen + Günün denemesi (15 dk)", "Ana sayfada panelini aç. Kaçan sorun, zayıf sinyalin ve 5 soruluk süreli deneme orada."];
+  const sabit = () => ["Sabah listen: deneme + okuma parçası (20 dk)", "Ana sayfada panelini aç. Kaçan sorun, 5 soruluk süreli deneme ve günün okuma parçası (3 soru, 6 dk) orada."];
   const defter = (ek) => ["Yanlış defteri (15 dk)", ek || "Bugünkü her yanlış için: soru, doğru cevap, kaçırdığın sinyal."];
 
   function gorevler(g){
@@ -397,8 +397,8 @@
     const yeni = g <= 14 ? "20 yeni + dünkü 20 tekrar" : "40 tekrar, yeni kelime yok";
     const t = [sabit(), ["Kelime: " + yeni, "Akademik kelimeler. Bilmediğini kartta işaretle."]];
     t.push(["Bugünün sinyali: " + k[0], "Aşağıdaki kutuyu oku, sonra Sinyal Lab'da 15 soru çöz."]);
-    if (g >= 10 && g <= 21) t.push(["1 okuma parçası (en fazla 10 dk)", "Önce soruları oku, sonra parçada cevabı ara. Süreyi tut."]);
-    else if (g >= 24) t.push(["2 okuma parçası (her biri en fazla 10 dk)", "Sınav temposu. Süre aşılırsa işaretle, geç."]);
+    if (g >= 10 && g <= 21) t.push(["1 okuma parçası daha (en fazla 10 dk)", "Panelde Paragraf sekmesinden. Önce soruları oku, sonra parçada cevabı ara. Süreyi tut."]);
+    else if (g >= 24) t.push(["2 okuma parçası daha (her biri en fazla 10 dk)", "Panelde Paragraf sekmesinden. Sınav temposu. Süre aşılırsa işaretle, geç."]);
     else t.push(["10 karışık gramer sorusu", "Dünkü ve bugünkü sinyalleri birlikte kullan."]);
     t.push(defter());
     return t;

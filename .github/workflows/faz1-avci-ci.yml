@@ -276,6 +276,9 @@ jobs:
       - name: Günün denemesi — tarihe göre 5 soru, 7,5 dk süre, sabah listesi maddesi, Kural → Örnek → Tuzak (vm, gerçek ağ yok)
         run: node tests/gunluk-deneme.test.mjs
 
+      - name: Günün okuma parçası — 15 özgün parça, 3 soru, 6 dk, yanlış defteri ve sabah listesi bağlantısı (vm, gerçek ağ yok)
+        run: node tests/gunun-okumasi.test.mjs
+
       - name: 50 puan programı — gün sonu sınavı soruları ve kilit (ağ yok)
         run: node tests/program-50.test.mjs
       - name: Puan hedefine göre YDS soruları — 50 / 70 / 90-100, 5 şık, Kural → Örnek → Tuzak (statik, gerçek ağ yok)
