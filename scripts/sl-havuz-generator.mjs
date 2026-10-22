@@ -75,6 +75,7 @@ export function canonicalToFrontendEntry(soru) {
     opts: soru.secenekler_tr,
     ans: soru.dogru_index,
     fb: soru.aciklama_tr,
+    tr: soru.ceviri_tr,
   };
 }
 
@@ -98,6 +99,8 @@ export function frontendEntryToLine(entry) {
     `ans:${entry.ans}`,
     `fb:${JSON.stringify(entry.fb)}`,
   ];
+  // İngilizce cümlenin Türkçe çevirisi (Sinyal Lab'da "Türkçesini göster").
+  if (entry.tr) parcalar.push(`tr:${JSON.stringify(entry.tr)}`);
   return `  {${parcalar.join(",")}},`;
 }
 

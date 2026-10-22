@@ -3,6 +3,7 @@
     "id": "q001",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The appellate court ruled that, despite the irregularities, the verdict was by no means invalid.",
+    "ceviri_tr": "İstinaf mahkemesi, usulsüzlüklere rağmen kararın kesinlikle geçersiz olmadığına hükmetti.",
     "alinti": true,
     "soru_tr": "Bu metne göre mahkeme kararı hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -24,6 +25,7 @@
     "id": "q002",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The researchers concluded that, despite the promising results, the treatment was far from guaranteed.",
+    "ceviri_tr": "Araştırmacılar, umut verici sonuçlara rağmen tedavinin garantili olmaktan çok uzak olduğu sonucuna vardı.",
     "alinti": true,
     "soru_tr": "Araştırmacılar tedavi hakkında ne söylemiştir?",
     "secenekler_tr": [
@@ -45,6 +47,7 @@
     "id": "q003",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The statute was far from unambiguous, yet the court applied it strictly.",
+    "ceviri_tr": "Kanun açık olmaktan çok uzaktı, yine de mahkeme onu katı bir şekilde uyguladı.",
     "alinti": true,
     "soru_tr": "Kanun hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -66,6 +69,7 @@
     "id": "q004",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The treatment was far from effective although it had shown promising results in trials.",
+    "ceviri_tr": "Denemelerde umut verici sonuçlar göstermiş olmasına rağmen tedavi etkili olmaktan çok uzaktı.",
     "alinti": true,
     "soru_tr": "Tedavi hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -87,6 +91,7 @@
     "id": "q005",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "Sociologists argue that stratification hardly operates independently of cultural norms.",
+    "ceviri_tr": "Sosyologlar, toplumsal tabakalaşmanın kültürel normlardan bağımsız olarak neredeyse hiç işlemediğini savunuyor.",
     "alinti": true,
     "soru_tr": "Sosyologlar tabakalaşma için ne söyler?",
     "secenekler_tr": [
@@ -108,6 +113,7 @@
     "id": "q006",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "The catalyst failed to accelerate the reaction even though the temperature was optimal.",
+    "ceviri_tr": "Sıcaklık ideal olmasına rağmen katalizör tepkimeyi hızlandıramadı.",
     "alinti": true,
     "soru_tr": "Katalizör için ne söylenebilir?",
     "secenekler_tr": [
@@ -129,6 +135,7 @@
     "id": "q007",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The committee was by no means unanimous in its decision, nor did it reach a consensus.",
+    "ceviri_tr": "Komite kararında kesinlikle oy birliği içinde değildi, bir uzlaşmaya da varamadı.",
     "alinti": true,
     "soru_tr": "Komite kararı hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -150,6 +157,7 @@
     "id": "q008",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Prior to the enactment of the law, companies were rarely held liable.",
+    "ceviri_tr": "Yasa yürürlüğe girmeden önce şirketler nadiren sorumlu tutuluyordu.",
     "alinti": true,
     "soru_tr": "Kanun öncesinde şirketler için ne gerçekti?",
     "secenekler_tr": [
@@ -171,6 +179,7 @@
     "id": "q009",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Whereas early studies suggested a strong correlation, recent findings have failed to replicate these results.",
+    "ceviri_tr": "İlk çalışmalar güçlü bir ilişki olduğunu ileri sürerken, son bulgular bu sonuçları tekrarlayamadı.",
     "alinti": true,
     "soru_tr": "Yeni bulgular hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -192,6 +201,7 @@
     "id": "q010",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The drug scarcely reduced inflammation despite being administered at the maximum dosage.",
+    "ceviri_tr": "İlaç, en yüksek dozda verilmesine rağmen iltihabı neredeyse hiç azaltmadı.",
     "alinti": true,
     "soru_tr": "İlaç hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -213,6 +223,7 @@
     "id": "q011",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "The policy was anything but neutral; it disproportionately affected marginalized communities.",
+    "ceviri_tr": "Politika tarafsız olmaktan çok uzaktı; dezavantajlı toplulukları orantısız biçimde etkiledi.",
     "alinti": true,
     "soru_tr": "Politika hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -234,6 +245,7 @@
     "id": "q012",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "The experiment by no means confirmed the hypothesis; on the contrary, it contradicted previous assumptions.",
+    "ceviri_tr": "Deney hipotezi kesinlikle doğrulamadı; aksine, önceki varsayımlarla çelişti.",
     "alinti": true,
     "soru_tr": "Deney sonuçları ne gösterdi?",
     "secenekler_tr": [
@@ -255,6 +267,7 @@
     "id": "q013",
     "kategori": "Genel - YDS Metni",
     "soru_en": "No sooner had the new regulation been implemented than companies began lobbying against it.",
+    "ceviri_tr": "Yeni düzenleme uygulanır uygulanmaz şirketler ona karşı lobi yapmaya başladı.",
     "alinti": true,
     "soru_tr": "Bu cümleye göre ne oldu?",
     "secenekler_tr": [
@@ -276,6 +289,7 @@
     "id": "q014",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant's argument was not without merit, yet the court ultimately ruled against him.",
+    "ceviri_tr": "Sanığın savunması haklılık payından yoksun değildi, yine de mahkeme sonunda onun aleyhine karar verdi.",
     "alinti": true,
     "soru_tr": "Savunma argümanı hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -297,6 +311,7 @@
     "id": "q015",
     "kategori": "Genel - YDS Metni",
     "soru_en": "While proponents argue the reform is essential, critics maintain it is far from sufficient.",
+    "ceviri_tr": "Destekçiler reformun gerekli olduğunu savunurken, eleştirmenler reformun yeterli olmaktan çok uzak olduğunu öne sürüyor.",
     "alinti": true,
     "soru_tr": "Eleştirenler reform hakkında ne düşünüyor?",
     "secenekler_tr": [
@@ -318,6 +333,7 @@
     "id": "q016",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant, notwithstanding the overwhelming evidence, pleaded not guilty.",
+    "ceviri_tr": "Sanık, ezici kanıtlara rağmen suçsuz olduğunu beyan etti.",
     "alinti": true,
     "soru_tr": "Bu metne göre savunma hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -339,6 +355,7 @@
     "id": "q017",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "By the time the symptoms appeared, the infection had already spread to adjacent tissue.",
+    "ceviri_tr": "Belirtiler ortaya çıktığında enfeksiyon çoktan komşu dokuya yayılmıştı.",
     "alinti": true,
     "soru_tr": "Semptomların ortaya çıkmasıyla enfeksiyon arasındaki ilişki nedir?",
     "secenekler_tr": [
@@ -360,6 +377,7 @@
     "id": "q018",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "The catalyst, rather than being consumed, facilitates the reaction without undergoing permanent change.",
+    "ceviri_tr": "Katalizör tüketilmek yerine kalıcı bir değişime uğramadan tepkimeyi kolaylaştırır.",
     "alinti": true,
     "soru_tr": "Katalizör hakkında hangisi doğrudur?",
     "secenekler_tr": [
@@ -381,6 +399,7 @@
     "id": "q019",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "Consequently, urbanization rates declined in regions where agricultural subsidies were increased.",
+    "ceviri_tr": "Sonuç olarak, tarım sübvansiyonlarının artırıldığı bölgelerde kentleşme oranları düştü.",
     "alinti": true,
     "soru_tr": "Tarım sübvansiyonlarının artırılmasıyla ne ilişkili?",
     "secenekler_tr": [
@@ -402,6 +421,7 @@
     "id": "q020",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The statute provided that any contract signed under duress shall be deemed voidable at the discretion of the aggrieved party.",
+    "ceviri_tr": "Kanun, baskı altında imzalanan her sözleşmenin, mağdur tarafın takdirine bağlı olarak iptal edilebilir sayılacağını öngörüyordu.",
     "alinti": true,
     "soru_tr": "Kanuna göre baskı altında imzalanan sözleşme için ne söylenebilir?",
     "secenekler_tr": [
@@ -423,6 +443,7 @@
     "id": "q021",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "Although the drug demonstrated efficacy in clinical trials, its long-term safety profile remained uncertain.",
+    "ceviri_tr": "İlaç klinik denemelerde etkinlik göstermesine rağmen uzun vadeli güvenliği belirsizliğini korudu.",
     "alinti": true,
     "soru_tr": "İlaç hakkında hangisi doğrudur?",
     "secenekler_tr": [
@@ -444,6 +465,7 @@
     "id": "q022",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "Prior to the discovery of penicillin, bacterial infections were often fatal.",
+    "ceviri_tr": "Penisilinin keşfinden önce bakteriyel enfeksiyonlar çoğu zaman ölümcüldü.",
     "alinti": true,
     "soru_tr": "Penisilin keşfinden önce bakteriyel enfeksiyonlar hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -465,6 +487,7 @@
     "id": "q023",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "The study found that social mobility, contrary to popular belief, has declined over the past two decades.",
+    "ceviri_tr": "Çalışma, yaygın inanışın aksine, sosyal hareketliliğin son yirmi yılda azaldığını ortaya koydu.",
     "alinti": true,
     "soru_tr": "Araştırmanın sosyal hareketlilik hakkındaki bulguları nedir?",
     "secenekler_tr": [
@@ -486,6 +509,7 @@
     "id": "q024",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The study's findings were far from conclusive, yet they sparked considerable debate among scholars.",
+    "ceviri_tr": "Çalışmanın bulguları kesin olmaktan çok uzaktı, yine de akademisyenler arasında ciddi bir tartışma başlattı.",
     "alinti": false,
     "soru_tr": "Çalışmanın bulgularıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
@@ -507,6 +531,7 @@
     "id": "q025",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Although the experiment failed to yield the expected results, the researchers remained optimistic about future prospects.",
+    "ceviri_tr": "Deney beklenen sonuçları veremese de araştırmacılar gelecekten umutlu olmaya devam etti.",
     "alinti": false,
     "soru_tr": "Araştırmacıların tutumu nedir?",
     "secenekler_tr": [
@@ -528,6 +553,7 @@
     "id": "q026",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The new policy was anything but popular despite the government's efforts to promote it.",
+    "ceviri_tr": "Hükümetin tanıtma çabalarına rağmen yeni politika hiç de popüler değildi.",
     "alinti": false,
     "soru_tr": "Yeni politika hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -549,6 +575,7 @@
     "id": "q027",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The economy recovered more quickly than anticipated, even though analysts had predicted a prolonged recession.",
+    "ceviri_tr": "Analistler uzun süren bir durgunluk öngörmüş olsa da ekonomi beklenenden daha hızlı toparlandı.",
     "alinti": false,
     "soru_tr": "Ekonomik toparlanma için ne söylenebilir?",
     "secenekler_tr": [
@@ -570,6 +597,7 @@
     "id": "q028",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant's argument was by no means convincing, yet the jury deliberated for three days.",
+    "ceviri_tr": "Sanığın savunması kesinlikle ikna edici değildi, yine de jüri üç gün boyunca müzakere etti.",
     "alinti": false,
     "soru_tr": "Sanığın savunması hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -591,6 +619,7 @@
     "id": "q029",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Despite the overwhelming evidence, the court was far from unanimous in its ruling.",
+    "ceviri_tr": "Ezici kanıtlara rağmen mahkeme kararında oy birliği içinde olmaktan çok uzaktı.",
     "alinti": false,
     "soru_tr": "Mahkemenin kararıyla ilgili ne söylenebilir?",
     "secenekler_tr": [
@@ -612,6 +641,7 @@
     "id": "q030",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The contract's terms were hardly favorable to either party, yet both sides agreed to proceed.",
+    "ceviri_tr": "Sözleşmenin şartları iki taraf için de pek elverişli değildi, yine de iki taraf da devam etmeyi kabul etti.",
     "alinti": false,
     "soru_tr": "Sözleşme şartları hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -633,6 +663,7 @@
     "id": "q031",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The clinical trial results were nowhere near as promising as initially hoped, although researchers continued the study.",
+    "ceviri_tr": "Klinik deneme sonuçları başta umulduğu kadar umut verici olmaktan çok uzaktı, yine de araştırmacılar çalışmaya devam etti.",
     "alinti": false,
     "soru_tr": "Klinik araştırma sonuçları nasıl değerlendirilir?",
     "secenekler_tr": [
@@ -654,6 +685,7 @@
     "id": "q032",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "Despite years of research, scientists have yet to find a definitive cure for the disease.",
+    "ceviri_tr": "Yıllarca süren araştırmalara rağmen bilim insanları hastalık için kesin bir tedavi henüz bulamadı.",
     "alinti": false,
     "soru_tr": "Hastalığın tedavisiyle ilgili ne söylenebilir?",
     "secenekler_tr": [
@@ -675,6 +707,7 @@
     "id": "q033",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The medication proved far from harmless, even though it had passed initial safety screenings.",
+    "ceviri_tr": "İlaç ilk güvenlik taramalarından geçmiş olmasına rağmen zararsız olmaktan çok uzak çıktı.",
     "alinti": false,
     "soru_tr": "İlaçla ilgili ne öğrenilmiştir?",
     "secenekler_tr": [
@@ -696,6 +729,7 @@
     "id": "q034",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "The experiment's results were scarcely reproducible, despite the controlled laboratory conditions.",
+    "ceviri_tr": "Kontrollü laboratuvar koşullarına rağmen deneyin sonuçları neredeyse hiç tekrarlanamadı.",
     "alinti": false,
     "soru_tr": "Deneyin sonuçları için ne söylenebilir?",
     "secenekler_tr": [
@@ -717,6 +751,7 @@
     "id": "q035",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "Although the hypothesis seemed plausible, the data failed to provide sufficient support.",
+    "ceviri_tr": "Hipotez makul görünse de veriler yeterli desteği sağlayamadı.",
     "alinti": false,
     "soru_tr": "Hipotez hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -738,6 +773,7 @@
     "id": "q036",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "The social program was far from achieving its intended outcomes, despite significant funding.",
+    "ceviri_tr": "Sosyal program, ciddi finansmana rağmen hedeflenen sonuçlara ulaşmaktan çok uzaktı.",
     "alinti": false,
     "soru_tr": "Sosyal program hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -759,6 +795,7 @@
     "id": "q037",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "Public support for the initiative was by no means guaranteed, even though surveys showed initial enthusiasm.",
+    "ceviri_tr": "Anketler başta bir heves olduğunu gösterse de girişime halk desteği kesinlikle garantili değildi.",
     "alinti": false,
     "soru_tr": "Kamuoyunun girişime desteği nasıldı?",
     "secenekler_tr": [
@@ -780,6 +817,7 @@
     "id": "q038",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Given the available evidence, the investigators concluded that the suspect must have been at the scene.",
+    "ceviri_tr": "Mevcut kanıtlar göz önüne alındığında, müfettişler şüphelinin olay yerinde bulunmuş olması gerektiği sonucuna vardı.",
     "alinti": false,
     "soru_tr": "Araştırmacıların sonucuna göre şüpheli için ne söylenebilir?",
     "secenekler_tr": [
@@ -801,6 +839,7 @@
     "id": "q039",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The team should have consulted the experts before making such a critical decision.",
+    "ceviri_tr": "Ekip, böylesine kritik bir karar vermeden önce uzmanlara danışmalıydı (ama danışmadı).",
     "alinti": false,
     "soru_tr": "Bu cümleden çıkarılacak sonuç nedir?",
     "secenekler_tr": [
@@ -822,6 +861,7 @@
     "id": "q040",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The patient's symptoms could have been misdiagnosed, as they were consistent with multiple conditions.",
+    "ceviri_tr": "Hastanın belirtileri birden fazla hastalıkla uyumlu olduğu için yanlış teşhis konmuş olabilir.",
     "alinti": false,
     "soru_tr": "Hastanın belirtileri hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -843,6 +883,7 @@
     "id": "q041",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The project was severely underfunded; consequently, the team was forced to abandon several key objectives.",
+    "ceviri_tr": "Proje ciddi şekilde yetersiz finanse edildi; bu nedenle ekip birkaç temel hedeften vazgeçmek zorunda kaldı.",
     "alinti": false,
     "soru_tr": "Projenin yetersiz finansmanının sonucu nedir?",
     "secenekler_tr": [
@@ -864,6 +905,7 @@
     "id": "q042",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "The population grew exponentially over the decade; as a result, housing prices reached unprecedented levels.",
+    "ceviri_tr": "Nüfus on yıl boyunca katlanarak arttı; bunun sonucunda konut fiyatları görülmemiş seviyelere ulaştı.",
     "alinti": false,
     "soru_tr": "Nüfus artışının sonucu nedir?",
     "secenekler_tr": [
@@ -885,6 +927,7 @@
     "id": "q043",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The agreement will remain valid provided that both parties fulfill their obligations within the specified timeframe.",
+    "ceviri_tr": "Anlaşma, iki taraf da yükümlülüklerini belirtilen süre içinde yerine getirdiği sürece geçerli kalacak.",
     "alinti": false,
     "soru_tr": "Anlaşmanın geçerliliği neye bağlıdır?",
     "secenekler_tr": [
@@ -906,6 +949,7 @@
     "id": "q044",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The defendant will be released on condition that they comply with all restrictions imposed by the court.",
+    "ceviri_tr": "Sanık, mahkemenin koyduğu tüm kısıtlamalara uyması şartıyla serbest bırakılacak.",
     "alinti": false,
     "soru_tr": "Sanığın serbest bırakılması ne koşula bağlıdır?",
     "secenekler_tr": [
@@ -927,6 +971,7 @@
     "id": "q045",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The negotiations were nowhere near completion, yet both parties expressed optimism about reaching a deal.",
+    "ceviri_tr": "Müzakereler tamamlanmaya yakın bile değildi, yine de iki taraf da anlaşmaya varma konusunda iyimserliğini dile getirdi.",
     "alinti": true,
     "soru_tr": "Müzakereler hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -948,6 +993,7 @@
     "id": "q046",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Unless the appeal is filed within thirty days, the ruling will become final and binding.",
+    "ceviri_tr": "İtiraz otuz gün içinde yapılmazsa karar kesinleşip bağlayıcı hale gelecek.",
     "alinti": true,
     "soru_tr": "Kararın kesinleşmesi neye bağlıdır?",
     "secenekler_tr": [
@@ -969,6 +1015,7 @@
     "id": "q047",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "The clinical guidelines were revised after new evidence cast doubt on the drug's long-term safety.",
+    "ceviri_tr": "Yeni kanıtlar ilacın uzun vadeli güvenliği konusunda şüphe uyandırınca klinik kılavuzlar revize edildi.",
     "alinti": true,
     "soru_tr": "Klinik kılavuzların revize edilme nedeni nedir?",
     "secenekler_tr": [
@@ -990,6 +1037,7 @@
     "id": "q048",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "Contrary to earlier assumptions, the compound proved anything but stable at room temperature.",
+    "ceviri_tr": "Önceki varsayımların aksine, bileşik oda sıcaklığında hiç de kararlı olmadığını gösterdi.",
     "alinti": true,
     "soru_tr": "Bileşik hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -1011,6 +1059,7 @@
     "id": "q049",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "As a consequence of declining birth rates, several countries have revised their pension systems.",
+    "ceviri_tr": "Düşen doğum oranlarının bir sonucu olarak birçok ülke emeklilik sistemlerini revize etti.",
     "alinti": true,
     "soru_tr": "Doğum oranlarındaki düşüşün sonucu nedir?",
     "secenekler_tr": [
@@ -1032,6 +1081,7 @@
     "id": "q050",
     "kategori": "Genel - YDS Metni",
     "soru_en": "The proposal, while theoretically sound, has proven next to impossible to implement in practice.",
+    "ceviri_tr": "Öneri, teorik olarak sağlam olsa da uygulamada hayata geçirilmesinin neredeyse imkânsız olduğu görüldü.",
     "alinti": true,
     "soru_tr": "Teklif hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1053,6 +1103,7 @@
     "id": "q051",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "Had the witness come forward earlier, the outcome of the trial might have been different.",
+    "ceviri_tr": "Tanık daha önce ortaya çıksaydı, davanın sonucu farklı olabilirdi.",
     "alinti": true,
     "soru_tr": "Bu cümleden ne çıkarılabilir?",
     "secenekler_tr": [
@@ -1074,6 +1125,7 @@
     "id": "q052",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "Once the infection had been misdiagnosed, treatment was delayed by several critical weeks.",
+    "ceviri_tr": "Enfeksiyona bir kez yanlış teşhis konunca tedavi birkaç kritik hafta gecikti.",
     "alinti": true,
     "soru_tr": "Tedavinin gecikmesinin nedeni nedir?",
     "secenekler_tr": [
@@ -1095,6 +1147,7 @@
     "id": "q053",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "The satellite's trajectory deviated only slightly from the projected path, a fact that nonetheless required immediate correction.",
+    "ceviri_tr": "Uydunun yörüngesi öngörülen rotadan yalnızca biraz saptı; yine de bu durum acil düzeltme gerektirdi.",
     "alinti": true,
     "soru_tr": "Uydunun yörüngesi hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1116,6 +1169,7 @@
     "id": "q054",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "Even though the survey sample was representative, critics claim the results were far from generalizable.",
+    "ceviri_tr": "Anket örneklemi temsil edici olsa da eleştirmenler sonuçların genellenebilir olmaktan çok uzak olduğunu iddia ediyor.",
     "alinti": true,
     "soru_tr": "Eleştirmenlerin ankete yönelik itirazı nedir?",
     "secenekler_tr": [
@@ -1137,6 +1191,7 @@
     "id": "q055",
     "kategori": "Genel - YDS Metni",
     "soru_en": "Not only did the merger fail to boost profits, but it also triggered a wave of layoffs.",
+    "ceviri_tr": "Birleşme kârları artırmamakla kalmadı, aynı zamanda bir işten çıkarma dalgasını da tetikledi.",
     "alinti": true,
     "soru_tr": "Birleşmenin sonucu hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -1158,6 +1213,7 @@
     "id": "q056",
     "kategori": "Hukuk - YDS Metni",
     "soru_en": "The clause was drafted so as to prevent either party from unilaterally terminating the agreement.",
+    "ceviri_tr": "Madde, iki taraftan birinin de anlaşmayı tek taraflı olarak feshetmesini önleyecek şekilde yazıldı.",
     "alinti": true,
     "soru_tr": "Maddenin amacı nedir?",
     "secenekler_tr": [
@@ -1179,6 +1235,7 @@
     "id": "q057",
     "kategori": "Sağlık - YÖKDİL Metni",
     "soru_en": "Despite its promising early results, the therapy was withheld from the general population pending further trials.",
+    "ceviri_tr": "Erken dönemdeki umut verici sonuçlarına rağmen tedavi, ek denemeler tamamlanana kadar genel halka uygulanmadı.",
     "alinti": true,
     "soru_tr": "Tedavi neden genel nüfusa uygulanmadı?",
     "secenekler_tr": [
@@ -1200,6 +1257,7 @@
     "id": "q058",
     "kategori": "Fen - YÖKDİL Metni",
     "soru_en": "Provided that the temperature remains stable, the reaction will proceed without further intervention.",
+    "ceviri_tr": "Sıcaklık sabit kaldığı sürece tepkime başka bir müdahaleye gerek kalmadan devam edecek.",
     "alinti": true,
     "soru_tr": "Reaksiyonun devam etmesi için hangi koşul gereklidir?",
     "secenekler_tr": [
@@ -1221,6 +1279,7 @@
     "id": "q059",
     "kategori": "Sosyal - YÖKDİL Metni",
     "soru_en": "Public opinion on the reform has shifted markedly since the initial announcement, with support dwindling steadily.",
+    "ceviri_tr": "Reforma yönelik kamuoyu, ilk duyurudan bu yana belirgin şekilde değişti ve destek giderek azaldı.",
     "alinti": true,
     "soru_tr": "Kamuoyu desteği ile ilgili ne söylenebilir?",
     "secenekler_tr": [
@@ -1242,6 +1301,7 @@
     "id": "q060",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Neither the manager nor the employees were informed about the restructuring plan before it was announced.",
+    "ceviri_tr": "Ne yönetici ne de çalışanlar, yeniden yapılanma planı duyurulmadan önce plan hakkında bilgilendirildi.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre çalışanlar hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1263,6 +1323,7 @@
     "id": "q061",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Either the director or the board members have to approve the budget before the project can commence.",
+    "ceviri_tr": "Projenin başlayabilmesi için bütçeyi ya müdür ya da yönetim kurulu üyeleri onaylamak zorunda.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre proje başlamadan önce ne gereklidir?",
     "secenekler_tr": [
@@ -1284,6 +1345,7 @@
     "id": "q062",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Neither the research findings nor the clinical data support the hypothesis that the new compound is safer than existing treatments.",
+    "ceviri_tr": "Ne araştırma bulguları ne de klinik veriler, yeni bileşiğin mevcut tedavilerden daha güvenli olduğu hipotezini destekliyor.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre yeni bileşik için ne söylenebilir?",
     "secenekler_tr": [
@@ -1305,6 +1367,7 @@
     "id": "q063",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Not only did the new policy reduce operational costs, but it also improved employee satisfaction significantly.",
+    "ceviri_tr": "Yeni politika yalnızca işletme maliyetlerini düşürmekle kalmadı, aynı zamanda çalışan memnuniyetini de önemli ölçüde artırdı.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre yeni politikanın etkisi nedir?",
     "secenekler_tr": [
@@ -1326,6 +1389,7 @@
     "id": "q064",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Not only is she the youngest professor in the department, but she has also published more papers than anyone else.",
+    "ceviri_tr": "O, bölümün en genç profesörü olmakla kalmıyor, aynı zamanda herkesten daha fazla makale yayımlamış.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre profesör hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -1347,6 +1411,7 @@
     "id": "q065",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Not only does the treatment eliminate the symptoms, but it also addresses the underlying cause of the disease.",
+    "ceviri_tr": "Tedavi yalnızca belirtileri ortadan kaldırmakla kalmıyor, aynı zamanda hastalığın altta yatan nedenini de ele alıyor.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre tedavi hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1368,6 +1433,7 @@
     "id": "q066",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "No sooner had the conference begun than the fire alarm disrupted the proceedings.",
+    "ceviri_tr": "Konferans başlar başlamaz yangın alarmı oturumları kesintiye uğrattı.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre konferansta ne oldu?",
     "secenekler_tr": [
@@ -1389,6 +1455,7 @@
     "id": "q067",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Hardly had the scientists published their findings when a rival team announced a contradictory discovery.",
+    "ceviri_tr": "Bilim insanları bulgularını yayımlar yayımlamaz rakip bir ekip çelişkili bir keşif duyurdu.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre ne oldu?",
     "secenekler_tr": [
@@ -1410,6 +1477,7 @@
     "id": "q068",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Contrary to the initial projections, the economic recovery proved to be far more rapid than anticipated.",
+    "ceviri_tr": "İlk tahminlerin aksine, ekonomik toparlanma beklenenden çok daha hızlı gerçekleşti.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre ekonomik toparlanma hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1431,6 +1499,7 @@
     "id": "q069",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "As long as the funding remains available, the research team will continue its work on renewable energy sources.",
+    "ceviri_tr": "Finansman sağlandığı sürece araştırma ekibi yenilenebilir enerji kaynakları üzerindeki çalışmalarına devam edecek.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre araştırma ne zaman devam edecek?",
     "secenekler_tr": [
@@ -1452,6 +1521,7 @@
     "id": "q070",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "As long as employees adhere to the safety protocols, workplace accidents can be significantly reduced.",
+    "ceviri_tr": "Çalışanlar güvenlik protokollerine uyduğu sürece iş kazaları önemli ölçüde azaltılabilir.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre iş kazaları ne zaman azalır?",
     "secenekler_tr": [
@@ -1473,6 +1543,7 @@
     "id": "q071",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "As far as the committee is concerned, the proposal meets all the necessary criteria for approval.",
+    "ceviri_tr": "Komite açısından bakıldığında, öneri onay için gerekli tüm kriterleri karşılıyor.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre komite öneri hakkında ne düşünüyor?",
     "secenekler_tr": [
@@ -1494,6 +1565,7 @@
     "id": "q072",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "As long as the patient takes the prescribed medication regularly, a full recovery is expected within three months.",
+    "ceviri_tr": "Hasta reçete edilen ilacı düzenli olarak kullandığı sürece üç ay içinde tamamen iyileşmesi bekleniyor.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre tam iyileşme için ne gereklidir?",
     "secenekler_tr": [
@@ -1515,6 +1587,7 @@
     "id": "q073",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The government reduced import tariffs so that domestic manufacturers could access cheaper raw materials.",
+    "ceviri_tr": "Hükümet, yerli üreticiler daha ucuz hammaddeye ulaşabilsin diye ithalat vergilerini düşürdü.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre gümrük tarifeleri neden indirildi?",
     "secenekler_tr": [
@@ -1536,6 +1609,7 @@
     "id": "q074",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The researchers simplified their methodology in order to make the study replicable by independent laboratories.",
+    "ceviri_tr": "Araştırmacılar, çalışmanın bağımsız laboratuvarlarca tekrarlanabilmesi için yöntemlerini sadeleştirdi.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre araştırmacılar neden yöntemi sadeleştirdi?",
     "secenekler_tr": [
@@ -1557,6 +1631,7 @@
     "id": "q075",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The company updated its privacy policy so that users would have greater control over their personal data.",
+    "ceviri_tr": "Şirket, kullanıcılar kişisel verileri üzerinde daha fazla kontrole sahip olsun diye gizlilik politikasını güncelledi.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre gizlilik politikası neden güncellendi?",
     "secenekler_tr": [
@@ -1578,6 +1653,7 @@
     "id": "q076",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Rather than investing in expensive equipment, the startup decided to outsource its manufacturing operations.",
+    "ceviri_tr": "Girişim, pahalı ekipmana yatırım yapmak yerine üretim işlerini dış kaynağa vermeye karar verdi.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre girişim ne yaptı?",
     "secenekler_tr": [
@@ -1599,6 +1675,7 @@
     "id": "q077",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The scientist chose to publish preliminary results rather than wait for the final confirmation of her hypothesis.",
+    "ceviri_tr": "Bilim insanı, hipotezinin kesin olarak doğrulanmasını beklemek yerine ön sonuçları yayımlamayı seçti.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre bilim insanı ne yapmayı tercih etti?",
     "secenekler_tr": [
@@ -1620,6 +1697,7 @@
     "id": "q078",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Instead of expanding to new markets, the company focused on strengthening its position in existing ones.",
+    "ceviri_tr": "Şirket yeni pazarlara açılmak yerine mevcut pazarlardaki konumunu güçlendirmeye odaklandı.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre şirket ne yapmayı tercih etti?",
     "secenekler_tr": [
@@ -1641,6 +1719,7 @@
     "id": "q079",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "By no means should the experimental results be interpreted as conclusive without further peer review.",
+    "ceviri_tr": "Deney sonuçları, ek hakem değerlendirmesi yapılmadan kesinlikle kesin sonuç olarak yorumlanmamalı.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre deneysel sonuçlar hakkında ne söylenebilir?",
     "secenekler_tr": [
@@ -1662,6 +1741,7 @@
     "id": "q080",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The success of the pilot project is by no means a guarantee that the full-scale implementation will proceed smoothly.",
+    "ceviri_tr": "Pilot projenin başarısı, tam ölçekli uygulamanın sorunsuz ilerleyeceğinin kesinlikle garantisi değildir.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre pilot projenin başarısı hakkında ne doğrudur?",
     "secenekler_tr": [
@@ -1683,6 +1763,7 @@
     "id": "q081",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "Far from being a burden, the regulations introduced by the new administration actually stimulated innovation in the sector.",
+    "ceviri_tr": "Yeni yönetimin getirdiği düzenlemeler bir yük olmak şöyle dursun, aslında sektörde yeniliği teşvik etti.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre yeni düzenlemeler sektörü nasıl etkiledi?",
     "secenekler_tr": [
@@ -1704,6 +1785,7 @@
     "id": "q082",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "By no means did the committee intend to exclude minority voices from the decision-making process.",
+    "ceviri_tr": "Komite, azınlıkların sesini karar alma sürecinin dışında bırakmayı kesinlikle amaçlamadı.",
     "alinti": false,
     "soru_tr": "Bu cümleye göre komitenin niyeti neydi?",
     "secenekler_tr": [
@@ -1725,6 +1807,7 @@
     "id": "q083",
     "kategori": "Dilbilgisi - YDS",
     "soru_en": "The architect should have consulted the structural engineer before submitting the final design to the client.",
+    "ceviri_tr": "Mimar, nihai tasarımı müşteriye sunmadan önce statik mühendisine danışmalıydı (ama danışmadı).",
     "alinti": false,
     "soru_tr": "Bu cümleye göre mimar hakkında ne söylenebilir?",
     "secenekler_tr": [
