@@ -24,6 +24,10 @@ const OUT_DIR = path.join(ROOT, "out");
 // SOURCE OF TRUTH AŞAMA 5: tek canonical kaynak.
 const SORULAR_PATH = path.join(__dirname, "..", "..", "..", "api", "data", "sorular.json");
 
+// Site tanıtımı: reels-yayin/tasarim/tanitim.json'da "threads_gunu" bugüne (İstanbul) denk gelen
+// kayıt varsa o gün günlük ipucu yerine tanıtım metni paylaşılır (Reels tanıtımıyla aynı gün).
+const TANITIM_PATH = path.join(__dirname, "..", "..", "reels-yayin", "tasarim", "tanitim.json");
+
 const THREADS_OFFSET = 45;
 const KARAKTER_LIMIT = 480; // Threads gönderi sınırı 500 — pay bırakıyoruz
 
@@ -66,7 +70,20 @@ export function threadsMetniOlustur(soru) {
   return metniKisalt(govde, KARAKTER_LIMIT);
 }
 
+export function gununTanitimi(tanitim, simdi = new Date()) {
+  const gun = new Date(simdi.getTime() + 3 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return (tanitim?.videolar || []).find((v) => v.threads_gunu === gun && v.threads) || null;
+}
+
 export async function threadsPostUret() {
+  const tanitim = gununTanitimi(JSON.parse(await readFile(TANITIM_PATH, "utf-8").catch(() => "{}")));
+  if (tanitim) {
+    const metin = metniKisalt(tanitim.threads, KARAKTER_LIMIT);
+    await mkdir(OUT_DIR, { recursive: true });
+    await writeFile(path.join(OUT_DIR, "threads-post.json"), JSON.stringify({ tanitim: tanitim.konu, metin }, null, 2));
+    console.log("Threads tanıtım metni hazır:\n", metin);
+    return { metin };
+  }
   const sorular = JSON.parse(await readFile(SORULAR_PATH, "utf-8"));
   const soru = gununSorusunuSec(sorular);
   const metin = threadsMetniOlustur(soru);
