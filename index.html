@@ -1199,6 +1199,27 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .ok-tekrar .ok-metin{max-height:none}
 @media(max-width:600px){.ok-metin{font-size:16.5px;max-height:40vh}}
 
+/* BİRLİKTE SERİ — arkadaş daveti (koyu yeşil + nane) */
+.dv-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin-bottom:14px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
+.dv-kart:empty{display:none}
+.dv-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
+.dv-baslik{font-size:21px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.dv-alt{font-size:16px;color:#d5e9df;line-height:1.6;margin-bottom:12px}
+.dv-etiket{display:block;font-size:14.5px;color:#d5e9df;margin:4px 0 6px}
+.dv-input{width:100%;max-width:320px;display:block;background:#06140e!important;border:1px solid rgba(110,231,183,.5);border-radius:10px;padding:10px 12px;color:#ffffff;font-family:inherit;font-size:16px;margin-bottom:12px}
+.dv-input:focus{outline:2px solid #6ee7b7;outline-offset:1px}
+.dv-liste{list-style:none;display:flex;flex-direction:column;gap:10px;margin:6px 0 14px}
+.dv-satir{background:#102a1f;border:1px solid rgba(110,231,183,.3);border-radius:12px;padding:12px 14px}
+.dv-isim{font-size:17px;font-weight:700;margin-bottom:8px}
+.dv-sayilar{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+.dv-sayilar div{background:#06140e;border:1px solid rgba(110,231,183,.25);border-radius:10px;padding:8px;text-align:center;font-size:13.5px;color:#d5e9df}
+.dv-sayilar b{display:block;font-size:24px;color:#6ee7b7}
+.dv-durum{font-size:15px;color:#d5e9df;line-height:1.5}
+.dv-dugmeler{display:flex;gap:8px;margin-top:10px}
+.dv-kucuk{background:transparent;color:#ffffff;border:1px solid rgba(110,231,183,.55);border-radius:8px;padding:7px 12px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.dv-kucuk:hover{border-color:#6ee7b7}
+.dv-not{font-size:13.5px;color:#b9d6c8;margin-top:12px;line-height:1.5}
+@media(max-width:600px){.dv-kart{padding:16px}}
 /* YANLIŞ DEFTERİ — 1, 3 ve 7 gün tekrarı (koyu yeşil + nane) */
 .yd-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin:12px 0 18px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
 .yd-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
@@ -2049,6 +2070,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <div class="bugun-kart" id="bugun-kart"></div>
         <div class="sabah-kart" id="sabah-kart" aria-live="polite"></div>
         <div class="pt-kart" id="pt-kart"></div>
+        <div class="dv-kart" id="dv-kart"></div>
         <a href="/50-puan-programi" style="display:block;margin:0 0 10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;color:var(--ink);font-size:16px;font-weight:600;text-decoration:none">22 Kasım'a 50 puan programı: bugünkü görevlerin <span style="color:var(--signal)">→</span></a>
         <!-- AVCI ÖĞRENME YOLU — Dashboard mini CTA kartı -->
         <div id="aoy-dash-cta" onclick="aoyAc()" role="button" tabindex="0" style="display:none;cursor:pointer;background:linear-gradient(150deg,#0d1624,#131f30 130%);border:1px solid rgba(56,189,248,.32);border-radius:16px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden">
@@ -7176,6 +7198,7 @@ function dnav(el){
   const bugunKartEl=document.getElementById('bugun-kart');if(bugunKartEl)bugunKartEl.style.display='none';
   const sabahKartEl=document.getElementById('sabah-kart');if(sabahKartEl)sabahKartEl.style.display='none';
   const ptKartEl=document.getElementById('pt-kart');if(ptKartEl)ptKartEl.style.display='none';
+  const dvKartEl=document.getElementById('dv-kart');if(dvKartEl)dvKartEl.style.display='none';
   if(txt.includes('Dashboard')||txt.includes('Bugün')){
     // KATMAN 5B — Dashboard varsayılan olarak Sinyal Lab'ı gösterir (dtab[0] aktif)
     _aktifSoruModulu='sinyal_lab';
@@ -7184,6 +7207,7 @@ function dnav(el){
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
     if(sabahKartEl){sabahKartEl.style.display='block';if(typeof sabahListesiRender==='function')sabahListesiRender();}
     if(ptKartEl){ptKartEl.style.display='block';if(typeof ptKartRender==='function')ptKartRender();}
+    if(dvKartEl){dvKartEl.style.display='block';if(typeof davetKartRender==='function')davetKartRender();}
     modSinyalAsilGeriYukle();
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
@@ -12201,6 +12225,7 @@ function cevapKaydet(opts){
     if(typeof sabahListesiRender==='function')sabahListesiRender(); // tamamlanan maddeyi işaretle
     if(typeof ptKartRender==='function')ptKartRender();
     if(typeof hrCevapIsle==='function')hrCevapIsle(kayit); // haftalık rapor sayacı
+    if(typeof dvSeriSenkron==='function')dvSeriSenkron(); // birlikte seri
   }catch(e){}
 }
 
@@ -15559,6 +15584,182 @@ if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener(
   else if(location.hash==='#haftalik-rapor'){goTo('dashboard');haftalikRaporAc();}
 });
 
+// ─── BİRLİKTE SERİ — arkadaş daveti ve ortak seri ─────────────────────────
+// En sade sürüm, ek tablo yok: her kişinin davet bağlantısı kendi
+// anon profiline işaret eden şifreli bir kod taşır (api/anon-profile.mjs,
+// action 'davet'). Bağlantıyı açan, arkadaşını bu cihazda listesine ekler
+// (sa_arkadaslar) ve onun serisini görür. Karşılıklı görmek için iki taraf da
+// kendi bağlantısını gönderir; davetle gelen kişiye bu adım hemen sorulur.
+// Seri = soru çözülen ardışık günler (haftalık rapor sayacı sa_gunluk_sayac,
+// cihazın yerel günü). Ortak seri = ikinizin
+// de çalıştığı ardışık günler; dün ya da bugün bitmiyorsa kopmuştur.
+// Sunucuya giden: seri sayısı ve son çalışma günü (anon_profiles.streak,
+// streak_last). Arkadaşın başka hiçbir şeyini görmez.
+const DV_EN_FAZLA=5;
+let _dvOnbellek=null;
+function dvGunEkle(iso,n){const d=new Date(iso+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().split('T')[0];}
+function dvGunFarki(a,b){return Math.round((Date.parse(b+'T00:00:00Z')-Date.parse(a+'T00:00:00Z'))/86400000);}
+// gunler: {YYYY-MM-DD: soru sayısı}
+function dvCalismaSerisi(gunler){
+  const gunlerList=Object.keys(gunler||{}).filter(k=>gunler[k]>0).sort();
+  if(!gunlerList.length)return{seri:0,son:null};
+  const son=gunlerList[gunlerList.length-1];
+  let seri=1;
+  while(gunler[dvGunEkle(son,-seri)]>0)seri++;
+  return{seri,son};
+}
+// Bugün itibarıyla canlı seri: son gün dün ya da bugün değilse 0.
+function dvCanliSeri(s,bugun){return s&&s.son&&s.seri>0&&dvGunFarki(s.son,bugun)<=1?s.seri:0;}
+function dvOrtakSeri(a,b,bugun){
+  if(!a||!b||!a.son||!b.son||!a.seri||!b.seri)return 0;
+  const bit=a.son<b.son?a.son:b.son;
+  if(dvGunFarki(bit,bugun)>1)return 0;
+  const basA=dvGunEkle(a.son,1-a.seri),basB=dvGunEkle(b.son,1-b.seri);
+  const bas=basA>basB?basA:basB;
+  return bit>=bas?dvGunFarki(bas,bit)+1:0;
+}
+function dvBugun(){return hrGunAnahtari(new Date());}
+function dvBenimSerim(){
+  const sayac=typeof hrSayacLoad==='function'?hrSayacLoad():{};
+  const gunler={};Object.keys(sayac).forEach(k=>{gunler[k]=sayac[k].s||0;});
+  return dvCalismaSerisi(gunler);
+}
+function dvAdTemizle(x){return String(x||'').replace(/[^\p{L}\p{N} .'-]/gu,'').trim().slice(0,20);}
+function dvListe(){try{const v=JSON.parse(localStorage.getItem('sa_arkadaslar'));return Array.isArray(v)?v:[];}catch(e){return[];}}
+function dvListeKaydet(v){try{localStorage.setItem('sa_arkadaslar',JSON.stringify(v.slice(0,DV_EN_FAZLA)));}catch(e){}}
+function dvAnonId(){try{return localStorage.getItem('sa_anon_id');}catch(e){return null;}}
+async function dvKodum(){
+  try{const k=localStorage.getItem('sa_davet_kodu');if(k)return k;}catch(e){}
+  const anon_id=dvAnonId();if(!anon_id)return null;
+  try{
+    const r=await fetch('/api/anon-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id,action:'davet'})});
+    if(!r.ok)return null;
+    const {kod}=await r.json();
+    if(kod)try{localStorage.setItem('sa_davet_kodu',kod);}catch(e){}
+    return kod||null;
+  }catch(e){return null;}
+}
+function dvBaglanti(kod,ad){return 'https://sinyal-avcisi.com/?davet='+encodeURIComponent(kod)+(ad?'&ad='+encodeURIComponent(ad):'');}
+// Seriyi sunucuya yaz: günün ilk cevabında bir kez (gunlukSync sayfa açılışında
+// çalıştığı için o anki seri eski kalabiliyor). Sadece arkadaşı olan ya da
+// davet bağlantısı oluşturmuş kişide.
+function dvSeriSenkron(){
+  try{
+    if(!dvListe().length&&!localStorage.getItem('sa_davet_kodu'))return;
+    const anon_id=dvAnonId();if(!anon_id)return;
+    const bugun=dvBugun();
+    if(localStorage.getItem('sa_davet_sync')===bugun)return;
+    const s=dvBenimSerim();if(!s.son)return;
+    localStorage.setItem('sa_davet_sync',bugun);
+    fetch('/api/anon-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({anon_id,action:'sync',payload:{streak:s.seri,streak_last:s.son}})}).catch(()=>{});
+  }catch(e){}
+}
+async function dvArkadaslariGetir(){
+  const liste=dvListe();if(!liste.length)return[];
+  if(_dvOnbellek&&Date.now()-_dvOnbellek.zaman<5*60000)return _dvOnbellek.veri;
+  try{
+    const r=await fetch('/api/anon-profile?davet='+liste.map(a=>encodeURIComponent(a.kod)).join(','));
+    if(!r.ok)return null;
+    const {arkadaslar}=await r.json();
+    _dvOnbellek={zaman:Date.now(),veri:arkadaslar||[]};
+    return _dvOnbellek.veri;
+  }catch(e){return null;}
+}
+async function dvPaylas(metin,url,btn){
+  try{
+    if(navigator.share){await navigator.share({title:'Sinyal Avcısı',text:metin,url});return;}
+  }catch(e){if(e&&e.name==='AbortError')return;}
+  try{await navigator.clipboard.writeText(metin+' '+url);if(btn){const eski=btn.textContent;btn.textContent='Bağlantı kopyalandı';setTimeout(()=>{btn.textContent=eski;},2500);}}catch(e){prompt('Bağlantıyı kopyala:',url);}
+}
+async function dvDavetPaylas(btn){
+  const kod=await dvKodum();
+  if(!kod){alert('Davet bağlantısı şu an oluşturulamadı. Biraz sonra tekrar dene.');return;}
+  const adEl=document.getElementById('dv-ad');
+  const ad=dvAdTemizle(adEl?adEl.value:localStorage.getItem('sa_davet_ad'));
+  try{localStorage.setItem('sa_davet_ad',ad);}catch(e){}
+  faz2GaEvent('davet_paylas',{});
+  dvPaylas('YDS/YÖKDİL için birlikte seri tutalım. Her gün 1 soru bile yeter, ortak serimiz kopmasın.',dvBaglanti(kod,ad),btn);
+}
+function dvHatirlat(i,btn){
+  const a=dvListe()[i];if(!a)return;
+  dvKodum().then(kod=>dvPaylas('Bugün daha çalışmadın. Ortak serimiz kopmasın, 1 soru yeter.',kod?dvBaglanti(kod,localStorage.getItem('sa_davet_ad')||''):'https://sinyal-avcisi.com/',btn));
+}
+function dvCikar(i){
+  const v=dvListe();v.splice(i,1);dvListeKaydet(v);_dvOnbellek=null;davetKartRender();
+}
+async function davetKartRender(){
+  const el=document.getElementById('dv-kart');if(!el)return;
+  const liste=dvListe();
+  const bugun=dvBugun();
+  const ben=dvBenimSerim();
+  const benCanli=dvCanliSeri(ben,bugun);
+  const ad=gdEsc(localStorage.getItem('sa_davet_ad')||'');
+  const paylasForm=`<label class="dv-etiket" for="dv-ad">Adın (arkadaşın görsün, isteğe bağlı)</label>
+    <input id="dv-ad" class="dv-input" maxlength="20" value="${ad}" placeholder="Örnek: Ayşe" autocomplete="given-name">
+    <button type="button" class="gd-btn" onclick="dvDavetPaylas(this)">${liste.length?'Bir arkadaş daha davet et':'Davet bağlantısını paylaş'}</button>`;
+  if(!liste.length){
+    el.innerHTML=`<div class="dv-eyebrow">Birlikte seri</div>
+      <div class="dv-baslik">Arkadaşınla birlikte seri tut</div>
+      <div class="dv-alt">Bağlantını gönder. Arkadaşın açınca ikinizin serisi yan yana görünür. Ortak seri, ikinizin de soru çözdüğü ardışık günlerdir.</div>
+      ${paylasForm}
+      <div class="dv-not">Arkadaşın sadece seri sayını görür. Başka hiçbir bilgin paylaşılmaz.</div>`;
+    return;
+  }
+  el.innerHTML=`<div class="dv-eyebrow">Birlikte seri</div><div class="dv-baslik">Senin serin: ${benCanli} gün</div><div class="dv-alt">Yükleniyor...</div>`;
+  const veri=await dvArkadaslariGetir();
+  const satirlar=liste.map((a,i)=>{
+    const v=veri&&veri.find(x=>x.kod===a.kod);
+    const isim=gdEsc(a.ad||('Arkadaşın '+(i+1)));
+    if(!veri)return`<li class="dv-satir"><div class="dv-isim">${isim}</div><div class="dv-durum">Şu an bağlanılamadı.</div></li>`;
+    if(!v||!v.found)return`<li class="dv-satir"><div class="dv-isim">${isim}</div><div class="dv-durum">Profil bulunamadı.</div><button type="button" class="dv-kucuk" onclick="dvCikar(${i})">Çıkar</button></li>`;
+    const o={seri:v.streak||0,son:v.streak_last?String(v.streak_last).slice(0,10):null};
+    const oCanli=dvCanliSeri(o,bugun);
+    const ortak=dvOrtakSeri(ben,o,bugun);
+    const bugunCalisti=o.son===bugun;
+    return`<li class="dv-satir">
+      <div class="dv-isim">${isim}</div>
+      <div class="dv-sayilar"><div><b>${ortak}</b>Ortak seri</div><div><b>${oCanli}</b>Onun serisi</div></div>
+      <div class="dv-durum">${bugunCalisti?'Bugün çalıştı.':'Bugün daha çalışmadı (gün içinde gecikebilir).'}${ben.son===bugun?' Sen bugün çalıştın.':' Sen de bugün henüz çalışmadın.'}</div>
+      <div class="dv-dugmeler">${bugunCalisti?'':`<button type="button" class="dv-kucuk" onclick="dvHatirlat(${i},this)">Hatırlat</button>`}<button type="button" class="dv-kucuk" onclick="dvCikar(${i})">Çıkar</button></div>
+    </li>`;
+  }).join('');
+  el.innerHTML=`<div class="dv-eyebrow">Birlikte seri</div>
+    <div class="dv-baslik">Senin serin: ${benCanli} gün</div>
+    <ul class="dv-liste">${satirlar}</ul>
+    ${liste.length<DV_EN_FAZLA?paylasForm:''}
+    <div class="dv-not">Seri, soru çözdüğün ardışık günlerdir. Arkadaşının sayısı günde birkaç kez güncellenir.</div>`;
+}
+// Davet bağlantısıyla gelen: ?davet=KOD&ad=Ali
+function dvGelenDavet(){
+  let p;try{p=new URLSearchParams(location.search);}catch(e){return;}
+  const kod=p.get('davet');if(!kod||!/^[A-Za-z0-9_-]{22}$/.test(kod))return;
+  const ad=dvAdTemizle(p.get('ad'));
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
+  if(kod===localStorage.getItem('sa_davet_kodu'))return; // kendi bağlantısı
+  const v=dvListe();
+  const yeni=!v.some(a=>a.kod===kod);
+  if(yeni&&v.length<DV_EN_FAZLA){v.push({kod,ad,eklendi:dvBugun()});dvListeKaydet(v);}
+  faz2GaEvent('davet_kabul',{yeni:yeni?1:0});
+  setTimeout(()=>{goTo('dashboard');dvKarsilama(ad);davetKartRender();},1500);
+}
+function dvKarsilama(ad){
+  const el=document.createElement('div');el.className='gd-perde';el.id='dv-perde';
+  el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Birlikte seri daveti');
+  const kim=ad?gdEsc(ad):'Arkadaşın';
+  el.innerHTML=`<div class="gd-panel">
+    <div class="gd-ust"><div class="gd-eyebrow">Birlikte seri</div><button type="button" class="gd-kapat" onclick="this.closest('.gd-perde').remove();document.body.style.overflow=''">Kapat</button></div>
+    <div class="gd-baslik">${kim} seni birlikte seri tutmaya çağırdı</div>
+    <div class="gd-alt">${kim} listene eklendi, serisini panelinde görürsün. ${kim} de seni görsün diye kendi bağlantını ona gönder.</div>
+    <label class="dv-etiket" for="dv-ad-k">Adın (isteğe bağlı)</label>
+    <input id="dv-ad-k" class="dv-input" maxlength="20" placeholder="Örnek: Mehmet" autocomplete="given-name" oninput="try{localStorage.setItem('sa_davet_ad',dvAdTemizle(this.value))}catch(e){}">
+    <button type="button" class="gd-btn" onclick="dvDavetPaylas(this)">Kendi bağlantımı gönder</button>
+    <div class="gd-not">İkiniz de her gün en az 1 soru çözünce ortak seriniz büyür.</div>
+  </div>`;
+  el.addEventListener('click',e=>{if(e.target===el){el.remove();document.body.style.overflow='';}});
+  document.body.appendChild(el);document.body.style.overflow='hidden';
+}
+if(typeof location!=='undefined'&&typeof document!=='undefined')dvGelenDavet();
+
 // ─── PUAN TAHMİNİ — denemelerden tahmini YDS puanı, 50 hedefine mesafe ─────
 // Kaynak 1: /50-puan-programi'nde girilen tam deneme doğru sayıları
 // (program50:deneme, gün → doğru). Son 3 denemenin ağırlıklı ortalaması
@@ -15830,6 +16031,7 @@ setTimeout(()=>{
   bugunKartiRender();
   sabahListesiRender();
   ptKartRender();
+  davetKartRender();
   sinavGunlukMesajGoster();
 },2000);
 
@@ -19419,15 +19621,18 @@ async function gunlukSync(){
 
   try{
     const xpd   = (typeof xpLoad === 'function') ? xpLoad() : null;
-    const strd  = (typeof streakLoad === 'function') ? streakLoad() : null;
+    // Seri = soru çözülen ardışık günler (birlikte seri bunu okur). Eskiden
+    // var olmayan strd.gun alanı gidiyordu (hep 0) ve streak_last her gün
+    // "bugün" yazılıyordu.
+    const dvSeri = (typeof dvBenimSerim === 'function') ? dvBenimSerim() : {seri:0,son:null};
     const hatalar = (typeof hataLoad === 'function') ? hataLoad() : [];
 
     const payload = {
       xp:     xpd?.toplam  || 0,
-      streak: strd?.gun    || 0,
-      streak_last: bugun,
+      streak: dvSeri.seri,
       hatalar: (hatalar||[]).slice(0,100),
     };
+    if(dvSeri.son) payload.streak_last = dvSeri.son;
 
     const sinav = lsGet('sa_sinav_tarih');
     if(sinav) payload.sinav_tarih = sinav;
@@ -19500,16 +19705,16 @@ window.addEventListener('beforeunload', function(){
   const anon_id = lsGet(AP_KEY);
   if(!anon_id) return;
   const xpd  = (typeof xpLoad === 'function') ? xpLoad() : null;
-  const strd = (typeof streakLoad === 'function') ? streakLoad() : null;
-  if(!xpd && !strd) return;
+  const dvSeri = (typeof dvBenimSerim === 'function') ? dvBenimSerim() : {seri:0,son:null};
+  if(!xpd && !dvSeri.son) return;
   // sendBeacon — sayfa kapanırken fetch'e güvenemeyiz
   const payload = JSON.stringify({
     anon_id,
     action: 'sync',
     payload: {
       xp: xpd?.toplam||0,
-      streak: strd?.gun||0,
-      streak_last: new Date().toISOString().slice(0,10),
+      streak: dvSeri.seri,
+      ...(dvSeri.son ? { streak_last: dvSeri.son } : {}),
     }
   });
   try{ navigator.sendBeacon('/api/anon-profile', new Blob([payload],{type:'application/json'})); }catch(_){}
