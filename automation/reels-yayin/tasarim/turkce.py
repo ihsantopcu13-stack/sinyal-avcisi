@@ -7,6 +7,7 @@ Metinler: turkce-satirlar.json (tekrar konuları 101–140 asıl konunun satır�
 
 İki şablon:
   eski (konu 1–67 ve tekrar turu): satır, cümle kartının hemen altındaki boş şeride bindirilir.
+       Başlığı hâlâ sarı olanlarda (58, 64–67) başlık, sayaç ve TAKİP ET kartı nane yeşiline çevrilir.
   yeni (yeni-konular.json): kareler uret_yeni.kare ile Türkçe satırlı yeniden çizilir; ses ve
        kare süreleri asıl videodan alınır (yeni TTS yok).
 
@@ -23,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFont
 KOK = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, KOK)
 import uret_yeni  # noqa: E402
+import yenile  # noqa: E402
 from kapak import tr_adi  # noqa: E402
 
 KUYRUK = os.path.join(KOK, "..", "data", "kuyruk.json")
@@ -85,15 +87,49 @@ def serit(metin):
     return im
 
 
-def eski_uret(video, metin, cikti):
+def sari_mi(video):
+    """Başlığı hâlâ sarı olan eski video mu (konu 58, 64–67)? Başlık şeridinde sarı piksel sayılır."""
+    ham = subprocess.run(["ffmpeg", "-v", "error", "-ss", "5", "-i", video, "-frames:v", "1",
+                          "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+    a = np.frombuffer(ham, np.uint8).reshape(H, W, 3)[350:430].astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    return int(((r > 180) & (g > 130) & (b < 90)).sum()) > 500
+
+
+def nane_katmanlari(o, tmp):
+    """18 Ekim kararı (sarı yok): başlık, 3-2-1 sayacı ve TAKİP ET kartı nane yeşiliyle yeniden çizilir."""
+    b = o["baslik"]
+    baslik = yenile.tr_upper(b) if any(c in "çğıöşüÇĞİÖŞÜ" for c in b) else b.upper()
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(im).rectangle((0, 330, W, 450), fill=yenile.BG + (255,))
+    im.alpha_composite(yenile.baslik_katmani(baslik), (0, 0))
+    yollar = {"baslik": im}
+    for n in (3, 2, 1):
+        s = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(s).rectangle((0, 1225, W, 1500), fill=yenile.BG + (255,))
+        s.alpha_composite(yenile.sayac(n), (0, 1200))
+        yollar[f"s{n}"] = s
+    yollar["son"] = yenile.son_kart()
+    for ad, im in yollar.items():
+        im.save(os.path.join(tmp, ad + ".png"))
+    return [os.path.join(tmp, ad + ".png") for ad in ("baslik", "s3", "s2", "s1", "son")]
+
+
+def eski_uret(video, metin, cikti, o=None):
     t = sure(video)
     buyuk = gecisler(video, 8)   # TAKİP ET kartına geçiş: ekranın çoğu değişir
     son = buyuk[-1] if buyuk and buyuk[-1] > t - 5 else t - SON_KART
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "serit.png"); serit(metin).save(png)
+        girdiler, fc = ["-i", video, "-i", png], f"[0:v][1:v]overlay=0:0:enable='between(t,{SAYAC_SN},{son - 0.001:.3f})'"
+        if o and sari_mi(video):
+            ks = nane_katmanlari(o, tmp)
+            for k in ks: girdiler += ["-i", k]
+            fc += (f"[a];[a][2:v]overlay=0:0[b];[b][3:v]overlay=0:0:enable='lt(t,1)'[c];"
+                   f"[c][4:v]overlay=0:0:enable='gte(t,1)*lt(t,2)'[d];[d][5:v]overlay=0:0:enable='gte(t,2)*lt(t,3)'[e];"
+                   f"[e][6:v]overlay=0:0:enable='gte(t,{son:.3f})'")
         subprocess.run([
-            "ffmpeg", "-v", "error", "-y", "-i", video, "-i", png, "-filter_complex",
-            f"[0:v][1:v]overlay=0:0:enable='between(t,{SAYAC_SN},{son - 0.001:.3f})',format=yuv420p[v]",
+            "ffmpeg", "-v", "error", "-y", *girdiler, "-filter_complex", fc + ",format=yuv420p[v]",
             "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-r", "25",
             "-c:a", "copy", "-movflags", "+faststart", cikti], check=True, stdin=subprocess.DEVNULL)
 
@@ -126,7 +162,7 @@ def yeni_uret(video, k, metin, cikti):
 def uret(o, metin, video, cikti, yeni):
     k = yeni.get(o["konu"])
     if k: yeni_uret(video, k, metin, cikti)
-    else: eski_uret(video, metin, cikti)
+    else: eski_uret(video, metin, cikti, o)
 
 
 def gh(*arg):
