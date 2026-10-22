@@ -12,6 +12,14 @@
 // sabahListesiRender) cevap geçmişinden kurulur; bildirim sadece öğrenciyi
 // panele geri çağırır. Ayrı dosya değil: Vercel Hobby 12 fonksiyon sınırında.
 //
+// Pazar günleri 18:00 UTC (Türkiye 21:00) çalışmasında, ya da ?tur=haftalik
+// ile, "haftalık raporun hazır" bildirimi gider: son 7 günde çalışmış ve
+// bildirime izin vermiş kullanıcılara. Kişinin sayıları (soru, doğruluk,
+// tahmini puan) sunucuda yok; sw.js bildirimi gösterirken cihazdaki özetten
+// yazar. Serisi risk altında olana ayrıca seri bildirimi gitmez: aynı
+// bildirime "serin kopmasın" cümlesi eklenir (payload.seri). Yeni cron
+// satırı yok: mevcut 18:00 cron'u Pazar günü bu dala girer.
+//
 // GÜVENLİK: Vercel, projede bir CRON_SECRET ortam değişkeni tanımlıysa
 // cron isteklerine otomatik olarak `Authorization: Bearer $CRON_SECRET`
 // header'ı ekler. Bu header doğrulanmadan hiçbir gönderim yapılmaz —
@@ -28,6 +36,62 @@ export const SABAH_PAYLOAD = {
   url: '/#dashboard',
   tag: 'sinyal-avcisi-sabah-listesi',
 };
+
+export const HAFTALIK_PAYLOAD = {
+  title: 'Haftalık raporun hazır',
+  body: 'Bu haftaki soru sayın, doğruluk oranın ve tahmini puanın hazır. 1 dakikada bak.',
+  url: '/#haftalik-rapor',
+  tag: 'sinyal-avcisi-haftalik',
+  tur: 'haftalik',
+};
+
+// Pazar mı? (UTC; cron 18:00 UTC'de çalışır, Türkiye'de de aynı gün)
+export function haftalikGunuMu(simdi = new Date()) {
+  return simdi.getUTCDay() === 0;
+}
+
+// Abonelikleri seri riskine göre iki gruba ayırır: riskli olanların
+// bildirimine seri sayısı eklenir. Dönen her grup tek bir gönderimdir.
+export function haftalikGruplar(subs, seriByUser) {
+  const gruplar = {};
+  for (const sub of subs) {
+    const seri = seriByUser[sub.user_id] || 0;
+    (gruplar[seri] ||= []).push(sub);
+  }
+  return Object.entries(gruplar).map(([seri, liste]) => ({
+    payload: Number(seri) > 0 ? { ...HAFTALIK_PAYLOAD, seri: Number(seri) } : HAFTALIK_PAYLOAD,
+    subs: liste,
+  }));
+}
+
+async function haftalikGonder(serviceRoleKey, res) {
+  const sinir = new Date(Date.now() - SABAH_AKTIF_GUN * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const bugun = new Date().toISOString().split('T')[0];
+  const actRes = await fetch(
+    `${SUPABASE_URL}/rest/v1/user_activity?select=user_id,current_streak,last_active_date&last_active_date=gte.${sinir}`,
+    { headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` } }
+  );
+  if (!actRes.ok) {
+    const err = await actRes.text();
+    console.error('cron-haftalik: activity fetch error', err);
+    return res.status(500).json({ error: 'Aktivite verisi alınamadı' });
+  }
+  const aktifler = await actRes.json();
+  if (aktifler.length === 0) {
+    return res.status(200).json({ success: true, tur: 'haftalik', aktif: 0, sent: 0 });
+  }
+  // Bugün henüz çalışmamış ve serisi olanlar: seri riski
+  const seriByUser = Object.fromEntries(
+    aktifler.filter(a => a.current_streak > 0 && a.last_active_date < bugun).map(a => [a.user_id, a.current_streak])
+  );
+  const subs = await fetchSubscriptionsForUsers(serviceRoleKey, aktifler.map(a => a.user_id));
+  const toplam = { sent: 0, failed: 0, cleaned: 0, total: 0 };
+  for (const g of haftalikGruplar(subs, seriByUser)) {
+    const r = await sendPushToSubscriptions(g.subs, g.payload, serviceRoleKey);
+    toplam.sent += r.sent; toplam.failed += r.failed; toplam.cleaned += r.cleaned; toplam.total += r.total;
+  }
+  return res.status(200).json({ success: true, tur: 'haftalik', aktif: aktifler.length, ...toplam });
+}
 
 function istekTuru(req) {
   if (req.query && req.query.tur) return String(req.query.tur);
@@ -75,6 +139,7 @@ export default async function handler(req, res) {
 
   try {
     if (istekTuru(req) === 'sabah') return await sabahListesiGonder(serviceRoleKey, res);
+    if (istekTuru(req) === 'haftalik' || haftalikGunuMu()) return await haftalikGonder(serviceRoleKey, res);
 
     const bugun = new Date().toISOString().split('T')[0];
 
