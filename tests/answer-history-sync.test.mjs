@@ -189,7 +189,8 @@ const html = readFileSync(path.join(ROOT, "index.html"), "utf-8");
   // tek bir cevapKaydet({ ... isCorrect, ... }) çağrısıyla her iki sonucu da kaydediyor → 11.
   // module kolonu serbest text (supabase/answer-history-schema.sql) — 'avci_yol_mini_test' geçerli.
   // Günün denemesi (gdBitir) de cevaplarını tek bir cevapKaydet çağrısıyla 'sinyal' modülüne yazıyor → 12.
-  kontrol("35) cevapKaydet tam olarak 12 kez çağrılıyor (5 modül × doğru+yanlış + AOY mini test + günün denemesi)", cevapKaydetCagriSayisi === 12, `bulunan: ${cevapKaydetCagriSayisi}`);
+  // Yanlış defteri tekrarı (ydSec) da tek çağrıyla 'sinyal' modülüne yazıyor → 13.
+  kontrol("35) cevapKaydet tam olarak 13 kez çağrılıyor (5 modül × doğru+yanlış + AOY mini test + günün denemesi + yanlış defteri)", cevapKaydetCagriSayisi === 13, `bulunan: ${cevapKaydetCagriSayisi}`);
 
   const moduller = ["sinyal", "sat", "kelime", "tuzak", "paragraf"];
   for (const modul of moduller) {
