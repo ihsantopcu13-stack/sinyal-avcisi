@@ -278,3 +278,5 @@ jobs:
 
       - name: 50 puan programı — gün sonu sınavı soruları ve kilit (ağ yok)
         run: node tests/program-50.test.mjs
+      - name: Puan hedefine göre YDS soruları — 50 / 70 / 90-100, 5 şık, Kural → Örnek → Tuzak (statik, gerçek ağ yok)
+        run: node tests/puan-hedefi.test.mjs
