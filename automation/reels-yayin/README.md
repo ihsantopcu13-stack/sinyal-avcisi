@@ -25,7 +25,7 @@
 
 ## Tekrar turu (konu 101–140)
 
-Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla ikinci kez sıraya girer: konu `100 + n`, `"tekrar": n`. Videolar `tasarim/yenile.py` ile eski videodan üretilir (fotoğraf yok, sarı başlık, 3-2-1 sayacı, TAKİP ET kartı, −14 LUFS) ve `reels-tekrar-medya.yml` ile Release'e **üzerine yazmadan** yüklenir. Tekrar konuları YouTube'a gitmez (ders orada zaten var).
+Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla ikinci kez sıraya girer: konu `100 + n`, `"tekrar": n`. Videolar `tasarim/yenile.py` ile eski videodan üretilir (fotoğraf yok, nane yeşili başlık, 3-2-1 sayacı, TAKİP ET kartı, −14 LUFS) ve `reels-tekrar-medya.yml` ile Release'e **üzerine yazmadan** yüklenir. 22 Ekim 2026: başlık sarıdan nane yeşiline geçti; yeni sürüm `konuXXX-nane.mp4` adıyla (eski sarı dosyalar Release'te durur, kullanılmaz). Tekrar konuları YouTube'a gitmez (ders orada zaten var).
 
 ## Yeni konular (56, 57, 59–63, 68–77)
 

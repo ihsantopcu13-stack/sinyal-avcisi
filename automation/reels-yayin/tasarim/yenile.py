@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Eski tasarım Reels videosunu (avatar fotoğraflı) 18 Ekim tasarımına çevirir:
-avatar yok, sarı başlık, ilk 3 sn 3-2-1 sayacı, son ~2,85 sn TAKİP ET kartı, -14 LUFS ses.
+avatar yok, nane yeşili başlık, ilk 3 sn 3-2-1 sayacı, son ~2,85 sn TAKİP ET kartı, -14 LUFS ses.
 Kullanım: yenile.py girdi.mp4 cikti.mp4 "Başlık" [--tuzak|--tuzaksiz]"""
 import subprocess, sys, tempfile, os
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1080, 1920
 BG = (11, 10, 15)
-SARI = (232, 177, 5)
+NANE = (92, 255, 194)  # 18 Ekim kararı: sarı/altın yok
 KART_IC = (10, 15, 25)
 BEYAZ = (255, 255, 255)
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
@@ -32,24 +32,24 @@ def ortala(d, metin, f, ust_cap, renk):
 def baslik_katmani(baslik):
     im = Image.new("RGBA", (W, 480), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     f = font_genislige(baslik, 65, 1020)
-    ortala(d, baslik, f, 370 + (65 - f.size) * 0.36, SARI)
+    ortala(d, baslik, f, 370 + (65 - f.size) * 0.36, NANE)
     return im
 
 def sayac(n):
     im = Image.new("RGBA", (W, 400), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-    ortala(d, str(n), ImageFont.truetype(FONT, 302), 1259 - 1200, SARI)
+    ortala(d, str(n), ImageFont.truetype(FONT, 302), 1259 - 1200, NANE)
     return im
 
 def son_kart():
     im = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rectangle([0, 500, W, H], fill=BG + (255,))
-    d.rectangle([30, 561, 1049, 1415], fill=KART_IC + (255,), outline=SARI + (255,), width=8)
+    d.rectangle([30, 561, 1049, 1415], fill=KART_IC + (255,), outline=NANE + (255,), width=8)
     def genislik(metin, hedef):
         b = 40
         while ImageFont.truetype(FONT, b + 1).getlength(metin) <= hedef: b += 1
         return ImageFont.truetype(FONT, b)
     for metin, hedef, ust, renk in (("Yarın yeni bir tuzak", 788, 780, BEYAZ),
-                                    ("TAKİP ET", 836, 951, SARI),
+                                    ("TAKİP ET", 836, 951, NANE),
                                     ("kaçırma", 311, 1146, BEYAZ)):
         f = genislik(metin, hedef)
         if metin == "kaçırma":   # küçük harf: üst = ascender

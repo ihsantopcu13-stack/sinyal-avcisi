@@ -27,7 +27,9 @@ const konular = new Set();
 for (const o of kuyruk.ogeler) {
   const k = `Konu ${o.konu}`;
   kontrol(`${k}: konu numarası tekil`, !konular.has(o.konu)); konular.add(o.konu);
-  kontrol(`${k}: medya adı`, o.video === `konu${String(o.konu).padStart(2, "0")}.mp4`);
+  // Tekrar videoları nane yeşili başlıkla yeni adla üretildi (eski sarı sürümün üzerine yazılmaz)
+  const ad = `konu${String(o.konu).padStart(2, "0")}`;
+  kontrol(`${k}: medya adı`, o.video === `${ad}.mp4` || ("tekrar" in o && o.video === `${ad}-nane.mp4`));
   kontrol(`${k}: açıklama dolu`, typeof o.aciklama === "string" && o.aciklama.trim().length > 50);
   kontrol(`${k}: Instagram açıklaması ≤ 2200 karakter`, [...o.aciklama].length <= 2200, `(${[...o.aciklama].length})`);
   const etiketler = o.aciklama.match(/#[\p{L}\p{N}_]+/gu) || [];
