@@ -133,12 +133,12 @@ const isle = (d, plan, basarisiz = {}) => {
 
 // ---- YouTube ----
 {
-  const d = durumHazirla({ youtube_bekleyen: [1, 2, 3], konular: {} });
+  const d = durumHazirla({ youtube_bekleyen: [1, 2, 3, 4], konular: {} });
   youtubeBekleyeneEkle(d, 2);
-  kontrol("aynı konu bekleyene iki kez eklenmez", d.youtube_bekleyen.join() === "1,2,3");
-  kontrol("çalışma başına en fazla 2, eskiden yeniye", youtubeSiradakiler(d).join() === "1,2");
+  kontrol("aynı konu bekleyene iki kez eklenmez", d.youtube_bekleyen.join() === "1,2,3,4");
+  kontrol("çalışma başına en fazla 3, eskiden yeniye", youtubeSiradakiler(d).join() === "1,2,3");
   d.konular[1] = { youtube: { tamam: true } }; youtubeTamamlandi(d, 1);
-  kontrol("yüklenen konu bekleyenden çıkar", d.youtube_bekleyen.join() === "2,3");
+  kontrol("yüklenen konu bekleyenden çıkar", d.youtube_bekleyen.join() === "2,3,4");
   const d2 = durumHazirla({ konular: { 4: { youtube: { tamam: true } } } });
   youtubeBekleyeneEkle(d2, 4);
   kontrol("yüklenmiş konu bekleyene eklenmez", d2.youtube_bekleyen.length === 0);
