@@ -18,7 +18,7 @@ function kontrol(ad, sonuc, detay) {
   console.log(`[${sonuc ? "PASS" : "FAIL"}] ${ad}${detay !== undefined ? " — " + detay : ""}`);
 }
 
-const REHBERLER = ["yds-cikmis-sorular", "yokdil-sinyal-kelimeler", "yds-sinav-teknikleri", "ucretsiz-rehber", "hedef-rota"];
+const REHBERLER = ["yds-cikmis-sorular", "yokdil-sinyal-kelimeler", "yds-sinav-teknikleri", "ucretsiz-rehber", "hedef-rota", "50-puan-programi"];
 const indexHtml = readFileSync(path.join(ROOT, "index.html"), "utf-8");
 const footerler = indexHtml.match(/<footer>[\s\S]*?<\/footer>/g) || [];
 const footer = footerler[0] || "";
