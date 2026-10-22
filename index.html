@@ -1192,6 +1192,12 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .gd-satir.tuzak .gd-etiket{color:#fca5a5}
 .gd-cevaplar{font-size:14px;color:#d5e9df;margin-top:4px}
 @media(max-width:600px){.gd-panel{padding:18px 16px}.gd-baslik{font-size:19px}.gd-ozet{grid-template-columns:repeat(2,1fr)}}
+/* GÜNÜN OKUMA PARÇASI — paragraf kutusu (gd-* panelini kullanır) */
+.ok-metin{font-size:17.5px;line-height:1.75;color:#ffffff;background:#06140e;border:1px solid rgba(110,231,183,.4);border-radius:12px;padding:14px 16px;margin-bottom:14px;max-height:46vh;overflow-y:auto}
+.ok-konu{display:block;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
+.ok-tekrar{margin:4px 0 14px}.ok-tekrar summary{cursor:pointer;color:#6ee7b7;font-weight:700;font-size:15px;margin-bottom:10px}
+.ok-tekrar .ok-metin{max-height:none}
+@media(max-width:600px){.ok-metin{font-size:16.5px;max-height:40vh}}
 
 /* YANLIŞ DEFTERİ — 1, 3 ve 7 gün tekrarı (koyu yeşil + nane) */
 .yd-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin:12px 0 18px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
@@ -11061,6 +11067,7 @@ function paragrafModulHTML(){
       <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:6px">📖 Paragraf Okuma Modülü</div>
       <div style="font-size:15px;color:var(--ink)">Gerçek YDS/YÖKDİL formatında paragraf soruları — sinyalleri tespit et, soruları çöz</div>
     </div>
+    <button type="button" class="gd-btn" onclick="gununOkumasiAc()" style="margin-bottom:16px">Günün okuma parçası: 3 soru, 6 dakika</button>
     <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
       ${PARAGRAFLAR.map((p,i)=>`<button onclick="paragrafSec(${i})" id="ptab-${i}" style="padding:8px 18px;border-radius:8px;border:2px solid ${i===0?'var(--signal)':'var(--border)'};background:${i===0?'var(--sl)':'transparent'};color:${i===0?'var(--signal)':'var(--muted)'};font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;transition:all .2s">${p.baslik}</button>`).join('')}
     </div>
@@ -14565,6 +14572,7 @@ function bugunGorevGit(dnAra){
 // cevap bugün kaydedilince (cevapKaydet) kendiliğinden işaretlenir.
 const SABAH_KELIME_HEDEF=5;
 const SABAH_DENEME_MADDE={tip:'deneme',baslik:'Günün denemesi',alt:'5 soru · 7,5 dakika · herkes için aynı'};
+const SABAH_OKUMA_MADDE={tip:'okuma',baslik:'Günün okuma parçası',alt:'1 paragraf · 3 soru · 6 dakika'};
 function sabahTohum(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
 function sabahBugunBasi(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();}
 function sabahListesiKur(bugun){
@@ -14610,6 +14618,8 @@ function sabahListesiKur(bugun){
   maddeler.push({tip:'kelime',baslik:SABAH_KELIME_HEDEF+' kelime kartı tekrar et',alt:'Kelime Kartları'});
   // 5) Günün denemesi.
   maddeler.push(SABAH_DENEME_MADDE);
+  // 6) Günün okuma parçası.
+  maddeler.push(SABAH_OKUMA_MADDE);
   return{tarih:bugun,zayif:zayif?{sinyal:zayif.sinyal,oran:Math.round(zayif.dogru/zayif.toplam*100)}:null,veriVar:slGecmis.length>0,maddeler};
 }
 function sabahListesiYukle(){
@@ -14625,12 +14635,17 @@ function sabahListesiYukle(){
     v.maddeler.push(SABAH_DENEME_MADDE);
     try{localStorage.setItem('sa_sabah_listesi',JSON.stringify(v));}catch(e){}
   }
+  if(!v.maddeler.some(m=>m.tip==='okuma')){
+    v.maddeler.push(SABAH_OKUMA_MADDE);
+    try{localStorage.setItem('sa_sabah_listesi',JSON.stringify(v));}catch(e){}
+  }
   return v;
 }
 function sabahMaddeTamamMi(m,bugunGecmis){
   if(m.tip==='soru')return bugunGecmis.some(h=>h.questionId===m.qid);
   if(m.tip==='kelime')return bugunGecmis.filter(h=>h.modul==='kelime').length>=SABAH_KELIME_HEDEF;
   if(m.tip==='deneme')return gdBugunBittiMi();
+  if(m.tip==='okuma')return okBugunBittiMi();
   if(m.tip==='defter')return typeof ydVadeliler==='function'&&ydVadeliler(sinavChecklistBugunAnahtari()).length===0;
   return false;
 }
@@ -14664,6 +14679,7 @@ function sabahMaddeAc(i){
   if(!m)return;
   if(m.tip==='kelime'){bugunGorevGit('Kelime Kartları');return;}
   if(m.tip==='deneme'){gunlukDenemeAc();return;}
+  if(m.tip==='okuma'){gununOkumasiAc();return;}
   if(m.tip==='defter'){ydTekrarAc();return;}
   const idx=SL_HAVUZ.findIndex(s=>s.id===m.qid);
   if(idx<0)return;
@@ -14702,7 +14718,7 @@ function ydLoad(){
     // İlk açılış: cevap geçmişindeki son denemesi yanlış olan Sinyal Lab soruları.
     v={kayitlar:{}};
     cevapGecmisiLoad().forEach(h=>{
-      if(h.modul!=='sinyal'||!h.questionId||h.isCorrect||v.kayitlar[h.questionId])return;
+      if((h.modul!=='sinyal'&&h.modul!=='okuma')||!h.questionId||h.isCorrect||v.kayitlar[h.questionId])return;
       const gun=ydTarihAnahtari(h.answeredAt);if(!gun)return;
       v.kayitlar[h.questionId]={qid:h.questionId,yanlisTarih:gun,adim:0,siradaki:ydGunEkle(gun,YD_ARALIK[0]),ogrenildi:false};
     });
@@ -14710,9 +14726,16 @@ function ydLoad(){
   }
   return v;
 }
-function ydSoruVar(qid){return typeof SL_HAVUZ!=='undefined'&&SL_HAVUZ.some(s=>s.id===qid);}
+// Defterdeki soru: Sinyal Lab (q001) ya da günün okuma parçası (ok03-2).
+function ydSoru(qid){
+  const sl=typeof SL_HAVUZ!=='undefined'&&SL_HAVUZ.find(x=>x.id===qid);
+  if(sl)return{id:sl.id,q:sl.q,opts:sl.opts,ans:sl.ans,sl};
+  const ok=typeof okSoruBul==='function'&&okSoruBul(qid);
+  return ok?{id:qid,q:ok.soru.q,opts:ok.soru.opts,ans:ok.soru.ans,ok}:null;
+}
+function ydSoruVar(qid){return!!ydSoru(qid);}
 function ydCevapIsle(kayit){
-  if(!kayit||kayit.modul!=='sinyal'||!kayit.questionId)return;
+  if(!kayit||(kayit.modul!=='sinyal'&&kayit.modul!=='okuma')||!kayit.questionId)return;
   const v=ydLoad();
   const bugun=sinavChecklistBugunAnahtari();
   const k=v.kayitlar[kayit.questionId];
@@ -14757,7 +14780,7 @@ function ydKartRender(){
   if(o.bugun)alt=`Bugün <b>${o.bugun} soru</b> seni bekliyor. Çöz, sonra bir sonraki tekrara geçsin.`;
   else if(o.siradakiGun)alt=`Bugün tekrar yok. Sıradaki tekrar: <b>${gdEsc(ydGunMetni(o.siradakiGun))}</b>.`;
   else if(o.toplam)alt='Defterdeki tüm soruları öğrendin. Yeni yanlışlar buraya düşer.';
-  else alt='Henüz yanlış yok. Sinyal Lab ya da günün denemesinde yanlış yaptığın soru buraya düşer.';
+  else alt='Henüz yanlış yok. Sinyal Lab, günün denemesi ya da okuma parçasında yanlış yaptığın soru buraya düşer.';
   el.innerHTML=`
     <div class="yd-eyebrow">Yanlış defteri</div>
     <div class="yd-baslik">${o.bugun?'Tekrar zamanı: '+o.bugun+' soru':'Yanlışların burada tekrar eder'}</div>
@@ -14802,10 +14825,10 @@ function ydKapat(){
 }
 function ydSec(i){
   const o=_ydOturum;if(!o||o.secim!==null)return;
-  const s=SL_HAVUZ.find(x=>x.id===o.ids[o.i]);if(!s)return;
+  const s=ydSoru(o.ids[o.i]);if(!s)return;
   o.secim=i;
   if(i===s.ans)o.dogru++;
-  cevapKaydet({questionId:s.id,modul:'sinyal',soru:s.q,selectedOption:s.opts[i],correctOption:s.opts[s.ans],isCorrect:i===s.ans,topic:'Yanlış defteri',signal:s.sinyal});
+  cevapKaydet({questionId:s.id,modul:s.ok?'okuma':'sinyal',soru:s.q,selectedOption:s.opts[i],correctOption:s.opts[s.ans],isCorrect:i===s.ans,topic:'Yanlış defteri',signal:s.ok?s.ok.soru.tip:s.sl.sinyal});
   ydRender();
 }
 function ydSonraki(){const o=_ydOturum;if(!o)return;o.i++;o.secim=null;ydRender();}
@@ -14825,10 +14848,12 @@ function ydRender(){
       <button type="button" class="gd-btn" onclick="ydKapat()">Kapat</button>`;
     return;
   }
-  const s=SL_HAVUZ.find(x=>x.id===o.ids[o.i]);
+  const s=ydSoru(o.ids[o.i]);
   if(!s){ydSonraki();return;}
   const k=ydLoad().kayitlar[s.id];
-  const c=gdCumleCoz(s);
+  const govde=s.ok
+    ?`<div class="ok-metin" lang="en"><span class="ok-konu">${gdEsc(s.ok.parca.konu)} · okuma parçası</span>${gdEsc(s.ok.parca.metin)}</div>`
+    :`<div class="gd-cumle" lang="en">${gdEsc(gdCumleCoz(s.sl).duz)}</div>`;
   const cevaplandi=o.secim!==null;
   const sinif=i=>!cevaplandi?'':i===s.ans?' yd-dogru':i===o.secim?' yd-yanlis':'';
   let sonuc='';
@@ -14837,12 +14862,12 @@ function ydRender(){
     const yeni=ydLoad().kayitlar[s.id];
     const durum=!dogruMu?'Yarın tekrar gelecek. Takvim baştan başladı.':yeni&&yeni.ogrenildi?'Üç tekrar da tamam. Bu soru öğrenildi.':yeni&&yeni.siradaki?'Sıradaki tekrar: '+gdEsc(ydGunMetni(yeni.siradaki))+'.':'';
     sonuc=`<div class="yd-sonuc${dogruMu?' ok':''}">${dogruMu?'Doğru.':'Yanlış.'} ${durum}</div>
-      ${dogruMu?'':`<div class="gd-aciklama">${gdAciklamaSatirlari(s)}</div>`}
+      ${dogruMu?'':`<div class="gd-aciklama">${s.ok?okAciklamaSatirlari(s.ok.soru):gdAciklamaSatirlari(s.sl)}</div>`}
       <div class="gd-alt-bar"><span></span><button type="button" class="gd-btn" onclick="ydSonraki()">${o.i===o.ids.length-1?'Bitir':'Sonraki'}</button></div>`;
   }
   panel.innerHTML=ust+`
     <div class="gd-eyebrow" style="margin-bottom:8px">Soru ${o.i+1}/${o.ids.length} · ${k?(k.adim+1)+'. tekrar':''}</div>
-    <div class="gd-cumle" lang="en">${gdEsc(c.duz)}</div>
+    ${govde}
     <div class="gd-soru">${gdEsc(s.q)}</div>
     <div class="gd-siklar">${s.opts.map((op,i)=>`<button type="button" class="gd-sik${sinif(i)}" onclick="ydSec(${i})"${cevaplandi?' disabled':''}><span class="gd-harf">${GD_HARFLER[i]})</span><span>${gdEsc(op)}</span></button>`).join('')}</div>
     ${sonuc}`;
@@ -15036,6 +15061,377 @@ function gdRender(){
     <button type="button" class="gd-btn" onclick="gdKapat()">Kapat</button>
     <div class="gd-not">Yarın yeni 5 soru. Yanlışların yarınki sabah listene düşer.</div>`;
 }
+
+// ─── GÜNÜN OKUMA PARÇASI — her gün 1 kısa paragraf, süreli 3 soru ─────────
+// YDS'de okuma bölümü çok soru taşır (varsayım; soru dağılımını ÖSYM'den
+// kontrol et). Parçalar özgün, sınav tarzında yazıldı. Sıra tarihe göre:
+// 22 Ekim 2026 ilk parça, sonra her gün bir sonraki; herkes aynı gün aynı
+// parçayı görür, liste bitince başa döner. Süre 3 soru için 6 dakika
+// (varsayım: soru başı 2 dakika, okuma süresi dahil). Durum
+// sa_gunun_okumasi'nda; süre başlangıçtan hesaplanır, kapatınca durmaz.
+// Bitince cevaplar cevapKaydet'e (modul 'okuma', questionId ok01-1 gibi)
+// yazılır: yanlışlar yanlış defterine düşer, sabah listesi maddeyi işaretler.
+const OK_SORU_SURE_SN=120;
+const OK_BASLANGIC='2026-10-22';
+// Soru tipine göre Kural satırı. Örnek ve Tuzak her soruda ayrı yazıldı.
+const OK_KURAL={
+  'Ana fikir':'Ana fikir çoğu zaman ilk ya da son cümlededir. Doğru şık paragrafın tamamını kapsar, tek bir ayrıntıyı değil.',
+  'Başlık':'Başlık hem konuyu hem yazarın yönünü taşır. Bir ayrıntıyı ya da paragrafa ters bir yönü anlatan başlığı ele.',
+  'Ayrıntı':'Sorudaki anahtar kelimeyi paragrafta bul ve o cümleyi oku. Doğru şık aynı bilgiyi başka kelimelerle söyler.',
+  'Çıkarım':'Çıkarım paragrafta açıkça yazmaz ama yazanla desteklenir. Paragrafın ötesine geçen, always / never / all gibi abartan şıkkı ele.',
+  'Kelime':'Kelimenin anlamını cümledeki sinyalden çıkar: zıtlık (yet, however, rather than), sebep ya da örnek bağlacı anlamı ele verir.',
+  'Gönderim':'Zamiri (it, them, this) şıklardaki isimle değiştirip cümleyi yeniden oku. Anlamlı olan tek seçenek doğrudur. Tekil-çoğul uyumuna bak.',
+  'Amaç':'Yazarın amacını fiil söyler: describe, explain, compare, criticise. Bir örneğin amacı sorulursa cevap genelde örnekten önceki cümlededir.',
+  'Tutum':'Yazarın tutumu sıfat, zarf ve may / suggest gibi temkin kelimelerinden anlaşılır. Temkinli anlatımda uç şıklar (strongly, completely) yanlıştır.',
+  'Neden':'Because, since, as, due to sinyalini bul. Cevap sinyalin hemen arkasındadır.',
+  'Karşılaştırma':'By contrast, whereas, while iki tarafı karşılaştırır. İki taraf neyin üzerinden karşılaştırılıyor, ona bak.',
+  'Olumsuz soru':'NOT sorusunda paragrafta geçenleri tek tek işaretle. Paragrafta karşılığı olmayan şık cevaptır.'
+};
+const OKUMA_PARCALARI=[
+  {id:'ok01',konu:'Psikoloji',metin:"For decades, sleep was regarded as a passive state in which the brain simply rested. Recent research, however, suggests that sleep plays an active role in learning. During deep sleep, the brain appears to replay information acquired during the day, strengthening the connections between neurons that store new memories. In one study, students who slept after studying a list of words recalled significantly more of them the next morning than those who stayed awake for the same period. Interestingly, the benefit was greatest for material that had been learned shortly before sleep. These findings have led some educators to argue that late-night studying before an exam may be less harmful than once believed, provided that students still get a full night's sleep afterwards.",
+   sorular:[
+    {tip:'Ana fikir',q:'The passage mainly discusses ____.',opts:['why students prefer to study late at night','the active contribution of sleep to learning and memory','the dangers of sleeping too little before exams','how neurons are formed during childhood','the reasons why educators oppose late-night studying'],ans:1,
+     ornek:'Recent research, however, suggests that sleep plays an active role in learning.',ornekTr:'Ancak son araştırmalar, uykunun öğrenmede etkin bir rol oynadığını gösteriyor.',
+     tuzak:'C şıkkı uyku ve sınav kelimelerini taşıdığı için çekici. Ama paragraf uykusuzluğun tehlikesini değil, uykunun öğrenmeye katkısını anlatıyor.'},
+    {tip:'Ayrıntı',q:'According to the passage, students who slept after studying ____.',opts:['forgot most of the words by the next morning','needed less time to study the same list','remembered more words than students who stayed awake','learned better if they studied early in the day','preferred late-night studying to regular study'],ans:2,
+     ornek:'Students who slept after studying a list of words recalled significantly more of them the next morning than those who stayed awake.',ornekTr:'Çalıştıktan sonra uyuyan öğrenciler, ertesi sabah uyanık kalanlardan çok daha fazla kelime hatırladı.',
+     tuzak:'D şıkkı tersini söylüyor: fayda, uykudan hemen önce öğrenilen bilgide en büyük. "Early in the day" paragrafta yok.'},
+    {tip:'Çıkarım',q:'It can be inferred from the passage that late-night studying ____.',opts:['is always the most effective way to prepare for an exam','should be completely avoided by students','has no effect on memory at all','may be useful if it is followed by enough sleep','was recommended by educators for decades'],ans:3,
+     ornek:"Late-night studying may be less harmful than once believed, provided that students still get a full night's sleep afterwards.",ornekTr:'Sonrasında tam bir gece uykusu alınması şartıyla, gece geç saatte çalışmak sanıldığı kadar zararlı olmayabilir.',
+     tuzak:'A şıkkındaki "always the most effective" abartı. Paragraf sadece "may be less harmful" diyor. Çıkarım sorusunda always / never / completely çoğu zaman yanlıştır.'}
+   ]},
+  {id:'ok02',konu:'Çevre',metin:"Cities are usually seen as hostile environments for wildlife, yet a growing number of studies show that urban areas can support surprisingly rich bee populations. Parks, private gardens and even balconies offer a wide variety of flowering plants that bloom at different times of the year. In contrast, many rural areas are now dominated by large single-crop farms, which provide food for bees for only a few weeks. Moreover, cities tend to use fewer agricultural pesticides, which are known to weaken bee colonies. Nevertheless, researchers warn that urban beekeeping should not be seen as a solution in itself. When too many honeybee hives are placed in a small area, they may compete with wild bee species for the same limited flowers.",
+   sorular:[
+    {tip:'Ana fikir',q:'Which of the following best expresses the main idea of the passage?',opts:['Cities can be good habitats for bees, but urban beekeeping has limits.','Pesticides are the only reason bee populations are declining.','Rural areas are always better for wildlife than cities.','Honeybees and wild bees never use the same flowers.','Large farms provide flowers for bees throughout the year.'],ans:0,
+     ornek:'Nevertheless, researchers warn that urban beekeeping should not be seen as a solution in itself.',ornekTr:'Yine de araştırmacılar, şehir arıcılığının tek başına bir çözüm sayılmaması gerektiği uyarısında bulunuyor.',
+     tuzak:'B şıkkı bir ayrıntıyı (pesticides) ana fikir gibi sunuyor ve "only" ile abartıyor. Ana fikir hem olumlu kısmı hem "nevertheless" sonrasındaki uyarıyı kapsamalı.'},
+    {tip:'Ayrıntı',q:'According to the passage, one advantage of cities for bees is that ____.',opts:['they contain large single-crop farms','there is no competition between bee species','they use more pesticides than rural areas','their plants flower at different times of the year','honeybee hives are banned in small areas'],ans:3,
+     ornek:'Parks, private gardens and even balconies offer a wide variety of flowering plants that bloom at different times of the year.',ornekTr:'Parklar, özel bahçeler, hatta balkonlar yılın farklı zamanlarında çiçek açan pek çok bitki sunar.',
+     tuzak:'C şıkkı tersini söylüyor: paragrafa göre şehirler "fewer" (daha az) ilaç kullanır. Karşılaştırma kelimesini (fewer / more) dikkatli oku.'},
+    {tip:'Kelime',q:'The word "hostile" in the first sentence is closest in meaning to ____.',opts:['crowded','modern','attractive','temporary','unfriendly'],ans:4,
+     ornek:'Cities are usually seen as hostile environments for wildlife, yet urban areas can support surprisingly rich bee populations.',ornekTr:'Şehirler genelde yaban hayatı için elverişsiz yerler olarak görülür, oysa şaşırtıcı derecede zengin arı topluluklarını barındırabilir.',
+     tuzak:'C (attractive) cümlenin ikinci yarısındaki olumlu havaya kapılanları yakalar. "Yet" zıtlık sinyali: ilk yarı olumsuz olmalı, yani hostile olumsuz anlamlı.'}
+   ]},
+  {id:'ok03',konu:'Tarih',metin:"Coffee arrived in Istanbul in the sixteenth century, and within a few decades coffeehouses had spread throughout the city. Unlike private homes or religious buildings, these establishments offered men of different social classes a place to meet as equals. Customers played games, listened to storytellers and, most importantly, exchanged news and opinions. Because of this, the authorities often viewed coffeehouses with suspicion. Several rulers ordered them to be closed, claiming that they encouraged idleness and political criticism. However, such bans rarely lasted long, partly because coffeehouses had become an important source of tax revenue. Historians therefore describe them as an early form of public space in which ordinary people could take part in discussions about society.",
+   sorular:[
+    {tip:'Amaç',q:"The author's main purpose in the passage is to ____.",opts:['explain how coffee is grown and prepared','describe the social role of early coffeehouses in Istanbul','criticise the rulers who closed coffeehouses','compare coffeehouses with modern cafés','argue that coffee is harmful to health'],ans:1,
+     ornek:'Historians therefore describe them as an early form of public space in which ordinary people could take part in discussions about society.',ornekTr:'Bu yüzden tarihçiler onları, sıradan insanların toplum hakkındaki tartışmalara katılabildiği erken bir kamusal alan olarak tanımlar.',
+     tuzak:'C çekici çünkü yasaklardan söz ediliyor. Ama yazar yöneticileri eleştirmiyor, olanı anlatıyor. Yazarın sesi nötrse amaç describe / explain olur.'},
+    {tip:'Neden',q:'According to the passage, bans on coffeehouses did not last long partly because ____.',opts:['customers stopped playing games','religious leaders supported coffeehouses','storytellers protested against the decision','coffeehouses provided the state with tax income','coffee became too expensive'],ans:3,
+     ornek:'Such bans rarely lasted long, partly because coffeehouses had become an important source of tax revenue.',ornekTr:'Bu yasaklar nadiren uzun sürdü; bunun bir nedeni kahvehanelerin önemli bir vergi geliri kaynağı olmasıydı.',
+     tuzak:'B paragrafta yok: dini yapılar sadece karşılaştırma için geçiyor. "Because" sinyalini bul, cevap hemen arkasında.'},
+    {tip:'Gönderim',q:'The word "them" in "ordered them to be closed" refers to ____.',opts:['rulers','customers','coffeehouses','storytellers','opinions'],ans:2,
+     ornek:'Several rulers ordered them to be closed, claiming that they encouraged idleness and political criticism.',ornekTr:'Birçok hükümdar, tembelliği ve siyasi eleştiriyi teşvik ettiklerini öne sürerek onların (kahvehanelerin) kapatılmasını emretti.',
+     tuzak:'A (rulers) aynı cümlenin öznesi, bu yüzden göze ilk çarpar. Ama hükümdar kendini kapattırmaz. Zamirin yerine koy: "ordered coffeehouses to be closed" anlamlı.'}
+   ]},
+  {id:'ok04',konu:'Çevre',metin:"Microplastics are pieces of plastic smaller than five millimetres. Some are produced deliberately, for example as tiny beads in cosmetics, but most result from larger items breaking down under sunlight and waves. Because they are so small, microplastics are easily swallowed by marine organisms, from plankton to whales. Scientists are particularly concerned that these particles can carry toxic chemicals into the food chain. So far, the effects on human health remain uncertain, as long-term studies are still limited. What is clear, however, is that removing microplastics from the ocean is almost impossible once they have spread. For this reason, most experts agree that the most effective strategy is to reduce plastic waste before it reaches the sea.",
+   sorular:[
+    {tip:'Ayrıntı',q:'According to the passage, most microplastics ____.',opts:['are added to cosmetics on purpose','come from larger plastic items that break apart','are larger than five millimetres','are produced by marine organisms','can easily be removed from the sea'],ans:1,
+     ornek:'Some are produced deliberately, but most result from larger items breaking down under sunlight and waves.',ornekTr:'Bir kısmı bilerek üretilir ama çoğu, büyük eşyaların güneş ışığı ve dalgalarla parçalanmasından oluşur.',
+     tuzak:'A paragrafta geçiyor ama "some" (bir kısmı) için. Soru "most" diyor; "but" sonrasındaki bilgi asıl cevaptır.'},
+    {tip:'Ayrıntı',q:'It is stated in the passage that the effect of microplastics on human health ____.',opts:['has been proven to be very serious','is less important than the effect on whales','was discovered by long-term studies','is the same as their effect on plankton','is not yet clearly known'],ans:4,
+     ornek:'So far, the effects on human health remain uncertain, as long-term studies are still limited.',ornekTr:'Şimdilik insan sağlığına etkileri belirsiz, çünkü uzun vadeli çalışmalar hâlâ sınırlı.',
+     tuzak:'A, konunun ciddiyetinden etkilenip "proven" diyenleri yakalar. Paragraf "uncertain" diyor. Kesinlik derecesini değiştiren şık yanlıştır.'},
+    {tip:'Çıkarım',q:'It can be inferred from the passage that experts believe ____.',opts:['cleaning the ocean is the best way to solve the problem','cosmetics are the main source of ocean pollution','prevention is more effective than cleaning','whales are not affected by microplastics','sunlight protects the sea from plastic'],ans:2,
+     ornek:'Removing microplastics from the ocean is almost impossible. For this reason, the most effective strategy is to reduce plastic waste before it reaches the sea.',ornekTr:'Mikroplastikleri okyanustan temizlemek neredeyse imkânsız. Bu yüzden en etkili yol, plastik atığı denize ulaşmadan azaltmak.',
+     tuzak:'A tam tersini söylüyor: paragraf temizliği "almost impossible" diye niteliyor. "For this reason" sonucu verir, çıkarım oradan gelir.'}
+   ]},
+  {id:'ok05',konu:'Dilbilim',metin:"It was once widely believed that raising children with two languages would confuse them and delay their speech. Today, most linguists reject this view. Although bilingual children may initially know fewer words in each language than monolingual children, their total vocabulary across both languages is usually similar or even larger. Furthermore, several studies suggest that switching between languages trains the brain to focus attention and ignore irrelevant information. Some researchers have claimed that these advantages continue into old age and may even delay the symptoms of dementia. Such claims, however, remain controversial, since other studies have failed to find the same effect. What seems certain is that learning two languages early does not harm a child's development.",
+   sorular:[
+    {tip:'Ana fikir',q:'The passage is mainly concerned with ____.',opts:['the effects of growing up with two languages','the history of language teaching in schools','how dementia can be cured by learning languages','why monolingual children learn faster','the difficulties of teaching vocabulary'],ans:0,
+     ornek:'It was once widely believed that raising children with two languages would confuse them. Today, most linguists reject this view.',ornekTr:'Bir zamanlar iki dille büyütülen çocukların kafasının karışacağına yaygın olarak inanılırdı. Bugün dilbilimcilerin çoğu bu görüşü reddediyor.',
+     tuzak:'C, "cured" ile abartıyor. Paragraf demansı sadece "may delay" ve "controversial" diye anıyor. Tek bir tartışmalı ayrıntı ana fikir olamaz.'},
+    {tip:'Kelime',q:'The word "controversial" is closest in meaning to ____.',opts:['proven','debated','popular','recent','harmful'],ans:1,
+     ornek:'Such claims, however, remain controversial, since other studies have failed to find the same effect.',ornekTr:'Ancak bu iddialar tartışmalı olmayı sürdürüyor, çünkü başka çalışmalar aynı etkiyi bulamadı.',
+     tuzak:'A (proven) tam ters anlam. "However" ve "failed to find" sinyalleri iddianın kesin olmadığını söylüyor.'},
+    {tip:'Ayrıntı',q:'According to the passage, bilingual children ____.',opts:['always speak later than other children','cannot focus their attention easily','never mix their two languages','may know fewer words in each language at first','have a smaller total vocabulary'],ans:3,
+     ornek:'Although bilingual children may initially know fewer words in each language, their total vocabulary across both languages is usually similar or even larger.',ornekTr:'İki dilli çocuklar başta her bir dilde daha az kelime bilebilir ama iki dildeki toplam kelime sayıları genelde benzer, hatta daha fazladır.',
+     tuzak:'E, "each language" ile "total" ifadesini karıştırıyor. Toplam kelime benzer ya da daha fazla. Birbirine benzeyen iki ifadeyi ayırt et.'}
+   ]},
+  {id:'ok06',konu:'İş dünyası',metin:"The rapid spread of remote work since 2020 has changed the way many companies operate. Supporters argue that working from home saves employees hours of commuting each week and allows firms to hire talented people regardless of where they live. Productivity, according to several surveys, has remained stable or even improved in many sectors. Critics, on the other hand, point out that remote work can weaken the informal relationships that develop in an office. Young employees in particular may miss the chance to learn by observing experienced colleagues. As a result, a growing number of organisations are adopting hybrid models, in which staff spend part of the week at home and part in the workplace.",
+   sorular:[
+    {tip:'Ana fikir',q:'The passage mainly ____.',opts:['proves that remote work lowers productivity','presents arguments for and against remote work','explains how to find a job abroad','criticises young employees for working from home','describes the history of office buildings'],ans:1,
+     ornek:'Supporters argue that working from home saves employees hours. Critics, on the other hand, point out that remote work can weaken informal relationships.',ornekTr:'Destekleyenler evden çalışmanın saatler kazandırdığını savunuyor. Eleştirenler ise uzaktan çalışmanın gayriresmî ilişkileri zayıflatabileceğine dikkat çekiyor.',
+     tuzak:'A paragrafa ters: anketlere göre verimlilik "stable or even improved". "Supporters / Critics" yapısı iki tarafın da anlatıldığını gösterir.'},
+    {tip:'Ayrıntı',q:'According to the critics, one disadvantage of remote work is that ____.',opts:['companies cannot hire people from other cities','employees spend too much time commuting','productivity falls in every sector','young workers learn less from experienced colleagues','offices become too crowded'],ans:3,
+     ornek:'Young employees in particular may miss the chance to learn by observing experienced colleagues.',ornekTr:'Özellikle genç çalışanlar, deneyimli meslektaşlarını izleyerek öğrenme fırsatını kaçırabilir.',
+     tuzak:'B, uzaktan çalışmanın avantajını (yolda zaman kazanmak) dezavantaj gibi sunuyor. Soru "critics" diyor, cevabı "on the other hand" sonrasında ara.'},
+    {tip:'Çıkarım',q:'It can be inferred that organisations adopt hybrid models because ____.',opts:['they want to combine the benefits of home and office work','employees refuse to work at home','offices are cheaper than ever','remote work has been banned','surveys show that productivity has collapsed'],ans:0,
+     ornek:'As a result, a growing number of organisations are adopting hybrid models.',ornekTr:'Sonuç olarak giderek daha fazla kurum karma modele geçiyor.',
+     tuzak:'"As a result" iki görüşün birlikte sonucudur. B ve D paragrafta olmayan uç durumlar. Doğru çıkarım iki tarafı birleştiren şıktır.'}
+   ]},
+  {id:'ok07',konu:'Sağlık',metin:"Antibiotics have saved millions of lives since their introduction in the 1940s. However, their widespread and often unnecessary use has accelerated a natural process known as antibiotic resistance. Each time antibiotics are used, sensitive bacteria are killed, while the few resistant ones survive and multiply. Over time, infections that were once easy to treat become difficult or even impossible to cure. The problem is made worse by the fact that very few new antibiotics have been developed in recent decades, mainly because they are less profitable for pharmaceutical companies than drugs for chronic diseases. Health authorities therefore urge doctors to prescribe antibiotics only when necessary and patients to complete the full course of treatment.",
+   sorular:[
+    {tip:'Ayrıntı',q:'According to the passage, resistance develops because ____.',opts:['bacteria become weaker after each treatment','resistant bacteria survive and multiply','doctors refuse to prescribe antibiotics','antibiotics were introduced too late','patients take too few vitamins'],ans:1,
+     ornek:'Sensitive bacteria are killed, while the few resistant ones survive and multiply.',ornekTr:'Hassas bakteriler ölür, birkaç dirençli bakteri ise hayatta kalıp çoğalır.',
+     tuzak:'A, "killed" kelimesinden "weaker" sonucuna atlıyor. "While" zıtlık sinyali ölenlerle hayatta kalanları ayırır.'},
+    {tip:'Neden',q:'According to the passage, few new antibiotics have been developed mainly because ____.',opts:['bacteria no longer cause infections','doctors prefer older drugs','health authorities have banned research','chronic diseases have disappeared','they earn less money for drug companies'],ans:4,
+     ornek:'Mainly because they are less profitable for pharmaceutical companies than drugs for chronic diseases.',ornekTr:'Esas olarak, ilaç şirketleri için kronik hastalık ilaçlarından daha az kârlı oldukları için.',
+     tuzak:'D, "chronic diseases" kelimesini taşıyor ama paragraf bu hastalıkların yok olduğunu söylemiyor. Aynı kelimeyi taşıyan şık her zaman doğru değildir.'},
+    {tip:'Çıkarım',q:'It can be inferred that completing the full course of antibiotics ____.',opts:['helps to prevent resistant bacteria from spreading','makes antibiotics more profitable','is unnecessary for most patients','causes chronic diseases','was first recommended in the 1940s'],ans:0,
+     ornek:'Health authorities therefore urge patients to complete the full course of treatment.',ornekTr:'Bu yüzden sağlık otoriteleri hastaların tedaviyi sonuna kadar tamamlamasını istiyor.',
+     tuzak:'C öneriyle çelişiyor. "Therefore" önceki sorunun (direnç) çözümünü verir; tedaviyi tamamlamak bu soruna karşı bir önlemdir.'}
+   ]},
+  {id:'ok08',konu:'Ekonomi',metin:"Over the past twenty years, the price of clothing in many countries has fallen sharply, while the number of garments bought per person has nearly doubled. This trend, often called fast fashion, depends on producing large quantities of cheap clothes very quickly. The environmental cost is considerable. Textile production consumes vast amounts of water, and synthetic fabrics release microfibres every time they are washed. In addition, most garments are worn only a few times before being thrown away. In response, some brands have started repair services and second-hand sections in their stores. Critics argue that these steps are largely symbolic, since the companies' profits still rely on selling ever greater numbers of new items.",
+   sorular:[
+    {tip:'Başlık',q:'Which of the following is the best title for the passage?',opts:['How to Repair Your Clothes','The History of Synthetic Fabrics','Why Clothes Are Getting More Expensive','The Hidden Costs of Cheap Clothing','Second-hand Shops Around the World'],ans:3,
+     ornek:'This trend depends on producing large quantities of cheap clothes very quickly. The environmental cost is considerable.',ornekTr:'Bu eğilim çok hızlı biçimde büyük miktarda ucuz giysi üretmeye dayanıyor. Çevresel bedeli çok büyük.',
+     tuzak:'C ilk cümleye ters: fiyatlar "fallen sharply". A ise sadece bir ayrıntı (repair services).'},
+    {tip:'Tutum',q:"The critics mentioned in the passage think that the brands' repair services ____.",opts:['will soon end fast fashion','are mostly for show and do not change much','are too expensive for customers','use too much water','should be made compulsory'],ans:1,
+     ornek:"Critics argue that these steps are largely symbolic, since the companies' profits still rely on selling ever greater numbers of new items.",ornekTr:'Eleştirmenler bu adımların büyük ölçüde sembolik olduğunu, çünkü şirketlerin kârının hâlâ daha fazla yeni ürün satmaya dayandığını savunuyor.',
+     tuzak:'A, markaların adımını olumlu bulanların seçeceği şık. "Largely symbolic" olumsuz bir değerlendirme: göstermelik demek.'},
+    {tip:'Ayrıntı',q:'According to the passage, synthetic fabrics ____.',opts:['are worn more often than natural fabrics','consume less water than cotton','release microfibres when they are washed','are mainly sold in second-hand sections','have become more expensive'],ans:2,
+     ornek:'Synthetic fabrics release microfibres every time they are washed.',ornekTr:'Sentetik kumaşlar her yıkandığında mikrolif bırakır.',
+     tuzak:'B paragrafta yok: su tüketimi tekstil üretimi için söyleniyor, sentetik ile pamuk karşılaştırılmıyor. Paragrafta olmayan karşılaştırmayı şıkka yükleme.'}
+   ]},
+  {id:'ok09',konu:'Sağlık',metin:"Regular physical activity is widely recognised as good for the heart, but its benefits for mental health have received less attention. A growing body of evidence indicates that exercise can reduce symptoms of mild depression and anxiety. One explanation is that physical activity increases the production of chemicals in the brain that improve mood. Another is that exercise often involves social contact, which itself protects against loneliness. Importantly, the activity does not have to be intense. In one large study, people who walked for about thirty minutes a day reported better mood than those who were inactive. Nevertheless, doctors stress that exercise should be seen as a supplement to, rather than a replacement for, professional treatment in serious cases.",
+   sorular:[
+    {tip:'Ayrıntı',q:'According to the passage, one reason exercise improves mental health is that it ____.',opts:['increases mood-improving chemicals in the brain','must be very intense to work','prevents heart disease completely','reduces social contact','is suitable only for young people'],ans:0,
+     ornek:'Physical activity increases the production of chemicals in the brain that improve mood.',ornekTr:'Fiziksel aktivite beyinde ruh halini iyileştiren kimyasalların üretimini artırır.',
+     tuzak:'D tersini söylüyor: egzersiz sosyal teması artırır ve yalnızlığa karşı korur. Olumlu-olumsuz yönü çevrilmiş şıklara dikkat.'},
+    {tip:'Çıkarım',q:'It can be understood from the passage that a daily walk ____.',opts:['is not enough to affect mood','is more useful than medicine in serious cases','can have a positive effect on mood','causes anxiety in inactive people','must last at least two hours'],ans:2,
+     ornek:'People who walked for about thirty minutes a day reported better mood than those who were inactive.',ornekTr:'Günde yaklaşık otuz dakika yürüyenler, hareketsiz olanlara göre daha iyi bir ruh hali bildirdi.',
+     tuzak:'B son cümleyle çelişiyor: ciddi durumlarda egzersiz tedavinin yerine değil, yanında. "Rather than" iki şeyi karşılaştırıp birini reddeder.'},
+    {tip:'Kelime',q:'The word "supplement" is closest in meaning to ____.',opts:['alternative','danger','cure','addition','reason'],ans:3,
+     ornek:'Exercise should be seen as a supplement to, rather than a replacement for, professional treatment.',ornekTr:'Egzersiz, profesyonel tedavinin yerine geçen bir şey olarak değil, ona bir ek olarak görülmeli.',
+     tuzak:'A (alternative) "replacement" anlamına yakın; "rather than" ile reddedilen tam da bu. Zıtlık yapısında iki kelime zıt anlamlıdır.'}
+   ]},
+  {id:'ok10',konu:'Enerji',metin:"Deserts receive more solar energy in a few hours than the whole world consumes in a year, so it is not surprising that engineers have long dreamed of covering them with solar panels. In practice, several obstacles have slowed such projects. Dust and sand reduce the efficiency of panels, which must be cleaned regularly, often with scarce water. Furthermore, most deserts are far from the cities that need electricity, and transmitting power over long distances leads to losses. Recently, however, the cost of solar panels has fallen dramatically, and new cleaning robots that use no water have been tested. As a result, large desert solar farms are now being built in countries such as Morocco and the United Arab Emirates.",
+   sorular:[
+    {tip:'Ana fikir',q:'The passage mainly focuses on ____.',opts:['why deserts are getting hotter','the history of Morocco','how cities waste electricity','the dangers of cleaning robots','the problems and recent progress of solar power in deserts'],ans:4,
+     ornek:'In practice, several obstacles have slowed such projects. Recently, however, the cost of solar panels has fallen dramatically.',ornekTr:'Uygulamada bazı engeller bu projeleri yavaşlattı. Ancak son zamanlarda güneş paneli maliyeti büyük ölçüde düştü.',
+     tuzak:'Paragraf iki parçalı: engeller ve "however" sonrası ilerleme. Sadece bir parçayı ya da tek bir örneği (Morocco) kapsayan şık ana fikir olamaz.'},
+    {tip:'Olumsuz soru',q:'Which of the following is NOT mentioned as an obstacle in the passage?',opts:['dust on the panels','lack of water for cleaning','strong desert winds','distance from cities','energy loss during transmission'],ans:2,
+     ornek:'Dust and sand reduce the efficiency of panels ... often with scarce water ... far from the cities ... transmitting power over long distances leads to losses.',ornekTr:'Toz ve kum verimi düşürür ... su kıttır ... şehirlerden uzaktır ... uzun mesafeli iletimde kayıp olur.',
+     tuzak:'Rüzgâr çölle ilgili olduğu için tanıdık gelir ama paragrafta yok. Hızlı okurken "mantıklı" görünen şıkkı paragrafta varmış gibi sanma.'},
+    {tip:'Çıkarım',q:'It can be inferred that the new cleaning robots are useful because ____.',opts:['water is scarce in deserts','they increase transmission losses','they are more expensive than solar panels','they were invented in Morocco','they make solar panels unnecessary'],ans:0,
+     ornek:'Panels must be cleaned regularly, often with scarce water. New cleaning robots that use no water have been tested.',ornekTr:'Paneller düzenli temizlenmeli, çoğu zaman kıt suyla. Su kullanmayan yeni temizlik robotları test edildi.',
+     tuzak:'D paragrafta yok: Fas sadece santral kurulan ülke olarak geçiyor. Paragraftaki iki ayrı bilgiyi birbirine bağlayan şıklara dikkat.'}
+   ]},
+  {id:'ok11',konu:'Tıp',metin:"The placebo effect occurs when patients feel better after receiving a treatment that has no active ingredient, such as a sugar pill. For a long time, it was considered a nuisance that made clinical trials harder to interpret. More recently, researchers have begun to study it as a real phenomenon. Brain scans show that expecting relief can trigger the release of natural painkillers. Surprisingly, some studies have found that placebos can work even when patients are told they are taking a placebo. The effect, however, has clear limits: it may reduce pain or fatigue, but it cannot shrink a tumour or cure an infection. Researchers suggest that a better understanding of placebos could help doctors communicate in ways that strengthen real treatments.",
+   sorular:[
+    {tip:'Ayrıntı',q:'According to the passage, the placebo effect ____.',opts:['can shrink tumours if patients believe in it','only works when patients are deceived','has no effect on the brain','may reduce pain but cannot cure an infection','is always stronger than real treatment'],ans:3,
+     ornek:'It may reduce pain or fatigue, but it cannot shrink a tumour or cure an infection.',ornekTr:'Ağrıyı ya da yorgunluğu azaltabilir ama tümörü küçültemez ya da enfeksiyonu iyileştiremez.',
+     tuzak:'B paragrafla çelişiyor: hastaya plasebo olduğu söylendiğinde bile işe yarayabiliyor. "Even when" beklenmedik durumu verir.'},
+    {tip:'Kelime',q:'The word "nuisance" is closest in meaning to ____.',opts:['discovery','annoyance','medicine','success','experiment'],ans:1,
+     ornek:'For a long time, it was considered a nuisance that made clinical trials harder to interpret.',ornekTr:'Uzun süre, klinik deneyleri yorumlamayı zorlaştıran can sıkıcı bir şey olarak görüldü.',
+     tuzak:'A (discovery) sonraki cümledeki "real phenomenon" ile karışır. "For a long time" eski görüşü, "More recently" yeni görüşü verir; nuisance eski, olumsuz görüştür.'},
+    {tip:'Amaç',q:'The author mentions brain scans in order to ____.',opts:['criticise clinical trials','prove that sugar pills cure tumours','show that the placebo effect has a real biological basis','explain how painkillers are produced in factories','argue that doctors should stop using real treatments'],ans:2,
+     ornek:'Researchers have begun to study it as a real phenomenon. Brain scans show that expecting relief can trigger the release of natural painkillers.',ornekTr:'Araştırmacılar onu gerçek bir olgu olarak incelemeye başladı. Beyin taramaları, rahatlama beklentisinin doğal ağrı kesicilerin salınımını tetikleyebildiğini gösteriyor.',
+     tuzak:'D, "painkillers" kelimesini taşıyor ama paragraftaki ağrı kesici beynin kendi ürettiği "natural" maddedir. Örnek, kendinden önceki iddiayı (real phenomenon) destekler.'}
+   ]},
+  {id:'ok12',konu:'Dilbilim',metin:"Of the roughly 7,000 languages spoken today, linguists estimate that about half may disappear by the end of this century. A language usually dies not because its speakers are lost, but because parents stop passing it on to their children, often in favour of a more widely spoken language that offers better economic opportunities. When a language disappears, much more than vocabulary is lost: traditional knowledge about local plants, animals and history is frequently encoded in it. Some communities have managed to reverse the decline. In New Zealand, for example, Māori language nests, in which young children are cared for entirely in Māori, have helped to create a new generation of speakers.",
+   sorular:[
+    {tip:'Neden',q:'According to the passage, a language usually dies because ____.',opts:['its speakers die in wars','it has too few words','parents choose not to teach it to their children','linguists stop studying it','it is not written down'],ans:2,
+     ornek:'A language usually dies not because its speakers are lost, but because parents stop passing it on to their children.',ornekTr:'Bir dil genellikle konuşanları yok olduğu için değil, ebeveynler onu çocuklarına aktarmayı bıraktığı için ölür.',
+     tuzak:'A, "not because ... but because" yapısında reddedilen kısmı seçenleri yakalar. Doğru cevap her zaman "but because" sonrasındadır.'},
+    {tip:'Gönderim',q:'The word "it" in "frequently encoded in it" refers to ____.',opts:['vocabulary','the language that disappears','traditional knowledge','history','the century'],ans:1,
+     ornek:'When a language disappears, much more than vocabulary is lost: traditional knowledge is frequently encoded in it.',ornekTr:'Bir dil yok olduğunda kelimelerden çok daha fazlası kaybolur: geleneksel bilgi çoğu zaman onun (dilin) içinde saklıdır.',
+     tuzak:'C (knowledge) cümlenin öznesi; kendi içinde saklanamaz. Zamiri yerine koy: bilgi neyin içinde saklı? Dilin.'},
+    {tip:'Amaç',q:'The example of New Zealand is given to show that ____.',opts:['Māori has the largest vocabulary in the world','children learn languages faster than adults in every country','economic opportunities are better in New Zealand','the decline of a language can sometimes be reversed','language nests are used to teach about plants'],ans:3,
+     ornek:'Some communities have managed to reverse the decline. In New Zealand, for example, ...',ornekTr:'Bazı topluluklar düşüşü tersine çevirmeyi başardı. Örneğin Yeni Zelanda’da ...',
+     tuzak:'"For example" kendinden önceki cümleyi örnekler; cevap orada. B ise "every country" ile genelleme yapıyor.'}
+   ]},
+  {id:'ok13',konu:'Eğitim',metin:"Reading on screens has become a daily habit for most people, yet research suggests that it may not always be as effective as reading on paper. In several experiments, students who read long informational texts on paper understood them slightly better than those who read the same texts on a screen. Interestingly, the difference disappeared for short texts and for stories. One possible reason is that screen readers tend to skim, scrolling quickly and jumping between sections. Researchers also found that students reading on screens were more confident about their understanding, even when they performed worse. This overconfidence, they argue, may lead readers to spend less time on difficult passages.",
+   sorular:[
+    {tip:'Ana fikir',q:'The main point of the passage is that ____.',opts:['students should never read on screens','screen reading may reduce understanding of long informational texts','stories are harder to understand on paper','confident readers always perform better','paper books are disappearing'],ans:1,
+     ornek:'Students who read long informational texts on paper understood them slightly better than those who read the same texts on a screen.',ornekTr:'Uzun bilgilendirici metinleri kâğıttan okuyan öğrenciler, aynı metinleri ekrandan okuyanlardan biraz daha iyi anladı.',
+     tuzak:'A, "never" ile abartıyor; paragraf "may not always" ve "slightly better" diyor. Ölçüyü abartan şık genelde çeldiricidir.'},
+    {tip:'Ayrıntı',q:'According to the passage, the difference between screen and paper reading ____.',opts:['was largest for short texts','appeared only in stories','was caused by eye problems','made paper readers overconfident','disappeared for short texts and stories'],ans:4,
+     ornek:'Interestingly, the difference disappeared for short texts and for stories.',ornekTr:'İlginç biçimde fark, kısa metinlerde ve hikâyelerde ortadan kalktı.',
+     tuzak:'A tam ters: kısa metinlerde fark en büyük değil, hiç yok. "Interestingly" beklenmeyen bilgiyi işaret eder, onu dikkatli oku.'},
+    {tip:'Çıkarım',q:'It can be inferred that students reading on screens ____.',opts:['may not realise how little they have understood','spend more time on difficult passages','prefer paper to screens','always score lower on every text','read stories more slowly'],ans:0,
+     ornek:'Students reading on screens were more confident about their understanding, even when they performed worse.',ornekTr:'Ekrandan okuyan öğrenciler, daha kötü sonuç aldıklarında bile anladıklarından daha emindi.',
+     tuzak:'B son cümlenin tersi: aşırı özgüven zor bölümlere "less time" ayırmaya yol açabilir. D yine "always / every" ile abartıyor.'}
+   ]},
+  {id:'ok14',konu:'Ekonomi',metin:"Roughly one third of all food produced in the world is lost or wasted. In poorer countries, most of this loss happens early in the supply chain, as crops spoil because of inadequate storage and transport. In richer countries, by contrast, the largest share is wasted by shops and households. Supermarkets often reject fruit and vegetables that look imperfect, and consumers throw away food that is still safe to eat because they misunderstand 'best before' dates. Reducing food waste would not only save money but also lower greenhouse gas emissions, since rotting food in landfills produces methane. Several countries have therefore introduced laws requiring large supermarkets to donate unsold food to charities instead of throwing it away.",
+   sorular:[
+    {tip:'Karşılaştırma',q:'According to the passage, the main difference between poorer and richer countries is ____.',opts:['how much food they produce','which crops they grow','at which stage most food is lost or wasted','how many charities they have','how they produce methane'],ans:2,
+     ornek:'In poorer countries, most of this loss happens early in the supply chain. In richer countries, by contrast, the largest share is wasted by shops and households.',ornekTr:'Yoksul ülkelerde kaybın çoğu tedarik zincirinin başında olur. Zengin ülkelerde ise en büyük pay mağazalarda ve evlerde israf edilir.',
+     tuzak:'A paragrafta karşılaştırılmıyor. "By contrast" iki tarafı tek bir şey üzerinden karşılaştırır: kaybın nerede olduğu.'},
+    {tip:'Ayrıntı',q:'Consumers in richer countries throw away safe food partly because they ____.',opts:['cannot store it properly','misunderstand "best before" dates','want to reduce methane','donate it to charities','prefer imperfect vegetables'],ans:1,
+     ornek:"Consumers throw away food that is still safe to eat because they misunderstand 'best before' dates.",ornekTr:'Tüketiciler, son tüketim tarihi ifadesini yanlış anladıkları için hâlâ güvenli olan yiyecekleri atıyor.',
+     tuzak:'A yoksul ülkelerin sorunu (inadequate storage). Soru zengin ülkeleri soruyor; cevabı paragrafın doğru bölümünde ara.'},
+    {tip:'Neden',q:'According to the passage, reducing food waste would lower greenhouse gas emissions because ____.',opts:['supermarkets would use less electricity','charities produce less methane','crops would be transported faster','rotting food in landfills releases methane','consumers would buy more vegetables'],ans:3,
+     ornek:'Reducing food waste would also lower greenhouse gas emissions, since rotting food in landfills produces methane.',ornekTr:'Gıda israfını azaltmak sera gazı salımını da düşürür, çünkü çöplüklerde çürüyen yiyecekler metan üretir.',
+     tuzak:'"Since" burada zaman değil, sebep bildirir (çünkü). B, "methane" kelimesini yanlış özneyle eşleştiriyor.'}
+   ]},
+  {id:'ok15',konu:'Arkeoloji',metin:"Göbekli Tepe, an archaeological site in south-eastern Turkey, has challenged long-held ideas about the origins of civilisation. Its massive carved stone pillars were erected around 11,000 years ago, thousands of years before writing, pottery or the wheel. Archaeologists had traditionally assumed that people first settled down as farmers and only later built large religious monuments. At Göbekli Tepe, however, there is no clear evidence of farming at the time the pillars were raised. This has led some researchers to suggest that the need to gather for shared rituals may have encouraged people to settle in one place, and that agriculture developed partly to feed these gatherings. Not all experts accept this interpretation, and excavations are continuing.",
+   sorular:[
+    {tip:'Ana fikir',q:'The passage mainly suggests that Göbekli Tepe ____.',opts:['has led researchers to rethink how civilisation began','was built after writing was invented','proves that all early humans were farmers','has been fully excavated','was used only as a market place'],ans:0,
+     ornek:'Göbekli Tepe has challenged long-held ideas about the origins of civilisation.',ornekTr:'Göbekli Tepe, uygarlığın kökenine dair uzun süredir kabul gören fikirleri sarstı.',
+     tuzak:'C, "proves" ve "all" ile hem abartıyor hem paragrafa ters. Ana fikir burada ilk cümlede.'},
+    {tip:'Ayrıntı',q:'According to the traditional view mentioned in the passage, ____.',opts:['rituals led to the invention of writing','monuments were built before farming began','people first became farmers and later built monuments','pottery was invented before stone pillars','there were no religious beliefs 11,000 years ago'],ans:2,
+     ornek:'Archaeologists had traditionally assumed that people first settled down as farmers and only later built large religious monuments.',ornekTr:'Arkeologlar geleneksel olarak insanların önce çiftçi olarak yerleştiğini, büyük dini anıtları ise ancak sonra yaptığını varsaymıştı.',
+     tuzak:'B yeni görüşü anlatıyor, geleneksel görüşü değil. "Traditionally assumed" ile "however" sonrasını karıştırma.'},
+    {tip:'Tutum',q:"The author's attitude towards the new interpretation can best be described as ____.",opts:['completely opposed','strongly enthusiastic','angry','indifferent','cautious and balanced'],ans:4,
+     ornek:'Some researchers suggest that rituals may have encouraged people to settle. Not all experts accept this interpretation, and excavations are continuing.',ornekTr:'Bazı araştırmacılar ritüellerin insanları yerleşmeye yöneltmiş olabileceğini öne sürüyor. Bu yorumu tüm uzmanlar kabul etmiyor ve kazılar sürüyor.',
+     tuzak:'B, yeni görüşün heyecanına kapılanları yakalar. "Suggest", "may have" ve "not all experts accept" yazarın temkinli olduğunu gösterir.'}
+   ]}
+];
+function okGunNo(anahtar){const [y,a,g]=anahtar.split('-').map(Number);return Math.round(Date.UTC(y,a-1,g)/86400000);}
+function okParcaSec(tarih){
+  const n=OKUMA_PARCALARI.length;
+  return OKUMA_PARCALARI[((okGunNo(tarih)-okGunNo(OK_BASLANGIC))%n+n)%n];
+}
+function okToplamSn(p){return p.sorular.length*OK_SORU_SURE_SN;}
+// Yanlış defteri ve cevap geçmişi için soru kimliği: ok03-2 = 3. parçanın 2. sorusu.
+function okSoruId(p,i){return p.id+'-'+(i+1);}
+function okSoruBul(qid){
+  const m=/^(ok\d+)-(\d)$/.exec(String(qid||''));if(!m)return null;
+  const p=OKUMA_PARCALARI.find(x=>x.id===m[1]);const s=p&&p.sorular[Number(m[2])-1];
+  return s?{parca:p,soru:s,id:qid}:null;
+}
+function okYukle(){
+  const bugun=sinavChecklistBugunAnahtari();
+  let v=null;
+  try{v=JSON.parse(localStorage.getItem('sa_gunun_okumasi'));}catch(e){v=null;}
+  if(!v||v.tarih!==bugun||!Array.isArray(v.cevaplar)){
+    const p=okParcaSec(bugun);
+    v={tarih:bugun,pid:p.id,cevaplar:p.sorular.map(()=>null),baslangic:null,bitis:null};
+    okKaydet(v);
+  }
+  return v;
+}
+function okKaydet(v){try{localStorage.setItem('sa_gunun_okumasi',JSON.stringify(v));}catch(e){}}
+function okParca(v){return OKUMA_PARCALARI.find(x=>x.id===v.pid)||okParcaSec(v.tarih);}
+function okKalanSn(v){return Math.max(0,okToplamSn(okParca(v))-Math.floor((Date.now()-v.baslangic)/1000));}
+function okBugunBittiMi(){
+  try{const v=JSON.parse(localStorage.getItem('sa_gunun_okumasi'));return!!(v&&v.tarih===sinavChecklistBugunAnahtari()&&v.bitis);}catch(e){return false;}
+}
+// Kural → Örnek → Tuzak. Günün okuma parçası ve yanlış defteri ortak kullanır.
+function okAciklamaSatirlari(s){
+  return `<div class="gd-satir"><span class="gd-etiket">Kural</span><b>${gdEsc(s.tip)}</b>. ${gdEsc(OK_KURAL[s.tip]||'')}</div>
+      <div class="gd-satir"><span class="gd-etiket">Örnek</span><i lang="en">${gdEsc(s.ornek)}</i><br>Türkçesi: ${gdEsc(s.ornekTr)}</div>
+      <div class="gd-satir tuzak"><span class="gd-etiket">Tuzak</span>${gdEsc(s.tuzak)}</div>`;
+}
+let _okSayac=null,_okAktif=0;
+function okPerde(){
+  let el=document.getElementById('ok-perde');
+  if(!el){
+    el=document.createElement('div');el.id='ok-perde';el.className='gd-perde';el.hidden=true;
+    el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Günün okuma parçası');
+    el.innerHTML='<div class="gd-panel" id="ok-panel"></div>';
+    el.addEventListener('click',e=>{if(e.target===el)okKapat();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)okKapat();});
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function gununOkumasiAc(){
+  const v=okYukle();
+  if(v.baslangic&&!v.bitis&&okKalanSn(v)===0)okBitir();
+  okPerde().hidden=false;
+  document.body.style.overflow='hidden';
+  okRender();
+}
+function okKapat(){
+  const el=document.getElementById('ok-perde');if(el)el.hidden=true;
+  document.body.style.overflow='';
+  if(_okSayac){clearInterval(_okSayac);_okSayac=null;}
+  if(typeof sabahListesiRender==='function')sabahListesiRender();
+}
+function okBasla(){
+  const v=okYukle();
+  if(!v.baslangic){v.baslangic=Date.now();okKaydet(v);faz2GaEvent('okuma_basla',{parca:v.pid});}
+  _okAktif=0;
+  okRender();
+}
+function okSec(i){
+  const v=okYukle();if(v.bitis)return;
+  v.cevaplar[_okAktif]=v.cevaplar[_okAktif]===i?null:i;
+  okKaydet(v);okRender();
+}
+function okGit(n){_okAktif=Math.max(0,Math.min(okParca(okYukle()).sorular.length-1,n));okRender();}
+function okBitir(){
+  const v=okYukle();if(v.bitis)return;
+  const p=okParca(v);
+  v.bitis=Math.min(Date.now(),v.baslangic+okToplamSn(p)*1000);
+  okKaydet(v);
+  if(_okSayac){clearInterval(_okSayac);_okSayac=null;}
+  let dogru=0;
+  p.sorular.forEach((s,i)=>{
+    const c=v.cevaplar[i];if(c===null)return;
+    if(c===s.ans)dogru++;
+    cevapKaydet({questionId:okSoruId(p,i),modul:'okuma',soru:s.q,selectedOption:s.opts[c],correctOption:s.opts[s.ans],isCorrect:c===s.ans,topic:'Günün okuma parçası',signal:s.tip});
+  });
+  faz2GaEvent('okuma_bitir',{parca:p.id,dogru,sure_sn:Math.round((v.bitis-v.baslangic)/1000)});
+  okRender();
+}
+function okSayacKur(){
+  if(_okSayac)clearInterval(_okSayac);
+  _okSayac=setInterval(()=>{
+    const v=okYukle();
+    if(!v.baslangic||v.bitis){clearInterval(_okSayac);_okSayac=null;return;}
+    const kalan=okKalanSn(v);
+    const el=document.getElementById('ok-sure');
+    if(el){el.textContent=gdSureMetni(kalan);el.classList.toggle('az',kalan<=60);}
+    if(kalan===0)okBitir();
+  },1000);
+}
+function okRender(){
+  const panel=document.getElementById('ok-panel');if(!panel)return;
+  const v=okYukle();const p=okParca(v);const n=p.sorular.length;
+  const tarihMetni=new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'});
+  const ust=sag=>`<div class="gd-ust"><div class="gd-eyebrow">Günün okuma parçası · ${gdEsc(tarihMetni)}</div><div style="display:flex;gap:8px;align-items:center">${sag||''}<button type="button" class="gd-kapat" onclick="okKapat()" aria-label="Kapat">Kapat</button></div></div>`;
+  const metin=`<div class="ok-metin" lang="en"><span class="ok-konu">${gdEsc(p.konu)}</span>${gdEsc(p.metin)}</div>`;
+  if(!v.baslangic){
+    panel.innerHTML=ust()+`
+      <div class="gd-baslik">1 paragraf, ${n} soru, ${gdSureMetni(okToplamSn(p))} dakika</div>
+      <div class="gd-alt">Bugünün parçası herkes için aynı. Yarın yeni parça gelir.</div>
+      <ul class="gd-bilgi">
+        <li>Önce soruları oku, sonra parçada cevabı ara.</li>
+        <li>Süre başlayınca durmaz. Kapatsan da işler.</li>
+        <li>Sorular arasında gidip gelebilir, cevabını değiştirebilirsin.</li>
+        <li>Sonda her yanlış için Kural → Örnek → Tuzak. Yanlışların yanlış defterine düşer.</li>
+      </ul>
+      <button type="button" class="gd-btn" onclick="okBasla()">Başla</button>
+      <div class="gd-not">Varsayım: okuma sorusu başına 2 dakika. Sınavdaki okuma sorusu sayısını ve süreyi ÖSYM'den kontrol et.</div>`;
+    return;
+  }
+  if(!v.bitis){
+    const s=p.sorular[_okAktif];
+    const kalan=okKalanSn(v);
+    const son=_okAktif===n-1;
+    panel.innerHTML=ust(`<div class="gd-sure${kalan<=60?' az':''}" id="ok-sure" aria-label="Kalan süre">${gdSureMetni(kalan)}</div>`)+`
+      ${metin}
+      <div class="gd-noktalar">${p.sorular.map((x,i)=>`<button type="button" class="gd-nokta${v.cevaplar[i]!==null?' dolu':''}${i===_okAktif?' aktif':''}" onclick="okGit(${i})" aria-label="Soru ${i+1}">${i+1}</button>`).join('')}</div>
+      <div class="gd-eyebrow" style="margin-bottom:8px">Soru ${_okAktif+1}/${n} · ${gdEsc(s.tip)}</div>
+      <div class="gd-soru" lang="en">${gdEsc(s.q)}</div>
+      <div class="gd-siklar">${s.opts.map((o,i)=>`<button type="button" class="gd-sik${v.cevaplar[_okAktif]===i?' secili':''}" onclick="okSec(${i})"><span class="gd-harf">${GD_HARFLER[i]})</span><span lang="en">${gdEsc(o)}</span></button>`).join('')}</div>
+      <div class="gd-alt-bar">
+        <button type="button" class="gd-btn ikincil" onclick="okGit(${_okAktif-1})"${_okAktif===0?' disabled':''}>Önceki</button>
+        ${son?'<button type="button" class="gd-btn" onclick="okBitir()">Bitir</button>':`<button type="button" class="gd-btn" onclick="okGit(${_okAktif+1})">Sonraki</button>`}
+      </div>`;
+    if(!_okSayac)okSayacKur();
+    return;
+  }
+  // Sonuç
+  let dogru=0,yanlis=0,bos=0;
+  p.sorular.forEach((s,i)=>{const c=v.cevaplar[i];if(c===null)bos++;else if(c===s.ans)dogru++;else yanlis++;});
+  const sureSn=Math.round((v.bitis-v.baslangic)/1000);
+  const tempo=sureSn<okToplamSn(p)?'Süren yetti: '+gdSureMetni(sureSn)+' dakikada bitirdin.':'Süre yetmedi. Önce soruları oku, parçayı cevabı arayarak oku.';
+  const yorum=dogru===n?'Hepsi doğru. Yarın yeni parça seni bekliyor.':yanlis+bos===1?'Bir soru kaçtı. Aşağıdaki açıklamaya bak.':'Aşağıdaki açıklamaları oku. Yanlışlar yarın yanlış defterinde tekrar gelir.';
+  const kartlar=p.sorular.map((s,i)=>{
+    const c=v.cevaplar[i];if(c===s.ans)return'';
+    return `<div class="gd-aciklama">
+      <div class="gd-aciklama-ust">Soru ${i+1} <span>· ${c===null?'boş':'yanlış'}</span></div>
+      <div class="gd-satir" lang="en" style="font-weight:600">${gdEsc(s.q)}</div>
+      ${okAciklamaSatirlari(s)}
+      <div class="gd-cevaplar">${c===null?'Boş bıraktın.':'Senin cevabın: '+GD_HARFLER[c]+') '+gdEsc(s.opts[c])}<br>Doğrusu: ${GD_HARFLER[s.ans]}) ${gdEsc(s.opts[s.ans])}</div>
+    </div>`;
+  }).join('');
+  panel.innerHTML=ust()+`
+    <div class="gd-skor"><div class="gd-skor-sayi">${dogru}/${n}</div><div class="gd-skor-etiket">doğru</div></div>
+    <div class="gd-alt">${yorum} ${tempo}</div>
+    <div class="gd-ozet"><div><b>${dogru}</b>Doğru</div><div><b>${yanlis}</b>Yanlış</div><div><b>${bos}</b>Boş</div><div><b>${gdSureMetni(sureSn)}</b>Süre</div></div>
+    ${kartlar}
+    <details class="ok-tekrar"><summary>Parçayı yeniden oku</summary>${metin}</details>
+    <button type="button" class="gd-btn" onclick="okKapat()">Kapat</button>
+    <div class="gd-not">Yarın yeni parça. Yanlış yaptığın sorular 1, 3 ve 7 gün sonra yanlış defterinde tekrar gelir.</div>`;
+}
+// Bildirim ya da 50 puan programı bağlantısı: sinyal-avcisi.com/#okuma
+if(typeof location!=='undefined'&&location.hash==='#okuma')setTimeout(()=>{goTo('dashboard');gununOkumasiAc();},1500);
 
 // ─── PUAN TAHMİNİ — denemelerden tahmini YDS puanı, 50 hedefine mesafe ─────
 // Kaynak 1: /50-puan-programi'nde girilen tam deneme doğru sayıları
