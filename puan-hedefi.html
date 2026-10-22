@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puan Hedefine Göre YDS Soruları — Sinyal Avcısı</title>
+  <meta name="description" content="YDS'de 90-100 puan hedefleyenler için geçmiş sınavların soru tiplerine bakılarak yazılmış zor, özgün sorular. 50, 70 ve 90-100 hedefine göre ayrılmış; her soruda Kural, Örnek, Tuzak.">
+  <meta property="og:title" content="Puan Hedefine Göre YDS Soruları — Sinyal Avcısı">
+  <meta property="og:description" content="Hedefini seç: 50, 70 ya da 90-100. Sınava benzeyen özgün sorular, her birinde Kural, Örnek, Tuzak.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/puan-hedefi">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <!-- GA4 — mevcut measurement ID; yalnız sayfa görüntüleme ve "hedef_soru_cevap" (seviye + doğru/yanlış) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <style>
+    /* Koyu yeşil + nane (sabah listesi / günün denemesi ile aynı aile). Yazılar büyük ve beyaza yakın. */
+    :root{
+      --bg:#06140e; --surface:#0b1f17; --surface-2:#0f2a1f; --border:rgba(110,231,183,.28);
+      --nane:#6ee7b7; --nane-dim:rgba(110,231,183,.12); --text:#f4fbf7; --soft:#d5e9df;
+      --hata:#fca5a5; --hata-dim:rgba(252,165,165,.12);
+      --f-body:'IBM Plex Sans',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+      color-scheme:dark;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 var(--f-body)}
+    a{color:var(--nane)}
+    .nav{position:sticky;top:0;z-index:10;background:rgba(6,20,14,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+    .nav-logo{font-weight:800;font-size:17px;color:var(--nane);text-decoration:none}
+    .nav-back{font-size:16px;color:var(--soft);text-decoration:none}
+    .wrap{max-width:720px;margin:0 auto;padding:28px 16px 64px;display:flex;flex-direction:column;gap:22px}
+    h1,h2,h3{margin:0;text-wrap:balance;line-height:1.2}
+    h1{font-size:clamp(30px,7vw,42px);font-weight:800;letter-spacing:-.02em}
+    h2{font-size:23px;font-weight:700}
+    h3{font-size:19px;font-weight:700}
+    p{margin:0}
+    .eyebrow{font:600 14px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--nane)}
+    .lead{color:var(--soft);margin-top:10px;font-size:19px}
+    .uyari{border-left:3px solid var(--nane);background:var(--nane-dim);padding:12px 14px;border-radius:0 10px 10px 0;font-size:16.5px;color:var(--soft)}
+    .sekmeler{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .sekme{font:700 20px var(--f-body);color:var(--text);background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:14px 8px;cursor:pointer}
+    .sekme small{display:block;font:500 14px var(--f-body);color:var(--soft);margin-top:2px}
+    .sekme[aria-selected="true"]{background:var(--nane);color:#06140e;border-color:var(--nane)}
+    .sekme[aria-selected="true"] small{color:#0b1f17}
+    .sekme:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--nane);outline-offset:2px}
+    .kart{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+    .netler{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .net{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px}
+    .net b{display:block;font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--nane)}
+    .net span{font-size:15px;color:var(--soft)}
+    .cipler{display:flex;gap:8px;flex-wrap:wrap}
+    .cip{font:600 15.5px var(--f-body);color:var(--text);background:transparent;border:1px solid var(--border);border-radius:99px;padding:7px 14px;cursor:pointer}
+    .cip[aria-pressed="true"]{background:var(--nane-dim);border-color:var(--nane);color:var(--nane)}
+    .soru-ust{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .etiket{font:600 14px var(--f-mono);background:var(--nane-dim);color:var(--nane);padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.05em}
+    .sayac{font:600 15px var(--f-mono);color:var(--soft)}
+    .govde{font-size:20px;line-height:1.65;white-space:pre-line}
+    .secenekler{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+    .sec{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;font:500 18px/1.5 var(--f-body);color:var(--text);background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer}
+    .sec:hover:not(:disabled){border-color:var(--nane)}
+    .sec:disabled{cursor:default}
+    .harf{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--nane);display:grid;place-items:center;font:700 15px var(--f-mono);color:var(--nane)}
+    .sec.dogru{background:var(--nane-dim);border-color:var(--nane)}
+    .sec.dogru .harf{background:var(--nane);color:#06140e}
+    .sec.yanlis{background:var(--hata-dim);border-color:var(--hata)}
+    .sec.yanlis .harf{border-color:var(--hata);color:var(--hata)}
+    .sonuc{font-size:20px;font-weight:700}
+    .sonuc.iyi{color:var(--nane)}
+    .sonuc.kotu{color:var(--hata)}
+    .aciklama{display:flex;flex-direction:column;gap:10px}
+    .adim{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+    .adim b{display:block;font:700 14px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--nane);margin-bottom:4px}
+    .adim.tuzak{border-color:rgba(252,165,165,.45)}
+    .adim.tuzak b{color:var(--hata)}
+    .tr-dugme{align-self:flex-start;font:600 16px var(--f-body);color:var(--text);background:transparent;border:1px solid var(--nane);border-radius:10px;padding:8px 14px;cursor:pointer}
+    .tr{font-size:17.5px;color:var(--soft);white-space:pre-line;border-left:3px solid var(--border);padding-left:12px}
+    .satir{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}
+    .btn{font:700 17px var(--f-body);background:var(--nane);color:#06140e;border:0;border-radius:12px;padding:12px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.ikincil{background:transparent;color:var(--text);border:1px solid var(--nane)}
+    .btn:disabled{opacity:.4;cursor:default}
+    table{width:100%;border-collapse:collapse;font-size:16.5px}
+    td,th{padding:9px 6px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+    th{color:var(--nane);font-size:14px;font-family:var(--f-mono);text-transform:uppercase;letter-spacing:.06em}
+    td:first-child{white-space:nowrap;font-weight:700}
+    td:nth-child(2){white-space:nowrap;font-family:var(--f-mono);color:var(--soft)}
+    details summary{cursor:pointer;font-weight:700;font-size:19px}
+    .not{font-size:15.5px;color:var(--soft)}
+    footer{font-size:16px;color:var(--soft);display:flex;gap:10px 20px;flex-wrap:wrap}
+    @media(max-width:520px){.netler{grid-template-columns:1fr 1fr 1fr}.net b{font-size:24px}.sekme{font-size:18px}.govde{font-size:19px}td:nth-child(2){white-space:normal}}
+  </style>
+</head>
+<body>
+<nav class="nav"><a class="nav-logo" href="/">Sinyal Avcısı</a><a class="nav-back" href="/">← Ana sayfa</a></nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Puan hedefi</div>
+    <h1>Puan Hedefine Göre YDS Soruları</h1>
+    <p class="lead">Hedefini seç. 90-100 isteyen için zor, sınava çok benzeyen sorular. Her soruda Kural → Örnek → Tuzak.</p>
+  </header>
+
+  <p class="uyari">Bu sorular ÖSYM sorusu değil. Geçmiş YDS'lerin soru tiplerine bakılarak yazılmış özgün sorular. Aynı tipte soru çıkması muhtemel, ama hiçbir soru için "kesin çıkar" denemez; bu bir tahmindir.</p>
+
+  <div class="sekmeler" role="tablist" aria-label="Puan hedefi">
+    <button class="sekme" role="tab" id="sekme-50" data-seviye="50" aria-selected="false">50<small>temel</small></button>
+    <button class="sekme" role="tab" id="sekme-70" data-seviye="70" aria-selected="false">70<small>orta</small></button>
+    <button class="sekme" role="tab" id="sekme-90" data-seviye="90" aria-selected="true">90-100<small>zor</small></button>
+  </div>
+
+  <section class="kart" aria-labelledby="netBaslik">
+    <h2 id="netBaslik">Kaç doğru lazım?</h2>
+    <div class="netler">
+      <div class="net"><b id="netDogru">72</b><span>doğru gerekir</span></div>
+      <div class="net"><b id="netHata">8</b><span>hata hakkın</span></div>
+      <div class="net"><b id="netCozulen">0</b><span>bu seviyede çözdüğün</span></div>
+    </div>
+    <p class="not">Hesap: 80 soru, her doğru 1,25 puan, yanlış doğruyu götürmez (varsayım). Puan hesabını ve sınav tarihini ÖSYM'den kontrol et.</p>
+  </section>
+
+  <section id="bolum-50" class="kart" hidden>
+    <h2>50 puan: önce temel</h2>
+    <p>50 için 40 doğru yeter. Zor sorular yerine kelime, dilbilgisi ve çeviriden düzenli net topla.</p>
+    <div class="satir">
+      <a class="btn" href="/50-puan-programi">22 Kasım'a kadar 50 puan programı</a>
+      <a class="btn ikincil" href="/hedef-rota">Hedef puan rotanı çıkar</a>
+    </div>
+    <p class="not">Temeli oturunca 70 sekmesindeki sorulara geç.</p>
+  </section>
+
+  <section id="bolum-soru" class="kart" aria-live="polite">
+    <div class="cipler" id="cipler" aria-label="Soru tipi"></div>
+    <div class="soru-ust"><span class="etiket" id="tip"></span><span class="sayac" id="sayac"></span></div>
+    <p class="govde" id="govde"></p>
+    <ol class="secenekler" id="secenekler"></ol>
+    <div id="sonucAlani" hidden>
+      <p class="sonuc" id="sonuc"></p>
+      <div class="aciklama">
+        <div class="adim"><b>Kural</b><span id="kural"></span></div>
+        <div class="adim"><b>Örnek</b><span id="ornek"></span></div>
+        <div class="adim tuzak"><b>Tuzak</b><span id="tuzak"></span></div>
+      </div>
+    </div>
+    <button class="tr-dugme" id="trDugme" type="button" hidden>Türkçesini göster</button>
+    <p class="tr" id="tr" hidden></p>
+    <div class="satir">
+      <button class="btn ikincil" id="geri" type="button">← Önceki</button>
+      <button class="btn" id="ileri" type="button">Sonraki soru →</button>
+    </div>
+  </section>
+
+  <section class="kart" aria-labelledby="taramaBaslik">
+    <h2 id="taramaBaslik">Geçmiş sınav taraması: 90+ puan nerede kaybedilir?</h2>
+    <p>YDS'de 80 soru 11 tipe ayrılır. Aşağıdaki sıra ve sayılar son yılların düzenine göre; değişebilir, ÖSYM'den kontrol et.</p>
+    <table>
+      <thead><tr><th>Tip</th><th>Soru</th><th>90+ için kritik nokta</th></tr></thead>
+      <tbody>
+        <tr><td>Kelime</td><td>1-6</td><td>İki şık cümleye girer; cümlenin yönünü (olumlu / olumsuz) tutan doğrudur.</td></tr>
+        <tr><td>Dilbilgisi</td><td>7-16</td><td>Devrik yapı, However + sıfat, zaman uyumu. Şıkları ikili kontrol et.</td></tr>
+        <tr><td>Cloze</td><td>17-26</td><td>Önce iki parça arasındaki ilişki: sebep, zıtlık, ekleme, düzeltme.</td></tr>
+        <tr><td>Cümle tamamlama</td><td>27-36</td><td>Whereas, Had ... gibi kalıplar şıkların yarısını tek başına eler.</td></tr>
+        <tr><td>Çeviri İng → Tr</td><td>37-42</td><td>likely, may, tend to gibi yumuşatıcıyı atan şık yanlış.</td></tr>
+        <tr><td>Çeviri Tr → İng</td><td>43-46</td><td>Etken / edilgen ve fiilin gücü (zorlamak ≠ seçmek).</td></tr>
+        <tr><td>Okuma</td><td>47-58</td><td>"only, never, no role" gibi uç ifadeler çoğu zaman yanlış.</td></tr>
+        <tr><td>Diyalog</td><td>59-64</td><td>Boşluktan sonraki satır cevabı söyler.</td></tr>
+        <tr><td>Yakın anlam</td><td>65-70</td><td>Aynı kelimeyi taşıyan şık genelde tuzak.</td></tr>
+        <tr><td>Paragraf tamamlama</td><td>71-75</td><td>Boşluğun önü ve arkası: köprü iki tarafa da bağlanmalı.</td></tr>
+        <tr><td>Anlamı bozan cümle</td><td>76-80</td><td>Kopuk cümle, komşusuyla kelime paylaşır. Kelimeye değil akışa bak.</td></tr>
+      </tbody>
+    </table>
+    <p class="not">"90+ için kritik nokta" sütunu sınav verisi değil, soru tiplerinin yapısından çıkan gözlemdir (varsayım).</p>
+  </section>
+
+  <footer>
+    <a href="/">Ana sayfa</a>
+    <a href="/hedef-rota">Hedef puan rotası</a>
+    <a href="/yds-cikmis-sorular">YDS çıkmış sorular nasıl çalışılır</a>
+    <a href="/yds-sinav-teknikleri">YDS sınav teknikleri</a>
+  </footer>
+</main>
+
+<script type="application/json" id="ph-sorular">[
+ {
+  "id": "z01",
+  "seviye": "90",
+  "tip": "kelime",
+  "soru": "The new regulations are expected to ---- the long-standing disparities between urban and rural healthcare services, though critics doubt they will go far enough.",
+  "secenekler": [
+   "exacerbate",
+   "redress",
+   "endorse",
+   "stipulate",
+   "forfeit"
+  ],
+  "dogru": 1,
+  "tr": "Yeni düzenlemelerin kent ve kırsal sağlık hizmetleri arasındaki köklü eşitsizlikleri gidermesi bekleniyor, ancak eleştirmenler yeterince ileri gideceklerinden şüpheli.",
+  "kural": "Boşluğu cümlenin yönü belirler. \"though critics doubt they will go far enough\" düzenlemenin olumlu bir şey yapmaya çalıştığını gösterir.",
+  "ornek": "redress the disparities = eşitsizlikleri gidermek. go far enough = yeterince ileri gitmek; yani amaç iyi, sadece yetersiz kalabilir.",
+  "tuzak": "exacerbate (kötüleştirmek) dilbilgisi olarak oturur ama yönü ters. 90+ sorularda iki şık da cümleye \"girer\"; doğru olan yönü tutan şıktır."
+ },
+ {
+  "id": "z02",
+  "seviye": "90",
+  "tip": "kelime",
+  "soru": "Despite years of meticulous fieldwork, the team's findings remained largely ----, since no other laboratory had managed to replicate them.",
+  "secenekler": [
+   "tentative",
+   "redundant",
+   "lucrative",
+   "exhaustive",
+   "imminent"
+  ],
+  "dogru": 0,
+  "tr": "Yıllarca süren titiz saha çalışmasına rağmen ekibin bulguları büyük ölçüde kesinlik kazanmamış (geçici) kaldı, çünkü başka hiçbir laboratuvar onları tekrarlayamamıştı.",
+  "kural": "\"since\" sebep verir: başka kimse tekrarlayamadıysa bulgu henüz kesin değildir.",
+  "ornek": "tentative findings = kesinleşmemiş, ön bulgular. replicate = deneyi tekrarlayıp aynı sonucu almak.",
+  "tuzak": "exhaustive (kapsamlı) \"meticulous fieldwork\" ile uyumlu göründüğü için çekici. Ama \"Despite\" zıtlık ister: titiz çalışmaya rağmen sonuç zayıf kalmalı."
+ },
+ {
+  "id": "z03",
+  "seviye": "90",
+  "tip": "kelime",
+  "soru": "The negotiations nearly ---- when neither side was willing to make concessions on the issue of border control.",
+  "secenekler": [
+   "took over",
+   "set off",
+   "brought about",
+   "fell through",
+   "put forward"
+  ],
+  "dogru": 3,
+  "tr": "Taraflardan hiçbiri sınır kontrolü konusunda taviz vermeye yanaşmayınca müzakereler neredeyse suya düştü.",
+  "kural": "Phrasal verb sorularında öznenin ne olduğuna bak: özne \"negotiations\". Müzakereye ne olur? Ya sonuçlanır ya çöker.",
+  "ornek": "fall through = (plan, anlaşma) suya düşmek, gerçekleşmemek. The deal fell through at the last minute.",
+  "tuzak": "bring about (neden olmak) ve put forward (öne sürmek) nesne ister; burada nesne yok. Nesne yoksa geçişsiz fiili ara."
+ },
+ {
+  "id": "z04",
+  "seviye": "90",
+  "tip": "dilbilgisi",
+  "soru": "By the time the vaccine ---- widely available, the virus ---- into several new variants.",
+  "secenekler": [
+   "has become / had mutated",
+   "becomes / has mutated",
+   "became / had already mutated",
+   "had become / mutated",
+   "was becoming / would mutate"
+  ],
+  "dogru": 2,
+  "tr": "Aşı yaygın olarak erişilebilir hale geldiğinde virüs çoktan birkaç yeni varyanta dönüşmüştü.",
+  "kural": "By the time + Past Simple → ana cümle Past Perfect. Hangi olay önce bittiyse o Past Perfect olur.",
+  "ornek": "By the time we arrived, the film had already started.",
+  "tuzak": "\"has become / had mutated\" zaman uyumunu bozar: Present Perfect ile Past Perfect aynı cümlede eşleşmez. Şıkları tek tek değil, ikili olarak kontrol et."
+ },
+ {
+  "id": "z05",
+  "seviye": "90",
+  "tip": "dilbilgisi",
+  "soru": "---- overwhelming the evidence for climate change may be, a significant portion of the public remains unconvinced.",
+  "secenekler": [
+   "However",
+   "Whatever",
+   "Although",
+   "Even if",
+   "Whereas"
+  ],
+  "dogru": 0,
+  "tr": "İklim değişikliğine dair kanıtlar ne kadar güçlü olursa olsun, halkın önemli bir kısmı ikna olmuş değil.",
+  "kural": "However + sıfat + özne + may be = ne kadar ... olursa olsun. Boşluktan hemen sonra sıfat geliyorsa \"However\" ara.",
+  "ornek": "However hard he tries, he can't finish on time.",
+  "tuzak": "Although ve Even if anlamca yakın ama hemen ardından sıfat alamaz (\"Although overwhelming the evidence\" yanlış). Anlama değil, kalıba bak."
+ },
+ {
+  "id": "z06",
+  "seviye": "90",
+  "tip": "dilbilgisi",
+  "soru": "Not only ---- the economic burden of the project, but they also ignored its environmental impact.",
+  "secenekler": [
+   "the planners underestimated",
+   "underestimated the planners",
+   "had underestimated the planners",
+   "did the planners underestimate",
+   "the planners did underestimate"
+  ],
+  "dogru": 3,
+  "tr": "Planlamacılar projenin ekonomik yükünü küçümsemekle kalmadı, çevresel etkisini de görmezden geldi.",
+  "kural": "Cümle başında Not only gelirse devrik yapı gelir: yardımcı fiil + özne + fiil.",
+  "ornek": "Not only did she win the race, but she also broke the record.",
+  "tuzak": "\"the planners did underestimate\" doğru kelimeleri içerir ama sırası düz cümle. Devrikte yardımcı fiil öznenin önüne geçer."
+ },
+ {
+  "id": "z07",
+  "seviye": "90",
+  "tip": "cloze",
+  "soru": "Sleep is not a passive state of rest, as was long assumed; ----, it is an active period during which the brain consolidates memories and clears metabolic waste.",
+  "secenekler": [
+   "likewise",
+   "otherwise",
+   "therefore",
+   "in addition",
+   "on the contrary"
+  ],
+  "dogru": 4,
+  "tr": "Uyku, uzun süre sanıldığı gibi pasif bir dinlenme hali değildir; aksine beynin anıları pekiştirdiği ve metabolik atıkları temizlediği aktif bir dönemdir.",
+  "kural": "Olumsuz bir yargıdan (not passive) sonra zıt doğru veriliyorsa bağlaç \"on the contrary / rather\" olur.",
+  "ornek": "The plan was not a failure; on the contrary, it exceeded our expectations.",
+  "tuzak": "\"in addition\" ekleme yapar ama burada ekleme değil düzeltme var: passive değil, active. İki tarafın anlamını karşılaştır."
+ },
+ {
+  "id": "z08",
+  "seviye": "90",
+  "tip": "cloze",
+  "soru": "Many early civilisations developed writing systems ---- the need to keep records of trade, taxation and land ownership.",
+  "secenekler": [
+   "in spite of",
+   "in response to",
+   "in place of",
+   "regardless of",
+   "on behalf of"
+  ],
+  "dogru": 1,
+  "tr": "Birçok erken uygarlık, ticaret, vergi ve toprak mülkiyeti kayıtlarını tutma ihtiyacına karşılık olarak yazı sistemleri geliştirdi.",
+  "kural": "İhtiyaç (need) bir sebeptir. Sebep bağlayan edat grubunu seç.",
+  "ornek": "The school changed its timetable in response to parents' complaints.",
+  "tuzak": "in spite of zıtlık verir. Yazı ihtiyaç yüzünden doğmuşsa zıtlık yok. Cloze'da önce iki parça arasındaki ilişkiyi (sebep, zıtlık, ekleme) belirle."
+ },
+ {
+  "id": "z09",
+  "seviye": "90",
+  "tip": "cloze",
+  "soru": "The ancient city, ---- ruins were discovered only in the 1920s, is believed to have housed over 50,000 people at its peak.",
+  "secenekler": [
+   "where",
+   "which",
+   "that",
+   "whom",
+   "whose"
+  ],
+  "dogru": 4,
+  "tr": "Kalıntıları ancak 1920'lerde bulunan antik şehrin, en parlak döneminde 50.000'den fazla kişiye ev sahipliği yaptığı düşünülüyor.",
+  "kural": "Boşluktan sonra isim (ruins) geliyor ve bu isim önceki isme ait: aitlik = whose.",
+  "ornek": "The author, whose novel won the prize, gave a speech.",
+  "tuzak": "where de \"şehir\" kelimesine bakınca çekici gelir. Ama where'den sonra tam cümle gelir; burada \"ruins were discovered\" kimin kalıntıları sorusunu açık bırakıyor."
+ },
+ {
+  "id": "z10",
+  "seviye": "90",
+  "tip": "cümle tamamlama",
+  "soru": "Had the warning signs been taken seriously, ----.",
+  "secenekler": [
+   "the authorities ignore such reports",
+   "the disaster could have been prevented",
+   "many lives are at risk",
+   "the damage will be limited",
+   "experts had predicted the collapse"
+  ],
+  "dogru": 1,
+  "tr": "Uyarı işaretleri ciddiye alınmış olsaydı, ---.",
+  "kural": "Had + özne + V3 = If ... had V3 (3. tip koşul). Karşılığı: could / would have V3.",
+  "ornek": "Had I known, I would have called you.",
+  "tuzak": "\"experts had predicted\" de geçmiş zaman ve Had kelimesini hatırlatıyor. Ama koşulun sonucu modal + have V3 olmalı."
+ },
+ {
+  "id": "z11",
+  "seviye": "90",
+  "tip": "cümle tamamlama",
+  "soru": "----, the researchers were unable to determine whether the drug itself or the patients' lifestyle changes caused the improvement.",
+  "secenekler": [
+   "Unless further funding is secured",
+   "Although the sample size was large enough",
+   "Since the trial lacked a proper control group",
+   "As the results were published in a leading journal",
+   "So that the findings could be generalised"
+  ],
+  "dogru": 2,
+  "tr": "---, araştırmacılar iyileşmeye ilacın kendisinin mi yoksa hastaların yaşam tarzı değişikliklerinin mi yol açtığını belirleyemedi.",
+  "kural": "Ana cümle olumsuz bir sonuç (were unable). Boşluk bu başarısızlığın sebebini vermeli.",
+  "ornek": "Kontrol grubu yoksa ilacın etkisini diğer etkenlerden ayıramazsın.",
+  "tuzak": "\"Although the sample size was large enough\" zıtlık kurar ve kulağa akademik gelir. Ama örneklem büyüklüğü bu sorunu açıklamaz. Zaman uyumuna da bak: Unless ... is secured şimdiki zaman, ana cümle geçmiş."
+ },
+ {
+  "id": "z12",
+  "seviye": "90",
+  "tip": "cümle tamamlama",
+  "soru": "Whereas earlier generations tended to stay in one job for life, ----.",
+  "secenekler": [
+   "they valued stability above all",
+   "younger workers today change careers several times",
+   "the job market was far less competitive",
+   "loyalty to employers was highly rewarded",
+   "many of them retired early"
+  ],
+  "dogru": 1,
+  "tr": "Önceki kuşaklar ömür boyu tek işte kalma eğilimindeyken, ---.",
+  "kural": "Whereas iki farklı grubu karşılaştırır. İkinci yarı başka bir grubu (bugünkü gençler) ve zıt bir durumu anlatmalı.",
+  "ornek": "Whereas my brother loves football, I prefer tennis.",
+  "tuzak": "Diğer dört şık mantıklı ve doğru bilgiler ama hepsi yine \"önceki kuşak\"tan söz ediyor. Whereas'te iki taraf aynı grup olamaz."
+ },
+ {
+  "id": "z13",
+  "seviye": "90",
+  "tip": "çeviri (İng → Tr)",
+  "soru": "It was not until the invention of the microscope that scientists could observe the cells that make up living organisms.",
+  "secenekler": [
+   "Mikroskop icat edilmeden önce de bilim insanları canlı organizmaları oluşturan hücreleri gözlemleyebiliyordu.",
+   "Mikroskobun icadı, bilim insanlarının canlı organizmaları oluşturan hücreleri gözlemlemesini kolaylaştırdı.",
+   "Bilim insanlarının hücreleri gözlemleyebilmesi için mikroskobun icat edilmesi yeterli değildi.",
+   "Bilim insanları, canlı organizmaları oluşturan hücreleri ancak mikroskobun icadıyla gözlemleyebildi.",
+   "Bilim insanları mikroskobu, canlı organizmaları oluşturan hücreleri gözlemlemek için icat etti."
+  ],
+  "dogru": 3,
+  "tr": "",
+  "kural": "It was not until X that Y = Y ancak X ile / X'e kadar Y olmadı. Türkçede \"ancak\" ya da \"-e kadar ... -medi\" ile verilir.",
+  "ornek": "It was not until midnight that he came home. = Eve ancak gece yarısı geldi.",
+  "tuzak": "\"kolaylaştırdı\" anlamı yumuşatır. Kalıp \"önce imkânsızdı\" der, \"kolaylaştı\" demez. Çeviride vurgunun şiddeti de korunmalı."
+ },
+ {
+  "id": "z14",
+  "seviye": "90",
+  "tip": "çeviri (İng → Tr)",
+  "soru": "The more widely a language is spoken, the less likely it is to die out in the near future.",
+  "secenekler": [
+   "Yaygın konuşulan diller yakın gelecekte kesinlikle yok olmayacaktır.",
+   "Bir dilin yakın gelecekte yok olmaması için yaygın konuşulması gerekir.",
+   "Bir dil daha az konuşuldukça yakın gelecekte daha hızlı yok olur.",
+   "Yakın gelecekte yok olma ihtimali düşük olan diller daha yaygın konuşulur.",
+   "Bir dil ne kadar yaygın konuşulursa, yakın gelecekte yok olma olasılığı o kadar düşük olur."
+  ],
+  "dogru": 4,
+  "tr": "",
+  "kural": "The more ..., the less ... = ne kadar ... o kadar az. İki karşılaştırma da çeviride görünmeli.",
+  "ornek": "The more you practise, the fewer mistakes you make. = Ne kadar çok pratik yaparsan o kadar az hata yaparsın.",
+  "tuzak": "\"kesinlikle yok olmayacaktır\" olasılığı (less likely) kesinliğe çevirir. YDS'de \"likely, may, tend to\" gibi yumuşatıcıları atan şık yanlıştır."
+ },
+ {
+  "id": "z15",
+  "seviye": "90",
+  "tip": "çeviri (İng → Tr)",
+  "soru": "Given that the effects of the policy will not be felt for years, it would be premature to judge its success now.",
+  "secenekler": [
+   "Politikanın etkileri yıllar sonra hissedileceği için başarısı şimdiden belli olmuştur.",
+   "Politikanın başarısını şimdi değerlendirmek, etkilerinin yıllarca sürmesine neden olabilir.",
+   "Politikanın etkilerinin yıllarca hissedilmeyeceği göz önüne alındığında, başarısını şimdiden değerlendirmek erken olur.",
+   "Politikanın etkileri yıllardır hissedilmediği halde, başarısı şimdiden değerlendiriliyor.",
+   "Politikanın başarısını değerlendirmek için etkilerinin hissedilmesini yıllarca beklemek gereksizdir."
+  ],
+  "dogru": 2,
+  "tr": "",
+  "kural": "Given that = göz önüne alındığında / -dığı düşünülürse. premature = erken, vakitsiz.",
+  "ornek": "Given that he is new, he did a good job. = Yeni olduğu düşünülürse iyi iş çıkardı.",
+  "tuzak": "\"yıllardır hissedilmediği halde\" zamanı ters çevirir: cümle gelecekten (will not be felt) söz ediyor. Zaman ve zıtlık bağlacını birlikte kontrol et."
+ },
+ {
+  "id": "z16",
+  "seviye": "90",
+  "tip": "çeviri (Tr → İng)",
+  "soru": "Uzmanlar, yapay zekânın birçok mesleği dönüştüreceği konusunda hemfikir olsa da bunun ne kadar hızlı gerçekleşeceği tartışmalıdır.",
+  "secenekler": [
+   "Experts debate whether artificial intelligence will transform many professions quickly.",
+   "Although experts agree that artificial intelligence will transform many professions, how quickly this will happen is debatable.",
+   "Since experts agree that artificial intelligence will transform many professions, it will happen quickly.",
+   "Experts agree that how quickly artificial intelligence transforms professions is no longer debatable.",
+   "Even if artificial intelligence transforms many professions, experts do not agree that it will happen."
+  ],
+  "dogru": 1,
+  "tr": "",
+  "kural": "Türkçe cümleyi iki parçaya böl: (1) hemfikirler, (2) hız tartışmalı. Doğru şık iki parçayı da ve aradaki \"-sa da\" zıtlığını korur.",
+  "ornek": "-sa da = although / even though. \"ne kadar hızlı\" = how quickly.",
+  "tuzak": "İlk şık tek parçayı alıp ikisini birleştiriyor: uzmanların hemfikir olduğu kısmı kaybediyor. Eksik bilgi veren şık da yanlıştır."
+ },
+ {
+  "id": "z17",
+  "seviye": "90",
+  "tip": "çeviri (Tr → İng)",
+  "soru": "Bu bölgedeki kuraklık, tarımsal üretimi azaltmakla kalmamış, aynı zamanda birçok çiftçiyi göç etmeye zorlamıştır.",
+  "secenekler": [
+   "The drought in this region has reduced agricultural production, so many farmers have chosen to migrate.",
+   "The drought in this region forced farmers to migrate rather than reducing agricultural production.",
+   "Although the drought reduced agricultural production, few farmers in the region were forced to migrate.",
+   "Not only has the drought in this region reduced agricultural production, but it has also forced many farmers to migrate.",
+   "Many farmers migrating from this region have reduced agricultural production during the drought."
+  ],
+  "dogru": 3,
+  "tr": "",
+  "kural": "\"-makla kalmamış, aynı zamanda\" = not only ... but also. İki sonuç eşit ağırlıkta verilir.",
+  "ornek": "Sadece yorulmakla kalmadı, aynı zamanda hastalandı. = Not only did he get tired, but he also fell ill.",
+  "tuzak": "İlk şık anlamca yakın ama \"chosen to migrate\" (göçü seçti) \"zorlamıştır\" ile çelişiyor. Fiilin gücüne dikkat: zorlamak ≠ seçmek."
+ },
+ {
+  "id": "z18",
+  "seviye": "90",
+  "tip": "çeviri (Tr → İng)",
+  "soru": "Çocukların dil becerileri, onlarla ne sıklıkla konuşulduğuna büyük ölçüde bağlıdır.",
+  "secenekler": [
+   "Children who talk often have greater language skills.",
+   "Children's language skills depend on how often they talk to others.",
+   "Children's language skills largely depend on how often they are spoken to.",
+   "How often children speak depends on their language skills.",
+   "Speaking to children often may slightly improve their language skills."
+  ],
+  "dogru": 2,
+  "tr": "",
+  "kural": "\"onlarla konuşulması\" edilgendir: çocuk konuşan değil, kendisiyle konuşulan kişidir. İngilizcede \"they are spoken to\".",
+  "ornek": "büyük ölçüde = largely / to a great extent. bağlıdır = depend on.",
+  "tuzak": "\"how often they talk to others\" çok yakın ama özneyi değiştiriyor (çocuk konuşuyor). Etken/edilgen farkı 90+ adayların en çok kaçırdığı ayrıntı."
+ },
+ {
+  "id": "z19",
+  "seviye": "90",
+  "tip": "okuma",
+  "soru": "For decades, the decline of honeybee populations was attributed primarily to pesticide use. Recent studies, however, suggest a more complex picture. A parasitic mite, combined with poor nutrition caused by monoculture farming, appears to weaken colonies to the point where even low doses of pesticides become lethal. Researchers therefore argue that banning a single class of chemicals, while useful, is unlikely to reverse the trend on its own.\n\nIt can be understood from the passage that ----.",
+  "secenekler": [
+   "pesticides play no role in the decline of honeybees",
+   "banning one class of pesticides alone will probably not stop the decline",
+   "monoculture farming improves the nutrition of bee colonies",
+   "the parasitic mite is the only cause of the decline",
+   "researchers oppose any restriction on pesticide use"
+  ],
+  "dogru": 1,
+  "tr": "Arı nüfusundaki düşüş uzun süre böcek ilaçlarına bağlandı. Yeni çalışmalar daha karmaşık bir tablo gösteriyor: parazit akar ve tek ürün tarımından gelen kötü beslenme kolonileri zayıflatıyor, böylece düşük dozda ilaç bile öldürücü olabiliyor. Bu yüzden tek bir ilaç grubunu yasaklamak faydalı olsa da tek başına gidişatı tersine çevirmeyecek.",
+  "kural": "Son cümle genelde yazarın vardığı sonuçtur. \"while useful, is unlikely ... on its own\" = faydalı ama tek başına yetmez.",
+  "ornek": "on its own = tek başına. unlikely to = muhtemelen ... olmayacak.",
+  "tuzak": "\"play no role\" ve \"the only cause\" uç ifadelerdir. Metin \"more complex\" diyorsa tek sebep veya hiç etkisi yok diyen şıklar yanlıştır."
+ },
+ {
+  "id": "z20",
+  "seviye": "90",
+  "tip": "okuma",
+  "soru": "Proponents of the four-day working week claim that it boosts productivity and well-being. The trials conducted so far, though encouraging, have mostly involved office-based companies that volunteered to take part. Whether the same benefits would emerge in sectors such as healthcare or manufacturing, where work cannot easily be compressed, remains an open question.\n\nThe author's attitude towards the four-day working week can best be described as ----.",
+  "secenekler": [
+   "enthusiastic",
+   "dismissive",
+   "cautious",
+   "hostile",
+   "indifferent"
+  ],
+  "dogru": 2,
+  "tr": "Dört günlük çalışma haftasını savunanlar verimliliği ve iyi oluşu artırdığını söylüyor. Şimdiye kadarki denemeler umut verici olsa da çoğunlukla gönüllü ofis şirketlerinde yapıldı. Aynı faydaların sağlık ya da üretim gibi işin kolayca sıkıştırılamadığı sektörlerde görülüp görülmeyeceği açık bir soru.",
+  "kural": "Tutum sorularında yazarın kendi kelimelerine bak: \"though encouraging\" (olumlu) + \"remains an open question\" (şüphe) = temkinli.",
+  "ornek": "cautious = temkinli. dismissive = küçümseyen. indifferent = ilgisiz.",
+  "tuzak": "\"encouraging\" kelimesini görüp enthusiastic seçmek klasik tuzaktır. Yazar hem olumlu hem şüpheli konuşuyorsa cevap ortadadır."
+ },
+ {
+  "id": "z21",
+  "seviye": "90",
+  "tip": "okuma",
+  "soru": "Urban trees are often valued for their beauty, yet their economic contributions are rarely calculated. A single mature tree can lower nearby air-conditioning costs by shading buildings, absorb stormwater that would otherwise overload drainage systems, and filter pollutants linked to respiratory illness. When these benefits are expressed in monetary terms, the cost of planting and maintaining trees is often recovered many times over.\n\nThe main purpose of the passage is to ----.",
+  "secenekler": [
+   "describe how trees are planted in cities",
+   "argue that air-conditioning use should be reduced",
+   "criticise city councils for cutting down trees",
+   "show that urban trees provide measurable economic benefits",
+   "compare the beauty of different tree species"
+  ],
+  "dogru": 3,
+  "tr": "Kent ağaçları çoğunlukla güzellikleriyle değer görür ama ekonomik katkıları nadiren hesaplanır. Olgun bir ağaç gölgesiyle klima masrafını düşürür, yağmur suyunu emer, solunum hastalıklarıyla bağlantılı kirleticileri süzer. Bu faydalar paraya çevrildiğinde ağaç dikme ve bakım masrafı kat kat geri döner.",
+  "kural": "Ana amaç: ilk cümledeki \"yet\" sonrası + son cümle. Yazar ağaçların ekonomik faydasını gösteriyor.",
+  "ornek": "yet = ama (zıtlık). recovered many times over = kat kat geri kazanılmak.",
+  "tuzak": "Klima metinde geçiyor diye B çekici. Ayrıntıda geçen bilgi ana amaç değildir. Şık metnin tamamını kapsıyor mu, ona bak."
+ },
+ {
+  "id": "z22",
+  "seviye": "90",
+  "tip": "diyalog",
+  "soru": "Emma: I heard you turned down the job offer in Berlin. Weren't you desperate to work abroad?\nLucas: ----\nEmma: Fair enough. There's no point moving abroad just to struggle financially.",
+  "secenekler": [
+   "Yes, I've already signed the contract.",
+   "Berlin is the capital of Germany.",
+   "No, I've never wanted to leave my hometown.",
+   "I'm going to accept it next week.",
+   "I was, but the salary barely covered the cost of living there."
+  ],
+  "dogru": 4,
+  "tr": "Emma: Berlin'deki iş teklifini reddettiğini duydum. Yurt dışında çalışmayı çok istemiyor muydun?\nLucas: ---\nEmma: Haklısın. Sadece maddi sıkıntı çekmek için yurt dışına taşınmanın anlamı yok.",
+  "kural": "Boşluktan sonraki cümle anahtardır. Emma \"maddi sıkıntı\" diyorsa Lucas para ile ilgili bir sebep vermiş olmalı.",
+  "ornek": "barely covered = ancak karşılıyordu (zar zor). Fair enough = makul, haklısın.",
+  "tuzak": "\"No, I've never wanted to leave\" Emma'nın \"desperate to work abroad\" sözüyle çelişiyor. Diyalogda hem önceki hem sonraki satıra uymayan şık elenir."
+ },
+ {
+  "id": "z23",
+  "seviye": "90",
+  "tip": "diyalog",
+  "soru": "Student: Could I hand in my essay a few days late? I've been ill all week.\nTeacher: ----\nStudent: Thank you, I'll bring the note tomorrow.",
+  "secenekler": [
+   "That should be fine, as long as you bring a doctor's note.",
+   "Of course not, deadlines are deadlines.",
+   "You should have written it last month.",
+   "Essays are worth 30 percent of your grade.",
+   "I'm afraid I'm ill too."
+  ],
+  "dogru": 0,
+  "tr": "Öğrenci: Ödevimi birkaç gün geç teslim edebilir miyim? Bütün hafta hastaydım.\nÖğretmen: ---\nÖğrenci: Teşekkürler, raporu yarın getiririm.",
+  "kural": "Öğrenci \"Thank you\" ve \"the note\" diyor. Öğretmen hem izin vermiş hem de bir belge (note) istemiş olmalı.",
+  "ornek": "as long as = -dığı sürece (şart). doctor's note = doktor raporu.",
+  "tuzak": "\"Of course not\" kibar bir \"evet\" sanılabilir (Do you mind...? sorusunda öyledir). Ama \"Could I...?\" sorusuna \"Of course not\" ret demektir."
+ },
+ {
+  "id": "z24",
+  "seviye": "90",
+  "tip": "diyalog",
+  "soru": "Interviewer: Your study claims that social media lowers teenagers' self-esteem. Isn't that an oversimplification?\nResearcher: ----\nInterviewer: So it's more about how they use it than how long they use it?\nResearcher: Exactly.",
+  "secenekler": [
+   "Not at all; every teenager who uses social media suffers from it.",
+   "Yes, so we decided to ban social media in schools.",
+   "To some extent. We found the effect mainly among those who constantly compare themselves with others.",
+   "Teenagers spend an average of three hours online every day.",
+   "We didn't include teenagers in our study."
+  ],
+  "dogru": 2,
+  "tr": "Muhabir: Çalışmanız sosyal medyanın gençlerin özsaygısını düşürdüğünü söylüyor. Bu aşırı basitleştirme değil mi?\nAraştırmacı: ---\nMuhabir: Yani mesele ne kadar süre değil, nasıl kullandıkları mı?\nAraştırmacı: Kesinlikle.",
+  "kural": "Muhabirin ikinci sorusu araştırmacının cevabını özetliyor: süre değil, kullanım şekli.",
+  "ornek": "To some extent = bir dereceye kadar. compare themselves with others = kendini başkalarıyla kıyaslamak.",
+  "tuzak": "\"three hours online\" süreden bahsediyor; muhabir ise \"how long değil\" diyor. Sayı veren şıklar ciddi görünür ama özetle çelişir."
+ },
+ {
+  "id": "z25",
+  "seviye": "90",
+  "tip": "yakın anlam",
+  "soru": "Hardly had the committee announced its decision when protests broke out across the country.",
+  "secenekler": [
+   "As soon as the committee announced its decision, protests broke out across the country.",
+   "Protests broke out across the country long after the committee announced its decision.",
+   "The committee announced its decision because of the protests across the country.",
+   "Protests across the country forced the committee to change its decision.",
+   "The committee hardly expected protests when it announced its decision."
+  ],
+  "dogru": 0,
+  "tr": "Kurul kararını açıklar açıklamaz ülke genelinde protestolar başladı.",
+  "kural": "Hardly / Scarcely ... when = No sooner ... than = As soon as = -ir -mez.",
+  "ornek": "Hardly had I sat down when the phone rang. = Oturur oturmaz telefon çaldı.",
+  "tuzak": "\"hardly expected\" aynı kelimeyi kullanır ama anlamı \"neredeyse hiç beklemedi\"dir. Yakın anlamda aynı kelimeyi taşıyan şık çoğu zaman tuzaktır."
+ },
+ {
+  "id": "z26",
+  "seviye": "90",
+  "tip": "yakın anlam",
+  "soru": "The project would have failed had it not been for the volunteers' dedication.",
+  "secenekler": [
+   "Although the volunteers were dedicated, the project failed.",
+   "The project failed because the volunteers were not dedicated enough.",
+   "If the volunteers are dedicated, the project will not fail.",
+   "The volunteers' dedication was not enough to save the project.",
+   "Thanks to the volunteers' dedication, the project did not fail."
+  ],
+  "dogru": 4,
+  "tr": "Gönüllülerin özverisi olmasaydı proje başarısız olacaktı.",
+  "kural": "had it not been for X = X olmasaydı (3. tip koşul). Gerçekte X vardı ve sonuç olmadı.",
+  "ornek": "Had it not been for your help, I would have lost. = Yardımın sayesinde kaybetmedim.",
+  "tuzak": "\"failed\" kelimesini taşıyan şıklar gerçekleşmemiş sonucu gerçekleşmiş gibi anlatıyor. 3. tip koşul hep gerçeğin tersidir."
+ },
+ {
+  "id": "z27",
+  "seviye": "90",
+  "tip": "yakın anlam",
+  "soru": "It is by no means certain that the new treatment will be approved.",
+  "secenekler": [
+   "The new treatment will certainly not be approved.",
+   "There is no doubt that the new treatment will be approved.",
+   "The new treatment has already been approved.",
+   "It is quite uncertain whether the new treatment will be approved.",
+   "The approval of the new treatment depends on certain conditions."
+  ],
+  "dogru": 3,
+  "tr": "Yeni tedavinin onaylanacağı hiç de kesin değil.",
+  "kural": "by no means certain = hiç kesin değil (belirsiz). \"Kesinlikle olmayacak\" demek değildir.",
+  "ornek": "It is by no means easy. = Hiç de kolay değil.",
+  "tuzak": "\"will certainly not be approved\" belirsizliği kesin bir \"hayır\"a çevirir. Olumsuzluğun neyi olumsuzladığına bak: onayı değil, kesinliği."
+ },
+ {
+  "id": "z28",
+  "seviye": "90",
+  "tip": "paragraf tamamlama",
+  "soru": "Antibiotics have saved millions of lives since the mid-twentieth century. ----. As a result, infections that were once easily treated are becoming deadly again. Health authorities therefore urge doctors to prescribe them only when absolutely necessary.",
+  "secenekler": [
+   "Penicillin was discovered by Alexander Fleming in 1928.",
+   "However, their overuse has allowed many bacteria to develop resistance.",
+   "Viruses, unlike bacteria, cannot be treated with antibiotics.",
+   "Many patients prefer natural remedies to prescription drugs.",
+   "Consequently, the number of infections has fallen sharply worldwide."
+  ],
+  "dogru": 1,
+  "tr": "Antibiyotikler 20. yüzyılın ortasından beri milyonlarca hayat kurtardı. ---. Sonuç olarak bir zamanlar kolayca tedavi edilen enfeksiyonlar yeniden ölümcül hale geliyor. Bu yüzden sağlık otoriteleri doktorları yalnızca gerçekten gerekliyse reçete yazmaya çağırıyor.",
+  "kural": "Boşluktan sonra \"As a result\" geliyor: boşluk, enfeksiyonların neden yeniden ölümcül olduğunu açıklamalı. Önceki cümle olumlu, sonraki olumsuz: arada \"However\" gerekir.",
+  "ornek": "Boşluğun önü + arkası = köprü. Köprü iki tarafa da bağlanmalı.",
+  "tuzak": "Penisilin bilgisi konuya uygun ve doğru ama \"As a result\" ile bağlanmaz. Doğru bilgi, doğru cevap demek değil."
+ },
+ {
+  "id": "z29",
+  "seviye": "90",
+  "tip": "paragraf tamamlama",
+  "soru": "Bilingual children often take slightly longer to start speaking than their monolingual peers. ----. In fact, by school age they usually catch up and may even show advantages in tasks requiring attention control. Parents, therefore, need not worry about early delays.",
+  "secenekler": [
+   "For this reason, experts advise parents to use only one language at home.",
+   "Monolingual children rarely experience learning difficulties.",
+   "Learning a second language as an adult is considerably harder.",
+   "Some bilingual children never learn to read properly.",
+   "This delay, however, is temporary and is not a sign of a language disorder."
+  ],
+  "dogru": 4,
+  "tr": "İki dilli çocuklar konuşmaya tek dilli akranlarından biraz daha geç başlayabilir. ---. Aslında okul çağına geldiklerinde genellikle yetişirler, hatta dikkat kontrolü gerektiren işlerde avantaj gösterebilirler. Bu yüzden ebeveynlerin erken gecikmeler için endişelenmesine gerek yok.",
+  "kural": "\"In fact\" bir önceki fikri güçlendirir. Boşluk \"gecikme önemli değil\" fikrini kurmalı ki \"In fact, yetişirler\" ona otursun.",
+  "ornek": "need not worry = endişelenmeye gerek yok. catch up = yetişmek.",
+  "tuzak": "\"use only one language\" önerisi paragrafın sonucu (endişeye gerek yok) ile çelişiyor. Paragraf tamamlamada son cümle yönü gösterir."
+ },
+ {
+  "id": "z30",
+  "seviye": "90",
+  "tip": "paragraf tamamlama",
+  "soru": "----. Some species migrate thousands of kilometres without ever having made the journey before. Scientists believe they rely on a combination of the sun's position, the stars and the Earth's magnetic field. Remarkably, young birds raised in isolation still orient themselves in the correct direction when the migration season begins.",
+  "secenekler": [
+   "Bird migration is increasingly threatened by climate change.",
+   "Most birds spend the winter in warmer regions.",
+   "Isolation has a negative effect on young birds.",
+   "The navigational abilities of migratory birds have long puzzled researchers.",
+   "Magnetic fields are also used in modern navigation systems."
+  ],
+  "dogru": 3,
+  "tr": "---. Bazı türler daha önce hiç yapmadıkları binlerce kilometrelik yolculuğu yapar. Bilim insanları güneşin konumu, yıldızlar ve manyetik alanın birlikte kullanıldığını düşünüyor. Şaşırtıcı biçimde yalnız büyütülen yavrular bile göç zamanı doğru yönü buluyor.",
+  "kural": "Boşluk paragrafın başındaysa konu cümlesini ara: diğer bütün cümleleri kapsayan genel fikir.",
+  "ornek": "Paragrafın tamamı \"kuşlar yolu nasıl buluyor\" sorusu etrafında dönüyor: navigational abilities.",
+  "tuzak": "\"Isolation\" ve \"magnetic field\" kelimeleri paragrafta geçtiği için çekici. Tek cümleye bağlanan şık konu cümlesi olamaz."
+ },
+ {
+  "id": "z31",
+  "seviye": "90",
+  "tip": "anlamı bozan cümle",
+  "soru": "(I) Microplastics are tiny plastic particles less than five millimetres in length. (II) They enter the oceans through sources such as synthetic clothing, tyres and cosmetics. (III) Plastic bags were first introduced in supermarkets in the 1970s. (IV) Once in the water, they are swallowed by fish and other marine organisms. (V) In this way, microplastics can eventually reach the human food chain.",
+  "secenekler": [
+   "I",
+   "II",
+   "III",
+   "IV",
+   "V"
+  ],
+  "dogru": 2,
+  "tr": "(I) Mikroplastikler 5 mm'den küçük plastik parçacıklardır. (II) Sentetik giysi, lastik ve kozmetik yoluyla okyanuslara karışırlar. (III) Plastik poşetler süpermarketlere ilk kez 1970'lerde girdi. (IV) Suya girince balıklar ve diğer deniz canlıları onları yutar. (V) Böylece mikroplastikler sonunda insan besin zincirine ulaşabilir.",
+  "kural": "Paragrafın akışını çıkar: tanım → kaynak → denizde ne olur → insana ulaşır. Bu zincire bağlanmayan cümle atılır.",
+  "ornek": "IV'teki \"they\" II'deki mikroplastikleri işaret eder; III araya girince \"they\" poşetleri gösterir gibi olur ve zincir kopar.",
+  "tuzak": "III de plastikten bahsettiği için \"konu içi\" görünür. Aynı kelime geçmesi yetmez; akışa bağlanmalı."
+ },
+ {
+  "id": "z32",
+  "seviye": "90",
+  "tip": "anlamı bozan cümle",
+  "soru": "(I) Remote work has become far more common since 2020. (II) Cycling to work is one of the healthiest ways to commute. (III) Many employees say that working from home saves the time they used to spend commuting. (IV) Some managers, however, worry that it weakens team cohesion. (V) As a result, a growing number of firms are adopting hybrid models that combine office and home working.",
+  "secenekler": [
+   "I",
+   "II",
+   "III",
+   "IV",
+   "V"
+  ],
+  "dogru": 1,
+  "tr": "(I) Uzaktan çalışma 2020'den beri çok yaygınlaştı. (II) Bisikletle işe gitmek en sağlıklı ulaşım yollarından biridir. (III) Birçok çalışan evden çalışmanın işe gidip gelmeye harcadığı zamanı kazandırdığını söylüyor. (IV) Ancak bazı yöneticiler bunun ekip bağını zayıflattığından endişe ediyor. (V) Sonuç olarak giderek daha fazla şirket hibrit modele geçiyor.",
+  "kural": "Konu: uzaktan çalışmanın artısı, eksisi ve sonucu. Her cümle bu tartışmaya hizmet etmeli.",
+  "ornek": "III ve IV artı-eksi verir, V \"As a result\" ile hibrit modele bağlar.",
+  "tuzak": "\"commute\" kelimesi III'te de geçtiği için II yerinde görünür. 90+ sorularda kopuk cümle, komşu cümleyle kelime paylaşacak şekilde yazılır."
+ },
+ {
+  "id": "z33",
+  "seviye": "90",
+  "tip": "anlamı bozan cümle",
+  "soru": "(I) The Silk Road was not a single route but a network of trade paths linking China with the Mediterranean. (II) Along it travelled not only silk but also spices, metals and religious ideas. (III) Buddhism, for instance, spread from India to China partly through these routes. (IV) Silk is produced by silkworms that feed almost exclusively on mulberry leaves. (V) Thus, the Silk Road shaped cultures as much as it shaped economies.",
+  "secenekler": [
+   "I",
+   "II",
+   "III",
+   "IV",
+   "V"
+  ],
+  "dogru": 3,
+  "tr": "(I) İpek Yolu tek bir yol değil, Çin'i Akdeniz'e bağlayan ticaret yolları ağıydı. (II) Bu yolda ipeğin yanında baharat, maden ve dini fikirler de taşındı. (III) Örneğin Budizm Hindistan'dan Çin'e kısmen bu yollarla yayıldı. (IV) İpek, neredeyse yalnızca dut yaprağıyla beslenen ipekböceklerinden üretilir. (V) Böylece İpek Yolu ekonomileri olduğu kadar kültürleri de şekillendirdi.",
+  "kural": "Konu \"İpek Yolu'nun kültürel ve ekonomik etkisi\", \"ipeğin kendisi\" değil.",
+  "ornek": "V \"Thus\" ile II ve III'ü özetler; IV bu özete katkı vermez.",
+  "tuzak": "Silk kelimesi her cümlede var. Kelime değil, paragrafın sorusu ne, ona bak."
+ },
+ {
+  "id": "o01",
+  "seviye": "70",
+  "tip": "kelime",
+  "soru": "The museum was forced to close temporarily due to a ---- of funding.",
+  "secenekler": [
+   "range",
+   "lack",
+   "source",
+   "share",
+   "rise"
+  ],
+  "dogru": 1,
+  "tr": "Müze, fon eksikliği nedeniyle geçici olarak kapanmak zorunda kaldı.",
+  "kural": "\"forced to close\" olumsuz bir sonuç. Sebep de olumsuz olmalı: eksiklik.",
+  "ornek": "a lack of time / money / evidence = zaman / para / kanıt eksikliği.",
+  "tuzak": "\"source of funding\" (fon kaynağı) kalıp olarak doğru ama kapanmanın sebebi olamaz."
+ },
+ {
+  "id": "o02",
+  "seviye": "70",
+  "tip": "dilbilgisi",
+  "soru": "If I ---- about the traffic, I would have left home earlier.",
+  "secenekler": [
+   "know",
+   "knew",
+   "had known",
+   "would know",
+   "have known"
+  ],
+  "dogru": 2,
+  "tr": "Trafiği bilseydim evden daha erken çıkardım.",
+  "kural": "Ana cümlede would have V3 varsa koşul cümlesi had V3 olur (3. tip).",
+  "ornek": "If she had studied, she would have passed.",
+  "tuzak": "\"knew\" 2. tip koşuldur ve şimdiyi anlatır. Ana cümleyle (would have) eşleşmez."
+ },
+ {
+  "id": "o03",
+  "seviye": "70",
+  "tip": "cloze",
+  "soru": "Coffee was first cultivated in Ethiopia; ----, it spread to Yemen and then to the rest of the world.",
+  "secenekler": [
+   "however",
+   "instead",
+   "later",
+   "otherwise",
+   "nevertheless"
+  ],
+  "dogru": 2,
+  "tr": "Kahve ilk olarak Etiyopya'da yetiştirildi; daha sonra Yemen'e, ardından dünyanın geri kalanına yayıldı.",
+  "kural": "Olaylar sırayla anlatılıyor (first → then). Zaman sırası bağlacı gerekir.",
+  "ornek": "First we ate; later, we went for a walk.",
+  "tuzak": "however ve nevertheless zıtlık verir; iki cümle arasında zıtlık yok."
+ },
+ {
+  "id": "o04",
+  "seviye": "70",
+  "tip": "cümle tamamlama",
+  "soru": "Although he had studied hard for the exam, ----.",
+  "secenekler": [
+   "he passed it easily",
+   "he was well prepared",
+   "his teacher praised him",
+   "he still felt nervous on the day",
+   "he got the highest score"
+  ],
+  "dogru": 3,
+  "tr": "Sınava çok çalışmış olmasına rağmen, ---.",
+  "kural": "Although beklenmeyen bir sonuç ister. Çok çalıştıysa beklenmeyen şey: yine de gergin olması.",
+  "ornek": "Although it was raining, they went out.",
+  "tuzak": "\"he passed it easily\" mantıklı ama beklenen sonuç. Although ile beklenen sonuç gelmez."
+ },
+ {
+  "id": "o05",
+  "seviye": "70",
+  "tip": "çeviri (İng → Tr)",
+  "soru": "Unless we reduce our energy consumption, the cost of living will keep rising.",
+  "secenekler": [
+   "Enerji tüketimimizi azalttığımız için yaşam maliyeti artmıyor.",
+   "Yaşam maliyeti artarsa enerji tüketimimizi azaltmalıyız.",
+   "Enerji tüketimini azaltsak bile yaşam maliyeti artacak.",
+   "Yaşam maliyeti, enerji tüketimimiz azaldıkça artıyor.",
+   "Enerji tüketimimizi azaltmazsak yaşam maliyeti artmaya devam edecek."
+  ],
+  "dogru": 4,
+  "tr": "",
+  "kural": "Unless = if not = -mezse / -madıkça.",
+  "ornek": "Unless you hurry, you'll miss the bus. = Acele etmezsen otobüsü kaçırırsın.",
+  "tuzak": "\"azaltsak bile\" (even if) çok yakın görünür ama şartı ortadan kaldırır."
+ },
+ {
+  "id": "o06",
+  "seviye": "70",
+  "tip": "çeviri (Tr → İng)",
+  "soru": "Bu kitap o kadar ilginçti ki bir gecede bitirdim.",
+  "secenekler": [
+   "Although the book was interesting, I couldn't finish it in one night.",
+   "This book was so interesting that I finished it in one night.",
+   "I finished the book in one night because it was short.",
+   "The book was too interesting to finish in one night.",
+   "Such an interesting book should be finished in one night."
+  ],
+  "dogru": 1,
+  "tr": "",
+  "kural": "o kadar ... ki = so + sıfat + that.",
+  "ornek": "It was so cold that we stayed inside.",
+  "tuzak": "too ... to = \"yapamayacak kadar\" demektir; anlamı tersine çevirir."
+ },
+ {
+  "id": "o07",
+  "seviye": "70",
+  "tip": "okuma",
+  "soru": "Many people believe that goldfish have a memory span of only three seconds. However, experiments have shown that goldfish can remember simple tasks, such as pushing a lever to get food, for several months.\n\nAccording to the passage, ----.",
+  "secenekler": [
+   "goldfish forget everything after three seconds",
+   "goldfish cannot learn to push a lever",
+   "goldfish can remember some things for months",
+   "most people know a lot about goldfish",
+   "experiments on goldfish have failed"
+  ],
+  "dogru": 2,
+  "tr": "Birçok kişi japon balıklarının hafızasının yalnızca üç saniye olduğuna inanır. Ancak deneyler, yem almak için kola basmak gibi basit işleri aylarca hatırlayabildiklerini göstermiştir.",
+  "kural": "\"However\"dan sonrası yazarın gerçek bilgisidir.",
+  "ornek": "Many people believe ... However ... = yaygın inanç yanlış.",
+  "tuzak": "\"three seconds\" metinde geçer ama yanlış inanç olarak geçer. Metinde geçen her bilgi doğru kabul edilmez."
+ },
+ {
+  "id": "o08",
+  "seviye": "70",
+  "tip": "diyalog",
+  "soru": "Anna: Shall we take the bus or walk to the cinema?\nBen: ----\nAnna: You're right, we'd better hurry then.",
+  "secenekler": [
+   "I don't like that film.",
+   "Walking is good for our health, so let's walk slowly.",
+   "The cinema is closed today.",
+   "I've already seen it twice.",
+   "Let's take the bus; the film starts in ten minutes."
+  ],
+  "dogru": 4,
+  "tr": "Anna: Sinemaya otobüsle mi gidelim, yürüyerek mi?\nBen: ---\nAnna: Haklısın, o zaman acele etsek iyi olur.",
+  "kural": "Sonraki satır: \"acele edelim\". Ben zamanın az olduğunu söylemiş olmalı.",
+  "ornek": "we'd better = -sak iyi olur.",
+  "tuzak": "\"let's walk slowly\" acele ile çelişir."
+ },
+ {
+  "id": "o09",
+  "seviye": "70",
+  "tip": "yakın anlam",
+  "soru": "She is not as experienced as her colleagues.",
+  "secenekler": [
+   "Her colleagues are more experienced than she is.",
+   "She is the most experienced in the team.",
+   "She and her colleagues are equally experienced.",
+   "Her colleagues lack experience.",
+   "She has more experience than her colleagues."
+  ],
+  "dogru": 0,
+  "tr": "O, meslektaşları kadar deneyimli değil.",
+  "kural": "not as ... as = ... kadar değil. Yani diğer taraf daha fazla.",
+  "ornek": "Tom is not as tall as Jim. = Jim, Tom'dan uzun.",
+  "tuzak": "\"equally experienced\" as ... as kalıbını hatırlatır ama \"not\" onu tersine çevirir."
+ },
+ {
+  "id": "o10",
+  "seviye": "70",
+  "tip": "paragraf tamamlama",
+  "soru": "Regular exercise benefits both the body and the mind. ----. It also releases chemicals in the brain that improve mood. That is why doctors often recommend it to people suffering from mild depression.",
+  "secenekler": [
+   "Many people cannot afford a gym membership.",
+   "Running is popular in many countries.",
+   "Some exercises can cause injuries.",
+   "Physically, it strengthens the heart and muscles.",
+   "The mind is more important than the body."
+  ],
+  "dogru": 3,
+  "tr": "Düzenli egzersiz hem bedene hem zihne iyi gelir. ---. Ayrıca beyinde ruh halini iyileştiren kimyasallar salgılatır. Bu yüzden doktorlar hafif depresyonu olanlara sık sık önerir.",
+  "kural": "İlk cümle iki şey vaat ediyor: beden + zihin. \"It also\" zihni anlatıyor, demek ki boşluk bedeni anlatır.",
+  "ornek": "both A and B → önce A, sonra \"also\" ile B.",
+  "tuzak": "\"Some exercises can cause injuries\" konu içi ama olumsuz; paragraf faydaları sayıyor."
+ },
+ {
+  "id": "o11",
+  "seviye": "70",
+  "tip": "anlamı bozan cümle",
+  "soru": "(I) Honey is one of the few foods that never spoil. (II) Archaeologists have found edible honey in ancient Egyptian tombs. (III) Its low moisture and natural acidity prevent bacteria from growing. (IV) Bees communicate with each other by dancing. (V) This is why honey was valued as a preservative in the past.",
+  "secenekler": [
+   "I",
+   "II",
+   "III",
+   "IV",
+   "V"
+  ],
+  "dogru": 3,
+  "tr": "(I) Bal hiç bozulmayan nadir yiyeceklerden biridir. (II) Arkeologlar Mısır mezarlarında yenebilir bal buldu. (III) Düşük nemi ve doğal asitliği bakteri üremesini engeller. (IV) Arılar dans ederek iletişim kurar. (V) Bu yüzden bal geçmişte koruyucu olarak değerliydi.",
+  "kural": "Konu: balın bozulmaması. Her cümle bu fikre bağlanmalı.",
+  "ornek": "V \"This is why\" ile III'e bağlanır; IV araya girince bağ kopar.",
+  "tuzak": "Arılar baldan bahsediyor gibi görünür ama konu arılar değil, balın dayanıklılığı."
+ }
+]</script>
+<script>
+(function () {
+  "use strict";
+  var SORULAR = JSON.parse(document.getElementById("ph-sorular").textContent);
+  var HARF = ["A", "B", "C", "D", "E"];
+  var NET = { "50": [40, 40], "70": [56, 24], "90": [72, 8] };
+  var KAYIT_ANAHTAR = "sa_puan_hedefi";
+  var $ = function (id) { return document.getElementById(id); };
+
+  var kayit = {};
+  try { kayit = JSON.parse(localStorage.getItem(KAYIT_ANAHTAR) || "{}") || {}; } catch (e) { kayit = {}; }
+  function kaydet() { try { localStorage.setItem(KAYIT_ANAHTAR, JSON.stringify(kayit)); } catch (e) {} }
+
+  var durum = { seviye: "90", tip: "hepsi", sira: 0 };
+  try { var s = localStorage.getItem(KAYIT_ANAHTAR + "_seviye"); if (NET[s]) durum.seviye = s; } catch (e) {}
+
+  function liste() {
+    return SORULAR.filter(function (q) {
+      return q.seviye === durum.seviye && (durum.tip === "hepsi" || q.tip === durum.tip);
+    });
+  }
+
+  function cipleriCiz() {
+    var tipler = ["hepsi"];
+    SORULAR.forEach(function (q) { if (q.seviye === durum.seviye && tipler.indexOf(q.tip) < 0) tipler.push(q.tip); });
+    var kutu = $("cipler");
+    kutu.innerHTML = "";
+    tipler.forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cip";
+      b.textContent = t === "hepsi" ? "Hepsi" : t.charAt(0).toLocaleUpperCase("tr") + t.slice(1);
+      b.setAttribute("aria-pressed", String(t === durum.tip));
+      b.addEventListener("click", function () { durum.tip = t; durum.sira = 0; ciz(); });
+      kutu.appendChild(b);
+    });
+  }
+
+  function netleriCiz() {
+    var n = NET[durum.seviye];
+    $("netDogru").textContent = n[0];
+    $("netHata").textContent = n[1];
+    var cozulen = SORULAR.filter(function (q) { return q.seviye === durum.seviye && kayit[q.id] !== undefined; }).length;
+    $("netCozulen").textContent = cozulen;
+  }
+
+  function soruyuCiz() {
+    var l = liste();
+    if (durum.sira >= l.length) durum.sira = 0;
+    var q = l[durum.sira];
+    $("tip").textContent = q.tip;
+    $("sayac").textContent = "Soru " + (durum.sira + 1) + " / " + l.length;
+    $("govde").textContent = q.soru;
+    var ol = $("secenekler");
+    ol.innerHTML = "";
+    q.secenekler.forEach(function (metin, i) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "sec";
+      var h = document.createElement("span");
+      h.className = "harf";
+      h.textContent = HARF[i];
+      var m = document.createElement("span");
+      m.textContent = metin;
+      b.appendChild(h);
+      b.appendChild(m);
+      b.addEventListener("click", function () { cevapla(q, i); });
+      li.appendChild(b);
+      ol.appendChild(li);
+    });
+    $("tr").hidden = true;
+    $("tr").textContent = q.tr || "";
+    $("trDugme").hidden = !q.tr;
+    $("trDugme").textContent = "Türkçesini göster";
+    $("geri").disabled = durum.sira === 0;
+    $("ileri").disabled = durum.sira >= l.length - 1;
+    if (kayit[q.id] !== undefined) sonucuGoster(q, kayit[q.id]);
+    else $("sonucAlani").hidden = true;
+  }
+
+  function sonucuGoster(q, secilen) {
+    var butonlar = $("secenekler").querySelectorAll(".sec");
+    butonlar.forEach(function (b, i) {
+      b.disabled = true;
+      if (i === q.dogru) b.classList.add("dogru");
+      else if (i === secilen) b.classList.add("yanlis");
+    });
+    var iyi = secilen === q.dogru;
+    $("sonuc").textContent = iyi ? "Doğru. Cevap " + HARF[q.dogru] + "." : "Yanlış. Doğru cevap " + HARF[q.dogru] + ".";
+    $("sonuc").className = "sonuc " + (iyi ? "iyi" : "kotu");
+    $("kural").textContent = q.kural;
+    $("ornek").textContent = q.ornek;
+    $("tuzak").textContent = q.tuzak;
+    $("sonucAlani").hidden = false;
+    if (q.tr) { $("tr").hidden = false; $("trDugme").textContent = "Türkçesini gizle"; }
+  }
+
+  function cevapla(q, i) {
+    if (kayit[q.id] !== undefined) return;
+    kayit[q.id] = i;
+    kaydet();
+    try { gtag("event", "hedef_soru_cevap", { seviye: q.seviye, dogru: i === q.dogru }); } catch (e) {}
+    sonucuGoster(q, i);
+    netleriCiz();
+  }
+
+  function ciz() {
+    document.querySelectorAll(".sekme").forEach(function (b) {
+      b.setAttribute("aria-selected", String(b.getAttribute("data-seviye") === durum.seviye));
+    });
+    $("bolum-50").hidden = durum.seviye !== "50";
+    $("bolum-soru").hidden = durum.seviye === "50";
+    netleriCiz();
+    if (durum.seviye !== "50") { cipleriCiz(); soruyuCiz(); }
+  }
+
+  document.querySelectorAll(".sekme").forEach(function (b) {
+    b.addEventListener("click", function () {
+      durum.seviye = b.getAttribute("data-seviye");
+      durum.tip = "hepsi";
+      durum.sira = 0;
+      try { localStorage.setItem(KAYIT_ANAHTAR + "_seviye", durum.seviye); } catch (e) {}
+      ciz();
+    });
+  });
+  $("geri").addEventListener("click", function () { if (durum.sira > 0) { durum.sira--; soruyuCiz(); } });
+  $("ileri").addEventListener("click", function () { if (durum.sira < liste().length - 1) { durum.sira++; soruyuCiz(); } });
+  $("trDugme").addEventListener("click", function () {
+    var acik = $("tr").hidden;
+    $("tr").hidden = !acik;
+    $("trDugme").textContent = acik ? "Türkçesini gizle" : "Türkçesini göster";
+  });
+
+  ciz();
+})();
+</script>
+</body>
+</html>
