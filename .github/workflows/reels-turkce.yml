@@ -1,0 +1,59 @@
+name: Reels — Türkçe alt satırlı videolar
+
+# tasarim/turkce.py: videodaki İngilizce cümlenin altına kısa Türkçe anlamı ekler
+# ("konuXX-tr.mp4"). PR'da: konu 101 ve 56 örnekleri iş çıktısı (artifact) olarak eklenir.
+# main'de: henüz zamanlanmamış konuların videoları üretilir ve kapakları yapılır,
+# reels-medya-v1'e yüklenir (var olan dosyaya dokunmaz). Günlük yayın da eksikleri tamamlar.
+
+on:
+  pull_request:
+    paths:
+      - automation/reels-yayin/tasarim/turkce.py
+      - automation/reels-yayin/tasarim/turkce-satirlar.json
+      - .github/workflows/reels-turkce.yml
+  push:
+    branches: [main]
+    paths:
+      - automation/reels-yayin/tasarim/turkce.py
+      - automation/reels-yayin/tasarim/turkce-satirlar.json
+      - .github/workflows/reels-turkce.yml
+  workflow_dispatch:
+
+concurrency:
+  group: reels-turkce
+  cancel-in-progress: false
+
+jobs:
+  medya:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write # Release'e video yüklemek için
+    defaults:
+      run:
+        working-directory: automation/reels-yayin/tasarim
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      CIKTI_KLASORU: ${{ github.workspace }}/turkce-cikti
+    steps:
+      - uses: actions/checkout@v4
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          pip install --quiet Pillow numpy
+      - name: Örnekler (PR)
+        if: github.event_name == 'pull_request'
+        run: python3 turkce.py --ornek 101 56
+      - name: Önizleme
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: turkce-onizleme
+          path: turkce-cikti/
+      - name: Üret ve yükle
+        if: github.event_name != 'pull_request'
+        run: |
+          python3 turkce.py --hepsi --yukle
+          python3 kapak.py --hepsi --yukle

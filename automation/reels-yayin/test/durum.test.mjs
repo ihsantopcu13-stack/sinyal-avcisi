@@ -3,7 +3,7 @@
 import {
   durumHazirla, planla, atamaSonucu, gelecekSlotlar, youtubeAcik, ilkYorumAcik,
   youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, MAX_DENEME,
-  kuyrukUyarisi, KALAN_UYARI_ESIGI, kapakliVideoAdi, paylasilacakVideo,
+  kuyrukUyarisi, KALAN_UYARI_ESIGI, kapakliVideoAdi, paylasilacakVideo, turkceVideoAdi, asilVideo,
 } from "../kuyruk-mantigi.mjs";
 
 let toplam = 0, hata = 0;
@@ -159,6 +159,12 @@ const isle = (d, plan, basarisiz = {}) => {
   kontrol("kapaklı ad", kapakliVideoAdi("konu45.mp4") === "konu45-kapak.mp4");
   kontrol("kapaklı varsa o paylaşılır", paylasilacakVideo("konu45.mp4", { "konu45.mp4": {}, "konu45-kapak.mp4": {} }) === "konu45-kapak.mp4");
   kontrol("kapaklı yoksa asıl video", paylasilacakVideo("konu45.mp4", { "konu45.mp4": {} }) === "konu45.mp4");
+  kontrol("Türkçe ad", turkceVideoAdi("konu58.mp4") === "konu58-tr.mp4" && turkceVideoAdi("konu101-nane.mp4") === "konu101-tr.mp4");
+  kontrol("Türkçe+kapak önce", paylasilacakVideo("konu58.mp4", { "konu58.mp4": {}, "konu58-kapak.mp4": {}, "konu58-tr.mp4": {}, "konu58-tr-kapak.mp4": {} }) === "konu58-tr-kapak.mp4");
+  kontrol("Türkçe kapaksızsa eski kapak", paylasilacakVideo("konu58.mp4", { "konu58.mp4": {}, "konu58-kapak.mp4": {}, "konu58-tr.mp4": {} }) === "konu58-kapak.mp4");
+  kontrol("kapak yoksa Türkçe", paylasilacakVideo("konu101-nane.mp4", { "konu101-nane.mp4": {}, "konu101-tr.mp4": {} }) === "konu101-tr.mp4");
+  kontrol("YouTube Türkçe varsa onu", asilVideo("konu56.mp4", { "konu56.mp4": {}, "konu56-tr.mp4": {} }) === "konu56-tr.mp4");
+  kontrol("YouTube Türkçe yoksa asıl", asilVideo("konu56.mp4", { "konu56.mp4": {} }) === "konu56.mp4");
 }
 
 console.log(`${toplam - hata}/${toplam} kontrol geçti`);
