@@ -12200,6 +12200,7 @@ function cevapKaydet(opts){
     cevapSunucuyaSenkronla(kayit);
     if(typeof sabahListesiRender==='function')sabahListesiRender(); // tamamlanan maddeyi işaretle
     if(typeof ptKartRender==='function')ptKartRender();
+    if(typeof hrCevapIsle==='function')hrCevapIsle(kayit); // haftalık rapor sayacı
   }catch(e){}
 }
 
@@ -15433,6 +15434,131 @@ function okRender(){
 // Bildirim ya da 50 puan programı bağlantısı: sinyal-avcisi.com/#okuma
 if(typeof location!=='undefined'&&location.hash==='#okuma')setTimeout(()=>{goTo('dashboard');gununOkumasiAc();},1500);
 
+// ─── HAFTALIK RAPOR — son 7 günün özeti, Pazar 21:00 bildirimi ──────────────
+// Cevap geçmişi (sa_cevap_gecmisi) aynı soruyu tekilleştirdiği için tekrarları
+// saymaz. Bu yüzden cevapKaydet her cevabı ayrıca günlük sayaca yazar
+// (sa_gunluk_sayac: gün → {s: soru, d: doğru, ok: okuma sorusu}), 35 gün tutulur.
+// Rapor bu sayaçtan kurulur. Aynı özet Cache API'ye de yazılır
+// (sa-ozet-v1): Pazar bildirimi geldiğinde sw.js bunu okuyup bildirime kişinin
+// kendi sayılarını yazar ("Bu hafta 120 soru, %68 doğru"). Sunucu bu sayıları
+// hiç görmez; bildirimi sadece son 7 günde aktif olanlara gönderir.
+const HR_SAKLA_GUN=35;
+const HR_OZET_CACHE='sa-ozet-v1';
+const HR_OZET_URL='/__sa/haftalik-ozet';
+function hrSayacLoad(){try{const v=JSON.parse(localStorage.getItem('sa_gunluk_sayac'));return v&&typeof v==='object'?v:{};}catch(e){return{};}}
+function hrGunAnahtari(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function hrGunGeri(simdi,n){const d=new Date(simdi);return hrGunAnahtari(new Date(d.getFullYear(),d.getMonth(),d.getDate()-n));}
+function hrSayacEkle(kayit,simdi){
+  const v=hrSayacLoad();
+  const gun=hrGunAnahtari(new Date(simdi));
+  const g=v[gun]||(v[gun]={s:0,d:0,ok:0});
+  g.s++;if(kayit.isCorrect)g.d++;if(kayit.modul==='okuma')g.ok++;
+  const sinir=hrGunGeri(simdi,HR_SAKLA_GUN);
+  Object.keys(v).forEach(k=>{if(k<sinir)delete v[k];});
+  try{localStorage.setItem('sa_gunluk_sayac',JSON.stringify(v));}catch(e){}
+  return v;
+}
+// bas: kaç gün önceden başlasın (0 = bugünle biten 7 gün, 7 = ondan önceki 7 gün)
+function hrHafta(sayac,simdi,bas){
+  let s=0,d=0,ok=0,gun=0;
+  for(let i=bas;i<bas+7;i++){const g=sayac[hrGunGeri(simdi,i)];if(g&&g.s){s+=g.s;d+=g.d;ok+=g.ok||0;gun++;}}
+  return{soru:s,dogru:d,oran:s?Math.round(d/s*100):null,gun,okuma:Math.round(ok/3)};
+}
+function hrOzet(simdi){
+  const sayac=hrSayacLoad();
+  const bu=hrHafta(sayac,simdi,0),once=hrHafta(sayac,simdi,7);
+  const pt=typeof ptHesapla==='function'?ptHesapla(ptDenemeleriOku(),cevapGecmisiLoad(),simdi):{tur:'yok'};
+  // En zayıf sinyal: bu hafta en az 2 kez cevaplanan sinyaller arasında en düşük doğruluk.
+  const sinir=new Date(hrGunGeri(simdi,6)+'T00:00:00').getTime();
+  const sinyaller={};
+  cevapGecmisiLoad().forEach(h=>{
+    if(h.modul!=='sinyal'||!h.signal||!h.answeredAt||new Date(h.answeredAt).getTime()<sinir)return;
+    const z=sinyaller[h.signal]||(sinyaller[h.signal]={sinyal:h.signal,dogru:0,toplam:0});
+    z.toplam++;if(h.isCorrect)z.dogru++;
+  });
+  const zayif=Object.values(sinyaller).filter(z=>z.toplam>=2&&z.dogru<z.toplam).sort((a,b)=>a.dogru/a.toplam-b.dogru/b.toplam)[0]||null;
+  const yd=typeof ydOzet==='function'?ydOzet(sinavChecklistBugunAnahtari()):null;
+  return{bu,once,puan:pt.tur==='yok'?null:pt.puan,puanTur:pt.tur,zayif,ogrenilen:yd?yd.ogrenilen:0,bekleyen:yd?yd.bugun:0};
+}
+function hrOzetCacheYaz(simdi){
+  try{
+    if(typeof caches==='undefined')return;
+    const pt=typeof ptHesapla==='function'?ptHesapla(ptDenemeleriOku(),cevapGecmisiLoad(),simdi):{tur:'yok'};
+    const govde=JSON.stringify({gunler:hrSayacLoad(),puan:pt.tur==='yok'?null:pt.puan,guncel:new Date(simdi).toISOString()});
+    caches.open(HR_OZET_CACHE).then(c=>c.put(HR_OZET_URL,new Response(govde,{headers:{'Content-Type':'application/json'}}))).catch(()=>{});
+  }catch(e){}
+}
+function hrCevapIsle(kayit){
+  try{const simdi=Date.now();hrSayacEkle(kayit,simdi);hrOzetCacheYaz(simdi);}catch(e){}
+}
+function hrFark(bu,once,birim){
+  if(once===null||bu===null)return'';
+  const f=bu-once;
+  if(f===0)return'Geçen haftayla aynı.';
+  return'Geçen haftadan '+(f>0?'+':'')+f+birim+'.';
+}
+// Tek bir sonraki adım: en çok işe yarayacak olan.
+function hrSonrakiAdim(o){
+  if(!o.bu.soru)return{metin:'Bu hafta hiç soru çözmedin. Bugün 5 soruluk denemeyle başla.',dugme:'Günün denemesini aç',fn:'gunlukDenemeAc'};
+  if(o.bekleyen)return{metin:'Yanlış defterinde bugün '+o.bekleyen+' soru seni bekliyor. Önce onları bitir.',dugme:'Tekrara başla',fn:'ydTekrarAc'};
+  if(o.bu.gun<5)return{metin:'Bu hafta '+o.bu.gun+' gün çalıştın. Hedef haftada en az 5 gün: her sabah listeni bitir.',dugme:'Günün okuma parçasını aç',fn:'gununOkumasiAc'};
+  if(o.zayif)return{metin:'En zayıf sinyalin '+o.zayif.sinyal+'. Yarın sabah listen ondan soru seçecek.',dugme:'Günün denemesini aç',fn:'gunlukDenemeAc'};
+  return{metin:'Tempon iyi. Bu hafta bir tam deneme çöz ve sonucunu 50 puan programına yaz.',dugme:'Günün okuma parçasını aç',fn:'gununOkumasiAc'};
+}
+function hrPerde(){
+  let el=document.getElementById('hr-perde');
+  if(!el){
+    el=document.createElement('div');el.id='hr-perde';el.className='gd-perde';el.hidden=true;
+    el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Haftalık rapor');
+    el.innerHTML='<div class="gd-panel" id="hr-panel"></div>';
+    el.addEventListener('click',e=>{if(e.target===el)hrKapat();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)hrKapat();});
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function haftalikRaporAc(){
+  hrPerde().hidden=false;
+  document.body.style.overflow='hidden';
+  faz2GaEvent('haftalik_rapor_ac',{});
+  hrRender();
+}
+function hrKapat(){const el=document.getElementById('hr-perde');if(el)el.hidden=true;document.body.style.overflow='';}
+function hrAdimAc(fn){hrKapat();if(typeof window[fn]==='function')window[fn]();}
+function hrRender(){
+  const panel=document.getElementById('hr-panel');if(!panel)return;
+  const simdi=Date.now();
+  const o=hrOzet(simdi);
+  const tarih=k=>{const [y,a,g]=k.split('-').map(Number);return new Date(y,a-1,g).toLocaleDateString('tr-TR',{day:'numeric',month:'long'});};
+  const aralik=tarih(hrGunGeri(simdi,6))+' - '+tarih(hrGunGeri(simdi,0));
+  const adim=hrSonrakiAdim(o);
+  const satirlar=[];
+  if(o.once.soru||o.bu.soru)satirlar.push('Soru: '+hrFark(o.bu.soru,o.once.soru,''));
+  if(o.bu.oran!==null&&o.once.oran!==null)satirlar.push('Doğruluk: geçen hafta %'+o.once.oran+', bu hafta %'+o.bu.oran+'.');
+  if(o.bu.okuma)satirlar.push('Bu hafta '+o.bu.okuma+' okuma parçası bitirdin.');
+  if(o.ogrenilen)satirlar.push('Yanlış defterinde '+o.ogrenilen+' soru öğrenildi.');
+  if(o.zayif)satirlar.push('En zayıf sinyalin: <b>'+gdEsc(o.zayif.sinyal)+'</b> (%'+Math.round(o.zayif.dogru/o.zayif.toplam*100)+' doğru).');
+  panel.innerHTML=`<div class="gd-ust"><div class="gd-eyebrow">Haftalık rapor · ${gdEsc(aralik)}</div><button type="button" class="gd-kapat" onclick="hrKapat()" aria-label="Kapat">Kapat</button></div>
+    <div class="gd-baslik">${o.bu.soru?'Bu hafta '+o.bu.soru+' soru çözdün':'Bu hafta henüz soru yok'}</div>
+    <div class="gd-ozet hr-ozet">
+      <div><b>${o.bu.soru}</b>Soru</div>
+      <div><b>${o.bu.oran===null?'-':'%'+o.bu.oran}</b>Doğru</div>
+      <div><b>${o.bu.gun}/7</b>Gün</div>
+      <div><b>${o.puan===null?'-':ptSayi(o.puan)}</b>Tahmini puan</div>
+    </div>
+    ${satirlar.length?`<ul class="gd-bilgi">${satirlar.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+    <div class="gd-aciklama"><div class="gd-satir"><span class="gd-etiket">Sonraki adım</span>${gdEsc(adim.metin)}</div></div>
+    <button type="button" class="gd-btn" onclick="hrAdimAc('${adim.fn}')">${gdEsc(adim.dugme)}</button>
+    <div class="gd-not">Sayılar bu cihazdaki çalışmandan. ${o.puanTur==='mini'?'Tahmini puan kaba tahmin (varsayım). ':''}Puan hesabı varsayım: 80 soru, her doğru 1,25 puan. ÖSYM'den kontrol et.</div>`;
+}
+// Pazar bildirimi ya da bağlantı: sinyal-avcisi.com/#haftalik-rapor
+if(typeof location!=='undefined'&&location.hash==='#haftalik-rapor')setTimeout(()=>{goTo('dashboard');haftalikRaporAc();},1500);
+// Sayfa açıkken bildirime tıklanınca sadece adresin #'i değişir: aynı paneli aç.
+if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('hashchange',()=>{
+  if(location.hash==='#okuma'){goTo('dashboard');gununOkumasiAc();}
+  else if(location.hash==='#haftalik-rapor'){goTo('dashboard');haftalikRaporAc();}
+});
+
 // ─── PUAN TAHMİNİ — denemelerden tahmini YDS puanı, 50 hedefine mesafe ─────
 // Kaynak 1: /50-puan-programi'nde girilen tam deneme doğru sayıları
 // (program50:deneme, gün → doğru). Son 3 denemenin ağırlıklı ortalaması
@@ -15475,7 +15601,7 @@ function ptKartRender(){
     el.innerHTML=`<div class="pt-eyebrow">Puan tahmini</div>
       <div class="pt-baslik">Henüz tahmin yok</div>
       <div class="pt-alt">${PT_MINI_EN_AZ-t.soruSayisi} soru daha çöz ya da tam deneme sonucunu gir. Sonra tahmini puanın burada çıkar.</div>
-      <div class="pt-linkler"><a href="/50-puan-programi">Deneme sonucunu gir</a></div>${not}`;
+      <div class="pt-linkler"><a href="/50-puan-programi">Deneme sonucunu gir</a><a href="#haftalik-rapor" onclick="event.preventDefault();haftalikRaporAc()">Haftalık raporun</a></div>${not}`;
     return;
   }
   const kalan=Math.round((PT_HEDEF-t.puan)*10)/10;
@@ -15490,7 +15616,7 @@ function ptKartRender(){
     <div class="pt-olcek"><span>0</span><span style="left:${PT_HEDEF}%">Hedef ${PT_HEDEF}</span><span>100</span></div>
     <div class="pt-alt">${mesafe}</div>
     <div class="pt-kaynak">${kaynak}</div>
-    <div class="pt-linkler"><a href="/50-puan-programi">${t.tur==='deneme'?'Yeni deneme sonucu gir':'Tam deneme sonucunu gir'}</a><a href="/puan-hedefi">${kalan>0?'50 için neye çalışmalı':'Daha yüksek hedef'}</a></div>${not}`;
+    <div class="pt-linkler"><a href="/50-puan-programi">${t.tur==='deneme'?'Yeni deneme sonucu gir':'Tam deneme sonucunu gir'}</a><a href="/puan-hedefi">${kalan>0?'50 için neye çalışmalı':'Daha yüksek hedef'}</a><a href="#haftalik-rapor" onclick="event.preventDefault();haftalikRaporAc()">Haftalık raporun</a></div>${not}`;
 }
 
 // ─── PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* ─────────────────────────────────

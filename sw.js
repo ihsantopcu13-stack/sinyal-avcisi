@@ -4,6 +4,10 @@
 // önbelleği siler.
 const CACHE_NAME = 'sinyal-avcisi-v5';
 const CACHE_URLS = ['/', '/index.html'];
+// Haftalık rapor özeti: sayfa (index.html → hrOzetCacheYaz) yazar, Pazar
+// bildirimi gelince burada okunur. Sürüm temizliğinde SİLİNMEZ.
+const OZET_CACHE = 'sa-ozet-v1';
+const OZET_URL = '/__sa/haftalik-ozet';
 
 self.addEventListener('install', e => {
   self.skipWaiting(); // yeni SW'yi hemen aktif et — eski sekmelerin kapanmasını bekleme
@@ -16,7 +20,7 @@ self.addEventListener('activate', e => {
   e.waitUntil(
     Promise.all([
       caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+        Promise.all(keys.filter(k => k !== CACHE_NAME && k !== OZET_CACHE).map(k => caches.delete(k)))
       ),
       self.clients.claim(), // açık sekmeleri de hemen yeni SW'nin kontrolüne al
     ])
@@ -87,20 +91,52 @@ self.addEventListener('fetch', e => {
 // ============================================================
 const SA_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='24' fill='%232d5be3'/><text x='96' y='130' font-size='100' text-anchor='middle' fill='white'>🎯</text></svg>";
 
+// Haftalık bildirim metni: cihazdaki özetten son 7 günün sayıları.
+// Özet yoksa ya da hafta boşsa sunucunun gönderdiği genel metin kalır.
+function haftalikGovde(ozet, simdi, seri) {
+  let govde = null;
+  if (ozet && ozet.gunler) {
+    let s = 0, d = 0;
+    const bugun = new Date(simdi);
+    for (let i = 0; i < 7; i++) {
+      const g = new Date(bugun.getFullYear(), bugun.getMonth(), bugun.getDate() - i);
+      const k = g.getFullYear() + '-' + String(g.getMonth() + 1).padStart(2, '0') + '-' + String(g.getDate()).padStart(2, '0');
+      const v = ozet.gunler[k];
+      if (v) { s += v.s || 0; d += v.d || 0; }
+    }
+    if (s > 0) {
+      govde = `Bu hafta ${s} soru, %${Math.round(d / s * 100)} doğru`;
+      if (typeof ozet.puan === 'number') govde += `, tahmini puan ${String(ozet.puan).replace('.', ',')}`;
+      govde += '. Raporuna bak.';
+    }
+  }
+  if (seri) govde = (govde || 'Haftalık raporun hazır.') + ` Önce bugün 1 soru çöz, ${seri} günlük serin kopmasın.`;
+  return govde;
+}
+async function ozetOku() {
+  try {
+    const c = await caches.open(OZET_CACHE);
+    const r = await c.match(OZET_URL);
+    return r ? await r.json() : null;
+  } catch (err) { return null; }
+}
+
 // Sunucudan (Web Push API) gelen gerçek push mesajları
 self.addEventListener('push', e => {
   let data = {};
   try { data = e.data ? e.data.json() : {}; } catch (err) { data = { title: 'Sinyal Avcısı', body: e.data ? e.data.text() : '' }; }
-  const title = data.title || 'Sinyal Avcısı';
-  const options = {
-    body: data.body || '',
-    icon: SA_ICON,
-    badge: SA_ICON,
-    tag: data.tag || 'sinyal-avcisi',
-    data: { url: data.url || '/' },
-    vibrate: [100, 50, 100],
-  };
-  e.waitUntil(self.registration.showNotification(title, options));
+  e.waitUntil((async () => {
+    let body = data.body || '';
+    if (data.tur === 'haftalik') body = haftalikGovde(await ozetOku(), Date.now(), data.seri) || body;
+    return self.registration.showNotification(data.title || 'Sinyal Avcısı', {
+      body,
+      icon: SA_ICON,
+      badge: SA_ICON,
+      tag: data.tag || 'sinyal-avcisi',
+      data: { url: data.url || '/' },
+      vibrate: [100, 50, 100],
+    });
+  })());
 });
 
 // Bildirime tıklanınca siteyi aç / var olan sekmeye odaklan
@@ -110,6 +146,8 @@ self.addEventListener('notificationclick', e => {
   e.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
       for (const c of list) {
+        // Açık sekme bildirimin adresine gitsin (örn. /#haftalik-rapor raporu açar).
+        if ('navigate' in c && url !== '/') return c.navigate(url).then(w => (w || c).focus());
         if ('focus' in c) return c.focus();
       }
       if (clients.openWindow) return clients.openWindow(url);
