@@ -1114,6 +1114,27 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .sabah-madde.tamam .sabah-madde-baslik{text-decoration:line-through;color:rgba(230,242,236,.55)}
 .sabah-madde.tamam .sabah-ok{visibility:hidden}
 @media(max-width:600px){.sabah-kart{padding:16px}}
+/* PUAN TAHMİNİ — denemelerden tahmini puan, 50 hedefine mesafe (koyu yeşil + nane) */
+.pt-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin-bottom:14px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
+.pt-kart:empty{display:none}
+.pt-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
+.pt-baslik{font-size:21px;font-weight:700;margin-bottom:6px}
+.pt-skor{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.pt-sayi{font-size:48px;font-weight:800;color:#6ee7b7;line-height:1}
+.pt-etiket{font-size:17px;color:#d5e9df}
+.pt-bar{position:relative;height:14px;border-radius:8px;background:#102a1f;border:1px solid rgba(110,231,183,.3);overflow:visible}
+.pt-dolu{display:block;height:100%;border-radius:8px;background:#6ee7b7}
+.pt-hedef{position:absolute;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;background:#ffffff;border-radius:2px}
+.pt-olcek{position:relative;display:flex;justify-content:space-between;font-size:13px;color:#b9d6c8;margin:6px 0 12px;height:18px}
+.pt-olcek span:nth-child(2){position:absolute;transform:translateX(-50%);color:#ffffff;font-weight:700}
+.pt-alt{font-size:16.5px;color:#d5e9df;line-height:1.6;margin-bottom:8px}
+.pt-alt b{color:#ffffff}
+.pt-kaynak{font-size:14.5px;color:#b9d6c8;line-height:1.5;margin-bottom:12px}
+.pt-linkler{display:flex;flex-wrap:wrap;gap:8px}
+.pt-linkler a{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid rgba(110,231,183,.55);color:#ffffff;font-weight:700;font-size:15px;text-decoration:none}
+.pt-linkler a:first-child{background:#6ee7b7;border-color:#6ee7b7;color:#0b1f17}
+.pt-not{font-size:13.5px;color:#b9d6c8;margin-top:12px;line-height:1.5}
+@media(max-width:600px){.pt-kart{padding:16px}.pt-sayi{font-size:42px}}
 /* GÜNÜN DENEMESİ — her gün 5 soruluk süreli mini YDS denemesi (koyu yeşil + nane) */
 .gd-perde{position:fixed;inset:0;z-index:100000;background:rgba(3,10,7,.78);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
 .gd-perde[hidden]{display:none}
@@ -1994,6 +2015,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <div class="dash-welcome">Günaydın — <b>Bugünün sinyal rotası hazır</b></div>
         <div class="bugun-kart" id="bugun-kart"></div>
         <div class="sabah-kart" id="sabah-kart" aria-live="polite"></div>
+        <div class="pt-kart" id="pt-kart"></div>
         <a href="/50-puan-programi" style="display:block;margin:0 0 10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;color:var(--ink);font-size:16px;font-weight:600;text-decoration:none">22 Kasım'a 50 puan programı: bugünkü görevlerin <span style="color:var(--signal)">→</span></a>
         <!-- AVCI ÖĞRENME YOLU — Dashboard mini CTA kartı -->
         <div id="aoy-dash-cta" onclick="aoyAc()" role="button" tabindex="0" style="display:none;cursor:pointer;background:linear-gradient(150deg,#0d1624,#131f30 130%);border:1px solid rgba(56,189,248,.32);border-radius:16px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden">
@@ -7116,6 +7138,7 @@ function dnav(el){
   const skKartEl=document.getElementById('sk-kart');if(skKartEl)skKartEl.style.display='none';
   const bugunKartEl=document.getElementById('bugun-kart');if(bugunKartEl)bugunKartEl.style.display='none';
   const sabahKartEl=document.getElementById('sabah-kart');if(sabahKartEl)sabahKartEl.style.display='none';
+  const ptKartEl=document.getElementById('pt-kart');if(ptKartEl)ptKartEl.style.display='none';
   if(txt.includes('Dashboard')||txt.includes('Bugün')){
     // KATMAN 5B — Dashboard varsayılan olarak Sinyal Lab'ı gösterir (dtab[0] aktif)
     _aktifSoruModulu='sinyal_lab';
@@ -7123,6 +7146,7 @@ function dnav(el){
     if(skKartEl){skKartEl.style.display='block';if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();}
     if(bugunKartEl){bugunKartEl.style.display='block';if(typeof bugunKartiRender==='function')bugunKartiRender();}
     if(sabahKartEl){sabahKartEl.style.display='block';if(typeof sabahListesiRender==='function')sabahListesiRender();}
+    if(ptKartEl){ptKartEl.style.display='block';if(typeof ptKartRender==='function')ptKartRender();}
     modSinyalAsilGeriYukle();
     document.getElementById('mod-sinyal').style.display='block';document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dtab')[0].classList.add('active');
     setTimeout(takvimOlustur,300);
@@ -11588,6 +11612,7 @@ function cevapKaydet(opts){
     cevapGecmisiSave(d);
     cevapSunucuyaSenkronla(kayit);
     if(typeof sabahListesiRender==='function')sabahListesiRender(); // tamamlanan maddeyi işaretle
+    if(typeof ptKartRender==='function')ptKartRender();
   }catch(e){}
 }
 
@@ -14247,6 +14272,66 @@ function gdRender(){
     <div class="gd-not">Yarın yeni 5 soru. Yanlışların yarınki sabah listene düşer.</div>`;
 }
 
+// ─── PUAN TAHMİNİ — denemelerden tahmini YDS puanı, 50 hedefine mesafe ─────
+// Kaynak 1: /50-puan-programi'nde girilen tam deneme doğru sayıları
+// (program50:deneme, gün → doğru). Son 3 denemenin ağırlıklı ortalaması
+// (yeni olan daha ağır: 1, 2, 3). Puan = doğru × 1,25 (varsayım: 80 soru,
+// yanlış doğruyu götürmez). Kaynak 2, tam deneme yoksa: son 30 gündeki
+// Sinyal Lab / günün denemesi doğruluğu × 0,85, ±8 puan aralıkla kaba
+// tahmin. 0,85 varsayım: kısa sinyal soruları tam sınavdan kolay.
+const PT_HEDEF=50;
+const PT_SORU_PUANI=1.25;
+const PT_MINI_KATSAYI=0.85;
+const PT_MINI_EN_AZ=20;
+function ptDenemeleriOku(){
+  try{
+    const d=JSON.parse(localStorage.getItem('program50:deneme')||'{}');
+    return Object.keys(d).map(Number).filter(g=>!isNaN(g)).sort((a,b)=>a-b).map(g=>Math.min(80,Math.max(0,Number(d[g])||0)));
+  }catch(e){return[];}
+}
+function ptHesapla(denemeler,gecmis,simdi){
+  if(denemeler.length){
+    const son=denemeler.slice(-3);
+    let pay=0,payda=0;
+    son.forEach((x,i)=>{const w=i+1;pay+=x*w;payda+=w;});
+    const puan=Math.round(pay/payda*PT_SORU_PUANI*10)/10;
+    const fark=denemeler.length>=2?Math.round((denemeler[denemeler.length-1]-denemeler[denemeler.length-2])*PT_SORU_PUANI*10)/10:null;
+    return{tur:'deneme',puan,denemeSayisi:denemeler.length,fark};
+  }
+  const sinir=simdi-30*86400000;
+  const son=gecmis.filter(h=>h.modul==='sinyal'&&h.answeredAt&&new Date(h.answeredAt).getTime()>=sinir);
+  if(son.length<PT_MINI_EN_AZ)return{tur:'yok',soruSayisi:son.length};
+  const oran=son.filter(h=>h.isCorrect).length/son.length;
+  const puan=Math.round(oran*100*PT_MINI_KATSAYI);
+  return{tur:'mini',puan,alt:Math.max(0,puan-8),ust:Math.min(100,puan+8),oran:Math.round(oran*100),soruSayisi:son.length};
+}
+function ptSayi(x){return String(x).replace('.',',');}
+function ptKartRender(){
+  const el=document.getElementById('pt-kart');if(!el)return;
+  const t=ptHesapla(ptDenemeleriOku(),cevapGecmisiLoad(),Date.now());
+  const not=`<div class="pt-not">Varsayım: YDS 80 soru, her doğru 1,25 puan, yanlış doğruyu götürmez. ÖSYM'den kontrol et.</div>`;
+  if(t.tur==='yok'){
+    el.innerHTML=`<div class="pt-eyebrow">Puan tahmini</div>
+      <div class="pt-baslik">Henüz tahmin yok</div>
+      <div class="pt-alt">${PT_MINI_EN_AZ-t.soruSayisi} soru daha çöz ya da tam deneme sonucunu gir. Sonra tahmini puanın burada çıkar.</div>
+      <div class="pt-linkler"><a href="/50-puan-programi">Deneme sonucunu gir</a></div>${not}`;
+    return;
+  }
+  const kalan=Math.round((PT_HEDEF-t.puan)*10)/10;
+  const dogru=Math.ceil(kalan/PT_SORU_PUANI);
+  const mesafe=kalan>0?`${PT_HEDEF} hedefine <b>${ptSayi(kalan)} puan</b> kaldı. Bu, yaklaşık <b>${dogru} doğru</b> daha demek.`:`${PT_HEDEF} hedefini geçiyorsun. Şimdi daha yüksek hedefe bak.`;
+  const kaynak=t.tur==='deneme'
+    ?`Son ${Math.min(3,t.denemeSayisi)} tam denemene göre (yeni olan daha ağır).${t.fark!==null?' Son denemede '+(t.fark>=0?'+':'')+ptSayi(t.fark)+' puan değişim.':''}`
+    :`Kaba tahmin: son 30 günde ${t.soruSayisi} sinyal sorusunda %${t.oran} doğru. Aralık ${t.alt}-${t.ust}. Tam deneme çözünce kesinleşir (varsayım).`;
+  el.innerHTML=`<div class="pt-eyebrow">Puan tahmini</div>
+    <div class="pt-skor"><span class="pt-sayi">${ptSayi(t.puan)}</span><span class="pt-etiket">tahmini puanın</span></div>
+    <div class="pt-bar" role="img" aria-label="Tahmini puan ${ptSayi(t.puan)}, hedef ${PT_HEDEF}"><span class="pt-dolu" style="width:${Math.min(100,t.puan)}%"></span><span class="pt-hedef" style="left:${PT_HEDEF}%"></span></div>
+    <div class="pt-olcek"><span>0</span><span style="left:${PT_HEDEF}%">Hedef ${PT_HEDEF}</span><span>100</span></div>
+    <div class="pt-alt">${mesafe}</div>
+    <div class="pt-kaynak">${kaynak}</div>
+    <div class="pt-linkler"><a href="/50-puan-programi">${t.tur==='deneme'?'Yeni deneme sonucu gir':'Tam deneme sonucunu gir'}</a><a href="/puan-hedefi">${kalan>0?'50 için neye çalışmalı':'Daha yüksek hedef'}</a></div>${not}`;
+}
+
 // ─── PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* ─────────────────────────────────
 const PA_BOLUMLER=[
   {key:'sosyal',etiket:'Sosyal Bilimler',aktif:true},
@@ -14457,6 +14542,7 @@ setTimeout(()=>{
   sinavKurtarmaKartRender();
   bugunKartiRender();
   sabahListesiRender();
+  ptKartRender();
   sinavGunlukMesajGoster();
 },2000);
 

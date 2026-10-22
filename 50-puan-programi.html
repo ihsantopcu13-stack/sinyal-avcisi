@@ -91,6 +91,7 @@
     .mock{border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:16px}
     .mock input{font:inherit;font-size:18px;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;width:100%}
     .verdict{font-size:15px;color:var(--soft)}
+    .tahmin{margin-top:14px;font-size:18px;line-height:1.6}.tahmin b{color:var(--mint);font-size:22px}.tahmin a{color:var(--mint);font-weight:700}
     .verdict.good{color:var(--mint);font-weight:700}
     .btn{display:block;text-align:center;text-decoration:none;font:700 17px var(--f-body);background:var(--mint);color:var(--mint-ink);border:0;border-radius:12px;padding:14px 16px}
     .d.kilit{opacity:.4}
@@ -190,6 +191,7 @@
     <h2>Deneme sonuçların</h2>
     <p class="note">Tam denemeden sonra doğru sayını yaz. Hedef: 40 doğru.</p>
     <div class="mocks" id="mocks"></div>
+    <p class="tahmin" id="tahmin" aria-live="polite"></p>
   </section>
 
   <section class="card">
@@ -624,6 +626,19 @@
       inp.addEventListener("change", () => { const x = parseInt(inp.value, 10); if (Number.isNaN(x)) delete deneme[g]; else deneme[g] = Math.min(80, Math.max(0, x)); store.set("deneme", deneme); yaz(); if (g === secili) kontrolEt(g); else { const k = kapiTuru(g); if (!gecti[g] && gorevlerTamam(g) && k === "deneme" && deneme[g] !== undefined) { gecir(g); ust(); serit(); } } });
       yaz(); d.append(lab, inp, out); el.appendChild(d);
     });
+    tahmin();
+  }
+
+  /* Puan tahmini: son 3 denemenin ağırlıklı ortalaması (yeni olan daha ağır).
+     Paneldeki ptHesapla ile aynı kural. */
+  function tahmin(){
+    const el = $("tahmin");
+    const son = DENEME.filter((g) => deneme[g] !== undefined).map((g) => deneme[g]).slice(-3);
+    if (!son.length) { el.textContent = "İlk denemeni yazınca tahmini puanın burada çıkar."; return; }
+    let pay = 0, payda = 0;
+    son.forEach((x, i) => { pay += x * (i + 1); payda += i + 1; });
+    const puan = Math.round(pay / payda * 1.25 * 10) / 10, kalan = Math.round((50 - puan) * 10) / 10;
+    el.innerHTML = `Tahmini puanın: <b>${String(puan).replace(".", ",")}</b>. ` + (kalan > 0 ? `50'ye ${String(kalan).replace(".", ",")} puan, yaklaşık ${Math.ceil(kalan / 1.25)} doğru kaldı.` : "50 hedefini geçiyorsun.") + ` <a href="/">Panelde gör</a>`;
   }
 
   $("geri").onclick = () => { secili = Math.max(1, secili - 1); ciz(); };
