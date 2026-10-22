@@ -1114,6 +1114,54 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 .sabah-madde.tamam .sabah-madde-baslik{text-decoration:line-through;color:rgba(230,242,236,.55)}
 .sabah-madde.tamam .sabah-ok{visibility:hidden}
 @media(max-width:600px){.sabah-kart{padding:16px}}
+/* GÜNÜN DENEMESİ — her gün 5 soruluk süreli mini YDS denemesi (koyu yeşil + nane) */
+.gd-perde{position:fixed;inset:0;z-index:100000;background:rgba(3,10,7,.78);display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+.gd-perde[hidden]{display:none}
+.gd-panel{width:100%;max-width:640px;background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-radius:18px;padding:22px 24px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif;box-shadow:0 18px 48px rgba(0,0,0,.45)}
+.gd-ust{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.gd-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7}
+.gd-kapat{background:none;border:1px solid rgba(110,231,183,.5);border-radius:8px;color:#ffffff;font-family:inherit;font-size:14px;padding:4px 10px;cursor:pointer}
+.gd-kapat:hover{border-color:#6ee7b7}
+.gd-sure{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:#6ee7b7;background:rgba(110,231,183,.08);border:1px solid rgba(110,231,183,.25);border-radius:8px;padding:3px 10px}
+.gd-sure.az{color:#fca5a5;border-color:rgba(252,165,165,.45);background:rgba(252,165,165,.08)}
+.gd-baslik{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:6px}
+.gd-alt{font-size:15.5px;color:#d5e9df;line-height:1.6;margin-bottom:14px}
+.gd-bilgi{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:18px;font-size:16px;line-height:1.5}
+.gd-bilgi li{padding-left:14px;position:relative}
+.gd-bilgi li::before{content:'';position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:#6ee7b7}
+.gd-not{font-size:13.5px;color:#b9d6c8;margin-top:12px;line-height:1.5}
+.gd-btn{background:#6ee7b7;color:#0b1f17;border:none;border-radius:10px;padding:11px 20px;font-weight:700;font-size:15px;font-family:inherit;cursor:pointer}
+.gd-btn:hover{background:#86efc4}
+.gd-btn.ikincil{background:transparent;color:#ffffff;border:1px solid rgba(110,231,183,.55)}
+.gd-btn.ikincil:hover{border-color:#6ee7b7}
+.gd-btn:disabled{opacity:.4;cursor:default}
+.gd-noktalar{display:flex;gap:6px;margin-bottom:14px}
+.gd-nokta{flex:1;height:34px;border-radius:8px;border:1px solid rgba(110,231,183,.45);background:transparent;color:#f4fbf7;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;cursor:pointer}
+.gd-nokta.dolu{background:rgba(110,231,183,.16);color:#e6f2ec}
+.gd-nokta.aktif{border-color:#6ee7b7;box-shadow:0 0 0 1px #6ee7b7 inset;color:#e6f2ec}
+.gd-cumle{font-size:18px;line-height:1.65;color:#ffffff;background:#06140e;border:1px solid rgba(110,231,183,.4);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.gd-soru{font-size:17px;font-weight:700;color:#ffffff;margin-bottom:10px}
+.gd-siklar{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.gd-sik{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:#102a1f;border:1px solid rgba(110,231,183,.38);border-radius:10px;padding:12px 14px;color:#ffffff;font-family:inherit;font-size:16px;line-height:1.5;cursor:pointer}
+.gd-sik:hover{border-color:rgba(110,231,183,.45)}
+.gd-sik.secili{background:#6ee7b7;border-color:#6ee7b7;color:#0b1f17;font-weight:600}.gd-sik.secili .gd-harf{color:#0b1f17}
+.gd-harf{flex:none;font-family:'IBM Plex Mono',monospace;font-weight:700;color:#6ee7b7}
+.gd-alt-bar{display:flex;justify-content:space-between;gap:10px}
+.gd-skor{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.gd-skor-sayi{font-size:44px;font-weight:800;color:#6ee7b7;line-height:1}
+.gd-skor-etiket{font-size:16px;color:#d5e9df}
+.gd-ozet{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 18px}
+.gd-ozet div{background:#102a1f;border:1px solid rgba(110,231,183,.3);border-radius:10px;padding:8px;text-align:center;font-size:13.5px;color:#d5e9df}
+.gd-ozet b{display:block;font-size:20px;color:#ffffff}
+.gd-aciklama{border:1px solid rgba(110,231,183,.35);border-left:4px solid #6ee7b7;border-radius:12px;padding:14px 16px;margin-bottom:12px;background:#06140e}
+.gd-aciklama-ust{font-size:15px;font-weight:700;margin-bottom:8px}
+.gd-aciklama-ust span{font-weight:400;color:#b9d6c8}
+.gd-satir{font-size:15.5px;line-height:1.6;color:#ffffff;margin-bottom:8px}
+.gd-satir:last-child{margin-bottom:0}
+.gd-etiket{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6ee7b7;margin-right:6px}
+.gd-satir.tuzak .gd-etiket{color:#fca5a5}
+.gd-cevaplar{font-size:14px;color:#d5e9df;margin-top:4px}
+@media(max-width:600px){.gd-panel{padding:18px 16px}.gd-baslik{font-size:19px}.gd-ozet{grid-template-columns:repeat(2,1fr)}}
 
 /* ACİL KURTARMA KARTI — Dashboard */
 .sk-kart{background:linear-gradient(135deg,#0d1624,#131f30);border-radius:16px;padding:20px 22px;margin-bottom:16px;color:#f8fafc;cursor:pointer;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(239,68,68,.45),0 8px 24px rgba(0,0,0,.3)}
@@ -13901,13 +13949,14 @@ function bugunGorevGit(dnAra){
   document.getElementById('dashboard')?.scrollIntoView({behavior:'smooth'});
 }
 
-// ─── SABAH LİSTEN — her sabah kişiye özel 4 maddelik çalışma listesi ──────
+// ─── SABAH LİSTEN — her sabah kişiye özel 5 maddelik çalışma listesi ──────
 // "Günün Sorusu"nun kişiye özel hali. Kaynak bu cihazdaki cevap geçmişi
 // (sa_cevap_gecmisi): son kaçan Sinyal Lab sorusu, en düşük doğruluklu
 // sinyalden sorular ve kelime tekrarı. Liste günde bir kez kurulur ve
 // sa_sabah_listesi'nde saklanır, gün içinde değişmez. Maddeler, ilgili
 // cevap bugün kaydedilince (cevapKaydet) kendiliğinden işaretlenir.
 const SABAH_KELIME_HEDEF=5;
+const SABAH_DENEME_MADDE={tip:'deneme',baslik:'Günün denemesi',alt:'5 soru · 7,5 dakika · herkes için aynı'};
 function sabahTohum(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
 function sabahBugunBasi(){const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();}
 function sabahListesiKur(bugun){
@@ -13945,6 +13994,8 @@ function sabahListesiKur(bugun){
   }
   // 4) Kelime tekrarı.
   maddeler.push({tip:'kelime',baslik:SABAH_KELIME_HEDEF+' kelime kartı tekrar et',alt:'Kelime Kartları'});
+  // 5) Günün denemesi.
+  maddeler.push(SABAH_DENEME_MADDE);
   return{tarih:bugun,zayif:zayif?{sinyal:zayif.sinyal,oran:Math.round(zayif.dogru/zayif.toplam*100)}:null,veriVar:slGecmis.length>0,maddeler};
 }
 function sabahListesiYukle(){
@@ -13955,11 +14006,17 @@ function sabahListesiYukle(){
     v=sabahListesiKur(bugun);
     try{localStorage.setItem('sa_sabah_listesi',JSON.stringify(v));}catch(e){}
   }
+  // Deneme maddesi gelmeden önce kurulmuş bugünkü listeye maddeyi ekle (seçimleri bozmadan).
+  if(!v.maddeler.some(m=>m.tip==='deneme')){
+    v.maddeler.push(SABAH_DENEME_MADDE);
+    try{localStorage.setItem('sa_sabah_listesi',JSON.stringify(v));}catch(e){}
+  }
   return v;
 }
 function sabahMaddeTamamMi(m,bugunGecmis){
   if(m.tip==='soru')return bugunGecmis.some(h=>h.questionId===m.qid);
   if(m.tip==='kelime')return bugunGecmis.filter(h=>h.modul==='kelime').length>=SABAH_KELIME_HEDEF;
+  if(m.tip==='deneme')return gdBugunBittiMi();
   return false;
 }
 function sabahListesiRender(){
@@ -13991,6 +14048,7 @@ function sabahMaddeAc(i){
   const m=sabahListesiYukle().maddeler[i];
   if(!m)return;
   if(m.tip==='kelime'){bugunGorevGit('Kelime Kartları');return;}
+  if(m.tip==='deneme'){gunlukDenemeAc();return;}
   const idx=SL_HAVUZ.findIndex(s=>s.id===m.qid);
   if(idx<0)return;
   const tab=document.querySelectorAll('.dtab')[0];
@@ -13999,6 +14057,191 @@ function sabahMaddeAc(i){
   window.__slDeepLinkSoru=SL_HAVUZ[idx]; // slRender bu soruyu bir kez gösterir
   slRender();
   document.getElementById('mod-sinyal')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─── GÜNÜN DENEMESİ — her gün 5 soruluk süreli mini YDS denemesi ──────────
+// Sorular tarihe göre tohumlu seçilir: aynı gün herkes aynı 5 soruyu görür,
+// ertesi gün set değişir. Süre soru başı 90 sn (varsayım: kısa cümle
+// sorusu için hedef tempo). Durum sa_gunluk_deneme'de saklanır; süre
+// başlangıç zamanından hesaplandığı için sayfa kapansa da durmaz. Bitince
+// cevaplar cevapKaydet ile geçmişe yazılır (zayıf sinyal / sabah listesi
+// bunları görür) ve her yanlış için Kural → Örnek → Tuzak açıklaması çıkar.
+const GD_SORU_SAYISI=5;
+const GD_SORU_SURE_SN=90;
+const GD_HARFLER=['A','B','C','D','E'];
+let _gdSayac=null,_gdAktif=0;
+function gdSorulariSec(tarih){
+  let tohum=sabahTohum('deneme:'+tarih);
+  const sira=SL_HAVUZ.map((s,i)=>i);
+  for(let i=sira.length-1;i>0;i--){tohum=sabahTohum(tarih+':'+tohum);const j=tohum%(i+1);[sira[i],sira[j]]=[sira[j],sira[i]];}
+  // Önce farklı sinyallerden seç; yetmezse kalanlardan tamamla.
+  const secilen=[],sinyaller=new Set();
+  sira.forEach(i=>{const s=SL_HAVUZ[i];const k=String(s.sinyal).toLowerCase();if(secilen.length<GD_SORU_SAYISI&&!sinyaller.has(k)){secilen.push(s.id);sinyaller.add(k);}});
+  sira.forEach(i=>{const id=SL_HAVUZ[i].id;if(secilen.length<GD_SORU_SAYISI&&!secilen.includes(id))secilen.push(id);});
+  return secilen;
+}
+function gdYukle(){
+  const bugun=sinavChecklistBugunAnahtari();
+  let v=null;
+  try{v=JSON.parse(localStorage.getItem('sa_gunluk_deneme'));}catch(e){v=null;}
+  if(!v||v.tarih!==bugun||!Array.isArray(v.ids)){
+    const ids=gdSorulariSec(bugun);
+    v={tarih:bugun,ids,cevaplar:ids.map(()=>null),baslangic:null,bitis:null};
+    gdKaydet(v);
+  }
+  return v;
+}
+function gdKaydet(v){try{localStorage.setItem('sa_gunluk_deneme',JSON.stringify(v));}catch(e){}}
+function gdToplamSn(){return GD_SORU_SAYISI*GD_SORU_SURE_SN;}
+function gdKalanSn(v){return Math.max(0,gdToplamSn()-Math.floor((Date.now()-v.baslangic)/1000));}
+function gdSureMetni(sn){return Math.floor(sn/60)+':'+String(sn%60).padStart(2,'0');}
+function gdBugunBittiMi(){
+  try{const v=JSON.parse(localStorage.getItem('sa_gunluk_deneme'));return!!(v&&v.tarih===sinavChecklistBugunAnahtari()&&v.bitis);}catch(e){return false;}
+}
+function gdEsc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+// Sinyal Lab cümlesindeki işaretler (s-sig, s-trap) denemede cevabı ele verir:
+// cümle düz metin gösterilir, işaretler yalnızca açıklamada kullanılır.
+function gdCumleCoz(soru){
+  const d=document.createElement('div');d.innerHTML=soru.sent;
+  const sig=d.querySelector('.s-sig'),trap=d.querySelector('.s-trap');
+  return{
+    duz:d.textContent.trim(),
+    sinyalIpucu:sig?sig.getAttribute('data-tip')||'':'',
+    tuzak:trap?trap.textContent.trim():'',
+    tuzakIpucu:trap?(trap.getAttribute('data-tip')||'').replace(/^Tuzak:\s*/i,''):''
+  };
+}
+function gdPerde(){
+  let el=document.getElementById('gd-perde');
+  if(!el){
+    el=document.createElement('div');el.id='gd-perde';el.className='gd-perde';el.hidden=true;
+    el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','Günün denemesi');
+    el.innerHTML='<div class="gd-panel" id="gd-panel"></div>';
+    el.addEventListener('click',e=>{if(e.target===el)gdKapat();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el.hidden)gdKapat();});
+    document.body.appendChild(el);
+  }
+  return el;
+}
+function gunlukDenemeAc(){
+  if(typeof SL_HAVUZ==='undefined')return;
+  const v=gdYukle();
+  if(v.baslangic&&!v.bitis&&gdKalanSn(v)===0){gdBitir();}
+  gdPerde().hidden=false;
+  document.body.style.overflow='hidden';
+  gdRender();
+}
+function gdKapat(){
+  const el=document.getElementById('gd-perde');if(el)el.hidden=true;
+  document.body.style.overflow='';
+  if(_gdSayac){clearInterval(_gdSayac);_gdSayac=null;}
+  if(typeof sabahListesiRender==='function')sabahListesiRender();
+}
+function gdBasla(){
+  const v=gdYukle();
+  if(!v.baslangic){v.baslangic=Date.now();gdKaydet(v);faz2GaEvent('gunluk_deneme_basla',{tarih:v.tarih});}
+  _gdAktif=0;
+  gdRender();
+}
+function gdSec(i){
+  const v=gdYukle();if(v.bitis)return;
+  v.cevaplar[_gdAktif]=v.cevaplar[_gdAktif]===i?null:i;
+  gdKaydet(v);gdRender();
+}
+function gdGit(n){_gdAktif=Math.max(0,Math.min(GD_SORU_SAYISI-1,n));gdRender();}
+function gdBitir(){
+  const v=gdYukle();if(v.bitis)return;
+  v.bitis=Math.min(Date.now(),v.baslangic+gdToplamSn()*1000);
+  gdKaydet(v);
+  if(_gdSayac){clearInterval(_gdSayac);_gdSayac=null;}
+  let dogru=0;
+  v.ids.forEach((id,i)=>{
+    const s=SL_HAVUZ.find(x=>x.id===id);const c=v.cevaplar[i];
+    if(!s||c===null)return;
+    if(c===s.ans)dogru++;
+    cevapKaydet({questionId:s.id,modul:'sinyal',soru:s.q,selectedOption:s.opts[c],correctOption:s.opts[s.ans],isCorrect:c===s.ans,topic:'Günün denemesi',signal:s.sinyal});
+  });
+  faz2GaEvent('gunluk_deneme_bitir',{tarih:v.tarih,dogru,sure_sn:Math.round((v.bitis-v.baslangic)/1000)});
+  gdRender();
+}
+function gdSayacKur(){
+  if(_gdSayac)clearInterval(_gdSayac);
+  _gdSayac=setInterval(()=>{
+    const v=gdYukle();
+    if(!v.baslangic||v.bitis){clearInterval(_gdSayac);_gdSayac=null;return;}
+    const kalan=gdKalanSn(v);
+    const el=document.getElementById('gd-sure');
+    if(el){el.textContent=gdSureMetni(kalan);el.classList.toggle('az',kalan<=60);}
+    if(kalan===0)gdBitir();
+  },1000);
+}
+function gdRender(){
+  const panel=document.getElementById('gd-panel');if(!panel)return;
+  const v=gdYukle();
+  const tarihMetni=new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'});
+  const ust=sag=>`<div class="gd-ust"><div class="gd-eyebrow">Günün denemesi · ${gdEsc(tarihMetni)}</div><div style="display:flex;gap:8px;align-items:center">${sag||''}<button type="button" class="gd-kapat" onclick="gdKapat()" aria-label="Kapat">Kapat</button></div></div>`;
+  if(!v.baslangic){
+    panel.innerHTML=ust()+`
+      <div class="gd-baslik">5 soru, ${gdSureMetni(gdToplamSn())} dakika</div>
+      <div class="gd-alt">Bugünün soruları herkes için aynı. Yarın yeni set gelir.</div>
+      <ul class="gd-bilgi">
+        <li>Süre başlayınca durmaz. Kapatsan da işler.</li>
+        <li>Sorular arasında gidip gelebilir, cevabını değiştirebilirsin.</li>
+        <li>Sinyal işaretleri yok, sınavdaki gibi düz cümle.</li>
+        <li>Sonda puanın ve her yanlış için Kural → Örnek → Tuzak.</li>
+      </ul>
+      <button type="button" class="gd-btn" onclick="gdBasla()">Başla</button>
+      <div class="gd-not">Süre varsayım: soru başı 1,5 dakika. Gerçek sınav süresini ÖSYM'den kontrol et.</div>`;
+    return;
+  }
+  if(!v.bitis){
+    const s=SL_HAVUZ.find(x=>x.id===v.ids[_gdAktif]);
+    if(!s){gdBitir();return;}
+    const c=gdCumleCoz(s);
+    const kalan=gdKalanSn(v);
+    const son=_gdAktif===GD_SORU_SAYISI-1;
+    panel.innerHTML=ust(`<div class="gd-sure${kalan<=60?' az':''}" id="gd-sure" aria-label="Kalan süre">${gdSureMetni(kalan)}</div>`)+`
+      <div class="gd-noktalar">${v.ids.map((id,i)=>`<button type="button" class="gd-nokta${v.cevaplar[i]!==null?' dolu':''}${i===_gdAktif?' aktif':''}" onclick="gdGit(${i})" aria-label="Soru ${i+1}">${i+1}</button>`).join('')}</div>
+      <div class="gd-eyebrow" style="margin-bottom:8px">Soru ${_gdAktif+1}/${GD_SORU_SAYISI} · ${gdEsc(s.eye)}</div>
+      <div class="gd-cumle" lang="en">${gdEsc(c.duz)}</div>
+      <div class="gd-soru">${gdEsc(s.q)}</div>
+      <div class="gd-siklar">${s.opts.map((o,i)=>`<button type="button" class="gd-sik${v.cevaplar[_gdAktif]===i?' secili':''}" onclick="gdSec(${i})"><span class="gd-harf">${GD_HARFLER[i]})</span><span>${gdEsc(o)}</span></button>`).join('')}</div>
+      <div class="gd-alt-bar">
+        <button type="button" class="gd-btn ikincil" onclick="gdGit(${_gdAktif-1})"${_gdAktif===0?' disabled':''}>Önceki</button>
+        ${son?'<button type="button" class="gd-btn" onclick="gdBitir()">Bitir</button>':`<button type="button" class="gd-btn" onclick="gdGit(${_gdAktif+1})">Sonraki</button>`}
+      </div>`;
+    if(!_gdSayac)gdSayacKur();
+    return;
+  }
+  // Sonuç
+  const sorular=v.ids.map(id=>SL_HAVUZ.find(x=>x.id===id)).filter(Boolean);
+  let dogru=0,yanlis=0,bos=0;
+  sorular.forEach((s,i)=>{const c=v.cevaplar[i];if(c===null)bos++;else if(c===s.ans)dogru++;else yanlis++;});
+  const sureSn=Math.round((v.bitis-v.baslangic)/1000);
+  const ortSn=Math.round(sureSn/GD_SORU_SAYISI);
+  const tempo=ortSn<=GD_SORU_SURE_SN?'Tempon iyi: soru başı ortalama '+ortSn+' sn.':'Süre yetmedi. Önce sinyali bul, sonra şıklara bak.';
+  const yorum=dogru===GD_SORU_SAYISI?'Hepsi doğru. Yarın yeni set seni bekliyor.':dogru>=3?'İyi gidiyor. Aşağıdaki '+(GD_SORU_SAYISI-dogru)+' soruya bak.':'Aşağıdaki açıklamaları oku, yarın tekrar dene.';
+  const kartlar=sorular.map((s,i)=>{
+    const c=v.cevaplar[i];if(c===s.ans)return'';
+    const k=gdCumleCoz(s);
+    const kural=`<b>${gdEsc(s.sinyal)}</b>${k.sinyalIpucu?' — '+gdEsc(k.sinyalIpucu):''}. ${gdEsc(s.fb)}`;
+    const ornek=`<i lang="en">${gdEsc(k.duz)}</i>${s.tr?'<br>Türkçesi: '+gdEsc(s.tr):''}`;
+    const tuzak=k.tuzakIpucu?(k.tuzak?'<b>'+gdEsc(k.tuzak)+'</b>: ':'')+gdEsc(k.tuzakIpucu):'Sinyal kelimesini atlayıp şıkkı cümlenin genel havasına göre seçmek.';
+    return `<div class="gd-aciklama">
+      <div class="gd-aciklama-ust">Soru ${i+1} <span>· ${c===null?'boş':'yanlış'}</span></div>
+      <div class="gd-satir"><span class="gd-etiket">Kural</span>${kural}</div>
+      <div class="gd-satir"><span class="gd-etiket">Örnek</span>${ornek}</div>
+      <div class="gd-satir tuzak"><span class="gd-etiket">Tuzak</span>${tuzak}</div>
+      <div class="gd-cevaplar">${c===null?'Boş bıraktın.':'Senin cevabın: '+GD_HARFLER[c]+') '+gdEsc(s.opts[c])}<br>Doğrusu: ${GD_HARFLER[s.ans]}) ${gdEsc(s.opts[s.ans])}</div>
+    </div>`;
+  }).join('');
+  panel.innerHTML=ust()+`
+    <div class="gd-skor"><div class="gd-skor-sayi">${dogru}/${GD_SORU_SAYISI}</div><div class="gd-skor-etiket">doğru</div></div>
+    <div class="gd-alt">${yorum} ${tempo}</div>
+    <div class="gd-ozet"><div><b>${dogru}</b>Doğru</div><div><b>${yanlis}</b>Yanlış</div><div><b>${bos}</b>Boş</div><div><b>${gdSureMetni(sureSn)}</b>Süre</div></div>
+    ${kartlar}
+    <button type="button" class="gd-btn" onclick="gdKapat()">Kapat</button>
+    <div class="gd-not">Yarın yeni 5 soru. Yanlışların yarınki sabah listene düşer.</div>`;
 }
 
 // ─── PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — pa-* ─────────────────────────────────

@@ -272,3 +272,6 @@ jobs:
 
       - name: Service worker önbellek kapsamı — /api/ önbelleğe girmez, CACHE_NAME, eski önbellek temizliği (vm, gerçek ağ yok)
         run: node tests/sw-cache.test.mjs
+
+      - name: Günün denemesi — tarihe göre 5 soru, 7,5 dk süre, sabah listesi maddesi, Kural → Örnek → Tuzak (vm, gerçek ağ yok)
+        run: node tests/gunluk-deneme.test.mjs
