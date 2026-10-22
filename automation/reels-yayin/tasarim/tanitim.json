@@ -1,0 +1,68 @@
+{
+  "aciklama": "Sitedeki yeni özellikleri tanıtan Reels (konu 201+). once: kuyrukta bu konunun önüne girer (yayın saatini sıra belirler). threads_gunu: Threads o gün (13:00) günlük ipucu yerine threads metnini paylaşır. uret_tanitim.py video ve kuyruk kaydını üretir. Sahne: etiket (üstte küçük), baslik (büyük), buyuk (dev nane yazı, isteğe bağlı), maddeler, ses (anlatım). Son sahne her videoda aynı PLAN çağrısı.",
+  "son": {
+    "ses": "Ücretsiz. Yoruma plan yaz, linki göndereyim. Takip et."
+  },
+  "videolar": [
+    {
+      "konu": 201,
+      "threads_gunu": "2026-10-24",
+      "once": 64,
+      "baslik": "50 Puan Programı",
+      "kanca": "50 puan için nereden başlamalı?",
+      "adres": "sinyal-avcisi.com/50-puan-programi",
+      "sahneler": [
+        {"etiket": "YENİ ÖZELLİK", "baslik": "50 PUAN İÇİN NEREDEN BAŞLAMALI?", "maddeler": ["Program hazır."],
+         "ses": "Elli puan mı hedefliyorsun? Program hazır."},
+        {"etiket": "50 PUAN PROGRAMI", "buyuk": "32 GÜN", "maddeler": ["Her gün yaklaşık 2,5 saat", "Görevler gün gün hazır", "6 tam deneme günü"],
+         "ses": "Otuz iki gün, günde iki buçuk saat, altı deneme günü."},
+        {"etiket": "GÜN KİLİDİ", "baslik": "4 DOĞRU YAPMADAN ERTESİ GÜN AÇILMAZ", "maddeler": ["Günün sonunda 5 soru", "Gün atlamak yok"],
+         "ses": "Günün sonunda beş soru. Dört doğru yoksa ertesi gün açılmaz."}
+      ],
+      "metin": "50 puan için nereden başlayacağını düşünme. Program hazır.\n\n32 günlük 50 Puan Programı:\n- Her gün yaklaşık 2,5 saatlik hazır görevler\n- 6 tam deneme günü\n- Gün kilidi: her günün sonunda 5 soruluk sınav. 4 doğru yapmadan ertesi gün açılmaz.\n\nBöylece bir günü geçmeden ötekine atlamazsın.",
+      "ilk_yorum": "Bugün kaçıncı gündesin? Yoruma gün numaranı yaz, birlikte takip edelim.",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydshazırlık #çalışmaplanı",
+      "threads": "Sınava hazırlanırken en zor kısım nereden başlayacağını bilmek.\n\nSinyal Avcısı'nda 32 günlük 50 Puan Programı var:\n- Her gün yaklaşık 2,5 saatlik hazır görevler\n- 6 tam deneme günü\n- Gün kilidi: günün sonunda 5 soruluk sınav, 4 doğru yapmadan ertesi gün açılmaz\n\nÜcretsiz, kayıt gerekmez: sinyal-avcisi.com/50-puan-programi\n\n#YDS #YÖKDİL"
+    },
+    {
+      "konu": 202,
+      "threads_gunu": "2026-10-25",
+      "once": 67,
+      "baslik": "Puan Hedefine Göre Sorular",
+      "kanca": "Hedefin kaç puan?",
+      "adres": "sinyal-avcisi.com/puan-hedefi",
+      "sahneler": [
+        {"etiket": "YENİ ÖZELLİK", "baslik": "HEDEFİN KAÇ PUAN?", "buyuk": "50 · 70 · 90+",
+         "ses": "Hedefin kaç puan? Elli, yetmiş, doksan üstü?"},
+        {"etiket": "PUAN HEDEFİ", "baslik": "HEDEFİNE GÖRE SORU ÇÖZ", "maddeler": ["50 / 70 / 90-100 sekmesi", "Hedefini seç, soruyu çöz", "Her cevap açıklamalı"],
+         "ses": "Hedefini seç, o seviyenin sorusunu çöz."},
+        {"etiket": "90-100 İSTEYENE", "buyuk": "33", "maddeler": ["zor ve özgün soru", "Kolaylarla vakit kaybetme"],
+         "ses": "Doksan üstü isteyene otuz üç zor soru."}
+      ],
+      "metin": "Hedefin 50 mi, 70 mi, 90 üstü mü?\n\nPuan Hedefi sayfasında üç sekme var: 50, 70 ve 90-100. Hedefini seç, o seviyenin sorusunu çöz.\n\n90-100 isteyene 33 zor ve özgün soru.",
+      "ilk_yorum": "Senin hedefin kaç? Yoruma 50, 70 ya da 90 yaz.",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydshazırlık #ydssoruları",
+      "threads": "Hedefin 50 mi, 70 mi, 90 üstü mü?\n\nSinyal Avcısı'nın Puan Hedefi sayfasında üç sekme var: 50, 70 ve 90-100. Hedefini seç, o seviyenin sorusunu çöz. 90-100 isteyene 33 zor ve özgün soru.\n\nÜcretsiz: sinyal-avcisi.com/puan-hedefi\n\n#YDS #YÖKDİL"
+    },
+    {
+      "konu": 203,
+      "threads_gunu": "2026-10-26",
+      "once": 101,
+      "baslik": "Yanlış Defteri",
+      "kanca": "Yanlış yaptığın soruyu tekrar görüyor musun?",
+      "adres": "sinyal-avcisi.com",
+      "sahneler": [
+        {"etiket": "YENİ ÖZELLİK", "baslik": "YANLIŞ YAPTIĞIN SORUYU TEKRAR GÖRÜYOR MUSUN?",
+         "ses": "Yanlış yaptığın soruyu tekrar görüyor musun?"},
+        {"etiket": "YANLIŞ DEFTERİ", "buyuk": "1 · 3 · 7", "maddeler": ["Yanlışın tekrar gelir:", "1, 3 ve 7 gün sonra"],
+         "ses": "Yanlış defteri onu bir, üç ve yedi gün sonra getirir."},
+        {"etiket": "KELİME KARTLARI · PUAN TAHMİNİ", "buyuk": "568", "maddeler": ["kelime kartı", "Günde 15 yeni kelime", "Panelde tahmini puanın"],
+         "ses": "Beş yüz altmış sekiz kelime kartı. Bir de puan tahmini."}
+      ],
+      "metin": "Yanlış yaptığın soru kaybolmasın.\n\nSinyal Avcısı'nda üç yeni araç:\n- Yanlış defteri: yanlışın 1, 3 ve 7 gün sonra yeniden karşına çıkar.\n- Kelime kartları: 568 kelime, günde 15 yeni.\n- Puan tahmini: panelde, çözdüklerine göre tahmini puanın. Bu kaba bir tahmindir, kesin puan değildir.",
+      "ilk_yorum": "Sen yanlışlarını nereye not ediyorsun? Defter mi, telefon mu?",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydskelime #ydshazırlık",
+      "threads": "Yanlış yaptığın soru kaybolmasın.\n\nSinyal Avcısı'nda üç yeni araç:\n- Yanlış defteri: yanlışın 1, 3 ve 7 gün sonra yeniden karşına çıkar\n- Kelime kartları: 568 kelime, günde 15 yeni\n- Puan tahmini: panelde, çözdüklerine göre kaba bir tahmin\n\nÜcretsiz: sinyal-avcisi.com\n\n#YDS #YÖKDİL"
+    }
+  ]
+}

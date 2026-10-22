@@ -53,3 +53,7 @@ Gerekli secret'lar (hepsi zaten tanımlı): `BUFFER_ACCESS_TOKEN`, `YOUTUBE_CLIE
 3. Medya yüklemesine onay ver (videolar herkese açık GitHub Release'e konur; Claude `medya_yukle.ps1` ile yükler).
 4. PR'ı merge et → *Actions → "Reels — Instagram, Facebook (Buffer), YouTube Shorts" → Run workflow → mod: deneme*. Bütün satırlar ✔ olmalı.
 5. Otomatik yayını aç: *Settings → Secrets and variables → Actions → Variables → New repository variable* → ad **`REELS_YAYIN`**, değer **`acik`**. Durdurmak için değeri değiştir ya da sil.
+
+## Site tanıtım videoları (201–203)
+
+Sitenin yeni özelliklerini (50 Puan Programı, Puan Hedefi, Yanlış defteri + kelime kartları + puan tahmini) tanıtan Reels. Metinler `tasarim/tanitim.json`'da; `tasarim/uret_tanitim.py` nane yeşili şablonla video üretir (OpenAI TTS, −14 LUFS) ve `--kuyruk` ile kayıtları `once` alanındaki konunun önüne ekler (yayın saatini sıra belirler: 24 Eki 13:00, 25 Eki 17:30, 26 Eki 13:00). Son kart: "Yoruma PLAN yaz" (ManyChat DM) + TAKİP ET. Türkçe alt satır yok (video Türkçe); kapağı `kapak.py` ekler; YouTube'a gitmez (`"tanitim": true`), Telegram kuyruğu kendiliğinden izler. Threads aynı günlerde (`threads_gunu`) günlük ipucu yerine `threads` metnini paylaşır. `reels-tanitim.yml`: PR'da üç videoyu ve kapakları `reels-onizleme`'ye koyar; main'de eksikleri `reels-medya-v1`'e üzerine yazmadan yükler. Kare önizlemesi: `python3 tasarim/uret_tanitim.py --kare 201`.

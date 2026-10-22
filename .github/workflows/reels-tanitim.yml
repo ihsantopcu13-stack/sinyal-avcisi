@@ -1,0 +1,57 @@
+name: Reels — site tanıtım videoları
+
+# tasarim/tanitim.json'daki tanıtım videolarını (konu 201+) OpenAI TTS sesiyle üretir.
+# PR'da: hepsi üretilir ve kapaklarıyla "reels-onizleme" ön sürümüne konur (onay için).
+# main'de: Release'te olmayan videolar üretilir ve reels-medya-v1'e yüklenir (üzerine yazmaz).
+# Kapaklı sürümü günlük yayın (reels-yayin.yml → kapak.py) kendisi hazırlar.
+
+on:
+  pull_request:
+    paths:
+      - automation/reels-yayin/tasarim/uret_tanitim.py
+      - automation/reels-yayin/tasarim/tanitim.json
+      - .github/workflows/reels-tanitim.yml
+  push:
+    branches: [main]
+    paths:
+      - automation/reels-yayin/tasarim/uret_tanitim.py
+      - automation/reels-yayin/tasarim/tanitim.json
+      - .github/workflows/reels-tanitim.yml
+  workflow_dispatch:
+
+concurrency:
+  group: reels-tanitim
+  cancel-in-progress: false
+
+jobs:
+  medya:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # Release'e video yüklemek için
+    defaults:
+      run:
+        working-directory: automation/reels-yayin/tasarim
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      CIKTI_KLASORU: ${{ github.workspace }}/tanitim-cikti
+    steps:
+      - uses: actions/checkout@v4
+      - name: Araçlar
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+          pip install --quiet Pillow
+      - name: Önizleme (PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 uret_tanitim.py --video 201 202 203
+          python3 kapak.py --ornek 201 202 203 --cikti "$CIKTI_KLASORU"
+          gh release view reels-onizleme >/dev/null 2>&1 || \
+            gh release create reels-onizleme --prerelease --title "Reels önizleme" --notes "Onay için örnek videolar; yayın hattı kullanmaz."
+          gh release upload reels-onizleme "$CIKTI_KLASORU"/konu20?.mp4 "$CIKTI_KLASORU"/kapak20?.png --clobber
+      - name: Üret ve yükle
+        if: github.event_name != 'pull_request'
+        run: python3 uret_tanitim.py --hepsi --yukle
