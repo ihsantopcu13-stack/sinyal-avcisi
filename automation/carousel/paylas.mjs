@@ -45,6 +45,14 @@ console.log("Görseller:", adresler.join("\n"));
 const kanal = await instagramKanali();
 console.log("Instagram kanalı:", kanal.name);
 const dueAt = new Date(ayar.saat).toISOString();
+if (ayar.mod === "durum") {
+  // Salt okunur: ayar.post_id gönderisinin Buffer'daki durumunu yazar.
+  const alanlar = (await buffer(`{ __type(name: "Post") { fields { name } } }`)).__type.fields.map((f) => f.name);
+  const iste = ["id", "status", "dueAt", "sentAt", "externalLink", "error"].filter((a) => alanlar.includes(a));
+  const d = await buffer(`{ post(input: { id: "${ayar.post_id}" }) { ${iste.join(" ")} } }`).catch((e) => ({ hata: e.message }));
+  console.log("DURUM:", JSON.stringify(d));
+  process.exit(0);
+}
 if (ayar.mod === "simdi") {
   // Zamanlanmış gönderiyi (ayar.post_id) yeni gönderi açmadan hemen paylaşıma çevirir.
   const modTip = (await buffer(`{ __type(name: "EditPostInput") { inputFields { name type { name ofType { name } } } } }`))
