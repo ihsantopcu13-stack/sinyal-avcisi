@@ -47,6 +47,16 @@ console.log("Instagram kanalı:", kanal.name);
 const dueAt = new Date(ayar.saat).toISOString();
 if (Date.parse(dueAt) < Date.now() + 10 * 60_000) throw new Error(`Saat en az 10 dk ileride olmalı: ${ayar.saat}`);
 
+if (ayar.mod === "sema") {
+  const m = await buffer(`{ __schema { mutationType { fields { name args { name type { name kind ofType { name } } } } } } }`);
+  for (const f of m.__schema.mutationType.fields.filter((f) => /post/i.test(f.name)))
+    console.log("MUTATION", f.name, JSON.stringify(f.args.map((a) => [a.name, a.type.name || a.type.ofType?.name])));
+  for (const ad of ["DeletePostInput", "EditPostInput", "UpdatePostInput", "SharePostNowInput"]) {
+    const t = await buffer(`{ __type(name: "${ad}") { inputFields { name } } }`).catch(() => null);
+    if (t?.__type) console.log("INPUT", ad, t.__type.inputFields.map((f) => f.name).join(", "));
+  }
+  process.exit(0);
+}
 if (ayar.mod !== "yayin") {
   // Buffer şemasından Instagram "type" değerlerini oku (carousel destekleniyor mu?)
   const tip = async (ad) => (await buffer(`{ __type(name: "${ad}") { inputFields { name type { name ofType { name ofType { name } } } } enumValues { name } } }`))?.__type;
