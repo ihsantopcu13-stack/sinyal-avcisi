@@ -47,8 +47,19 @@ const dueAt = new Date(ayar.saat).toISOString();
 if (Date.parse(dueAt) < Date.now() + 10 * 60_000) throw new Error(`Saat en az 10 dk ileride olmalı: ${ayar.saat}`);
 
 if (ayar.mod !== "yayin") {
-  const t = await buffer(`{ __type(name: "InstagramPostType") { enumValues { name } } }`).catch((e) => ({ hata: e.message }));
-  console.log("Instagram gönderi türleri:", JSON.stringify(t));
+  // Buffer şemasından Instagram "type" değerlerini oku (carousel destekleniyor mu?)
+  const tip = async (ad) => (await buffer(`{ __type(name: "${ad}") { inputFields { name type { name ofType { name ofType { name } } } } enumValues { name } } }`))?.__type;
+  const adi = (t) => t?.name || t?.ofType?.name || t?.ofType?.ofType?.name;
+  try {
+    const meta = (await tip("CreatePostInput"))?.inputFields?.find((f) => f.name === "metadata");
+    const ig = (await tip(adi(meta.type)))?.inputFields?.find((f) => f.name === "instagram");
+    const igAlan = (await tip(adi(ig.type)))?.inputFields ?? [];
+    console.log("Instagram alanları:", igAlan.map((f) => f.name).join(", "));
+    const tur = igAlan.find((f) => f.name === "type");
+    console.log("Instagram gönderi türleri:", ((await tip(adi(tur.type)))?.enumValues ?? []).map((e) => e.name).join(", "));
+    const asset = (await tip("AssetsInput"))?.inputFields ?? (await tip(adi((await tip("CreatePostInput")).inputFields.find((f) => f.name === "assets").type)))?.inputFields;
+    console.log("Asset alanları:", (asset ?? []).map((f) => f.name).join(", "));
+  } catch (e) { console.log("Şema okunamadı:", e.message); }
   console.log(`DENEME: yayında ${dosyalar.length} görsel ${dueAt} için zamanlanırdı. Açıklama:\n${ayar.aciklama}`);
   process.exit(0);
 }
