@@ -1,0 +1,85 @@
+{
+  "kategoriler": [
+    {
+      "id": "seyahat",
+      "ad": "Seyahat",
+      "renk": "#5eead4",
+      "ikon": "✈️",
+      "kelimeler": [
+        { "en": "arrive", "okunus": "I-rayv", "anlam": "Varmak, ulaşmak" },
+        { "en": "leave", "okunus": "Li-iv", "anlam": "Ayrılmak, bırakmak" },
+        { "en": "enter", "okunus": "En-tır", "anlam": "Girmek" },
+        { "en": "exit", "okunus": "Ek-zit", "anlam": "Çıkmak" },
+        { "en": "wait", "okunus": "Weyt", "anlam": "Beklemek" }
+      ]
+    },
+    {
+      "id": "gormek-dikkat",
+      "ad": "Görmek / Dikkat",
+      "renk": "#7dd3fc",
+      "ikon": "👀",
+      "kelimeler": [
+        { "en": "look", "okunus": "Lu-k", "anlam": "Bakmak" },
+        { "en": "watch", "okunus": "Woç", "anlam": "İzlemek" },
+        { "en": "listen", "okunus": "Li-sın", "anlam": "Dinlemek" },
+        { "en": "speak", "okunus": "Spi-ik", "anlam": "Konuşmak" },
+        { "en": "ask", "okunus": "Esk", "anlam": "Sormak, istemek" }
+      ]
+    },
+    {
+      "id": "cevap-soylemek",
+      "ad": "Cevap / Söylemek",
+      "renk": "#a5b4fc",
+      "ikon": "💬",
+      "kelimeler": [
+        { "en": "answer", "okunus": "En-sır", "anlam": "Cevap vermek" },
+        { "en": "tell", "okunus": "Tel", "anlam": "Anlatmak, söylemek" },
+        { "en": "show", "okunus": "Şov", "anlam": "Göstermek" },
+        { "en": "bring", "okunus": "Bring", "anlam": "Getirmek" },
+        { "en": "take", "okunus": "Teyk", "anlam": "Almak, götürmek" },
+        { "en": "give", "okunus": "Giv", "anlam": "Vermek" }
+      ]
+    },
+    {
+      "id": "almak-gondermek",
+      "ad": "Almak / Göndermek",
+      "renk": "#86efac",
+      "ikon": "📦",
+      "kelimeler": [
+        { "en": "receive", "okunus": "Ri-siv", "anlam": "Teslim almak" },
+        { "en": "send", "okunus": "Send", "anlam": "Göndermek" },
+        { "en": "return", "okunus": "Ri-törn", "anlam": "Geri dönmek, iade etmek" },
+        { "en": "keep", "okunus": "Ki-ip", "anlam": "Tutmak, saklamak" },
+        { "en": "remove", "okunus": "Ri-muv", "anlam": "Kaldırmak, çıkarmak" }
+      ]
+    },
+    {
+      "id": "yapi-olusturma",
+      "ad": "Yapı / Oluşturma",
+      "renk": "#c4b5fd",
+      "ikon": "🔨",
+      "kelimeler": [
+        { "en": "put", "okunus": "Put", "anlam": "Koymak" },
+        { "en": "build", "okunus": "Bild", "anlam": "İnşa etmek, kurmak" },
+        { "en": "destroy", "okunus": "Dis-troy", "anlam": "Yok etmek, yıkmak" },
+        { "en": "fix", "okunus": "Fiks", "anlam": "Tamir etmek, düzeltmek" },
+        { "en": "clean", "okunus": "Kli-in", "anlam": "Temizlemek" }
+      ]
+    },
+    {
+      "id": "duzenleme-planlama",
+      "ad": "Düzenleme / Planlama",
+      "renk": "#6ee7b7",
+      "ikon": "🗓️",
+      "kelimeler": [
+        { "en": "organize", "okunus": "Or-gı-nayz", "anlam": "Düzenlemek, organize etmek" },
+        { "en": "prepare", "okunus": "Pri-per", "anlam": "Hazırlamak" },
+        { "en": "relax", "okunus": "Ri-leks", "anlam": "Rahatlamak, dinlenmek" },
+        { "en": "hurry", "okunus": "Hö-ri", "anlam": "Acele etmek" },
+        { "en": "delay", "okunus": "Di-ley", "anlam": "Geciktirmek, ertelemek" },
+        { "en": "cancel", "okunus": "Ken-sıl", "anlam": "İptal etmek" },
+        { "en": "complete", "okunus": "Kım-pli-it", "anlam": "Tamamlamak" }
+      ]
+    }
+  ]
+}
