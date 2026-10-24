@@ -1137,6 +1137,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-15T21:11:48.406Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "tMLnO5pjLp8",
+        "link": "https://youtube.com/shorts/tMLnO5pjLp8",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-24T20:33:43.755Z"
       }
     },
     "38": {
@@ -1160,6 +1168,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-17T20:25:04.076Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "uHplGk0NwR4",
+        "link": "https://youtube.com/shorts/uHplGk0NwR4",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-24T20:33:45.190Z"
       }
     },
     "39": {
@@ -1183,6 +1199,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-17T20:25:05.329Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "jiJ4nItbY6g",
+        "link": "https://youtube.com/shorts/jiJ4nItbY6g",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-24T20:33:46.538Z"
       }
     },
     "40": {
@@ -1693,9 +1717,6 @@
     }
   },
   "youtube_bekleyen": [
-    37,
-    38,
-    39,
     40,
     41,
     42,
