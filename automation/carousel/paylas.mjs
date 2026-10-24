@@ -45,6 +45,30 @@ console.log("Görseller:", adresler.join("\n"));
 const kanal = await instagramKanali();
 console.log("Instagram kanalı:", kanal.name);
 const dueAt = new Date(ayar.saat).toISOString();
+if (ayar.mod === "simdi") {
+  // Zamanlanmış gönderiyi (ayar.post_id) yeni gönderi açmadan hemen paylaşıma çevirir.
+  const modTip = (await buffer(`{ __type(name: "EditPostInput") { inputFields { name type { name ofType { name } } } } }`))
+    .__type.inputFields.find((f) => f.name === "mode").type;
+  const modlar = ((await buffer(`{ __type(name: "${modTip.name || modTip.ofType.name}") { enumValues { name } } }`)).__type.enumValues ?? []).map((e) => e.name);
+  console.log("Modlar:", modlar.join(", "));
+  const hemen = modlar.includes("shareNow");
+  const assets = adresler.map((url) => `{ image: { url: ${JSON.stringify(url)} } }`).join(", ");
+  const d = await buffer(`mutation { editPost(input: {
+      id: "${ayar.post_id}"
+      text: ${JSON.stringify(ayar.aciklama)}
+      schedulingType: automatic
+      mode: ${hemen ? "shareNow" : "customScheduled"}
+      ${hemen ? "" : `dueAt: "${new Date(Date.now() + 2 * 60_000).toISOString()}"`}
+      assets: [${assets}]
+      metadata: { instagram: { type: post, shouldShareToFeed: true } }
+    }) {
+      ... on PostActionSuccess { post { id dueAt status } }
+      ... on MutationError { message } } }`);
+  const r = d?.editPost;
+  if (!r || r.message) throw new Error(`Buffer post düzenlenemedi: ${r?.message ?? "boş yanıt"}`);
+  console.log("HEMEN:", JSON.stringify(r.post));
+  process.exit(0);
+}
 if (Date.parse(dueAt) < Date.now() + 10 * 60_000) throw new Error(`Saat en az 10 dk ileride olmalı: ${ayar.saat}`);
 
 if (ayar.mod === "sema") {
