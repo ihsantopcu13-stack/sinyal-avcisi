@@ -2,6 +2,7 @@
 // tek bir çok resimli Instagram gönderisi olarak ayar.json'daki saate zamanlar.
 // mod "deneme": hiçbir şey paylaşmaz; kanalı, şemayı ve görsel adreslerini kontrol eder.
 // mod "yayin": gönderiyi Buffer'a zamanlar.
+// Buffer Instagram için "carousel" türünü reddediyor; çok görselli "post" carousel olur.
 // Görseller repo herkese açık olduğu için raw.githubusercontent adresinden verilir.
 import { readFile, readdir } from "node:fs/promises";
 
@@ -72,7 +73,7 @@ const d = await buffer(`mutation { createPost(input: {
     mode: customScheduled
     dueAt: "${dueAt}"
     assets: [${assets}]
-    metadata: { instagram: { type: carousel, shouldShareToFeed: true } }
+    metadata: { instagram: { type: post, shouldShareToFeed: true } }
   }) {
     ... on PostActionSuccess { post { id dueAt status } }
     ... on MutationError { message } } }`);
