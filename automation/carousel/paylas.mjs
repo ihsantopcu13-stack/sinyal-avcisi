@@ -48,7 +48,8 @@ const dueAt = new Date(ayar.saat).toISOString();
 if (ayar.mod === "durum") {
   // Salt okunur: ayar.post_id gönderisinin Buffer'daki durumunu yazar.
   const alanlar = (await buffer(`{ __type(name: "Post") { fields { name } } }`)).__type.fields.map((f) => f.name);
-  const iste = ["id", "status", "dueAt", "sentAt", "externalLink", "error"].filter((a) => alanlar.includes(a));
+  const iste = ["id", "status", "dueAt", "sentAt", "externalLink"].filter((a) => alanlar.includes(a));
+  if (alanlar.includes("error")) iste.push("error { message }");
   const d = await buffer(`{ post(input: { id: "${ayar.post_id}" }) { ${iste.join(" ")} } }`).catch((e) => ({ hata: e.message }));
   console.log("DURUM:", JSON.stringify(d));
   process.exit(0);
