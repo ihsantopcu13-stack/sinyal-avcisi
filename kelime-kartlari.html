@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kelime Kartları: Kategorili Fiiller — Sinyal Avcısı</title>
+  <meta name="description" content="Günlük İngilizce fiiller kategorilere ayrılmış kartlarda: Türkçe okunuş, anlam ve sesli dinleme. Bildiklerini işaretle, tekrar edeceklerini ayır.">
+  <meta property="og:title" content="Kelime Kartları: Kategorili Fiiller — Sinyal Avcısı">
+  <meta property="og:description" content="Kategori kategori İngilizce fiiller. Dokun, dinle, Biliyorum ya da Tekrar diye işaretle.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/kelime-kartlari">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <style>
+    /* Koyu yeşil + nane (puan hedefi / 50 puan programı ile aynı aile). Kategori renkleri yeşil-mavi-lila tonlarında; sarı/altın yok. */
+    :root{
+      --bg:#06140e; --surface:#0b1f17; --surface-2:#0f2a1f; --border:rgba(110,231,183,.28);
+      --nane:#6ee7b7; --nane-dim:rgba(110,231,183,.12); --text:#f4fbf7; --soft:#d5e9df;
+      --tekrar:#fca5a5; --tekrar-dim:rgba(252,165,165,.14);
+      --f-body:'IBM Plex Sans',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+      color-scheme:dark;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    body{margin:0;background:var(--bg);color:var(--text);font:18px/1.6 var(--f-body)}
+    a{color:var(--nane)}
+    .nav{position:sticky;top:0;z-index:10;background:rgba(6,20,14,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+    .nav-logo{font-weight:800;font-size:17px;color:var(--nane);text-decoration:none}
+    .nav-back{font-size:16px;color:var(--soft);text-decoration:none}
+    .wrap{max-width:720px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:18px}
+    h1,h2{margin:0;line-height:1.2;text-wrap:balance}
+    h1{font-size:clamp(30px,7vw,40px);font-weight:800;letter-spacing:-.02em}
+    p{margin:0}
+    .eyebrow{font:600 14px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--nane)}
+    .lead{color:var(--soft);margin-top:8px;font-size:18px}
+    .ozet{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .ozet div{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+    .ozet b{display:block;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+    .ozet span{font-size:14px;color:var(--soft)}
+    .ara{width:100%;font:500 19px var(--f-body);color:var(--text);background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:12px 14px}
+    .ara::placeholder{color:#9fbcb0}
+    .filtre{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+    .cip{flex:0 0 auto;font:600 16px var(--f-body);color:var(--text);background:var(--surface);border:2px solid var(--border);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+    .cip[aria-pressed="true"]{background:var(--nane);color:#06140e;border-color:var(--nane)}
+    button:focus-visible,a:focus-visible,.ara:focus-visible{outline:3px solid var(--nane);outline-offset:2px}
+    .kat{background:var(--surface);border:1px solid var(--border);border-top:6px solid var(--renk);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+    .kat h2{font-size:23px;font-weight:800;color:var(--renk);display:flex;align-items:center;gap:10px}
+    .kat h2 small{margin-left:auto;font:500 15px var(--f-body);color:var(--soft)}
+    .satir{background:var(--surface-2);border:1px solid rgba(255,255,255,.06);border-left:4px solid transparent;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+    .satir.biliyorum{border-left-color:var(--nane)}
+    .satir.tekrar{border-left-color:var(--tekrar)}
+    .kelime{all:unset;cursor:pointer;font-size:21px;line-height:1.4;display:block;border-radius:6px}
+    .kelime:focus-visible{outline:3px solid var(--nane);outline-offset:2px}
+    .kelime .en{font-weight:800;color:var(--text)}
+    .kelime .ok{color:var(--renk);font-family:var(--f-mono);font-weight:600;font-size:19px}
+    .kelime .an{color:var(--soft)}
+    .kelime .ses{font-size:15px;color:#9fbcb0;margin-left:6px}
+    .kelime.caliyor .en{color:var(--nane);text-decoration:underline}
+    .isaret{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .isaret button{font:700 16px var(--f-body);border-radius:10px;padding:10px 8px;cursor:pointer;background:transparent;color:var(--soft);border:2px solid rgba(255,255,255,.14)}
+    .isaret .b-bil[aria-pressed="true"]{background:var(--nane);border-color:var(--nane);color:#06140e}
+    .isaret .b-tek[aria-pressed="true"]{background:var(--tekrar-dim);border-color:var(--tekrar);color:var(--tekrar)}
+    .bos{color:var(--soft);text-align:center;padding:24px 0}
+    .not{font-size:15px;color:#9fbcb0}
+    .uyari-ses{position:sticky;bottom:12px;background:var(--tekrar-dim);border:2px solid var(--tekrar);color:var(--text);border-radius:12px;padding:12px 14px;font-size:17px}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-logo" href="/">Sinyal Avcısı</a>
+    <a class="nav-back" href="/">← Ana sayfa</a>
+  </nav>
+  <main class="wrap">
+    <header>
+      <p class="eyebrow">Kategorili fiiller</p>
+      <h1>Kelime Kartları</h1>
+      <p class="lead">Kelimeye dokun, İngilizcesini dinle. Biliyorsan işaretle, emin değilsen tekrara ayır.</p>
+    </header>
+
+    <div class="ozet" aria-live="polite">
+      <div><b id="kkat-toplam">0</b><span>kelime</span></div>
+      <div><b id="kkat-bil" style="color:var(--nane)">0</b><span>biliyorum</span></div>
+      <div><b id="kkat-tek" style="color:var(--tekrar)">0</b><span>tekrar</span></div>
+    </div>
+
+    <label for="kkat-ara" class="not">Ara (İngilizce ya da Türkçe)</label>
+    <input id="kkat-ara" class="ara" type="search" placeholder="Örnek: look ya da bakmak" autocomplete="off" style="margin-top:-12px">
+
+    <div class="filtre" id="kkat-filtre" role="group" aria-label="Kategori filtresi"></div>
+
+    <div id="kkat-liste"></div>
+    <p class="bos" id="kkat-bos" hidden>Bu aramayla eşleşen kelime yok.</p>
+
+    <p class="uyari-ses" id="kkat-ses-not" hidden>Ses gelmedi mi? Telefonun sessiz modda olmasın ve ses açık olsun. iPhone'da yandaki sessiz anahtarını kapat. Android'de Ayarlar → Metin okuma (TTS) bölümünde İngilizce ses yüklü olmalı.</p>
+
+    <p class="not">Okunuşlar yaklaşık Türkçe yazımdır. Doğrusu için kelimeye dokunup dinle. Ses, telefonundaki İngilizce sese göre değişebilir.</p>
+  </main>
+
+  <script>
+  (function(){
+    // Ana sayfadaki SM-2 kelime kartlarından (sa_kk_*) ayrı tutulur.
+    var ANAHTAR = 'sa_kat_kelime_durum';
+    var veri = [], durum = {}, secili = 'hepsi', aranan = '';
+
+    try { durum = JSON.parse(localStorage.getItem(ANAHTAR)) || {}; } catch (e) { durum = {}; }
+    function kaydet(){ try { localStorage.setItem(ANAHTAR, JSON.stringify(durum)); } catch (e) {} }
+    function buyukHarf(s){ return s.charAt(0).toLocaleUpperCase('en-US') + s.slice(1); }
+    function el(tag, cls, metin){ var e = document.createElement(tag); if (cls) e.className = cls; if (metin != null) e.textContent = metin; return e; }
+    function kucuk(s){ return s.toLocaleLowerCase('tr-TR'); }
+
+    // Telefonlarda bazı sesler (özellikle ağ üzerinden çalışanlar) sessiz kalabiliyor:
+    // önce cihazdaki en-US sesini seç, yoksa sadece lang ver ve tarayıcı seçsin.
+    var ses = null;
+    function sesYukle(){
+      if (!window.speechSynthesis) return;
+      var en = speechSynthesis.getVoices().filter(function(v){ return /^en[-_]US/i.test(v.lang); });
+      ses = en.filter(function(v){ return v.localService; })[0] || null;
+    }
+    if (window.speechSynthesis) { sesYukle(); speechSynthesis.onvoiceschanged = sesYukle; }
+    function sesUyari(){
+      var n = document.getElementById('kkat-ses-not');
+      n.hidden = false;
+    }
+    function oku(kelime, btn){
+      if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) { sesUyari(); return; }
+      var u = new SpeechSynthesisUtterance(kelime);
+      u.lang = 'en-US'; u.rate = 0.85; u.volume = 1;
+      if (ses) { try { u.voice = ses; } catch (e) {} }
+      var basladi = false;
+      u.onstart = function(){ basladi = true; };
+      u.onend = function(){ btn.classList.remove('caliyor'); };
+      u.onerror = function(e){ btn.classList.remove('caliyor'); if (e.error !== 'interrupted' && e.error !== 'canceled') sesUyari(); };
+      btn.classList.add('caliyor');
+      // Chrome'da cancel()'dan hemen sonra speak() bazen sessiz kalıyor; yalnız konuşma sürüyorsa kes.
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      speechSynthesis.resume();
+      setTimeout(function(){
+        speechSynthesis.speak(u);
+        setTimeout(function(){ if (!basladi && !speechSynthesis.speaking) { btn.classList.remove('caliyor'); sesUyari(); } }, 2500);
+      }, 60);
+    }
+
+    function isaretle(en, deger){
+      if (durum[en] === deger) delete durum[en]; else durum[en] = deger;
+      kaydet(); ciz();
+    }
+
+    function sayac(){
+      var t = 0, b = 0, k = 0;
+      veri.forEach(function(kat){ kat.kelimeler.forEach(function(w){ t++; if (durum[w.en] === 'biliyorum') b++; else if (durum[w.en] === 'tekrar') k++; }); });
+      document.getElementById('kkat-toplam').textContent = t;
+      document.getElementById('kkat-bil').textContent = b;
+      document.getElementById('kkat-tek').textContent = k;
+    }
+
+    function filtreCiz(){
+      var kutu = document.getElementById('kkat-filtre');
+      kutu.textContent = '';
+      var secenekler = [{ id: 'hepsi', ad: 'Hepsi' }, { id: 'tekrar', ad: 'Tekrar listem' }].concat(
+        veri.map(function(k){ return { id: k.id, ad: k.ikon + ' ' + k.ad }; }));
+      secenekler.forEach(function(s){
+        var b = el('button', 'cip', s.ad);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', String(secili === s.id));
+        b.onclick = function(){ secili = s.id; filtreCiz(); ciz(); };
+        kutu.appendChild(b);
+      });
+    }
+
+    function ciz(){
+      var liste = document.getElementById('kkat-liste');
+      liste.textContent = '';
+      var q = kucuk(aranan.trim()), gosterilen = 0;
+      veri.forEach(function(kat){
+        if (secili !== 'hepsi' && secili !== 'tekrar' && secili !== kat.id) return;
+        var kelimeler = kat.kelimeler.filter(function(w){
+          if (secili === 'tekrar' && durum[w.en] !== 'tekrar') return false;
+          return !q || kucuk(w.en).indexOf(q) > -1 || kucuk(w.anlam).indexOf(q) > -1 || kucuk(w.okunus).indexOf(q) > -1;
+        });
+        if (!kelimeler.length) return;
+        gosterilen += kelimeler.length;
+        var kart = el('section', 'kat');
+        kart.style.setProperty('--renk', kat.renk);
+        var h = el('h2');
+        h.appendChild(el('span', null, kat.ikon));
+        h.appendChild(el('span', null, kat.ad));
+        h.appendChild(el('small', null, kelimeler.length + ' kelime'));
+        kart.appendChild(h);
+        kelimeler.forEach(function(w){
+          var satir = el('div', 'satir' + (durum[w.en] ? ' ' + durum[w.en] : ''));
+          var k = el('button', 'kelime');
+          k.type = 'button';
+          k.setAttribute('aria-label', w.en + ', dinlemek için dokun. Anlamı: ' + w.anlam);
+          k.appendChild(el('span', 'en', buyukHarf(w.en)));
+          k.appendChild(document.createTextNode(' → '));
+          k.appendChild(el('span', 'ok', '(' + w.okunus + ')'));
+          k.appendChild(document.createTextNode(' : '));
+          k.appendChild(el('span', 'an', w.anlam));
+          k.appendChild(el('span', 'ses', '🔊'));
+          k.onclick = function(){ oku(w.en, k); };
+          satir.appendChild(k);
+          var isaret = el('div', 'isaret');
+          var bil = el('button', 'b-bil', 'Biliyorum');
+          var tek = el('button', 'b-tek', 'Tekrar');
+          bil.type = tek.type = 'button';
+          bil.setAttribute('aria-pressed', String(durum[w.en] === 'biliyorum'));
+          tek.setAttribute('aria-pressed', String(durum[w.en] === 'tekrar'));
+          bil.onclick = function(){ isaretle(w.en, 'biliyorum'); };
+          tek.onclick = function(){ isaretle(w.en, 'tekrar'); };
+          isaret.appendChild(bil); isaret.appendChild(tek);
+          satir.appendChild(isaret);
+          kart.appendChild(satir);
+        });
+        liste.appendChild(kart);
+      });
+      var bos = document.getElementById('kkat-bos');
+      bos.textContent = secili === 'tekrar' && !q ? 'Tekrar listen boş. Bir kelimede "Tekrar"a bastığında burada görünür.' : 'Bu aramayla eşleşen kelime yok.';
+      bos.hidden = gosterilen > 0;
+      sayac();
+    }
+
+    document.getElementById('kkat-ara').addEventListener('input', function(e){ aranan = e.target.value; ciz(); });
+
+    fetch('/data/kelime-kartlari.json')
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(j){ veri = j.kategoriler || []; filtreCiz(); ciz(); })
+      .catch(function(){
+        var bos = document.getElementById('kkat-bos');
+        bos.textContent = 'Kelimeler yüklenemedi. İnternetini kontrol edip sayfayı yenile.';
+        bos.hidden = false;
+      });
+  })();
+  </script>
+</body>
+</html>
