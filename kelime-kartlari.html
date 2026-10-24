@@ -71,6 +71,7 @@
     .isaret .b-tek[aria-pressed="true"]{background:var(--tekrar-dim);border-color:var(--tekrar);color:var(--tekrar)}
     .bos{color:var(--soft);text-align:center;padding:24px 0}
     .not{font-size:15px;color:#9fbcb0}
+    .uyari-ses{position:sticky;bottom:12px;background:var(--tekrar-dim);border:2px solid var(--tekrar);color:var(--text);border-radius:12px;padding:12px 14px;font-size:17px}
   </style>
 </head>
 <body>
@@ -99,6 +100,8 @@
     <div id="kkat-liste"></div>
     <p class="bos" id="kkat-bos" hidden>Bu aramayla eşleşen kelime yok.</p>
 
+    <p class="uyari-ses" id="kkat-ses-not" hidden>Ses gelmedi mi? Telefonun sessiz modda olmasın ve ses açık olsun. iPhone'da yandaki sessiz anahtarını kapat. Android'de Ayarlar → Metin okuma (TTS) bölümünde İngilizce ses yüklü olmalı.</p>
+
     <p class="not">Okunuşlar yaklaşık Türkçe yazımdır. Doğrusu için kelimeye dokunup dinle. Ses, telefonundaki İngilizce sese göre değişebilir.</p>
   </main>
 
@@ -114,18 +117,36 @@
     function el(tag, cls, metin){ var e = document.createElement(tag); if (cls) e.className = cls; if (metin != null) e.textContent = metin; return e; }
     function kucuk(s){ return s.toLocaleLowerCase('tr-TR'); }
 
-    var sesler = [];
-    function sesYukle(){ if (window.speechSynthesis) sesler = speechSynthesis.getVoices().filter(function(v){ return /^en[-_]US/i.test(v.lang); }); }
+    // Telefonlarda bazı sesler (özellikle ağ üzerinden çalışanlar) sessiz kalabiliyor:
+    // önce cihazdaki en-US sesini seç, yoksa sadece lang ver ve tarayıcı seçsin.
+    var ses = null;
+    function sesYukle(){
+      if (!window.speechSynthesis) return;
+      var en = speechSynthesis.getVoices().filter(function(v){ return /^en[-_]US/i.test(v.lang); });
+      ses = en.filter(function(v){ return v.localService; })[0] || null;
+    }
     if (window.speechSynthesis) { sesYukle(); speechSynthesis.onvoiceschanged = sesYukle; }
+    function sesUyari(){
+      var n = document.getElementById('kkat-ses-not');
+      n.hidden = false;
+    }
     function oku(kelime, btn){
-      if (!window.speechSynthesis) { alert('Tarayıcın sesli okumayı desteklemiyor.'); return; }
-      speechSynthesis.cancel();
+      if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) { sesUyari(); return; }
       var u = new SpeechSynthesisUtterance(kelime);
-      u.lang = 'en-US'; u.rate = 0.85;
-      if (sesler[0]) u.voice = sesler[0];
+      u.lang = 'en-US'; u.rate = 0.85; u.volume = 1;
+      if (ses) { try { u.voice = ses; } catch (e) {} }
+      var basladi = false;
+      u.onstart = function(){ basladi = true; };
+      u.onend = function(){ btn.classList.remove('caliyor'); };
+      u.onerror = function(e){ btn.classList.remove('caliyor'); if (e.error !== 'interrupted' && e.error !== 'canceled') sesUyari(); };
       btn.classList.add('caliyor');
-      u.onend = u.onerror = function(){ btn.classList.remove('caliyor'); };
-      speechSynthesis.speak(u);
+      // Chrome'da cancel()'dan hemen sonra speak() bazen sessiz kalıyor; yalnız konuşma sürüyorsa kes.
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+      speechSynthesis.resume();
+      setTimeout(function(){
+        speechSynthesis.speak(u);
+        setTimeout(function(){ if (!basladi && !speechSynthesis.speaking) { btn.classList.remove('caliyor'); sesUyari(); } }, 2500);
+      }, 60);
     }
 
     function isaretle(en, deger){
