@@ -1,0 +1,21 @@
+name: Instagram Carousel Paylaş
+
+# Carousel tek seferlik paylaşılır: carousel-paylas dalına ayar.json push'lanınca çalışır.
+on:
+  push:
+    branches: [carousel-paylas]
+    paths: ["automation/carousel/ayar.json"]
+  workflow_dispatch: {}
+
+jobs:
+  paylas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Carousel'i Buffer'a zamanla
+        run: node automation/carousel/paylas.mjs
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
