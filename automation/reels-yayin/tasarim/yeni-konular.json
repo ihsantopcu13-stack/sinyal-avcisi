@@ -211,8 +211,8 @@
       "cumle": "The contract will be ____ by the manager tomorrow.",
       "dogru": "signed",
       "hap": "BE + V3", "hap_alt": "by + yapan kişi = pasif düşün",
-      "kural": "By ve yapan kişi var, tomorrow da var. Gelecekte pasif: will be artı V3. Modalda da aynı: must be artı V3.",
-      "tuzak_metin": "Will be sign tuzaktır, V3 gerekir. Bir de her by pasif değil: by car, by 2030 cümleyi pasif yapmaz.",
+      "kural": "By artı yapan kişi ve tomorrow var. Formül: will be artı V3.",
+      "tuzak_metin": "Will be sign tuzaktır. By car, by 2030 ise pasif değildir.",
       "sinyal": "by + kişi, will be, has been, being, get + V3",
       "ilk_yorum": "Mini test 🎯\nThe results ____ next week.\n\"will announce\" mı, \"will be announced\" mı?",
       "etiket": "#yds #yökdil #sinyalavcısı #passivevoice #ingilizcegramer"
