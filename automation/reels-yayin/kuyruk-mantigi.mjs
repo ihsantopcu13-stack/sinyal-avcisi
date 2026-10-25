@@ -146,3 +146,20 @@ export function paylasilacakVideo(video, assetler) {
   }
   return video;
 }
+
+// MERAK SATIRI: genel "Yarın yeni bir tuzak" kapanışı, kuyrukta sıradaki konunun adıyla değiştirilir
+// ("Sıradaki video: Passive Voice."). Tanıtım videoları (konu ≥ 200) sıradaki sayılmaz.
+// Satırı olmayan açıklama (konu 1-40, tanıtım) olduğu gibi kalır.
+export const GENEL_TAKIP_SATIRI = "🔔 Yarın yeni bir tuzak. Kaçırmamak için takip et.";
+
+export function sonrakiKonu(kuyruk, konu) {
+  const i = kuyruk.ogeler.findIndex((o) => o.konu === konu);
+  if (i < 0) return null;
+  return kuyruk.ogeler.slice(i + 1).find((o) => o.konu < 200 && o.baslik) || null;
+}
+
+export function merakliAciklama(aciklama, sonraki) {
+  const metin = String(aciklama ?? "");
+  if (!sonraki?.baslik || !metin.includes(GENEL_TAKIP_SATIRI)) return metin;
+  return metin.replace(GENEL_TAKIP_SATIRI, `🔔 Sıradaki video: ${sonraki.baslik}. Kaçırmamak için takip et.`);
+}

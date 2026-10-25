@@ -3,7 +3,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { facebookAciklamasi, youtubeAciklamasi } from "../kuyruk-mantigi.mjs";
+import { facebookAciklamasi, youtubeAciklamasi, sonrakiKonu, merakliAciklama, GENEL_TAKIP_SATIRI } from "../kuyruk-mantigi.mjs";
 
 const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "data");
 const kuyruk = JSON.parse(await readFile(path.join(dir, "kuyruk.json"), "utf-8"));
@@ -21,6 +21,17 @@ kontrol("Facebook: 'Link biyografide.' site adresine çevrilir",
 kontrol("Facebook: noktasız tek cümle de çevrilir", facebookAciklamasi("Link biyografide") === "https://sinyal-avcisi.com");
 kontrol("YouTube: 'Link biyografide.' çıkarılır, satır yapısı korunur",
   youtubeAciklamasi("Ücretsiz. Link biyografide.\n\n#x") === "Ücretsiz.\n\n#x");
+
+// Merak satırı (birim): genel takip satırı sıradaki konunun adını alır, tanıtım videoları atlanır
+{
+  const k = { ogeler: [{ konu: 78, baslik: "Passive Voice" }, { konu: 203, baslik: "Yanlış Defteri" }, { konu: 67, baslik: "Reading: Author Attitude" }] };
+  kontrol("Merak: tanıtım atlanır, sıradaki asıl konu bulunur", sonrakiKonu(k, 78)?.konu === 67);
+  kontrol("Merak: son konudan sonrası yok", sonrakiKonu(k, 67) === null);
+  kontrol("Merak: satır sıradaki konuyla değişir",
+    merakliAciklama(`A\n${GENEL_TAKIP_SATIRI}\nB`, { baslik: "Passive Voice" }) === "A\n🔔 Sıradaki video: Passive Voice. Kaçırmamak için takip et.\nB");
+  kontrol("Merak: satırı olmayan açıklama aynı kalır", merakliAciklama("Takip et.", { baslik: "X" }) === "Takip et.");
+  kontrol("Merak: sıradaki yoksa genel satır kalır", merakliAciklama(GENEL_TAKIP_SATIRI, null) === GENEL_TAKIP_SATIRI);
+}
 
 kontrol("kuyruk boş değil", Array.isArray(kuyruk.ogeler) && kuyruk.ogeler.length > 0);
 const konular = new Set();

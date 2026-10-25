@@ -39,7 +39,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo, asilVideo } from "./kuyruk-mantigi.mjs";
+import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo, asilVideo, sonrakiKonu, merakliAciklama } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -228,7 +228,7 @@ async function deneme(kuyruk, durum) {
     log("\n—— Bu çalışma yayın modunda olsaydı Buffer'a şunlar ZAMANLANIRDI ——");
     for (const x of plan) log(`  Konu ${x.konu} — ${istanbulSaati(x.dueAt)} → ${x.platformlar.join(", ")}${x.yeni ? "" : " (eksik platform)"}`);
     log(`YouTube: ${ytAcik ? "bekleyen sırasıyla yüklenir" : "bekletiliyor (konular bekleyen listesine girer)"}`);
-    log("İlk konunun açıklaması:\n" + ilk.aciklama);
+    log("İlk konunun açıklaması:\n" + merakliAciklama(ilk.aciklama, sonrakiKonu(kuyruk, ilk.konu)));
     log(ilkYorumAcik(env) ? "İlk yorum:\n" + ilk.ilk_yorum : "İlk yorum Buffer'a gönderilmez (BUFFER_ILK_YORUM≠acik); mini test elle yorumlanır.");
   }
 
@@ -320,7 +320,9 @@ async function yayinla(kuyruk, durum) {
     const kanallar = await bufferKanallari();
     const sema = await bufferSemasi();
     for (const x of plan) {
-      const oge = kuyruk.ogeler.find((o) => o.konu === x.konu);
+      const asil = kuyruk.ogeler.find((o) => o.konu === x.konu);
+      // Kopya: kuyruk.json'daki metin değişmez; Instagram/Facebook sıradaki konunun adını görür
+      const oge = { ...asil, aciklama: merakliAciklama(asil.aciklama, sonrakiKonu(kuyruk, asil.konu)) };
       log(`ZAMANLA: Konu ${oge.konu} — ${oge.baslik} → ${istanbulSaati(x.dueAt)} (${x.platformlar.join(", ")})`);
       const d = (durum.konular[oge.konu] ||= {});
       d.slot = x.slot;
