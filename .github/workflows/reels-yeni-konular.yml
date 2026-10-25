@@ -1,7 +1,7 @@
 name: Reels — yeni konu videoları (nane yeşili şablon)
 
 # tasarim/yeni-konular.json'daki konuların videolarını OpenAI TTS sesiyle üretir.
-# PR'da: yalnız konu 68 üretilir ve "reels-onizleme" ön sürümüne konur (onay için).
+# PR'da: yalnız en son eklenen konu (şu an 78) üretilir ve "reels-onizleme" ön sürümüne konur (onay için).
 # main'de: Release'te olmayan videolar üretilir ve reels-medya-v1'e yüklenir (üzerine yazmaz).
 
 on:
@@ -46,10 +46,10 @@ jobs:
       - name: Önizleme (PR)
         if: github.event_name == 'pull_request'
         run: |
-          python3 uret_yeni.py --video 68
+          python3 uret_yeni.py --video 78
           gh release view reels-onizleme >/dev/null 2>&1 || \
             gh release create reels-onizleme --prerelease --title "Reels önizleme" --notes "Onay için örnek videolar; yayın hattı kullanmaz."
-          gh release upload reels-onizleme "$CIKTI_KLASORU/konu68.mp4" --clobber
+          gh release upload reels-onizleme "$CIKTI_KLASORU/konu78.mp4" --clobber
       - name: Üret ve yükle
         if: github.event_name != 'pull_request'
         run: python3 uret_yeni.py --hepsi --yukle

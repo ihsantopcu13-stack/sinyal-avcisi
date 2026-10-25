@@ -9,7 +9,7 @@ Tasarım: koyu yeşil zemin, nane yeşili vurgu (sarı yok). Akış:
 Ses OpenAI TTS (OPENAI_API_KEY) ile üretilir, sonunda -14 LUFS'a çekilir.
 
 Kullanım:
-  uret_yeni.py --kuyruk                 kuyruk.json'a eksik kayıtları ekler (ağ yok)
+  uret_yeni.py --kuyruk                 kuyruk.json'a eksik kayıtları ekler (ağ yok; "once" varsa o konunun önüne)
   uret_yeni.py --video 68 [--cikti D]   tek konunun videosunu üretir
   uret_yeni.py --hepsi --yukle          Release'te olmayan videoları üretir ve yükler (üzerine yazmaz)
 """
@@ -250,12 +250,16 @@ def kuyruk_kaydi(k):
 
 
 def kuyruga_ekle(veri):
+    """Eksik kayıtları ekler. "once" verilmişse kayıt o konunun önüne girer (yayın saatini sıra belirler)."""
     d = json.load(open(KUYRUK, encoding="utf-8"))
     var = {o["konu"] for o in d["ogeler"]}
-    yeni = [kuyruk_kaydi(k) for k in veri["konular"] if k["konu"] not in var]
-    d["ogeler"] += yeni
+    eklenen = 0
+    for k in veri["konular"]:
+        if k["konu"] in var: continue
+        sira = next((i for i, o in enumerate(d["ogeler"]) if o["konu"] == k.get("once")), len(d["ogeler"]))
+        d["ogeler"].insert(sira, kuyruk_kaydi(k)); eklenen += 1
     open(KUYRUK, "w", encoding="utf-8").write(json.dumps(d, ensure_ascii=False, indent=2) + "\n")
-    print(f"{len(yeni)} konu kuyruğa eklendi")
+    print(f"{eklenen} konu kuyruğa eklendi")
 
 
 def main():

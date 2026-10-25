@@ -1,6 +1,6 @@
 
 (function(){
-  const PVM_TOTAL = 7;
+  const PVM_TOTAL = 8;
   let pvmCurrent = 0;
   const PVM_CORRECT = { 1: 'b', 2: 'c' };
   const pvmQuizAnswered = { 1: false, 2: false };

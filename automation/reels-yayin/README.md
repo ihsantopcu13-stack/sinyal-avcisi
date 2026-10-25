@@ -31,9 +31,9 @@ Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla 
 
 `tasarim/turkce.py` videodaki İngilizce cümlenin altına kısa Türkçe anlamını ekler (`tasarim/turkce-satirlar.json`; tekrar konuları asıl konunun satırını kullanır, konu 59 yok). Satır 3-2-1 sayacından sonra görünür, TAKİP ET kartında kalkar; ses aynı kalır. Eski şablonda (1–67, 101–140) cümle kartının altındaki boş şeride bindirilir (başlığı hâlâ sarı olan 58, 64–67 de aynı seferde nane yeşiline çevrilir); yeni şablonda (`yeni-konular.json`) kareler `uret_yeni.kare(..., tr=...)` ile yeniden çizilir, süreler ve ses asıl videodan alınır. Çıktı `konuXX-tr.mp4` (`konu101-nane.mp4` → `konu101-tr.mp4`), Release'e üzerine yazmadan yüklenir; kapak varsa onun üstüne yapılır (`konuXX-tr-kapak.mp4`). Paylaşım sırası: Türkçe+kapak > kapak > Türkçe > asıl video; YouTube Türkçe satırlı kapaksız sürümü yükler. `reels-turkce.yml` main'de eksikleri üretir; günlük yayın da kapaktan önce eksikleri tamamlar. Örnek: `python3 tasarim/turkce.py --ornek 101 56`.
 
-## Yeni konular (56, 57, 59–63, 68–77)
+## Yeni konular (56, 57, 59–63, 68–78)
 
-Metinler `tasarim/yeni-konular.json`'da (22 Ekim 2026'da onaylandı). `tasarim/uret_yeni.py` nane yeşili şablonla video üretir (OpenAI TTS sesi, −14 LUFS) ve `--kuyruk` ile kuyruk kayıtlarını yazar. `reels-yeni-konular.yml`: PR'da konu 68 örneğini `reels-onizleme` ön sürümüne koyar; main'de eksik videoları `reels-medya-v1`'e üzerine yazmadan yükler.
+Metinler `tasarim/yeni-konular.json`'da (22 Ekim 2026'da onaylandı; konu 78 Passive Voice 25 Ekim 2026'da eklendi, `"once": 101` ile tekrar turunun önüne girer). `tasarim/uret_yeni.py` nane yeşili şablonla video üretir (OpenAI TTS sesi, −14 LUFS) ve `--kuyruk` ile kuyruk kayıtlarını yazar. `reels-yeni-konular.yml`: PR'da en son eklenen konunun (şu an 78) örneğini `reels-onizleme` ön sürümüne koyar; main'de eksik videoları `reels-medya-v1`'e üzerine yazmadan yükler.
 
 Kuyruk (`data/kuyruk.json`) yerelde `yds-video-fabrikasi-space\kuyruk_olustur.py` ile üretilir; her çalışmada `test/kuyruk.test.mjs` platform kurallarını (≤2200 karakter, ≤5 hashtag, YouTube başlığı ≤100, yapay zekâ satırı, istatistik iddiası yok…) doğrular.
 
