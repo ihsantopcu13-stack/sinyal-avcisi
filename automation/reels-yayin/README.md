@@ -33,7 +33,7 @@ Konu 1–40 eski tasarımda (avatar fotoğraflı) olduğu için yeni tasarımla 
 
 ## Yeni konular (56, 57, 59–63, 68–78)
 
-Metinler `tasarim/yeni-konular.json`'da (22 Ekim 2026'da onaylandı; konu 78 Passive Voice 25 Ekim 2026'da eklendi, `"once": 101` ile tekrar turunun önüne girer). `tasarim/uret_yeni.py` nane yeşili şablonla video üretir (OpenAI TTS sesi, −14 LUFS) ve `--kuyruk` ile kuyruk kayıtlarını yazar. `reels-yeni-konular.yml`: PR'da en son eklenen konunun (şu an 78) örneğini `reels-onizleme` ön sürümüne koyar; main'de eksik videoları `reels-medya-v1`'e üzerine yazmadan yükler.
+Metinler `tasarim/yeni-konular.json`'da (22 Ekim 2026'da onaylandı; konu 78 Passive Voice 25 Ekim 2026'da eklendi, `"once": 203` ile 26 Eki 08:30 saatine girer). `tasarim/uret_yeni.py` nane yeşili şablonla video üretir (OpenAI TTS sesi, −14 LUFS) ve `--kuyruk` ile kuyruk kayıtlarını yazar. `reels-yeni-konular.yml`: PR'da en son eklenen konunun (şu an 78) örneğini `reels-onizleme` ön sürümüne koyar; main'de eksik videoları `reels-medya-v1`'e üzerine yazmadan yükler.
 
 Kuyruk (`data/kuyruk.json`) yerelde `yds-video-fabrikasi-space\kuyruk_olustur.py` ile üretilir; her çalışmada `test/kuyruk.test.mjs` platform kurallarını (≤2200 karakter, ≤5 hashtag, YouTube başlığı ≤100, yapay zekâ satırı, istatistik iddiası yok…) doğrular.
 
