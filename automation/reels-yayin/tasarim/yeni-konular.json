@@ -1,5 +1,5 @@
 {
-  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak). uret_yeni.py bunlardan video ve kuyruk kaydı üretir.",
+  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak) ve konu 78 Passive (25 Ekim 2026, İhsan'ın notundan). uret_yeni.py bunlardan video ve kuyruk kaydı üretir. \"once\" verilmişse kuyruk kaydı o konunun önüne girer.",
   "konular": [
     {
       "konu": 56, "baslik": "Paragraph Completion", "tuzak": false,
@@ -204,6 +204,18 @@
       "sinyal": "had better, would rather, than",
       "ilk_yorum": "Mini test 🎯\nI'd rather you ____ smoke here.\n\"didn't\" mi, \"don't\" mu?",
       "etiket": "#yds #yökdil #sinyalavcısı #modals #ingilizcegramer"
+    },
+    {
+      "konu": 78, "baslik": "Passive Voice", "tuzak": true, "once": 101,
+      "kanca": "Will be sign mı, will be signed mı? 3 saniyede seç.",
+      "cumle": "The contract will be ____ by the manager tomorrow.",
+      "dogru": "signed",
+      "hap": "BE + V3", "hap_alt": "by + yapan kişi = pasif düşün",
+      "kural": "By artı yapan kişi ve tomorrow var. Formül: will be artı V3.",
+      "tuzak_metin": "Will be sign tuzaktır. By car, by 2030 ise pasif değildir.",
+      "sinyal": "by + kişi, will be, has been, being, get + V3",
+      "ilk_yorum": "Mini test 🎯\nThe results ____ next week.\n\"will announce\" mı, \"will be announced\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #passivevoice #ingilizcegramer"
     }
   ]
 }
