@@ -13,6 +13,13 @@
 // döndür (model çağrısı YOK, günlük KLOD hakkı düşmez) → yoksa costGuard →
 // Claude → JSON doğrula → emin:true ise service_role ile kaydet → döndür.
 // JSON bozuksa kaydedilmez, dürüst hata mesajı döner.
+//
+// İNCELEME KAYDI (AVCI çözüm motoru, 2026-10-26): Model doğru cevapla
+// ÇELİŞEN bir açıklama üretirse (dogru_uyusmuyor) açıklama öğrenciye
+// gösterilmez; aynı tabloya {inceleme:true, sebep, kaynak_hash} satırı
+// yazılır. Soru içeriği değişmedikçe (hash aynı) bu soru için model bir
+// daha çağrılmaz — çelişen çıktı için tekrar tekrar ücret ödenmez.
+// Yönetici incelemesi: Supabase → klod_aciklama, aciklama->>'inceleme' = 'true'.
 
 import { createHash } from 'node:crypto';
 
@@ -160,6 +167,7 @@ function istemciyeAciklama(a) {
   return { dogru: a.dogru, yapi: a.yapi, sinyal: a.sinyal, eleme: a.eleme, avci_ipucu: a.avci_ipucu, emin: a.emin };
 }
 
+const INCELEME_MESAJI = 'Bu soru için yapay zekâ açıklaması doğru cevapla uyuşmadı ve incelemeye alındı. Doğru cevap ekrandaki anahtardır; yerel çözüm adımlarına bakabilirsin.';
 const HATA_MESAJI = 'KLOD bu soru için şu an güvenilir bir açıklama üretemedi. Biraz sonra tekrar dene ya da sohbette sor.';
 
 export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = process.env, fetchFn = fetch }) {
@@ -170,6 +178,9 @@ export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = proce
   const hash = soruHash(soru);
 
   const onbellek = await onbellektenOku(soru.id, env, fetchFn);
+  if (onbellek && onbellek.kaynak_hash === hash && onbellek.inceleme === true) {
+    return res.status(200).json({ inceleme: true, error: INCELEME_MESAJI, kaynak: 'inceleme' });
+  }
   if (onbellek && onbellek.kaynak_hash === hash) {
     return res.status(200).json({ aciklama: istemciyeAciklama(onbellek), kaynak: 'onbellek' });
   }
@@ -205,6 +216,11 @@ export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = proce
   }
 
   const sonuc = aciklamaDogrula(hamMetin, soru);
+  if (sonuc.hata === 'dogru_uyusmuyor') {
+    console.error('[klod-aciklama] doğru cevapla çelişen çıktı, incelemeye alındı', soru.id);
+    const incelemeYazildi = await onbellegeYaz(soru.id, { inceleme: true, sebep: 'dogru_uyusmuyor', kaynak_hash: hash }, env, fetchFn);
+    return res.status(200).json({ inceleme: true, error: INCELEME_MESAJI, kaynak: 'model', kaydedildi: incelemeYazildi });
+  }
   if (sonuc.hata) {
     console.error('[klod-aciklama] geçersiz çıktı', soru.id, sonuc.hata);
     return res.status(502).json({ error: HATA_MESAJI });
