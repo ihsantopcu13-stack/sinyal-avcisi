@@ -159,6 +159,9 @@ jobs:
       - name: KLOD açıklama (Sinyal Lab yanlış cevap) önbellek + JSON doğrulama testi
         run: node tests/klod-aciklama.test.mjs
 
+      - name: AVCI çözüm motoru (sinyal kütüphanesi + boşluk soruları) testi
+        run: node tests/avci-cozum-motoru.test.mjs
+
       - name: Site + YouTube/Instagram yayın zinciri bağlantısı testi
         run: node tests/published-content.test.mjs
 
