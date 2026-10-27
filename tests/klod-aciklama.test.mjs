@@ -120,5 +120,26 @@ function senaryo({ onbellek = null, modelMetni = gecerli(), env = { ANTHROPIC_AP
   kontrol("23) günlük limit doluysa model çağrılmıyor", res.kod === 429 && s.cagrilar.anthropic === 0);
 }
 
+// --- AVCI çözüm motoru: çelişen çıktı inceleme kaydı + tekrar çağrı yok ---
+{
+  const s = senaryo({ modelMetni: gecerli({ dogru: "A" }) });
+  const res = await s.calistir({ mode: "aciklama", soru_id: "q001" });
+  const y = s.cagrilar.yaz[0];
+  kontrol("24) doğru cevapla çelişen çıktı gösterilmiyor, inceleme kaydı yazılıyor",
+    res.kod === 200 && res.govde.inceleme === true && !res.govde.aciklama && typeof res.govde.error === "string"
+    && s.cagrilar.yaz.length === 1 && y.govde.aciklama.inceleme === true && y.govde.aciklama.sebep === "dogru_uyusmuyor" && y.govde.aciklama.kaynak_hash === soruHash(q001));
+}
+{
+  const s = senaryo({ onbellek: { inceleme: true, sebep: "dogru_uyusmuyor", kaynak_hash: soruHash(q001) } });
+  const res = await s.calistir({ mode: "aciklama", soru_id: "q001" });
+  kontrol("25) incelemedeki soru için model ve costGuard tekrar çağrılmıyor",
+    res.kod === 200 && res.govde.inceleme === true && s.cagrilar.anthropic === 0 && s.cagrilar.costGuard === 0);
+}
+{
+  const s = senaryo({ onbellek: { inceleme: true, sebep: "dogru_uyusmuyor", kaynak_hash: "eski" } });
+  await s.calistir({ mode: "aciklama", soru_id: "q001" });
+  kontrol("26) soru değiştiyse (hash farklı) inceleme kaydı tekrar üretimi engellemiyor", s.cagrilar.anthropic === 1);
+}
+
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
 if (basarisiz > 0) process.exit(1);

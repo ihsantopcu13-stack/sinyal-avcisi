@@ -26,6 +26,14 @@ try {
 } catch (e) {
   console.error('Soru havuzu yüklenemedi (RAG devre dışı, devam ediliyor):', e.message);
 }
+// AVCI çözüm motoru: ÖSYM tipi boşluk soruları (q501+) ayrı dosyada durur;
+// Sinyal Lab'da gösterildikleri için KLOD bağlamı ve açıklama dalı bunları
+// da canonical olarak tanır. sorular.json'a ve video hattına dokunulmaz.
+try {
+  SORU_HAVUZU = SORU_HAVUZU.concat(JSON.parse(readFileSync(path.join(__dirname, 'data', 'avci-bosluk-sorular.json'), 'utf-8')));
+} catch (e) {
+  console.error('Soru havuzu yüklenemedi (RAG devre dışı, devam ediliyor):', e.message);
+}
 
 // Kullanıcının mesajında geçen sinyal kelimeye (despite, must have, by no
 // means...) göre gerçek soru bankasından 1-2 örnek bulur. Basit anahtar
