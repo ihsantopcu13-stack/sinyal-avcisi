@@ -1416,6 +1416,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-19T22:13:29.640Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "UWGaVZESZPA",
+        "link": "https://youtube.com/shorts/UWGaVZESZPA",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-27T22:02:26.329Z"
       }
     },
     "47": {
@@ -1439,6 +1447,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-19T22:13:30.536Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "VaPEx8MCHk4",
+        "link": "https://youtube.com/shorts/VaPEx8MCHk4",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-27T22:02:28.004Z"
       }
     },
     "48": {
@@ -1462,6 +1478,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-19T22:13:31.508Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "O9D5S_Fe7UQ",
+        "link": "https://youtube.com/shorts/O9D5S_Fe7UQ",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-10-27T22:02:29.333Z"
       }
     },
     "49": {
@@ -1901,6 +1925,75 @@
         "gonderildi": "2026-10-26T22:33:12.696Z"
       }
     },
+    "107": {
+      "slot": "2026-10-29T08:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae11f6dbebdf8261a7e53d0",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T05:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:21.526Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae11f6d03bc55f7e02e32e0",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T05:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:21.980Z"
+      }
+    },
+    "108": {
+      "slot": "2026-10-29T13:00:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae11f6e7ee83e48a97b0441",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T10:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:22.661Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae11f6ec039c7bc1c89f74d",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T10:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:23.048Z"
+      }
+    },
+    "109": {
+      "slot": "2026-10-29T17:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae11f6f7ee83e48a97b047f",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T14:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:23.670Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae11f70bebdf8261a7e5459",
+        "durum": "scheduled",
+        "zamanlandi": "2026-10-29T14:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-10-27T22:02:24.214Z"
+      }
+    },
     "201": {
       "slot": "2026-10-24T13:00:00+03:00",
       "instagram": {
@@ -1972,9 +2065,6 @@
     }
   },
   "youtube_bekleyen": [
-    46,
-    47,
-    48,
     49,
     50,
     51,
