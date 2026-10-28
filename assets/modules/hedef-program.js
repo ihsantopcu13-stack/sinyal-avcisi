@@ -266,19 +266,19 @@ const CSS=`
 .hp-sekmeler{max-width:760px;margin:10px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .hp-sekmeler::-webkit-scrollbar{display:none}
 .hp-sekme{flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:inherit;border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
-.hp-sekme.aktif{background:rgba(245,166,35,.18);border-color:#f5a623;color:#fbbf24}
+.hp-sekme.aktif{background:rgba(56,189,248,.18);border-color:#38bdf8;color:#7dd3fc}
 .hp-govde{max-width:760px;margin:0 auto;padding:6px 16px 90px}
 .hp-kart{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;margin-bottom:12px}
-.hp-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:#f5a623;text-transform:uppercase;margin-bottom:6px}
+.hp-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:#38bdf8;text-transform:uppercase;margin-bottom:6px}
 .hp-h{font-size:19px;font-weight:800;margin:0 0 6px;line-height:1.35}
 .hp-muted{color:#a8b0bf;font-size:13.5px;line-height:1.6}
 .hp-statlar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 @media(max-width:560px){.hp-statlar{grid-template-columns:repeat(2,1fr)}}
 .hp-stat{background:rgba(255,255,255,.04);border-radius:12px;padding:10px;text-align:center}
-.hp-stat b{display:block;font-size:22px;font-family:'IBM Plex Mono',monospace;color:#fbbf24}
+.hp-stat b{display:block;font-size:22px;font-family:'IBM Plex Mono',monospace;color:#7dd3fc}
 .hp-stat span{font-size:11.5px;color:#a8b0bf}
 .hp-bar{height:8px;background:rgba(255,255,255,.08);border-radius:6px;overflow:hidden}
-.hp-bar div{height:100%;background:linear-gradient(90deg,#f5a623,#34d399);border-radius:6px;transition:width .3s}
+.hp-bar div{height:100%;background:linear-gradient(90deg,#38bdf8,#34d399);border-radius:6px;transition:width .3s}
 .hp-gorev{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-top:8px}
 .hp-gorev.bitti{opacity:.55}
 .hp-gorev.bitti .hp-g-baslik{text-decoration:line-through}
@@ -287,15 +287,15 @@ const CSS=`
 .hp-g-ic{flex:1;min-width:0}
 .hp-g-baslik{font-weight:700;font-size:14.5px;line-height:1.35}
 .hp-g-detay{font-size:12.5px;color:#a8b0bf;margin-top:2px;line-height:1.45}
-.hp-basla{flex-shrink:0;background:#f5a623;color:#1a1205;border:none;border-radius:10px;padding:9px 12px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
-.hp-btn{background:linear-gradient(135deg,#f5a623,#e08a00);color:#1a1205;border:none;border-radius:12px;padding:14px;font-weight:800;font-size:15px;cursor:pointer;width:100%;font-family:inherit}
+.hp-basla{flex-shrink:0;background:#38bdf8;color:#031018;border:none;border-radius:10px;padding:9px 12px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+.hp-btn{background:linear-gradient(135deg,#38bdf8,#0284c7);color:#031018;border:none;border-radius:12px;padding:14px;font-weight:800;font-size:15px;cursor:pointer;width:100%;font-family:inherit}
 .hp-btn2{background:none;border:1px solid rgba(255,255,255,.25);color:inherit;border-radius:10px;padding:9px 14px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit}
 .hp-alan{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
 .hp-alan label{font-size:13px;font-weight:700}
 .hp-alan input,.hp-alan select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:11px 12px;color:inherit;font-size:16px;font-family:inherit;color-scheme:dark}
 .hp-secim{display:flex;gap:6px;flex-wrap:wrap}
 .hp-secim button{flex:1;min-width:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);color:inherit;border-radius:10px;padding:10px;font-size:13.5px;cursor:pointer;font-family:inherit}
-.hp-secim button.sec{border-color:#f5a623;background:rgba(245,166,35,.15);color:#fbbf24;font-weight:700}
+.hp-secim button.sec{border-color:#38bdf8;background:rgba(56,189,248,.15);color:#7dd3fc;font-weight:700}
 .hp-tablo{width:100%;border-collapse:collapse;font-size:13px}
 .hp-tablo th{text-align:left;font-size:11px;color:#a8b0bf;font-weight:600;padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.1)}
 .hp-tablo td{padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
@@ -303,22 +303,22 @@ const CSS=`
 .hp-chip{display:inline-block;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);color:#7dd3fc;border-radius:8px;padding:2px 7px;font-size:11.5px;margin:2px 3px 0 0;cursor:pointer}
 .hp-gun{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:13px;cursor:pointer}
 .hp-gun:hover{background:rgba(255,255,255,.04)}
-.hp-gun.bugun{background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.4)}
+.hp-gun.bugun{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.4)}
 .hp-gun-no{width:34px;font-family:'IBM Plex Mono',monospace;color:#a8b0bf;font-size:12px}
 .hp-gun-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .hp-mat-grup{margin-bottom:14px}
 .hp-mat-grup h4{margin:0 0 6px;font-size:14px}
 .hp-mat{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:inherit;border-radius:10px;padding:11px 12px;margin-top:6px;cursor:pointer;font-size:14px;font-family:inherit}
-.hp-mat:hover{border-color:rgba(245,166,35,.5)}
+.hp-mat:hover{border-color:rgba(56,189,248,.5)}
 .hp-uyari{background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.6}
 .hp-adim{display:flex;gap:10px;margin-top:10px;font-size:13.5px;line-height:1.55}
-.hp-adim b.n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(245,166,35,.15);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-size:12px}
-#hp-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:840;background:linear-gradient(135deg,#f5a623,#7c3aed);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
+.hp-adim b.n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,.15);color:#7dd3fc;display:flex;align-items:center;justify-content:center;font-size:12px}
+#hp-pill{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:840;background:linear-gradient(135deg,#38bdf8,#7c3aed);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap}
 @media(max-width:900px){#hp-pill{bottom:76px}}
 .hp-bolum{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;color:#a8b0bf;text-transform:uppercase;margin:22px 2px 8px}
 .hp-hedef-cumle{font-size:20px;font-weight:800;line-height:1.4}
-.hp-hedef-cumle b{color:#fbbf24;font-family:'IBM Plex Mono',monospace}
-.hp-gorev-kart{border:1.5px solid rgba(245,166,35,.55);background:linear-gradient(160deg,rgba(245,166,35,.1),rgba(255,255,255,.02))}
+.hp-hedef-cumle b{color:#7dd3fc;font-family:'IBM Plex Mono',monospace}
+.hp-gorev-kart{border:1.5px solid rgba(56,189,248,.55);background:linear-gradient(160deg,rgba(56,189,248,.1),rgba(255,255,255,.02))}
 .hp-adimlar{list-style:none;margin:12px 0 14px;padding:0}
 .hp-adim2{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07)}
 .hp-adim2:first-child{border-top:none}
@@ -327,7 +327,7 @@ const CSS=`
 .hp-ekadim small{display:block;font-weight:400;font-size:12px;color:#a8b0bf}
 .hp-ekadim.bitti{opacity:.6}
 .hp-adim2 .hp-no{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid rgba(255,255,255,.25);color:#a8b0bf;background:none;padding:0;font-family:inherit}
-.hp-adim2.sira .hp-no{border-color:#f5a623;color:#fbbf24}
+.hp-adim2.sira .hp-no{border-color:#38bdf8;color:#7dd3fc}
 .hp-adim2.bitti .hp-no{background:#10b981;border-color:#10b981;color:#fff}
 .hp-adim2.bitti .hp-g-baslik{text-decoration:line-through;opacity:.6}
 button.hp-no{cursor:pointer}
@@ -341,7 +341,7 @@ button.hp-no{cursor:pointer}
 .hp-asama.bitti::before{background:#10b981}
 .hp-asama-bas{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:inherit;text-align:left;padding:6px 0;cursor:pointer;font-family:inherit;font-size:15px;font-weight:800}
 .hp-asama-bas .hp-asama-no{position:absolute;left:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;background:#1b1f2a;border:2px solid rgba(255,255,255,.25);color:#a8b0bf}
-.hp-asama.aktif .hp-asama-no{border-color:#f5a623;color:#fbbf24}
+.hp-asama.aktif .hp-asama-no{border-color:#38bdf8;color:#7dd3fc}
 .hp-asama.bitti .hp-asama-no{background:#10b981;border-color:#10b981;color:#fff}
 .hp-asama.kilit .hp-asama-bas{color:#8b93a3}
 .hp-asama-bas .hp-say{margin-left:auto;font-size:12px;font-weight:600;color:#a8b0bf;font-family:'IBM Plex Mono',monospace}
@@ -352,7 +352,7 @@ button.hp-no{cursor:pointer}
 .hp-dugum .hp-d-ad small{display:block;font-size:11px;color:#a8b0bf;font-family:'IBM Plex Mono',monospace}
 .hp-dugum .hp-d-ik{width:22px;text-align:center;flex-shrink:0}
 .hp-dugum.bitti .hp-d-ik{color:#34d399;font-weight:800}
-.hp-dugum.sira{border-color:#f5a623;background:rgba(245,166,35,.1);box-shadow:0 0 0 3px rgba(245,166,35,.12)}
+.hp-dugum.sira{border-color:#38bdf8;background:rgba(56,189,248,.1);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
 .hp-dugum.gelecek{opacity:.5}
 .hp-link{background:none;border:none;color:#7dd3fc;font-size:12.5px;cursor:pointer;padding:4px 2px;font-family:inherit;text-decoration:underline;flex-shrink:0}
 .hp-ekler{border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.02);margin-top:22px}
@@ -377,7 +377,7 @@ button.hp-no{cursor:pointer}
 .hp-sik.dogru{border-color:#10b981;background:rgba(16,185,129,.15)}
 .hp-sik.yanlis{border-color:#f87171;background:rgba(248,113,113,.12)}
 .hp-sik:disabled{cursor:default;color:inherit;opacity:1}
-.hp-sure{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:#fbbf24;text-align:center;margin:4px 0 10px}
+.hp-sure{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:#7dd3fc;text-align:center;margin:4px 0 10px}
 .hp-tekrar-liste .hp-aha{min-height:130px;margin-top:10px}
 `;
 function cssEkle(){if(document.getElementById('hp-css'))return;const s=document.createElement('style');s.id='hp-css';s.textContent=CSS;document.head.appendChild(s);}
@@ -465,7 +465,7 @@ function durumMesaji(v){
   const f=v.sonDeneme.puan-v.beklenenPuan;
   if(v.sonDeneme.puan>=v.hedefPuan)return{r:'#34d399',m:'🏆 Son denemende hedefini yakaladın! Şimdi bu seviyeyi sabitle.'};
   if(f>=0)return{r:'#34d399',m:`✅ Plan üstündesin: son deneme ${v.sonDeneme.puan} puan, bugün beklenen ${v.beklenenPuan}.`};
-  if(f>-7)return{r:'#fbbf24',m:`🟡 Plana çok yakınsın (${v.sonDeneme.puan} / beklenen ${v.beklenenPuan}). Görevleri aksatmazsan kapanır.`};
+  if(f>-7)return{r:'#7dd3fc',m:`🟡 Plana çok yakınsın (${v.sonDeneme.puan} / beklenen ${v.beklenenPuan}). Görevleri aksatmazsan kapanır.`};
   return{r:'#f87171',m:`🔴 Planın ${Math.round(-f)} puan gerisindesin. Paniğe gerek yok: "Hedef Haritası"ndaki en kolay bölümlere (kelime, dilbilgisi, çeviri) ağırlık ver.`};
 }
 // ===== TEK YOL — ana ekran =====
@@ -540,7 +540,7 @@ function yolHaritasiHTML(p){
       const cls=bitti?'bitti':sira?'sira':'gelecek';
       const ik=bitti?'✓':sira?'●':'🔒';
       const aks=bitti?'tekrar et':sira?'':'yine de aç';
-      return `<div class="hp-dugum ${cls}"><span class="hp-d-ik">${ik}</span><span class="hp-d-ad"><small>AHA ${n}</small>${esc(k.baslik)}${sira?` <span style="color:#fbbf24;font-size:12px;font-weight:700">· ${bugunBitti?'yarın':'bugün'}</span>`:''}</span>${aks?`<button class="hp-link" data-hp-action="kart" data-no="${n}">${aks}</button>`:''}</div>`;
+      return `<div class="hp-dugum ${cls}"><span class="hp-d-ik">${ik}</span><span class="hp-d-ad"><small>AHA ${n}</small>${esc(k.baslik)}${sira?` <span style="color:#7dd3fc;font-size:12px;font-weight:700">· ${bugunBitti?'yarın':'bugün'}</span>`:''}</span>${aks?`<button class="hp-link" data-hp-action="kart" data-no="${n}">${aks}</button>`:''}</div>`;
     }).join('')+(a.ekler||[]).map(([k,ad])=>`<div class="hp-dugum${kilit?' gelecek':''}"><span class="hp-d-ik">${kilit?'🔒':'○'}</span><span class="hp-d-ad">${ad}</span><button class="hp-link" data-hp-action="materyal" data-k="${k}">${kilit?'yine de aç':'aç'}</button></div>`).join('');
     return `<div class="hp-asama${a.no===acik?' acik':''}${tamam?' bitti':''}${a.no===aktif?' aktif':''}${kilit?' kilit':''}">
       <button class="hp-asama-bas" data-hp-action="asama" data-no="${a.no}" aria-expanded="${a.no===acik}"><span class="hp-asama-no">${tamam?'✓':kilit?'🔒':a.no}</span>Aşama ${a.no} · ${a.ad}<span class="hp-say">${biten}/${a.kartlar.length}</span></button>
@@ -703,14 +703,14 @@ function haritaHTML(v){
   <div class="hp-kart">
     <div class="hp-eyebrow">Puan hesabın</div>
     <div class="hp-h">${v.sonPuan} puan ≈ ${v.mevcutDogru} doğru → ${v.hedefPuan} puan = ${v.hedefDogru} doğru</div>
-    <p class="hp-muted" style="margin:0">80 soru var, her doğru <b>1,25 puan</b>. Hedefine ulaşmak için şu an yaptığından <b style="color:#fbbf24">${v.fark} soru daha fazla</b> doğru yapman yeterli. ${v.kalanGun>0?`${v.kalanGun} günün var; bu, <b>${Math.max(1,Math.round(v.kalanGun/Math.max(1,v.fark)*10)/10)} günde 1 yeni doğru</b> demek.`:''}</p>
+    <p class="hp-muted" style="margin:0">80 soru var, her doğru <b>1,25 puan</b>. Hedefine ulaşmak için şu an yaptığından <b style="color:#7dd3fc">${v.fark} soru daha fazla</b> doğru yapman yeterli. ${v.kalanGun>0?`${v.kalanGun} günün var; bu, <b>${Math.max(1,Math.round(v.kalanGun/Math.max(1,v.fark)*10)/10)} günde 1 yeni doğru</b> demek.`:''}</p>
   </div>
   <div class="hp-kart">
     <div class="hp-eyebrow">Hangi bölümden kaç doğru?</div>
     <p class="hp-muted" style="margin:0 0 8px">Önerilen dağılım: öğrenmesi en hızlı olan bölümlere (kelime, dilbilgisi, cümle tamamlama, çeviri) ağırlık veriyor. Materyale tıklayınca ilgili ders açılır.</p>
     <table class="hp-tablo"><thead><tr><th>Bölüm (${v.sinav==='YOKDIL'?'YDS numaralarıyla':'soru no'})</th><th style="text-align:center">Soru</th><th style="text-align:center">Hedef</th></tr></thead><tbody>
-    ${dag.map(b=>`<tr><td><b>${b.ad}</b> <span class="hp-muted" style="font-size:11.5px">${b.no}</span><div>${b.mat.map(k=>M[k]?`<span class="hp-chip" onclick="hpMateryal('${k}')">${M[k].ikon} ${M[k].ad}</span>`:'').join('')}</div></td><td class="s">${b.adet}</td><td class="s" style="color:#fbbf24;font-weight:700">${b.hedef}</td></tr>`).join('')}
-    <tr><td><b>Toplam</b></td><td class="s">80</td><td class="s" style="color:#fbbf24;font-weight:800">${topHedef}</td></tr>
+    ${dag.map(b=>`<tr><td><b>${b.ad}</b> <span class="hp-muted" style="font-size:11.5px">${b.no}</span><div>${b.mat.map(k=>M[k]?`<span class="hp-chip" onclick="hpMateryal('${k}')">${M[k].ikon} ${M[k].ad}</span>`:'').join('')}</div></td><td class="s">${b.adet}</td><td class="s" style="color:#7dd3fc;font-weight:700">${b.hedef}</td></tr>`).join('')}
+    <tr><td><b>Toplam</b></td><td class="s">80</td><td class="s" style="color:#7dd3fc;font-weight:800">${topHedef}</td></tr>
     </tbody></table>
     ${v.sinav==='YOKDIL'?'<p class="hp-muted" style="font-size:12px;margin:8px 0 0">YÖKDİL\'de diyalog sorusu yoktur ve bölüm sıraları farklıdır; o hedefleri okuma ve cümle tamamlamaya ekle. Soru tipleri ve çalışma yöntemi aynıdır.</p>':''}
   </div>
@@ -719,7 +719,7 @@ function haritaHTML(v){
 }
 
 // ----- program (takvim) -----
-const GUN_RENK={normal:'#38bdf8',deneme:'#f5a623',tekrar:'#34d399',son:'#a78bfa'};
+const GUN_RENK={normal:'#38bdf8',deneme:'#38bdf8',tekrar:'#34d399',son:'#a78bfa'};
 function planHTML(v,p){
   const bugunNo=Math.min(v.gunNo,v.toplamGun);
   let html=`<div class="hp-kart"><div class="hp-eyebrow">${v.toplamGun} günlük program</div><div class="hp-h">${tarihYaz(p.baslangic)} → ${tarihYaz(p.tarih)} (sınav)</div>
@@ -749,8 +749,8 @@ function grafikSVG(v){
   const y=pu=>pt+(H-pt-pb)*(1-pu/maxY);
   const noktalar=v.denemeler.map(dn=>({d:gunFarki(v.baslangic,dn.tarih)+1,pu:dn.puan}));
   const izgara=[0,20,40,60,80,100].map(g=>`<line x1="${pl}" x2="${W-pr}" y1="${y(g)}" y2="${y(g)}" stroke="rgba(255,255,255,.07)"/><text x="${pl-6}" y="${y(g)+4}" fill="#8b93a3" font-size="13" text-anchor="end">${g}</text>`).join('');
-  const hedefCizgi=`<line x1="${x(0)}" y1="${y(v.sonPuan)}" x2="${x(N)}" y2="${y(v.hedefPuan)}" stroke="#f5a623" stroke-width="2" stroke-dasharray="6 5"/>`;
-  const hedefEt=`<text x="${x(N)-4}" y="${y(v.hedefPuan)-7}" fill="#fbbf24" font-size="13" text-anchor="end">hedef ${v.hedefPuan}</text>`;
+  const hedefCizgi=`<line x1="${x(0)}" y1="${y(v.sonPuan)}" x2="${x(N)}" y2="${y(v.hedefPuan)}" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 5"/>`;
+  const hedefEt=`<text x="${x(N)-4}" y="${y(v.hedefPuan)-7}" fill="#7dd3fc" font-size="13" text-anchor="end">hedef ${v.hedefPuan}</text>`;
   const cizgi=noktalar.length>1?`<polyline fill="none" stroke="#34d399" stroke-width="2.5" points="${noktalar.map(n=>x(n.d)+','+y(n.pu)).join(' ')}"/>`:'';
   const nokta=noktalar.map(n=>`<circle cx="${x(n.d)}" cy="${y(n.pu)}" r="4.5" fill="#34d399"/><text x="${x(n.d)}" y="${y(n.pu)-9}" fill="#d1fae5" font-size="13" text-anchor="middle">${n.pu}</text>`).join('');
   const bugunX=x(Math.min(v.gunNo,N));
@@ -762,7 +762,7 @@ function ilerlemeHTML(v,p){
   <div class="hp-kart">
     <div class="hp-eyebrow">Deneme puanların</div>
     ${grafikSVG(v)}
-    <div class="hp-muted" style="font-size:12px;margin-top:6px"><span style="color:#fbbf24">– – –</span> olması gereken yol · <span style="color:#34d399">●</span> senin denemelerin</div>
+    <div class="hp-muted" style="font-size:12px;margin-top:6px"><span style="color:#7dd3fc">– – –</span> olması gereken yol · <span style="color:#34d399">●</span> senin denemelerin</div>
     <div class="hp-muted" style="margin-top:8px;color:${dm.r}">${dm.m}</div>
   </div>
   <div class="hp-kart">
@@ -773,7 +773,7 @@ function ilerlemeHTML(v,p){
       <button class="hp-basla" onclick="hpDenemeElle()">Ekle</button>
     </div>
     <div id="hp-dn-hata" style="color:#f87171;font-size:12.5px;margin-top:6px"></div>
-    ${v.denemeler.length?`<div style="margin-top:10px">${v.denemeler.slice().reverse().map((dn,i)=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span>${tarihYaz(dn.tarih)} · ${dn.dogru} doğru${dn.kaynak==='simulator'?' <span class="hp-muted" style="font-size:11px">(simülatör)</span>':''}</span><span><b style="color:#fbbf24">${dn.puan}</b> <button class="hp-btn2" style="padding:2px 8px;font-size:11px;margin-left:6px" onclick="hpDenemeSil(${v.denemeler.length-1-i})">sil</button></span></div>`).join('')}</div>`:''}
+    ${v.denemeler.length?`<div style="margin-top:10px">${v.denemeler.slice().reverse().map((dn,i)=>`<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span>${tarihYaz(dn.tarih)} · ${dn.dogru} doğru${dn.kaynak==='simulator'?' <span class="hp-muted" style="font-size:11px">(simülatör)</span>':''}</span><span><b style="color:#7dd3fc">${dn.puan}</b> <button class="hp-btn2" style="padding:2px 8px;font-size:11px;margin-left:6px" onclick="hpDenemeSil(${v.denemeler.length-1-i})">sil</button></span></div>`).join('')}</div>`:''}
   </div>
   <div class="hp-statlar">
     <div class="hp-stat"><b>${sayac.tamGun}</b><span>gün tamamlandı</span></div>
@@ -821,7 +821,7 @@ function materyalHTML(){
     ['🤝 Yardım',['klod','sesKurs','ekitap']]
   ];
   return `<div class="hp-kart"><div class="hp-eyebrow">Materyal kütüphanesi</div><div class="hp-h">Sitedeki her şey, soru tipine göre</div><p class="hp-muted" style="margin:0">Tıkla, ilgili ders ya da alıştırma açılır. Programa dönmek için alttaki "🎯 Programa dön" butonunu kullan.</p></div>
-  ${gruplar.map(([b,l])=>`<div class="hp-mat-grup"><h4>${b}</h4>${l.map(k=>`<button class="hp-mat" onclick="hpMateryal('${k}')"><span style="font-size:18px">${M[k].ikon}</span><span style="flex:1">${M[k].ad}</span><span style="color:#f5a623">→</span></button>`).join('')}</div>`).join('')}`;
+  ${gruplar.map(([b,l])=>`<div class="hp-mat-grup"><h4>${b}</h4>${l.map(k=>`<button class="hp-mat" onclick="hpMateryal('${k}')"><span style="font-size:18px">${M[k].ikon}</span><span style="flex:1">${M[k].ad}</span><span style="color:#38bdf8">→</span></button>`).join('')}</div>`).join('')}`;
 }
 
 // ----- sınav günü -----
