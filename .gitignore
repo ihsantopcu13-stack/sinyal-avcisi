@@ -12,3 +12,7 @@ node_modules/
 client_secret*.json
 service-account*.json
 *credentials*.json
+
+# Python derleme önbelleği (otomatik üretilir, repoya girmemeli)
+__pycache__/
+*.pyc
