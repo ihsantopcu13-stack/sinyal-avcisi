@@ -11291,7 +11291,7 @@ function klodAciklamaKartHtml(a,secilenIdx){
   const sb=a.sosyal;
   if(sb&&sb.cekirdek){
     const c=sb.cekirdek;
-    const civi='<div class="yc-klod-bolum"><div class="yc-klod-etiket">🔩 Çivi tablo: '+(c.tip==='SVC'?'S–V–C':'S–V–O')+'</div><div><b>S:</b> '+ycKacis(c.s)+'<br><b>V:</b> '+ycKacis(c.v)+'<br><b>'+(c.tip==='SVC'?'C':'O')+':</b> '+ycKacis(c.o)+'</div></div>';
+    const civi='<div class="yc-klod-bolum"><div class="yc-klod-etiket">🔩 Çivi tablo: '+(c.tip==='SV'?'S–V (nesnesiz)':c.tip==='SVC'?'S–V–C':'S–V–O')+'</div><div><b>S:</b> '+ycKacis(c.s)+'<br><b>V:</b> '+ycKacis(c.v)+(c.tip==='SV'?'':'<br><b>'+(c.tip==='SVC'?'C':'O')+':</b> '+ycKacis(c.o))+'</div></div>';
     return '<div class="yc-klod-baslik">🎯 KLOD Sosyal Bilimler öğretmeni</div>'
       +bolum('📋 Soru durumu',sb.soru_durumu)
       +bolum('🧭 Konu alanı',sb.alan+(sb.alan_kaniti?' (kanıt: "'+sb.alan_kaniti+'")':''))

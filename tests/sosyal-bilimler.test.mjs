@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { soruBul, soruHash, kullaniciMesaji, klodAciklamaIsle, KLOD_ACIKLAMA_PROMPT } from "../api/_klodAciklama.mjs";
 import {
   alanTespit, sosyalKatmanBaglami, soruDurumu, sosyalDogrula, insanDiliFiltresi,
-  ALAN_BELIRSIZ, BILGI_DOGRULANMADI, SOSYAL_BILIMLER_PROMPT, SOSYAL_ALANLAR,
+  ALAN_BELIRSIZ, BILGI_DOGRULANMADI, SOSYAL_BILIMLER_PROMPT, SOSYAL_ALANLAR, nesneZarfMi,
 } from "../api/_sosyalBilimler.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,6 +66,22 @@ kontrol("13) cümlede olmayan nesne reddediliyor",
 kontrol("14) bilgi notundaki uydurma yıl atılıyor",
   sosyalDogrula(sbHam({ bilgi_notu: "Bu kavram 1922 yılında ortaya çıktı." }), q005, b005).sosyal.bilgi_notu === BILGI_DOGRULANMADI);
 kontrol("15) model alanı değiştiremiyor", sosyalDogrula(sbHam({ alan: "Tarih" }), q005, b005).sosyal.alan === "Sosyoloji");
+
+// --- nesnesiz fiil (S–V) ve zarfın nesne yazılması ---
+// q027 gerçek model çıktısında "more quickly than anticipated" nesne (O) diye yazılmıştı.
+const q027 = soruBul(HAVUZ, "q027");
+const b027 = sosyalKatmanBaglami(q027);
+const sb027 = cekirdek => sbHam({ ana_fiil: "recovered", cekirdek });
+kontrol("15a) SVO'da zarf öbeği nesne olarak reddediliyor",
+  sosyalDogrula(sb027({ tip: "SVO", s: "The economy", v: "recovered", o: "more quickly than anticipated" }), q027, b027).hata === "nesne_zarf");
+{
+  const r = sosyalDogrula(sb027({ tip: "SV", s: "The economy", v: "recovered", o: "" }), q027, b027);
+  kontrol("15b) nesnesiz cümle S–V olarak kabul ediliyor", !r.hata && r.sosyal.cekirdek.tip === "SV" && r.sosyal.cekirdek.o === "");
+}
+kontrol("15c) S–V'de nesne alanı doluysa reddediliyor",
+  sosyalDogrula(sb027({ tip: "SV", s: "The economy", v: "recovered", o: "more quickly" }), q027, b027).hata === "sv_nesne_dolu");
+kontrol("15d) gerçek nesne zarf sanılmıyor (that-cümleciği, more people, family members)",
+  ["that stratification hardly operates independently of cultural norms", "more people", "family members", "early warnings"].every(o => !nesneZarfMi(o)));
 
 // --- İnsan Dili Filtresi ---
 {
@@ -129,7 +145,7 @@ function senaryo({ havuz = HAVUZ, onbellek = null, modelMetni }) {
     s.c.govde.messages[0].content.includes(q005.soru_en) && q005.secenekler_tr.every(o => s.c.govde.messages[0].content.includes(o)));
   kontrol("24) yanıtta sosyal blok var, doğru cevap anahtarla aynı",
     res.kod === 200 && res.govde.aciklama.sosyal?.alan === "Sosyoloji" && res.govde.aciklama.dogru === "C");
-  kontrol("25) sosyal önbellek anahtarı ayrı sürümlü", s.c.yaz.length === 1 && s.c.yaz[0].aciklama.kaynak_hash === soruHash(q005) + ":sb1");
+  kontrol("25) sosyal önbellek anahtarı ayrı sürümlü", s.c.yaz.length === 1 && s.c.yaz[0].aciklama.kaynak_hash === soruHash(q005) + ":sb2");
 }
 {
   const s = senaryo({ modelMetni: JSON.stringify({ ...temel("C"), sosyal: sbHam({ ana_fiil: "believe" }) }) });
@@ -163,6 +179,8 @@ function senaryo({ havuz = HAVUZ, onbellek = null, modelMetni }) {
     "Sosyal Bilimler bilgi notu", "Şık eleme", "Doğru cevap", "Kanıt", "ÖSYM tuzağı", "3 saniyelik çözüm kartı", "Doğrulama durumu"];
   const yerler = sira.map(b => sosyal.indexOf(b));
   kontrol("30) sosyal kart çıktı düzeni sırasıyla", yerler.every((y, i) => y > 0 && (i === 0 || y > yerler[i - 1])), yerler.join(","));
+  const svKart = ctx.kart({ ...temel("E"), sosyal: sosyalDogrula(sb027({ tip: "SV", s: "The economy", v: "recovered", o: "" }), q027, b027).sosyal }, 0);
+  kontrol("31) S–V kartında nesne satırı yok", svKart.includes("S–V (nesnesiz)") && !svKart.includes("<b>O:</b>") && !svKart.includes("<b>C:</b>"));
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);

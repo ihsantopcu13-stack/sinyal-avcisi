@@ -15,12 +15,14 @@
 //   - Eksik/okunamayan soru → model çağrılmaz, tahmin yürütülmez.
 //   - ana_fiil ve çivi tablo parçaları soru cümlesinde birebir geçmiyorsa
 //     katman çıktısı atılır (uydurma kelime kabul edilmez).
+//   - Nesnesiz fiil için tip "SV"dir; SVO'da nesne yerine zarf/edat öbeği
+//     yazılmışsa (ör. "more quickly than anticipated") çıktı atılır.
 //   - Bilgi notunda kaynakta olmayan bir sayı/yıl varsa not, sabit
 //     "doğrulanmadı" cümlesiyle değiştirilir.
 //   - İnsan Dili Filtresi SADECE Türkçe anlatım alanlarına uygulanır;
 //     doğru cevap, çivi tablo, sinyal, sağ-sol ve şık eleme alanlarına dokunmaz.
 
-export const SB_SURUM = 1;
+export const SB_SURUM = 2;
 export const ALAN_BELIRSIZ = 'Alan kesin olarak belirlenemedi.';
 export const BILGI_DOGRULANMADI = 'Bu alan bilgisi doğrulanmadığı için eklenmedi.';
 
@@ -84,7 +86,8 @@ Bu soru Sosyal Bilimler kapsamında. Yukarıdaki kurallar ve alanlar aynen geçe
 SIRA (bu sırayla düşün):
 1. Soru ve seçenekler sana eksiksiz verildi; eksik ya da okunamayan kelime görürsen tahmin etme, "emin": false yaz.
 2. İngilizce cümleyi ve seçenekleri DEĞİŞTİRME; alıntı yaparken birebir kopyala.
-3. Ana fiili bul. 4. S-V-O ya da gerekiyorsa S-V-C iskeletini çıkar.
+3. Ana fiili bul. 4. S-V-O ya da gerekiyorsa S-V-C iskeletini çıkar. Fiil nesne almıyorsa tip "SV" olur ve "o" boş kalır.
+   Zarf, zarf öbeği ve edat öbeği (ör. "quickly", "more quickly than anticipated", "in the city") nesne ya da tümleç DEĞİLDİR; "o" alanına yazma.
 5. Zaman, bağlaç, edat, modal, passive ve relative clause sinyallerini belirle; olmayanı yazma.
 6. Boşluğun sağına ve soluna bak ("yapi" alanı). Boşluk yoksa bunu söyle.
 7. Seçenekleri dilbilgisi ve anlam kanıtıyla ele ("eleme" alanı).
@@ -104,7 +107,7 @@ DOĞRULUK
 "sosyal" NESNESİ (JSON'a ekle, diğer alanların yanına):
 "sosyal": {
   "ana_fiil": "cümlede birebir geçen ana fiil",
-  "cekirdek": {"tip": "SVO" ya da "SVC", "s": "özne (cümleden birebir)", "v": "fiil (cümleden birebir)", "o": "nesne ya da tümleç (cümleden birebir)"},
+  "cekirdek": {"tip": "SVO", "SVC" ya da "SV", "s": "özne (cümleden birebir)", "v": "fiil (cümleden birebir)", "o": "nesne ya da tümleç (cümleden birebir; SV ise boş: \"\")"},
   "sinyaller": "zaman/bağlaç/edat/modal/passive/relative clause sinyalleri ve anlamları",
   "sade_turkce": "cümlenin sade Türkçesi",
   "bilgi_notu": "kaynaktaki alan bilgisi ya da sabit doğrulanmadı cümlesi",
@@ -121,6 +124,13 @@ export function sosyalKullaniciEki(baglam) {
 const SB_ALAN_MAX = 600;
 function sbMetin(v) {
   return typeof v === 'string' && v.trim().length > 0 && v.length <= SB_ALAN_MAX;
+}
+
+// SVO'da "nesne" zarf ya da edat öbeğiyle başlıyorsa nesne değildir.
+const EDATLAR = 'about|above|across|after|against|along|among|around|at|before|behind|below|beneath|beside|between|beyond|by|despite|during|for|from|in|inside|into|near|of|off|on|onto|out|over|since|than|through|throughout|to|toward|towards|under|until|upon|with|within|without';
+const ZARF_NESNE = new RegExp(`^(?:(?:${EDATLAR})\\b|(?:more|less|most|least|as|so|very|too|rather|quite)\\s+\\w+ly\\b|\\w+ly\\s*$)`, 'i');
+export function nesneZarfMi(o) {
+  return ZARF_NESNE.test(String(o || '').trim());
 }
 
 function cumledeGeciyor(parca, cumle) {
@@ -180,15 +190,18 @@ export function sosyalDogrula(ham, soru, baglam) {
   const c = ham.cekirdek;
   if (!c || typeof c !== 'object') return { hata: 'cekirdek_yok' };
   const tip = typeof c.tip === 'string' ? c.tip.replace(/[^A-Z]/gi, '').toUpperCase() : '';
-  if (tip !== 'SVO' && tip !== 'SVC') return { hata: 'cekirdek_tip' };
+  if (tip !== 'SVO' && tip !== 'SVC' && tip !== 'SV') return { hata: 'cekirdek_tip' };
   for (const alan of ['ana_fiil', 'sinyaller', ...FILTRE_ALANLARI]) {
     if (!sbMetin(ham[alan])) return { hata: 'sosyal_alan_eksik:' + alan };
   }
-  for (const p of ['s', 'v', 'o']) {
+  for (const p of tip === 'SV' ? ['s', 'v'] : ['s', 'v', 'o']) {
     if (!sbMetin(c[p])) return { hata: 'cekirdek_eksik:' + p };
   }
+  if (tip === 'SV' && typeof c.o === 'string' && c.o.trim()) return { hata: 'sv_nesne_dolu' };
+  if (tip === 'SVO' && nesneZarfMi(c.o)) return { hata: 'nesne_zarf' };
+  const parcalar = tip === 'SV' ? [ham.ana_fiil, c.s, c.v] : [ham.ana_fiil, c.s, c.v, c.o];
   // Uydurma kelime koruması: fiil ve iskelet parçaları cümlede birebir geçmeli.
-  for (const parca of [ham.ana_fiil, c.s, c.v, c.o]) {
+  for (const parca of parcalar) {
     if (!cumledeGeciyor(parca, soru.soru_en)) return { hata: 'cumlede_yok' };
   }
 
@@ -210,13 +223,13 @@ export function sosyalDogrula(ham, soru, baglam) {
       alan: baglam.alan,
       alan_kaniti: baglam.kanit,
       ana_fiil: ham.ana_fiil.trim(),
-      cekirdek: { tip, s: c.s.trim(), v: c.v.trim(), o: c.o.trim() },
+      cekirdek: { tip, s: c.s.trim(), v: c.v.trim(), o: tip === 'SV' ? '' : c.o.trim() },
       sinyaller: ham.sinyaller.trim(),
       ...filtreli,
       dogrulama: [
         'Soru eksiksiz.',
         'Doğru cevap cevap anahtarıyla eşleşti.',
-        'Ana fiil ve çivi tablo soru cümlesinde birebir bulundu.',
+        'Ana fiil ve çivi tablo soru cümlesinde birebir bulundu; nesne yerine zarf yazılmadı.',
         notDogrulandi && bilgiNotu !== BILGI_DOGRULANMADI ? 'Bilgi notu yalnızca soru kaynağına dayanıyor.' : 'Haricî alan bilgisi eklenmedi.',
       ].join(' '),
     },
