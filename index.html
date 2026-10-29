@@ -12155,6 +12155,28 @@ function klodAciklamaKartHtml(a,secilenIdx){
     const secilen=e.sik===secilenHarf;
     return '<li class="yc-klod-eleme-satir'+(secilen?' yc-klod-secilen':'')+'"><b>'+ycKacis(e.sik)+')</b> '+ycKacis(e.neden)+(secilen?' <span class="yc-klod-rozet">Senin seçimin</span>':'')+'</li>';
   }).join('');
+  // Sosyal Bilimler katmanı (api/_sosyalBilimler.mjs) — sadece sunucu `sosyal` gönderdiyse
+  const sb=a.sosyal;
+  if(sb&&sb.cekirdek){
+    const c=sb.cekirdek;
+    const civi='<div class="yc-klod-bolum"><div class="yc-klod-etiket">🔩 Çivi tablo: '+(c.tip==='SV'?'S–V (nesnesiz)':c.tip==='SVC'?'S–V–C':'S–V–O')+'</div><div><b>S:</b> '+ycKacis(c.s)+'<br><b>V:</b> '+ycKacis(c.v)+(c.tip==='SV'?'':'<br><b>'+(c.tip==='SVC'?'C':'O')+':</b> '+ycKacis(c.o))+'</div></div>';
+    return '<div class="yc-klod-baslik">🎯 KLOD Sosyal Bilimler öğretmeni</div>'
+      +bolum('📋 Soru durumu',sb.soru_durumu)
+      +bolum('🧭 Konu alanı',sb.alan+(sb.alan_kaniti?' (kanıt: "'+sb.alan_kaniti+'")':''))
+      +bolum('🎯 Ana fiil',sb.ana_fiil)
+      +civi
+      +bolum('📡 Sinyaller',sb.sinyaller+' '+a.sinyal)
+      +bolum('↔️ Sağ–sol kontrolü',a.yapi)
+      +bolum('🗣️ Cümlenin sade Türkçesi',sb.sade_turkce)
+      +bolum('📚 Sosyal Bilimler bilgi notu',sb.bilgi_notu)
+      +'<div class="yc-klod-bolum"><div class="yc-klod-etiket">❌ Şık eleme</div><ul class="yc-klod-eleme">'+eleme+'</ul></div>'
+      +bolum('✅ Doğru cevap',a.dogru)
+      +bolum('🔍 Kanıt',sb.kanit)
+      +bolum('🪤 ÖSYM tuzağı',sb.osym_tuzagi)
+      +'<div class="yc-klod-ipucu"><div class="yc-klod-etiket">⚡ 3 saniyelik çözüm kartı</div><div>'+ycKacis(a.avci_ipucu)+'</div></div>'
+      +bolum('🛡️ Doğrulama durumu',sb.dogrulama)
+      +(a.emin===false?'<div class="yc-klod-not">KLOD bu açıklamadan tam emin değil; doğru cevap yukarıdaki anahtardır.</div>':'');
+  }
   return '<div class="yc-klod-baslik">🎯 KLOD açıklıyor — doğru cevap '+ycKacis(a.dogru)+'</div>'
     +bolum('🧱 Yapı',a.yapi)
     +bolum('📡 Sinyal',a.sinyal)

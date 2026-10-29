@@ -22,6 +22,10 @@
 // Yönetici incelemesi: Supabase → klod_aciklama, aciklama->>'inceleme' = 'true'.
 
 import { createHash } from 'node:crypto';
+import {
+  sosyalKatmanBaglami, soruDurumu, sosyalDogrula, sosyalKullaniciEki,
+  SOSYAL_BILIMLER_PROMPT, EKSIK_SORU_MESAJI, SB_SURUM,
+} from './_sosyalBilimler.mjs';
 
 const SUPABASE_URL = 'https://scqczkyiyshmczzmlshl.supabase.co';
 const MODEL = 'claude-sonnet-5-5';
@@ -110,6 +114,7 @@ export function aciklamaDogrula(hamMetin, soru) {
   eleme.sort((a, b) => a.sik.localeCompare(b.sik));
 
   return {
+    sosyalHam: j.sosyal,
     aciklama: {
       dogru: dogruHarf,
       yapi: j.yapi.trim(),
@@ -164,7 +169,9 @@ async function onbellegeYaz(soruId, aciklama, env, fetchFn) {
 }
 
 function istemciyeAciklama(a) {
-  return { dogru: a.dogru, yapi: a.yapi, sinyal: a.sinyal, eleme: a.eleme, avci_ipucu: a.avci_ipucu, emin: a.emin };
+  const c = { dogru: a.dogru, yapi: a.yapi, sinyal: a.sinyal, eleme: a.eleme, avci_ipucu: a.avci_ipucu, emin: a.emin };
+  if (a.sosyal) c.sosyal = a.sosyal;
+  return c;
 }
 
 const INCELEME_MESAJI = 'Bu soru için yapay zekâ açıklaması doğru cevapla uyuşmadı ve incelemeye alındı. Doğru cevap ekrandaki anahtardır; yerel çözüm adımlarına bakabilirsin.';
@@ -175,7 +182,13 @@ export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = proce
   if (!soru || !Array.isArray(soru.secenekler_tr) || !HARFLER[soru.dogru_index]) {
     return res.status(400).json({ error: 'Geçersiz istek' });
   }
-  const hash = soruHash(soru);
+  // Sosyal Bilimler katmanı (bkz. _sosyalBilimler.mjs) — diğer sorularda null,
+  // akış ve önbellek anahtarı eskisiyle birebir aynı kalır.
+  const sb = sosyalKatmanBaglami(soru);
+  if (sb && !soruDurumu(soru).tamam) {
+    return res.status(422).json({ error: EKSIK_SORU_MESAJI });
+  }
+  const hash = sb ? `${soruHash(soru)}:sb${SB_SURUM}` : soruHash(soru);
 
   const onbellek = await onbellektenOku(soru.id, env, fetchFn);
   if (onbellek && onbellek.kaynak_hash === hash && onbellek.inceleme === true) {
@@ -199,9 +212,12 @@ export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = proce
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: 1200,
-        system: KLOD_ACIKLAMA_PROMPT,
-        messages: [{ role: 'user', content: kullaniciMesaji(soru) }],
+        max_tokens: sb ? 2000 : 1200,
+        system: sb ? `${KLOD_ACIKLAMA_PROMPT}
+
+${SOSYAL_BILIMLER_PROMPT}` : KLOD_ACIKLAMA_PROMPT,
+        messages: [{ role: 'user', content: sb ? `${kullaniciMesaji(soru)}
+${sosyalKullaniciEki(sb)}` : kullaniciMesaji(soru) }],
       }),
     });
     if (!r.ok) {
@@ -226,8 +242,21 @@ export async function klodAciklamaIsle(req, res, { havuz, costGuard, env = proce
     return res.status(502).json({ error: HATA_MESAJI });
   }
 
+  // Sosyal katman çıktısı geçersizse (ör. cümlede olmayan kelime) atılır:
+  // öğrenci temel açıklamayı yine görür, eksik kayıt önbelleğe yazılmaz.
+  let sosyalGecerli = true;
+  if (sb) {
+    const s = sosyalDogrula(sonuc.sosyalHam, soru, sb);
+    if (s.hata) {
+      console.error('[klod-aciklama] sosyal katman geçersiz', soru.id, s.hata);
+      sosyalGecerli = false;
+    } else {
+      sonuc.aciklama.sosyal = s.sosyal;
+    }
+  }
+
   let kaydedildi = false;
-  if (sonuc.aciklama.emin) {
+  if (sonuc.aciklama.emin && sosyalGecerli) {
     kaydedildi = await onbellegeYaz(soru.id, { ...sonuc.aciklama, kaynak_hash: hash }, env, fetchFn);
   }
   return res.status(200).json({ aciklama: sonuc.aciklama, kaynak: 'model', kaydedildi });
