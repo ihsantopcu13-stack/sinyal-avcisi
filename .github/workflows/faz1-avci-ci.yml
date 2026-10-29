@@ -105,6 +105,8 @@ jobs:
           node --check tests/avci-pedagogy-controller.test.mjs
           node --check api/_klodChatPrompt.mjs
           node --check tests/klod-chat-prompt-senkron.test.mjs
+          node --check api/_sosyalBilimler.mjs
+          node --check tests/sosyal-bilimler.test.mjs
 
       - name: FAZ 1 izole test paketi (ağ çağrısı yok, secret yok, publish yok)
         run: node automation/video-pipeline/tests/faz1-ci-test.mjs
@@ -156,6 +158,9 @@ jobs:
 
       - name: KLOD açıklama (Sinyal Lab yanlış cevap) önbellek + JSON doğrulama testi
         run: node tests/klod-aciklama.test.mjs
+
+      - name: KLOD Sosyal Bilimler öğretmeni + İnsan Dili Filtresi testi
+        run: node tests/sosyal-bilimler.test.mjs
 
       - name: Site + YouTube/Instagram yayın zinciri bağlantısı testi
         run: node tests/published-content.test.mjs
