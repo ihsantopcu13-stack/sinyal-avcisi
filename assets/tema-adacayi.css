@@ -392,3 +392,13 @@ body.tema-adacayi #sss .sss-item{background:var(--ad-inci)!important;border:1px 
 }
 /* Kapalı sinyal panelinin gölgesi açık zeminde sağ kenarda görünmesin */
 body.tema-adacayi .sinyal-panel:not(.acik){box-shadow:none;border-left-color:transparent}
+
+/* ---------- Mobil menü düzeltmeleri ---------- */
+/* Menü 16 öğe: kısa ekranlarda kendi içinde kaysın, son öğelere ulaşılsın */
+body.tema-adacayi .mmenu{max-height:calc(100vh - 56px);max-height:calc(100dvh - 56px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+/* Çok dar ekranda (≤360px) "Platforma Eriş" logoya binmesin */
+@media(max-width:360px){
+  body.tema-adacayi > nav .nav-logo{font-size:15px;gap:6px}
+  body.tema-adacayi > nav .nav-logo-ikon{width:26px;height:26px}
+  body.tema-adacayi > nav .btn-nav{padding:7px 10px;font-size:13px}
+}
