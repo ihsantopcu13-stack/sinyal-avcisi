@@ -1814,10 +1814,12 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>Açık erişim YDS &amp; YÖKDİL platformu</span>
     <h1>Sinyalleri Gör, Soruyu Çöz.</h1>
     <p class="hero-sub">Sinyal metoduyla ÖSYM sorularındaki ipucu kelimeleri gör, tuzağa düşmeden doğru şıkka ulaş. 5 kısa soruyla seviyeni öğren, sana özel <strong>bugünkü görevini</strong> al.</p>
-    <div class="hero-btns">
-      <button class="btn-primary ad-btn" id="hero-basla-btn" onclick="basla()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>Seviyemi Öğren</button>
-      <span class="hero-onay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>%100 ücretsiz, kayıt yok</span>
+    <div class="hero-yollar" role="group" aria-label="Nereden başlamak istersin?">
+      <button type="button" class="hero-yol hero-yol-ana" id="hero-basla-btn" onclick="basla()"><small>İlk kez geliyorum</small><b>Seviyemi Öğren</b></button>
+      <button type="button" class="hero-yol" onclick="goTo('dersler')"><small>Ders çalışmak istiyorum</small><b>Derslere Git</b></button>
+      <button type="button" class="hero-yol" onclick="gunlukDenemeAc()"><small>Soru çözmek istiyorum</small><b>Günün Denemesi · 5 soru</b></button>
     </div>
+    <span class="hero-onay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>%100 ücretsiz, kayıt yok</span>
     <div class="hero-baglantilar">
     <div style="margin-top:14px;font-size:14px;color:var(--ink)">Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
     <div style="margin-top:6px;font-size:14px;color:var(--muted)">Kayıt olmadan hızlı bir plan mı istersin? <a href="/hedef-rota" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Puan Rotanı çıkar →</a></div>
@@ -1940,7 +1942,6 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section id="dersler" class="ad-bolum">
   <div class="ad-ic">
     <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>Modüler eğitim sistemi</span><h2>Dersler ve Çalışma Modülleri</h2><p>ÖSYM soru tiplerini ve akademik İngilizceyi adım adım öğreten, uygulamalı ders modülleri.</p></div>
-    <div class="ad-serit"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></svg>19 konuluk Ses Kursu: dinle, tekrar et, pekiştir</b><div class="ad-serit-sag"><button type="button" class="ad-btn-cizgi" onclick="goTo('ses')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></svg>Sesli anlatım</button><button type="button" class="ad-btn-cizgi" onclick="if(typeof ahkGit==='function')ahkGit()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>AHA Kartları</button></div></div>
     <div class="ad-kartlar">
       <div class="ad-kart">
         <span class="ad-etiket">Sesli ders modülü</span>
@@ -1964,6 +1965,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <a class="ad-btn-cizgi" href="/kelime-kartlari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>Kelime kartlarına git</a>
       </div>
     </div>
+    <p class="ad-not">Hızlı tekrar için <button type="button" class="ad-metin-link" onclick="if(typeof ahkGit==='function')ahkGit()">AHA Kartları</button> da hazır.</p>
   </div>
 </section>
 <section id="soru-lab-tanitim" class="ad-bolum ad-tonlu">
@@ -1987,7 +1989,6 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section id="antrenman" class="ad-bolum">
   <div class="ad-ic">
     <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Günlük hızlı seans</span><h2>Günlük Antrenman</h2><p>Sınav temposunu korumak için her gün kısa, odaklı ve süreli çalışmalar.</p></div>
-    <div class="ad-serit"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Günün Denemesi · 5 soru · soru başı 90 saniye</b><div class="ad-serit-sag"><button type="button" class="ad-btn-cizgi" onclick="gunlukDenemeAc()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>Hemen başla</button></div></div>
     <div class="ad-kartlar">
       <div class="ad-kart">
         <span class="ad-etiket">Hızlı rutin</span>
@@ -2094,30 +2095,27 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
         <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span>
         <h3>Serbest erişim</h3>
         <p>Tüm ders modülleri ücretsiz ve şifresiz açık.</p>
-        <button type="button" class="ad-btn-cizgi" onclick="goTo('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>Çalışma alanı</button>
       </div>
       <div class="ad-kart">
         <span class="ad-etiket">Hata takibi</span>
         <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M8 8h6M8 12h6M18 8h2v12h-2"/></svg></span>
         <h3>Hata Defteri</h3>
         <p>Yanlış yaptığın sorular 1, 3 ve 7 gün sonra karşına yeniden gelir.</p>
-        <button type="button" class="ad-btn-cizgi" onclick="goTo('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>Çalışma alanı</button>
       </div>
       <div class="ad-kart">
         <span class="ad-etiket">Analiz</span>
         <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span>
         <h3>Puan tahmini</h3>
         <p>Deneme ve soru sonuçlarına göre kaba puan tahmini.</p>
-        <button type="button" class="ad-btn-cizgi" onclick="goTo('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>Çalışma alanı</button>
       </div>
       <div class="ad-kart">
         <span class="ad-etiket">Kelime</span>
         <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 0V7a3 3 0 0 0-3-3z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 0"/></svg></span>
         <h3>Kelime hafızası</h3>
         <p>Aralıklı tekrarla belleğe yerleşen akademik kelimeler.</p>
-        <a class="ad-btn-cizgi" href="/kelime-kartlari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>Kelime kartları</a>
       </div>
     </div>
+    <div class="ad-alt-cta"><button type="button" class="ad-btn" onclick="goTo('dashboard')">Çalışma alanını aç</button></div>
     <p class="ad-not">Burada örnek ya da uydurma sayı gösterilmez. Kendi sonuçların yalnızca çalışma alanında, çalıştıkça oluşur.</p>
   </div>
 </section>

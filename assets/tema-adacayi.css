@@ -402,3 +402,80 @@ body.tema-adacayi .mmenu{max-height:calc(100vh - 56px);max-height:calc(100dvh - 
   body.tema-adacayi > nav .nav-logo-ikon{width:26px;height:26px}
   body.tema-adacayi > nav .btn-nav{padding:7px 10px;font-size:13px}
 }
+
+/* ============================================================
+   SON RÖTUŞ (Adaçayı V4)
+   ============================================================ */
+:root{--ad-gece:#16211C} /* çalışma alanı ve Medya çerçevesi için koyu adaçayı-siyah */
+
+/* D — Başlangıç yönlendirmesi: 3 net seçenek */
+body.tema-adacayi .hero-yollar{display:flex;flex-direction:column;gap:10px;max-width:520px;margin-bottom:14px}
+body.tema-adacayi .hero-yol{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;width:100%;min-height:56px;
+  background:var(--ad-kart);color:var(--ad-metin);border:1px solid var(--ad-cizgi);border-radius:14px;
+  padding:12px 18px;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;
+  transition:border-color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+}
+body.tema-adacayi .hero-yol small{font-size:14px;color:var(--ad-ikincil);font-weight:500}
+body.tema-adacayi .hero-yol b{font-size:17px;font-weight:700;color:var(--ad-koyu-2);white-space:nowrap}
+body.tema-adacayi .hero-yol::after{content:'→';font-weight:700;color:var(--ad-koyu);margin-left:2px}
+body.tema-adacayi .hero-yol:hover{border-color:var(--ad-koyu);background:var(--ad-acik-2);transform:translateY(-1px)}
+body.tema-adacayi .hero-yol.hero-yol-ana{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff;box-shadow:0 6px 18px rgba(54,92,75,.22)}
+body.tema-adacayi .hero-yol.hero-yol-ana small{color:rgba(255,255,255,.85)}
+body.tema-adacayi .hero-yol.hero-yol-ana b,body.tema-adacayi .hero-yol.hero-yol-ana::after{color:#fff}
+body.tema-adacayi .hero-yol.hero-yol-ana:hover{background:var(--ad-koyu-2)}
+body.tema-adacayi .hero-yol:focus-visible{outline:3px solid var(--ad-dogal);outline-offset:2px}
+
+/* B — Soru Lab öne çıksın: koyu adaçayı bant, diğer bölümlerden ayrışır */
+body.tema-adacayi #soru-lab-tanitim{background:linear-gradient(160deg,var(--ad-koyu) 0%,var(--ad-koyu-2) 100%)}
+body.tema-adacayi #soru-lab-tanitim .ad-baslik h2{color:#fff}
+body.tema-adacayi #soru-lab-tanitim .ad-baslik p{color:rgba(255,255,255,.88)}
+body.tema-adacayi #soru-lab-tanitim .ad-rozet{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.28)}
+body.tema-adacayi #soru-lab-tanitim .ad-asama{box-shadow:none;border-color:transparent}
+body.tema-adacayi #soru-lab-tanitim .ad-btn{background:#fff;color:var(--ad-koyu-2);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+body.tema-adacayi #soru-lab-tanitim .ad-btn:hover{background:var(--ad-acik)}
+body.tema-adacayi #soru-lab-tanitim .ad-analiz{border-color:transparent;box-shadow:0 18px 44px rgba(0,0,0,.22)}
+body.tema-adacayi .ad-metin-link{background:none;border:none;padding:0;font:inherit;font-weight:700;color:var(--ad-koyu);text-decoration:underline;cursor:pointer}
+
+/* C — Tutarlı ve daha kısa bölüm boşlukları */
+body.tema-adacayi .ad-bolum{padding:72px 5vw}
+body.tema-adacayi .ad-baslik{margin-bottom:32px}
+body.tema-adacayi .ad-baslik h2{margin:14px 0 10px}
+body.tema-adacayi #nasil{padding:64px 5vw}
+body.tema-adacayi #nasil .nasil-header{margin-bottom:28px}
+body.tema-adacayi #nasil .step{padding:22px 0}
+body.tema-adacayi #klod{padding-top:64px;padding-bottom:64px}
+body.tema-adacayi #klod .chat-body{min-height:300px}
+body.tema-adacayi #ses{padding:64px 5vw}
+body.tema-adacayi #ekitap{padding:64px 5vw}
+
+/* A — Koyu bölümlere yumuşak geçiş; çalışma panelleri aynen koyu kalır.
+   Yalnız dış çerçeve rengi lacivertten koyu adaçayıya döner. */
+body.tema-adacayi #ses{background:linear-gradient(180deg,var(--ad-kart) 0%,var(--ad-kart) 70%,var(--ad-acik-2) 100%)}
+body.tema-adacayi #dashboard.dash{background:linear-gradient(180deg,var(--ad-koyu-2) 0,var(--ad-gece) 240px,var(--ad-gece) 100%)}
+body.tema-adacayi #medya{background:linear-gradient(180deg,var(--ad-gece) 0%,var(--ad-gece) 80%,var(--ad-koyu-2) 100%)!important}
+body.tema-adacayi #medya>div[style*="radial-gradient"]{display:none}
+body.tema-adacayi #medya-icerik.medya-kapali::after{background:linear-gradient(transparent,var(--ad-gece))}
+
+/* E — Mobil: dokunma alanları ve küçük etiketler */
+@media(max-width:560px){
+  body.tema-adacayi .ad-bolum{padding:52px 16px}
+  body.tema-adacayi #nasil,body.tema-adacayi #ses,body.tema-adacayi #ekitap{padding:52px 16px}
+  body.tema-adacayi .ad-kartlar{gap:14px}
+  body.tema-adacayi .ad-kart{padding:20px}
+  body.tema-adacayi .hero-yol{padding:12px 14px}
+  body.tema-adacayi .hero-yol small{font-size:13px}
+  body.tema-adacayi .hero-yol b{font-size:16px}
+  body.tema-adacayi .ad-etiket,body.tema-adacayi .ad-asama small,
+  body.tema-adacayi .hero-kutu small,body.tema-adacayi .hero-sag-etiket{font-size:13px}
+  body.tema-adacayi > footer .footer-links a,body.tema-adacayi > footer .footer-links span,
+  body.tema-adacayi > footer .footer-rehberler a{display:inline-block;padding:10px 0}
+}
+body.tema-adacayi .hero-yol{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:12px;row-gap:2px;align-items:center}
+body.tema-adacayi .hero-yol small{grid-column:1;grid-row:1}
+body.tema-adacayi .hero-yol b{grid-column:1;grid-row:2;white-space:normal}
+body.tema-adacayi .hero-yol::after{grid-column:2;grid-row:1 / span 2;font-size:20px}
+body.tema-adacayi .hero-baglantilar{margin-top:20px;padding-top:16px;gap:6px}
+@media(max-width:560px){
+  body.tema-adacayi #hero .demo-lbl,body.tema-adacayi #ses .p-topic{font-size:13px}
+}
