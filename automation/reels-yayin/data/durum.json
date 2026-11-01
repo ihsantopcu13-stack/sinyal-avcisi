@@ -1850,6 +1850,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-10-25T20:41:06.120Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "t6Cvu-0zl7U",
+        "link": "https://youtube.com/shorts/t6Cvu-0zl7U",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-11-01T21:55:30.318Z"
       }
     },
     "78": {
@@ -2366,6 +2374,75 @@
         "gonderildi": "2026-10-31T21:18:16.622Z"
       }
     },
+    "122": {
+      "slot": "2026-11-03T08:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae7b54c48ce42a6b42b1514",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T05:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:24.980Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae7b54d2da2578c1883f9a6",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T05:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:25.666Z"
+      }
+    },
+    "123": {
+      "slot": "2026-11-03T13:00:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae7b54e779ee9f13cb93f28",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T10:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:26.381Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae7b54e902c3fb1debcb13e",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T10:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:26.792Z"
+      }
+    },
+    "124": {
+      "slot": "2026-11-03T17:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6ae7b54f48ce42a6b42b1575",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T14:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:27.398Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6ae7b54f2da2578c1883fa32",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-03T14:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-01T21:55:27.994Z"
+      }
+    },
     "201": {
       "slot": "2026-10-24T13:00:00+03:00",
       "instagram": {
@@ -2436,7 +2513,5 @@
       }
     }
   },
-  "youtube_bekleyen": [
-    67
-  ]
+  "youtube_bekleyen": []
 }
