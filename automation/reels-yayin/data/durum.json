@@ -2512,6 +2512,75 @@
         "gonderildi": "2026-11-03T00:50:32.256Z"
       }
     },
+    "128": {
+      "slot": "2026-11-05T08:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6aea6b23a54767472d4be6ed",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T05:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:47.311Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6aea6b23a54767472d4be71b",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T05:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:47.775Z"
+      }
+    },
+    "129": {
+      "slot": "2026-11-05T13:00:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6aea6b242fbe315a4d669b52",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T10:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:48.466Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6aea6b2419e0657b84480f46",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T10:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:49.131Z"
+      }
+    },
+    "130": {
+      "slot": "2026-11-05T17:30:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6aea6b252b922deec55de587",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T14:30:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:49.829Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6aea6b2619e0657b84480f9c",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-05T14:30:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-03T23:15:50.390Z"
+      }
+    },
     "201": {
       "slot": "2026-10-24T13:00:00+03:00",
       "instagram": {
