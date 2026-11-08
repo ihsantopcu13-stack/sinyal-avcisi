@@ -40,14 +40,14 @@
     if(val===correct){
       fb.className='pvm-quiz-feedback pvm-show pvm-ok';
       fb.textContent = qNum===1
-        ? '✅ Doğru! "yesterday" → geçmiş zaman → Past Passive → was + V3 → was reviewed.'
-        : '✅ Doğru! "tomorrow" + "by the CEO" → Future Passive → will be + V3 → will be signed.';
+        ? 'Doğru! "yesterday" → geçmiş zaman → Past Passive → was + V3 → was reviewed.'
+        : 'Doğru! "tomorrow" + "by the CEO" → Future Passive → will be + V3 → will be signed.';
       if(typeof xpKazan==='function')xpKazan('teknik',0);
     } else {
       fb.className='pvm-quiz-feedback pvm-show pvm-no';
       fb.textContent = qNum===1
-        ? '❌ "yesterday" geçmiş zaman sinyali. Past Passive = was/were + V3 → was reviewed.'
-        : '❌ "tomorrow" gelecek sinyal. Future Passive = will be + V3. "will be sign" V3 değil — V1!';
+        ? '"yesterday" geçmiş zaman sinyali. Past Passive = was/were + V3 → was reviewed.'
+        : '"tomorrow" gelecek sinyal. Future Passive = will be + V3. "will be sign" V3 değil — V1!';
     }
     if(pvmQuizAnswered[1] && pvmQuizAnswered[2] && pvmCurrent===PVM_TOTAL-1){
       document.getElementById('pvm-finishScreen').classList.add('pvm-show');
@@ -188,10 +188,10 @@
     };
     if(dogruMu){
       fb.className='srt-quiz-feedback srt-show srt-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='srt-quiz-feedback srt-show srt-no';
-      fb.textContent = '❌ Doğru cevap: "'+dogruCevap+'". '+aciklamalar[qNum];
+      fb.textContent = 'Doğru cevap: "'+dogruCevap+'". '+aciklamalar[qNum];
     }
     if(srtQuizAnswered[1] && srtQuizAnswered[2] && srtQuizAnswered[3]){
       document.getElementById('srt-finishScreen').classList.add('srt-show');
@@ -272,13 +272,13 @@
     if(val===correct){
       fb.className='osm-quiz-feedback osm-show osm-ok';
       fb.textContent = qNum===1
-        ? '✅ Doğru! Uzun çalışma ↔ mola daha iyi = ZITLIK → however.'
-        : '✅ Doğru! Kirlilik arttı → yeni düzenleme = sebep-sonuç → therefore.';
+        ? 'Doğru! Uzun çalışma ↔ mola daha iyi = ZITLIK → however.'
+        : 'Doğru! Kirlilik arttı → yeni düzenleme = sebep-sonuç → therefore.';
     } else {
       fb.className='osm-quiz-feedback osm-show osm-no';
       fb.textContent = qNum===1
-        ? '❌ Doğru cevap: however. Uzun çalışma ↔ mola daha iyi = ZITLIK.'
-        : '❌ Doğru cevap: therefore. Kirlilik arttı → yeni düzenleme = sebep-sonuç.';
+        ? 'Doğru cevap: however. Uzun çalışma ↔ mola daha iyi = ZITLIK.'
+        : 'Doğru cevap: therefore. Kirlilik arttı → yeni düzenleme = sebep-sonuç.';
     }
     if(osmQuizAnswered[1] && osmQuizAnswered[2]){
       document.getElementById('osm-finishBox').style.display='flex';
@@ -367,9 +367,9 @@
     const fb = document.getElementById('dna-fb-'+idx);
     fb.classList.add('dna-show');
     if(o.answer==='C'){
-      fb.textContent = (dogruMu?'✅ ':'❌ ')+'Fiil var (was/studied/increased vb.) → Clause (C)';
+      fb.textContent = (dogruMu?'':'')+'Fiil var (was/studied/increased vb.) → Clause (C)';
     } else {
-      fb.textContent = (dogruMu?'✅ ':'❌ ')+'Sadece isim+sıfat, fiil yok → Noun Phrase (N)';
+      fb.textContent = (dogruMu?'':'')+'Sadece isim+sıfat, fiil yok → Noun Phrase (N)';
     }
     dnaUpdateProgress();
   }
@@ -440,10 +440,10 @@
     };
     if(val===correct){
       fb.className='gi-quiz-feedback gi-show gi-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='gi-quiz-feedback gi-show gi-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(giQuizAnswered[1] && giQuizAnswered[2] && giQuizAnswered[3]){
       document.getElementById('gi-finishBox').style.display='flex';
@@ -517,14 +517,14 @@
     const aciklamalar = {
       1: 'V3 tek başına sıfat görevi yapar → stolen = çalınan (the car which was stolen).',
       2: 'V-ing sıfat cümleciği = which is standing.',
-      3: '"the heavy traffic" = isim → Despite + isim ✅'
+      3: '"the heavy traffic" = isim → Despite + isim ✓'
     };
     if(val===correct){
       fb.className='kf-quiz-feedback kf-show kf-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='kf-quiz-feedback kf-show kf-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(kfQuizAnswered[1] && kfQuizAnswered[2] && kfQuizAnswered[3]){
       document.getElementById('kf-finishBox').style.display='flex';
@@ -596,16 +596,16 @@
     const fb = document.getElementById('voc-q'+qNum+'-feedback');
     fb.classList.add('voc-show');
     const aciklamalar = {
-      1: 'mitigate + risk → klasik collocation ✅',
+      1: 'mitigate + risk → klasik collocation ✓',
       2: 'kötü (expensive) → iyi (improved) = zıtlık + noktalı virgül → nevertheless.',
-      3: 'conduct + research/study → sabit collocation ✅'
+      3: 'conduct + research/study → sabit collocation ✓'
     };
     if(val===correct){
       fb.className='voc-quiz-feedback voc-show voc-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='voc-quiz-feedback voc-show voc-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(vocQuizAnswered[1] && vocQuizAnswered[2] && vocQuizAnswered[3]){
       document.getElementById('voc-finishBox').style.display='flex';
@@ -677,16 +677,16 @@
     const fb = document.getElementById('rd-q'+qNum+'-feedback');
     fb.classList.add('rd-show');
     const aciklamalar = {
-      1: 'it → hemen önceki isim = a new element ✅',
+      1: 'it → hemen önceki isim = a new element ✓',
       2: 'Çıkarım (inference) = metinde açıkça yazmaz, ima var.',
-      3: 'fayda (iyi) → zarar (kötü) = zıtlık → however ✅'
+      3: 'fayda (iyi) → zarar (kötü) = zıtlık → however ✓'
     };
     if(val===correct){
       fb.className='rd-quiz-feedback rd-show rd-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='rd-quiz-feedback rd-show rd-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(rdQuizAnswered[1] && rdQuizAnswered[2] && rdQuizAnswered[3]){
       document.getElementById('rd-finishBox').style.display='flex';
@@ -764,10 +764,10 @@
     };
     if(val===correct){
       fb.className='mp-quiz-feedback mp-show mp-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='mp-quiz-feedback mp-show mp-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(mpQuizAnswered[1] && mpQuizAnswered[2] && mpQuizAnswered[3]){
       document.getElementById('mp-finishBox').style.display='flex';
@@ -942,7 +942,7 @@
           '<div class="kb-card-face kb-card-back"><span class="kb-card-tr">'+w.tr+'</span><span class="kb-card-ex">'+w.ornek+'</span>'+ipucuArka+'</div>'+
         '</div>'+
         '<button type="button" class="kb-ogren-btn'+(ogrenildiMi?' kb-on':'')+'" data-kb-action="ogren" data-kb-word="'+w.id+'">'+(ogrenildiMi?'Öğrenildi ✓':'Öğrendim ✓')+'</button>'+
-        '<span class="kb-learned-badge">✅</span>'+
+        '<span class="kb-learned-badge">✓</span>'+
       '</div>';
     }).join('');
   }
@@ -1032,10 +1032,10 @@
     };
     if(val===correct){
       fb.className='ss-quiz-feedback ss-show ss-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='ss-quiz-feedback ss-show ss-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(ssQuizAnswered[1] && ssQuizAnswered[2] && ssQuizAnswered[3]){
       document.getElementById('ss-finishBox').style.display='flex';
@@ -1289,7 +1289,7 @@
     });
     const fb = document.getElementById('tg-fb-'+idx);
     fb.classList.add('tg-show');
-    fb.textContent = (dogruMu?'✅ ':'❌ Doğru cevap: '+TG_ETIKET[o.answer]+'. ')+o.aciklama;
+    fb.textContent = (dogruMu?'':'Doğru cevap: '+TG_ETIKET[o.answer]+'. ')+o.aciklama;
     tgUpdateProgress();
   }
 
@@ -1359,10 +1359,10 @@
     };
     if(val===correct){
       fb.className='psy-quiz-feedback psy-show psy-ok';
-      fb.textContent = '✅ Doğru! '+aciklamalar[qNum];
+      fb.textContent = 'Doğru! '+aciklamalar[qNum];
     } else {
       fb.className='psy-quiz-feedback psy-show psy-no';
-      fb.textContent = '❌ '+aciklamalar[qNum];
+      fb.textContent = ''+aciklamalar[qNum];
     }
     if(psyQuizAnswered[1] && psyQuizAnswered[2] && psyQuizAnswered[3]){
       document.getElementById('psy-finishBox').style.display='flex';
@@ -1442,7 +1442,7 @@
     });
     const fb = document.getElementById('bs-fb-'+idx);
     fb.classList.add('bs-show');
-    fb.textContent = (dogruMu?'✅ ':'❌ Doğru cevap: '+o.answer+'. ')+o.aciklama;
+    fb.textContent = (dogruMu?'':'Doğru cevap: '+o.answer+'. ')+o.aciklama;
     bsUpdateProgress();
   }
 
