@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sinyal Kelime Kartları — Sinyal Avcısı</title>
+  <meta name="description" content="YDS ve YÖKDİL sinyal kelimeleri kartlarda: although, despite, however, unless ve daha fazlası. Kartı çevir, Türkçesini, sınavdaki işlevini, örnek cümleyi ve tuzağı gör. Ücretsiz, üyelik yok.">
+  <meta property="og:title" content="Sinyal Kelime Kartları — Sinyal Avcısı">
+  <meta property="og:description" content="Sinyal kelimeyi gör, kartı çevir, tuzağı öğren. Öğrendim ya da Tekrar Et diye ayır. Tamamen ücretsiz.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/sinyal-kartlari">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <!-- GA4 — mevcut measurement ID; yalnız sayfa görüntüleme ve "sinyal_kart" (kelime + öğrendim/tekrar) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <script>
+    // Tema: /sinyal-soru ile ortak seçim. Seçilmediyse açık (Adaçayı).
+    (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
+    document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
+  </script>
+  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261108">
+  <style>
+    /* Ortak renkler ve tema: assets/sinyal-tema.css. Burada yalnız kart arayüzü. */
+    .sk-listeler{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--kart-2);border:1px solid var(--cizgi);border-radius:14px;padding:5px}
+    .sk-liste{min-height:52px;border:0;border-radius:10px;background:transparent;cursor:pointer;font-size:15px;font-weight:600;color:var(--ikincil);line-height:1.2;padding:6px 4px}
+    .sk-liste b{display:block;font-size:19px;color:var(--metin);font-variant-numeric:tabular-nums}
+    .sk-liste[aria-selected="true"]{background:var(--kart);color:var(--vurgu);box-shadow:var(--golge);outline:2px solid var(--vurgu)}
+    .sk-turler{display:flex;flex-wrap:wrap;gap:8px}
+    .sk-tur{min-height:40px;cursor:pointer;font-size:15px;font-weight:700;border-radius:999px!important;padding:6px 13px!important;border:1.5px solid transparent}
+    .sk-tur:not(.ss-rozet){background:var(--kart);border-color:var(--cizgi-guclu);color:var(--metin)}
+    .sk-tur[aria-pressed="true"]{outline:3px solid var(--metin);outline-offset:1px}
+    .sk-ilerleme-kutu{scroll-margin-top:80px;display:flex;flex-direction:column;gap:6px}
+    .sk-ilerleme-ust{display:flex;justify-content:space-between;font-size:16px;font-weight:600;color:var(--ikincil)}
+    .sk-sayac{font:600 15px var(--f-mono);color:var(--vurgu)}
+    .sk-bar{height:10px;border-radius:999px;background:var(--kart-2);border:1px solid var(--cizgi);overflow:hidden}
+    #sk-cubuk{height:100%;width:0;background:var(--dogru);border-radius:999px;transition:width .4s ease}
+
+    /* kart: iki yüz aynı ızgara hücresinde, yükseklik uzun olan yüze göre */
+    .sk-sahne{perspective:1400px}
+    .sk-kart{display:block;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:22px}
+    .sk-kart:focus-visible{outline:3px solid var(--vurgu);outline-offset:4px}
+    .sk-ic{display:grid;align-items:start;transition:transform .6s cubic-bezier(.2,.7,.2,1),height .35s ease;transform-style:preserve-3d}
+    .sk-kart:not(.cevrik) .sk-arka,.sk-kart.cevrik .sk-on{pointer-events:none}
+    .sk-kart.cevrik .sk-ic{transform:rotateY(180deg)}
+    .sk-yuz{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--kart);border:1px solid var(--cizgi);border-radius:22px;box-shadow:var(--golge);padding:22px 20px;display:flex;flex-direction:column;gap:14px;min-height:320px}
+    .sk-arka{transform:rotateY(180deg)}
+    @media (prefers-reduced-motion:reduce){
+      .sk-ic{transition:none!important;transform:none!important}
+      .sk-arka{transform:none}
+      .sk-kart:not(.cevrik) .sk-arka,.sk-kart.cevrik .sk-on{visibility:hidden}
+    }
+    .sk-on{align-items:center;justify-content:center;text-align:center;border-top:6px solid var(--c,var(--vurgu))}
+    .sk-on-ust{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .sk-kelime{font-size:clamp(40px,11vw,60px);font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--metin);overflow-wrap:anywhere}
+    .sk-seviye{font-size:15px;font-weight:700;padding:4px 12px;border-radius:999px;border:1.5px solid var(--cizgi-guclu);color:var(--ikincil);display:inline-flex;align-items:center;gap:6px}
+    .sk-seviye::before{content:"";width:30px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--vurgu) var(--dolu),var(--cizgi) var(--dolu))}
+    .sk-kolay{--dolu:33%}.sk-orta{--dolu:66%}.sk-zor{--dolu:100%}
+    .sk-durum{font-size:15px;font-weight:700;padding:3px 11px;border-radius:999px}
+    .sk-durum.ogrendim{color:var(--dogru);background:var(--dogru-zemin)}
+    .sk-durum.tekrar{color:var(--yanlis);background:var(--yanlis-zemin)}
+    .sk-ipucu{font-size:16px;color:var(--ikincil);margin-top:6px}
+    .sk-arka-ust{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+    .sk-kelime-k{font-size:24px;font-weight:800}
+    .sk-tr{font-size:26px;font-weight:800;color:var(--vurgu);line-height:1.25}
+    .sk-blok{display:flex;flex-direction:column;gap:4px}
+    .sk-blok h3{font:700 13.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ikincil)}
+    .sk-blok p{font-size:17.5px;line-height:1.55}
+    .sk-ornek{font-size:18px;font-weight:500}
+    .sk-ornek mark{color:var(--c);background:var(--z);border-bottom:2px solid var(--c);border-radius:5px;padding:0 4px;font-weight:700}
+    .sk-ornek-tr{color:var(--ikincil);font-size:16.5px!important}
+    .sk-tuzak{border-left:5px solid var(--yanlis);background:var(--yanlis-zemin);border-radius:10px;padding:10px 12px}
+    .sk-tuzak h3{color:var(--yanlis)}
+
+    .sk-bos{background:var(--kart);border:1.5px dashed var(--cizgi-guclu);border-radius:22px;padding:40px 20px;text-align:center;font-size:18px;color:var(--ikincil)}
+    .sk-isaret{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .sk-gezin{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .sk-btn{min-height:54px;padding:10px 14px;border-radius:14px;border:2px solid var(--cizgi-guclu);background:var(--kart);font-size:17.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .sk-btn:disabled{opacity:.45;cursor:default}
+    .sk-btn svg{width:20px;height:20px;flex:none}
+    .sk-tekrar{color:var(--yanlis);border-color:var(--yanlis);background:var(--yanlis-zemin)}
+    .sk-ogrendim{color:var(--vurgu-ust);border-color:var(--dogru);background:var(--dogru)}
+    :root[data-tema="koyu"] .sk-ogrendim{color:#0F1A15}
+    .sk-not{font-size:15.5px;color:var(--ikincil);text-align:center}
+    .sk-suz{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--cizgi);padding-top:18px}
+    .sk-suz h2{font-size:21px;font-weight:800}
+    .sonraki-adim{font-size:17px;color:var(--ikincil)}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="/">Sinyal Avcısı</a>
+  <div class="nav-sag">
+    <button type="button" class="tema-btn" id="tema-btn" aria-pressed="false">Koyu tema</button>
+    <a class="nav-back" href="/">← Ana sayfa</a>
+  </div>
+</nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Sinyal kelime kartları</div>
+    <h1>Sinyali gör, kartı çevir</h1>
+    <p class="lead">YDS ve YÖKDİL'de soruyu çözdüren kelimeler. Ön yüzde kelime, arka yüzde Türkçesi, sınavdaki işlevi, örnek cümle ve tuzak.</p>
+    <span class="ucretsiz">Ücretsiz · Üyelik yok · Her şey açık</span>
+  </header>
+
+  <div class="sk-ilerleme-kutu">
+    <div class="sk-ilerleme-ust"><span id="sk-ilerleme">Öğrendiğin: 0</span><span class="sk-sayac" id="sk-sayac"></span></div>
+    <div class="sk-bar" aria-hidden="true"><div id="sk-cubuk"></div></div>
+  </div>
+
+  <div class="sk-sahne">
+    <div class="sk-kart" id="sk-kart" role="button" tabindex="0" aria-pressed="false" aria-label="Kartı çevir, Türkçesini ve tuzağını gör.">
+      <div class="sk-ic" id="sk-ic">
+        <div class="sk-yuz sk-on" id="sk-on">
+          <div class="sk-on-ust"><span id="sk-tur-on" class="ss-rozet"></span><span id="sk-seviye" class="sk-seviye"></span></div>
+          <div class="sk-kelime" id="sk-kelime" lang="en"></div>
+          <span class="sk-durum" id="sk-durum" hidden></span>
+          <p class="sk-ipucu">Dokun, kartı çevir.</p>
+        </div>
+        <div class="sk-yuz sk-arka" id="sk-arka" aria-hidden="true">
+          <div class="sk-arka-ust"><span class="sk-kelime-k" id="sk-kelime-arka" lang="en"></span><span id="sk-tur-arka" class="ss-rozet"></span></div>
+          <div class="sk-blok"><h3>Türkçesi</h3><p class="sk-tr" id="sk-tr"></p></div>
+          <div class="sk-blok"><h3>Sınavdaki işlevi</h3><p id="sk-islev"></p></div>
+          <div class="sk-blok"><h3>Örnek</h3><p class="sk-ornek" id="sk-ornek" lang="en"></p><p class="sk-ornek-tr" id="sk-ornek-tr"></p></div>
+          <div class="sk-blok sk-tuzak"><h3>Tuzak</h3><p id="sk-tuzak"></p></div>
+        </div>
+      </div>
+    </div>
+    <p class="sk-bos" id="sk-bos" hidden></p>
+  </div>
+
+  <div class="sk-isaret">
+    <button type="button" class="sk-btn sk-tekrar" id="sk-tekrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Tekrar Et</button>
+    <button type="button" class="sk-btn sk-ogrendim" id="sk-ogrendim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Öğrendim</button>
+  </div>
+  <div class="sk-gezin">
+    <button type="button" class="sk-btn" id="sk-onceki">← Önceki Kart</button>
+    <button type="button" class="sk-btn" id="sk-sonraki">Sonraki Kart →</button>
+  </div>
+  <p class="sk-not">İşaretlediklerin bu cihazda saklanır.</p>
+
+  <section class="sk-suz" aria-labelledby="sk-suz-baslik">
+    <h2 id="sk-suz-baslik">Hangi kartları çalışmak istersin?</h2>
+    <div class="sk-listeler" id="sk-listeler" role="tablist" aria-label="Kart listesi">
+    <button type="button" class="sk-liste" role="tab" data-liste="hepsi"><b>0</b>Hepsi</button>
+    <button type="button" class="sk-liste" role="tab" data-liste="yeni"><b>0</b>Yeni</button>
+    <button type="button" class="sk-liste" role="tab" data-liste="tekrar"><b>0</b>Tekrar Et</button>
+    <button type="button" class="sk-liste" role="tab" data-liste="ogrendim"><b>0</b>Öğrendim</button>
+    </div>
+    <div class="sk-turler" id="sk-turler" aria-label="Sinyal türü"></div>
+
+  </section>
+
+  <p class="sonraki-adim">Sıradaki adım: kartlardaki kelimeleri soruda dene, <a href="/sinyal-soru">Sinyal kelimeli soru çözümü</a> sayfasına geç.</p>
+</main>
+
+<script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
+<script src="/assets/modules/sinyal-soru.js?v=20261108"></script>
+<script src="/assets/data/sinyal-kartlari.js?v=20261108"></script>
+<script src="/assets/modules/sinyal-kartlari.js?v=20261108"></script>
+<script>window.SinyalKartlari.baslat(window.SINYAL_KARTLARI);</script>
+</body>
+</html>
