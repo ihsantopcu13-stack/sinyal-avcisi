@@ -1692,7 +1692,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </script>
 <!-- PWA Banner -->
 <div class="pwa-banner" id="pwa-banner">
-  <span style="font-size:24px">📱</span>
+  <span class="pwa-banner-ikon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></span>
   <div class="pwa-banner-text"><b>Uygulamaya ekle</b><span class="pwa-banner-aciklama">Sinyal Avcısı'nı ana ekranına ekle, uygulama gibi kullan</span></div>
   <button class="pwa-install-btn" onclick="pwaInstall()">Ekle</button>
   <button class="pwa-close-btn" onclick="pwaBannerKapat()" aria-label="Kapat (7 gün gösterme)">✕</button>
@@ -1709,10 +1709,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="nav-links">
     <span onclick="goTo('dersler')" role="button" tabindex="0">Dersler</span>
     <a href="/soru-lab/" style="text-decoration:none"><span>Soru Lab</span></a>
-    <span onclick="goTo('antrenman')" role="button" tabindex="0">Günlük Antrenman</span>
     <span onclick="goTo('klod')" role="button" tabindex="0">Yapay Zekâ</span>
     <span onclick="goTo('calisma-plani')" role="button" tabindex="0">Çalışma Planı</span>
-    <span onclick="goTo('ilerleme')" role="button" tabindex="0">Öğrenci İlerleme</span>
     <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
   </div>
   <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Ara (Ctrl+K)">🔍</button>
@@ -1755,7 +1753,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <div class="arama-modal" id="arama-modal" onclick="if(event.target===this)globalAramaKapat()" role="button" tabindex="0">
   <div class="arama-kutu">
     <div class="arama-header">
-      <span class="arama-header-ikon">🔍</span>
+      <span class="arama-header-ikon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
       <input type="text" id="arama-input" class="arama-input" placeholder="Modül, konu, kelime veya soru tipi ara..." autocomplete="off" oninput="aramaAra()" onkeydown="globalAramaKeydown(event)" aria-label="Modül, konu, kelime veya soru tipi ara">
       <button class="arama-kapat-btn" onclick="globalAramaKapat()">✕</button>
     </div>
@@ -1779,21 +1777,25 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="streak-badges" id="streak-badges"></div>
 </div>
 <div class="mmenu" id="mmenu">
-  <a onclick="toggleMenu();globalAramaAc()">Ara</a>
   <a onclick="closeMenuGoTo('dersler')">Dersler</a>
   <a href="/soru-lab/" style="text-decoration:none">Soru Lab</a>
-  <a onclick="closeMenuGoTo('antrenman')">Günlük Antrenman</a>
   <a onclick="closeMenuGoTo('klod')">Yapay Zekâ (KLOD)</a>
   <a onclick="closeMenuGoTo('calisma-plani')">Çalışma Planı</a>
-  <a onclick="closeMenu();hpAc()">Hedef Programım</a>
-  <a onclick="closeMenuGoTo('ilerleme')">Öğrenci İlerleme</a>
-  <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
-  <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
-  <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
-  <a onclick="closeMenu();sinavSimulatoruAc()">Deneme Sınavı</a>
-  <a onclick="closeMenu();if(typeof ahkGit==='function')ahkGit()">AHA Kartları</a>
-  <a onclick="closeMenuGoTo('medya')">Medya</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
+  <a onclick="toggleMenu();globalAramaAc()">Ara</a>
+  <details class="mmenu-daha">
+    <summary>Daha fazla</summary>
+    <a onclick="closeMenuGoTo('antrenman')">Günlük Antrenman</a>
+    <a onclick="closeMenu();sinavSimulatoruAc()">Deneme Sınavı</a>
+    <a onclick="closeMenu();hpAc()">Hedef Programım</a>
+    <a onclick="closeMenuGoTo('ilerleme')">Öğrenci İlerleme</a>
+    <a onclick="closeMenuGoTo('nasil')">Nasıl Çalışır?</a>
+    <a onclick="closeMenuGoTo('ses')">Ses Kurs</a>
+    <a onclick="closeMenuGoTo('ekitap')">Ücretsiz E-Kitap</a>
+    <a onclick="closeMenu();if(typeof ahkGit==='function')ahkGit()">AHA Kartları</a>
+    <a onclick="closeMenuGoTo('medya')">Medya</a>
+    <a onclick="closeMenu();pwaInstall()">Uygulamayı telefona yükle</a>
+  </details>
   <a onclick="closeMenu();basla()" style="color:var(--signal);font-weight:700">Platforma Eriş</a>
 </div>
 <section id="hero" class="hero">
@@ -1823,9 +1825,9 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <div class="hero-baglantilar">
     <div style="margin-top:14px;font-size:14px;color:var(--ink)">Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
     <div style="margin-top:6px;font-size:14px;color:var(--muted)">Kayıt olmadan hızlı bir plan mı istersin? <a href="/hedef-rota" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Puan Rotanı çıkar →</a></div>
-    <div style="margin-top:6px;font-size:14px;color:var(--ink)">22 Kasım'a 50 puan mı hedefliyorsun? <a href="/50-puan-programi" style="color:var(--signal);font-weight:700;text-decoration:underline">Gün gün 50 puan programı →</a></div>
+    <div style="margin-top:6px;font-size:14px;color:var(--ink)"><span id="hero-50-metin">22 Kasım'a 50 puan mı hedefliyorsun?</span> <a href="/50-puan-programi" style="color:var(--signal);font-weight:700;text-decoration:underline">Gün gün 50 puan programı →</a></div>
     <div style="margin-top:6px;font-size:14px;color:var(--muted)">90-100 mü hedefliyorsun? <a href="/puan-hedefi" style="color:var(--signal);font-weight:700;text-decoration:underline">Zor, sınava benzeyen soruları çöz →</a></div>
-    <div style="margin-top:10px;font-size:13px;color:var(--muted)">YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
+    <div id="hero-geri-sayim-satir" style="margin-top:10px;font-size:13px;color:var(--muted)">YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
     </div>
     <style>
       .hero-adimlar{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink)}
@@ -1844,8 +1846,14 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       if(!el)return;
       var now=new Date();
       var bugun=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-      var hedef=new Date(now.getFullYear(),10,22);
-      if(hedef<bugun)hedef=new Date(now.getFullYear()+1,10,22); // sınav günü 0 gösterir, ertesi gün seneye geçer
+      var hedef=new Date(2026,10,22);
+      if(hedef<bugun){
+        // Sınav geçti: yanlış tarihe saymak yerine geri sayımı gizle, metni tarihsiz yap.
+        // Yeni sınav tarihi ÖSYM'den kontrol edilince buraya yazılır.
+        var satir=document.getElementById('hero-geri-sayim-satir');if(satir)satir.style.display='none';
+        var m=document.getElementById('hero-50-metin');if(m)m.textContent='50 puan mı hedefliyorsun?';
+        return;
+      }
       var gun=Math.max(0,Math.round((hedef-bugun)/(1000*60*60*24)));
       el.textContent=gun;
     })();
@@ -1887,7 +1895,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       var DILAVCISI='assets/modules/dilavcisi.js?v=20261025';
       ['pvmGit','bbkGit','srtGit','osmGit','dnaGit','giGit','kfGit','vocGit','rdGit','mpGit','kbGit','ssGit','cpGit','tgGit','psyGit','bsGit']
         .forEach(function(ad){stubOlustur(ad,DILAVCISI,'dilavcisi');});
-      var NAVEXTRAS='assets/modules/nav-extras.js?v=20260923';
+      var NAVEXTRAS='assets/modules/nav-extras.js?v=20261108';
       ['globalAramaAc','globalAramaKapat','globalAramaKeydown','aramaAra','aramaSonucSec','ahkGit']
         .forEach(function(ad){stubOlustur(ad,NAVEXTRAS,'nav-extras');});
     })();
@@ -1925,23 +1933,24 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <section class="sosyal">
   <div class="sosyal-inner">
     <div class="stats">
-      <div><div class="stat-num">0 TL</div><div class="stat-lbl">Tamamen ücretsiz</div></div>
+      <div><div class="stat-num" data-count="568">568</div><div class="stat-lbl">Kelime kartı</div></div>
       <div class="stat-div"></div>
-      <div><div class="stat-num">0 Kayıt</div><div class="stat-lbl">Kayıt olmadan başla</div></div>
+      <div><div class="stat-num">Her gün</div><div class="stat-lbl">5 soruluk deneme</div></div>
       <div class="stat-div"></div>
       <div><div class="stat-num" data-count="19">19</div><div class="stat-lbl">Konuluk ses kursu</div></div>
       <div class="stat-div"></div>
       <div><div class="stat-num">KLOD</div><div class="stat-lbl">Yapay zekâ öğretmen</div></div>
     </div>
+    <p class="sosyal-ig">Instagram'da son 30 günde 13 bini aşkın görüntüleme <span>(25 Ekim 2026 ölçümü)</span> · <a href="https://www.instagram.com/sinyalavcisi.yds/" target="_blank" rel="noopener">@sinyalavcisi.yds</a></p>
     <div class="yorumlar" id="yorumlar-track"></div>
-    <div id="yorum-paylas-kutu" hidden style="text-align:center;margin-top:20px">
+    <div id="yorum-paylas-kutu" style="text-align:center;margin-top:20px">
       <button id="yorum-paylas-btn" onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">Deneyimini Paylaş</button>
     </div>
   </div>
 </section>
 <section id="dersler" class="ad-bolum">
   <div class="ad-ic">
-    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>Modüler eğitim sistemi</span><h2>Dersler ve Çalışma Modülleri</h2><p>ÖSYM soru tiplerini ve akademik İngilizceyi adım adım öğreten, uygulamalı ders modülleri.</p></div>
+    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>Modüler eğitim sistemi</span><h2>Dersler</h2><p>ÖSYM soru tiplerini ve akademik İngilizceyi adım adım öğreten, uygulamalı ders modülleri.</p></div>
     <div class="ad-kartlar">
       <div class="ad-kart">
         <span class="ad-etiket">Sesli ders modülü</span>
@@ -1970,7 +1979,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </section>
 <section id="soru-lab-tanitim" class="ad-bolum ad-tonlu">
   <div class="ad-ic">
-    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Analitik deşifre</span><h2>Soru Laboratuvarı (Soru Lab)</h2><p>Takıldığın sorunun fotoğrafını yükle; sinyalleri, tuzakları ve doğru şıkkın mantığını Türkçe gör.</p></div>
+    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Analitik deşifre</span><h2>Soru Lab</h2><p>Takıldığın sorunun fotoğrafını yükle; sinyalleri, tuzakları ve doğru şıkkın mantığını Türkçe gör.</p></div>
     <div class="ad-iki">
       <div class="ad-asamalar">
         <div class="ad-asama"><small>Aşama 01 · Aktarım</small><h3>Fotoğrafla hızlı yükleme</h3><p>Soru fotoğrafını seç; cümle yapısı ve ipucu kelimeleri ekrana aktarılır.</p></div>
@@ -2060,7 +2069,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </section>
 <section id="calisma-plani" class="ad-bolum ad-tonlu">
   <div class="ad-ic">
-    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Kişiselleştirilmiş takvim</span><h2>Günlük Çalışma Planı ve Hedef Puan Rotası</h2><p>Seviyene, hedef puanına ve sınava kalan süreye göre gün gün çalışma planı.</p></div>
+    <div class="ad-baslik"><span class="ad-rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Kişiselleştirilmiş takvim</span><h2>Çalışma Planın</h2><p>Seviyene, hedef puanına ve sınava kalan süreye göre gün gün çalışma planı.</p></div>
     <div class="ad-kartlar">
       <div class="ad-kart">
         <span class="ad-etiket">Başlangıç adımı</span>
@@ -2092,7 +2101,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <div class="ad-kartlar ad-dortlu">
       <div class="ad-kart">
         <span class="ad-etiket">Erişim</span>
-        <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span>
+        <span class="ad-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span>
         <h3>Serbest erişim</h3>
         <p>Tüm ders modülleri ücretsiz ve şifresiz açık.</p>
       </div>
@@ -6606,50 +6615,14 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <div class="section-title">Tamamen ücretsiz</div>
     <p style="font-size:16px;color:var(--ink);margin-top:12px;line-height:1.7">Buradaki her şey sana açık, <strong>ücret yok</strong>.</p>
   </div>
-  <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-family:IBM Plex Sans,sans-serif">
-      <thead>
-        <tr>
-          <th style="text-align:left;padding:14px 16px;font-size:14px;color:var(--muted);font-weight:600;border-bottom:2px solid var(--border)">Özellik</th>
-          <th style="padding:14px 16px;font-size:15px;font-weight:700;color:var(--signal);border-bottom:2px solid var(--signal);background:#0d1624;border-radius:8px 8px 0 0">Sinyal Avcısı</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid var(--border);background:#131f30">
-          <td style="padding:14px 16px;font-size:15px;font-weight:700;color:#c4b5fd">Ücret</td>
-          <td style="padding:14px 16px;text-align:center;background:#0f2418;font-size:15px;font-weight:800;color:#22c55e">TAMAMEN ÜCRETSİZ</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Sinyal metodolojisi</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Türkçe AI öğretmen (KLOD)</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Alan bazlı metinler (Hukuk, Sağlık…)</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Sesli kurs & podcast</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Spaced repetition kelime sistemi</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--border)">
-          <td style="padding:14px 16px;font-size:15px">Adaptif soru motoru</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-        <tr>
-          <td style="padding:14px 16px;font-size:15px">İmkânsız öğrencilere destek</td>
-          <td style="padding:14px 16px;text-align:center;background:#0d1624;font-size:18px"><span style="display:inline-block;width:22px;height:22px;color:var(--signal)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <ul class="nsa-liste">
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Sinyal metodu</b><span>ÖSYM sorularındaki ipucu kelimeleri görmeyi öğretir.</span></div></li>
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Türkçe yapay zekâ öğretmen</b><span>KLOD, takıldığın soruyu Türkçe anlatır.</span></div></li>
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Alanına göre metinler</b><span>Sosyal, Fen, Sağlık ve diğer alanlardan okuma.</span></div></li>
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Sesli kurs</b><span>19 konu, hızını kendin ayarlarsın.</span></div></li>
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Akıllı kelime tekrarı</b><span>568 kelime kartı, unutmadan önce yeniden gelir.</span></div></li>
+    <li><span class="nsa-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.8"/></svg></span><div><b>Sana göre sorular</b><span>Yanlış yaptığın konular daha sık karşına çıkar.</span></div></li>
+  </ul>
   <div style="text-align:center;margin-top:32px">
     <button onclick="basla()" style="background:linear-gradient(135deg,var(--signal),var(--signal-dark));color:#031018;border:none;border-radius:12px;padding:15px 40px;font-size:16px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif;box-shadow:0 6px 24px rgba(56,189,248,.3)">
       Hemen Başla — Kayıt Bile İstemez
@@ -13266,7 +13239,7 @@ function podcastOyna(i){
 window.addEventListener('DOMContentLoaded',()=>{
   medyaRender();
   sonYayinlarRender();
-  const navLinks=document.querySelector('.nav-links');
+  const navLinks=null; // menü sade: Medya yalnız mobil menü ve sayfa içinde
   if(navLinks&&!navLinks.querySelector('[data-medya]')){
     const span=document.createElement('span');
     span.textContent='Medya';span.setAttribute('data-medya','1');

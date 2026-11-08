@@ -479,3 +479,33 @@ body.tema-adacayi .hero-baglantilar{margin-top:20px;padding-top:16px;gap:6px}
 @media(max-width:560px){
   body.tema-adacayi #hero .demo-lbl,body.tema-adacayi #ses .p-topic{font-size:13px}
 }
+
+/* Dış analiz önerileri (8 Kas 2026) */
+body.tema-adacayi .nsa-liste{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){body.tema-adacayi .nsa-liste{grid-template-columns:1fr}}
+body.tema-adacayi .nsa-liste li{display:flex;gap:14px;align-items:flex-start;background:var(--ad-kart);border:1px solid var(--ad-cizgi);border-radius:14px;padding:18px 20px}
+body.tema-adacayi .nsa-liste .nsa-ikon{flex-shrink:0;width:26px;height:26px;color:var(--ad-koyu)}
+body.tema-adacayi .nsa-liste b{display:block;font-size:17px;color:var(--ad-metin);margin-bottom:4px}
+body.tema-adacayi .nsa-liste li span:not(.nsa-ikon){font-size:15px;line-height:1.55;color:var(--ad-metin)}
+body.tema-adacayi .mmenu-daha summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--ad-koyu);border-bottom:1px solid var(--ad-cizgi);list-style:none}
+body.tema-adacayi .mmenu-daha summary::after{content:" +"}
+body.tema-adacayi .mmenu-daha[open] summary::after{content:" −"}
+body.tema-adacayi .mmenu-daha a{padding-left:14px}
+@media(max-width:640px){body.tema-adacayi #pwa-btn{display:none!important}}
+body.tema-adacayi .sosyal-ig{text-align:center;margin:22px 0 0;font-size:15px;color:var(--ad-metin)}
+body.tema-adacayi .sosyal-ig span{color:var(--ad-ikincil);font-size:13px}
+body.tema-adacayi .sosyal-ig a{color:var(--ad-koyu);font-weight:700}
+/* Instagram mesaj butonu: sarı/turuncu yerine koyu adaçayı */
+body.tema-adacayi #wa-destek-btn{background:var(--ad-koyu)!important;box-shadow:0 6px 18px rgba(54,92,75,.3)!important}
+/* Arama penceresi: açık tema */
+body.tema-adacayi .arama-modal{background:rgba(31,42,36,.45)}
+body.tema-adacayi .arama-kutu{background:var(--ad-kart);border-color:var(--ad-cizgi);box-shadow:0 20px 60px rgba(31,42,36,.18)}
+body.tema-adacayi .arama-header,body.tema-adacayi .arama-ipucu{border-color:var(--ad-cizgi)}
+body.tema-adacayi .arama-modal .arama-input,body.tema-adacayi .arama-modal .arama-input:focus{color:var(--ad-metin)!important;background:transparent!important;-webkit-text-fill-color:var(--ad-metin)}
+body.tema-adacayi .arama-input::placeholder,body.tema-adacayi .arama-kapat-btn,body.tema-adacayi .arama-bos,body.tema-adacayi .arama-ipucu,body.tema-adacayi .arama-sonuc-alt{color:var(--ad-ikincil)}
+body.tema-adacayi .arama-kapat-btn:hover,body.tema-adacayi .arama-sonuc-baslik{color:var(--ad-metin)}
+body.tema-adacayi .arama-sonuc-item:hover,body.tema-adacayi .arama-sonuc-item.arama-secili{background:var(--ad-acik)}
+body.tema-adacayi .arama-sonuc-baslik mark,body.tema-adacayi .arama-sonuc-kategori{color:var(--ad-koyu)}
+body.tema-adacayi .arama-sonuc-kategori{background:var(--ad-acik)}
+body.tema-adacayi .arama-ipucu kbd{background:var(--ad-acik);color:var(--ad-metin)}
+body.tema-adacayi .arama-sonuc-ikon,body.tema-adacayi .arama-header-ikon{color:var(--ad-koyu)}
