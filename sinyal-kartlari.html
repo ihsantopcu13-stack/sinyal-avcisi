@@ -26,7 +26,7 @@
     (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
     document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
   </script>
-  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261108">
+  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261109">
   <style>
     /* Ortak renkler ve tema: assets/sinyal-tema.css. Burada yalnız kart arayüzü. */
     .sk-listeler{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--kart-2);border:1px solid var(--cizgi);border-radius:14px;padding:5px}
@@ -158,14 +158,17 @@
 
   </section>
 
+  <div id="pdf-paylas"></div>
+
   <p class="sonraki-adim">Sıradaki adım: kartlardaki kelimeleri soruda dene, <a href="/sinyal-soru">Sinyal kelimeli soru çözümü</a> sayfasına geç.</p>
-  <p class="sonraki-adim">Tüm kartlar tek dosyada: <a href="/assets/sinyal-avcisi-100-sinyal-kelime-rehberi.pdf" download>100 Sinyal Kelime ve Tuzaklar Rehberi (PDF, ücretsiz)</a>. Zıtlık bağlaçları için <a href="/zitlik-baglaclari">10 zıtlık bağlacı</a> sayfasına bak.</p>
+  <p class="sonraki-adim">Zıtlık bağlaçları için <a href="/zitlik-baglaclari">10 zıtlık bağlacı</a> sayfasına bak.</p>
 </main>
 
 <script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
 <script src="/assets/modules/sinyal-soru.js?v=20261108"></script>
 <script src="/assets/data/sinyal-kartlari.js?v=20261109"></script>
 <script src="/assets/modules/sinyal-kartlari.js?v=20261109"></script>
+<script src="/assets/modules/pdf-paylas.js?v=20261109"></script>
 <script>window.SinyalKartlari.baslat(window.SINYAL_KARTLARI);</script>
 </body>
 </html>
