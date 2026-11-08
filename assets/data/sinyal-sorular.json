@@ -17,6 +17,10 @@
         "tip": "Olumsuz bir sonuç: insanlar yine de istekli değil. Olumlu + olumsuz yan yana = zıtlık bağlacı arıyorsun."
       }
     ],
+    "mainSignal": {
+      "word": "Although",
+      "type": "zitlik"
+    },
     "options": [
       "Because",
       "Although",
@@ -47,6 +51,10 @@
         "tip": "Boşluktan sonra isim öbeği geliyor, cümle değil. O zaman edat lazım: due to, despite, because of."
       }
     ],
+    "mainSignal": {
+      "word": "due to",
+      "type": "sebep"
+    },
     "options": [
       "in spite of",
       "due to",
@@ -77,6 +85,10 @@
         "tip": "Simple past: ekip köye geçmişte ulaştı. Öteki olay bundan ÖNCE bitmiş olmalı."
       }
     ],
+    "mainSignal": {
+      "word": "By the time",
+      "type": "zaman"
+    },
     "options": [
       "were leaving",
       "have left",
@@ -102,6 +114,10 @@
         "tip": "\"-den beri\". Geçmişte başlayıp bugüne kadar süren durum: present perfect (has/have + V3)."
       }
     ],
+    "mainSignal": {
+      "word": "Since",
+      "type": "zaman"
+    },
     "options": [
       "increased",
       "had increased",
@@ -132,6 +148,10 @@
         "tip": "\"Bunu yapmak\" yani ilacı bırakmak. Doktor bırak derse bırakılabilir: bu bir şart."
       }
     ],
+    "mainSignal": {
+      "word": "unless",
+      "type": "kosul"
+    },
     "options": [
       "unless",
       "because",
@@ -162,6 +182,10 @@
         "tip": "Yine olumlu bir fayda. Olumlu + olumlu = aynı yönde ekleme."
       }
     ],
+    "mainSignal": {
+      "word": "moreover",
+      "type": "ekleme"
+    },
     "options": [
       "however",
       "otherwise",
@@ -192,6 +216,10 @@
         "tip": "Bu sebebin doğal sonucu: kimse şaşırmadı. Sebep → sonuç = sonuç bağlacı."
       }
     ],
+    "mainSignal": {
+      "word": "consequently",
+      "type": "sebep"
+    },
     "options": [
       "nevertheless",
       "meanwhile",
@@ -227,6 +255,10 @@
         "tip": "Kalır: yer değiştirmez. Migrate ile tam ters anlam."
       }
     ],
+    "mainSignal": {
+      "word": "whereas",
+      "type": "zitlik"
+    },
     "options": [
       "whereas",
       "since",
@@ -257,6 +289,10 @@
         "tip": "Olumlu bilgi: kâr hızla arttı. Zıtlık olduğu için devamı olumsuz ya da beklenmedik olmalı."
       }
     ],
+    "mainSignal": {
+      "word": "Even though",
+      "type": "zitlik"
+    },
     "options": [
       "it hired hundreds of new employees",
       "its shareholders were pleased with the results",
@@ -287,6 +323,10 @@
         "tip": "Şart kısmı present simple. Birinci tip koşul: ana cümle will + V1 olur."
       }
     ],
+    "mainSignal": {
+      "word": "Unless",
+      "type": "kosul"
+    },
     "options": [
       "more people have started cycling to work",
       "the new metro line opened last month",
@@ -312,6 +352,10 @@
         "tip": "\"Hiç de ... değil\". Kelime olumlu (successful) görünür ama anlam olumsuzdur: başarısız."
       }
     ],
+    "mainSignal": {
+      "word": "far from",
+      "type": "olumsuz"
+    },
     "options": [
       "The new policy has managed to reduce unemployment significantly.",
       "The new policy has largely failed to reduce unemployment.",
@@ -342,6 +386,10 @@
         "tip": "Hardly ile birlikte gelir ve ikinci olayı başlatır: hemen ardından olan şey."
       }
     ],
+    "mainSignal": {
+      "word": "Hardly ... when",
+      "type": "zaman"
+    },
     "options": [
       "The fire alarm went off long after the meeting had started.",
       "The meeting started just after the fire alarm stopped.",
@@ -367,6 +415,10 @@
         "tip": "\"Son yirmi yılda\": geçmişte başlayıp bugüne kadar süren bir dönem. Present perfect (has/have + V3) ister."
       }
     ],
+    "mainSignal": {
+      "word": "over the last two decades",
+      "type": "zaman"
+    },
     "options": [
       "rose",
       "had risen",
@@ -397,6 +449,10 @@
         "tip": "Bir tahmin anlatılıyor, yani olay gelecekte. Geçmiş zaman şıklarını ele."
       }
     ],
+    "mainSignal": {
+      "word": "By the end of this century",
+      "type": "zaman"
+    },
     "options": [
       "has risen",
       "had risen",
@@ -427,6 +483,10 @@
         "tip": "If + past perfect = üçüncü tip koşul: geçmişte olmamış bir şeyi hayal eder. Ana cümle would have + V3 olur."
       }
     ],
+    "mainSignal": {
+      "word": "If",
+      "type": "kosul"
+    },
     "options": [
       "will not learn",
       "had not learned",
@@ -457,6 +517,10 @@
         "tip": "Güvenli kullanımın şartı: önerilen dozu uygulamak. Şart + olumlu sonuç = provided that / as long as."
       }
     ],
+    "mainSignal": {
+      "word": "provided that",
+      "type": "kosul"
+    },
     "options": [
       "provided that",
       "even though",
@@ -487,6 +551,10 @@
         "tip": "So ... that = \"o kadar ... ki\". That'tan sonra gelen kısım sonucu anlatır."
       }
     ],
+    "mainSignal": {
+      "word": "so ... that",
+      "type": "sebep"
+    },
     "options": [
       "such",
       "so",
@@ -517,6 +585,10 @@
         "tip": "\"Hâlâ\": beklenene rağmen değişmeyen durum. Ucuzlamasına rağmen kömür hâlâ kullanılıyor, bu bir zıtlık."
       }
     ],
+    "mainSignal": {
+      "word": "Nevertheless",
+      "type": "zitlik"
+    },
     "options": [
       "Therefore",
       "Similarly",
@@ -547,6 +619,10 @@
         "tip": "Boşluktan sonra özne + would/could gelen tam bir cümle var. Amaç bildiren ve cümle alan bağlaç: so that."
       }
     ],
+    "mainSignal": {
+      "word": "so that",
+      "type": "sebep"
+    },
     "options": [
       "in order to",
       "because of",
@@ -577,6 +653,10 @@
         "tip": "Devrik yapı: no sooner cümle başına gelince yardımcı fiil özneden önce gelir (had the government)."
       }
     ],
+    "mainSignal": {
+      "word": "No sooner ... than",
+      "type": "zaman"
+    },
     "options": [
       "when",
       "than",
@@ -607,6 +687,10 @@
         "tip": "Some ... others kalıbı: bazı ekonomistler bir şey düşünür, diğerleri başka bir şey. Devamında \"others\" ya da karşıt bir grup ara."
       }
     ],
+    "mainSignal": {
+      "word": "While",
+      "type": "zitlik"
+    },
     "options": [
       "others argue that it leads to higher unemployment",
       "it has been raised several times in recent years",
@@ -637,6 +721,10 @@
         "tip": "Risk bildiren bir bilgi: hastanın kalp rahatsızlığı geçmişi var. Beklenen sonuç: ekstra dikkat, önlem."
       }
     ],
+    "mainSignal": {
+      "word": "Since",
+      "type": "sebep"
+    },
     "options": [
       "the surgery was successful despite the risks",
       "he had never been to a hospital before",

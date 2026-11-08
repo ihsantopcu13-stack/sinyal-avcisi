@@ -40,6 +40,8 @@
  * @property {string} topic           Alan: Genel, Sağlık, Fen, Sosyal...
  * @property {string} questionText    İngilizce soru kökü. Boşluk "----" ile yazılır.
  * @property {SinyalKelime[]} signalWords
+ * @property {{word:string,type:SinyalTipi}} mainSignal  Sorunun ölçtüğü ana sinyal
+ *           (çoğu zaman doğru şıktaki bağlaç). İlerleme özetindeki "takıldığın kelimeler" bunu sayar.
  * @property {string[]} options       Tam 5 şık (A-E), harfsiz.
  * @property {number} correctAnswer   Doğru şıkkın sırası: 0=A ... 4=E.
  * @property {string} explanation     Çözüm: kural + bu soruda nasıl uygulandığı.
@@ -163,12 +165,14 @@
         else dolu.push([bas, bas + sk.word.length]);
       });
     }
+    if (!s.mainSignal || typeof s.mainSignal.word !== 'string' || !s.mainSignal.word.trim()) hata('mainSignal.word boş');
+    else if (!SINYAL_TIPLERI[s.mainSignal.type]) hata('mainSignal için bilinmeyen type: ' + s.mainSignal.type);
     return h;
   }
 
   var Cekirdek = {
     SINYAL_TIPLERI: SINYAL_TIPLERI, SORU_TURLERI: SORU_TURLERI, HARFLER: HARFLER,
-    sinyalBul: sinyalBul, parcala: parcala, dogrula: dogrula
+    sinyalBul: sinyalBul, parcala: parcala, dogrula: dogrula, CEVAP_OLAYI: 'sinyal-soru-cevap'
   };
 
   // ======================= ARAYÜZ =======================
@@ -198,8 +202,7 @@
     kap.innerHTML = '';
     var ust = el('div', 'ss-ust');
     var sayac = el('span', 'ss-sayac');
-    var skor = el('span', 'ss-skor');
-    ust.append(sayac, skor);
+    ust.append(sayac);
 
     var etiketler = el('div', 'ss-etiketler');
     var yonerge = el('p', 'ss-yonerge');
@@ -234,11 +237,6 @@
 
     kap.append(ust, etiketler, yonerge, kutu, dokun, siklar, geri, analiz, alt);
 
-    function skorYaz() {
-      var ids = Object.keys(kayit.sonuclar).filter(function (id) { return sorular.some(function (s) { return s.id === id; }); });
-      var dogru = ids.filter(function (id) { return kayit.sonuclar[id]; }).length;
-      skor.textContent = ids.length ? 'Çözdüğün: ' + ids.length + ' · Doğru: ' + dogru : '';
-    }
 
     // ---------- ipucu kutusu ----------
     function popAc(btn, sabit) {
@@ -302,7 +300,6 @@
       D.cevap = null;
       popKapat();
       sayac.textContent = 'Soru ' + (D.idx + 1) + ' / ' + sorular.length;
-      skorYaz();
       etiketler.innerHTML = '';
       [s.exam, SORU_TURLERI[s.questionType].ad, s.topic].forEach(function (t) { etiketler.append(el('span', 'ss-etiket', t)); });
       yonerge.textContent = SORU_TURLERI[s.questionType].yonerge;
@@ -362,7 +359,11 @@
         ? 'Doğru! Sinyali yakaladın.'
         : 'Yanlış. Doğru cevap ' + HARFLER[s.correctAnswer] + ') ' + s.options[s.correctAnswer];
       kayit.sonuclar[s.id] = dogru; lsYaz(kayit);
-      skorYaz();
+      // İlerleme özeti (sinyal-istatistik.js) bu olayı dinler; sayfa yenilemeden güncellenir.
+      try {
+        kap.dispatchEvent(new CustomEvent(Cekirdek.CEVAP_OLAYI, { bubbles: true, detail: {
+          id: s.id, dogru: dogru, kelime: s.mainSignal.word, tur: s.mainSignal.type } }));
+      } catch (e) {}
       analizCiz(s);
       try { if (typeof window.gtag === 'function') window.gtag('event', 'sinyal_soru_cevap', { soru: s.id, dogru: dogru }); } catch (e) {}
     }
