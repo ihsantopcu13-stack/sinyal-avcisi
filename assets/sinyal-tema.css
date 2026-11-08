@@ -1,0 +1,73 @@
+/* ============================================================
+   SİNYAL SAYFALARI ORTAK TEMASI — /sinyal-soru ve /sinyal-kartlari
+   Adaçayı V4 açık tema (varsayılan) + koyu tema (html[data-tema="koyu"]).
+   Tema seçimi localStorage 'sa_ss_tema' (iki sayfa ortak), düğme:
+   assets/modules/sinyal-tema.js. Sarı/turuncu/altın yok.
+   ============================================================ */
+:root{
+  --bg:#F8F7F3; --kart:#FFFFFF; --kart-2:#EEF3EC; --cizgi:#DDE3DA; --cizgi-guclu:#A8BFA8;
+  --metin:#1F2A24; --ikincil:#4F5F57; --vurgu:#365C4B; --vurgu-2:#2B4A3C; --vurgu-zemin:#DCE8DE; --vurgu-ust:#FFFFFF;
+  --dogru:#2F7A55; --dogru-zemin:#E3F1E7; --yanlis:#B91C1C; --yanlis-zemin:#FBEAEA;
+  --golge:0 1px 2px rgba(31,42,36,.05),0 6px 20px rgba(31,42,36,.06);
+  /* sinyal tipi renkleri: yazı / zemin */
+  --zitlik:#5B21B6; --zitlik-z:#EDE9FE;
+  --sebep:#1E40AF;  --sebep-z:#DBEAFE;
+  --zaman:#115E59;  --zaman-z:#CCFBF1;
+  --kosul:#9D174D;  --kosul-z:#FCE7F3;
+  --ekleme:#365C4B; --ekleme-z:#DCE8DE;
+  --olumsuz:#B91C1C;--olumsuz-z:#FBEAEA;
+  --anlam:#334155;  --anlam-z:#E2E8F0;
+  --yapi:#3F3F46;   --yapi-z:#F1F1F3;
+  --f-body:'IBM Plex Sans',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:light;
+}
+:root[data-tema="koyu"]{
+  --bg:#0F1A15; --kart:#16241D; --kart-2:#1C2E25; --cizgi:#2C4136; --cizgi-guclu:#4A6B5A;
+  --metin:#EEF5F0; --ikincil:#BCCFC4; --vurgu:#A7D3B9; --vurgu-2:#C6E5D2; --vurgu-zemin:#24392E; --vurgu-ust:#0F1A15;
+  --dogru:#86EFAC; --dogru-zemin:rgba(134,239,172,.13); --yanlis:#FCA5A5; --yanlis-zemin:rgba(252,165,165,.13);
+  --golge:none;
+  --zitlik:#DDD6FE; --zitlik-z:rgba(139,92,246,.24);
+  --sebep:#BFDBFE;  --sebep-z:rgba(59,130,246,.24);
+  --zaman:#99F6E4;  --zaman-z:rgba(20,184,166,.22);
+  --kosul:#FBCFE8;  --kosul-z:rgba(236,72,153,.22);
+  --ekleme:#BBF7D0; --ekleme-z:rgba(74,222,128,.18);
+  --olumsuz:#FECACA;--olumsuz-z:rgba(239,68,68,.24);
+  --anlam:#E2E8F0;  --anlam-z:rgba(148,163,184,.24);
+  --yapi:#E4E4E7;   --yapi-z:rgba(161,161,170,.2);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--metin);font:18px/1.6 var(--f-body);-webkit-text-size-adjust:100%}
+a{color:var(--vurgu)}
+button{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid var(--vurgu);outline-offset:2px}
+.nav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--cizgi);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.nav-logo{font-weight:800;font-size:18px;color:var(--vurgu);text-decoration:none}
+.nav-sag{display:flex;align-items:center;gap:8px}
+.nav-back{font-size:16px;color:var(--ikincil);text-decoration:none;padding:8px 4px}
+.tema-btn{min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--cizgi-guclu);background:var(--kart);font-size:15px;font-weight:600;cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:26px 16px 64px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:clamp(30px,7vw,42px);font-weight:800;letter-spacing:-.02em}
+p{margin:0}
+.eyebrow{font:600 14px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--vurgu)}
+.lead{color:var(--ikincil);margin-top:10px;font-size:19px}
+.ucretsiz{display:inline-block;margin-top:12px;font-size:15.5px;font-weight:600;color:var(--vurgu);background:var(--vurgu-zemin);padding:6px 12px;border-radius:999px}
+
+/* renk anahtarı */
+.anahtar{display:flex;flex-wrap:wrap;gap:8px}
+.anahtar-baslik{width:100%;font-size:15px;font-weight:600;color:var(--ikincil)}
+
+/* sinyal tipleri */
+.ss-t-zitlik{--c:var(--zitlik);--z:var(--zitlik-z)}
+.ss-t-sebep{--c:var(--sebep);--z:var(--sebep-z)}
+.ss-t-zaman{--c:var(--zaman);--z:var(--zaman-z)}
+.ss-t-kosul{--c:var(--kosul);--z:var(--kosul-z)}
+.ss-t-ekleme{--c:var(--ekleme);--z:var(--ekleme-z)}
+.ss-t-olumsuz{--c:var(--olumsuz);--z:var(--olumsuz-z)}
+.ss-t-anlam{--c:var(--anlam);--z:var(--anlam-z)}
+.ss-t-yapi{--c:var(--yapi);--z:var(--yapi-z)}
+.ss-rozet{display:inline-block;font-weight:700;font-size:15.5px;color:var(--c);background:var(--z);border-radius:8px;padding:3px 10px;border-bottom:2px solid var(--c)}
+.ss-t-anlam.ss-rozet,.ss-t-anlam.ss-sinyal{border-bottom-style:dashed}
+.ss-t-yapi.ss-rozet,.ss-t-yapi.ss-sinyal{border-bottom-style:dotted}

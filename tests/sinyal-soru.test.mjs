@@ -53,9 +53,10 @@ const html = readFileSync(path.join(ROOT, "sinyal-soru.html"), "utf-8");
 const vercel = JSON.parse(readFileSync(path.join(ROOT, "vercel.json"), "utf-8"));
 const sitemap = readFileSync(path.join(ROOT, "sitemap.xml"), "utf-8");
 kontrol("sayfa modülü ve veriyi yükler", html.includes("/assets/modules/sinyal-soru.js") && html.includes("/assets/data/sinyal-sorular.json"));
+const temaCss = readFileSync(path.join(ROOT, "assets/sinyal-tema.css"), "utf-8");
 kontrol("ödeme / üyelik duvarı yok", !/paywall|premium|abone ol|satın al|giriş yap/i.test(html + kod));
-kontrol("sarı/turuncu/altın renk yok", !/#(f59e0b|fbbf24|fcd34d|f97316|fb923c|eab308|facc15|d4af37|ffd700)\b|gold|orange|yellow/i.test(html));
-kontrol("açık ve koyu tema tanımlı", html.includes(':root[data-tema="koyu"]') && html.includes("color-scheme:light"));
+kontrol("sarı/turuncu/altın renk yok", !/#(f59e0b|fbbf24|fcd34d|f97316|fb923c|eab308|facc15|d4af37|ffd700)\b|gold|orange|yellow/i.test(html + temaCss));
+kontrol("açık ve koyu tema tanımlı (ortak tema dosyası)", html.includes("/assets/sinyal-tema.css") && temaCss.includes(':root[data-tema="koyu"]') && temaCss.includes("color-scheme:light"));
 kontrol("/sinyal-soru yönlendirmesi var", vercel.rewrites.some((r) => r.source === "/sinyal-soru" && r.destination === "/sinyal-soru.html"));
 kontrol("site haritasında var", sitemap.includes("https://sinyal-avcisi.com/sinyal-soru<"));
 

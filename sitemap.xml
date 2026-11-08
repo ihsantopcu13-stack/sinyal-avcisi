@@ -55,6 +55,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sinyal-avcisi.com/sinyal-kartlari</loc>
+    <lastmod>2026-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sinyal-avcisi.com/kelime-kartlari</loc>
     <lastmod>2026-10-24</lastmod>
     <changefreq>weekly</changefreq>
