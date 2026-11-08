@@ -1797,7 +1797,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108p">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108q">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -6697,12 +6697,12 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 </section>
 
 <!-- MEDYA MERKEZİ -->
-<section id="medya" style="padding:80px 5vw;background:linear-gradient(135deg,#05070d 0%,#09111d 45%,#0d1624 100%);position:relative;overflow:hidden"><div style="position:absolute;top:-100px;right:5%;width:500px;height:500px;background:radial-gradient(circle,rgba(56,189,248,.14),transparent 65%);pointer-events:none;animation:floatGlow 6s ease-in-out infinite"></div><div style="position:absolute;bottom:-100px;left:5%;width:400px;height:400px;background:radial-gradient(circle,rgba(196,181,253,.10),transparent 65%);pointer-events:none;animation:floatGlow 8s ease-in-out infinite reverse"></div><div style="position:absolute;top:40%;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(56,189,248,.15),transparent 65%);pointer-events:none;animation:floatGlow 10s ease-in-out infinite"></div>
+<section id="medya">
   <div style="max-width:1020px;margin:0 auto">
     <div style="text-align:center;margin-bottom:48px">
       <div class="eyebrow" style="color:var(--signal)">Medya Merkezi</div>
       <div class="section-title" style="color:var(--ink)">60 Saniyede <em style="color:var(--signal);font-style:italic">ÖSYM Avı</em></div>
-      <div style="font-size:15px;color:rgba(220,227,236,.62);margin-top:12px">Metroda, kuyrukta, kahve molasında — bir dakikan varsa bir tuzak öğrenecek vaktin var.</div>
+      <div class="md-giris">Metroda, kuyrukta, kahve molasında — bir dakikan varsa bir tuzak öğrenecek vaktin var.</div>
     </div>
 
     <div id="medya-icerik" class="medya-kapali">
@@ -6711,33 +6711,32 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
     <!-- Son Yayınlanan Videolar (gerçek YouTube/Instagram linkleri, api/published-content.mjs'den) -->
     <div id="son-yayinlar-wrap" style="display:none;margin-bottom:32px">
-      <div class="eyebrow" style="color:#7dd3fc;margin-bottom:8px">Son Yayınlanan</div>
-      <div style="font-family:'IBM Plex Serif',serif;font-size:22px;color:#f8fafc;margin-bottom:16px">Gerçek YouTube Shorts</div>
+      <div class="eyebrow md-ust-baslik">Son Yayınlanan</div>
+      <div class="md-blok-baslik">Gerçek YouTube Shorts</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px" id="son-yayinlar-grid"></div>
     </div>
 
     <!-- Avcı Akademisi -->
-    <div style="background:linear-gradient(135deg,#131f30,#0d1624);border-radius:16px;padding:32px;margin-bottom:32px">
-      <div class="eyebrow" style="color:#7dd3fc;margin-bottom:8px">Avcı Akademisi</div>
-      <div style="font-family:'IBM Plex Serif',serif;font-size:24px;color:#f8fafc;margin-bottom:8px">ÖSYM Tuzak Videoları</div>
-      <div style="font-size:15px;color:rgba(255,255,255,.62);margin-bottom:20px">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
+    <div class="md-blok">
+      <div class="eyebrow md-ust-baslik">Avcı Akademisi</div>
+      <div class="md-blok-baslik">ÖSYM Tuzak Videoları</div>
+      <div class="md-blok-alt">Her bölümde 1 tuzak tipi, 3 örnek soru, 1 refleks kuralı.</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px" id="avci-akademi-grid"></div>
     </div>
 
     <!-- Podcast Paneli -->
-    <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px">
-      <div class="eyebrow" style="color:var(--signal);margin-bottom:8px">Podcast Paneli</div>
-      <div style="font-family:'IBM Plex Serif',serif;font-size:22px;color:#dce3ec;margin-bottom:16px">Kulak Aşinalığı</div>
+    <div class="md-blok">
+      <div class="eyebrow md-ust-baslik">Podcast Paneli</div>
+      <div class="md-blok-baslik">Kulak Aşinalığı</div>
       <div id="podcast-liste" style="display:flex;flex-direction:column;gap:10px"></div>
     </div>
     </div>
     <div style="text-align:center;margin-top:18px">
-      <button id="medya-ac-btn" onclick="medyaTumunuGoster()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#dce3ec;border-radius:12px;padding:12px 26px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🎬 Tüm videoları ve podcast'leri göster ↓</button>
+      <button id="medya-ac-btn" onclick="medyaTumunuGoster()">Tüm videoları ve podcast'leri göster ↓</button>
     </div>
     <style>
-      #medya-grid>:nth-child(3n+1){border-color:rgba(56,189,248,.35)!important}#medya-grid>:nth-child(3n+2){border-color:rgba(196,181,253,.35)!important}#medya-grid>:nth-child(3n){border-color:rgba(110,231,183,.35)!important}#medya-grid>:nth-child(3n+1):hover{border-color:rgba(56,189,248,.7)!important}#medya-grid>:nth-child(3n+2):hover{border-color:rgba(196,181,253,.7)!important}#medya-grid>:nth-child(3n):hover{border-color:rgba(110,231,183,.7)!important}
       #medya-icerik.medya-kapali{max-height:560px;overflow:hidden;position:relative}
-      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#131f30);pointer-events:none}
+      #medya-icerik.medya-kapali::after{content:'';position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(transparent,#F8F7F3);pointer-events:none}
     </style>
     <script>
       function medyaTumunuGoster(){
@@ -13206,12 +13205,12 @@ setTimeout(hataCountGuncelle, 500);
 // MEDYA MERKEZİ
 // ============================================================
 const MEDYA_KARTLAR=[
-  {ikon:'🔗',baslik:'Bağlaçlar Konu Anlatımı',aciklama:'Zıtlık sinyalini şık okumadan yakala.',renk:'#38bdf8',konuIndex:0},
-  {ikon:'🎯',baslik:'Modal Perfect Konu Anlatımı',aciklama:'must have V3 = zorunluluk DEĞİL, çıkarım.',renk:'#ef4444',konuIndex:2},
-  {ikon:'📝',baslik:'Relative Clause Konu Anlatımı',aciklama:'who/which/that/whom kullanımı.',renk:'#0284c7',konuIndex:5},
-  {ikon:'🔬',baslik:'Passive Voice Konu Anlatımı',aciklama:'Fen metinlerinin temel yapısı.',renk:'#16a34a',konuIndex:6},
-  {ikon:'🔀',baslik:'If Clause / Conditionals',aciklama:'3. tip koşul = gerçekleşmemiş geçmiş.',renk:'#0369a1',konuIndex:7},
-  {ikon:'⚖️',baslik:'YDS Bağlaç Soru Çözümü',aciklama:'ÖSYM tarzı sorularla pratik.',renk:'#f87171',konuIndex:1},
+  {ikon:'yon',baslik:'Bağlaçlar Konu Anlatımı',aciklama:'Zıtlık sinyalini şık okumadan yakala.',renk:'#38bdf8',konuIndex:0},
+  {ikon:'ampul',baslik:'Modal Perfect Konu Anlatımı',aciklama:'must have V3 = zorunluluk DEĞİL, çıkarım.',renk:'#ef4444',konuIndex:2},
+  {ikon:'yapi',baslik:'Relative Clause Konu Anlatımı',aciklama:'who/which/that/whom kullanımı.',renk:'#0284c7',konuIndex:5},
+  {ikon:'lab',baslik:'Passive Voice Konu Anlatımı',aciklama:'Fen metinlerinin temel yapısı.',renk:'#16a34a',konuIndex:6},
+  {ikon:'karistir',baslik:'If Clause / Conditionals',aciklama:'3. tip koşul = gerçekleşmemiş geçmiş.',renk:'#0369a1',konuIndex:7},
+  {ikon:'hedef',baslik:'YDS Bağlaç Soru Çözümü',aciklama:'ÖSYM tarzı sorularla pratik.',renk:'#f87171',konuIndex:1},
 ];
 
 const AVCI_AKADEMI=[
@@ -13224,11 +13223,11 @@ const AVCI_AKADEMI=[
 ];
 
 const PODCAST_LIST=[
-  {no:'Bölüm 1',baslik:'Aydınlanma Çağı ve Hukuk Metinleri Analizi',sure:'12 Dk',ikon:'⚖️'},
-  {no:'Bölüm 2',baslik:'Sağlık Bilimlerinde Modal Yapılar',sure:'15 Dk',ikon:'🏥'},
-  {no:'Bölüm 3',baslik:'Fen Bilimleri: Pasif Yapı ve Neden-Sonuç',sure:'11 Dk',ikon:'🔬'},
-  {no:'Bölüm 4',baslik:'Sosyal Bilimlerde Karşılaştırma Stratejisi',sure:'13 Dk',ikon:'📊'},
-  {no:'Bölüm 5',baslik:'YDS vs YÖKDİL: Format Farkları',sure:'10 Dk',ikon:'🎯'},
+  {no:'Bölüm 1',baslik:'Aydınlanma Çağı ve Hukuk Metinleri Analizi',sure:'12 Dk'},
+  {no:'Bölüm 2',baslik:'Sağlık Bilimlerinde Modal Yapılar',sure:'15 Dk'},
+  {no:'Bölüm 3',baslik:'Fen Bilimleri: Pasif Yapı ve Neden-Sonuç',sure:'11 Dk'},
+  {no:'Bölüm 4',baslik:'Sosyal Bilimlerde Karşılaştırma Stratejisi',sure:'13 Dk'},
+  {no:'Bölüm 5',baslik:'YDS vs YÖKDİL: Format Farkları',sure:'10 Dk'},
 ];
 
 let medyaAktif=null;
@@ -13236,43 +13235,40 @@ function medyaRender(){
   const grid=document.getElementById('medya-grid');
   if(!grid)return;
   grid.innerHTML=MEDYA_KARTLAR.map((k,i)=>`
-    <div onclick="medyaCanliDersGit(${k.konuIndex})" style="cursor:pointer;background:linear-gradient(145deg,#0d1624,#131f30);border-radius:20px;overflow:hidden;border:1px solid rgba(56,189,248,.25);transition:all .3s;box-shadow:0 4px 24px rgba(56,189,248,.25),inset 0 1px 0 rgba(255,255,255,.05)" onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 20px 60px rgba(56,189,248,.5),0 0 30px rgba(56,189,248,.2)';this.style.borderColor='rgba(56,189,248,.6)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 24px rgba(56,189,248,.25),inset 0 1px 0 rgba(255,255,255,.05)';this.style.borderColor='rgba(56,189,248,.25)'" role="button" tabindex="0">
-      <div style="position:relative;padding:28px 20px;background:linear-gradient(135deg,${k.renk}22,transparent);display:flex;align-items:center;justify-content:center;overflow:hidden">
-        <div style="position:absolute;top:10px;left:14px;background:color-mix(in srgb,${k.renk||'#38bdf8'} 35%,#05070d);border:1px solid ${k.renk||'#38bdf8'};color:#f8fafc;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.02em">🎓 CANLI DERS</div>
-        <div style="font-size:44px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))">${k.ikon}</div>
+    <div class="md-kart" onclick="medyaCanliDersGit(${k.konuIndex})" role="button" tabindex="0">
+      <div class="md-kart-ust">
+        <span class="md-etiket">CANLI DERS</span>
+        <span class="md-kart-ik"><svg class="ik" aria-hidden="true"><use href="#ik-${k.ikon}"/></svg></span>
       </div>
-      <div style="padding:16px">
-        <div style="font-size:15px;font-weight:800;color:#f8fafc;margin-bottom:6px;line-height:1.4;letter-spacing:-.01em">${k.baslik}</div>
-        <div style="font-size:15px;color:rgba(170,180,195,.7);line-height:1.5;margin-bottom:12px">${k.aciklama}</div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:color-mix(in srgb,${k.renk} 60%,#fff)">▶ Canlı Derste İzle</div>
+      <div class="md-kart-govde">
+        <div class="md-kart-baslik">${k.baslik}</div>
+        <div class="md-kart-alt">${k.aciklama}</div>
+        <div class="md-kart-git">Canlı Derste İzle →</div>
       </div>
     </div>
   `).join('');
 
   const aGrid=document.getElementById('avci-akademi-grid');
   if(aGrid)aGrid.innerHTML=AVCI_AKADEMI.map((a,i)=>`
-    <div onclick="avciAkademiOyna(${i})" style="cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(56,189,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'" role="button" tabindex="0">
-      <div style="font-family:monospace;font-size:10px;color:#7dd3fc;margin-bottom:6px">BÖLÜM ${a.no}</div>
-      <div style="font-size:15px;font-weight:700;color:#f8fafc;margin-bottom:4px">${a.konu}</div>
-      <div style="font-size:14px;color:rgba(255,255,255,.62);margin-bottom:8px">${a.aciklama}</div>
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:14px;color:#7dd3fc">▶ ${a.sure}</span>
-        <span style="font-size:10px;background:rgba(56,189,248,.2);color:#7dd3fc;padding:2px 8px;border-radius:4px">İZLE</span>
-      </div>
+    <div class="md-bolum" onclick="avciAkademiOyna(${i})" role="button" tabindex="0">
+      <div class="md-bolum-no">BÖLÜM ${a.no}</div>
+      <div class="md-bolum-baslik">${a.konu}</div>
+      <div class="md-bolum-alt">${a.aciklama}</div>
+      <div class="md-bolum-alt-satir"><span class="md-sure">${a.sure}</span><span class="md-izle">İZLE</span></div>
     </div>
   `).join('');
 
   const pList=document.getElementById('podcast-liste');
   if(pList)pList.innerHTML=PODCAST_LIST.map((p,i)=>`
-    <div onclick="podcastOyna(${i})" style="cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 4px 16px rgba(56,189,248,.1)'" onmouseout="this.style.boxShadow='none'" role="button" tabindex="0">
-      <div style="width:44px;height:44px;background:var(--sl);border-radius:50%;display:grid;place-items:center;font-size:20px;flex-shrink:0">${p.ikon}</div>
-      <div style="flex:1">
-        <div style="font-size:10px;color:#7dd3fc;font-weight:700;font-family:monospace;margin-bottom:2px">${p.no}</div>
-        <div style="font-size:15px;font-weight:600;color:#dce3ec">${p.baslik}</div>
+    <div class="md-pod" onclick="podcastOyna(${i})" role="button" tabindex="0">
+      <div class="md-pod-ik"><svg class="ik" aria-hidden="true"><use href="#ik-kulaklik"/></svg></div>
+      <div class="md-pod-orta">
+        <div class="md-pod-no">${p.no}</div>
+        <div class="md-pod-baslik">${p.baslik}</div>
       </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-size:14px;color:var(--muted)">${p.sure}</div>
-        <div style="font-size:14px;color:#7dd3fc;font-weight:700;margin-top:2px">▶ Dinle</div>
+      <div class="md-pod-sag">
+        <div class="md-pod-sure">${p.sure}</div>
+        <div class="md-pod-dinle">Dinle →</div>
       </div>
     </div>
   `).join('');
@@ -13294,9 +13290,9 @@ async function sonYayinlarRender(){
     const wrap=document.getElementById('son-yayinlar-wrap');
     if(!grid||!wrap)return;
     grid.innerHTML=items.slice(0,6).map(it=>`
-      <a href="${it.youtubeUrl}" target="_blank" rel="noopener" style="display:block;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;transition:background .2s" onmouseover="this.style.background='rgba(56,189,248,.15)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
-        <div style="font-size:10px;color:#7dd3fc;margin-bottom:6px;font-family:monospace">▶ YOUTUBE</div>
-        <div style="font-size:15px;font-weight:700;color:#f8fafc">${it.title||'Sinyal Avcısı'}</div>
+      <a class="md-bolum" href="${it.youtubeUrl}" target="_blank" rel="noopener">
+        <div class="md-bolum-no">YOUTUBE</div>
+        <div class="md-bolum-baslik">${it.title||'Sinyal Avcısı'}</div>
       </a>
     `).join('');
     wrap.style.display='block';
@@ -13335,14 +13331,14 @@ function podcastOyna(i){
   if(!window.speechSynthesis)return;
   speechSynthesis.cancel();
   const metinler=[
-    'Bölüm 1. Aydınlanma Çağı ve Hukuk Metinleri Analizi. YDS hukuk metinlerinde en sık karşılaşılan yapılar: koşul cümleleri, pasif yapılar ve modal ifadeler. Provided that ve subject to yapılarına özellikle dikkat edin.',
-    'Bölüm 2. Sağlık Bilimlerinde Modal Yapılar. YÖKDİL Sağlık metinlerinde must have, may have ve could have yapıları sıkça kullanılır. Geçmişe dair çıkarım yaparken zaman zarflarına bakın.',
+    'Bölüm 1. Aydınlanma Çağı ve Hukuk Metinleri Analizi. YDS hukuk metinlerinde en sık karşılaşılan yapılar: koşul cümleleri, pasif yapılar ve modal ifadeler. Provided that ve subject to yapılarına özellikle dikkat et.',
+    'Bölüm 2. Sağlık Bilimlerinde Modal Yapılar. YÖKDİL Sağlık metinlerinde must have, may have ve could have yapıları sıkça kullanılır. Geçmişe dair çıkarım yaparken zaman zarflarına bak.',
     'Bölüm 3. Fen Bilimleri: Pasif Yapı ve Neden Sonuç. Fen metinlerinde neredeyse her cümle pasif yapıdadır. Therefore, thus ve consequently neden sonuç ilişkisi kurar.',
-    'Bölüm 4. Sosyal Bilimlerde Karşılaştırma Stratejisi. More, less, greater, higher gibi karşılaştırma sinyallerinde iki unsuru belirleyin. ÖSYM sıklıkla karşılaştırmanın yönünü değiştirir.',
-    'Bölüm 5. YDS ile YÖKDİL Format Farkları. YDS genel akademik, YÖKDİL ise alan odaklıdır. Alan kelime dağarcığı için kkData kartlarını düzenli çalışın.',
+    'Bölüm 4. Sosyal Bilimlerde Karşılaştırma Stratejisi. More, less, greater, higher gibi karşılaştırma sinyallerinde iki unsuru belirle. ÖSYM sıklıkla karşılaştırmanın yönünü değiştirir.',
+    'Bölüm 5. YDS ile YÖKDİL Format Farkları. YDS genel akademik, YÖKDİL ise alan odaklıdır. Alan kelimeleri için kelime kartlarını düzenli çalış.',
   ];
   const u=new SpeechSynthesisUtterance(metinler[i]||metinler[0]);
-  u.lang='en-US';u.rate=0.9;
+  u.lang='tr-TR';u.rate=0.9;
   const bildirim=document.createElement('div');
   bildirim.style.cssText='position:fixed;bottom:24px;right:24px;z-index:600;background:#05070d;color:#f8fafc;border-radius:14px;padding:16px 20px;font-size:15px;font-family:IBM Plex Sans,sans-serif;display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.3)';
   bildirim.innerHTML=`<span style="font-size:24px">${p.ikon}</span><div><div style="font-weight:700;margin-bottom:2px">${p.baslik}</div><div style="color:rgba(255,255,255,.62);font-size:14px">▶ Oynatılıyor · ${p.sure}</div></div><button onclick="speechSynthesis.cancel();this.parentElement.remove()" style="background:rgba(255,255,255,.1);border:none;color:#f8fafc;width:28px;height:28px;border-radius:50%;cursor:pointer;margin-left:8px">■</button>`;

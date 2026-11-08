@@ -453,9 +453,6 @@ body.tema-adacayi #ekitap{padding:64px 5vw}
    Yalnız dış çerçeve rengi lacivertten koyu adaçayıya döner. */
 body.tema-adacayi #ses{background:linear-gradient(180deg,var(--ad-kart) 0%,var(--ad-kart) 70%,var(--ad-acik-2) 100%)}
 body.tema-adacayi #dashboard.dash{background:linear-gradient(180deg,var(--ad-acik-2) 0,var(--ad-inci) 240px,var(--ad-inci) 100%)}
-body.tema-adacayi #medya{background:linear-gradient(180deg,var(--ad-gece) 0%,var(--ad-gece) 80%,var(--ad-koyu-2) 100%)!important}
-body.tema-adacayi #medya>div[style*="radial-gradient"]{display:none}
-body.tema-adacayi #medya-icerik.medya-kapali::after{background:linear-gradient(transparent,var(--ad-gece))}
 
 /* E — Mobil: dokunma alanları ve küçük etiketler */
 @media(max-width:560px){
@@ -1444,3 +1441,47 @@ body.tema-adacayi .sinyal-panel [style*="font-size:11px"]{font-size:12.5px!impor
 body.tema-adacayi .sinyal-panel [style*="font-size:13px;line-height:1.7"]{font-size:15px!important}
 body.tema-adacayi #scroll-progress{background:var(--ad-koyu)!important}
 body.tema-adacayi #scroll-top-btn{background:var(--ad-kart)!important;color:var(--ad-koyu)!important;border:1px solid var(--ad-dogal)!important;box-shadow:var(--ad-golge)}
+/* Medya Merkezi (vitrin) — açık adaçayı */
+body.tema-adacayi #medya{padding:80px 5vw;background:var(--ad-inci);position:relative;overflow:hidden;color:var(--ad-metin)}
+body.tema-adacayi #medya .eyebrow{color:var(--ad-koyu)!important}
+body.tema-adacayi #medya .section-title{color:var(--ad-metin)!important}
+body.tema-adacayi #medya .section-title em{color:var(--ad-koyu)!important}
+body.tema-adacayi #medya .md-giris{font-size:17px;color:var(--ad-ikincil);margin-top:12px;line-height:1.6}
+body.tema-adacayi #medya-icerik.medya-kapali::after{background:linear-gradient(rgba(248,247,243,0),var(--ad-inci))}
+body.tema-adacayi #medya .md-kart{cursor:pointer;background:var(--ad-kart);border:1px solid var(--ad-cizgi);border-radius:18px;overflow:hidden;box-shadow:var(--ad-golge);transition:transform .2s,box-shadow .2s,border-color .2s}
+body.tema-adacayi #medya .md-kart:hover{transform:translateY(-4px);border-color:var(--ad-dogal);box-shadow:0 12px 30px rgba(31,42,36,.10)}
+body.tema-adacayi #medya .md-kart-ust{position:relative;padding:26px 20px;background:var(--ad-acik-2);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--ad-cizgi)}
+body.tema-adacayi #medya .md-etiket{position:absolute;top:10px;left:14px;background:var(--ad-koyu);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+body.tema-adacayi #medya .md-kart-ik{width:64px;height:64px;border-radius:50%;background:var(--ad-kart);border:1px solid var(--ad-dogal);display:grid;place-items:center;color:var(--ad-koyu)}
+body.tema-adacayi #medya .md-kart-ik .ik{width:30px;height:30px}
+body.tema-adacayi #medya .md-kart-govde{padding:16px 18px 18px}
+body.tema-adacayi #medya .md-kart-baslik{font-size:17px;font-weight:700;color:var(--ad-metin);margin-bottom:6px;line-height:1.4}
+body.tema-adacayi #medya .md-kart-alt{font-size:15px;color:var(--ad-ikincil);line-height:1.5;margin-bottom:12px}
+body.tema-adacayi #medya .md-kart-git{font-size:15px;font-weight:700;color:var(--ad-koyu)}
+body.tema-adacayi #medya .md-blok{background:var(--ad-kart);border:1px solid var(--ad-cizgi);border-radius:18px;padding:28px;margin-bottom:28px;box-shadow:var(--ad-golge)}
+body.tema-adacayi #medya .md-ust-baslik{margin-bottom:8px}
+body.tema-adacayi #medya .md-blok-baslik{font-family:'IBM Plex Serif',serif;font-size:24px;color:var(--ad-metin);margin-bottom:10px}
+body.tema-adacayi #medya .md-blok-alt{font-size:16px;color:var(--ad-ikincil);margin-bottom:20px}
+body.tema-adacayi #medya .md-bolum{display:block;text-decoration:none;cursor:pointer;background:var(--ad-inci);border:1px solid var(--ad-cizgi);border-radius:12px;padding:16px;transition:background .2s,border-color .2s}
+body.tema-adacayi #medya .md-bolum:hover{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
+body.tema-adacayi #medya .md-bolum-no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ad-koyu);font-weight:700;margin-bottom:6px;letter-spacing:.06em}
+body.tema-adacayi #medya .md-bolum-baslik{font-size:16px;font-weight:700;color:var(--ad-metin);margin-bottom:4px}
+body.tema-adacayi #medya .md-bolum-alt{font-size:15px;color:var(--ad-ikincil);margin-bottom:10px;line-height:1.5}
+body.tema-adacayi #medya .md-bolum-alt-satir{display:flex;justify-content:space-between;align-items:center}
+body.tema-adacayi #medya .md-sure{font-size:14px;color:var(--ad-ikincil);font-family:'IBM Plex Mono',monospace}
+body.tema-adacayi #medya .md-izle{font-size:12px;font-weight:700;background:var(--ad-koyu);color:#fff;padding:3px 10px;border-radius:6px;letter-spacing:.04em}
+body.tema-adacayi #medya #podcast-liste .md-pod{cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--ad-inci)!important;border:1px solid var(--ad-cizgi)!important;border-radius:12px;transition:border-color .2s,background .2s}
+body.tema-adacayi #medya #podcast-liste .md-pod:hover{background:var(--ad-acik-2)!important;border-color:var(--ad-dogal)!important}
+body.tema-adacayi #medya #podcast-liste .md-pod div{background:transparent!important;border-color:transparent!important}
+body.tema-adacayi #medya #podcast-liste .md-pod .md-pod-ik{width:44px;height:44px;border-radius:50%;background:var(--ad-acik)!important;display:grid;place-items:center;flex-shrink:0;color:var(--ad-koyu)!important}
+body.tema-adacayi #medya #podcast-liste .md-pod-ik .ik{width:22px;height:22px}
+body.tema-adacayi #medya #podcast-liste .md-pod-orta{flex:1}
+body.tema-adacayi #medya #podcast-liste .md-pod-no{font-size:12px;color:var(--ad-koyu)!important;font-weight:700;font-family:'IBM Plex Mono',monospace;margin-bottom:2px}
+body.tema-adacayi #medya #podcast-liste .md-pod-baslik{font-size:16px;font-weight:600;color:var(--ad-metin)!important}
+body.tema-adacayi #medya #podcast-liste .md-pod-sag{text-align:right;flex-shrink:0}
+body.tema-adacayi #medya #podcast-liste .md-pod-sure{font-size:14px;color:var(--ad-ikincil)!important}
+body.tema-adacayi #medya #podcast-liste .md-pod-dinle{font-size:15px;color:var(--ad-koyu)!important;font-weight:700;margin-top:2px}
+body.tema-adacayi #medya-ac-btn{background:var(--ad-koyu);border:none;color:#fff;border-radius:12px;padding:14px 28px;font-size:16px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+body.tema-adacayi #medya-ac-btn:hover{background:var(--ad-koyu-2)}
+@media(max-width:560px){body.tema-adacayi #medya{padding:52px 16px}body.tema-adacayi #medya .md-blok{padding:20px}}
+body.tema-adacayi #medya #podcast-liste .md-pod-ik :is(.ik,use){color:var(--ad-koyu)!important}
