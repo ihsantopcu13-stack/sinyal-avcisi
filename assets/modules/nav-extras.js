@@ -128,7 +128,7 @@
     }
     el.innerHTML=sonuclar.map((s,i)=>`
       <div class="arama-sonuc-item${i===0?' arama-secili':''}" onclick="aramaSonucSec(${i})" role="button" tabindex="0">
-        <div class="arama-sonuc-ikon">${s.ikon}</div>
+        <div class="arama-sonuc-ikon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
         <div class="arama-sonuc-metin">
           <div class="arama-sonuc-baslik">${aramaVurgula(s.baslik,sorgu)}</div>
           ${s.altbaslik?`<div class="arama-sonuc-alt">${aramaEscHtml(s.altbaslik)}</div>`:''}
