@@ -26,7 +26,7 @@
     (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
     document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
   </script>
-  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261108">
+  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261109">
   <style>
     /* Ortak renkler ve tema: assets/sinyal-tema.css. Burada yalnız soru paneli. */
 
@@ -140,6 +140,8 @@
 
   <section class="ss-kart" id="ss-panel" aria-label="Soru">Sorular yükleniyor...</section>
 
+  <div id="pdf-paylas"></div>
+
   <p class="sonraki-adim">Sıradaki adım: sınava benzeyen daha zor sorular için <a href="/puan-hedefi">Puan Hedefi</a> sayfasına geç.</p>
   <p class="sonraki-adim">Zıtlık bağlaçlarını tek sayfada gör: <a href="/zitlik-baglaclari">10 zıtlık bağlacı</a>.</p>
 </main>
@@ -147,6 +149,7 @@
 <script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
 <script src="/assets/modules/sinyal-soru.js?v=20261109"></script>
 <script src="/assets/modules/sinyal-istatistik.js?v=20261109"></script>
+<script src="/assets/modules/pdf-paylas.js?v=20261109"></script>
 <script>
 (function(){
   var S=window.SinyalSoru;
