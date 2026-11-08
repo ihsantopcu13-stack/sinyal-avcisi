@@ -943,3 +943,42 @@ body.tema-adacayi #dashboard #mod-avci .aoy-fb.ok{background:var(--ad-dogru-zemi
 body.tema-adacayi #dashboard #mod-avci .aoy-fb.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-metin)}
 body.tema-adacayi #dashboard #mod-avci .aoy-sonuc-ik{background:var(--ad-acik);color:var(--ad-koyu-2)}
 body.tema-adacayi #dashboard #mod-avci #aoy-mt-next,body.tema-adacayi #dashboard #mod-avci #aoy-container button[onclick^="aoyDersAc"][style*="gradient"]{color:#fff!important}
+/* KLOD'a Sor (çalışma alanında #mod-sinyal içine çizilir) */
+body.tema-adacayi #dashboard .klod-avatar{background:var(--ad-acik);color:var(--ad-koyu-2);box-shadow:none}
+body.tema-adacayi #dashboard .klod-title{color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(.klod-master-btn,.klod-kart-btn){background:var(--ad-koyu);color:#fff;box-shadow:none}
+body.tema-adacayi #dashboard :is(.klod-master-btn,.klod-kart-btn):hover{background:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .klod-status-dot.avci i{background:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-quick-chip{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin);font-size:14px}
+body.tema-adacayi #dashboard .klod-quick-chip .ik{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-quick-chip:hover{border-color:var(--ad-koyu);color:var(--ad-koyu-2);background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .klod-quick-chip.strong{background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .klod-method-strip{background:var(--ad-kart);border-color:var(--ad-cizgi)}
+body.tema-adacayi #dashboard .klod-method-chip{background:var(--ad-acik-2);color:var(--ad-metin)}
+body.tema-adacayi #dashboard .klod-method-arrow{color:var(--ad-dogal);opacity:1}
+body.tema-adacayi #dashboard .klod-method-adim:hover{border-color:var(--ad-koyu);background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .klod-method-adim:hover .klod-method-chip{color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .klod-method-adim:focus-visible{outline-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-method-adim.aktif .klod-method-chip{background:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard .msg.k{background:var(--ad-kart);border:1px solid var(--ad-cizgi);color:var(--ad-metin);box-shadow:var(--ad-golge)}
+body.tema-adacayi #dashboard .msg.k b,body.tema-adacayi #dashboard .msg.k strong{color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .msg.k :is(code,pre){background:var(--ad-acik-2)!important;color:var(--ad-koyu-2)!important;border:1px solid var(--ad-cizgi)}
+body.tema-adacayi #dashboard .msg.k a{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .msg.u{background:var(--ad-acik);color:var(--ad-metin);box-shadow:none}
+body.tema-adacayi #dashboard :is(.klod-input,.chat-in){background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(.klod-input,.chat-in):focus{border-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(.klod-input,.chat-in)::placeholder{color:var(--ad-ikincil)}
+body.tema-adacayi #dashboard .klod-send{background:var(--ad-koyu);color:#fff;box-shadow:none}
+body.tema-adacayi #dashboard .klod-send:hover{background:var(--ad-koyu-2);filter:none}
+body.tema-adacayi #dashboard .klod-ikon-btn{background:var(--ad-kart)!important;color:var(--ad-koyu)!important;border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard .klod-ikon-btn:hover{background:var(--ad-acik)!important}
+body.tema-adacayi #dashboard :is(.klod-geri-btn,.klod-hata-btn):hover{border-color:var(--ad-koyu);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .klod-soru-karti{background:var(--ad-kart);border-color:var(--ad-cizgi);box-shadow:var(--ad-golge)}
+body.tema-adacayi #dashboard .klod-kart-etiket{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-kart-siklar li::marker{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-rol-s{color:var(--ad-koyu-2);background:var(--ad-acik);border-radius:4px;padding:0 4px}
+body.tema-adacayi #dashboard .klod-rol-v{color:var(--ad-tuzak);background:var(--ad-tuzak-zemin);border-radius:4px;padding:0 4px}
+body.tema-adacayi #dashboard .klod-rol-o{color:var(--ad-metin);background:var(--ad-bej);border-radius:4px;padding:0 4px}
+body.tema-adacayi #dashboard .klod-hata{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .chat-typing span{background:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-dinle-btn{background:var(--ad-kart);color:var(--ad-koyu);border:1px solid var(--ad-dogal)}
