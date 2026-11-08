@@ -1419,3 +1419,28 @@ body.tema-adacayi #dashboard :is(.ist-takvim-cell,.ist-kat-bar-track){background
 body.tema-adacayi #dashboard .ist-hafta-fill{background:var(--ad-dogal)}
 body.tema-adacayi #dashboard .ist-hafta-ozet{font-size:15px;color:var(--ad-metin)}
 body.tema-adacayi #dashboard .tam-ekran-btn{font-variant-emoji:text}
+/* Ortak açılır öğeler: rozet bildirimi, rozet çipleri, Avcı Çözüm paneli */
+body.tema-adacayi .rozet-pop-ik{display:flex;justify-content:center;margin-bottom:6px;color:var(--ad-koyu)}
+body.tema-adacayi .rozet-pop-ik .ik{width:36px;height:36px}
+body.tema-adacayi .rozet{background:var(--ad-acik-2);border-color:var(--ad-cizgi);color:var(--ad-koyu-2)}
+body.tema-adacayi .rozet:is(.altin,.sinyal,.modal){background:var(--ad-acik);border-color:var(--ad-dogal);color:var(--ad-koyu-2)}
+body.tema-adacayi .rozet .ik{width:15px;height:15px}
+body.tema-adacayi .sinyal-panel{--surface:var(--ad-kart);--ink:var(--ad-metin);--muted:var(--ad-ikincil);--border:var(--ad-cizgi);--signal:var(--ad-koyu);--sl:var(--ad-acik-2);--trap:var(--ad-tuzak);background:var(--ad-kart);color:var(--ad-metin)}
+body.tema-adacayi .sinyal-panel-ov{background:rgba(31,42,36,.45)}
+body.tema-adacayi .sinyal-panel-title{font-size:17px}
+body.tema-adacayi .sinyal-panel .sinyal-opt-row{font-size:15px;background:var(--ad-kart);color:var(--ad-metin)}
+body.tema-adacayi .sinyal-panel .sp-kurallar{font-size:15px;line-height:1.7;color:var(--ad-metin);display:grid;gap:6px}
+body.tema-adacayi .sinyal-panel .sp-isaret{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:12px;font-weight:700;margin-right:6px;vertical-align:1px}
+body.tema-adacayi .sinyal-panel .sp-isaret.ele{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi .sinyal-panel .sp-isaret.tuzak{background:var(--ad-bej);color:var(--ad-metin)}
+body.tema-adacayi .sinyal-panel .sp-isaret.dogru{background:var(--ad-dogru-zemin);color:var(--ad-dogru)}
+body.tema-adacayi .sinyal-opt-kirmizi{background:var(--ad-tuzak-zemin)!important;border-color:var(--ad-tuzak)!important;color:var(--ad-tuzak)!important}
+body.tema-adacayi :is(.sinyal-opt-sari,.sinyal-opt-turuncu){background:#F3ECE6!important;border-color:var(--ad-bej)!important;color:var(--ad-metin)!important}
+body.tema-adacayi .sinyal-opt-yesil{background:var(--ad-dogru-zemin)!important;border-color:var(--ad-dogru)!important;color:var(--ad-dogru)!important}
+body.tema-adacayi #sinyalAnalizMetin{font-size:15px!important}
+body.tema-adacayi .sinyal-panel [style*="color:var(--ink)"]{color:var(--ad-metin)!important}
+body.tema-adacayi .sinyal-panel [style*="color:var(--muted)"]{color:var(--ad-ikincil)!important}
+body.tema-adacayi .sinyal-panel [style*="font-size:11px"]{font-size:12.5px!important}
+body.tema-adacayi .sinyal-panel [style*="font-size:13px;line-height:1.7"]{font-size:15px!important}
+body.tema-adacayi #scroll-progress{background:var(--ad-koyu)!important}
+body.tema-adacayi #scroll-top-btn{background:var(--ad-kart)!important;color:var(--ad-koyu)!important;border:1px solid var(--ad-dogal)!important;box-shadow:var(--ad-golge)}
