@@ -1797,7 +1797,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108n">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108o">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -6637,55 +6637,55 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- MİNİ DERSLER (ayrı modül) -->
         <div class="dmod" id="mod-mikro" style="display:none">
-          <div class="dm-eye">🎬 MİNİ DERSLER — Her biri 2-3 dakika</div>
+          <div class="dm-eye">MİNİ DERSLER — Her biri 2-3 dakika</div>
           <div id="mikro-liste" style="margin-top:14px;display:grid;gap:10px"></div>
         </div>
 
         <!-- CANLI DERS (yeşil tahta — sesli + yazarak anlatım) -->
         <div class="dmod" id="mod-canliders" style="display:none">
           <button class="tam-ekran-btn" data-saf-odak-btn="canliders" onclick="tamEkranAcKapat('mod-canliders')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
-          <div class="dm-eye">🎓 CANLI DERS — Yeşil tahtada sesli konu anlatımı</div>
+          <div class="dm-eye">CANLI DERS — Yeşil tahtada sesli konu anlatımı</div>
           <div id="canliders-container"></div>
         </div>
 
         <!-- İSTATİSTİKLERİM -->
         <div class="dmod" id="mod-istatistik" style="display:none">
-          <div class="dm-eye">📊 İSTATİSTİKLERİM — Performans özetin</div>
+          <div class="dm-eye">İSTATİSTİKLERİM — Performans özetin</div>
 
           <div class="ist-kpi-grid">
-            <div class="ist-kpi"><div class="ist-kpi-ikon">📝</div><div class="ist-kpi-val" id="ist-toplam">0</div><div class="ist-kpi-lbl">Toplam Çözülen Soru</div></div>
-            <div class="ist-kpi"><div class="ist-kpi-ikon">🎯</div><div class="ist-kpi-val" id="ist-dogruluk">0%</div><div class="ist-kpi-lbl">Doğruluk Oranı</div></div>
-            <div class="ist-kpi"><div class="ist-kpi-ikon">🔥</div><div class="ist-kpi-val" id="ist-streak">0</div><div class="ist-kpi-lbl">Güncel Seri (gün)</div></div>
-            <div class="ist-kpi"><div class="ist-kpi-ikon">⚡</div><div class="ist-kpi-val" id="ist-xp">0</div><div class="ist-kpi-lbl">Toplam XP</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon"><svg class="ik" aria-hidden="true"><use href="#ik-not"/></svg></div><div class="ist-kpi-val" id="ist-toplam">0</div><div class="ist-kpi-lbl">Toplam Çözülen Soru</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon"><svg class="ik" aria-hidden="true"><use href="#ik-hedef"/></svg></div><div class="ist-kpi-val" id="ist-dogruluk">0%</div><div class="ist-kpi-lbl">Doğruluk Oranı</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon"><svg class="ik" aria-hidden="true"><use href="#ik-takvim"/></svg></div><div class="ist-kpi-val" id="ist-streak">0</div><div class="ist-kpi-lbl">Güncel Seri (gün)</div></div>
+            <div class="ist-kpi"><div class="ist-kpi-ikon"><svg class="ik" aria-hidden="true"><use href="#ik-kupa"/></svg></div><div class="ist-kpi-val" id="ist-xp">0</div><div class="ist-kpi-lbl">Toplam XP</div></div>
           </div>
 
           <div class="ist-panel">
-            <div class="ist-panel-baslik">📚 Kategori Bazlı Performans</div>
+            <div class="ist-panel-baslik">Kategori bazlı performans</div>
             <div id="ist-kategori-liste"></div>
           </div>
 
           <div class="ist-panel">
-            <div class="ist-panel-baslik">🔥 Streak Takvimi <span class="ist-panel-sub">Son 35 gün</span></div>
+            <div class="ist-panel-baslik">Seri takvimi <span class="ist-panel-sub">Son 35 gün</span></div>
             <div id="ist-takvim-grid" class="ist-takvim-grid"></div>
             <div class="ist-takvim-legend">
               <span>Az</span>
-              <span class="ist-legend-dot" style="background:rgba(56,189,248,.15)"></span>
-              <span class="ist-legend-dot" style="background:rgba(56,189,248,.45)"></span>
-              <span class="ist-legend-dot" style="background:rgba(56,189,248,.75)"></span>
-              <span class="ist-legend-dot" style="background:rgba(56,189,248,1)"></span>
+              <span class="ist-legend-dot" style="background:rgba(54,92,75,.15)"></span>
+              <span class="ist-legend-dot" style="background:rgba(54,92,75,.45)"></span>
+              <span class="ist-legend-dot" style="background:rgba(54,92,75,.75)"></span>
+              <span class="ist-legend-dot" style="background:rgba(54,92,75,1)"></span>
               <span>Çok</span>
             </div>
           </div>
 
           <div class="ist-panel">
-            <div class="ist-panel-baslik">📅 Bu Haftaki İlerleme</div>
+            <div class="ist-panel-baslik">Bu haftaki ilerleme</div>
             <div class="ist-hafta-ozet">Bu hafta <b id="ist-hafta-soru">0</b> soru çözdün, <b id="ist-hafta-xp">0</b> XP kazandın.</div>
             <div id="ist-hafta-bar" class="ist-hafta-bar"></div>
           </div>
 
           <!-- Cevap geçmişi (doğru+yanlış birleşik) — veri yoksa gizli kalır, UYDURMA yok -->
           <div class="ist-panel" id="ist-cevap-gecmisi-panel" style="display:none">
-            <div class="ist-panel-baslik">🎯 Zayıf Alan & Son Cevaplar</div>
+            <div class="ist-panel-baslik">Zayıf alan ve son cevaplar</div>
             <div id="ist-zayif-konu" style="font-size:14px;margin-bottom:12px"></div>
             <div id="ist-son-cevaplar"></div>
             <div id="ist-attribution-kaynak" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
@@ -10596,20 +10596,20 @@ function clModulHTML(){
       </div>
       <div class="tahta-icerik">
         <div class="tahta-blok" id="cl-blok-aciklama">
-          <div class="tahta-lbl">📖 AÇIKLAMA</div>
+          <div class="tahta-lbl">AÇIKLAMA</div>
           <div class="tahta-metin" id="cl-metin-aciklama"></div>
         </div>
         <div class="tahta-blok" id="cl-blok-ornek" style="display:none">
-          <div class="tahta-lbl">✏️ ÖRNEK CÜMLE</div>
+          <div class="tahta-lbl">ÖRNEK CÜMLE</div>
           <div class="tahta-metin" id="cl-metin-ornek"></div>
           <div class="tahta-metin-tr" id="cl-metin-ornek-tr"></div>
         </div>
         <div class="tahta-blok" id="cl-blok-soru" style="display:none">
-          <div class="tahta-lbl">❓ YDS SORUSU</div>
+          <div class="tahta-lbl">YDS SORUSU</div>
           <div class="tahta-metin" id="cl-metin-soru"></div>
           <div class="cl-secenekler" id="cl-secenekler"></div>
           <div class="cl-hoca" id="cl-hoca" style="display:none">
-            <button class="cl-btn cl-btn-primary" id="cl-hoca-baslat" onclick="clHocaBaslat()">🎓 AVCI Hoca ile birlikte çöz</button>
+            <button class="cl-btn cl-btn-primary" id="cl-hoca-baslat" onclick="clHocaBaslat()">AVCI Hoca ile birlikte çöz</button>
             <div class="cl-hoca-chat" id="cl-hoca-chat" style="display:none"></div>
             <div class="cl-hoca-giris" id="cl-hoca-giris" style="display:none">
               <input class="chat-in" id="cl-hoca-in" placeholder="Cevabını yaz…" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();clHocaGonder();}">
@@ -10618,13 +10618,13 @@ function clModulHTML(){
           </div>
         </div>
         <div class="tahta-blok" id="cl-blok-cevap" style="display:none">
-          <div class="tahta-lbl">✅ CEVAP VE AÇIKLAMA</div>
+          <div class="tahta-lbl">CEVAP VE AÇIKLAMA</div>
           <div class="tahta-metin" id="cl-metin-cevap"></div>
         </div>
       </div>
     </div>
     <div class="cl-kontrol">
-      <button class="cl-btn cl-btn-ghost" onclick="clTekrarAnlat()">🔁 Tekrar Anlat</button>
+      <button class="cl-btn cl-btn-ghost" onclick="clTekrarAnlat()"><svg class="ik" aria-hidden="true"><use href="#ik-tekrar"/></svg> Tekrar Anlat</button>
       <button class="cl-btn cl-btn-primary" onclick="clSonrakiKonu()">Sonraki Konu →</button>
     </div>
   `;
@@ -16423,12 +16423,12 @@ async function liderTabloGoster(){
 
 // ─── 4. MİKRO DERSLER ────────────────────────────────────────────────────────
 const MIKRO_DERSLER=[
-  {id:1,baslik:'Modal Perfect: must have done',sure:'2:34',konu:'Gramer · Tuzak',emoji:'⚡',renk:'#0369a1',ilerleme:0,transkript:'<b>Modal Perfect</b> yapısı ÖSYM\'nin en sevdiği tuzaklardan biridir.<br><br>Formül: <span class="vurgu">must / should / could / can\'t + have + V3</span><br><br>Bu yapı her zaman <span class="vurgu">geçmişe yönelik bir çıkarım</span> veya pişmanlık ifade eder.<br><br>Örnek: <em>"She must have left early"</em> → Erken gitmiş olmalı (ben yokken).<br><br>Tuzak: Geniş zaman anlamı gibi görünür, ama değildir!'},
-  {id:2,baslik:'Despite vs Although: Zıtlık Sinyali',sure:'3:12',konu:'Sinyal · Bağlaç',emoji:'🎯',renk:'#dc2626',ilerleme:30,transkript:'<b>Zıtlık sinyalleri</b>, bir cümlenin ikinci yarısının ilk yarısıyla çelişeceğini söyler.<br><br><span class="vurgu">Despite / In spite of</span> → isim grubu alır (despite THE FACT THAT)<br><span class="vurgu">Although / Even though</span> → cümle alır (although SHE TRIED)<br><br>ÖSYM tuzağı: İkisini birbirinin yerine koyar. Sadece sentaksı kontrol et!'},
-  {id:3,baslik:'Far from: Gizli Olumsuz',sure:'1:58',konu:'Tuzak · Sinyal',emoji:'🔍',renk:'#f87171',ilerleme:0,transkript:'<b>Far from</b> görünürde masum, aslında güçlü bir olumsuz sinyaldir.<br><br>"far from perfect" = hiç mükemmel değil<br>"far from over" = bitmekten çok uzak<br><br><span class="vurgu">İpucu:</span> "far from" gördüğünde hemen ardından gelen sıfat veya fiili olumsuzla — metnin tonu tersine döner.'},
-  {id:4,baslik:'Paragraf Yapısı: Topic Sentence',sure:'2:45',konu:'Paragraf · Strateji',emoji:'📖',renk:'#0369a1',ilerleme:60,transkript:'Her akademik paragrafın <b>Topic Sentence</b>\'ı vardır — genellikle <span class="vurgu">ilk veya son cümlede</span>.<br><br>ÖSYM\'nin "paragrafın ana fikri" soruları bu cümleyi bulduruntur.<br><br>Hızlı yöntem:<br>1. İlk cümleyi oku<br>2. Son cümleyi oku<br>3. İkisi arasında bağlantı var mı? → Cevap orada.'},
-  {id:5,baslik:'S+V+O Kırılımı: Uzun Cümleler',sure:'3:28',konu:'Yapı · Analiz',emoji:'📐',renk:'#0284c7',ilerleme:0,transkript:'Uzun ve karmaşık ÖSYM cümleleri sizi korkutmasın.<br><br><b>S+V+O kırılım yöntemi:</b><br>1. Virgülleri ve bağlaçları bul<br>2. Ana özneyi işaretle (kim/ne)<br>3. Ana fiili bul (ne yapıyor)<br>4. Nesneyi belirle (kime/neye)<br><br><span class="vurgu">Parantez içleri, ara cümleler ve past participle\'lar ana yapıyı gizler — onları geç!</span>'},
-  {id:6,baslik:'Vocabulary: Academic Word List',sure:'2:15',konu:'Kelime · Akademik',emoji:'📚',renk:'#16a34a',ilerleme:80,transkript:'ÖSYM\'de tekrar eden <b>60 temel akademik kelime</b> vardır.<br><br>En kritik 10\'u:<br><span class="vurgu">albeit, notwithstanding, insofar, hitherto, purported, ostensibly, predicated, stipulate, corollary, denote</span><br><br>Bu kelimeleri bağlamla öğren — kartlara ekle, cümle içinde gör.'},
+  {id:1,baslik:'Modal Perfect: must have done',sure:'2:34',konu:'Gramer · Tuzak',emoji:'',renk:'#365C4B',ilerleme:0,transkript:'<b>Modal Perfect</b> yapısı ÖSYM\'nin en sevdiği tuzaklardan biridir.<br><br>Formül: <span class="vurgu">must / should / could / can\'t + have + V3</span><br><br>Bu yapı her zaman <span class="vurgu">geçmişe yönelik bir çıkarım</span> veya pişmanlık ifade eder.<br><br>Örnek: <em>"She must have left early"</em> → Erken gitmiş olmalı (ben yokken).<br><br>Tuzak: Geniş zaman anlamı gibi görünür, ama değildir!'},
+  {id:2,baslik:'Despite vs Although: Zıtlık Sinyali',sure:'3:12',konu:'Sinyal · Bağlaç',emoji:'',renk:'#B91C1C',ilerleme:0,transkript:'<b>Zıtlık sinyalleri</b>, bir cümlenin ikinci yarısının ilk yarısıyla çelişeceğini söyler.<br><br><span class="vurgu">Despite / In spite of</span> → isim grubu alır (despite THE FACT THAT)<br><span class="vurgu">Although / Even though</span> → cümle alır (although SHE TRIED)<br><br>ÖSYM tuzağı: İkisini birbirinin yerine koyar. Sadece sentaksı kontrol et!'},
+  {id:3,baslik:'Far from: Gizli Olumsuz',sure:'1:58',konu:'Tuzak · Sinyal',emoji:'',renk:'#7A5C48',ilerleme:0,transkript:'<b>Far from</b> görünürde masum, aslında güçlü bir olumsuz sinyaldir.<br><br>"far from perfect" = hiç mükemmel değil<br>"far from over" = bitmekten çok uzak<br><br><span class="vurgu">İpucu:</span> "far from" gördüğünde hemen ardından gelen sıfat veya fiili olumsuzla — metnin tonu tersine döner.'},
+  {id:4,baslik:'Paragraf Yapısı: Topic Sentence',sure:'2:45',konu:'Paragraf · Strateji',emoji:'',renk:'#365C4B',ilerleme:0,transkript:'Her akademik paragrafın <b>Topic Sentence</b>\'ı vardır — genellikle <span class="vurgu">ilk veya son cümlede</span>.<br><br>ÖSYM\'nin "paragrafın ana fikri" soruları bu cümleyi bulduruntur.<br><br>Hızlı yöntem:<br>1. İlk cümleyi oku<br>2. Son cümleyi oku<br>3. İkisi arasında bağlantı var mı? → Cevap orada.'},
+  {id:5,baslik:'S+V+O Kırılımı: Uzun Cümleler',sure:'3:28',konu:'Yapı · Analiz',emoji:'',renk:'#365C4B',ilerleme:0,transkript:'Uzun ve karmaşık ÖSYM cümleleri sizi korkutmasın.<br><br><b>S+V+O kırılım yöntemi:</b><br>1. Virgülleri ve bağlaçları bul<br>2. Ana özneyi işaretle (kim/ne)<br>3. Ana fiili bul (ne yapıyor)<br>4. Nesneyi belirle (kime/neye)<br><br><span class="vurgu">Parantez içleri, ara cümleler ve past participle\'lar ana yapıyı gizler — onları geç!</span>'},
+  {id:6,baslik:'Vocabulary: Academic Word List',sure:'2:15',konu:'Kelime · Akademik',emoji:'',renk:'#2F7A55',ilerleme:0,transkript:'ÖSYM\'de tekrar eden <b>60 temel akademik kelime</b> vardır.<br><br>En kritik 10\'u:<br><span class="vurgu">albeit, notwithstanding, insofar, hitherto, purported, ostensibly, predicated, stipulate, corollary, denote</span><br><br>Bu kelimeleri bağlamla öğren — kartlara ekle, cümle içinde gör.'},
 ];
 
 function mikroDersleriRender(){
@@ -16439,7 +16439,7 @@ function mikroDersleriRender(){
       <div class="micro-thumb" style="background:linear-gradient(135deg,${d.renk}22,${d.renk}44)">
         <div class="micro-play"><span style="margin-left:3px">▶</span></div>
         <div class="micro-sure">${d.sure}</div>
-        <div style="position:absolute;top:10px;left:12px;font-size:24px">${d.emoji}</div>
+        <div class="micro-no">${d.id}</div>
       </div>
       <div class="micro-info">
         <div class="micro-baslik" style="color:var(--ink)">${d.baslik}</div>
@@ -16465,12 +16465,12 @@ function mikroDersAc(id){
   modal.innerHTML=`
     <div class="ders-modal-ic">
       <div class="ders-modal-header">
-        <div class="ders-modal-baslik">${d.emoji} ${d.baslik}</div>
+        <div class="ders-modal-baslik">${d.baslik}</div>
         <button class="ders-kapat" onclick="document.getElementById('ders-modal').classList.remove('open')">×</button>
       </div>
       <div class="ders-video-alan">
         <div class="ders-video-ic">
-          <div class="emoji">${d.emoji}</div>
+          <div class="emoji"><svg class="ik" aria-hidden="true"><use href="#ik-video"/></svg></div>
           <p>${d.konu}</p>
           <div style="margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(255,255,255,.62)">${d.sure} · TTS Aktif</div>
         </div>
@@ -16549,9 +16549,9 @@ const _orijinalDAns=window.dAns;
 // performansı, streak takvimi, haftalık ilerleme
 // ============================================================
 const IST_KATEGORILER=[
-  {tip:'sinyal',ad:'Sinyal Lab',renk:'#38bdf8'},
-  {tip:'kelime',ad:'Kelime Kartları',renk:'#16a34a'},
-  {tip:'tuzak',ad:'Günlük Tuzak',renk:'#dc2626'},
+  {tip:'sinyal',ad:'Sinyal Lab',renk:'#365C4B'},
+  {tip:'kelime',ad:'Kelime Kartları',renk:'#7A5C48'},
+  {tip:'tuzak',ad:'Günlük Tuzak',renk:'#B91C1C'},
 ];
 function istatistikRender(){
   const streak=streakLoad();
@@ -16606,7 +16606,7 @@ function istatistikRender(){
     const maxSayi=Math.max(1,...hucreler.map(h=>h.sayi));
     takvimEl.innerHTML=hucreler.map(h=>{
       const yogunluk=h.sayi===0?0:Math.min(1,0.2+0.8*(h.sayi/maxSayi));
-      const bg=h.sayi===0?'var(--border)':`rgba(56,189,248,${yogunluk.toFixed(2)})`;
+      const bg=h.sayi===0?'var(--border)':`rgba(54,92,75,${yogunluk.toFixed(2)})`;
       return `<div class="ist-takvim-cell" style="background:${bg}" title="${h.anahtar}: ${h.sayi} soru"></div>`;
     }).join('');
   }
@@ -16635,8 +16635,8 @@ function istatistikRender(){
     haftaBarEl.innerHTML=gunlukVeri.map(g=>`
       <div class="ist-hafta-col">
         <div style="font-size:10px;color:var(--ink);font-weight:700">${g.sayi||''}</div>
-        <div class="ist-hafta-fill" style="height:${g.sayi===0?'3px':Math.max(6,Math.round((g.sayi/maxG)*80))+'px'};${g.bugunMu?'background:#0284c7':''}"></div>
-        <div class="ist-hafta-gun-lbl" style="${g.bugunMu?'color:#7dd3fc;font-weight:700':''}">${g.lbl}</div>
+        <div class="ist-hafta-fill" style="height:${g.sayi===0?'3px':Math.max(6,Math.round((g.sayi/maxG)*80))+'px'};${g.bugunMu?'background:#2B4A3C':''}"></div>
+        <div class="ist-hafta-gun-lbl" style="${g.bugunMu?'color:#2B4A3C;font-weight:700':''}">${g.lbl}</div>
       </div>
     `).join('');
   }
@@ -16656,8 +16656,8 @@ function istatistikRender(){
         const eh=cgOzet.enHataliSinyal;
         zayifEl.innerHTML=[
           `<div>Toplam <b>${cgOzet.toplamCevap}</b> cevap · <b>${cgOzet.genelDogruluk}%</b> genel doğruluk${cgOzet.recentAccuracy!==null?' · son 20\'de <b>'+cgOzet.recentAccuracy+'%</b>':''}</div>`,
-          ez?`<div style="margin-top:4px">🔻 En zayıf konu: <b>${ez.konu}</b> — ${ez.accuracy}% (${ez.attempts} deneme)</div>`:'',
-          (eh&&eh!==ez)?`<div style="margin-top:4px">⚠️ En çok hata yapılan sinyal: <b>${eh.konu}</b> (${eh.incorrect} yanlış)</div>`:'',
+          ez?`<div style="margin-top:4px">En zayıf konu: <b>${ez.konu}</b> — ${ez.accuracy}% (${ez.attempts} deneme)</div>`:'',
+          (eh&&eh!==ez)?`<div style="margin-top:4px">En çok hata yapılan sinyal: <b>${eh.konu}</b> (${eh.incorrect} yanlış)</div>`:'',
         ].join('');
       }
       const sonEl=document.getElementById('ist-son-cevaplar');
@@ -16665,7 +16665,7 @@ function istatistikRender(){
         sonEl.innerHTML=cgOzet.sonCevaplar.slice(0,5).map(k=>`
           <div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:13px;border-bottom:1px solid var(--border)">
             <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(k.signal||k.topic||k.modul||'').toString().slice(0,40)}</span>
-            <span style="color:${k.isCorrect?'#22c55e':'var(--trap)'};flex-shrink:0">${k.isCorrect?'✅':'❌'}</span>
+            <span style="color:${k.isCorrect?'#2F7A55':'var(--trap)'};flex-shrink:0;font-weight:700">${k.isCorrect?'✓':'✗'}</span>
           </div>
         `).join('');
       }
