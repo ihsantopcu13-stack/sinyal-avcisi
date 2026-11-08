@@ -20,8 +20,12 @@ const b = P.paylasimBilgisi({ querySelector: () => ({ href: "https://sinyal-avci
 kontrol("WhatsApp bağlantısı", b.whatsapp.startsWith("https://wa.me/?text=") && decodeURIComponent(b.whatsapp).includes("https://sinyal-avcisi.com/sinyal-soru"));
 kontrol("Telegram bağlantısı", b.telegram.startsWith("https://t.me/share/url?url=") && b.telegram.includes(encodeURIComponent("https://sinyal-avcisi.com/sinyal-soru")));
 kontrol("kanonik yoksa site adresi", P.paylasimBilgisi({ querySelector: () => null }).url === "https://sinyal-avcisi.com");
-kontrol("indirme paylaşıma bağlı değil (kilit yok)", !/pdf_unlocked|aria-disabled|kilitli/.test(js));
-kontrol("şartsız metni var", js.includes("Kayıt ya da paylaşım şartı yok"));
+kontrol("kilit anahtarı pdf_unlocked", P.LS === "pdf_unlocked" && js.includes("localStorage.setItem(LS, 'true')"));
+kontrol("yenilemede kayıt okunur", js.includes("localStorage.getItem(LS) === 'true'"));
+kontrol("üç paylaşım yolu kilidi açar", ["'whatsapp'", "'telegram'", "'kopya'"].every((k) => js.includes("paylasildi(" + k + ")") || js.includes(k)));
+kontrol("kilitliyken indirme bağlantısı yok", js.includes("indir.removeAttribute('href')") && js.includes("e.preventDefault()"));
+const zit = readFileSync(path.join(ROOT, "zitlik-baglaclari.html"), "utf-8");
+kontrol("zıtlık sayfasında doğrudan indirme şartsız kalır (gönderilerdeki söz)", zit.includes('sinyal-kelime-rehberi.pdf" download'));
 kontrol("sunucuya veri gönderilmez", !/fetch\(|XMLHttpRequest|sendBeacon/.test(js));
 for (const f of ["sinyal-soru.html", "sinyal-kartlari.html"]) {
   const h = readFileSync(path.join(ROOT, f), "utf-8");

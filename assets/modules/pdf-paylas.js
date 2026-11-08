@@ -3,8 +3,11 @@
 // ============================================================
 // /sinyal-soru ve /sinyal-kartlari sayfalarında <div id="pdf-paylas"> içine
 // banner + modal kurar. PDF her zaman ücretsiz ve şartsız iner; paylaşım
-// düğmeleri (WhatsApp, Telegram, kopyala) yalnız teşvik içindir; indirme
-// paylaşıma bağlı DEĞİL (İhsan kararı, 8 Kas 2026: kilitsiz). Üyelik, kayıt, sunucu yok.
+// İhsan isteği (8 Kas 2026, 21:58): indirme düğmesi bir paylaşım işleminden
+// (WhatsApp, Telegram, Bağlantıyı kopyala) sonra açılır; localStorage 'pdf_unlocked'
+// kaydı kalıcıdır, sayfa yenilense de açık kalır. Üyelik, kayıt, sunucu yok.
+// Not: /zitlik-baglaclari sayfasındaki doğrudan indirme bilerek şartsız kalır
+// (yayınlanan gönderiler "paylaşım şartı yok" diyor).
 // ============================================================
 (function (kok) {
   'use strict';
@@ -12,6 +15,9 @@
   var PDF = '/assets/sinyal-avcisi-100-sinyal-kelime-rehberi.pdf';
   var PDF_ADI = '100 Sinyal Kelime ve Tuzaklar Rehberi';
   var SITE = 'https://sinyal-avcisi.com';
+  var LS = 'pdf_unlocked';
+  function acikMi() { try { return localStorage.getItem(LS) === 'true'; } catch (e) { return false; } }
+  function kilidiAc() { try { localStorage.setItem(LS, 'true'); } catch (e) {} }
 
   /** Paylaşım metni ve bağlantısı. Sayfanın kanonik adresini kullanır. */
   function paylasimBilgisi(belge) {
@@ -44,15 +50,16 @@
   function baslat(kap) {
     if (!kap) return;
     var P = paylasimBilgisi(document);
+    var acik = acikMi();
 
     // ---- banner ----
     var banner = el('section', 'pp-banner');
     banner.setAttribute('aria-label', 'Ücretsiz PDF rehber');
     var bm = el('div', 'pp-banner-metin');
-    bm.append(el('b', null, 'Ücretsiz PDF: ' + PDF_ADI), el('span', null, '100 kelime, her biri için kural, örnek ve tuzak. Yazdır, istediğin yerde çalış.'));
+    bm.append(el('b', null, 'Bonus PDF Rehberi Kazan'), el('span', null, PDF_ADI + ': 100 kelime, her biri için kural, örnek ve tuzak. Ücretsiz.'));
     var bAc = el('button', 'pp-btn');
     bAc.type = 'button';
-    bAc.innerHTML = IKON.indir + '<span>PDF rehberini al</span>';
+    bAc.innerHTML = IKON.indir + '<span>Rehberi kazan</span>';
     banner.append(bm, bAc);
 
     // ---- modal ----
@@ -60,22 +67,27 @@
     d.setAttribute('aria-labelledby', 'pp-baslik');
     var ic = el('div', 'pp-ic');
     var ust = el('div', 'pp-ust');
-    var h = el('h2', null, 'YDS ve YÖKDİL: ' + PDF_ADI + ' (PDF)');
+    var h = el('h2', null, 'YDS & YÖKDİL 100 Sinyal Kelime ve Tuzak Rehberi (PDF)');
     h.id = 'pp-baslik';
     var kapat = el('button', 'pp-kapat', '×');
     kapat.type = 'button';
     kapat.setAttribute('aria-label', 'Kapat');
     ust.append(h, kapat);
 
-    var aciklama = el('p', 'pp-aciklama', 'Rehber ücretsiz. Kayıt ya da paylaşım şartı yok, hemen indir. Faydalı bulursan bir arkadaşınla ya da çalışma grubunla paylaş.');
+    var aciklama = el('p', 'pp-aciklama', 'Sitemizi 1 arkadaşınla veya çalışma grubunla paylaş, 100 sinyal kelimelik özel PDF rehberinin indirme bağlantısını anında aç!');
     var indir = el('a', 'pp-btn pp-indir');
-    indir.href = PDF;
-    indir.setAttribute('download', '');
-    indir.innerHTML = IKON.indir + '<span>PDF rehberini indir</span>';
-    indir.addEventListener('click', function () { olay('pdf_rehber_indir'); });
-    var not = el('p', 'pp-not', '23 sayfa, yaklaşık 0,4 MB.');
+    indir.innerHTML = IKON.indir + '<span>PDF Rehberini İndir</span>';
+    indir.addEventListener('click', function (e) {
+      if (!acik) { e.preventDefault(); return; }
+      olay('pdf_rehber_indir');
+    });
+    var not = el('p', 'pp-not');
+    var link = el('a', 'pp-link');
+    link.href = PDF;
+    link.setAttribute('download', '');
+    link.textContent = SITE.replace('https://', '') + PDF;
 
-    var pb = el('p', 'pp-paylas-baslik', 'Bir arkadaşına da gönder');
+    var pb = el('p', 'pp-paylas-baslik', '1. Paylaş');
     var pl = el('div', 'pp-paylas');
     function paylasBtn(ikon, yazi, href) {
       var b = el(href ? 'a' : 'button', 'pp-btn pp-ikincil');
@@ -90,9 +102,29 @@
     var durum = el('p', 'pp-durum');
     durum.setAttribute('aria-live', 'polite');
 
+    var ib = el('p', 'pp-paylas-baslik', '2. İndir');
+    function kilitCiz() {
+      if (acik) {
+        indir.href = PDF;
+        indir.setAttribute('download', '');
+        indir.removeAttribute('aria-disabled');
+        indir.removeAttribute('tabindex');
+        not.textContent = '';
+        not.append('Kilit açık. 23 sayfa, yaklaşık 0,4 MB. Bağlantı: ', link);
+      } else {
+        indir.removeAttribute('href');
+        indir.setAttribute('aria-disabled', 'true');
+        indir.setAttribute('role', 'link');
+        indir.setAttribute('tabindex', '-1');
+        not.textContent = 'Paylaşım düğmelerinden birine bastığında bu düğme açılır.';
+      }
+    }
     function paylasildi(kanal) {
       olay('pdf_rehber_paylas', { kanal: kanal });
-      if (kanal !== 'kopya') durum.textContent = 'Teşekkürler, paylaştığın için!';
+      var yeni = !acik;
+      acik = true; kilidiAc(); kilitCiz();
+      if (kanal !== 'kopya') durum.textContent = yeni ? 'Teşekkürler! İndirme bağlantısı açıldı.' : 'Teşekkürler, paylaştığın için!';
+      else if (yeni) durum.textContent += ' İndirme bağlantısı açıldı.';
     }
     wa.addEventListener('click', function () { paylasildi('whatsapp'); });
     tg.addEventListener('click', function () { paylasildi('telegram'); });
@@ -103,8 +135,9 @@
     });
 
     ic.append(ust, aciklama);
-    ic.append(indir, not, pb, pl, durum);
+    ic.append(pb, pl, durum, ib, indir, not);
     d.append(ic);
+    kilitCiz();
 
     bAc.addEventListener('click', function () {
       olay('pdf_rehber_ac');
@@ -125,7 +158,7 @@
     } catch (e) {}
   }
 
-  kok.PdfPaylas = { PDF: PDF, paylasimBilgisi: paylasimBilgisi, baslat: baslat };
+  kok.PdfPaylas = { PDF: PDF, LS: LS, paylasimBilgisi: paylasimBilgisi, baslat: baslat };
   if (typeof document !== 'undefined' && document.getElementById) {
     var k = document.getElementById('pdf-paylas');
     if (k) baslat(k);

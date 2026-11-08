@@ -98,3 +98,6 @@ p{margin:0}
 .pp-paylas .pp-btn{justify-content:flex-start}
 .pp-durum{font-size:15.5px;font-weight:600;color:var(--dogru);min-height:1.4em}
 @media (min-width:480px){.pp-paylas{grid-template-columns:1fr 1fr 1fr}.pp-paylas .pp-btn{justify-content:center;padding:10px 8px;font-size:15.5px}}
+.pp-indir[aria-disabled="true"]{background:var(--kart-2);border-color:var(--cizgi);color:var(--ikincil);cursor:not-allowed}
+.pp-link{word-break:break-all;font-weight:600}
+.pp-durum:empty{display:none}
