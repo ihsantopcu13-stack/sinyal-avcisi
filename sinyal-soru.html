@@ -34,7 +34,6 @@
     .ss-kart{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;padding:20px;box-shadow:var(--golge);display:flex;flex-direction:column;gap:14px;scroll-margin-top:72px}
     .ss-ust{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
     .ss-sayac{font:600 15px var(--f-mono);letter-spacing:.06em;color:var(--vurgu)}
-    .ss-skor{font-size:15.5px;color:var(--ikincil);font-weight:600}
     .ss-etiketler{display:flex;flex-wrap:wrap;gap:6px}
     .ss-etiket{font-size:14.5px;font-weight:600;color:var(--ikincil);background:var(--kart-2);border:1px solid var(--cizgi);border-radius:999px;padding:3px 11px}
     .ss-yonerge{font-size:17px;font-weight:600;color:var(--ikincil)}
@@ -87,6 +86,32 @@
     .ss-btn:disabled{opacity:.45;cursor:default}
     .ss-ana{background:var(--vurgu);border-color:var(--vurgu);color:var(--vurgu-ust)}
     .ss-ana:hover{background:var(--vurgu-2);border-color:var(--vurgu-2)}
+    /* İlerleme Özetim (assets/modules/sinyal-istatistik.js) */
+    .oz{background:var(--kart);border:1px solid var(--cizgi);border-radius:16px;box-shadow:var(--golge)}
+    .oz-baslik{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;min-height:56px;padding:12px 18px;border-radius:16px}
+    .oz-baslik::-webkit-details-marker{display:none}
+    .oz-ad{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+    .oz-ad::before{content:"";width:9px;height:9px;border-right:2.5px solid var(--vurgu);border-bottom:2.5px solid var(--vurgu);transform:rotate(-45deg);transition:transform .15s}
+    .oz[open] .oz-ad::before{transform:rotate(45deg)}
+    .oz-kisa{font:600 15px var(--f-mono);color:var(--ikincil)}
+    .oz-govde{display:flex;flex-direction:column;gap:14px;padding:4px 18px 18px;border-top:1px solid var(--cizgi);padding-top:14px}
+    .oz-bos{color:var(--ikincil);font-size:16.5px}
+    .oz-sayilar{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .oz-sayi{background:var(--kart-2);border:1px solid var(--cizgi);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column}
+    .oz-sayi b{font-size:30px;line-height:1.15;color:var(--vurgu)}
+    .oz-sayi span{font-size:15px;color:var(--ikincil);font-weight:600}
+    .oz-cubuk{height:10px;border-radius:99px;background:var(--kart-2);border:1px solid var(--cizgi);overflow:hidden}
+    .oz-cubuk span{display:block;height:100%;background:var(--dogru);border-radius:99px;transition:width .3s}
+    .oz-takil h3{font:700 13.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ikincil);margin-bottom:8px}
+    .oz-takil ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+    .oz-takil li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+    .oz-kelime{font-weight:700;color:var(--c);background:var(--z);border-bottom:2.5px solid var(--c);border-radius:6px 6px 2px 2px;padding:1px 7px;font-size:17px}
+    .oz-tur{font-size:14.5px;font-weight:600;color:var(--ikincil)}
+    .oz-yanlis{margin-left:auto;font-size:14.5px;font-weight:600;color:var(--yanlis)}
+    .oz-not{font-size:15.5px;color:var(--ikincil);margin-top:8px}
+    .oz-sil{align-self:flex-start;min-height:44px;padding:8px 14px;border-radius:10px;border:1.5px solid var(--cizgi-guclu);background:transparent;font-size:15px;font-weight:600;color:var(--ikincil);cursor:pointer}
+    .oz-sil:hover{border-color:var(--yanlis);color:var(--yanlis)}
+    @media (prefers-reduced-motion:reduce){.oz-cubuk span,.oz-ad::before{transition:none}}
     .sonraki-adim{font-size:17px;color:var(--ikincil)}
     @media (max-width:420px){.ss-kart{padding:16px 14px}.ss-btn{padding:10px 14px}}
   </style>
@@ -107,6 +132,8 @@
     <span class="ucretsiz">Ücretsiz · Üyelik yok · Her şey açık</span>
   </header>
 
+  <details class="oz" id="ilerleme" aria-label="İlerleme Özetim"></details>
+
   <section class="anahtar" id="anahtar" aria-label="Renklerin anlamı">
     <span class="anahtar-baslik">Renklerin anlamı</span>
   </section>
@@ -118,7 +145,8 @@
 </main>
 
 <script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
-<script src="/assets/modules/sinyal-soru.js?v=20261108"></script>
+<script src="/assets/modules/sinyal-soru.js?v=20261109"></script>
+<script src="/assets/modules/sinyal-istatistik.js?v=20261109"></script>
 <script>
 (function(){
   var S=window.SinyalSoru;
@@ -131,9 +159,11 @@
     r.title=S.SINYAL_TIPLERI[k].ozet;
     anahtar.appendChild(r);
   });
+  // İlerleme Özetim: cevapları tarayıcıda sayar, sayfa yenilemeden güncellenir
+  window.SinyalIstatistik.baslat(document.getElementById('ilerleme'), S.SINYAL_TIPLERI, S.CEVAP_OLAYI);
   // Sorular
   var panel=document.getElementById('ss-panel');
-  fetch('/assets/data/sinyal-sorular.json?v=20261108').then(function(r){return r.json();})
+  fetch('/assets/data/sinyal-sorular.json?v=20261109').then(function(r){return r.json();})
     .then(function(sorular){S.baslat(panel,sorular);})
     .catch(function(){panel.textContent='Sorular yüklenemedi. Sayfayı yenile.';});
 })();
