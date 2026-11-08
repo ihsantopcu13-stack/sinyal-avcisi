@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- BU DOSYA ÜRETİLİR: scripts/generate-sinyal-rehber.mjs (şablon: scripts/sinyal-rehber/zitlik-sablon.html). Elle düzenleme. -->
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sık Çıkan 10 Zıtlık Bağlacı (YDS / YÖKDİL) — Sinyal Avcısı</title>
+  <meta name="description" content="YDS ve YÖKDİL'de sık çıkan 10 zıtlık bağlacı tek sayfada: although, despite, however, whereas, while ve diğerleri. Her biri için kural, örnek ve tuzak. Ücretsiz PDF rehber.">
+  <meta property="og:title" content="Sık Çıkan 10 Zıtlık Bağlacı — Sinyal Avcısı">
+  <meta property="og:description" content="10 zıtlık bağlacı tek sayfada: kural, örnek, tuzak. Ücretsiz 100 sinyal kelime PDF rehberi.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/zitlik-baglaclari">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <script>
+    (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
+    document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
+  </script>
+  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261108">
+  <style>
+    .pdf-kutu{background:var(--kart);border:2px solid var(--vurgu);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--golge)}
+    .pdf-kutu h2{font-size:22px}
+    .pdf-kutu p{color:var(--ikincil);font-size:17px}
+    .pdf-btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:12px 22px;border-radius:12px;background:var(--vurgu);color:var(--vurgu-ust);font-size:18px;font-weight:700;text-decoration:none;align-self:flex-start}
+    .pdf-btn:hover{background:var(--vurgu-2)}
+    .pdf-not{font-size:15px!important}
+    .tablo-kutu{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;padding:6px 0;box-shadow:var(--golge);overflow:hidden}
+    .tablo-kutu h2{font-size:22px;padding:14px 18px 6px}
+    table{width:100%;border-collapse:collapse;font-size:17px}
+    th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--cizgi);vertical-align:top}
+    th{font:600 13.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ikincil)}
+    td:first-child,th:first-child{padding-left:18px}
+    td a{font-weight:700;color:var(--zitlik);text-decoration:none;border-bottom:2px solid var(--zitlik)}
+    .zb{background:var(--kart);border:1px solid var(--cizgi);border-left:6px solid var(--zitlik);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--golge);scroll-margin-top:72px}
+    .zb-ust{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px}
+    .zb-no{font:600 15px var(--f-mono);color:var(--zitlik);background:var(--zitlik-z);border-radius:8px;padding:2px 9px}
+    .zb-ust h2{font-size:26px;color:var(--metin)}
+    .zb-tr{font-size:18px;color:var(--ikincil);font-weight:600}
+    .zb-blok h3{font:700 13.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ikincil);margin-bottom:4px}
+    .zb-blok p{font-size:17.5px}
+    .zb-ornek{font-size:18.5px!important;font-weight:500}
+    .zb-ornek mark{font-weight:700;color:var(--c);background:var(--z);border-bottom:2.5px solid var(--c);border-radius:5px 5px 2px 2px;padding:0 4px}
+    .zb-ornek-tr{color:var(--ikincil);margin-top:4px}
+    .zb-tuzak{background:var(--yanlis-zemin);border-radius:10px;padding:10px 12px}
+    .zb-tuzak h3{color:var(--yanlis)}
+    .devam{display:flex;flex-direction:column;gap:10px;background:var(--kart-2);border:1px solid var(--cizgi);border-radius:16px;padding:18px 20px}
+    .devam h2{font-size:22px}
+    .devam ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:17.5px}
+    @media (max-width:420px){th,td{padding:9px 8px;font-size:16px}td:first-child,th:first-child{padding-left:12px}.zb{padding:16px 14px}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="/">Sinyal Avcısı</a>
+  <div class="nav-sag">
+    <button type="button" class="tema-btn" id="tema-btn" aria-pressed="false">Koyu tema</button>
+    <a class="nav-back" href="/">← Ana sayfa</a>
+  </div>
+</nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">YDS · YÖKDİL · Zıtlık bağlaçları</div>
+    <h1>Sık çıkan 10 zıtlık bağlacı, tek sayfada</h1>
+    <p class="lead">Boşluk sorularında zıtlık bağlacı çok sık gelir. Her biri için kural, örnek ve tuzak burada. Önce tabloya bak, sonra tek tek oku.</p>
+    <span class="ucretsiz">Ücretsiz · Üyelik yok · Her şey açık</span>
+  </header>
+
+  <section class="pdf-kutu" aria-label="PDF rehber">
+    <h2>{{PDF_ADI}}</h2>
+    <p>Bu 10 bağlaç ve {{KART_SAYISI}} sinyal kelimenin tamamı tek PDF'te. Her kelime için kural, örnek ve tuzak var. İndir, yazdır, istediğin yerde çalış.</p>
+    <a class="pdf-btn" href="{{PDF_YOLU}}" download>PDF'i ücretsiz indir</a>
+    <p class="pdf-not">Kayıt, paylaşım ya da e-posta istemiyoruz. Doğrudan iner.</p>
+  </section>
+
+  <section class="tablo-kutu" aria-label="Hızlı tablo">
+    <h2>Hızlı tablo</h2>
+    <table>
+      <thead><tr><th>Bağlaç</th><th>Anlamı</th><th>Arkasından</th></tr></thead>
+      <tbody>
+          {{TABLO}}
+      </tbody>
+    </table>
+  </section>
+{{BOLUMLER}}
+
+  <section class="devam" aria-label="Sıradaki adım">
+    <h2>Şimdi dene</h2>
+    <ul>
+      <li><a href="/sinyal-soru">Sinyal kelimeli sorular</a>: zıtlık bağlacı olan soruları çöz, çözümü hemen gör.</li>
+      <li><a href="/sinyal-kartlari">Sinyal kelime kartları</a>: {{KART_SAYISI}} kelimeyi kartla tekrar et.</li>
+    </ul>
+    <p class="pdf-not">Sınav biçimiyle ilgili güncel bilgiyi ÖSYM'nin sitesinden kontrol et.</p>
+  </section>
+</main>
+<script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
+</body>
+</html>

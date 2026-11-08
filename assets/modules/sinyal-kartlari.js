@@ -14,6 +14,17 @@
   var TURLER_YEDEK = { zitlik: { ad: 'Zıtlık' }, sebep: { ad: 'Sebep-sonuç' }, zaman: { ad: 'Zaman' }, kosul: { ad: 'Koşul' }, ekleme: { ad: 'Ekleme' }, olumsuz: { ad: 'Gizli olumsuz' } };
   function turler() { return (kok.SinyalSoru && kok.SinyalSoru.SINYAL_TIPLERI) || TURLER_YEDEK; }
 
+  // Kelimeyi örnek cümlede kelime sınırına dikkat ederek bulur ("as" → "has" içinde sayılmaz).
+  function harfMi(c) { return !!c && /[A-Za-z\u00C0-\u024F]/.test(c); }
+  function bul(metin, aranan, bas) {
+    var m = metin.toLowerCase(), a = aranan.toLowerCase(), i = m.indexOf(a, bas || 0);
+    while (i !== -1) {
+      if (!harfMi(metin.charAt(i - 1)) && !harfMi(metin.charAt(i + a.length))) return i;
+      i = m.indexOf(a, i + 1);
+    }
+    return -1;
+  }
+
   /** Kartın biçimini denetler. Boş dizi = sorun yok. */
   function kartDogrula(k) {
     var h = [], ad = (k && k.word) || '(adsız)';
@@ -25,7 +36,7 @@
     if (!turler()[k.type]) hata('bilinmeyen type: ' + k.type);
     if (!SEVIYELER[k.level]) hata('level kolay, orta ya da zor olmalı');
     if (k.word && k.ornek) {
-      var eksik = k.word.split(/\s*\.\.\.\s*/).filter(function (p) { return k.ornek.toLowerCase().indexOf(p.toLowerCase()) === -1; });
+      var eksik = k.word.split(/\s*\.\.\.\s*/).filter(function (p) { return bul(k.ornek, p, 0) === -1; });
       if (eksik.length) hata('örnek cümlede "' + eksik.join(', ') + '" geçmiyor');
     }
     return h;
@@ -45,11 +56,11 @@
 
   /** Örnek cümlede sinyal kelimeyi bulup parçalara ayırır (vurgu için). */
   function ornekParcala(ornek, word) {
-    var parcalar = [], kalan = ornek, alt = ornek.toLowerCase();
+    var parcalar = [], kalan = ornek;
     var aranan = word.split(/\s*\.\.\.\s*/);
     var imlec = 0;
     aranan.forEach(function (p) {
-      var i = alt.indexOf(p.toLowerCase(), imlec);
+      var i = bul(ornek, p, imlec);
       if (i === -1) return;
       if (i > imlec) parcalar.push({ v: false, m: ornek.slice(imlec, i) });
       parcalar.push({ v: true, m: ornek.slice(i, i + p.length) });
@@ -59,7 +70,7 @@
     return parcalar.length ? parcalar : [{ v: false, m: kalan }];
   }
 
-  var Cekirdek = { SEVIYELER: SEVIYELER, kartDogrula: kartDogrula, filtrele: filtrele, ornekParcala: ornekParcala };
+  var Cekirdek = { SEVIYELER: SEVIYELER, kartDogrula: kartDogrula, bul: bul, filtrele: filtrele, ornekParcala: ornekParcala };
 
   // ======================= ARAYÜZ =======================
   var LS = 'sa_sinyal_kart_v1';

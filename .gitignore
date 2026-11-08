@@ -16,3 +16,4 @@ service-account*.json
 # Python derleme önbelleği (otomatik üretilir, repoya girmemeli)
 __pycache__/
 *.pyc
+.rehber-tmp/
