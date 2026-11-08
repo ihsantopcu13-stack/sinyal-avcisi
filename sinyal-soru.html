@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sinyal Kelimeli Soru Çözümü — Sinyal Avcısı</title>
+  <meta name="description" content="YDS ve YÖKDİL sorularında sinyal kelimeler renkli. Kelimeye dokun, sınavdaki işlevini gör. Şıkkı seç, anında doğru ya da yanlış öğren. Ücretsiz, üyelik yok.">
+  <meta property="og:title" content="Sinyal Kelimeli Soru Çözümü — Sinyal Avcısı">
+  <meta property="og:description" content="Renkli sinyal kelimeye dokun, soruyu çöz, çözümü ve sinyal analizini gör. Tamamen ücretsiz.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/sinyal-soru">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <!-- GA4 — mevcut measurement ID; yalnız sayfa görüntüleme ve "sinyal_soru_cevap" (soru + doğru/yanlış) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <script>
+    // Tema: kullanıcı seçtiyse onu, seçmediyse açık temayı kullan (sitenin Adaçayı vitrini).
+    (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
+    document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
+  </script>
+  <style>
+    /* Adaçayı V4 açık tema (varsayılan) + göz yormayan koyu tema.
+       Sarı/turuncu/altın yok. Yazılar büyük, kontrast yüksek. */
+    :root{
+      --bg:#F8F7F3; --kart:#FFFFFF; --kart-2:#EEF3EC; --cizgi:#DDE3DA; --cizgi-guclu:#A8BFA8;
+      --metin:#1F2A24; --ikincil:#4F5F57; --vurgu:#365C4B; --vurgu-2:#2B4A3C; --vurgu-zemin:#DCE8DE; --vurgu-ust:#FFFFFF;
+      --dogru:#2F7A55; --dogru-zemin:#E3F1E7; --yanlis:#B91C1C; --yanlis-zemin:#FBEAEA;
+      --golge:0 1px 2px rgba(31,42,36,.05),0 6px 20px rgba(31,42,36,.06);
+      /* sinyal tipi renkleri: yazı / zemin */
+      --zitlik:#5B21B6; --zitlik-z:#EDE9FE;
+      --sebep:#1E40AF;  --sebep-z:#DBEAFE;
+      --zaman:#115E59;  --zaman-z:#CCFBF1;
+      --kosul:#9D174D;  --kosul-z:#FCE7F3;
+      --ekleme:#365C4B; --ekleme-z:#DCE8DE;
+      --olumsuz:#B91C1C;--olumsuz-z:#FBEAEA;
+      --anlam:#334155;  --anlam-z:#E2E8F0;
+      --yapi:#3F3F46;   --yapi-z:#F1F1F3;
+      --f-body:'IBM Plex Sans',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+      color-scheme:light;
+    }
+    :root[data-tema="koyu"]{
+      --bg:#0F1A15; --kart:#16241D; --kart-2:#1C2E25; --cizgi:#2C4136; --cizgi-guclu:#4A6B5A;
+      --metin:#EEF5F0; --ikincil:#BCCFC4; --vurgu:#A7D3B9; --vurgu-2:#C6E5D2; --vurgu-zemin:#24392E; --vurgu-ust:#0F1A15;
+      --dogru:#86EFAC; --dogru-zemin:rgba(134,239,172,.13); --yanlis:#FCA5A5; --yanlis-zemin:rgba(252,165,165,.13);
+      --golge:none;
+      --zitlik:#DDD6FE; --zitlik-z:rgba(139,92,246,.24);
+      --sebep:#BFDBFE;  --sebep-z:rgba(59,130,246,.24);
+      --zaman:#99F6E4;  --zaman-z:rgba(20,184,166,.22);
+      --kosul:#FBCFE8;  --kosul-z:rgba(236,72,153,.22);
+      --ekleme:#BBF7D0; --ekleme-z:rgba(74,222,128,.18);
+      --olumsuz:#FECACA;--olumsuz-z:rgba(239,68,68,.24);
+      --anlam:#E2E8F0;  --anlam-z:rgba(148,163,184,.24);
+      --yapi:#E4E4E7;   --yapi-z:rgba(161,161,170,.2);
+      color-scheme:dark;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    body{margin:0;background:var(--bg);color:var(--metin);font:18px/1.6 var(--f-body);-webkit-text-size-adjust:100%}
+    a{color:var(--vurgu)}
+    button{font:inherit;color:inherit}
+    button:focus-visible,a:focus-visible{outline:3px solid var(--vurgu);outline-offset:2px}
+    .nav{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--cizgi);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .nav-logo{font-weight:800;font-size:18px;color:var(--vurgu);text-decoration:none}
+    .nav-sag{display:flex;align-items:center;gap:8px}
+    .nav-back{font-size:16px;color:var(--ikincil);text-decoration:none;padding:8px 4px}
+    .tema-btn{min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--cizgi-guclu);background:var(--kart);font-size:15px;font-weight:600;cursor:pointer}
+    .wrap{max-width:760px;margin:0 auto;padding:26px 16px 64px;display:flex;flex-direction:column;gap:20px}
+    h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+    h1{font-size:clamp(30px,7vw,42px);font-weight:800;letter-spacing:-.02em}
+    p{margin:0}
+    .eyebrow{font:600 14px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--vurgu)}
+    .lead{color:var(--ikincil);margin-top:10px;font-size:19px}
+    .ucretsiz{display:inline-block;margin-top:12px;font-size:15.5px;font-weight:600;color:var(--vurgu);background:var(--vurgu-zemin);padding:6px 12px;border-radius:999px}
+
+    /* renk anahtarı */
+    .anahtar{display:flex;flex-wrap:wrap;gap:8px}
+    .anahtar-baslik{width:100%;font-size:15px;font-weight:600;color:var(--ikincil)}
+
+    /* sinyal tipleri */
+    .ss-t-zitlik{--c:var(--zitlik);--z:var(--zitlik-z)}
+    .ss-t-sebep{--c:var(--sebep);--z:var(--sebep-z)}
+    .ss-t-zaman{--c:var(--zaman);--z:var(--zaman-z)}
+    .ss-t-kosul{--c:var(--kosul);--z:var(--kosul-z)}
+    .ss-t-ekleme{--c:var(--ekleme);--z:var(--ekleme-z)}
+    .ss-t-olumsuz{--c:var(--olumsuz);--z:var(--olumsuz-z)}
+    .ss-t-anlam{--c:var(--anlam);--z:var(--anlam-z)}
+    .ss-t-yapi{--c:var(--yapi);--z:var(--yapi-z)}
+    .ss-rozet{display:inline-block;font-weight:700;font-size:15.5px;color:var(--c);background:var(--z);border-radius:8px;padding:3px 10px;border-bottom:2px solid var(--c)}
+    .ss-t-anlam.ss-rozet,.ss-t-anlam.ss-sinyal{border-bottom-style:dashed}
+    .ss-t-yapi.ss-rozet,.ss-t-yapi.ss-sinyal{border-bottom-style:dotted}
+
+    /* panel */
+    .ss-kart{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;padding:20px;box-shadow:var(--golge);display:flex;flex-direction:column;gap:14px;scroll-margin-top:72px}
+    .ss-ust{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+    .ss-sayac{font:600 15px var(--f-mono);letter-spacing:.06em;color:var(--vurgu)}
+    .ss-skor{font-size:15.5px;color:var(--ikincil);font-weight:600}
+    .ss-etiketler{display:flex;flex-wrap:wrap;gap:6px}
+    .ss-etiket{font-size:14.5px;font-weight:600;color:var(--ikincil);background:var(--kart-2);border:1px solid var(--cizgi);border-radius:999px;padding:3px 11px}
+    .ss-yonerge{font-size:17px;font-weight:600;color:var(--ikincil)}
+    .ss-metin-kutu{position:relative}
+    .ss-metin{font-size:clamp(20px,4.8vw,23px);line-height:1.85;font-weight:500;color:var(--metin)}
+    .ss-sinyal{display:inline;font-weight:700;color:var(--c);background:var(--z);border:0;border-bottom:2.5px solid var(--c);border-radius:6px 6px 2px 2px;padding:1px 5px;margin:0 1px;cursor:pointer;line-height:inherit;font-size:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+    .ss-sinyal:hover,.ss-sinyal.ss-acik{outline:2px solid var(--c);outline-offset:1px}
+    .ss-bosluk{display:inline-block;min-width:4.2em;height:1.1em;vertical-align:-.15em;border-bottom:3px solid var(--vurgu);margin:0 4px}
+    .ss-dokun{font-size:15px;color:var(--ikincil);margin-top:-6px}
+    .ss-pop{position:absolute;z-index:10;width:min(330px,100%);background:var(--kart);color:var(--metin);border:2px solid var(--c);border-radius:12px;padding:11px 13px;box-shadow:0 10px 28px rgba(0,0,0,.16);display:flex;flex-direction:column;gap:3px;font-size:16.5px;line-height:1.5}
+    .ss-pop::before{content:"";position:absolute;top:-8px;left:var(--ok,24px);width:14px;height:14px;margin-left:-7px;background:var(--kart);border-left:2px solid var(--c);border-top:2px solid var(--c);transform:rotate(45deg)}
+    .ss-pop-tip{font:700 13.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--c)}
+
+    .ss-siklar{display:flex;flex-direction:column;gap:10px}
+    .ss-sik{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;text-align:left;width:100%;min-height:54px;padding:12px 14px;background:var(--kart);border:2px solid var(--cizgi);border-radius:12px;cursor:pointer;font-size:18.5px;line-height:1.45;transition:border-color .15s,background .15s}
+    .ss-sik:hover:not(:disabled){border-color:var(--vurgu);background:var(--kart-2)}
+    .ss-sik:disabled{cursor:default}
+    .ss-harf{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--kart-2);border:1.5px solid var(--cizgi-guclu);font-weight:700;font-size:16px}
+    .ss-sik-metin{flex:1 1 0;min-width:0;padding-top:2px}
+    .ss-isaret{width:100%;padding-left:44px;font-size:14.5px;font-weight:700}
+    .ss-sik.ss-dogru{border-color:var(--dogru);background:var(--dogru-zemin)}
+    .ss-sik.ss-dogru .ss-harf{background:var(--dogru);border-color:var(--dogru);color:var(--kart)}
+    .ss-sik.ss-dogru .ss-isaret{color:var(--dogru)}
+    .ss-sik.ss-yanlis{border-color:var(--yanlis);background:var(--yanlis-zemin)}
+    .ss-sik.ss-yanlis .ss-harf{background:var(--yanlis);border-color:var(--yanlis);color:var(--kart)}
+    .ss-sik.ss-yanlis .ss-isaret{color:var(--yanlis)}
+    .ss-sik:disabled:not(.ss-dogru):not(.ss-yanlis){opacity:.62}
+    .ss-geri:empty{display:none}
+    .ss-geri{font-size:19px;font-weight:700;padding:12px 14px;border-radius:12px;border-left:5px solid;scroll-margin-top:80px}
+    .ss-geri-dogru{color:var(--dogru);background:var(--dogru-zemin)}
+    .ss-geri-yanlis{color:var(--yanlis);background:var(--yanlis-zemin)}
+
+    .ss-analiz{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--cizgi);padding-top:16px;animation:ss-ac .25s ease}
+    @keyframes ss-ac{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    @media (prefers-reduced-motion:reduce){.ss-analiz{animation:none}}
+    .ss-analiz-baslik{font-size:22px;font-weight:800}
+    .ss-blok{background:var(--kart-2);border:1px solid var(--cizgi);border-left:5px solid var(--cizgi-guclu);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:8px}
+    .ss-blok h3{font:700 14px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ikincil)}
+    .ss-blok p{font-size:17.5px}
+    .ss-blok-cozum{border-left-color:var(--dogru)}
+    .ss-blok-tuzak{border-left-color:var(--yanlis)}
+    .ss-blok-tuzak h3{color:var(--yanlis)}
+    .ss-sinyal-liste{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+    .ss-sinyal-liste li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+    .ss-sinyal-liste li p{width:100%;font-size:17px}
+    .ss-liste-tip{font-size:14.5px;font-weight:700;color:var(--ikincil)}
+
+    .ss-alt{display:flex;justify-content:space-between;gap:10px;margin-top:4px}
+    .ss-btn{min-height:50px;padding:10px 20px;border-radius:12px;border:2px solid var(--cizgi-guclu);background:var(--kart);font-size:17px;font-weight:700;cursor:pointer}
+    .ss-btn:disabled{opacity:.45;cursor:default}
+    .ss-ana{background:var(--vurgu);border-color:var(--vurgu);color:var(--vurgu-ust)}
+    .ss-ana:hover{background:var(--vurgu-2);border-color:var(--vurgu-2)}
+    .sonraki-adim{font-size:17px;color:var(--ikincil)}
+    @media (max-width:420px){.ss-kart{padding:16px 14px}.ss-btn{padding:10px 14px}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="/">Sinyal Avcısı</a>
+  <div class="nav-sag">
+    <button type="button" class="tema-btn" id="tema-btn" aria-pressed="false">Koyu tema</button>
+    <a class="nav-back" href="/">← Ana sayfa</a>
+  </div>
+</nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Sinyal kelimeli soru çözümü</div>
+    <h1>Sinyali yakala, soruyu çöz</h1>
+    <p class="lead">YDS ve YÖKDİL sorularında ipucu veren kelimeler renkli. Kelimeye dokun, sınavda ne işe yaradığını gör. Şıkkı seç, çözümü hemen oku.</p>
+    <span class="ucretsiz">Ücretsiz · Üyelik yok · Her şey açık</span>
+  </header>
+
+  <section class="anahtar" id="anahtar" aria-label="Renklerin anlamı">
+    <span class="anahtar-baslik">Renklerin anlamı</span>
+  </section>
+
+  <section class="ss-kart" id="ss-panel" aria-label="Soru">Sorular yükleniyor...</section>
+
+  <p class="sonraki-adim">Sıradaki adım: sınava benzeyen daha zor sorular için <a href="/puan-hedefi">Puan Hedefi</a> sayfasına geç.</p>
+</main>
+
+<script src="/assets/modules/sinyal-soru.js?v=20261108"></script>
+<script>
+(function(){
+  var S=window.SinyalSoru;
+  // Renk anahtarı
+  var anahtar=document.getElementById('anahtar');
+  Object.keys(S.SINYAL_TIPLERI).forEach(function(k){
+    var r=document.createElement('span');
+    r.className='ss-rozet ss-t-'+k;
+    r.textContent=S.SINYAL_TIPLERI[k].ad;
+    r.title=S.SINYAL_TIPLERI[k].ozet;
+    anahtar.appendChild(r);
+  });
+  // Tema düğmesi
+  var btn=document.getElementById('tema-btn');
+  function temaYaz(){var koyu=document.documentElement.getAttribute('data-tema')==='koyu';btn.textContent=koyu?'Açık tema':'Koyu tema';btn.setAttribute('aria-pressed',String(koyu));}
+  btn.addEventListener('click',function(){
+    var yeni=document.documentElement.getAttribute('data-tema')==='koyu'?'acik':'koyu';
+    document.documentElement.setAttribute('data-tema',yeni);
+    try{localStorage.setItem('sa_ss_tema',yeni);}catch(e){}
+    temaYaz();
+  });
+  temaYaz();
+  // Sorular
+  var panel=document.getElementById('ss-panel');
+  fetch('/assets/data/sinyal-sorular.json?v=20261108').then(function(r){return r.json();})
+    .then(function(sorular){S.baslat(panel,sorular);})
+    .catch(function(){panel.textContent='Sorular yüklenemedi. Sayfayı yenile.';});
+})();
+</script>
+</body>
+</html>
