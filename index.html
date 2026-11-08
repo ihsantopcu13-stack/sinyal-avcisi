@@ -1797,7 +1797,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108o">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108p">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -6866,8 +6866,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 <div class="sinyal-panel-ov" id="sinyalPanelOv" onclick="sinyalPaneliKapat()" role="button" tabindex="0"></div>
 <div class="sinyal-panel" id="sinyalPanel">
   <div class="sinyal-panel-head">
-    <div class="sinyal-panel-title">🎯 Avcı Çözüm Motoru</div>
-    <button class="sinyal-panel-close" onclick="sinyalPaneliKapat()">✕</button>
+    <div class="sinyal-panel-title">Avcı Çözüm Motoru</div>
+    <button class="sinyal-panel-close" onclick="sinyalPaneliKapat()" aria-label="Kapat">✕</button>
   </div>
   <div class="sinyal-panel-body" id="sinyalPanelBody"></div>
 </div>
@@ -7362,7 +7362,7 @@ function satBitisEkrani(){clearInterval(satTimer);const el=document.getElementBy
 function satPaylas(yuzde){
   const metin='⚡ SAT Metodunda %'+yuzde+' doğruluk oranı yakaladım!\n\n🎯 ÖSYM tuzaklarını 2 saniyede çözmeyi öğreniyorum.\ndespite, far from, must have... Artık bunlar beni kandıramaz!\n\n💙 Bu platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — SAT Metodu %'+yuzde+' Doğruluk!',text:metin,url:'https://sinyal-avcisi.com'});}
-  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#22c55e;color:#f8fafc;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#2F7A55;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='Metin kopyalandı. Instagram hikâyene yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function satYenidenBasla(){satSoruIdx=0;satDogruSayisi=0;satAnswered=false;clearInterval(satTimer);satPratikRender();}
 // Modüllerdeki ⛶ butonu (Sinyal Lab, Kelime Kartları, Günlük Tuzak, Paragraf,
@@ -9830,7 +9830,7 @@ function tuzakPaylas(correct,soru){
   const temizSoru=soru.sent.replace(/<[^>]*>/g,'').substring(0,80);
   const metin=sonuc+'\n\n📌 Bugünün YDS/YÖKDİL tuzağı:\n"'+temizSoru+'..."\n\n🎯 Bu tür tuzakları 2 saniyede çözmek ister misin?\n👇 Sinyal Avcısı — Ücretsiz dene\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #İngilizce #AkademikingilizcesineSinyalAvcisi';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — Günlük YDS Tuzağı',text:metin,url:'https://sinyal-avcisi.com'});}
-  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#22c55e;color:#f8fafc;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram\'a yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#2F7A55;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram\'a yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function tuzakSonraki(){
   const _ytIdx=(tuzakIdx+1)%TUZAK_HAVUZ.length;
@@ -11511,12 +11511,12 @@ function sinyalPaneliAc(pidx,sidx){
       <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:14px">${s.q}</div>
       <div id="sinyalOptListe">${s.opts.map((o,i)=>`<div class="sinyal-opt-row" id="sinyalOpt-${i}">${harfler[i]}) ${o}</div>`).join('')}</div>
       <div style="margin-top:16px;background:var(--sl);border-radius:10px;padding:12px 14px">
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--signal);margin-bottom:8px">⭐ ALTIN KURALLAR</div>
-        <div style="font-size:12.5px;line-height:1.9;color:var(--ink)">
-          🔴 Paragrafta olmayan bilgi → direkt elenir<br>
-          🟡 Kısmi doğru şık → tuzak<br>
-          🟠 Abartılmış yorum → elenir<br>
-          ✅ Sinyal kelimesinden SONRA gelen bilgi → asıl cevap
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--signal);margin-bottom:8px">ALTIN KURALLAR</div>
+        <div class="sp-kurallar">
+          <div><span class="sp-isaret ele">✗</span> Paragrafta olmayan bilgi: direkt elenir</div>
+          <div><span class="sp-isaret tuzak">!</span> Kısmi doğru şık: tuzak</div>
+          <div><span class="sp-isaret ele">✗</span> Abartılmış yorum: elenir</div>
+          <div><span class="sp-isaret dogru">✓</span> Sinyal kelimesinden SONRA gelen bilgi: asıl cevap</div>
         </div>
       </div>
       <div id="sinyalDurum" style="margin-top:16px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px">
@@ -11600,14 +11600,14 @@ async function avciSinyalCoz(pidx,sidx){
       if(!gecerliMi())return; // panel kapandı ya da başka soruya geçildi
       if(durumEl)durumEl.remove();
       fullText+=parca;
-      if(metinEl)metinEl.textContent=fullText;
+      if(metinEl)metinEl.textContent=fullText.replace(/🔴|🟠/g,'✗').replace(/🟡/g,'!').replace(/✅/g,'✓').replace(/⚠️ ?/g,'');
       siklariRenklendir();
     }
-    if(!fullText.trim()&&metinEl)metinEl.textContent='⚠️ Analiz alınamadı, tekrar dene.';
+    if(!fullText.trim()&&metinEl)metinEl.textContent='Analiz alınamadı, tekrar dene.';
   }catch(e){
     if(!gecerliMi())return;
     if(durumEl)durumEl.remove();
-    if(metinEl)metinEl.textContent='⚠️ Bağlantı hatası, tekrar dene.';
+    if(metinEl)metinEl.textContent='Bağlantı hatası, tekrar dene.';
   }
 }
 
@@ -11684,13 +11684,13 @@ setTimeout(slRender,100);
 
 // ============================================================
 const ROZET_LISTESI=[
-  {id:'ilk_gun',icon:'🌱',ad:'İlk Adım',desc:'İlk günü tamamladın',kosul:s=>s.streak>=1},
-  {id:'uc_gun',icon:'🔥',ad:'Ateş Yakıldı',desc:'3 gün üst üste',kosul:s=>s.streak>=3},
-  {id:'yedi_gun',icon:'⚡',ad:'Haftalık Avcı',desc:'7 gün seri',kosul:s=>s.streak>=7},
-  {id:'on_gun',icon:'💎',ad:'Elmas Avcı',desc:'10 gün seri',kosul:s=>s.streak>=10},
-  {id:'modal_usta',icon:'🧠',ad:'Modal Ustası',desc:'Modal soruda 5 doğru',kosul:s=>s.modalDogru>=5},
-  {id:'sinyal_usta',icon:'🎯',ad:'Sinyal Ustası',desc:'50 soru çözdün',kosul:s=>s.toplamSoru>=50},
-  {id:'hata_yok',icon:'✨',ad:'Kusursuz Gün',desc:'Hiç hata yapmadan bir tur',kosul:s=>s.kusursuzTur>=1},
+  {id:'ilk_gun',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-onay"/></svg>',ad:'İlk Adım',desc:'İlk günü tamamladın',kosul:s=>s.streak>=1},
+  {id:'uc_gun',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-takvim"/></svg>',ad:'Ateş Yakıldı',desc:'3 gün üst üste',kosul:s=>s.streak>=3},
+  {id:'yedi_gun',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-takvim"/></svg>',ad:'Haftalık Avcı',desc:'7 gün seri',kosul:s=>s.streak>=7},
+  {id:'on_gun',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-takvim"/></svg>',ad:'Elmas Avcı',desc:'10 gün seri',kosul:s=>s.streak>=10},
+  {id:'modal_usta',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-ampul"/></svg>',ad:'Modal Ustası',desc:'Modal soruda 5 doğru',kosul:s=>s.modalDogru>=5},
+  {id:'sinyal_usta',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-hedef"/></svg>',ad:'Sinyal Ustası',desc:'50 soru çözdün',kosul:s=>s.toplamSoru>=50},
+  {id:'hata_yok',icon:'<svg class="ik" aria-hidden="true"><use href="#ik-kupa"/></svg>',ad:'Kusursuz Gün',desc:'Hiç hata yapmadan bir tur',kosul:s=>s.kusursuzTur>=1},
 ];
 function streakLoad(){
   try{return JSON.parse(localStorage.getItem('sa_streak')||'{}');}catch(e){return {};}
@@ -11746,8 +11746,8 @@ function rozetKontrol(d){
 }
 function rozetBildirim(r){
   const div=document.createElement('div');
-  div.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:600;background:var(--surface);border:2px solid var(--signal);border-radius:16px;padding:16px 24px;text-align:center;box-shadow:0 8px 40px rgba(56,189,248,.2);animation:fadeInDown .4s ease;font-family:IBM Plex Sans,sans-serif;min-width:220px';
-  div.innerHTML=`<div style="font-size:36px;margin-bottom:6px">${r.icon}</div><div style="font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--signal);margin-bottom:4px;font-family:'IBM Plex Mono',monospace">Rozet Kazandın!</div><div style="font-size:16px;font-weight:700;color:var(--ink)">${r.ad}</div><div style="font-size:15px;color:var(--muted);margin-top:3px">${r.desc}</div><button onclick="paylasimKartiGoster('rozet','${r.icon} ${r.ad}','${r.desc}')" style="margin-top:12px;background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;width:100%">📸 Paylaş</button>`;
+  div.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:600;background:#FFFFFF;border:2px solid #365C4B;border-radius:16px;padding:16px 24px;text-align:center;box-shadow:0 8px 32px rgba(31,42,36,.14);animation:fadeInDown .4s ease;font-family:IBM Plex Sans,sans-serif;min-width:220px';
+  div.innerHTML=`<div class="rozet-pop-ik">${r.icon}</div><div style="font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:#365C4B;margin-bottom:4px;font-family:'IBM Plex Mono',monospace">Rozet Kazandın!</div><div style="font-size:16px;font-weight:700;color:#1F2A24">${r.ad}</div><div style="font-size:15px;color:#4F5F57;margin-top:3px">${r.desc}</div><button onclick="paylasimKartiGoster('rozet','${r.ad}','${r.desc}')" style="margin-top:12px;background:#365C4B;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:15px;font-weight:600;cursor:pointer;width:100%">Paylaş</button>`;
   document.body.appendChild(div);
   setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},5000);
 // ============================================================
@@ -12002,8 +12002,8 @@ function xpKazan(tip,streak){
 }
 function xpBildirim(puan,tip){
   const div=document.createElement('div');
-  div.style.cssText='position:fixed;top:110px;right:20px;z-index:10002;background:var(--surface);color:#6ee7b7;border-radius:10px;padding:8px 16px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif;animation:slideInLeft .3s ease;cursor:pointer;display:flex;align-items:center;gap:10px';
-  div.innerHTML='+'+puan+' XP ⚡ <span style="font-size:14px;opacity:.7">Paylaş</span>';
+  div.style.cssText='position:fixed;top:110px;right:20px;z-index:10002;background:#FFFFFF;color:#2B4A3C;border:1px solid #A8BFA8;box-shadow:0 4px 16px rgba(31,42,36,.12);border-radius:10px;padding:8px 16px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif;animation:slideInLeft .3s ease;cursor:pointer;display:flex;align-items:center;gap:10px';
+  div.innerHTML='+'+puan+' XP <span style="font-size:14px;color:#4F5F57;text-decoration:underline">Paylaş</span>';
   div.onclick=()=>xpPaylas(puan);
   document.body.appendChild(div);
   setTimeout(()=>{div.style.opacity='0';div.style.transition='opacity .4s';setTimeout(()=>div.remove(),400);},4000);
@@ -12012,7 +12012,7 @@ function xpPaylas(puan){
   const xd=xpLoad();
   const metin='🎯 Bu hafta '+xd.hafta+' XP kazandım!\n\n📚 YDS/YÖKDİL çalışıyorum — her gün sinyal metoduyla ÖSYM tuzaklarını çözüyorum.\n\n💙 Platform tamamen ücretsiz — imkânı olan da olmayan da aynı şansı hak ediyor.\n\n👇 Sen de dene — tek kuruş ödemeden\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı #EğitimeDestek #YabancıDil';
   if(navigator.share){navigator.share({title:'Sinyal Avcısı — '+puan+' XP Kazandım!',text:metin,url:'https://sinyal-avcisi.com'});}
-  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#22c55e;color:#f8fafc;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Metin kopyalandı! Instagram Story\'e yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#2F7A55;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='Metin kopyalandı. Instagram hikâyene yapıştır.';document.body.appendChild(d);setTimeout(()=>d.remove(),3000);});}
 }
 function seviyeAl(toplam){return SEVIYE_TABLOSU.find(s=>toplam>=s.min&&toplam<=s.max)||SEVIYE_TABLOSU[0];}
 function seviyeKontrol(toplam){
@@ -14094,20 +14094,20 @@ function pomodoroGoster(){
   if(document.getElementById('pomodoro-widget'))return;
   const div=document.createElement('div');
   div.id='pomodoro-widget';
-  div.style.cssText='position:fixed;top:110px;right:20px;z-index:300;background:var(--surface);color:#031018;border-radius:12px;padding:12px 16px;font-family:IBM Plex Sans,sans-serif;min-width:140px;box-shadow:0 4px 20px rgba(0,0,0,.3)';
-  div.innerHTML=`<div style="font-size:10px;color:rgba(255,255,255,.62);margin-bottom:4px;letter-spacing:.1em">🍅 POMODORO</div>
-    <div id="pom-sure" style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#6ee7b7;margin-bottom:8px">25:00</div>
+  div.style.cssText='position:fixed;top:110px;right:20px;z-index:300;background:#FFFFFF;color:#1F2A24;border:1px solid #DDE3DA;border-radius:12px;padding:12px 16px;font-family:IBM Plex Sans,sans-serif;min-width:160px;box-shadow:0 6px 20px rgba(31,42,36,.12)';
+  div.innerHTML=`<div style="font-size:12px;color:#4F5F57;margin-bottom:4px;letter-spacing:.1em;font-weight:700">POMODORO</div>
+    <div id="pom-sure" style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#2B4A3C;margin-bottom:8px">25:00</div>
     <div style="display:flex;gap:6px">
-      <button onclick="pomodoroToggle()" id="pom-btn" style="flex:1;background:var(--signal);color:#031018;border:none;border-radius:6px;padding:6px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">▶ Başlat</button>
-      <button onclick="pomodoroSifirla()" style="background:rgba(255,255,255,.1);color:#031018;border:none;border-radius:6px;padding:6px 8px;font-size:15px;cursor:pointer">↺</button>
-      <button onclick="document.getElementById('pomodoro-widget').remove();clearInterval(pomodoroTimer)" style="background:rgba(255,255,255,.1);color:#031018;border:none;border-radius:6px;padding:6px 8px;font-size:15px;cursor:pointer">✕</button>
+      <button onclick="pomodoroToggle()" id="pom-btn" style="flex:1;background:#365C4B;color:#fff;border:none;border-radius:6px;padding:6px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Başlat</button>
+      <button onclick="pomodoroSifirla()" aria-label="Sıfırla" style="background:#EEF3EC;color:#2B4A3C;border:none;border-radius:6px;padding:6px 8px;font-size:15px;cursor:pointer">↺</button>
+      <button onclick="document.getElementById('pomodoro-widget').remove();clearInterval(pomodoroTimer)" aria-label="Kapat" style="background:#EEF3EC;color:#2B4A3C;border:none;border-radius:6px;padding:6px 8px;font-size:15px;cursor:pointer">✕</button>
     </div>`;
   document.body.appendChild(div);
 }
 function pomodoroToggle(){
   pomodoroCalisiyor=!pomodoroCalisiyor;
   const btn=document.getElementById('pom-btn');
-  if(btn)btn.textContent=pomodoroCalisiyor?'⏸ Durdur':'▶ Devam';
+  if(btn)btn.textContent=pomodoroCalisiyor?'Durdur':'Devam';
   if(pomodoroCalisiyor){
     pomodoroTimer=setInterval(()=>{
       pomodoroSure--;
@@ -14493,7 +14493,7 @@ function planIndir(){
   const xp=xpLoad();
   const metin='📅 7 GÜNLÜK YDS/YÖKDİL ÇALIŞMA PLANIM\n\nSinyal Avcısı platformuyla hazırlanıyorum!\n\n✅ Günlük hedef: 35+ dakika\n📊 Bu hafta: '+xp.hafta+' XP\n\n👇 Sen de ücretsiz başla:\nsinyal-avcisi.com\n\n#YDS #YÖKDİL #SinyalAvcısı';
   if(navigator.share){navigator.share({title:'Çalışma Planım',text:metin});}
-  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#22c55e;color:#f8fafc;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Kopyalandı!';document.body.appendChild(d);setTimeout(()=>d.remove(),2500);});}
+  else{navigator.clipboard.writeText(metin).then(()=>{const d=document.createElement('div');d.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:999;background:#2F7A55;color:#fff;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:700;font-family:IBM Plex Sans,sans-serif';d.textContent='✅ Kopyalandı!';document.body.appendChild(d);setTimeout(()=>d.remove(),2500);});}
 }
 
 // ─── SINAV PLANIM — Kişiselleştirilmiş hedef planı ─────────────────────────
