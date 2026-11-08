@@ -720,6 +720,33 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 .am-formul-metin{font-size:14px;color:var(--ink);font-weight:600;letter-spacing:.04em;line-height:1.7}
 .am-btn{margin-top:10px;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 @media(max-width:480px){.am-izgara,.am-sagsol{grid-template-columns:1fr}.am-tuzak-liste{columns:1}}
+/* Raporlar (koyu taban) */
+.rp-baslik{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px}
+.rp-tarih{font-size:15px;color:var(--muted);margin-bottom:20px}
+.rp-kartlar{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.rp-kart{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+.rp-etiket{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.rp-sayi{font-size:36px;font-weight:800;letter-spacing:-.02em;color:var(--signal);line-height:1.1}
+.rp-kart-hata .rp-sayi{color:var(--trap)}
+.rp-alt{font-size:15px;color:var(--muted)}
+.rp-kutu{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
+.rp-kutu-baslik{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:14px}
+.rp-hata-sayi{color:var(--trap);font-weight:700}
+.rp-bar{background:var(--border);border-radius:4px;height:8px}.rp-bar-dolu{background:var(--trap);height:100%;border-radius:4px;transition:width 1s}
+.rp-uyari{background:#2a1414;border-radius:10px;padding:12px;margin-top:12px;font-size:15px;color:var(--trap)}
+.rp-iyi{display:flex;align-items:center;justify-content:center;gap:8px;background:#0f2418;border-radius:16px;padding:18px;font-size:16px;color:#22c55e;margin-bottom:16px}
+.rp-oneri-metin{font-size:16px;color:var(--ink);line-height:1.7}
+.rp-oneri .rp-kutu-baslik{color:var(--signal)}
+/* Hata defteri ve radar ek parçaları (koyu taban) */
+.hata-yanlis{color:var(--trap)}.hata-dogru{color:#22c55e}
+.hata-tarih{font-size:13px;color:var(--muted);margin-bottom:6px}
+.hata-bos{text-align:center;padding:32px 0}
+.hata-bos-ik{display:inline-grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--sl);color:var(--signal);margin-bottom:12px}.hata-bos-ik .ik{width:28px;height:28px}
+.hata-bos-baslik{font-family:'IBM Plex Serif',serif;font-size:19px;margin-bottom:8px;color:var(--ink)}
+.hata-bos-alt{font-size:16px;color:var(--muted)}
+.hata-tekrar-not{background:#131f30;border:1px solid #f87171;border-radius:8px;padding:10px 14px;font-size:15px;margin-bottom:10px;color:#c4b5fd}
+.radar-guncelle{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.kr-zayif-ust{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px}
 /* Öğrenme Yolu ek parçaları (koyu taban; widget kendi <style>'ını yalnız ana ekranda basar) */
 .aoy-title{display:flex;align-items:center;gap:8px}
 .aoy-bilgi{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);border-radius:10px;color:var(--signal)}
@@ -1770,7 +1797,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108k">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108l">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -2486,13 +2513,13 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- RADAR: ZAYIF ALAN ANALİZİ -->
         <div class="dmod" id="mod-radar" style="display:none">
-          <div class="dm-eye">🎯 ZAYIF ALAN RADARI — Performans haritanız</div>
+          <div class="dm-eye">ZAYIF ALAN RADARI — Performans haritan</div>
           <div class="radar-section" style="margin-top:14px">
-            <div class="radar-title">📡 Konu Radarı <span style="font-size:11px;color:var(--muted);font-weight:400" id="konu-radar-ozet"></span></div>
+            <div class="radar-title"><svg class="ik" aria-hidden="true"><use href="#ik-radar"/></svg> Konu Radarı <span style="font-size:11px;color:var(--muted);font-weight:400" id="konu-radar-ozet"></span></div>
             <div class="radar-canvas-wrap" id="konu-radar-svg-wrap"></div>
           </div>
           <div id="radar-zayif-liste" style="margin-top:16px"></div>
-          <button onclick="konuRadariCiz()" style="margin-top:14px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🔄 Güncelle</button>
+          <button onclick="konuRadariCiz()" class="radar-guncelle"><svg class="ik" aria-hidden="true"><use href="#ik-tekrar"/></svg> Güncelle</button>
         </div>
 
         <!-- ÇALIŞMA PLANI -->
@@ -11980,56 +12007,38 @@ function raporlarHTML(){
   const gunler=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
   const bugun=new Date().getDay();
   
-  return `<div style="max-width:680px">
-    <div style="font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px">📊 Haftalık Rapor</div>
-    <div style="font-size:15px;color:var(--muted);margin-bottom:24px">${new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
-    
-    <!-- Özet kartlar -->
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px">
-      <div style="background:linear-gradient(135deg,#38bdf8,#0284c7);border-radius:16px;padding:20px;color:#031018">
-        <div style="font-size:13px;opacity:.8;font-weight:600;letter-spacing:.05em;margin-bottom:6px">BU HAFTA</div>
-        <div style="font-size:36px;font-weight:800;letter-spacing:-.02em">${buHaftaSoru}</div>
-        <div style="font-size:14px;opacity:.8">soru çözüldü</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#f87171,#f87171);border-radius:16px;padding:20px;color:#f8fafc">
-        <div style="font-size:13px;opacity:.8;font-weight:600;letter-spacing:.05em;margin-bottom:6px">SERİ</div>
-        <div style="font-size:36px;font-weight:800;letter-spacing:-.02em">🔥 ${streakGun}</div>
-        <div style="font-size:14px;opacity:.8">günlük seri</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#16a34a,#15803d);border-radius:16px;padding:20px;color:#f8fafc">
-        <div style="font-size:13px;opacity:.8;font-weight:600;letter-spacing:.05em;margin-bottom:6px">TOPLAM</div>
-        <div style="font-size:36px;font-weight:800;letter-spacing:-.02em">${toplamSoru}</div>
-        <div style="font-size:14px;opacity:.8">soru çözüldü</div>
-      </div>
-      <div style="background:linear-gradient(135deg,#0284c7,#0369a1);border-radius:16px;padding:20px;color:#f8fafc">
-        <div style="font-size:13px;opacity:.8;font-weight:600;letter-spacing:.05em;margin-bottom:6px">HATA DEFTERİ</div>
-        <div style="font-size:36px;font-weight:800;letter-spacing:-.02em">${hatalar.length}</div>
-        <div style="font-size:14px;opacity:.8">kayıtlı hata</div>
-      </div>
+  const alanAd=k=>k==='sinyal'?'Sinyal Lab':k==='sat'?'SAT Metodu':k==='tuzak'?'Günlük Tuzak':'Kelime';
+  return `<div class="rp" style="max-width:680px">
+    <div class="rp-baslik"><svg class="ik" aria-hidden="true"><use href="#ik-grafik"/></svg> Haftalık Rapor</div>
+    <div class="rp-tarih">${new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+
+    <div class="rp-kartlar">
+      <div class="rp-kart"><div class="rp-etiket">BU HAFTA</div><div class="rp-sayi">${buHaftaSoru}</div><div class="rp-alt">soru çözüldü</div></div>
+      <div class="rp-kart"><div class="rp-etiket">SERİ</div><div class="rp-sayi">${streakGun}</div><div class="rp-alt">günlük seri</div></div>
+      <div class="rp-kart"><div class="rp-etiket">TOPLAM</div><div class="rp-sayi">${toplamSoru}</div><div class="rp-alt">soru çözüldü</div></div>
+      <div class="rp-kart rp-kart-hata"><div class="rp-etiket">HATA DEFTERİ</div><div class="rp-sayi">${hatalar.length}</div><div class="rp-alt">kayıtlı hata</div></div>
     </div>
-    
-    <!-- Hata analizi -->
+
     ${hatalar.length>0?`
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px">
-      <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px">🎯 Hata Analizi</div>
+    <div class="rp-kutu">
+      <div class="rp-kutu-baslik"><svg class="ik" aria-hidden="true"><use href="#ik-hedef"/></svg> Hata Analizi</div>
       ${Object.entries(hataByTip).filter(([,v])=>v>0).map(([k,v])=>`
         <div style="margin-bottom:12px">
-          <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px">
-            <span style="font-weight:600">${k==='sinyal'?'Sinyal Lab':k==='sat'?'SAT Metodu':k==='tuzak'?'Günlük Tuzak':'Kelime'}</span>
-            <span style="color:var(--trap);font-weight:700">${v} hata</span>
+          <div style="display:flex;justify-content:space-between;font-size:15px;margin-bottom:4px">
+            <span style="font-weight:600">${alanAd(k)}</span>
+            <span class="rp-hata-sayi">${v} hata</span>
           </div>
-          <div style="background:var(--border);border-radius:4px;height:8px"><div style="background:var(--trap);height:100%;border-radius:4px;width:${Math.min(v*20,100)}%;transition:width 1s"></div></div>
+          <div class="rp-bar"><div class="rp-bar-dolu" style="width:${Math.min(v*20,100)}%"></div></div>
         </div>
       `).join('')}
-      ${enCokHata&&enCokHata[1]>0?`<div style="background:#2a1414;border-radius:10px;padding:12px;margin-top:12px;font-size:14px;color:var(--trap)">⚠️ En çok hata: <b>${enCokHata[0]==='sinyal'?'Sinyal Lab':enCokHata[0]==='sat'?'SAT Metodu':enCokHata[0]==='tuzak'?'Günlük Tuzak':'Kelime'}</b> — bu alana odaklan!</div>`:''}
-    </div>`:'<div style="background:#0f2418;border-radius:16px;padding:20px;text-align:center;font-size:15px;color:#16a34a;margin-bottom:16px">✅ Henüz hata kaydın yok — harika!</div>'}
-    
-    <!-- Öneri -->
-    <div style="background:linear-gradient(135deg,#0d1624,#0d1624);border-radius:16px;padding:20px;border:1px solid rgba(56,189,248,.15)">
-      <div style="font-size:15px;font-weight:700;color:var(--signal);margin-bottom:8px">💡 Bu haftaki öneri</div>
-      <div style="font-size:15px;color:var(--ink);line-height:1.7">
-        ${buHaftaSoru<10?'Henüz başlıyorsun — günde 10 soru hedefle. Küçük adımlar büyük fark yaratır!':
-        buHaftaSoru<30?'İyi gidiyorsun! Günlük seriyi kırmamaya özen göster — Pomodoro tekniğini dene.':
+      ${enCokHata&&enCokHata[1]>0?`<div class="rp-uyari">En çok hata: <b>${alanAd(enCokHata[0])}</b>. Bu alana odaklan!</div>`:''}
+    </div>`:'<div class="rp-iyi"><svg class="ik" aria-hidden="true"><use href="#ik-onay"/></svg> Henüz hata kaydın yok, harika!</div>'}
+
+    <div class="rp-kutu rp-oneri">
+      <div class="rp-kutu-baslik"><svg class="ik" aria-hidden="true"><use href="#ik-ampul"/></svg> Bu haftaki öneri</div>
+      <div class="rp-oneri-metin">
+        ${buHaftaSoru<10?'Henüz başlıyorsun. Günde 10 soru hedefle, küçük adımlar büyük fark yaratır!':
+        buHaftaSoru<30?'İyi gidiyorsun! Günlük seriyi kırmamaya özen göster, Pomodoro tekniğini dene.':
         'Süper performans! Hata defterindeki soruları tekrar çözerek kalıcı öğrenmeyi pekiştir.'}
       </div>
     </div>
@@ -12344,10 +12353,10 @@ function hataLoad(){try{return JSON.parse(localStorage.getItem('sa_hatalar')||'[
 function hataSave(d){try{localStorage.setItem('sa_hatalar',JSON.stringify(d));}catch(e){}}
 function hataKategoriSinifla(soru,tip){
   const metin=(soru||'').toLowerCase();
-  if(tip==='kelime'||metin.includes('kelime')||metin.includes('vocabulary'))return{kod:'hk-kelime',etiket:'Kelime Bilgisi',aciklama:'Bu soruyu akademik kelime hazinenizdeki eksiklik etkiledi. Vurgulanmış kelimeyi kartlara ekleyin.',ipucu:'💡 Bu kelimeyi Kelime Kartlarına ekle ve yarın tekrar et'};
-  if(metin.includes('despite')||metin.includes('although')||metin.includes('however')||metin.includes('whereas')||tip==='sinyal')return{kod:'hk-sinyal',etiket:'Sinyal Kelimesi',aciklama:'Zıtlık/bağlaç sinyalini kaçırdınız. Bu tür sinyaller metnin yönünü belirler.',ipucu:'💡 Zıtlık sinyalleri: despite, although, however, whereas, yet, still'};
-  if(metin.includes('have')||metin.includes('would')||metin.includes('modal')||metin.includes('perfect'))return{kod:'hk-yapisal',etiket:'Yapısal Tuzak',aciklama:'Modal perfect yapısını kaçırdınız. Bu yapı geçmişe yönelik tahmini ifade eder.',ipucu:'💡 Modal Perfect: must/should/could/can\'t + have + V3 = geçmişe yönelik çıkarım'};
-  return{kod:'hk-dikkat',etiket:'Dikkat Hatası',aciklama:'Metni çok hızlı okuyarak kritik bir detayı atladınız. Yavaşlayın ve anahtar kelimeleri işaretleyin.',ipucu:'💡 Cümleyi baştan oku — genellikle ilk veya son cümlede cevap gizlidir'};
+  if(tip==='kelime'||metin.includes('kelime')||metin.includes('vocabulary'))return{kod:'hk-kelime',etiket:'Kelime Bilgisi',aciklama:'Bu soruyu akademik kelime bilgindeki bir eksik etkiledi. Vurgulanan kelimeyi kartlara ekle.',ipucu:'Bu kelimeyi Kelime Kartlarına ekle ve yarın tekrar et'};
+  if(metin.includes('despite')||metin.includes('although')||metin.includes('however')||metin.includes('whereas')||tip==='sinyal')return{kod:'hk-sinyal',etiket:'Sinyal Kelimesi',aciklama:'Zıtlık/bağlaç sinyalini kaçırdın. Bu tür sinyaller metnin yönünü belirler.',ipucu:'Zıtlık sinyalleri: despite, although, however, whereas, yet, still'};
+  if(metin.includes('have')||metin.includes('would')||metin.includes('modal')||metin.includes('perfect'))return{kod:'hk-yapisal',etiket:'Yapısal Tuzak',aciklama:'Modal perfect yapısını kaçırdın. Bu yapı geçmişe yönelik tahmini ifade eder.',ipucu:'Modal Perfect: must/should/could/can\'t + have + V3 = geçmişe yönelik çıkarım'};
+  return{kod:'hk-dikkat',etiket:'Dikkat Hatası',aciklama:'Metni çok hızlı okuyup kritik bir detayı atladın. Yavaşla ve anahtar kelimeleri işaretle.',ipucu:'Cümleyi baştan oku. Genellikle ilk veya son cümlede cevap gizlidir'};
 }
 
 function hataEkle(soru,verilenCevap,dogruCevap,tip){
@@ -12753,7 +12762,7 @@ function hataDefteriniGoster(){
   const cont=document.getElementById('hata-liste-container');
   if(!cont)return;
   if(d.length===0){
-    cont.innerHTML=`<div style="text-align:center;padding:32px 0"><div style="font-size:40px;margin-bottom:12px">✨</div><div style="font-family:'IBM Plex Serif',serif;font-size:18px;margin-bottom:8px">Hata defteri boş!</div><div style="font-size:15px;color:var(--ink)">Hiç hata yapmadın veya henüz soru çözmedin.</div></div>`;
+    cont.innerHTML=`<div class="hata-bos"><div class="hata-bos-ik"><svg class="ik" aria-hidden="true"><use href="#ik-onay"/></svg></div><div class="hata-bos-baslik">Hata defteri boş!</div><div class="hata-bos-alt">Hiç hata yapmadın veya henüz soru çözmedin.</div></div>`;
     return;
   }
   cont.innerHTML=`<div style="font-size:15px;color:var(--muted);margin-bottom:10px">${d.length} hatalı konu kayıtlı — Tekrar et ve sil</div>`+
@@ -12761,17 +12770,17 @@ function hataDefteriniGoster(){
     const kat=hataKategoriSinifla(h.soru,h.tip||'');
     return`<div class="hata-item" id="hata-${h.id}">
       <div class="hata-item-word">${h.soru.length>60?h.soru.substring(0,60)+'...':h.soru}</div>
-      <div class="hata-item-tip">Senin cevabın: <b style="color:var(--trap)">${h.verilenCevap}</b> → Doğrusu: <b style="color:#22c55e">${h.dogruCevap}</b></div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">${h.tarih} · ${h.tekrarSayisi>0?h.tekrarSayisi+' kez tekrar edildi':'İlk hata'}</div>
+      <div class="hata-item-tip">Senin cevabın: <b class="hata-yanlis">${h.verilenCevap}</b> → Doğrusu: <b class="hata-dogru">${h.dogruCevap}</b></div>
+      <div class="hata-tarih">${h.tarih} · ${h.tekrarSayisi>0?h.tekrarSayisi+' kez tekrar edildi':'İlk hata'}</div>
       <div class="hata-analiz">
-        <div class="hata-analiz-baslik">🔍 Neden Yanlış?</div>
+        <div class="hata-analiz-baslik"><svg class="ik" aria-hidden="true"><use href="#ik-nisan"/></svg> Neden yanlış?</div>
         <span class="hata-kategori ${kat.kod}">${kat.etiket}</span>
         <div class="hata-aciklama">${kat.aciklama}</div>
         <div class="hata-ipucu">${kat.ipucu}</div>
       </div>
       <div class="hata-item-actions">
-        <button class="hata-tekrar-btn" onclick="hataTekrar('${h.id}')">🔁 Tekrar et</button>
-        <button class="hata-sil-btn" onclick="hataSil('${h.id}')">✕ Sil</button>
+        <button class="hata-tekrar-btn" onclick="hataTekrar('${h.id}')">Tekrar et</button>
+        <button class="hata-sil-btn" onclick="hataSil('${h.id}')">Sil</button>
       </div>
     </div>`;
   }).join('');
@@ -12786,8 +12795,8 @@ function hataTekrar(id){
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));
   // Hata bildirim
   const fb=document.createElement('div');
-  fb.style.cssText='background:#131f30;border:1px solid #f87171;border-radius:8px;padding:10px 14px;font-size:15px;margin-bottom:10px;color:#c4b5fd;';
-  fb.innerHTML=`🔁 <b>Hata tekrarı:</b> "${h.soru.substring(0,50)}..." — Doğru cevap: <b>${h.dogruCevap}</b>`;
+  fb.className='hata-tekrar-not';
+  fb.innerHTML=`<b>Hata tekrarı:</b> "${h.soru.substring(0,50)}..." — Doğru cevap: <b>${h.dogruCevap}</b>`;
   const cont=document.getElementById('tuzak-container');if(cont)cont.insertAdjacentElement('afterbegin',fb);
   if(typeof safOdakOtomatik==='function')safOdakOtomatik('tuzak',true); // hata tekrarı: Odak Modu
 }
@@ -14170,10 +14179,10 @@ function konuRadariCiz(){
     const r=minR+(maxR-minR)*(1-seviye);
     return{x:+(cx+r*Math.cos(aci)).toFixed(1),y:+(cy+r*Math.sin(aci)).toFixed(1),seviye,baslik:k.baslik,idx:i};
   });
-  const halkalar=[1,2,3,4].map(lvl=>`<circle cx="${cx}" cy="${cy}" r="${(maxR*lvl/4).toFixed(1)}" fill="none" stroke="rgba(56,189,248,.12)" stroke-width="1"/>`).join('');
+  const halkalar=[1,2,3,4].map(lvl=>`<circle cx="${cx}" cy="${cy}" r="${(maxR*lvl/4).toFixed(1)}" fill="none" stroke="rgba(54,92,75,.12)" stroke-width="1"/>`).join('');
   const spoklar=CL_KONULAR.map((k,i)=>{
     const aci=acili(i);
-    return `<line x1="${cx}" y1="${cy}" x2="${(cx+maxR*Math.cos(aci)).toFixed(1)}" y2="${(cy+maxR*Math.sin(aci)).toFixed(1)}" stroke="rgba(56,189,248,.07)" stroke-width="1"/>`;
+    return `<line x1="${cx}" y1="${cy}" x2="${(cx+maxR*Math.cos(aci)).toFixed(1)}" y2="${(cy+maxR*Math.sin(aci)).toFixed(1)}" stroke="rgba(54,92,75,.07)" stroke-width="1"/>`;
   }).join('');
   const azaltilmisHareket=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const supurgeAci=(-90+30).toFixed(1);
@@ -14189,21 +14198,21 @@ function konuRadariCiz(){
     const haloOpaklik=(b.seviye*0.22).toFixed(2);
     const sinif=b.seviye>=1?'kr-blip-tam':b.seviye>0?'kr-blip-kismi':'kr-blip-bos';
     return `<g class="kr-blip ${sinif}" data-idx="${b.idx}" tabindex="0" role="button" aria-label="${b.baslik} — %${Math.round(b.seviye*100)} ustalık">
-      <circle class="kr-blip-halo" cx="${b.x}" cy="${b.y}" r="${(+yaricap+7).toFixed(1)}" fill="rgba(56,189,248,${haloOpaklik})"/>
-      <circle cx="${b.x}" cy="${b.y}" r="${yaricap}" fill="#38bdf8" opacity="${opaklik}"/>
+      <circle class="kr-blip-halo" cx="${b.x}" cy="${b.y}" r="${(+yaricap+7).toFixed(1)}" fill="rgba(54,92,75,${haloOpaklik})"/>
+      <circle cx="${b.x}" cy="${b.y}" r="${yaricap}" fill="#365C4B" opacity="${opaklik}"/>
       <title>${b.baslik} — %${Math.round(b.seviye*100)} ustalık</title>
     </g>`;
   }).join('');
   wrap.innerHTML=`
     <svg viewBox="0 0 300 300" class="kr-svg">
       <defs>
-        <radialGradient id="kr-sweep-grad"><stop offset="0%" stop-color="#38bdf8" stop-opacity=".32"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+        <radialGradient id="kr-sweep-grad"><stop offset="0%" stop-color="#365C4B" stop-opacity=".32"/><stop offset="100%" stop-color="#365C4B" stop-opacity="0"/></radialGradient>
       </defs>
-      <circle cx="${cx}" cy="${cy}" r="${maxR}" fill="rgba(56,189,248,.03)"/>
+      <circle cx="${cx}" cy="${cy}" r="${maxR}" fill="rgba(54,92,75,.03)"/>
       ${halkalar}
       ${spoklar}
       ${supurge}
-      <circle cx="${cx}" cy="${cy}" r="3" fill="#38bdf8"/>
+      <circle cx="${cx}" cy="${cy}" r="3" fill="#365C4B"/>
       ${blipSvg}
     </svg>
   `;
@@ -14221,7 +14230,7 @@ function konuRadariCiz(){
   if(zayifEl){
     const zayif=[...blipler].sort((a,b)=>a.seviye-b.seviye).slice(0,3);
     zayifEl.innerHTML=`
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">📡 En Zayıf Sinyallerin</div>
+      <div class="kr-zayif-ust"><svg class="ik" aria-hidden="true"><use href="#ik-sinyal"/></svg> En zayıf sinyallerin</div>
       ${zayif.map(z=>`
         <div class="kr-zayif-item">
           <div class="kr-zayif-metin">
