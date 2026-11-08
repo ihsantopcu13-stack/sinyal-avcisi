@@ -1,0 +1,357 @@
+[
+  {
+    "id": "ss001",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sağlık",
+    "questionText": "---- the new vaccine proved highly effective in clinical trials, many people remained reluctant to receive it.",
+    "signalWords": [
+      {
+        "word": "highly effective",
+        "type": "anlam",
+        "tip": "Olumlu bir bilgi: aşı çok etkili."
+      },
+      {
+        "word": "remained reluctant",
+        "type": "anlam",
+        "tip": "Olumsuz bir sonuç: insanlar yine de istekli değil. Olumlu + olumsuz yan yana = zıtlık bağlacı arıyorsun."
+      }
+    ],
+    "options": [
+      "Because",
+      "Although",
+      "Unless",
+      "As soon as",
+      "In case"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: İki cümle birbirine ters düşüyorsa zıtlık bağlacı gelir. Bu soruda aşı çok etkili (olumlu), ama insanlar aşı olmak istemiyor (olumsuz). Beklenenin tersi oluyor, bu yüzden Although (-e rağmen) doğru. Yapıya da bak: virgülün iki yanında tam cümle var, boşluğa cümle bağlayan bir bağlaç gelir.",
+    "trap": "Because en çok seçilen yanlıştır. \"Aşı etkili olduğu için insanlar istemedi\" mantıksızdır. İki cümleyi Türkçe bağlayıp oku, anlam bozuluyorsa o bağlacı ele.",
+    "translation": "Yeni aşı klinik denemelerde çok etkili olmasına rağmen, birçok kişi aşıyı olmaya isteksiz kaldı."
+  },
+  {
+    "id": "ss002",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Many coastal towns have lost a large part of their income ---- the sharp decline in fish stocks over the past decade.",
+    "signalWords": [
+      {
+        "word": "have lost",
+        "type": "anlam",
+        "tip": "Olumsuz bir sonuç: kasabalar gelir kaybetmiş. Neden kaybettiğini arıyorsun."
+      },
+      {
+        "word": "the sharp decline",
+        "type": "yapi",
+        "tip": "Boşluktan sonra isim öbeği geliyor, cümle değil. O zaman edat lazım: due to, despite, because of."
+      }
+    ],
+    "options": [
+      "in spite of",
+      "due to",
+      "so that",
+      "whereas",
+      "unless"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: Önce yapıya bak. Boşluktan sonra \"the sharp decline\" yani bir isim var. So that, whereas ve unless arkasından tam cümle ister, elenir. Kalan iki edattan anlamı uyan due to (yüzünden): balık azaldığı için gelir düştü.",
+    "trap": "In spite of da isimle kullanılır, yapı olarak uyar. Ama anlamı \"-e rağmen\". Balık azalmasına rağmen gelir düştü demek mantıksız. Yapı eledikten sonra anlamı mutlaka kontrol et.",
+    "translation": "Birçok sahil kasabası, son on yılda balık stoklarındaki keskin düşüş yüzünden gelirlerinin büyük bir kısmını kaybetti."
+  },
+  {
+    "id": "ss003",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Genel",
+    "questionText": "By the time the rescue team reached the village, most of the residents ----.",
+    "signalWords": [
+      {
+        "word": "By the time",
+        "type": "zaman",
+        "tip": "\"-diği zamana kadar\". Geçmişte iki olay var: önce olan past perfect (had + V3) ile yazılır."
+      },
+      {
+        "word": "reached",
+        "type": "zaman",
+        "tip": "Simple past: ekip köye geçmişte ulaştı. Öteki olay bundan ÖNCE bitmiş olmalı."
+      }
+    ],
+    "options": [
+      "were leaving",
+      "have left",
+      "would leave",
+      "had already left",
+      "leave"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: By the time + simple past varsa, ana cümle past perfect olur. Köy halkı, ekip gelmeden önce gitmişti. Bu yüzden had already left doğru.",
+    "trap": "Have left (present perfect) bugünle bağlantı kurar. Cümle tamamen geçmişte geçiyor, bugünle ilgisi yok. By the time görünce önce past perfect şıkkını ara.",
+    "translation": "Kurtarma ekibi köye ulaştığında, köy halkının çoğu çoktan ayrılmıştı."
+  },
+  {
+    "id": "ss004",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Since the invention of the printing press, access to written knowledge ---- dramatically.",
+    "signalWords": [
+      {
+        "word": "Since",
+        "type": "zaman",
+        "tip": "\"-den beri\". Geçmişte başlayıp bugüne kadar süren durum: present perfect (has/have + V3)."
+      }
+    ],
+    "options": [
+      "increased",
+      "had increased",
+      "was increasing",
+      "increases",
+      "has increased"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: Since + geçmişteki bir başlangıç noktası, ana cümlede present perfect ister. Matbaanın icadından bugüne kadar bilgiye erişim arttı ve hâlâ etkisi sürüyor. Bu yüzden has increased doğru.",
+    "trap": "Increased (simple past) cazip görünür, çünkü matbaa geçmişte icat edildi. Ama since \"bugüne kadar\" der. Geçmişte bitmiş bir olay değil, bugüne uzanan bir süreç var.",
+    "translation": "Matbaanın icadından bu yana yazılı bilgiye erişim büyük ölçüde arttı."
+  },
+  {
+    "id": "ss005",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Sağlık",
+    "questionText": "Patients should not stop taking antibiotics early ---- their doctor tells them to do so.",
+    "signalWords": [
+      {
+        "word": "should not stop",
+        "type": "olumsuz",
+        "tip": "Bir yasak var: ilacı erken bırakma. Tek istisnayı söyleyen bağlaç arıyorsun: \"-medikçe\"."
+      },
+      {
+        "word": "do so",
+        "type": "yapi",
+        "tip": "\"Bunu yapmak\" yani ilacı bırakmak. Doktor bırak derse bırakılabilir: bu bir şart."
+      }
+    ],
+    "options": [
+      "unless",
+      "because",
+      "whereas",
+      "so",
+      "despite"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kural: Unless = if not, yani \"-medikçe, -mezse\". Hastalar antibiyotiği erken bırakmamalı, doktor söylemedikçe. Yasak + tek istisna yapısı unless ile kurulur.",
+    "trap": "Because ile cümle \"doktor bırak dediği için bırakmamalı\" olur, anlam ters döner. Despite arkasından cümle almaz, yapı olarak da elenir.",
+    "translation": "Hastalar, doktorları söylemedikçe antibiyotikleri erken bırakmamalıdır."
+  },
+  {
+    "id": "ss006",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sağlık",
+    "questionText": "Regular exercise strengthens the heart; ----, it reduces stress and improves sleep quality.",
+    "signalWords": [
+      {
+        "word": "strengthens",
+        "type": "anlam",
+        "tip": "Olumlu bir fayda: kalbi güçlendirir."
+      },
+      {
+        "word": "reduces stress",
+        "type": "anlam",
+        "tip": "Yine olumlu bir fayda. Olumlu + olumlu = aynı yönde ekleme."
+      }
+    ],
+    "options": [
+      "however",
+      "otherwise",
+      "instead",
+      "on the contrary",
+      "moreover"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: İki cümle aynı yönde bilgi veriyorsa ekleme sinyali gelir. Egzersizin bir faydası, ardından başka faydaları sayılıyor. Moreover (üstelik) doğru. Yapıya da bak: noktalı virgül + boşluk + virgül, oraya bağlaç zarfı gelir demektir.",
+    "trap": "However en sık yapılan hatadır, çünkü noktalı virgülden sonra çok görülür. Ama however zıtlık getirir. Burada zıtlık yok, iki cümle de olumlu.",
+    "translation": "Düzenli egzersiz kalbi güçlendirir; üstelik stresi azaltır ve uyku kalitesini artırır."
+  },
+  {
+    "id": "ss007",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Fen",
+    "questionText": "The bridge had not been inspected for years; ----, nobody was surprised when cracks appeared on its surface.",
+    "signalWords": [
+      {
+        "word": "had not been inspected",
+        "type": "sebep",
+        "tip": "Sebep: köprü yıllarca kontrol edilmedi."
+      },
+      {
+        "word": "nobody was surprised",
+        "type": "sebep",
+        "tip": "Bu sebebin doğal sonucu: kimse şaşırmadı. Sebep → sonuç = sonuç bağlacı."
+      }
+    ],
+    "options": [
+      "nevertheless",
+      "meanwhile",
+      "for instance",
+      "consequently",
+      "in contrast"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: İlk cümle bir sebep, ikinci cümle onun beklenen sonucuysa sonuç bağlacı gelir. Köprü kontrol edilmediği için çatlaklar kimseyi şaşırtmadı. Consequently (sonuç olarak) doğru.",
+    "trap": "Nevertheless (yine de) zıtlık bildirir. \"Kontrol edilmedi, yine de kimse şaşırmadı\" demek mantığı bozar. Sonuç beklenen bir şeyse zıtlık bağlacını ele.",
+    "translation": "Köprü yıllardır denetlenmemişti; sonuç olarak yüzeyinde çatlaklar belirdiğinde kimse şaşırmadı."
+  },
+  {
+    "id": "ss008",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Fen",
+    "questionText": "Some birds migrate thousands of kilometres every winter, ---- others stay in the same region throughout the year.",
+    "signalWords": [
+      {
+        "word": "Some",
+        "type": "zitlik",
+        "tip": "Some ... others kalıbı iki grubu karşılaştırır. Karşılaştırma görünce whereas / while düşün."
+      },
+      {
+        "word": "migrate",
+        "type": "anlam",
+        "tip": "Göç eder: yer değiştirir."
+      },
+      {
+        "word": "stay",
+        "type": "anlam",
+        "tip": "Kalır: yer değiştirmez. Migrate ile tam ters anlam."
+      }
+    ],
+    "options": [
+      "whereas",
+      "since",
+      "so that",
+      "as if",
+      "provided that"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kural: İki grup birbirine ters şekilde davranıyorsa karşılaştırma bağlacı whereas (oysa, -iken) gelir. Bazı kuşlar göç eder, oysa diğerleri yerinde kalır.",
+    "trap": "Since hem \"-den beri\" hem \"çünkü\" anlamına gelir. İkisi de burada uymaz: diğer kuşların kalması, göçün sebebi değil.",
+    "translation": "Bazı kuşlar her kış binlerce kilometre göç ederken, diğerleri yıl boyunca aynı bölgede kalır."
+  },
+  {
+    "id": "ss009",
+    "questionType": "tamamlama",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Even though the company's profits rose sharply last year, ----.",
+    "signalWords": [
+      {
+        "word": "Even though",
+        "type": "zitlik",
+        "tip": "\"-mesine rağmen\". Devamında beklenenin TERSİ gelir."
+      },
+      {
+        "word": "rose sharply",
+        "type": "anlam",
+        "tip": "Olumlu bilgi: kâr hızla arttı. Zıtlık olduğu için devamı olumsuz ya da beklenmedik olmalı."
+      }
+    ],
+    "options": [
+      "it hired hundreds of new employees",
+      "its shareholders were pleased with the results",
+      "the demand for its products kept growing",
+      "it decided to close two of its factories",
+      "its managers received large bonuses"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: Even though olan cümlede ikinci kısım beklenenin tersini söyler. Kâr arttı (olumlu), beklenmeyen sonuç: iki fabrikayı kapatmaya karar verdi.",
+    "trap": "Diğer dört şık olumlu ve beklenen sonuçlar. Kâr artınca işe alım, mutlu hissedarlar, prim normaldir. Zıtlık sinyali varsa \"normal\" sonucu ele.",
+    "translation": "Şirketin kârı geçen yıl hızla artmasına rağmen, şirket fabrikalarından ikisini kapatmaya karar verdi."
+  },
+  {
+    "id": "ss010",
+    "questionType": "tamamlama",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Unless the city invests in public transport, ----.",
+    "signalWords": [
+      {
+        "word": "Unless",
+        "type": "kosul",
+        "tip": "\"-medikçe, -mezse\". Şart cümlesi: genelde olumsuz bir sonuç uyarısı gelir."
+      },
+      {
+        "word": "invests",
+        "type": "zaman",
+        "tip": "Şart kısmı present simple. Birinci tip koşul: ana cümle will + V1 olur."
+      }
+    ],
+    "options": [
+      "more people have started cycling to work",
+      "the new metro line opened last month",
+      "traffic congestion will continue to get worse",
+      "air quality improved considerably",
+      "residents would have saved a lot of time"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: Unless + present simple → ana cümlede will. Ayrıca unless \"yatırım yapmazsa\" demek, sonucu olumsuz olmalı. Trafik kötüleşmeye devam edecek, iki kurala da uyuyor.",
+    "trap": "Would have saved üçüncü tip koşulun ana cümlesidir, unless + present ile kullanılmaz. Zaman uyumu tutmayan şıkları hemen ele: have started, opened, improved de aynı nedenle elenir.",
+    "translation": "Şehir toplu taşımaya yatırım yapmazsa, trafik sıkışıklığı kötüleşmeye devam edecek."
+  },
+  {
+    "id": "ss011",
+    "questionType": "anlam",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "The new policy has been far from successful in reducing unemployment.",
+    "signalWords": [
+      {
+        "word": "far from",
+        "type": "olumsuz",
+        "tip": "\"Hiç de ... değil\". Kelime olumlu (successful) görünür ama anlam olumsuzdur: başarısız."
+      }
+    ],
+    "options": [
+      "The new policy has managed to reduce unemployment significantly.",
+      "The new policy has largely failed to reduce unemployment.",
+      "Unemployment has fallen far more than expected thanks to the new policy.",
+      "The new policy has had no connection with unemployment.",
+      "The new policy will soon succeed in reducing unemployment."
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: Far from + olumlu kelime = olumsuz anlam. \"Far from successful\" = hiç de başarılı değil. Aynı anlamı veren şık: büyük ölçüde başarısız oldu (largely failed).",
+    "trap": "A ve C şıkları \"successful\" kelimesine kanıp olumlu anlam verir. C'deki \"far more\" kelimesi de \"far\" geçtiği için göz yanıltır. Gizli olumsuzu görünce olumlu şıkları ele.",
+    "translation": "Yeni politika işsizliği azaltmada hiç de başarılı olmadı."
+  },
+  {
+    "id": "ss012",
+    "questionType": "anlam",
+    "exam": "YDS",
+    "topic": "Genel",
+    "questionText": "Hardly had the meeting started when the fire alarm went off.",
+    "signalWords": [
+      {
+        "word": "Hardly",
+        "type": "zaman",
+        "tip": "Hardly had ... when = \"-ir -mez\". Bir olay biter bitmez öteki olur. Burada \"zar zor\" anlamı yok."
+      },
+      {
+        "word": "when",
+        "type": "zaman",
+        "tip": "Hardly ile birlikte gelir ve ikinci olayı başlatır: hemen ardından olan şey."
+      }
+    ],
+    "options": [
+      "The fire alarm went off long after the meeting had started.",
+      "The meeting started just after the fire alarm stopped.",
+      "The fire alarm went off almost as soon as the meeting started.",
+      "The meeting was cancelled because of the fire alarm.",
+      "The meeting hardly ever starts on time."
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: Hardly / Scarcely had ... when ve No sooner had ... than = \"-ir -mez\". Toplantı başlar başlamaz yangın alarmı çaldı. Aynı anlam: almost as soon as.",
+    "trap": "E şıkkı \"hardly\" kelimesini tekrar ettiği için tanıdık gelir ama \"neredeyse hiç\" anlamında kullanılmış. A şıkkı ise \"long after\" ile süreyi tersine çevirir.",
+    "translation": "Toplantı başlar başlamaz yangın alarmı çaldı."
+  }
+]
