@@ -353,5 +353,300 @@
     "explanation": "Kural: Hardly / Scarcely had ... when ve No sooner had ... than = \"-ir -mez\". Toplantı başlar başlamaz yangın alarmı çaldı. Aynı anlam: almost as soon as.",
     "trap": "E şıkkı \"hardly\" kelimesini tekrar ettiği için tanıdık gelir ama \"neredeyse hiç\" anlamında kullanılmış. A şıkkı ise \"long after\" ile süreyi tersine çevirir.",
     "translation": "Toplantı başlar başlamaz yangın alarmı çaldı."
+  },
+  {
+    "id": "ss013",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "The number of smartphone users around the world ---- rapidly over the last two decades.",
+    "signalWords": [
+      {
+        "word": "over the last two decades",
+        "type": "zaman",
+        "tip": "\"Son yirmi yılda\": geçmişte başlayıp bugüne kadar süren bir dönem. Present perfect (has/have + V3) ister."
+      }
+    ],
+    "options": [
+      "rose",
+      "had risen",
+      "was rising",
+      "will rise",
+      "has risen"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: over the last / in the past / for + süre gibi bugüne uzanan zaman ifadeleri present perfect ister. Akıllı telefon kullanıcı sayısı son yirmi yıldır artıyor ve bu dönem bugün de sürüyor. Bu yüzden has risen doğru.",
+    "trap": "Rose (simple past) çok seçilir, çünkü \"artış geçmişte oldu\" diye düşünülür. Ama simple past bitmiş ve bugünle bağı kopmuş bir zamanı anlatır. \"Over the last\" bugüne kadar gelen bir süreyi gösterir.",
+    "translation": "Dünyadaki akıllı telefon kullanıcılarının sayısı son yirmi yılda hızla arttı."
+  },
+  {
+    "id": "ss014",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Fen",
+    "questionText": "By the end of this century, global sea levels ---- by at least half a metre, according to some climate models.",
+    "signalWords": [
+      {
+        "word": "By the end of this century",
+        "type": "zaman",
+        "tip": "\"Bu yüzyılın sonuna kadar\": gelecekte bir zamana kadar tamamlanmış olacak bir olay. Future perfect (will have + V3) ister."
+      },
+      {
+        "word": "according to some climate models",
+        "type": "anlam",
+        "tip": "Bir tahmin anlatılıyor, yani olay gelecekte. Geçmiş zaman şıklarını ele."
+      }
+    ],
+    "options": [
+      "has risen",
+      "had risen",
+      "will have risen",
+      "rose",
+      "would rise"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: By + gelecekteki bir zaman (by 2050, by the end of this century) varsa ana cümle future perfect olur. Deniz seviyesi yüzyılın sonuna kadar en az yarım metre yükselmiş olacak. Bu yüzden will have risen doğru.",
+    "trap": "By the time ve by ile başlayan ifadeler hep past perfect sanılır. Önce zamanın geçmiş mi gelecek mi olduğuna bak: \"this century\" ve bir tahmin varsa gelecek, yani will have + V3.",
+    "translation": "Bazı iklim modellerine göre, bu yüzyılın sonuna kadar küresel deniz seviyesi en az yarım metre yükselmiş olacak."
+  },
+  {
+    "id": "ss015",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "If the ancient city had not been buried under volcanic ash, archaeologists ---- so much about daily life in the Roman period.",
+    "signalWords": [
+      {
+        "word": "If",
+        "type": "kosul",
+        "tip": "Koşul cümlesi. Hangi tip olduğunu if'ten sonraki fiil söyler."
+      },
+      {
+        "word": "had not been buried",
+        "type": "zaman",
+        "tip": "If + past perfect = üçüncü tip koşul: geçmişte olmamış bir şeyi hayal eder. Ana cümle would have + V3 olur."
+      }
+    ],
+    "options": [
+      "will not learn",
+      "had not learned",
+      "did not learn",
+      "would not have learned",
+      "have not learned"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: If + had + V3 (üçüncü tip koşul) ana cümlede would/could/might have + V3 ister. Şehir gerçekte küllerin altında kaldı ve bu sayede çok şey öğrenildi. Cümle bunun tersini hayal ediyor: gömülmeseydi bu kadar şey öğrenemezdik.",
+    "trap": "Had not learned da \"had\" içerdiği için uyumlu görünür. Ama past perfect if'in kendi tarafına gelir, ana cümleye değil. Ana cümlede mutlaka would / could / might bulunur.",
+    "translation": "Antik şehir volkanik külün altına gömülmemiş olsaydı, arkeologlar Roma dönemindeki günlük yaşam hakkında bu kadar çok şey öğrenemezdi."
+  },
+  {
+    "id": "ss016",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Sağlık",
+    "questionText": "The new drug can be used safely ---- patients follow the recommended dosage strictly.",
+    "signalWords": [
+      {
+        "word": "can be used safely",
+        "type": "anlam",
+        "tip": "Olumlu bir sonuç: ilaç güvenle kullanılabilir. Bu sonucun bir şarta bağlı olduğunu arıyorsun."
+      },
+      {
+        "word": "follow the recommended dosage",
+        "type": "kosul",
+        "tip": "Güvenli kullanımın şartı: önerilen dozu uygulamak. Şart + olumlu sonuç = provided that / as long as."
+      }
+    ],
+    "options": [
+      "provided that",
+      "even though",
+      "so that",
+      "whereas",
+      "unless"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kural: Provided that (= only if) \"şartıyla\" demektir. İlaç güvenle kullanılabilir, hastaların dozu sıkı uygulaması şartıyla. Şart yerine gelirse sonuç olumlu olur.",
+    "trap": "Unless de şart bağlacıdır ama olumsuz anlam taşır (\"-mezse\"). Unless ile cümle \"dozu uygulamazlarsa güvenle kullanılabilir\" olur, anlam tam tersine döner.",
+    "translation": "Yeni ilaç, hastaların önerilen dozu sıkı bir şekilde uygulaması şartıyla güvenle kullanılabilir."
+  },
+  {
+    "id": "ss017",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Fen",
+    "questionText": "The experiment was ---- complex that only a few laboratories in the world could repeat it.",
+    "signalWords": [
+      {
+        "word": "complex",
+        "type": "yapi",
+        "tip": "Boşluktan sonra isim değil, sıfat geliyor. Sıfattan önce so, isimden önce such gelir."
+      },
+      {
+        "word": "that",
+        "type": "sebep",
+        "tip": "So ... that = \"o kadar ... ki\". That'tan sonra gelen kısım sonucu anlatır."
+      }
+    ],
+    "options": [
+      "such",
+      "so",
+      "too",
+      "enough",
+      "very"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: so + sıfat/zarf + that ve such + (a/an) + sıfat + isim + that, \"o kadar ... ki\" anlamında sebep-sonuç kurar. Boşluktan sonra yalnız sıfat (complex) var, isim yok. Bu yüzden so doğru: deney o kadar karmaşıktı ki dünyada çok az laboratuvar tekrarlayabildi.",
+    "trap": "Such de \"o kadar\" demektir ama arkasından isim ister: \"such a complex experiment that\". Too ise \"that\" ile değil \"to\" ile kullanılır: \"too complex to repeat\".",
+    "translation": "Deney o kadar karmaşıktı ki dünyada yalnızca birkaç laboratuvar onu tekrarlayabildi."
+  },
+  {
+    "id": "ss018",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Fen",
+    "questionText": "Renewable energy has become much cheaper in recent years. ----, many countries still depend heavily on coal.",
+    "signalWords": [
+      {
+        "word": "much cheaper",
+        "type": "anlam",
+        "tip": "Olumlu bilgi: yenilenebilir enerji ucuzladı. Beklenen sonuç: ülkeler ona geçer."
+      },
+      {
+        "word": "still",
+        "type": "zitlik",
+        "tip": "\"Hâlâ\": beklenene rağmen değişmeyen durum. Ucuzlamasına rağmen kömür hâlâ kullanılıyor, bu bir zıtlık."
+      }
+    ],
+    "options": [
+      "Therefore",
+      "Similarly",
+      "For example",
+      "Nevertheless",
+      "Thus"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: İkinci cümle birinciden beklenen sonucun tersini söylüyorsa zıtlık bağlacı gelir. Yenilenebilir enerji ucuzladı (beklenen: ona geçilir), ama ülkeler hâlâ kömüre bağlı. Nevertheless (yine de) doğru.",
+    "trap": "Therefore ve Thus sonuç bildirir. \"Ucuzladı, bu yüzden kömüre bağlılar\" mantıksızdır. Cümlede \"still\" görürsen genelde zıtlık vardır.",
+    "translation": "Yenilenebilir enerji son yıllarda çok daha ucuz hâle geldi. Yine de birçok ülke hâlâ büyük ölçüde kömüre bağımlı."
+  },
+  {
+    "id": "ss019",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Fen",
+    "questionText": "Researchers kept the samples at a low temperature ---- they would not lose their chemical properties.",
+    "signalWords": [
+      {
+        "word": "kept the samples at a low temperature",
+        "type": "sebep",
+        "tip": "Bir eylem yapılıyor. Arkasından bu eylemin amacı geliyor: neden düşük sıcaklıkta tutuldu?"
+      },
+      {
+        "word": "would",
+        "type": "yapi",
+        "tip": "Boşluktan sonra özne + would/could gelen tam bir cümle var. Amaç bildiren ve cümle alan bağlaç: so that."
+      }
+    ],
+    "options": [
+      "in order to",
+      "because of",
+      "as if",
+      "even if",
+      "so that"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: So that + özne + can/could/would/will, amaç bildirir: \"-sın diye\". Araştırmacılar örnekleri kimyasal özelliklerini kaybetmesinler diye düşük sıcaklıkta tuttu.",
+    "trap": "In order to da amaç bildirir ama arkasından fiilin yalın hâli gelir, cümle gelmez: \"in order to protect them\". Boşluktan sonra özne (they) varsa in order to elenir.",
+    "translation": "Araştırmacılar örnekleri, kimyasal özelliklerini kaybetmesinler diye düşük sıcaklıkta tuttu."
+  },
+  {
+    "id": "ss020",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "No sooner had the government announced the new tax ---- thousands of people took to the streets.",
+    "signalWords": [
+      {
+        "word": "No sooner",
+        "type": "zaman",
+        "tip": "No sooner ... than = \"-ir -mez\". Kalıbın ikinci yarısı mutlaka than olur."
+      },
+      {
+        "word": "had",
+        "type": "yapi",
+        "tip": "Devrik yapı: no sooner cümle başına gelince yardımcı fiil özneden önce gelir (had the government)."
+      }
+    ],
+    "options": [
+      "when",
+      "than",
+      "then",
+      "that",
+      "as"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: No sooner had + özne + V3 + than + simple past. Hükümet yeni vergiyi açıklar açıklamaz binlerce kişi sokaklara döküldü. Kalıp sabittir: no sooner ile than birlikte gelir.",
+    "trap": "When de \"-ir -mez\" yapısında kullanılır ama hardly / scarcely ile: \"Hardly had ... when\". No sooner'ın eşi than'dır. Kalıpları karıştırma.",
+    "translation": "Hükümet yeni vergiyi açıklar açıklamaz binlerce kişi sokaklara döküldü."
+  },
+  {
+    "id": "ss021",
+    "questionType": "tamamlama",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "While some economists believe that raising the minimum wage reduces poverty, ----.",
+    "signalWords": [
+      {
+        "word": "While",
+        "type": "zitlik",
+        "tip": "Burada \"-iken, oysa\": iki karşıt görüşü karşılaştırır. Devamında ilk görüşe ters bir görüş gelir."
+      },
+      {
+        "word": "some economists",
+        "type": "zitlik",
+        "tip": "Some ... others kalıbı: bazı ekonomistler bir şey düşünür, diğerleri başka bir şey. Devamında \"others\" ya da karşıt bir grup ara."
+      }
+    ],
+    "options": [
+      "others argue that it leads to higher unemployment",
+      "it has been raised several times in recent years",
+      "many workers earn more than the minimum wage",
+      "poverty has been a major problem for centuries",
+      "they support policies that help low-income families"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kural: While iki karşıt fikri bağlıyorsa ikinci kısım ilk fikre ters düşer. Bazı ekonomistler asgari ücret artışının yoksulluğu azalttığını düşünür (olumlu), diğerleri işsizliği artırdığını savunur (olumsuz). İki grup ve iki karşıt görüş var.",
+    "trap": "E şıkkı aynı ekonomistlerin aynı yöndeki başka bir görüşünü verir, zıtlık yoktur. B, C ve D ise konuyla ilgili ama karşıt bir görüş içermez. While ile başlayan cümlede karşıtlık arayan şıkkı seç.",
+    "translation": "Bazı ekonomistler asgari ücreti artırmanın yoksulluğu azalttığına inanırken, diğerleri bunun daha yüksek işsizliğe yol açtığını savunuyor."
+  },
+  {
+    "id": "ss022",
+    "questionType": "tamamlama",
+    "exam": "YÖKDİL",
+    "topic": "Sağlık",
+    "questionText": "Since the patient had a history of heart disease, ----.",
+    "signalWords": [
+      {
+        "word": "Since",
+        "type": "sebep",
+        "tip": "Burada \"çünkü, -diği için\" anlamında. Arkasından gelen kısım bu sebebin sonucu olmalı."
+      },
+      {
+        "word": "a history of heart disease",
+        "type": "anlam",
+        "tip": "Risk bildiren bir bilgi: hastanın kalp rahatsızlığı geçmişi var. Beklenen sonuç: ekstra dikkat, önlem."
+      }
+    ],
+    "options": [
+      "the surgery was successful despite the risks",
+      "he had never been to a hospital before",
+      "the doctors decided to monitor him closely after the operation",
+      "the operation would have been cancelled",
+      "nobody expected any complications"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: Since sebep anlamında kullanıldığında ana cümle bu sebebin mantıklı sonucunu verir. Hastanın kalp hastalığı geçmişi olduğu için doktorlar ameliyattan sonra onu yakından izlemeye karar verdi.",
+    "trap": "A şıkkı \"despite\" ile zıtlık kurar, sebep-sonuç değil. E şıkkı anlamca terstir: risk varken kimsenin sorun beklememesi mantıksız. D şıkkı would have been ile koşul yapısı ister, since ile uyuşmaz.",
+    "translation": "Hastanın kalp hastalığı geçmişi olduğu için doktorlar ameliyattan sonra onu yakından izlemeye karar verdi."
   }
 ]
