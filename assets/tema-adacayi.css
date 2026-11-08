@@ -579,7 +579,7 @@ body.tema-adacayi #dashboard{
 /* Adım 1 (panel): modüller henüz eski koyu temada kalır. Modül kutusuna eski
    değişkenler geri verilir; Adım 2'de her modül tek tek açık temaya alınınca
    o modülün satırı buradan çıkarılır. */
-body.tema-adacayi #dashboard .dmod:not(#mod-sinyal):not(#mod-tuzak):not(#mod-kelime):not(#mod-sat):not(#mod-paragraf):not(#mod-svo):not(#mod-teknik):not(#mod-avci):not(#mod-hatalar):not(#mod-radar):not(#mod-plan):not(#mod-sinavplanim):not(#mod-puananaliz):not(#mod-lider):not(#mod-dilavcisi){
+body.tema-adacayi #dashboard .dmod:not(#mod-sinyal):not(#mod-tuzak):not(#mod-kelime):not(#mod-sat):not(#mod-paragraf):not(#mod-svo):not(#mod-teknik):not(#mod-avci):not(#mod-hatalar):not(#mod-radar):not(#mod-plan):not(#mod-sinavplanim):not(#mod-puananaliz):not(#mod-lider):not(#mod-dilavcisi):not(#mod-mikro):not(#mod-canliders):not(#mod-istatistik){
   --paper:#05070d;--ink:#dce3ec;--surface:#0d1624;--surface-2:#131f30;--border:#22324a;--muted:#aeb6c4;
   --signal:#38bdf8;--signal-dark:#0284c7;--signal-hover:#7dd3fc;--signal-light:rgba(56,189,248,.14);--sl:rgba(56,189,248,.10);
   --contrast:#c4b5fd;--trap:#ef4444;--km-bg:#05070d;--km-surface:#0d1624;--km-border:#22324a;--km-accent:#38bdf8;
@@ -715,27 +715,27 @@ body.tema-adacayi #dashboard :is(.pt-kart,.dv-kart) .gd-btn.ikincil{background:v
    ============================================================ */
 /* Eski koyu tema "body.dark-mode [style*=...]" kuralları satır içi stilleri koyuya zorluyordu.
    Panelin kendi parçaları (.dash-main içindeki modül dışı öğeler) ve açık temaya alınan modüller için geri alınır. */
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,.dash-main>:not(.dmod)) :is([style*="background:var(--surface)"],[style*="background:white"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="background:var(--surface)"],[style*="background:white"]){background:var(--ad-kart)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,.dash-main>:not(.dmod)) [style*="background:var(--paper)"],body.tema-adacayi #dashboard .dash-main>:not(.dmod)[style*="background:var(--paper)"]{background:var(--ad-inci)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) [style*="background:#05070d"]{background:var(--ad-acik-2)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,.dash-main>:not(.dmod)) :is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]){color:var(--ad-metin)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik,.dash-main>:not(.dmod)) :is([style*="background:var(--surface)"],[style*="background:white"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="background:var(--surface)"],[style*="background:white"]){background:var(--ad-kart)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik,.dash-main>:not(.dmod)) [style*="background:var(--paper)"],body.tema-adacayi #dashboard .dash-main>:not(.dmod)[style*="background:var(--paper)"]{background:var(--ad-inci)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) [style*="background:#05070d"]{background:var(--ad-acik-2)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik,.dash-main>:not(.dmod)) :is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]){color:var(--ad-metin)!important}
 /* Şıklar */
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .dmo{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .dmo:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .dmo.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .dmo.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .dm-fb.ok{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .dmo{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .dmo:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .dmo.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .dmo.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .dm-fb.ok{color:var(--ad-dogru)}
 /* Cümledeki işaretler: sinyal (adaçayı), tuzak (kırmızı), anahtar kelime (koyu çizgi) */
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .s-sig{background:var(--ad-acik);color:var(--ad-koyu-2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .s-trap{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .s-key{background:var(--ad-acik-2);color:var(--ad-metin);box-shadow:inset 0 -2px 0 var(--ad-dogal)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) :is(.s-sig,.s-trap,.s-key)[data-tip]:hover::after{background:var(--ad-metin);color:#fff;box-shadow:0 4px 16px rgba(31,42,36,.2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) mark.avci-board-vurgu{background:var(--ad-acik)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .sl-ceviri-metin{background:var(--ad-kart);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .s-sig{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .s-trap{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .s-key{background:var(--ad-acik-2);color:var(--ad-metin);box-shadow:inset 0 -2px 0 var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) :is(.s-sig,.s-trap,.s-key)[data-tip]:hover::after{background:var(--ad-metin);color:#fff;box-shadow:0 4px 16px rgba(31,42,36,.2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) mark.avci-board-vurgu{background:var(--ad-acik)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .sl-ceviri-metin{background:var(--ad-kart);color:var(--ad-metin)}
 /* Üst satır */
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .adaptif-badge{background:var(--ad-acik);color:var(--ad-koyu-2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .adaptif-zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .adaptif-badge{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .adaptif-zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
 
 /* AVCI çözüm paneli (assets/modules/avci-cozum.js) */
 body.tema-adacayi #dashboard .avm-mod{color:var(--ad-ikincil);border-color:var(--ad-cizgi);background:var(--ad-kart)}
@@ -778,12 +778,12 @@ body.tema-adacayi #dashboard .avm-uyari{border-color:var(--ad-tuzak);background:
 body.tema-adacayi #dashboard .avm-rapor{background:var(--ad-kart);border-color:var(--ad-cizgi)}
 body.tema-adacayi #dashboard .avm-rapor h3{color:var(--ad-metin)}
 /* Yanlış cevap kutusu */
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-kutu{background:var(--ad-tuzak-zemin);border-color:#F2C4C4;border-left-color:var(--ad-tuzak);color:var(--ad-metin)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-dogru-satir b{color:var(--ad-dogru)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-klod-btn{background:var(--ad-kart);border-color:var(--ad-koyu);color:var(--ad-koyu)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-klod-ipucu{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-dogru{border-color:var(--ad-dogru)!important;background:var(--ad-dogru-zemin)!important;color:var(--ad-dogru)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) .yc-yanlis{border-color:var(--ad-tuzak)!important;background:var(--ad-tuzak-zemin)!important;color:var(--ad-tuzak)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-kutu{background:var(--ad-tuzak-zemin);border-color:#F2C4C4;border-left-color:var(--ad-tuzak);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-dogru-satir b{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-klod-btn{background:var(--ad-kart);border-color:var(--ad-koyu);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-klod-ipucu{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-dogru{border-color:var(--ad-dogru)!important;background:var(--ad-dogru-zemin)!important;color:var(--ad-dogru)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,#mod-kelime,#mod-sat,#mod-paragraf,#mod-svo,#mod-teknik,#mod-avci,#mod-hatalar,#mod-radar,#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) .yc-yanlis{border-color:var(--ad-tuzak)!important;background:var(--ad-tuzak-zemin)!important;color:var(--ad-tuzak)!important}
 /* Günlük Tuzak */
 body.tema-adacayi #dashboard #mod-tuzak .tuzak-sent{background:var(--ad-kart);border-color:var(--ad-cizgi)}
 body.tema-adacayi #dashboard #mod-tuzak .tuzak-opt{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
@@ -1042,9 +1042,9 @@ body.tema-adacayi #dashboard #mod-radar .kr-zayif-btn:hover{background:var(--ad-
 body.tema-adacayi #dashboard #mod-radar .radar-guncelle{background:var(--ad-koyu);color:#fff}
 /* Plan, Acil Kurtarma, Puan Analizörü, Liderlik */
 body.tema-adacayi #dashboard :is(#mod-plan,#mod-sinavplanim,#mod-puananaliz) input:not([type=checkbox]){background:var(--ad-kart)!important;border:1px solid var(--ad-cizgi)!important;color:var(--ad-metin)!important;color-scheme:light}
-body.tema-adacayi #dashboard :is(#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) label{color:var(--ad-ikincil)}
-body.tema-adacayi #dashboard :is(#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi) button[style*="color:#031018"]{background:var(--ad-koyu)!important;color:#fff!important}
-body.tema-adacayi #dashboard :is(#mod-plan,#mod-lider,#mod-dilavcisi,#mod-sinavplanim) button[style*="color:#f8fafc"],body.tema-adacayi #dashboard .plan-paylas{background:var(--ad-kart)!important;color:var(--ad-koyu)!important;border:1px solid var(--ad-dogal)!important}
+body.tema-adacayi #dashboard :is(#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) label{color:var(--ad-ikincil)}
+body.tema-adacayi #dashboard :is(#mod-plan,#mod-sinavplanim,#mod-puananaliz,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik) button[style*="color:#031018"]{background:var(--ad-koyu)!important;color:#fff!important}
+body.tema-adacayi #dashboard :is(#mod-plan,#mod-lider,#mod-dilavcisi,#mod-mikro,#mod-canliders,#mod-istatistik,#mod-sinavplanim) button[style*="color:#f8fafc"],body.tema-adacayi #dashboard .plan-paylas{background:var(--ad-kart)!important;color:var(--ad-koyu)!important;border:1px solid var(--ad-dogal)!important}
 body.tema-adacayi #dashboard .plan-section{background:var(--ad-kart);border-color:var(--ad-cizgi);box-shadow:var(--ad-golge)}
 body.tema-adacayi #dashboard :is(.plan-gun,.sp-hafta){border-bottom-color:var(--ad-cizgi)}
 body.tema-adacayi #dashboard :is(.plan-gun-no,.sp-hafta-no){background:var(--ad-koyu);color:#fff}
@@ -1375,3 +1375,47 @@ body.tema-adacayi #dashboard #mod-dilavcisi :is(#konusma-input,#dila-input){back
 body.tema-adacayi #dashboard #mod-dilavcisi :is(#konusma-mic-btn,#dila-mic-btn){display:inline-grid;place-items:center;border-color:var(--ad-dogal)!important}
 body.tema-adacayi #dashboard #mod-dilavcisi #konusma-alani{font-size:15px!important;border:1px solid var(--ad-cizgi)}
 body.tema-adacayi #dashboard #mod-dilavcisi a[onclick][style*="font-size:12px"]{font-size:14px!important}
+/* Mini Dersler */
+body.tema-adacayi #dashboard .micro-lesson-card{background:var(--ad-kart);border:1px solid var(--ad-cizgi);box-shadow:var(--ad-golge)}
+body.tema-adacayi #dashboard .micro-lesson-card .micro-baslik{color:var(--ad-metin)!important;font-size:16px}
+body.tema-adacayi #dashboard .micro-alt{color:var(--ad-ikincil)!important;font-size:14px}
+body.tema-adacayi #dashboard .micro-play{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard .micro-sure{background:var(--ad-kart);color:var(--ad-metin);font-size:12px}
+body.tema-adacayi #dashboard .micro-no{position:absolute;top:10px;left:12px;width:28px;height:28px;border-radius:50%;background:var(--ad-kart);color:var(--ad-koyu-2);font-weight:700;display:grid;place-items:center;font-size:14px}
+body.tema-adacayi #dashboard .micro-progress{background:var(--ad-acik)}
+body.tema-adacayi #dashboard .micro-progress-fill{background:var(--ad-koyu)}
+body.tema-adacayi .ders-modal{background:rgba(31,42,36,.55)}
+body.tema-adacayi .ders-modal-ic{background:var(--ad-kart);color:var(--ad-metin)}
+body.tema-adacayi .ders-modal-baslik{color:var(--ad-metin)}
+body.tema-adacayi .ders-kapat{background:var(--ad-acik-2);color:var(--ad-metin)}
+body.tema-adacayi .ders-video-alan{background:var(--ad-acik-2);border:1px solid var(--ad-cizgi)}
+body.tema-adacayi .ders-video-ic .emoji .ik{width:48px;height:48px;color:var(--ad-koyu)}
+body.tema-adacayi .ders-video-ic p,body.tema-adacayi .ders-video-ic [style*="rgba(255,255,255,.62)"]{color:var(--ad-ikincil)!important}
+body.tema-adacayi .ders-transkript h4{color:var(--ad-ikincil)}
+body.tema-adacayi .ders-transkript-metin{color:var(--ad-metin);font-size:15px}
+body.tema-adacayi .ders-transkript-metin .vurgu{color:var(--ad-koyu)}
+body.tema-adacayi .ders-quiz-btn{background:var(--ad-koyu);color:#fff}
+/* Canlı Ders: tahta yeşil kalır, çerçeve ve düğmeler adaçayı */
+body.tema-adacayi #dashboard #mod-canliders .tahta-wrap{background-color:#24392F;border-color:#7A5C48}
+body.tema-adacayi #dashboard #mod-canliders .tahta-wrap::after{background:#5E4636}
+body.tema-adacayi #dashboard #mod-canliders .tahta-lbl{color:#C9E2CF;font-size:12px}
+body.tema-adacayi #dashboard #mod-canliders .cl-progress{color:var(--ad-ikincil);font-size:13px}
+body.tema-adacayi #dashboard #mod-canliders .cl-btn-primary{background:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard #mod-canliders .cl-btn-primary:hover{background:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard #mod-canliders .cl-btn-ghost{background:var(--ad-kart);border-color:var(--ad-dogal);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard #mod-canliders .cl-btn-ghost .ik{width:16px;height:16px;vertical-align:-3px}
+body.tema-adacayi #dashboard #mod-canliders .cl-secenek.cl-dogru{background:rgba(47,122,85,.35);border-color:#8FCBA8;color:#E3F1E7}
+body.tema-adacayi #dashboard #mod-canliders .cl-secenek.cl-yanlis{background:rgba(185,28,28,.3);border-color:#E9A3A3;color:#FBEAEA}
+body.tema-adacayi #dashboard .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
+/* İstatistiklerim */
+body.tema-adacayi #dashboard :is(.ist-kpi,.ist-panel){background:var(--ad-kart);border-color:var(--ad-cizgi);box-shadow:var(--ad-golge)}
+body.tema-adacayi #dashboard .ist-kpi-ikon .ik{width:24px;height:24px;color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .ist-kpi-val{color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(.ist-kpi-lbl,.ist-kat-val){font-size:14px;color:var(--ad-ikincil)}
+body.tema-adacayi #dashboard .ist-panel-baslik{font-size:16px;color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(.ist-panel-sub,.ist-takvim-legend,.ist-hafta-gun-lbl){font-size:13px;color:var(--ad-ikincil)}
+body.tema-adacayi #dashboard .ist-kat-lbl{font-size:14px}
+body.tema-adacayi #dashboard :is(.ist-takvim-cell,.ist-kat-bar-track){background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .ist-hafta-fill{background:var(--ad-dogal)}
+body.tema-adacayi #dashboard .ist-hafta-ozet{font-size:15px;color:var(--ad-metin)}
+body.tema-adacayi #dashboard .tam-ekran-btn{font-variant-emoji:text}
