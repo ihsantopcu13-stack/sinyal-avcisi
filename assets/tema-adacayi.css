@@ -579,7 +579,7 @@ body.tema-adacayi #dashboard{
 /* Adım 1 (panel): modüller henüz eski koyu temada kalır. Modül kutusuna eski
    değişkenler geri verilir; Adım 2'de her modül tek tek açık temaya alınınca
    o modülün satırı buradan çıkarılır. */
-body.tema-adacayi #dashboard .dmod{
+body.tema-adacayi #dashboard .dmod:not(#mod-sinyal){
   --paper:#05070d;--ink:#dce3ec;--surface:#0d1624;--surface-2:#131f30;--border:#22324a;--muted:#aeb6c4;
   --signal:#38bdf8;--signal-dark:#0284c7;--signal-hover:#7dd3fc;--signal-light:rgba(56,189,248,.14);--sl:rgba(56,189,248,.10);
   --contrast:#c4b5fd;--trap:#ef4444;--km-bg:#05070d;--km-surface:#0d1624;--km-border:#22324a;--km-accent:#38bdf8;
@@ -706,3 +706,81 @@ body.tema-adacayi #dashboard .dash-header p{color:var(--ad-ikincil)!important}
 body.tema-adacayi #dashboard :is(.pt-kart,.dv-kart) .gd-btn{background:var(--ad-koyu);color:#fff}
 body.tema-adacayi #dashboard :is(.pt-kart,.dv-kart) .gd-btn:hover{background:var(--ad-koyu-2)}
 body.tema-adacayi #dashboard :is(.pt-kart,.dv-kart) .gd-btn.ikincil{background:var(--ad-kart);color:var(--ad-koyu);border-color:var(--ad-dogal)}
+
+/* ============================================================
+   FAZ 2 — ADIM 2: MODÜLLER (açık temaya alınan modüller)
+   Ortak kurallar aşağıdaki :is(...) listesindeki modüllere uygulanır.
+   Yeni bir modül açık temaya geçince: id'si bu listelere eklenir ve
+   yukarıdaki ".dmod:not(...)" koyu kutu kuralından çıkarılır.
+   ============================================================ */
+/* Eski koyu tema "body.dark-mode [style*=...]" kuralları satır içi stilleri koyuya zorluyordu.
+   Panelin kendi parçaları (.dash-main içindeki modül dışı öğeler) ve açık temaya alınan modüller için geri alınır. */
+body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) :is([style*="background:var(--surface)"],[style*="background:white"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="background:var(--surface)"],[style*="background:white"]){background:var(--ad-kart)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) [style*="background:var(--paper)"],body.tema-adacayi #dashboard .dash-main>:not(.dmod)[style*="background:var(--paper)"]{background:var(--ad-inci)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal) [style*="background:#05070d"]{background:var(--ad-acik-2)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) :is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]){color:var(--ad-metin)!important}
+/* Şıklar */
+body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .dm-fb.ok{color:var(--ad-dogru)}
+/* Cümledeki işaretler: sinyal (adaçayı), tuzak (kırmızı), anahtar kelime (koyu çizgi) */
+body.tema-adacayi #dashboard :is(#mod-sinyal) .s-sig{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .s-trap{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .s-key{background:var(--ad-acik-2);color:var(--ad-metin);box-shadow:inset 0 -2px 0 var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) :is(.s-sig,.s-trap,.s-key)[data-tip]:hover::after{background:var(--ad-metin);color:#fff;box-shadow:0 4px 16px rgba(31,42,36,.2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) mark.avci-board-vurgu{background:var(--ad-acik)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .sl-ceviri-metin{background:var(--ad-kart);color:var(--ad-metin)}
+/* Üst satır */
+body.tema-adacayi #dashboard :is(#mod-sinyal) .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .adaptif-badge{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .adaptif-zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+
+/* AVCI çözüm paneli (assets/modules/avci-cozum.js) */
+body.tema-adacayi #dashboard .avm-mod{color:var(--ad-ikincil);border-color:var(--ad-cizgi);background:var(--ad-kart)}
+body.tema-adacayi #dashboard .avm-mod[aria-pressed="true"]{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard .avm-btn:hover{color:var(--ad-koyu-2);border-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .avm-btn[aria-pressed="true"]{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-btn.avm-ana{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard .avm-btn.avm-ana:hover{background:var(--ad-koyu-2);color:#fff}
+body.tema-adacayi #dashboard .avm-kuyruk{background:var(--ad-dogru-zemin);border-color:var(--ad-dogal);color:var(--ad-metin)}
+body.tema-adacayi #dashboard .avm-ipucu-metin{background:var(--ad-acik-2);border-color:var(--ad-cizgi);border-left-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard #dm-opts .dmo.avm-elendi{opacity:1;color:var(--ad-ikincil);background:var(--ad-acik-2);border-style:dashed}
+body.tema-adacayi #dashboard #dm-opts .dmo.avm-secili{background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .avm-guven.yuksek{color:var(--ad-dogru);border-color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-guven.orta{color:var(--ad-koyu);border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard .avm-guven.dusuk{color:var(--ad-tuzak);border-color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .avm-b.beceri{border-left-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard .avm-b.dogrulama{border-left-color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-b.dogrulama h4,body.tema-adacayi #dashboard .avm-ok{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-b.tuzak{border-left-color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .avm-b.tuzak h4{color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .avm-b.refleks{border-left-color:var(--ad-koyu);background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .avm-b.refleks h4{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .avm-b.geri{border-left-color:var(--ad-ikincil)}
+body.tema-adacayi #dashboard .avm-cip{background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .avm-cumle mark.avm-isaret{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .avm-cumle mark.avm-dolgu{background:var(--ad-dogru-zemin);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-cumle mark.avm-dolgu.ana{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .avm-tz{border-color:var(--ad-cizgi);background:var(--ad-kart)}
+body.tema-adacayi #dashboard .avm-tz.secilen{border-color:var(--ad-tuzak);background:var(--ad-tuzak-zemin)}
+body.tema-adacayi #dashboard .avm-tz .avm-sik{color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .avm-rozet{background:var(--ad-tuzak);color:#fff}
+body.tema-adacayi #dashboard .avm-dogru-satir{border-color:var(--ad-dogru);background:var(--ad-dogru-zemin);color:var(--ad-metin)}
+body.tema-adacayi #dashboard .avm-refleks{color:var(--ad-metin)}
+body.tema-adacayi #dashboard .avm-gb .y{color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard .avm-gb .d{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .avm-adim .no{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .avm-adim.soru{border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard .avm-adim.son{border-color:var(--ad-koyu);background:var(--ad-acik-2)}
+body.tema-adacayi #dashboard .avm-uyari{border-color:var(--ad-tuzak);background:var(--ad-tuzak-zemin);color:var(--ad-metin)}
+body.tema-adacayi #dashboard .avm-rapor{background:var(--ad-kart);border-color:var(--ad-cizgi)}
+body.tema-adacayi #dashboard .avm-rapor h3{color:var(--ad-metin)}
+/* Yanlış cevap kutusu */
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-kutu{background:var(--ad-tuzak-zemin);border-color:#F2C4C4;border-left-color:var(--ad-tuzak);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-dogru-satir b{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-klod-btn{background:var(--ad-kart);border-color:var(--ad-koyu);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-klod-ipucu{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-dogru{border-color:var(--ad-dogru)!important;background:var(--ad-dogru-zemin)!important;color:var(--ad-dogru)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-yanlis{border-color:var(--ad-tuzak)!important;background:var(--ad-tuzak-zemin)!important;color:var(--ad-tuzak)!important}

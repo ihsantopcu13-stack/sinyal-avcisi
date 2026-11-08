@@ -1672,7 +1672,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108b">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108c">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -2273,7 +2273,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <button class="tam-ekran-btn" data-saf-odak-btn="sinyal" onclick="tamEkranAcKapat('mod-sinyal')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button>
           <div class="dm-eye" id="sl-eyebrow" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
             <span id="sl-eyebrow-text">Genel - YDS Metni - Soru 1/15</span>
-            <span class="adaptif-badge adaptif-orta" id="adaptif-seviye-badge">⚡ ORTA</span>
+            <span class="adaptif-badge adaptif-orta" id="adaptif-seviye-badge">Seviye: ORTA</span>
           </div>
           <div id="avci-mod-bar"></div>
           <div class="dm-sent" id="sl-sent"></div>
@@ -8529,14 +8529,14 @@ function dAns(btn,correct){
   faz2GaEvent('question_answered',{question_id:__slQidAns,correct:Boolean(correct)});
   faz2GaEvent(correct?'answer_correct':'answer_wrong',{question_id:__slQidAns});
   if(correct){
-    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='✅ Doğru! '+soru.fb;
+    btn.classList.add('ok');fb.className='dm-fb ok';fb.textContent='Doğru! '+soru.fb;
     streakSoruEkle('sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:true,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
     if(typeof konfeti==='function')konfeti();
   } else {
     btn.classList.add('err');opts[soru.ans].classList.add('ok');fb.className='dm-fb';
     if(typeof yanlisCevapKutusu==='function')yanlisCevapKutusu({hedef:fb,soru:soru.sent+' '+soru.q,secenekler:soru.opts,dogruIdx:soru.ans,secilenIdx:Array.from(opts).indexOf(btn),aciklama:soru.fb,butonlar:Array.from(opts),bolum:'Sinyal Lab',soruId:soru.id});
-    else{fb.className='dm-fb err';fb.textContent='❌ Yanlış. '+soru.fb;}
+    else{fb.className='dm-fb err';fb.textContent='Yanlış. '+soru.fb;}
     if(typeof saShakeBtn==='function')saShakeBtn(btn);
     hataEkle(soru.sent.replace(/<[^>]*>/g,''), btn.textContent, soru.opts[soru.ans], 'sinyal');
     cevapKaydet({questionId:soru.id,modul:'sinyal',soru:soru.sent.replace(/<[^>]*>/g,''),selectedOption:btn.textContent,correctOption:soru.opts[soru.ans],isCorrect:false,topic:'sinyal',signal:soru.sinyal||null,responseTimeMs:_slRt});
@@ -8726,7 +8726,7 @@ function avciTeshisPaneliGoster(soru){
   ];
   el.innerHTML=`
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
-      <div style="font-size:13px;font-weight:700;color:var(--signal);margin-bottom:4px">🏹 Bir noktayı kontrol edelim</div>
+      <div style="font-size:13px;font-weight:700;color:var(--signal);margin-bottom:4px">Bir noktayı kontrol edelim</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Bu şıkkı seçmende en etkili olan neydi?</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px">
         ${secenekler.map(([etiket,kod])=>`<button onclick="avciTeshisAdimASecim('${kod}')" style="background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:6px 12px;font-size:13px;color:var(--ink);cursor:pointer;font-family:'IBM Plex Sans',sans-serif">${etiket}</button>`).join('')}
@@ -10655,7 +10655,7 @@ function clCevapSec(i){
   if(blok){
     blok.querySelector('.yc-klod-btn')?.remove();
     if(i!==k.cevap&&typeof yanlisCevapKlodaSor==='function'){
-      const b=document.createElement('button');b.type='button';b.className='yc-klod-btn';b.textContent="🎯 KLOD'la açıkla";
+      const b=document.createElement('button');b.type='button';b.className='yc-klod-btn';b.textContent="KLOD'la açıkla";
       b.onclick=()=>{
         // Canlı Ders sesi KLOD'un üstüne binmesin; tahtadaki yazı tamamlanmaya devam eder
         ttsNesil++;if(window.speechSynthesis)speechSynthesis.cancel();if(pAudio)pAudio.pause();if(typeof clStopMouth==='function')clStopMouth();
@@ -12226,11 +12226,11 @@ function yanlisCevapKutusu(o){
   h.classList.add('yc-kutu');
   h.style.display='block';
   const aciklama=o.aciklama?String(o.aciklama).trim():'';
-  h.innerHTML='<div class="yc-baslik">❌ Yanlış cevap</div>'
+  h.innerHTML='<div class="yc-baslik">Yanlış cevap</div>'
     +'<div class="yc-satir yc-senin"><span>Senin cevabın</span><b>'+ycKacis(sec[o.secilenIdx]||'')+'</b></div>'
     +'<div class="yc-satir yc-dogru-satir"><span>Doğru cevap</span><b>'+ycKacis(sec[o.dogruIdx]||'')+'</b></div>'
     +(aciklama?'<div class="yc-aciklama">'+(typeof _safeHTML==='function'?_safeHTML(aciklama):ycKacis(aciklama))+'</div>':'')
-    +'<button type="button" class="yc-klod-btn">🎯 KLOD\'la açıkla</button>';
+    +'<button type="button" class="yc-klod-btn">KLOD\'la açıkla</button>';
   const sohbeteSor=()=>yanlisCevapKlodaSor({soru:o.soru,secenekler:sec,dogruIdx:o.dogruIdx,secilenIdx:o.secilenIdx,bolum:o.bolum});
   const btn=h.querySelector('.yc-klod-btn');
   if(o.soruId){h.dataset.ycSoru=o.soruId;btn.onclick=()=>klodAciklamaKartiAc(h,btn,o.soruId,o.secilenIdx,sohbeteSor);}
@@ -16424,7 +16424,7 @@ function adaptifBadgeGuncelle(){
   ];
   const s=seviyeler[(adaptifState.seviye-1)%4];
   badge.className='adaptif-badge '+s.cls;
-  badge.textContent=s.ikon+' '+s.ad;
+  badge.textContent='Seviye: '+s.ad;
 }
 
 // Mevcut dAns fonksiyonuna adaptif hook ekle
