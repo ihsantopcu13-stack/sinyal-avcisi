@@ -1,0 +1,23 @@
+name: Duyuru Paylaş (tek seferlik)
+
+# duyuru-paylas dalına automation/duyuru/ayar.json push'lanınca çalışır.
+# ayar.json "mod": "deneme" hiçbir şey paylaşmaz; "yayin" paylaşır.
+on:
+  push:
+    branches: [duyuru-paylas]
+    paths: ["automation/duyuru/ayar.json"]
+
+jobs:
+  paylas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Duyuruyu paylaş
+        run: node automation/duyuru/paylas.mjs
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
