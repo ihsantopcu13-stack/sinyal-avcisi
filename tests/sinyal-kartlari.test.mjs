@@ -28,7 +28,8 @@ const kartlar = vm.runInContext("SINYAL_KARTLARI", ctx);
 const K = ctx.SinyalKartlari;
 kontrol("modül SinyalKartlari'yı dışa verir", !!K && typeof K.baslat === "function");
 kontrol("veri tek bir dizi (SINYAL_KARTLARI)", Array.isArray(kartlar));
-kontrol("en az 30 kart", kartlar.length >= 30, kartlar.length);
+kontrol("100 kart", kartlar.length === 100, kartlar.length);
+kontrol("kelime sınırı: \"as\" kelimesi \"has\" içinde bulunmaz", K.bul("He has left as planned", "as") === 12);
 
 const hatalar = kartlar.flatMap((k) => K.kartDogrula(k));
 kontrol("her kart eksiksiz ve kelime örnekte geçiyor", hatalar.length === 0, hatalar.join(" | ") || "hata yok");

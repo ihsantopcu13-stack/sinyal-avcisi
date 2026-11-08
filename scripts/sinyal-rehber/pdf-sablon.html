@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="acik">
+<head>
+<meta charset="UTF-8">
+<title>{{PDF_ADI}} — Sinyal Avcısı</title>
+<style>
+{{TEMA}}
+@page{size:A4}
+body{background:#fff;font:11pt/1.5 'IBM Plex Sans','DejaVu Sans',system-ui,sans-serif}
+.kapak{height:250mm;display:flex;flex-direction:column;justify-content:center;gap:8mm;page-break-after:always}
+.kapak .ust{font:600 11pt var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--vurgu)}
+.kapak h1{font-size:34pt;line-height:1.1;color:var(--vurgu-2)}
+.kapak p{font-size:14pt;color:var(--ikincil);max-width:150mm}
+.kapak .serit{height:4mm;width:60mm;background:var(--vurgu);border-radius:2mm}
+.kapak .ucret{font-size:13pt;font-weight:700;color:var(--vurgu);background:var(--vurgu-zemin);display:inline-block;padding:2mm 4mm;border-radius:2mm;align-self:flex-start}
+.icerik{page-break-after:always}
+.icerik h2{font-size:20pt;margin-bottom:5mm}
+.icerik ol{padding-left:6mm;display:flex;flex-direction:column;gap:3mm;font-size:12pt}
+.icerik li{display:flex;gap:4mm;align-items:center}
+.nasil{margin-top:10mm;background:var(--kart-2);border:1px solid var(--cizgi);border-radius:3mm;padding:5mm 6mm}
+.nasil h3{font-size:13pt;margin-bottom:2mm}
+.nasil p{font-size:11pt;margin-top:1.5mm}
+.ss-rozet{font-size:10pt}
+.pt{page-break-before:always}
+.pt:first-of-type{page-break-before:auto}
+.pt h2{font-size:15pt;margin-bottom:4mm;display:flex;gap:3mm;align-items:center;color:var(--ikincil);font-weight:600}
+.pk{border:1px solid var(--cizgi);border-left:2mm solid var(--c);border-radius:2mm;padding:3mm 4mm;margin-bottom:3mm;break-inside:avoid;page-break-inside:avoid}
+.pk-ust{display:flex;align-items:baseline;gap:3mm;flex-wrap:wrap;margin-bottom:1mm}
+.pk-no{font:600 9pt var(--f-mono);color:var(--c);background:var(--z);border-radius:1.5mm;padding:0 1.5mm}
+.pk-ust b{font-size:13pt}
+.pk-tr{color:var(--ikincil);font-weight:600}
+.pk-sv{margin-left:auto;font-size:9pt;color:var(--ikincil);border:1px solid var(--cizgi);border-radius:5mm;padding:0 2.5mm}
+.pk p{font-size:10.5pt;margin-top:1mm}
+.pk i{font-style:normal;font-weight:700;color:var(--ikincil)}
+.pk mark{font-weight:700;color:var(--c);background:var(--z);padding:0 1mm;border-radius:1mm}
+.pk-orn-tr{color:var(--ikincil)}
+.pk-tuzak i{color:var(--yanlis)}
+.son{page-break-before:always;display:flex;flex-direction:column;gap:4mm;font-size:12pt}
+.son h2{font-size:18pt}
+</style>
+</head>
+<body>
+<section class="kapak">
+  <div class="ust">YDS · YÖKDİL · Sinyal Avcısı</div>
+  <div class="serit"></div>
+  <h1>{{PDF_ADI}}</h1>
+  <p>Soruyu çözdüren {{KART_SAYISI}} sinyal kelime. Her biri için kural, örnek cümle ve sınavdaki tuzak.</p>
+  <span class="ucret">Ücretsiz · Dilediğin gibi paylaşabilirsin</span>
+</section>
+<section class="icerik">
+  <h2>İçindekiler</h2>
+  <ol>{{ICINDEKILER}}</ol>
+  <div class="nasil">
+    <h3>Nasıl çalışmalı?</h3>
+    <p>1. Her gün bir bölüm oku. Önce kurala, sonra örneğe bak.</p>
+    <p>2. Tuzak satırını yüksek sesle oku. Sınavda en çok bu kısım puan kaybettirir.</p>
+    <p>3. Aynı kelimeleri sinyal-avcisi.com/sinyal-kartlari sayfasında kartla tekrar et.</p>
+    <p>4. Sınav biçimiyle ilgili güncel bilgiyi ÖSYM'nin sitesinden kontrol et.</p>
+  </div>
+</section>
+{{BOLUMLER}}
+<section class="son">
+  <h2>Sıradaki adım</h2>
+  <p>Bu kelimelerle soru çöz: sinyal-avcisi.com/sinyal-soru</p>
+  <p>Zıtlık bağlaçları tek sayfada: sinyal-avcisi.com/zitlik-baglaclari</p>
+  <p>Kartlarla tekrar et: sinyal-avcisi.com/sinyal-kartlari</p>
+  <p>Sinyal Avcısı'ndaki her şey ücretsiz. Sen sadece çalışmana odaklan.</p>
+</section>
+</body>
+</html>

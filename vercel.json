@@ -46,6 +46,7 @@
     { "source": "/puan-hedefi", "destination": "/puan-hedefi.html" },
     { "source": "/sinyal-soru", "destination": "/sinyal-soru.html" },
     { "source": "/sinyal-kartlari", "destination": "/sinyal-kartlari.html" },
+    { "source": "/zitlik-baglaclari", "destination": "/zitlik-baglaclari.html" },
     { "source": "/kelime-kartlari", "destination": "/kelime-kartlari.html" },
     { "source": "/yds-cikmis-sorular", "destination": "/yds-cikmis-sorular.html" },
     { "source": "/yokdil-sinyal-kelimeler", "destination": "/yokdil-sinyal-kelimeler.html" },

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- BU DOSYA ÜRETİLİR: scripts/generate-sinyal-rehber.mjs (şablon: scripts/sinyal-rehber/zitlik-sablon.html). Elle düzenleme. -->
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sık Çıkan 10 Zıtlık Bağlacı (YDS / YÖKDİL) — Sinyal Avcısı</title>
+  <meta name="description" content="YDS ve YÖKDİL'de sık çıkan 10 zıtlık bağlacı tek sayfada: although, despite, however, whereas, while ve diğerleri. Her biri için kural, örnek ve tuzak. Ücretsiz PDF rehber.">
+  <meta property="og:title" content="Sık Çıkan 10 Zıtlık Bağlacı — Sinyal Avcısı">
+  <meta property="og:description" content="10 zıtlık bağlacı tek sayfada: kural, örnek, tuzak. Ücretsiz 100 sinyal kelime PDF rehberi.">
+  <meta property="og:image" content="https://sinyal-avcisi.com/assets/og-image.png">
+  <link rel="canonical" href="https://sinyal-avcisi.com/zitlik-baglaclari">
+  <link rel="icon" href="/assets/icon-192.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PM25HTL46K');
+  </script>
+  <script>
+    (function(){var t=null;try{t=localStorage.getItem('sa_ss_tema');}catch(e){}
+    document.documentElement.setAttribute('data-tema',t==='koyu'?'koyu':'acik');})();
+  </script>
+  <link rel="stylesheet" href="/assets/sinyal-tema.css?v=20261108">
+  <style>
+    .pdf-kutu{background:var(--kart);border:2px solid var(--vurgu);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--golge)}
+    .pdf-kutu h2{font-size:22px}
+    .pdf-kutu p{color:var(--ikincil);font-size:17px}
+    .pdf-btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:12px 22px;border-radius:12px;background:var(--vurgu);color:var(--vurgu-ust);font-size:18px;font-weight:700;text-decoration:none;align-self:flex-start}
+    .pdf-btn:hover{background:var(--vurgu-2)}
+    .pdf-not{font-size:15px!important}
+    .tablo-kutu{background:var(--kart);border:1px solid var(--cizgi);border-radius:18px;padding:6px 0;box-shadow:var(--golge);overflow:hidden}
+    .tablo-kutu h2{font-size:22px;padding:14px 18px 6px}
+    table{width:100%;border-collapse:collapse;font-size:17px}
+    th,td{text-align:left;padding:10px 12px;border-top:1px solid var(--cizgi);vertical-align:top}
+    th{font:600 13.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ikincil)}
+    td:first-child,th:first-child{padding-left:18px}
+    td a{font-weight:700;color:var(--zitlik);text-decoration:none;border-bottom:2px solid var(--zitlik)}
+    .zb{background:var(--kart);border:1px solid var(--cizgi);border-left:6px solid var(--zitlik);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--golge);scroll-margin-top:72px}
+    .zb-ust{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px}
+    .zb-no{font:600 15px var(--f-mono);color:var(--zitlik);background:var(--zitlik-z);border-radius:8px;padding:2px 9px}
+    .zb-ust h2{font-size:26px;color:var(--metin)}
+    .zb-tr{font-size:18px;color:var(--ikincil);font-weight:600}
+    .zb-blok h3{font:700 13.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ikincil);margin-bottom:4px}
+    .zb-blok p{font-size:17.5px}
+    .zb-ornek{font-size:18.5px!important;font-weight:500}
+    .zb-ornek mark{font-weight:700;color:var(--c);background:var(--z);border-bottom:2.5px solid var(--c);border-radius:5px 5px 2px 2px;padding:0 4px}
+    .zb-ornek-tr{color:var(--ikincil);margin-top:4px}
+    .zb-tuzak{background:var(--yanlis-zemin);border-radius:10px;padding:10px 12px}
+    .zb-tuzak h3{color:var(--yanlis)}
+    .devam{display:flex;flex-direction:column;gap:10px;background:var(--kart-2);border:1px solid var(--cizgi);border-radius:16px;padding:18px 20px}
+    .devam h2{font-size:22px}
+    .devam ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:17.5px}
+    @media (max-width:420px){th,td{padding:9px 8px;font-size:16px}td:first-child,th:first-child{padding-left:12px}.zb{padding:16px 14px}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="/">Sinyal Avcısı</a>
+  <div class="nav-sag">
+    <button type="button" class="tema-btn" id="tema-btn" aria-pressed="false">Koyu tema</button>
+    <a class="nav-back" href="/">← Ana sayfa</a>
+  </div>
+</nav>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">YDS · YÖKDİL · Zıtlık bağlaçları</div>
+    <h1>Sık çıkan 10 zıtlık bağlacı, tek sayfada</h1>
+    <p class="lead">Boşluk sorularında zıtlık bağlacı çok sık gelir. Her biri için kural, örnek ve tuzak burada. Önce tabloya bak, sonra tek tek oku.</p>
+    <span class="ucretsiz">Ücretsiz · Üyelik yok · Her şey açık</span>
+  </header>
+
+  <section class="pdf-kutu" aria-label="PDF rehber">
+    <h2>100 Sinyal Kelime ve Tuzaklar Rehberi</h2>
+    <p>Bu 10 bağlaç ve 100 sinyal kelimenin tamamı tek PDF'te. Her kelime için kural, örnek ve tuzak var. İndir, yazdır, istediğin yerde çalış.</p>
+    <a class="pdf-btn" href="/assets/sinyal-avcisi-100-sinyal-kelime-rehberi.pdf" download>PDF'i ücretsiz indir</a>
+    <p class="pdf-not">Kayıt, paylaşım ya da e-posta istemiyoruz. Doğrudan iner.</p>
+  </section>
+
+  <section class="tablo-kutu" aria-label="Hızlı tablo">
+    <h2>Hızlı tablo</h2>
+    <table>
+      <thead><tr><th>Bağlaç</th><th>Anlamı</th><th>Arkasından</th></tr></thead>
+      <tbody>
+          <tr><td><a href="#b1" lang="en">Although</a></td><td>-e rağmen, -dığı hâlde</td><td>Tam cümle</td></tr>
+          <tr><td><a href="#b2" lang="en">Even though</a></td><td>-mesine rağmen (güçlü)</td><td>Tam cümle</td></tr>
+          <tr><td><a href="#b3" lang="en">Despite</a></td><td>-e rağmen</td><td>İsim ya da V-ing</td></tr>
+          <tr><td><a href="#b4" lang="en">However</a></td><td>ancak, fakat</td><td>Yeni cümle (; however,)</td></tr>
+          <tr><td><a href="#b5" lang="en">Nevertheless</a></td><td>yine de, buna rağmen</td><td>Yeni cümle</td></tr>
+          <tr><td><a href="#b6" lang="en">Whereas</a></td><td>oysa, -iken</td><td>Tam cümle</td></tr>
+          <tr><td><a href="#b7" lang="en">While</a></td><td>-iken; oysa</td><td>Tam cümle</td></tr>
+          <tr><td><a href="#b8" lang="en">Yet</a></td><td>ama, yine de</td><td>Tam cümle (virgülden sonra)</td></tr>
+          <tr><td><a href="#b9" lang="en">On the other hand</a></td><td>öte yandan, diğer taraftan</td><td>Yeni cümle</td></tr>
+          <tr><td><a href="#b10" lang="en">On the contrary</a></td><td>tam tersine</td><td>Yeni cümle</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+    <article class="zb" id="b1">
+      <div class="zb-ust"><span class="zb-no">1</span><h2 lang="en">Although</h2><span class="zb-tr">-e rağmen, -dığı hâlde</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>İki cümleyi zıtlıkla bağlar. Arkasından tam cümle gelir (özne + yüklem).</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en"><mark class="ss-t-zitlik">Although</mark> the drug reduced pain, it caused serious side effects.</p><p class="zb-ornek-tr">İlaç ağrıyı azaltmasına rağmen ciddi yan etkilere yol açtı.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Despite ile karıştırma. Although + cümle, despite + isim. Boşluktan sonra özne ve fiil varsa although seç.</p></div>
+    </article>
+
+    <article class="zb" id="b2">
+      <div class="zb-ust"><span class="zb-no">2</span><h2 lang="en">Even though</h2><span class="zb-tr">-mesine rağmen (güçlü)</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Although ile aynı yapı, zıtlığı daha güçlü vurgular. Arkasından cümle gelir.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en"><mark class="ss-t-zitlik">Even though</mark> the team worked overtime, the project was delayed.</p><p class="zb-ornek-tr">Ekip fazla mesai yapmasına rağmen proje gecikti.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Even if ile karıştırma. Even if &quot;olsa bile&quot; demektir, bir koşul bildirir. Even though gerçek bir durumu anlatır.</p></div>
+    </article>
+
+    <article class="zb" id="b3">
+      <div class="zb-ust"><span class="zb-no">3</span><h2 lang="en">Despite</h2><span class="zb-tr">-e rağmen</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Zıtlık edatıdır. Arkasından isim, isim öbeği ya da V-ing gelir.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en"><mark class="ss-t-zitlik">Despite</mark> the heavy rain, the match was not cancelled.</p><p class="zb-ornek-tr">Şiddetli yağmura rağmen maç iptal edilmedi.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>&quot;Despite of&quot; diye bir yapı yoktur. Arkasından cümle gelecekse &quot;despite the fact that&quot; olur.</p></div>
+    </article>
+
+    <article class="zb" id="b4">
+      <div class="zb-ust"><span class="zb-no">4</span><h2 lang="en">However</h2><span class="zb-tr">ancak, fakat</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>İki ayrı cümleyi zıtlıkla bağlar. Genelde nokta ya da noktalı virgülden sonra, virgülle gelir: &quot;; however,&quot;.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">The theory seemed convincing; <mark class="ss-t-zitlik">however</mark>, later experiments disproved it.</p><p class="zb-ornek-tr">Teori ikna edici görünüyordu; ancak sonraki deneyler onu çürüttü.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Although gibi tek cümle içinde iki yan cümleyi bağlamaz. Noktalı virgül görüp her zaman however seçme, önce anlamın zıt olduğunu kontrol et.</p></div>
+    </article>
+
+    <article class="zb" id="b5">
+      <div class="zb-ust"><span class="zb-no">5</span><h2 lang="en">Nevertheless</h2><span class="zb-tr">yine de, buna rağmen</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>However gibi iki ayrı cümleyi bağlar. Beklenene rağmen olan durumu anlatır.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">The evidence was weak; <mark class="ss-t-zitlik">nevertheless</mark>, the jury found him guilty.</p><p class="zb-ornek-tr">Kanıtlar zayıftı; yine de jüri onu suçlu buldu.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Consequently ile şıklarda yan yana çıkar. Sonuç beklenen bir şeyse consequently, beklenmedik bir şeyse nevertheless.</p></div>
+    </article>
+
+    <article class="zb" id="b6">
+      <div class="zb-ust"><span class="zb-no">6</span><h2 lang="en">Whereas</h2><span class="zb-tr">oysa, -iken</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>İki şeyi karşılaştırır, farkı gösterir. Arkasından cümle gelir.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">Some species adapt quickly to change, <mark class="ss-t-zitlik">whereas</mark> others become extinct.</p><p class="zb-ornek-tr">Bazı türler değişime hızla uyum sağlarken diğerleri yok olur.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Sebep anlamı yoktur. &quot;Some ... others&quot; gibi iki grup görürsen whereas ya da while düşün.</p></div>
+    </article>
+
+    <article class="zb" id="b7">
+      <div class="zb-ust"><span class="zb-no">7</span><h2 lang="en">While</h2><span class="zb-tr">-iken; oysa</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Hem zaman (&quot;-iken&quot;) hem zıtlık (&quot;oysa&quot;) bildirir. Hangisi olduğunu bağlam söyler.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en"><mark class="ss-t-zitlik">While</mark> most people prefer cities, a growing number are moving to rural areas.</p><p class="zb-ornek-tr">Çoğu insan şehirleri tercih ederken, giderek artan sayıda kişi kırsala taşınıyor.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>Her zaman &quot;-iken&quot; diye çevirme. İki karşıt bilgi varsa while = whereas olur.</p></div>
+    </article>
+
+    <article class="zb" id="b8">
+      <div class="zb-ust"><span class="zb-no">8</span><h2 lang="en">Yet</h2><span class="zb-tr">ama, yine de</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Cümle ortasında &quot;but&quot; gibi zıtlık bağlacıdır.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">The plan was simple, <mark class="ss-t-zitlik">yet</mark> it proved surprisingly effective.</p><p class="zb-ornek-tr">Plan basitti, ama şaşırtıcı derecede etkili oldu.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>&quot;Not yet&quot; (henüz değil) anlamıyla karıştırma. Virgülden sonra iki cümleyi bağlıyorsa anlamı &quot;ama&quot;dır.</p></div>
+    </article>
+
+    <article class="zb" id="b9">
+      <div class="zb-ust"><span class="zb-no">9</span><h2 lang="en">On the other hand</h2><span class="zb-tr">öte yandan, diğer taraftan</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Aynı konunun iki farklı yönünü karşılaştırır. Genelde &quot;on the one hand&quot; ile başlayan fikrin devamıdır.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">Cities offer more jobs. <mark class="ss-t-zitlik">On the other hand</mark>, living costs are much higher there.</p><p class="zb-ornek-tr">Şehirler daha çok iş imkânı sunar. Öte yandan oralarda yaşam maliyeti çok daha yüksektir.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>On the contrary ile karıştırma. On the other hand iki fikri de doğru kabul eder; on the contrary öncekini reddeder.</p></div>
+    </article>
+
+    <article class="zb" id="b10">
+      <div class="zb-ust"><span class="zb-no">10</span><h2 lang="en">On the contrary</h2><span class="zb-tr">tam tersine</span></div>
+      <div class="zb-blok"><h3>Kural</h3><p>Önceki cümledeki fikri reddeder, doğrusunu söyler. Genelde olumsuz bir cümleden sonra gelir.</p></div>
+      <div class="zb-blok"><h3>Örnek</h3><p class="zb-ornek" lang="en">The new law did not reduce crime. <mark class="ss-t-zitlik">On the contrary</mark>, it increased it.</p><p class="zb-ornek-tr">Yeni yasa suçu azaltmadı. Tam tersine, artırdı.</p></div>
+      <div class="zb-blok zb-tuzak"><h3>Tuzak</h3><p>İki farklı grubu karşılaştırmak için kullanılmaz; bunun için in contrast ya da whereas gelir.</p></div>
+    </article>
+
+  <section class="devam" aria-label="Sıradaki adım">
+    <h2>Şimdi dene</h2>
+    <ul>
+      <li><a href="/sinyal-soru">Sinyal kelimeli sorular</a>: zıtlık bağlacı olan soruları çöz, çözümü hemen gör.</li>
+      <li><a href="/sinyal-kartlari">Sinyal kelime kartları</a>: 100 kelimeyi kartla tekrar et.</li>
+    </ul>
+    <p class="pdf-not">Sınav biçimiyle ilgili güncel bilgiyi ÖSYM'nin sitesinden kontrol et.</p>
+  </section>
+</main>
+<script src="/assets/modules/sinyal-tema.js?v=20261108"></script>
+</body>
+</html>
