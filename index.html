@@ -1941,7 +1941,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <div class="stat-div"></div>
       <div><div class="stat-num">KLOD</div><div class="stat-lbl">Yapay zekâ öğretmen</div></div>
     </div>
-    <p class="sosyal-ig">Instagram'da son 30 günde 13 bini aşkın görüntüleme <span>(25 Ekim 2026 ölçümü)</span> · <a href="https://www.instagram.com/sinyalavcisi.yds/" target="_blank" rel="noopener">@sinyalavcisi.yds</a></p>
+    <p class="sosyal-ig">Instagram'da son 30 günde 22 bini aşkın görüntüleme <span>(8 Kasım 2026 ölçümü)</span> · <a href="https://www.instagram.com/sinyalavcisi.yds/" target="_blank" rel="noopener">@sinyalavcisi.yds</a></p>
     <div class="yorumlar" id="yorumlar-track"></div>
     <div id="yorum-paylas-kutu" style="text-align:center;margin-top:20px">
       <button id="yorum-paylas-btn" onclick="testimonialModalAc()" style="background:none;border:1px solid var(--border);border-radius:20px;padding:9px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;font-family:IBM Plex Sans,sans-serif">Deneyimini Paylaş</button>
@@ -15656,6 +15656,8 @@ function okRender(){
 }
 // Bildirim ya da 50 puan programı bağlantısı: sinyal-avcisi.com/#okuma
 if(typeof location!=='undefined'&&location.hash==='#okuma')setTimeout(()=>{goTo('dashboard');gununOkumasiAc();},1500);
+// Instagram kısa linkleri (/ig, /dm) buraya gelir: Günün Denemesi doğrudan açılır.
+if(typeof location!=='undefined'&&location.hash==='#gunun-denemesi')setTimeout(()=>{if(typeof gunlukDenemeAc==='function')gunlukDenemeAc();},1500);
 
 // ─── HAFTALIK RAPOR — son 7 günün özeti, Pazar 21:00 bildirimi ──────────────
 // Cevap geçmişi (sa_cevap_gecmisi) aynı soruyu tekilleştirdiği için tekrarları
@@ -15779,6 +15781,7 @@ if(typeof location!=='undefined'&&location.hash==='#haftalik-rapor')setTimeout((
 // Sayfa açıkken bildirime tıklanınca sadece adresin #'i değişir: aynı paneli aç.
 if(typeof window!=='undefined'&&window.addEventListener)window.addEventListener('hashchange',()=>{
   if(location.hash==='#okuma'){goTo('dashboard');gununOkumasiAc();}
+  else if(location.hash==='#gunun-denemesi'){gunlukDenemeAc();}
   else if(location.hash==='#haftalik-rapor'){goTo('dashboard');haftalikRaporAc();}
 });
 
@@ -17251,6 +17254,7 @@ let iaDurum={alan:'Genel',idx:0,dogru:0,yanlislar:[],cevaplandi:false};
 
 function iaSonucOku(){try{return JSON.parse(localStorage.getItem('sa_ilk_adim')||'null');}catch(e){return null;}}
 function basla(){
+  if(typeof faz2GaEvent==='function')faz2GaEvent('platforma_eris');
   if(typeof hpVarMi==='function'&&hpVarMi()){hpAc('bugun');return;}
   if(iaSonucOku()){goTo('dashboard');return;}
   iaAc();

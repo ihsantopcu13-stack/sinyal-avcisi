@@ -116,6 +116,7 @@ const SITE_URL = "https://sinyal-avcisi.com";
 // Instagram metni ve bufferGonder etkilenmez: yalnız facebookYayinla çağırır.
 export function facebookAciklamasi(aciklama) {
   return String(aciklama ?? "")
+    .replace(/,\s*link biyografide\.?/gi, `: ${SITE_URL}`)
     .replace(/\.\s*Link biyografide\.?/g, `: ${SITE_URL}`)
     .replace(/Link biyografide\.?/g, SITE_URL);
 }
@@ -156,6 +157,13 @@ export function sonrakiKonu(kuyruk, konu) {
   const i = kuyruk.ogeler.findIndex((o) => o.konu === konu);
   if (i < 0) return null;
   return kuyruk.ogeler.slice(i + 1).find((o) => o.konu < 200 && o.baslik) || null;
+}
+
+// SİTEYE ÇAĞRI (8 Kas 2026): Instagram'dan siteye geçiş çok düşüktü (haftada 1 kişi).
+// "Link biyografide." cümlesine siteye gitmek için somut bir sebep eklenir. kuyruk.json değişmez.
+export const SITE_CAGRISI = "Bu sorunun benzerlerini sitede çöz, link biyografide.";
+export function siteCagrisi(aciklama) {
+  return String(aciklama ?? "").replace(/Link biyografide\./g, SITE_CAGRISI);
 }
 
 export function merakliAciklama(aciklama, sonraki) {

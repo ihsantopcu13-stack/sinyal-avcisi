@@ -39,7 +39,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo, asilVideo, sonrakiKonu, merakliAciklama } from "./kuyruk-mantigi.mjs";
+import { siteCagrisi, MAX_DENEME, YT_CALISMA_BASINA, durumHazirla, planla, atamaSonucu, kuyrukUyarisi, youtubeAcik, ilkYorumAcik, youtubeBekleyeneEkle, youtubeSiradakiler, youtubeTamamlandi, facebookAciklamasi, youtubeAciklamasi, paylasilacakVideo, asilVideo, sonrakiKonu, merakliAciklama } from "./kuyruk-mantigi.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const KUYRUK_YOLU = path.join(__dirname, "data", "kuyruk.json");
@@ -322,7 +322,7 @@ async function yayinla(kuyruk, durum) {
     for (const x of plan) {
       const asil = kuyruk.ogeler.find((o) => o.konu === x.konu);
       // Kopya: kuyruk.json'daki metin değişmez; Instagram/Facebook sıradaki konunun adını görür
-      const oge = { ...asil, aciklama: merakliAciklama(asil.aciklama, sonrakiKonu(kuyruk, asil.konu)) };
+      const oge = { ...asil, aciklama: siteCagrisi(merakliAciklama(asil.aciklama, sonrakiKonu(kuyruk, asil.konu))) };
       log(`ZAMANLA: Konu ${oge.konu} — ${oge.baslik} → ${istanbulSaati(x.dueAt)} (${x.platformlar.join(", ")})`);
       const d = (durum.konular[oge.konu] ||= {});
       d.slot = x.slot;

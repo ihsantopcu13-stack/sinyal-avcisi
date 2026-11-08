@@ -127,7 +127,7 @@ kontrol("17) admin yolunda Telegram'a hiç gidilmedi", telegramCagrisi().length 
 const ESKI_YONLENDIRMELER = ["/privacy", "/terms", "/ucretsiz-rehber", "/hedef-rota", "/yds-cikmis-sorular", "/yokdil-sinyal-kelimeler", "/yds-sinav-teknikleri"];
 kontrol("18) mevcut 7 sayfa yönlendirmesi yerinde ve aynı hedefte", ESKI_YONLENDIRMELER.every((s) => (vercel.rewrites || []).some((r) => r.source === s && r.destination === s + ".html")));
 kontrol("19) /api/testimonial-bildirim için tek kural; başka /api kuralı yok", (vercel.rewrites || []).filter((r) => r.source.startsWith("/api")).length === 1);
-kontrol("20) www ve vercel.app yönlendirmeleri (2) yerinde; vercel.app kuralı /api'yi dışarıda bırakıyor", (vercel.redirects || []).length === 2 && (vercel.redirects || []).some((r) => r.source.includes("(?!api")));
+kontrol("20) www ve vercel.app alan adı yönlendirmeleri (2) yerinde; vercel.app kuralı /api'yi dışarıda bırakıyor", (vercel.redirects || []).filter((r) => (r.has || []).some((h) => h.type === "host")).length === 2 && (vercel.redirects || []).some((r) => r.source.includes("(?!api")));
 kontrol("21) cron (/api/cron-streak-risk) yerinde", (vercel.crons || []).some((c) => c.path === "/api/cron-streak-risk"));
 const fonksiyonlar = readdirSync(path.join(ROOT, "api")).filter((f) => /\.(m?js|ts)$/.test(f) && !f.startsWith("_"));
 kontrol("22) api/ fonksiyon sayısı Vercel Hobby sınırı içinde (≤ 12)", fonksiyonlar.length <= 12, `${fonksiyonlar.length} fonksiyon`);
