@@ -736,5 +736,750 @@
     "explanation": "Kural: Since sebep anlamında kullanıldığında ana cümle bu sebebin mantıklı sonucunu verir. Hastanın kalp hastalığı geçmişi olduğu için doktorlar ameliyattan sonra onu yakından izlemeye karar verdi.",
     "trap": "A şıkkı \"despite\" ile zıtlık kurar, sebep-sonuç değil. E şıkkı anlamca terstir: risk varken kimsenin sorun beklememesi mantıksız. D şıkkı would have been ile koşul yapısı ister, since ile uyuşmaz.",
     "translation": "Hastanın kalp hastalığı geçmişi olduğu için doktorlar ameliyattan sonra onu yakından izlemeye karar verdi."
+  },
+  {
+    "id": "ss023",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "---- the growing body of evidence on the benefits of bilingual education, many schools continue to offer instruction in only one language.",
+    "signalWords": [
+      {
+        "word": "the growing body of evidence",
+        "type": "yapi",
+        "tip": "Boşluktan sonra özne ve fiil yok, sadece isim öbeği var. İsim alan bir edat aranıyor."
+      },
+      {
+        "word": "benefits",
+        "type": "anlam",
+        "tip": "Olumlu bilgi: iki dilli eğitimin faydası kanıtlanıyor."
+      },
+      {
+        "word": "only one language",
+        "type": "anlam",
+        "tip": "Okullar yine de tek dilde devam ediyor. Kanıtın tersi bir davranış: zıtlık."
+      }
+    ],
+    "mainSignal": {
+      "word": "Despite",
+      "type": "zitlik"
+    },
+    "options": [
+      "Owing to",
+      "Although",
+      "Despite",
+      "As long as",
+      "In case"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Önce fiili bul: continue (to offer). İskelet: many schools (S) + continue to offer (V) + instruction (O). Sol taraf: iki dilli eğitimin faydalarına dair kanıtlar artıyor (olumlu). Sağ taraf: okullar hâlâ tek dilde eğitim veriyor. Beklenenin tersi oluyor, yani zıtlık var. Boşluktan sonra cümle değil, isim öbeği (the growing body of evidence) geliyor. İsim alan zıtlık edatı Despite olduğu için C doğru. A) Owing to isim alır ama sebep bildirir: 'kanıtlar yüzünden tek dil' mantıksız. B) Although zıtlıktır ama arkasından özne + fiil ister. D) As long as koşul bağlacıdır ve cümle ister. E) In case 'diye, ihtimaline karşı' demektir ve cümle ister.",
+    "trap": "Anlamı doğru görüp Although'ı işaretlemek. Despite ve Although aynı anlamı taşır, farkı yapıdadır: Despite + isim, Although + cümle. Boşluktan sonra fiil arayıp bulamıyorsan bağlaçları ele.",
+    "translation": "İki dilli eğitimin faydalarına dair kanıtlar giderek artmasına rağmen birçok okul hâlâ yalnızca tek dilde eğitim veriyor."
+  },
+  {
+    "id": "ss024",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Social media platforms were initially celebrated as tools that would strengthen democracy. ----, they are now frequently used by authoritarian governments to monitor and silence critics.",
+    "signalWords": [
+      {
+        "word": "initially",
+        "type": "zaman",
+        "tip": "'Başlangıçta' der. Arkasından genelde 'ama şimdi durum farklı' gelir."
+      },
+      {
+        "word": "strengthen democracy",
+        "type": "anlam",
+        "tip": "Olumlu beklenti: demokrasiyi güçlendirecek araçlar."
+      },
+      {
+        "word": "silence critics",
+        "type": "anlam",
+        "tip": "Olumsuz gerçek: eleştirenleri susturmak. Olumlu beklenti + olumsuz sonuç = zıtlık."
+      }
+    ],
+    "mainSignal": {
+      "word": "However",
+      "type": "zitlik"
+    },
+    "options": [
+      "Likewise",
+      "However",
+      "Therefore",
+      "In other words",
+      "For example"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Önce fiilleri bul: were celebrated ve are used (ikisi de edilgen). İskelet 1: Social media platforms (S) + were celebrated (V) + as tools (tamamlayıcı). İskelet 2: they (S) + are used (V) + by authoritarian governments. Sol cümle: platformlar başta demokrasiyi güçlendirecek araçlar diye övüldü. Sağ cümle: şimdi baskıcı yönetimler eleştirmenleri susturmak için kullanıyor. Beklenti ile gerçek ters düşüyor, bu yüzden zıtlık bağlacı However (B) doğru. A) Likewise benzerlik bildirir, iki cümle aynı yönde değil. C) Therefore sonuç bildirir: 'övüldükleri için baskı aracı oldular' mantıksız. D) In other words aynı fikri başka sözle anlatır, burada fikir değişiyor. E) For example örnek verir, ikinci cümle ilkinin örneği değil.",
+    "trap": "initially ... now ikilisini gözden kaçırmak. 'Başta şöyleydi, şimdi böyle' yapısı neredeyse her zaman zıtlık getirir. Therefore'u seçen öğrenci iki cümlenin yönüne değil, art arda gelişine bakmıştır.",
+    "translation": "Sosyal medya platformları başlangıçta demokrasiyi güçlendirecek araçlar olarak övülüyordu. Ancak şimdi otoriter yönetimler tarafından eleştirmenleri izlemek ve susturmak için sıkça kullanılıyorlar."
+  },
+  {
+    "id": "ss025",
+    "questionType": "tamamlama",
+    "exam": "YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Despite their limited financial resources, ----.",
+    "signalWords": [
+      {
+        "word": "Despite",
+        "type": "zitlik",
+        "tip": "'-e rağmen' der. Ana cümle, beklenenin tersini söylemeli."
+      },
+      {
+        "word": "limited financial resources",
+        "type": "anlam",
+        "tip": "Olumsuz durum: para kısıtlı. Doğru cevap olumlu ya da şaşırtıcı bir çaba anlatmalı."
+      },
+      {
+        "word": "their",
+        "type": "yapi",
+        "tip": "their bir çoğul özneyi gösterir. Ana cümlenin öznesi bu 'onlar' olmalı."
+      }
+    ],
+    "mainSignal": {
+      "word": "Despite",
+      "type": "zitlik"
+    },
+    "options": [
+      "many rural families invest a considerable share of their income in their children's education",
+      "poor families often struggle to pay for school supplies",
+      "rural schools frequently lack qualified teachers",
+      "the state has reduced its funding for village schools",
+      "children from low-income homes tend to leave school early"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Doğru şıkta önce fiili bul: invest. İskelet: many rural families (S) + invest (V) + a considerable share of their income (O). Sol taraf: kısıtlı maddi imkânlar (olumsuz). Despite zıtlık kurduğu için sağ taraf beklenenin tersini, yani olumlu bir çabayı söylemeli. A şıkkı tam bunu yapar: imkânları kısıtlı olmasına rağmen aileler gelirlerinin büyük kısmını çocuklarının eğitimine ayırır. Ayrıca their sözcüğü 'families' ile uyuşur. B) Okul malzemesi almakta zorlanmak, kısıtlı paranın beklenen sonucudur, zıtlık yok. C) Öğretmen eksikliği okullarla ilgilidir, their kimin parası olduğunu karşılamaz. D) Devletin fon kesmesi zıtlık kurmaz, their de devleti göstermez. E) Okulu erken bırakmak yine beklenen olumsuz sonuçtur.",
+    "trap": "B ve E konuyla çok uyumlu görünür, çünkü yoksulluk ve eğitim kelimeleri soru kökünü tekrar eder. Ama ikisi de sebep-sonuç ilişkisi kurar. Despite gördüğünde 'beklenen' değil 'beklenmeyen' sonucu ara.",
+    "translation": "Maddi imkânları kısıtlı olmasına rağmen kırsaldaki birçok aile gelirinin önemli bir kısmını çocuklarının eğitimine ayırıyor."
+  },
+  {
+    "id": "ss026",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "---- earlier generations, who usually stayed with a single employer for decades, young professionals today change jobs several times during their careers.",
+    "signalWords": [
+      {
+        "word": "stayed with a single employer for decades",
+        "type": "anlam",
+        "tip": "Eski kuşak: onlarca yıl tek işyeri."
+      },
+      {
+        "word": "change jobs several times",
+        "type": "anlam",
+        "tip": "Yeni kuşak: birçok kez iş değiştirme. İki grup birbirinin tersi davranıyor."
+      },
+      {
+        "word": "today",
+        "type": "zaman",
+        "tip": "Geçmiş (earlier generations) ile bugün karşılaştırılıyor. Karşılaştırma + ters davranış = zıtlık edatı."
+      }
+    ],
+    "mainSignal": {
+      "word": "Unlike",
+      "type": "zitlik"
+    },
+    "options": [
+      "Like",
+      "Due to",
+      "Apart from",
+      "Unlike",
+      "Instead of"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Önce fiili bul: change. İskelet: young professionals (S) + change (V) + jobs (O). Boşluktan sonra isim (earlier generations) geliyor, yani edat aranıyor. Sol taraf: eski kuşaklar onlarca yıl tek işverenle çalıştı. Sağ taraf: bugünün genç profesyonelleri kariyerleri boyunca birçok kez iş değiştiriyor. İki grup zıt davranıyor, bu yüzden 'aksine, -den farklı olarak' anlamındaki Unlike (D) doğru. A) Like benzerlik bildirir, anlamı tam tersine çevirir. B) Due to sebep bildirir: 'eski kuşaklar yüzünden iş değiştiriyorlar' denmiyor. C) Apart from 'dışında, yanı sıra' demektir, karşılaştırma kurmaz. E) Instead of 'yerine' demektir, bir kişinin ya da eylemin yerine başkasını koyar. Burada iki grup yer değiştirmiyor, karşılaştırılıyor.",
+    "trap": "Like ile Unlike tek harf farkla aynı yerde durur. Hızlı okuyan öğrenci 'kuşaklar karşılaştırılıyor' deyip Like'ı seçer. Karşılaştırmanın yönüne bak: davranışlar aynı mı, ters mi?",
+    "translation": "Genellikle onlarca yıl tek bir işverenle çalışan önceki kuşakların aksine, bugünün genç profesyonelleri kariyerleri boyunca birkaç kez iş değiştiriyor."
+  },
+  {
+    "id": "ss027",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Rational choice theory assumes that individuals always act in their own best interest, ---- research in behavioural economics shows that people often make decisions that harm them in the long run.",
+    "signalWords": [
+      {
+        "word": "always act in their own best interest",
+        "type": "anlam",
+        "tip": "Kuramın varsayımı: insanlar hep kendi yararlarına davranır."
+      },
+      {
+        "word": "harm them",
+        "type": "anlam",
+        "tip": "Araştırmanın bulgusu: insanlar kendilerine zarar veren kararlar alır. Varsayım ile bulgu çelişiyor."
+      },
+      {
+        "word": "often",
+        "type": "anlam",
+        "tip": "always ile often karşı karşıya. 'Her zaman' iddiasını 'sık sık tersi oluyor' bilgisi çürütür."
+      }
+    ],
+    "mainSignal": {
+      "word": "yet",
+      "type": "zitlik"
+    },
+    "options": [
+      "so",
+      "for",
+      "or",
+      "nor",
+      "yet"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Önce fiilleri bul: assumes ve shows. İskelet 1: Rational choice theory (S) + assumes (V) + that individuals always act... (O). İskelet 2: research in behavioural economics (S) + shows (V) + that people often make decisions... (O). Sol cümle: kurama göre bireyler hep kendi çıkarına davranır. Sağ cümle: araştırmalar insanların sık sık kendilerine zarar veren kararlar aldığını gösteriyor. İki fikir çelişiyor, bu yüzden 'ama, yine de' anlamındaki yet (E) doğru. A) so sonuç bildirir: kuramın varsayımı araştırma bulgusuna yol açmaz. B) for 'çünkü' demektir: kuram bu varsayımı araştırma yüzünden yapmıyor. C) or iki seçenek sunar, burada seçenek yok. D) nor yalnızca olumsuz bir cümleden sonra gelir ve devrik yapı ister.",
+    "trap": "yet'i yalnızca 'henüz' anlamıyla bilen öğrenci bu şıkkı eler. İki tam cümlenin arasında virgülle gelen yet, but gibi zıtlık bağlacıdır. Ayrıca for'u 'için' sanıp seçmek de sık görülen hatadır.",
+    "translation": "Rasyonel seçim kuramı bireylerin her zaman kendi çıkarlarına uygun davrandığını varsayar, ancak davranışsal ekonomi araştırmaları insanların uzun vadede kendilerine zarar veren kararları sıklıkla aldığını gösteriyor."
+  },
+  {
+    "id": "ss028",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "The government reduced taxes on small businesses, ---- encouraging thousands of people to start their own companies.",
+    "signalWords": [
+      {
+        "word": "reduced taxes",
+        "type": "anlam",
+        "tip": "Eylem: vergiler düşürüldü. Bunun doğal bir sonucu beklenir."
+      },
+      {
+        "word": "encouraging",
+        "type": "yapi",
+        "tip": "Boşluktan sonra özne yok, -ing'li fiil var. Bağlaçlar özne + çekimli fiil ister; -ing'in önüne gelen sonuç zarfı aranıyor."
+      },
+      {
+        "word": "start their own companies",
+        "type": "anlam",
+        "tip": "Olumlu sonuç: insanlar şirket kuruyor. Vergi indirimi ile şirket kurma arasında sebep-sonuç var."
+      }
+    ],
+    "mainSignal": {
+      "word": "thereby",
+      "type": "sebep"
+    },
+    "options": [
+      "thereby",
+      "whereas",
+      "although",
+      "unless",
+      "despite"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Önce fiili bul: reduced. İskelet: The government (S) + reduced (V) + taxes (O). Sol taraf: hükümet küçük işletmelerin vergilerini düşürdü. Sağ taraf: binlerce kişiyi kendi şirketini kurmaya teşvik etmek. Vergi indirimi bu teşvikin sebebi, yani sebep-sonuç var. thereby + V-ing 'böylece, bu sayede' anlamında sonucu bağlar, bu yüzden A doğru. B) whereas zıtlıktır ve özne + fiil ister. C) although zıtlıktır; -ing ile kısaltılsa bile 'teşvik etmesine rağmen vergi düşürdü' mantıksız. D) unless koşuldur ve cümle ister. E) despite -ing alabilir ama zıtlık kurar: 'teşvik etmesine rağmen' anlamı bozar.",
+    "trap": "despite + -ing dil bilgisi olarak doğru olduğu için öğrenci yapıya bakıp despite'ı seçer. Önce anlam ilişkisini kur: vergi indirimi ile girişimcilik aynı yönde mi, ters yönde mi? Aynı yöndeyse zıtlık edatları elenir.",
+    "translation": "Hükümet küçük işletmelere yönelik vergileri düşürdü ve böylece binlerce kişiyi kendi şirketini kurmaya teşvik etti."
+  },
+  {
+    "id": "ss029",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "---- the Industrial Revolution, a large part of the rural population moved to factory towns in search of work.",
+    "signalWords": [
+      {
+        "word": "the Industrial Revolution",
+        "type": "yapi",
+        "tip": "Boşluktan sonra isim var. İsim alan bir edat aranıyor."
+      },
+      {
+        "word": "moved to factory towns",
+        "type": "anlam",
+        "tip": "Kırsal nüfus fabrika kentlerine taşındı. Bu, Sanayi Devrimi'nin doğal bir sonucu."
+      },
+      {
+        "word": "in search of work",
+        "type": "sebep",
+        "tip": "Göçün sebebi iş aramak. Fabrikaları ve işi doğuran ise Sanayi Devrimi."
+      }
+    ],
+    "mainSignal": {
+      "word": "As a result of",
+      "type": "sebep"
+    },
+    "options": [
+      "In contrast to",
+      "As a result of",
+      "In spite of",
+      "Instead of",
+      "Regardless of"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Önce fiili bul: moved. İskelet: a large part of the rural population (S) + moved (V) + to factory towns (yer tamlayıcısı). Sol taraf: Sanayi Devrimi. Sağ taraf: kırsal nüfusun büyük kısmı iş aramak için fabrika kentlerine taşındı. Sanayi Devrimi fabrikaları ve iş imkânını doğurdu, göç de bunun sonucu oldu. Bu yüzden 'sonucunda' anlamındaki As a result of (B) doğru. A) In contrast to iki şeyi karşılaştırıp zıtlık kurar. C) In spite of '-e rağmen' der: 'Sanayi Devrimi'ne rağmen fabrika kentlerine göçtüler' mantıksız. D) Instead of 'yerine' der, devrim ile göç yer değiştirmez. E) Regardless of '-e bakmaksızın' der, aradaki güçlü bağı yok sayar.",
+    "trap": "Şıkların hepsi 'of' ya da 'to' ile biter ve hepsi isim alır, yani yapı burada eleme yapmaz. Yapı eşitse karar anlamdadır. Sağ cümledeki 'in search of work' ifadesi, göçün devrimin bir sonucu olduğunu açıkça gösterir.",
+    "translation": "Sanayi Devrimi'nin sonucunda kırsal nüfusun büyük bir kısmı iş bulmak için fabrika kentlerine taşındı."
+  },
+  {
+    "id": "ss030",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Voter turnout among young people has fallen steadily in recent elections. ----, several political parties have started to design campaigns that specifically target university students.",
+    "signalWords": [
+      {
+        "word": "has fallen steadily",
+        "type": "anlam",
+        "tip": "Sorun: gençlerin seçime katılımı sürekli düşüyor."
+      },
+      {
+        "word": "specifically target university students",
+        "type": "anlam",
+        "tip": "Çözüm: partiler doğrudan üniversite öğrencilerine yöneliyor. Sorun → çözüm = sebep-sonuç."
+      }
+    ],
+    "mainSignal": {
+      "word": "For this reason",
+      "type": "sebep"
+    },
+    "options": [
+      "In other words",
+      "In contrast",
+      "For this reason",
+      "Otherwise",
+      "Similarly"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Önce fiilleri bul: has fallen ve have started. İskelet 1: Voter turnout among young people (S) + has fallen (V). İskelet 2: several political parties (S) + have started (V) + to design campaigns (O). Sol cümle: gençlerin seçime katılımı son seçimlerde sürekli düştü. Sağ cümle: bazı partiler doğrudan üniversite öğrencilerini hedefleyen kampanyalar tasarlamaya başladı. İlk cümle sorunu, ikinci cümle bu soruna verilen tepkiyi anlatır. Bu bir sebep-sonuç ilişkisidir, 'bu nedenle' anlamındaki For this reason (C) doğru. A) In other words aynı fikri yeniden söyler, ikinci cümle yeni bir eylem anlatıyor. B) In contrast zıtlık kurar, iki cümle çelişmiyor. D) Otherwise 'aksi halde' der ve koşul ister: 'katılım düştü, aksi halde kampanya yaparlardı' mantıksız. E) Similarly benzer bir olgu ekler, ikinci cümle ilkine benzemiyor, ondan doğuyor.",
+    "trap": "Düşüş olumsuz, kampanya olumlu olduğu için öğrenci 'olumsuz + olumlu = zıtlık' kestirmesine gidip In contrast'ı seçer. Olumlu-olumsuz kuralını körü körüne uygulama: bir sorun ve ona verilen çözüm sebep-sonuçtur.",
+    "translation": "Son seçimlerde gençlerin oy verme oranı istikrarlı biçimde düştü. Bu nedenle birçok siyasi parti özellikle üniversite öğrencilerini hedefleyen kampanyalar tasarlamaya başladı."
+  },
+  {
+    "id": "ss031",
+    "questionType": "tamamlama",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Because the survey was conducted only among university graduates, ----.",
+    "signalWords": [
+      {
+        "word": "Because",
+        "type": "sebep",
+        "tip": "'-diği için' der. Ana cümle bu sebebin mantıklı sonucunu vermeli."
+      },
+      {
+        "word": "only among university graduates",
+        "type": "anlam",
+        "tip": "Örneklem dar: yalnızca üniversite mezunları. Beklenen sonuç: sonuçlar herkese genellenemez."
+      }
+    ],
+    "mainSignal": {
+      "word": "Because",
+      "type": "sebep"
+    },
+    "options": [
+      "the researchers interviewed people from all educational backgrounds",
+      "most of the participants had never attended university",
+      "it was published in a leading sociology journal",
+      "its findings cannot be generalised to the whole population",
+      "the results reflected the views of every social group"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Doğru şıkta önce fiili bul: cannot be generalised (edilgen). İskelet: its findings (S) + cannot be generalised (V) + to the whole population. Sol taraf: anket yalnızca üniversite mezunlarıyla yapıldı, yani örneklem dar. Because sebep bildirdiği için sağ taraf bu dar örneklemin sonucunu vermeli: bulgular tüm topluma genellenemez. Bu yüzden D doğru. A) 'Her eğitim düzeyinden kişiyle görüşüldü' bilgisi 'yalnızca mezunlar' ile çelişir. B) 'Katılımcıların çoğu hiç üniversiteye gitmemişti' yine sol tarafla çelişir. C) Saygın bir dergide yayımlanmak, örneklemin dar olmasının sonucu değildir. E) 'Sonuçlar her toplumsal grubun görüşünü yansıttı' anlamca tam tersidir.",
+    "trap": "A, B ve E sol cümleyle doğrudan çelişir, bunları hızlıca ele. C ise konuyla ilgili ve dil bilgisi olarak sorunsuz olduğu için en güçlü çeldiricidir. 'Because' sorularında şıkkı 'çünkü' ile bağlayıp sesli oku: 'Yalnızca mezunlarla yapıldığı için saygın dergide yayımlandı' mantıklı değil.",
+    "translation": "Anket yalnızca üniversite mezunları arasında yapıldığı için bulguları toplumun tamamına genellenemez."
+  },
+  {
+    "id": "ss032",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Language shapes the way people categorise their experiences; ----, speakers of different languages may perceive the same event in slightly different ways.",
+    "signalWords": [
+      {
+        "word": "shapes",
+        "type": "anlam",
+        "tip": "İlk cümle bir sebep sunar: dil, deneyimleri sınıflandırma biçimimizi şekillendirir."
+      },
+      {
+        "word": "may perceive the same event in slightly different ways",
+        "type": "anlam",
+        "tip": "İkinci cümle bu sebebin sonucudur: farklı dil konuşanlar aynı olayı biraz farklı algılayabilir."
+      }
+    ],
+    "mainSignal": {
+      "word": "hence",
+      "type": "sebep"
+    },
+    "options": [
+      "instead",
+      "otherwise",
+      "meanwhile",
+      "likewise",
+      "hence"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Önce fiilleri bul: shapes ve may perceive. İskelet 1: Language (S) + shapes (V) + the way people categorise... (O). İskelet 2: speakers of different languages (S) + may perceive (V) + the same event (O). Sol cümle: dil, insanların deneyimlerini sınıflandırma biçimini şekillendirir. Sağ cümle: farklı dilleri konuşanlar aynı olayı biraz farklı algılayabilir. Birinci cümle sebep, ikincisi onun sonucudur. Bu yüzden 'bu yüzden, dolayısıyla' anlamındaki hence (E) doğru. A) instead 'onun yerine' der, bir şeyin yerine başkasını koyar. B) otherwise 'aksi halde' der: 'dil şekillendirir, aksi halde farklı algılarlar' mantığı tersine çevirir. C) meanwhile 'bu arada' der, aynı anda olan iki ayrı olayı bağlar. D) likewise 'benzer şekilde' der, ikinci cümle birincinin benzeri değil sonucudur.",
+    "trap": "Akademik metinlerde hence, thus ve therefore aynı işi görür. hence'i 'buradan, bundan sonra' gibi bir zaman sözcüğü sanıp meanwhile ile karıştırmak sık yapılan hatadır.",
+    "translation": "Dil, insanların deneyimlerini sınıflandırma biçimini şekillendirir; bu nedenle farklı dilleri konuşan kişiler aynı olayı biraz farklı biçimlerde algılayabilir."
+  },
+  {
+    "id": "ss033",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Many ancient trade routes across Central Asia lost their importance ---- sea transport became cheaper and safer than travelling overland.",
+    "signalWords": [
+      {
+        "word": "lost their importance",
+        "type": "anlam",
+        "tip": "Kara yolları önemini yitirdi. Bunun ne zaman olduğunu sağ taraf söylüyor."
+      },
+      {
+        "word": "became",
+        "type": "zaman",
+        "tip": "İki taraf da geçmiş zamanda. Bir olay diğerinin hemen ardından gerçekleşiyor: '-ınca, -ır -maz' anlamı aranıyor."
+      },
+      {
+        "word": "cheaper and safer",
+        "type": "anlam",
+        "tip": "Deniz yolu daha ucuz ve güvenli hale geldi. Kara yolunun gerilemesi bundan sonra başlıyor."
+      }
+    ],
+    "mainSignal": {
+      "word": "once",
+      "type": "zaman"
+    },
+    "options": [
+      "unless",
+      "even if",
+      "in case",
+      "so that",
+      "once"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Önce fiilleri bul: lost ve became. İskelet 1: Many ancient trade routes (S) + lost (V) + their importance (O). İskelet 2: sea transport (S) + became (V) + cheaper and safer (tamamlayıcı). Sol taraf: Orta Asya'daki eski ticaret yolları önemini yitirdi. Sağ taraf: deniz taşımacılığı karadan daha ucuz ve güvenli hale geldi. Önce deniz yolu avantajlı oldu, ardından kara yolları geriledi. once burada 'bir kez ... olunca, -dıktan sonra' anlamında zaman bağlacıdır, bu yüzden E doğru. A) unless 'olmadıkça' der: 'deniz yolu ucuzlamadıkça önemini yitirdi' tersine çevirir. B) even if 'olsa bile' der, beklenmeyen bir durum anlatmaz. C) in case 'ihtimaline karşı' der, önlem bildirir. D) so that amaç bildirir ve genelde could/would ister: yollar deniz yolu ucuzlasın diye önem yitirmedi.",
+    "trap": "once'ı yalnızca 'bir kez, bir zamanlar' anlamıyla bilen öğrenci bu şıkkı eler. Cümle ortasında iki yan cümleyi bağlıyorsa once 'olunca, -dıktan sonra' demektir ve zaman bağlacıdır.",
+    "translation": "Deniz taşımacılığı kara yolculuğundan daha ucuz ve güvenli hale gelince Orta Asya'yı geçen pek çok eski ticaret yolu önemini yitirdi."
+  },
+  {
+    "id": "ss034",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "In many European countries, women were not allowed to vote ---- the early decades of the twentieth century.",
+    "signalWords": [
+      {
+        "word": "were not allowed",
+        "type": "zaman",
+        "tip": "Olumsuz ve geçmiş zaman: bir yasak bir noktaya kadar sürdü. 'not ... until' kalıbı akla gelmeli."
+      },
+      {
+        "word": "the early decades of the twentieth century",
+        "type": "yapi",
+        "tip": "Boşluktan sonra bir zaman noktası (isim) var, cümle yok."
+      }
+    ],
+    "mainSignal": {
+      "word": "until",
+      "type": "zaman"
+    },
+    "options": [
+      "until",
+      "since",
+      "for",
+      "while",
+      "by"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Önce fiili bul: were not allowed (edilgen, olumsuz). İskelet: women (S) + were not allowed (V) + to vote (tamamlayıcı). Sol taraf: kadınların oy vermesine izin verilmiyordu. Sağ taraf: 20. yüzyılın ilk on yılları, yani bir zaman noktası. Yasak bu noktaya kadar sürmüş, sonra kalkmış. 'not ... until' kalıbı '-e kadar ... yapılmadı' anlamı verir, bu yüzden A doğru. B) since 'den beri' der ve ana cümlede present perfect ister, burada geçmiş zaman (were) var. C) for süre (iki yıl, on yıl gibi) bildirir; 'vote for' ise 'birine oy vermek' anlamına kayar. D) while arkasından cümle ister, burada yalnız isim var. E) by 'en geç ... e kadar' der ve tamamlanmış bir eylem bekler; süren bir yasakla uyuşmaz.",
+    "trap": "until ile by en çok karıştırılan ikilidir. until bir durumun o ana kadar sürdüğünü, by bir işin en geç o ana kadar bittiğini anlatır. Süren bir yasak ya da bekleyiş varsa until gelir.",
+    "translation": "Pek çok Avrupa ülkesinde kadınların 20. yüzyılın ilk on yıllarına kadar oy kullanmasına izin verilmiyordu."
+  },
+  {
+    "id": "ss035",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "While the anthropologists ---- data in the remote mountain villages, a severe flood cut off the only road to the region.",
+    "signalWords": [
+      {
+        "word": "While",
+        "type": "zaman",
+        "tip": "'-iken' der. Uzun süren arka plan eylemi genelde past continuous (was/were + V-ing) ile verilir."
+      },
+      {
+        "word": "cut off",
+        "type": "zaman",
+        "tip": "Ana cümle simple past: sel aniden yolu kesti. Kısa olay simple past, onu kesen uzun eylem past continuous."
+      }
+    ],
+    "mainSignal": {
+      "word": "While",
+      "type": "zaman"
+    },
+    "options": [
+      "collect",
+      "were collecting",
+      "have collected",
+      "will collect",
+      "had been collected"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Önce fiili bul: ana cümlenin fiili cut off. İskelet: a severe flood (S) + cut off (V) + the only road (O). Ana cümle geçmişte tek seferlik, ani bir olayı anlatıyor. While yan cümlesi ise o sırada süren uzun eylemi verir: antropologlar veri topluyordu. Geçmişte süren eylem past continuous ile anlatılır, bu yüzden were collecting (B) doğru. A) collect geniş zamandır, geçmişteki tek bir olayla uyuşmaz. C) have collected present perfect'tir, geçmişteki kesin bir olayla (cut off) birlikte kullanılmaz. D) will collect gelecek zamandır, ana cümle geçmişte. E) had been collected edilgendir: antropologlar veriyi toplayan taraf, toplanan değil. Ayrıca 'data'dan önce özne zaten var.",
+    "trap": "E şıkkı past perfect olduğu için 'geçmişte önce olan iş' diye cazip görünür. Ama edilgen yapı (be + V3) anlamı bozar: öznenin işi yapıp yapmadığına bak. While + geçmiş cümlesinde ilk aday past continuous'tır.",
+    "translation": "Antropologlar uzak dağ köylerinde veri toplarken şiddetli bir sel bölgeye giden tek yolu kesti."
+  },
+  {
+    "id": "ss036",
+    "questionType": "tamamlama",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Before the welfare state emerged in Europe, ----.",
+    "signalWords": [
+      {
+        "word": "Before",
+        "type": "zaman",
+        "tip": "'-den önce' der. Ana cümle, refah devletinden önceki geçmiş durumu anlatmalı."
+      },
+      {
+        "word": "emerged",
+        "type": "zaman",
+        "tip": "Yan cümle simple past. Ana cümle de geçmişte kalmalı; today, will, have gibi şimdi ya da gelecek bildiren şıklar elenir."
+      },
+      {
+        "word": "welfare state",
+        "type": "anlam",
+        "tip": "Refah devleti: emekli maaşı, işsizlik yardımı, sağlık sigortası. Ondan önce bu yardımları kim yapıyordu?"
+      }
+    ],
+    "mainSignal": {
+      "word": "Before",
+      "type": "zaman"
+    },
+    "options": [
+      "governments have provided pensions to all retired workers",
+      "unemployment benefits will be extended to young people",
+      "most citizens rely on public health insurance today",
+      "families and religious institutions were the main sources of support for the poor",
+      "the state would have been responsible for social care"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Doğru şıkta önce fiili bul: were. İskelet: families and religious institutions (S) + were (V) + the main sources of support (tamamlayıcı). Sol taraf: refah devleti Avrupa'da ortaya çıkmadan önce. Ana cümle bu dönemi, yani devletin sosyal yardımı üstlenmediği zamanı anlatmalı. D şıkkı hem anlamca hem zamanca uyar: o dönemde yoksullara destek esas olarak aileden ve dini kurumlardan geliyordu. A) Present perfect şimdiye bağlanır; ayrıca devletin herkese emekli maaşı vermesi refah devletinin kendisidir. B) will gelecek zamandır, geçmişe uymaz. C) today ve geniş zaman bugünü anlatır. E) would have been gerçekleşmemiş bir geçmiş varsayımı bildirir; üstelik refah devletinden önce devletin sorumlu olması anlamca da terstir.",
+    "trap": "A şıkkı konuyla çok uyumlu kelimeler (governments, pensions) taşır. Before sorularında hem zaman kipine hem de 'önce ne vardı' sorusuna bak: refah devletinin yaptığı işi refah devletinden önceye koyan şık mantıksızdır.",
+    "translation": "Avrupa'da refah devleti ortaya çıkmadan önce yoksullar için başlıca destek kaynakları aileler ve dini kurumlardı."
+  },
+  {
+    "id": "ss037",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "---- the introduction of compulsory schooling, children in many societies worked alongside their parents in fields and workshops.",
+    "signalWords": [
+      {
+        "word": "the introduction of compulsory schooling",
+        "type": "yapi",
+        "tip": "Boşluktan sonra isim öbeği var, cümle yok. Zaman bildiren bir edat aranıyor."
+      },
+      {
+        "word": "worked alongside their parents",
+        "type": "anlam",
+        "tip": "Çocuklar tarlada ve atölyede çalışıyordu. Bu, zorunlu okuldan önceki döneme uyar."
+      }
+    ],
+    "mainSignal": {
+      "word": "Prior to",
+      "type": "zaman"
+    },
+    "options": [
+      "Following",
+      "As soon as",
+      "Prior to",
+      "Unless",
+      "Due to"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Önce fiili bul: worked. İskelet: children in many societies (S) + worked (V) + alongside their parents (tamamlayıcı). Sağ taraf: birçok toplumda çocuklar tarlalarda ve atölyelerde anne babalarıyla birlikte çalışıyordu. Sol taraf: zorunlu eğitimin getirilmesi. Çocukların okul yerine çalışması, zorunlu eğitimden önceki döneme aittir. 'den önce' anlamındaki Prior to (C) isim alır ve anlamı tamamlar. A) Following 'den sonra' der: 'zorunlu eğitimden sonra çocuklar tarlada çalıştı' mantıksız. B) As soon as zaman bildirir ama arkasından özne + fiil ister. D) Unless koşuldur ve cümle ister. E) Due to isim alır ama sebep bildirir: 'zorunlu eğitim yüzünden tarlada çalıştılar' anlamı terstir.",
+    "trap": "Prior to'yu tanımayan öğrenci anlamını bildiği Following'e yönelir. Following ve Prior to zıt anlamlıdır; ikisi aynı soruda varsa hangi dönemin anlatıldığına karar ver: okul öncesi mi, sonrası mı?",
+    "translation": "Zorunlu eğitim getirilmeden önce birçok toplumda çocuklar tarlalarda ve atölyelerde anne babalarıyla birlikte çalışıyordu."
+  },
+  {
+    "id": "ss038",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "Many households in earthquake-prone regions keep an emergency kit at home ---- a disaster strikes without warning.",
+    "signalWords": [
+      {
+        "word": "earthquake-prone",
+        "type": "anlam",
+        "tip": "Deprem riski yüksek bölge. Risk varsa önlem alınır."
+      },
+      {
+        "word": "keep an emergency kit",
+        "type": "anlam",
+        "tip": "Önlem: acil durum çantası. 'Bir şey olur diye, ihtimaline karşı' anlamı aranıyor."
+      },
+      {
+        "word": "without warning",
+        "type": "anlam",
+        "tip": "Afet habersiz gelebilir. Kesin değil, olası bir durum: önlem bağlacı in case."
+      }
+    ],
+    "mainSignal": {
+      "word": "in case",
+      "type": "kosul"
+    },
+    "options": [
+      "unless",
+      "in case",
+      "so that",
+      "even though",
+      "as though"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Önce fiilleri bul: keep ve strikes. İskelet 1: Many households (S) + keep (V) + an emergency kit (O). İskelet 2: a disaster (S) + strikes (V). Sol taraf: deprem bölgesindeki haneler evde acil durum çantası bulunduruyor. Sağ taraf: bir afet habersiz gelebilir. Çanta, olası bir afete karşı alınmış bir önlemdir. 'ihtimaline karşı, ... diye' anlamındaki in case koşul ve önlem bildirir, bu yüzden B doğru. A) unless 'olmadıkça' der: 'afet olmadıkça çanta tutarlar' anlamı terstir. C) so that amaç bildirir: çanta afet olsun diye tutulmaz. D) even though zıtlık bildirir, iki cümle arasında zıtlık yok. E) as though 'sanki' der, benzetme yapar.",
+    "trap": "in case ile if karıştırılır. if 'olursa' der, in case 'olur diye önceden' der. Bir önlem (çanta, şemsiye, yedek) görüyorsan in case gelir. so that da önlem gibi görünür ama 'afet olsun diye' anlamına gelir.",
+    "translation": "Deprem riskinin yüksek olduğu bölgelerdeki pek çok hane, bir afet habersizce gelir diye evde acil durum çantası bulunduruyor."
+  },
+  {
+    "id": "ss039",
+    "questionType": "bosluk",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "If housing were more affordable for young adults, fewer of them ---- with their parents well into their thirties.",
+    "signalWords": [
+      {
+        "word": "If",
+        "type": "kosul",
+        "tip": "Koşul cümlesi. Türünü belirlemek için yan cümledeki fiile bak."
+      },
+      {
+        "word": "were",
+        "type": "kosul",
+        "tip": "If + were (geçmiş biçim) bugünle ilgili gerçek dışı bir durumdur: Type 2. Ana cümle would + V1 ister."
+      }
+    ],
+    "mainSignal": {
+      "word": "If",
+      "type": "kosul"
+    },
+    "options": [
+      "will live",
+      "would have lived",
+      "would live",
+      "live",
+      "had lived"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Önce fiili bul: yan cümlenin fiili were. İskelet: housing (S) + were (V) + more affordable (tamamlayıcı). were burada geçmişi değil, bugünle ilgili gerçek dışı bir durumu anlatır: konutlar şu an genç yetişkinler için uygun fiyatlı değil. Bu Type 2 koşul cümlesidir ve ana cümle would + V1 alır. Sol taraf (koşul): konut daha ucuz olsaydı. Sağ taraf (sonuç): daha azı otuzlu yaşlarına kadar ailesiyle yaşardı. Bu yüzden would live (C) doğru. A) will live Type 1'dir, gerçek bir olasılık için kullanılır, were ile uyuşmaz. B) would have lived Type 3'tür, geçmişte olmamış bir sonucu anlatır, were ile uyuşmaz. D) live geniş zamandır, koşulun gerçek dışılığını yansıtmaz. E) had lived past perfecttir, ana cümlede tek başına sonuç bildirmez.",
+    "trap": "were'i geçmiş zaman sanıp 'geçmişte olmuş, demek ki would have lived' demek. If + were çoğu zaman bugünü anlatır. Ayrıca 'well into their thirties' genel ve süregelen bir durumdur, geçmişte bitmiş bir olay değildir.",
+    "translation": "Konutlar genç yetişkinler için daha uygun fiyatlı olsaydı, onların daha azı otuzlu yaşlarına kadar anne babalarıyla yaşardı."
+  },
+  {
+    "id": "ss040",
+    "questionType": "bosluk",
+    "exam": "YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "Societies need to invest in the social and economic integration of immigrants; ----, tensions between different communities may increase in the long run.",
+    "signalWords": [
+      {
+        "word": "need to invest",
+        "type": "anlam",
+        "tip": "Gereklilik: toplumlar yatırım yapmalı. Arkasından 'yapmazsa ne olur' gelebilir."
+      },
+      {
+        "word": "tensions",
+        "type": "anlam",
+        "tip": "Olumsuz sonuç: topluluklar arasında gerilim. Bu, öneri uygulanmazsa ortaya çıkacak durum."
+      },
+      {
+        "word": "may increase",
+        "type": "kosul",
+        "tip": "Olası, henüz gerçekleşmemiş bir sonuç. 'Aksi halde' anlamındaki koşul bağlacına işaret eder."
+      }
+    ],
+    "mainSignal": {
+      "word": "otherwise",
+      "type": "kosul"
+    },
+    "options": [
+      "similarly",
+      "therefore",
+      "moreover",
+      "otherwise",
+      "in contrast"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Önce fiilleri bul: need ve may increase. İskelet 1: Societies (S) + need (V) + to invest (O). İskelet 2: tensions between different communities (S) + may increase (V). Sol cümle: toplumlar göçmenlerin sosyal ve ekonomik uyumuna yatırım yapmalı. Sağ cümle: uzun vadede topluluklar arası gerilim artabilir. Gerilimin artması, yatırımın yapılmaması durumunda ortaya çıkacak sonuçtur. 'aksi halde, yoksa' anlamındaki otherwise (D) bunu anlatır. A) similarly benzer bir bilgi ekler, ikinci cümle ilkinin benzeri değil. B) therefore sonuç bildirir: 'yatırım yapmalılar, bu yüzden gerilim artabilir' mantıksız, yatırım gerilimi artırmaz. C) moreover aynı yönde ek bilgi verir, öneri ile risk aynı yönde değil. E) in contrast iki olguyu karşılaştırıp zıtlık kurar; burada karşılaştırma değil 'yapılmazsa' ilişkisi var.",
+    "trap": "therefore en güçlü çeldiricidir, çünkü iki cümle arasında bir sebep-sonuç bağı hissedilir. Ama sonuç yatırımın kendisinden değil, yatırımın yapılmamasından doğar. 'should / need to / must' + olumsuz olası sonuç görüyorsan otherwise'ı düşün.",
+    "translation": "Toplumların göçmenlerin sosyal ve ekonomik uyumuna yatırım yapması gerekir; aksi halde farklı topluluklar arasındaki gerilim uzun vadede artabilir."
+  },
+  {
+    "id": "ss041",
+    "questionType": "bosluk",
+    "exam": "YDS",
+    "topic": "Sosyal",
+    "questionText": "---- the central bank raised interest rates earlier, inflation would not have reached such high levels last year.",
+    "signalWords": [
+      {
+        "word": "would not have reached",
+        "type": "kosul",
+        "tip": "Ana cümle would have + V3: Type 3 koşul. Yan cümle had + V3 ister."
+      },
+      {
+        "word": "raised",
+        "type": "yapi",
+        "tip": "Bu raised geçmiş zaman değil V3 olarak okunmalı. Boşluktan sonra özne, ardından V3 geliyorsa devrik Type 3 yapısı: Had + özne + V3."
+      },
+      {
+        "word": "last year",
+        "type": "zaman",
+        "tip": "Geçmişte kalmış, değiştirilemez bir durum. Geçmişle ilgili gerçek dışı koşul."
+      }
+    ],
+    "mainSignal": {
+      "word": "Had",
+      "type": "kosul"
+    },
+    "options": [
+      "Unless",
+      "Should",
+      "Provided",
+      "Were",
+      "Had"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Önce fiilleri bul: raised ve would not have reached. Ana iskelet: inflation (S) + would not have reached (V) + such high levels (O). would have + V3 ana cümlesi Type 3 koşul cümlesidir ve geçmişte gerçekleşmemiş bir durumu anlatır. Type 3'ün yan cümlesi 'If the central bank had raised' biçimindedir. If atıldığında had başa geçer: Had the central bank raised. Bu yüzden E doğru. Anlam: merkez bankası faizleri daha erken artırsaydı (ama artırmadı), enflasyon geçen yıl bu kadar yükselmezdi. A) Unless 'olmadıkça' der; ayrıca Type 3 ile past perfect ister, burada 'raised' tek başına geçmiş zaman kalır. B) Should devrik yapısı Type 1'dir ve yalın fiil (raise) ister. C) Provided koşul bildirir ama Type 3 ile 'had raised' ister. D) Were devrik yapısı Type 2'dir ve were + to + V1 ya da sıfat ister.",
+    "trap": "raised'ı geçmiş zaman sanıp Type 2 devriği Were'i seçmek. Önce ana cümleye bak: would have + V3 varsa yan cümle mutlaka had + V3 olur. Devrik yapıda bu had başa geçer ve özneden sonra yalnız V3 kalır.",
+    "translation": "Merkez bankası faizleri daha erken artırsaydı, enflasyon geçen yıl bu kadar yüksek seviyelere ulaşmazdı."
+  },
+  {
+    "id": "ss042",
+    "questionType": "tamamlama",
+    "exam": "YDS ve YÖKDİL",
+    "topic": "Sosyal",
+    "questionText": "As long as public institutions remain transparent and accountable, ----.",
+    "signalWords": [
+      {
+        "word": "As long as",
+        "type": "kosul",
+        "tip": "'-dığı sürece' der. Gerçek bir koşul: yan cümle geniş zaman, ana cümle geniş zaman ya da gelecek ister."
+      },
+      {
+        "word": "transparent and accountable",
+        "type": "anlam",
+        "tip": "Olumlu koşul: kurumlar şeffaf ve hesap verebilir. Ana cümle olumlu bir sonuç vermeli."
+      },
+      {
+        "word": "remain",
+        "type": "zaman",
+        "tip": "Geniş zaman. Geçmiş zaman, past perfect ve would have içeren şıklar uyuşmaz."
+      }
+    ],
+    "mainSignal": {
+      "word": "As long as",
+      "type": "kosul"
+    },
+    "options": [
+      "citizens are likely to keep trusting them",
+      "corruption had already become a serious problem",
+      "many people would have lost faith in democracy",
+      "trust in government declined sharply in the 1990s",
+      "citizens rarely took part in political debates"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Doğru şıkta önce fiili bul: are likely to keep (trusting). İskelet: citizens (S) + are likely to keep trusting (V) + them (O). Sol taraf (koşul): kamu kurumları şeffaf ve hesap verebilir kaldığı sürece. As long as gerçek bir koşul bildirir, yan cümle geniş zamandır (remain). Ana cümle de geniş zaman ya da gelecek anlamı taşımalı ve olumlu koşula uygun olumlu bir sonuç vermelidir. A şıkkı ikisini de karşılar: vatandaşlar onlara güvenmeye büyük olasılıkla devam eder. B) had already become past perfecttir ve anlamca olumsuzdur. C) would have lost Type 3 sonucu bildirir, geniş zamanlı koşulla uyuşmaz ve anlamca terstir. D) Geçmişteki belirli bir olayı (1990'lar) anlatır, koşula bağlanamaz. E) Geçmiş zamandır ve şeffaflığın sonucu olarak katılımın azalması mantıksızdır.",
+    "trap": "Şıkların hepsi siyaset ve güven konusunda olduğu için anlam tanıdık gelir. Koşul tamamlama sorularında önce zamanı ele: As long as + geniş zaman, ana cümlede geçmiş zaman ya da would have görürsen o şık gider. Geriye kalanlarda yönü kontrol et.",
+    "translation": "Kamu kurumları şeffaf ve hesap verebilir kaldığı sürece vatandaşlar büyük olasılıkla onlara güvenmeye devam edecektir."
   }
 ]
