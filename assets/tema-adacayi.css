@@ -509,3 +509,37 @@ body.tema-adacayi .arama-sonuc-baslik mark,body.tema-adacayi .arama-sonuc-katego
 body.tema-adacayi .arama-sonuc-kategori{background:var(--ad-acik)}
 body.tema-adacayi .arama-ipucu kbd{background:var(--ad-acik);color:var(--ad-metin)}
 body.tema-adacayi .arama-sonuc-ikon,body.tema-adacayi .arama-header-ikon{color:var(--ad-koyu)}
+
+/* Açılır pencereler (Günün Denemesi, okuma, yanlış defteri, haftalık rapor, davet):
+   eski koyu yeşil + nane yerine Adaçayı açık tema. Yalnız .gd-perde içinde geçerli;
+   çalışma alanındaki aynı sınıflar (ör. .gd-btn) etkilenmez. (8 Kas 2026) */
+body.tema-adacayi .gd-perde{background:rgba(31,42,36,.45)}
+body.tema-adacayi .gd-perde .gd-panel{background:var(--ad-inci);border-color:var(--ad-cizgi);color:var(--ad-metin);box-shadow:0 18px 48px rgba(31,42,36,.18)}
+body.tema-adacayi .gd-perde .gd-eyebrow,body.tema-adacayi .gd-perde .gd-etiket,body.tema-adacayi .gd-perde .ok-konu,body.tema-adacayi .gd-perde .dv-eyebrow,body.tema-adacayi .gd-perde .gd-harf{color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-kapat,body.tema-adacayi .gd-perde .gd-btn.ikincil,body.tema-adacayi .gd-perde .dv-kucuk{color:var(--ad-koyu);border-color:var(--ad-dogal);background:var(--ad-kart)}
+body.tema-adacayi .gd-perde .gd-kapat:hover,body.tema-adacayi .gd-perde .gd-btn.ikincil:hover,body.tema-adacayi .gd-perde .dv-kucuk:hover{border-color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-sure{color:var(--ad-koyu);background:var(--ad-acik);border-color:var(--ad-dogal)}
+body.tema-adacayi .gd-perde .gd-sure.az{color:var(--ad-tuzak);background:var(--ad-tuzak-zemin);border-color:#F2C4C4}
+body.tema-adacayi .gd-perde .gd-baslik,body.tema-adacayi .gd-perde .gd-soru,body.tema-adacayi .gd-perde .gd-satir,body.tema-adacayi .gd-perde .gd-ozet b,body.tema-adacayi .gd-perde .yd-alt b,body.tema-adacayi .gd-perde .pt-alt b{color:var(--ad-metin)}
+body.tema-adacayi .gd-perde .gd-alt,body.tema-adacayi .gd-perde .gd-not,body.tema-adacayi .gd-perde .gd-skor-etiket,body.tema-adacayi .gd-perde .gd-cevaplar,body.tema-adacayi .gd-perde .gd-aciklama-ust span,body.tema-adacayi .gd-perde .gd-ozet div,body.tema-adacayi .gd-perde .pt-kaynak,body.tema-adacayi .gd-perde .pt-not,body.tema-adacayi .gd-perde .dv-alt,body.tema-adacayi .gd-perde .dv-not,body.tema-adacayi .gd-perde .dv-durum,body.tema-adacayi .gd-perde .dv-etiket{color:var(--ad-ikincil)}
+body.tema-adacayi .gd-perde .gd-bilgi li::before{background:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-btn{background:var(--ad-koyu);color:#fff}
+body.tema-adacayi .gd-perde .gd-btn:hover{background:var(--ad-koyu-2)}
+body.tema-adacayi .gd-perde .gd-btn.ikincil{background:var(--ad-kart);color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-nokta{border-color:var(--ad-dogal);color:var(--ad-metin);background:var(--ad-kart)}
+body.tema-adacayi .gd-perde .gd-nokta.dolu{background:var(--ad-acik);color:var(--ad-metin)}
+body.tema-adacayi .gd-perde .gd-nokta.aktif{border-color:var(--ad-koyu);box-shadow:0 0 0 1px var(--ad-koyu) inset}
+body.tema-adacayi .gd-perde .gd-cumle,body.tema-adacayi .gd-perde .ok-metin{background:var(--ad-kart);color:var(--ad-metin);border-color:var(--ad-cizgi)}
+body.tema-adacayi .gd-perde .gd-sik{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi .gd-perde .gd-sik:hover{border-color:var(--ad-dogal)}
+body.tema-adacayi .gd-perde .gd-sik.secili,body.tema-adacayi .gd-perde .gd-sik.yd-dogru{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff}
+body.tema-adacayi .gd-perde .gd-sik.secili .gd-harf,body.tema-adacayi .gd-perde .gd-sik.yd-dogru .gd-harf{color:#fff}
+body.tema-adacayi .gd-perde .gd-sik.yd-yanlis{border-color:var(--ad-tuzak);background:var(--ad-tuzak-zemin)}
+body.tema-adacayi .gd-perde .gd-skor-sayi,body.tema-adacayi .gd-perde .yd-sonuc.ok,body.tema-adacayi .gd-perde .dv-sayilar b,body.tema-adacayi .gd-perde .ok-tekrar summary{color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-ozet div,body.tema-adacayi .gd-perde .dv-satir,body.tema-adacayi .gd-perde .dv-sayilar div{background:var(--ad-kart);border-color:var(--ad-cizgi)}
+body.tema-adacayi .gd-perde .gd-aciklama{background:var(--ad-kart);border-color:var(--ad-cizgi);border-left-color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .gd-satir.tuzak .gd-etiket,body.tema-adacayi .gd-perde .yd-sonuc{color:var(--ad-tuzak)}
+body.tema-adacayi .gd-perde .dv-input{background:var(--ad-kart)!important;color:var(--ad-metin);border-color:var(--ad-dogal)}
+body.tema-adacayi .gd-perde .dv-input:focus{outline-color:var(--ad-koyu)}
+body.tema-adacayi .gd-perde .pt-linkler a{color:var(--ad-koyu);border-color:var(--ad-dogal)}
+body.tema-adacayi .gd-perde .pt-linkler a:first-child{background:var(--ad-koyu);border-color:var(--ad-koyu);color:#fff}
