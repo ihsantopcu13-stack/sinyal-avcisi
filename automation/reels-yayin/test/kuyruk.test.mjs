@@ -3,7 +3,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { facebookAciklamasi, youtubeAciklamasi, sonrakiKonu, merakliAciklama, GENEL_TAKIP_SATIRI } from "../kuyruk-mantigi.mjs";
+import { facebookAciklamasi, youtubeAciklamasi, sonrakiKonu, merakliAciklama, GENEL_TAKIP_SATIRI, siteCagrisi } from "../kuyruk-mantigi.mjs";
 
 const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "data");
 const kuyruk = JSON.parse(await readFile(path.join(dir, "kuyruk.json"), "utf-8"));
@@ -18,6 +18,10 @@ const uyar = (ad, ok, detay = "") => { if (!ok) { uyari++; console.log(`[UYARI] 
 // Platform dönüşümleri (birim): Facebook/YouTube'da "biyografi" yok
 kontrol("Facebook: 'Link biyografide.' site adresine çevrilir",
   facebookAciklamasi("Ücretsiz. Link biyografide.") === "Ücretsiz: https://sinyal-avcisi.com");
+kontrol("Instagram: siteye çağrı eklenir",
+  siteCagrisi("Ücretsiz. Link biyografide.\n\n#x") === "Ücretsiz. Bu sorunun benzerlerini sitede çöz, link biyografide.\n\n#x");
+kontrol("Facebook: siteye çağrılı cümle site adresine çevrilir",
+  facebookAciklamasi(siteCagrisi("Ücretsiz. Link biyografide.")) === "Ücretsiz. Bu sorunun benzerlerini sitede çöz: https://sinyal-avcisi.com");
 kontrol("Facebook: noktasız tek cümle de çevrilir", facebookAciklamasi("Link biyografide") === "https://sinyal-avcisi.com");
 kontrol("YouTube: 'Link biyografide.' çıkarılır, satır yapısı korunur",
   youtubeAciklamasi("Ücretsiz. Link biyografide.\n\n#x") === "Ücretsiz.\n\n#x");

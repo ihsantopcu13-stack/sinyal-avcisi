@@ -62,6 +62,8 @@
       "has": [{ "type": "host", "value": "sinyal-avcisi-five.vercel.app" }],
       "destination": "https://sinyal-avcisi.com/:path",
       "permanent": true
-    }
+    },
+    { "source": "/ig", "destination": "/?utm_source=instagram&utm_medium=bio&utm_campaign=profil#gunun-denemesi", "permanent": false },
+    { "source": "/dm", "destination": "/?utm_source=instagram&utm_medium=dm&utm_campaign=manychat#gunun-denemesi", "permanent": false }
   ]
 }
