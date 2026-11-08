@@ -579,7 +579,7 @@ body.tema-adacayi #dashboard{
 /* Adım 1 (panel): modüller henüz eski koyu temada kalır. Modül kutusuna eski
    değişkenler geri verilir; Adım 2'de her modül tek tek açık temaya alınınca
    o modülün satırı buradan çıkarılır. */
-body.tema-adacayi #dashboard .dmod:not(#mod-sinyal){
+body.tema-adacayi #dashboard .dmod:not(#mod-sinyal):not(#mod-tuzak){
   --paper:#05070d;--ink:#dce3ec;--surface:#0d1624;--surface-2:#131f30;--border:#22324a;--muted:#aeb6c4;
   --signal:#38bdf8;--signal-dark:#0284c7;--signal-hover:#7dd3fc;--signal-light:rgba(56,189,248,.14);--sl:rgba(56,189,248,.10);
   --contrast:#c4b5fd;--trap:#ef4444;--km-bg:#05070d;--km-surface:#0d1624;--km-border:#22324a;--km-accent:#38bdf8;
@@ -715,27 +715,27 @@ body.tema-adacayi #dashboard :is(.pt-kart,.dv-kart) .gd-btn.ikincil{background:v
    ============================================================ */
 /* Eski koyu tema "body.dark-mode [style*=...]" kuralları satır içi stilleri koyuya zorluyordu.
    Panelin kendi parçaları (.dash-main içindeki modül dışı öğeler) ve açık temaya alınan modüller için geri alınır. */
-body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) :is([style*="background:var(--surface)"],[style*="background:white"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="background:var(--surface)"],[style*="background:white"]){background:var(--ad-kart)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) [style*="background:var(--paper)"],body.tema-adacayi #dashboard .dash-main>:not(.dmod)[style*="background:var(--paper)"]{background:var(--ad-inci)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal) [style*="background:#05070d"]{background:var(--ad-acik-2)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal,.dash-main>:not(.dmod)) :is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]){color:var(--ad-metin)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,.dash-main>:not(.dmod)) :is([style*="background:var(--surface)"],[style*="background:white"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="background:var(--surface)"],[style*="background:white"]){background:var(--ad-kart)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,.dash-main>:not(.dmod)) [style*="background:var(--paper)"],body.tema-adacayi #dashboard .dash-main>:not(.dmod)[style*="background:var(--paper)"]{background:var(--ad-inci)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) [style*="background:#05070d"]{background:var(--ad-acik-2)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak,.dash-main>:not(.dmod)) :is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]),body.tema-adacayi #dashboard .dash-main>:not(.dmod):is([style*="color:var(--ink)"],[style*="color:#374151"],[style*="color:#1f2937"]){color:var(--ad-metin)!important}
 /* Şıklar */
-body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .dmo.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .dm-fb.ok{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .dmo{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .dmo:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .dmo.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .dmo.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .dm-fb.ok{color:var(--ad-dogru)}
 /* Cümledeki işaretler: sinyal (adaçayı), tuzak (kırmızı), anahtar kelime (koyu çizgi) */
-body.tema-adacayi #dashboard :is(#mod-sinyal) .s-sig{background:var(--ad-acik);color:var(--ad-koyu-2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .s-trap{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .s-key{background:var(--ad-acik-2);color:var(--ad-metin);box-shadow:inset 0 -2px 0 var(--ad-dogal)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) :is(.s-sig,.s-trap,.s-key)[data-tip]:hover::after{background:var(--ad-metin);color:#fff;box-shadow:0 4px 16px rgba(31,42,36,.2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) mark.avci-board-vurgu{background:var(--ad-acik)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .sl-ceviri-metin{background:var(--ad-kart);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .s-sig{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .s-trap{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .s-key{background:var(--ad-acik-2);color:var(--ad-metin);box-shadow:inset 0 -2px 0 var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) :is(.s-sig,.s-trap,.s-key)[data-tip]:hover::after{background:var(--ad-metin);color:#fff;box-shadow:0 4px 16px rgba(31,42,36,.2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) mark.avci-board-vurgu{background:var(--ad-acik)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .sl-ceviri-metin{background:var(--ad-kart);color:var(--ad-metin)}
 /* Üst satır */
-body.tema-adacayi #dashboard :is(#mod-sinyal) .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .adaptif-badge{background:var(--ad-acik);color:var(--ad-koyu-2)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .adaptif-zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .tam-ekran-btn{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .adaptif-badge{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .adaptif-zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
 
 /* AVCI çözüm paneli (assets/modules/avci-cozum.js) */
 body.tema-adacayi #dashboard .avm-mod{color:var(--ad-ikincil);border-color:var(--ad-cizgi);background:var(--ad-kart)}
@@ -778,9 +778,23 @@ body.tema-adacayi #dashboard .avm-uyari{border-color:var(--ad-tuzak);background:
 body.tema-adacayi #dashboard .avm-rapor{background:var(--ad-kart);border-color:var(--ad-cizgi)}
 body.tema-adacayi #dashboard .avm-rapor h3{color:var(--ad-metin)}
 /* Yanlış cevap kutusu */
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-kutu{background:var(--ad-tuzak-zemin);border-color:#F2C4C4;border-left-color:var(--ad-tuzak);color:var(--ad-metin)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-dogru-satir b{color:var(--ad-dogru)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-klod-btn{background:var(--ad-kart);border-color:var(--ad-koyu);color:var(--ad-koyu)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-klod-ipucu{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-dogru{border-color:var(--ad-dogru)!important;background:var(--ad-dogru-zemin)!important;color:var(--ad-dogru)!important}
-body.tema-adacayi #dashboard :is(#mod-sinyal) .yc-yanlis{border-color:var(--ad-tuzak)!important;background:var(--ad-tuzak-zemin)!important;color:var(--ad-tuzak)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-kutu{background:var(--ad-tuzak-zemin);border-color:#F2C4C4;border-left-color:var(--ad-tuzak);color:var(--ad-metin)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-dogru-satir b{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-klod-btn{background:var(--ad-kart);border-color:var(--ad-koyu);color:var(--ad-koyu)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-klod-ipucu{background:var(--ad-acik-2);border-color:var(--ad-dogal)}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-dogru{border-color:var(--ad-dogru)!important;background:var(--ad-dogru-zemin)!important;color:var(--ad-dogru)!important}
+body.tema-adacayi #dashboard :is(#mod-sinyal,#mod-tuzak) .yc-yanlis{border-color:var(--ad-tuzak)!important;background:var(--ad-tuzak-zemin)!important;color:var(--ad-tuzak)!important}
+/* Günlük Tuzak */
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-sent{background:var(--ad-kart);border-color:var(--ad-cizgi)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-opt{background:var(--ad-kart);border-color:var(--ad-cizgi);color:var(--ad-metin)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-opt:hover:not(:disabled){background:var(--ad-acik);border-color:var(--ad-koyu);color:var(--ad-koyu-2);box-shadow:0 4px 12px rgba(31,42,36,.08)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-opt.ok{background:var(--ad-dogru-zemin);border-color:var(--ad-dogru);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-opt.err{background:var(--ad-tuzak-zemin);border-color:var(--ad-tuzak);color:var(--ad-tuzak)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-fb.ok{color:var(--ad-dogru)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-next-btn{background:var(--ad-koyu);color:#fff}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-paylas{background:var(--ad-kart);color:var(--ad-koyu);border:1px solid var(--ad-dogal)}
+body.tema-adacayi #dashboard #mod-tuzak .tuzak-paylas:hover{border-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .zorluk-badge{font-size:11px}
+body.tema-adacayi #dashboard .zorluk-badge.kolay{background:var(--ad-dogru-zemin);color:var(--ad-dogru)}
+body.tema-adacayi #dashboard .zorluk-badge.orta{background:var(--ad-acik);color:var(--ad-koyu-2)}
+body.tema-adacayi #dashboard .zorluk-badge.zor{background:var(--ad-tuzak-zemin);color:var(--ad-tuzak)}
