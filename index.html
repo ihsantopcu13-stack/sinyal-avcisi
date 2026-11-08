@@ -1797,7 +1797,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108l">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108m">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -2524,11 +2524,11 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- ÇALIŞMA PLANI -->
         <div class="dmod" id="mod-plan" style="display:none">
-          <div class="dm-eye">📅 KİŞİSEL ÇALIŞMA PLANIN — Sınava Geri Sayım</div>
+          <div class="dm-eye">KİŞİSEL ÇALIŞMA PLANIN — Sınava Geri Sayım</div>
           <div style="margin-top:14px;padding:14px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
             <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Sınav tarihini seç:</div>
             <input type="date" id="plan-tarih" style="border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:IBM Plex Sans,sans-serif;font-size:14px;outline:none;color:var(--ink);background:var(--surface);width:100%" aria-label="Sınav tarihi">
-            <button onclick="planOlustur()" style="margin-top:10px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 7 Günlük Plan Oluştur →</button>
+            <button onclick="planOlustur()" style="margin-top:10px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">7 Günlük Plan Oluştur →</button>
           </div>
           <div id="plan-icerik" style="margin-top:14px"></div>
 
@@ -2617,7 +2617,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <div class="cp-weeks" id="cp-weeks"></div>
 
           <div class="cp-hedef-section">
-            <div class="cp-hedef-baslik">🎯 Hedef Puana Göre Öncelik</div>
+            <div class="cp-hedef-baslik">Hedef Puana Göre Öncelik</div>
             <div class="cp-hedef-sub">Puan aralığını seç, o hedefe özel çalışma önceliğini gör.</div>
             <div class="cp-hedef-tabs" id="cp-hedefTabs">
               <button class="cp-hedef-tab cp-hedef-active cp-hedef-1" type="button" data-cp-action="hedef-sec" data-cp-hedef="1">40-50 Puan</button>
@@ -2632,7 +2632,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 
         <!-- SINAV PLANIM — Kişiselleştirilmiş hedef planı -->
         <div class="dmod" id="mod-sinavplanim" style="display:none">
-          <div class="dm-eye">🚨 ACİL KURTARMA PLANI — Puanına özel hedef planı</div>
+          <div class="dm-eye">ACİL KURTARMA PLANI — Puanına özel hedef planı</div>
           <div style="margin-top:14px;padding:16px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="sp-dogru" min="0" value="17" aria-label="Doğru sayısı"></div>
@@ -2640,14 +2640,14 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
               <div class="sp-field"><label>Hedef puan</label><input type="number" id="sp-hedefpuan" min="0" max="100" step="0.5" value="65" aria-label="Hedef puan"></div>
               <div class="sp-field"><label>Sınav tarihi</label><input type="date" id="sp-tarih" aria-label="Sınav tarihi"></div>
             </div>
-            <button onclick="sinavPlanimOlustur(true)" style="margin-top:12px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📅 Planımı Oluştur →</button>
+            <button onclick="sinavPlanimOlustur(true)" style="margin-top:12px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Planımı Oluştur →</button>
           </div>
           <div id="sp-icerik" style="margin-top:16px"></div>
         </div>
 
         <!-- PUAN ANALİZÖRÜ & ÇALIŞMA PLANI -->
         <div class="dmod" id="mod-puananaliz" style="display:none">
-          <div class="dm-eye">📊 PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — sonucunu gir, KLOD prompt'larıyla haftalık planını al</div>
+          <div class="dm-eye">PUAN ANALİZÖRÜ & ÇALIŞMA PLANI — sonucunu gir, KLOD prompt'larıyla haftalık planını al</div>
           <div style="margin-top:14px;padding:16px;background:var(--sl);border-radius:10px;border:1px solid #2d3348">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="sp-field"><label>Doğru sayısı</label><input type="number" id="pa-dogru" min="0" max="80" value="17"></div>
@@ -2662,22 +2662,22 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
               <div class="pa-hedef-grid" id="pa-hedef-grid"></div>
             </div>
             <div style="margin-top:10px" class="sp-field"><label>Sınav tarihi (YDS/2 varsayılan: 22 Kasım 2026)</label><input type="date" id="pa-tarih"></div>
-            <button onclick="puanAnaliziOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📊 Analiz Et →</button>
+            <button onclick="puanAnaliziOlustur()" style="margin-top:12px;width:100%;background:var(--signal);color:#031018;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Analiz Et →</button>
           </div>
           <div id="pa-icerik" style="margin-top:16px"></div>
         </div>
 
         <!-- LİDERLİK TABLOSU -->
         <div class="dmod" id="mod-lider" style="display:none">
-          <div class="dm-eye">🏆 HAFTALIK LİDERLİK TABLOSU</div>
+          <div class="dm-eye">HAFTALIK LİDERLİK TABLOSU</div>
           <div class="lb-section" style="margin-top:14px">
-            <div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:12px;display:flex;align-items:center;gap:6px">🔥 Bu Hafta En Çok XP Kazananlar</div>
+            <div style="font-size:12px;font-weight:700;color:#c4b5fd;margin-bottom:12px;display:flex;align-items:center;gap:6px">Bu Hafta En Çok XP Kazananlar</div>
             <div id="lb-liste"></div>
           </div>
           <div style="margin-top:14px;padding:12px;background:var(--sl);border-radius:10px;border:1px solid #2d3348;text-align:center">
             <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Senin bu haftaki puanın</div>
             <div id="lb-benim-xp" style="font-size:28px;font-weight:700;color:var(--signal);font-family:'IBM Plex Mono',monospace">0 XP</div>
-            <button onclick="xpPaylas(xpLoad().hafta)" style="margin-top:10px;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📤 Arkadaşlarınla Paylaş</button>
+            <button onclick="xpPaylas(xpLoad().hafta)" style="margin-top:10px;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Arkadaşlarınla Paylaş</button>
           </div>
         </div>
 
@@ -14346,16 +14346,16 @@ function radarCiz(){
 
 // ─── 2. KİŞİSEL ÇALIŞMA PLANI ───────────────────────────────────────────────
 const PLAN_AKTIVITE_HAVUZU=[
-  {simge:'🔬',baslik:'Sinyal Lab',detay:'15 adaptif soru çöz, sinyallere odaklan',sure:'35 dk'},
-  {simge:'🃏',baslik:'Kelime Kartları',detay:'Bekleyen kartları tekrar et (spaced repetition)',sure:'15 dk'},
-  {simge:'⚡',baslik:'SAT Metodu',detay:'Paragraf yapısını S+V+O ile analiz et',sure:'20 dk'},
-  {simge:'🎧',baslik:'Ses Kursu',detay:'2 podcast bölümü dinle, aktif not al',sure:'20 dk'},
-  {simge:'🎯',baslik:'Günlük Tuzak',detay:'Tuzak sorusunu çöz, açıklamasını oku',sure:'10 dk'},
-  {simge:'📖',baslik:'Paragraf Analizi',detay:'1 akademik metin oku, sinyalleri işaretle',sure:'25 dk'},
-  {simge:'🤖',baslik:'KLOD Sohbeti',detay:'En zor konuyu KLOD\'a sor, tartış',sure:'15 dk'},
-  {simge:'📝',baslik:'Hata Defteri',detay:'Geçmiş hatalarını gözden geçir, tekrar et',sure:'20 dk'},
-  {simge:'🧠',baslik:'Modal Perfect',detay:'must/should/can\'t+have kalıplarını pekiştir',sure:'25 dk'},
-  {simge:'🔁',baslik:'Mini Test',detay:'10 soruluk hızlı test yap, zamanla kendin',sure:'15 dk'},
+  {baslik:'Sinyal Lab',detay:'15 adaptif soru çöz, sinyallere odaklan',sure:'35 dk'},
+  {baslik:'Kelime Kartları',detay:'Bekleyen kartları tekrar et (spaced repetition)',sure:'15 dk'},
+  {baslik:'SAT Metodu',detay:'Paragraf yapısını S+V+O ile analiz et',sure:'20 dk'},
+  {baslik:'Ses Kursu',detay:'2 podcast bölümü dinle, aktif not al',sure:'20 dk'},
+  {baslik:'Günlük Tuzak',detay:'Tuzak sorusunu çöz, açıklamasını oku',sure:'10 dk'},
+  {baslik:'Paragraf Analizi',detay:'1 akademik metin oku, sinyalleri işaretle',sure:'25 dk'},
+  {baslik:'KLOD Sohbeti',detay:'En zor konuyu KLOD\'a sor, tartış',sure:'15 dk'},
+  {baslik:'Hata Defteri',detay:'Geçmiş hatalarını gözden geçir, tekrar et',sure:'20 dk'},
+  {baslik:'Modal Perfect',detay:'must/should/can\'t+have kalıplarını pekiştir',sure:'25 dk'},
+  {baslik:'Mini Test',detay:'10 soruluk hızlı test yap, zamanla kendin',sure:'15 dk'},
 ];
 
 function planOlustur(){
@@ -14377,7 +14377,7 @@ function planOlustur(){
   }
   icerikEl.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink)">📅 7 Günlük Çalışma Planın</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink)">7 Günlük Çalışma Planın</div>
       <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--signal)">Sınava ${kalanGun} gün kaldı · En zayıf: ${enZayif}</div>
     </div>
     <div class="plan-section">
@@ -14386,14 +14386,14 @@ function planOlustur(){
           <div class="plan-gun-no">${g.no}</div>
           <div class="plan-gun-icerik">
             <div class="plan-gun-baslik">${g.gun}</div>
-            <div class="plan-gun-detay">${g.a1.simge} ${g.a1.baslik} · ${g.a2.simge} ${g.a2.baslik}</div>
+            <div class="plan-gun-detay">${g.a1.baslik} · ${g.a2.baslik}</div>
             <div class="plan-gun-detay" style="margin-top:2px">${g.a1.detay}</div>
-            <div class="plan-gun-sure">⏱ ${g.a1.sure} + ${g.a2.sure}</div>
+            <div class="plan-gun-sure">${g.a1.sure} + ${g.a2.sure}</div>
           </div>
         </div>
       `).join('')}
     </div>
-    <button onclick="planIndir()" style="margin-top:10px;width:100%;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">📲 Planı Paylaş</button>
+    <button onclick="planIndir()" class="plan-paylas" style="margin-top:10px;width:100%;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Planı Paylaş</button>
   `;
 }
 
@@ -14406,12 +14406,12 @@ function planIndir(){
 
 // ─── SINAV PLANIM — Kişiselleştirilmiş hedef planı ─────────────────────────
 const SP_MOTIVASYON=[
-  "💪 Her gün attığın küçük adım, sınav gününde büyük farkı yaratacak.",
-  "🔥 Bugün çözdüğün her soru, hedef puanına bir adım daha yaklaştırıyor.",
-  "📈 Gelişim çizgisel değildir — bazı günler sıçrarsın, bazı günler sabırla ilerlersin. İkisi de normal.",
-  "🎯 Net artışı küçük görünse de, düzenli tekrar uzun vadede büyük puan farkı yaratır.",
-  "☕ Zor günlerde bile 15 dakika çalışmak, hiç çalışmamaktan iyidir.",
-  "🚀 Geçmiş sınav sonucun bir başlangıç noktası, kaderin değil."
+  "Her gün attığın küçük adım, sınav gününde büyük farkı yaratacak.",
+  "Bugün çözdüğün her soru, hedef puanına bir adım daha yaklaştırıyor.",
+  "Gelişim çizgisel değildir — bazı günler sıçrarsın, bazı günler sabırla ilerlersin. İkisi de normal.",
+  "Net artışı küçük görünse de, düzenli tekrar uzun vadede büyük puan farkı yaratır.",
+  "Zor günlerde bile 15 dakika çalışmak, hiç çalışmamaktan iyidir.",
+  "Geçmiş sınav sonucun bir başlangıç noktası, kaderin değil."
 ];
 function sinavPlanimVarsayilanTarih(){
   const now=new Date();
@@ -14445,7 +14445,7 @@ function spHesaplaVerileri(dogru,yanlis,hedefPuan,tarihStr){
   const gunlukSoruHedefi=puanFarki<=0?15:Math.min(80,Math.max(15,Math.ceil((gerekliNetArtis*3.5)/kalanGun)));
   const gerekliDogruBosStrateji=Math.min(toplamSoru,Math.max(0,Math.ceil((hedefPuan/100)*toplamSoru)));
   const aciliyetRenk=kalanGun<14?'#dc2626':kalanGun<30?'#f87171':'#16a34a';
-  const aciliyetMetin=kalanGun<14?'🔴 Kritik':kalanGun<30?'🟡 Yoğun':'🟢 Rahat';
+  const aciliyetMetin=kalanGun<14?'Kritik':kalanGun<30?'Yoğun':'Rahat';
   return{dogru,yanlis,hedefPuan,tarihStr,toplamSoru,mevcutPuan,kalanGun,puanFarki,gerekliNetArtis,gunlukSoruHedefi,gerekliDogruBosStrateji,aciliyetRenk,aciliyetMetin};
 }
 
@@ -14459,11 +14459,11 @@ const SP_MUFREDAT_FAZLARI=[
 
 // Zayıf alan → günlük mini görev eşlemesi
 const SP_ZAYIF_GOREV={
-  'hk-sinyal':{etiket:'Bağlaçlar (despite/although/however)',gorev:'🔗 10 bağlaç cümlesi çöz + Canlı Ders\'te tekrar izle',mod:'canliders'},
-  'hk-yapisal':{etiket:'Modal Yapılar (must have/should have)',gorev:'🧠 5 modal perfect sorusu çöz',mod:'sinyal'},
-  'hk-kelime':{etiket:'Kelime Bilgisi',gorev:'🃏 20 kelime kartını tekrar et',mod:'kelime'},
-  'hk-dikkat':{etiket:'Dikkat Hataları',gorev:'🐢 1 metni satır satır oku, anahtar kelimeleri işaretle',mod:'paragraf'},
-  'paragraf':{etiket:'Paragraf Soruları',gorev:'📖 2 paragraf sorusu çöz (SAT metodu)',mod:'paragraf'}
+  'hk-sinyal':{etiket:'Bağlaçlar (despite/although/however)',gorev:'10 bağlaç cümlesi çöz + Canlı Ders\'te tekrar izle',mod:'canliders'},
+  'hk-yapisal':{etiket:'Modal Yapılar (must have/should have)',gorev:'5 modal perfect sorusu çöz',mod:'sinyal'},
+  'hk-kelime':{etiket:'Kelime Bilgisi',gorev:'20 kelime kartını tekrar et',mod:'kelime'},
+  'hk-dikkat':{etiket:'Dikkat Hataları',gorev:'1 metni satır satır oku, anahtar kelimeleri işaretle',mod:'paragraf'},
+  'paragraf':{etiket:'Paragraf Soruları',gorev:'2 paragraf sorusu çöz (SAT metodu)',mod:'paragraf'}
 };
 // Zayıf alan etiketine/görevine tıklanınca ilgili panel sekmesini açar.
 function spZayifGit(mod){
@@ -14582,7 +14582,7 @@ function konfetiPatlat(){
 function sinavKutlamaGoster(){
   const d=document.createElement('div');
   d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99999;background:linear-gradient(135deg,#16a34a,#15803d);color:#f8fafc;padding:16px 28px;border-radius:14px;font-size:16px;font-weight:700;font-family:IBM Plex Sans,sans-serif;box-shadow:0 8px 24px rgba(5,150,105,.4);text-align:center;max-width:90vw';
-  d.textContent='🎉 Bugünün checklist\'i tamam! Harika iş çıkardın.';
+  d.textContent='Bugünün checklist\'i tamam! Harika iş çıkardın.';
   document.body.appendChild(d);
   setTimeout(()=>{d.style.transition='opacity .5s';d.style.opacity='0';setTimeout(()=>d.remove(),500);},3200);
 }
@@ -14607,7 +14607,7 @@ function sinavGunlukMesajGoster(){
   const v=spHesaplaVerileri(ayar.dogru,ayar.yanlis,ayar.hedefPuan,ayar.tarih);
   const d=document.createElement('div');
   d.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);z-index:99997;background:linear-gradient(135deg,#38bdf8,#0284c7);color:#f8fafc;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:700;font-family:IBM Plex Sans,sans-serif;box-shadow:0 8px 24px rgba(56,189,248,.35);text-align:center;max-width:90vw;cursor:pointer';
-  d.textContent=`📅 Hedefine ${v.kalanGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz! 🚀`;
+  d.textContent=`Hedefine ${v.kalanGun} gün kaldı — bugün ${v.gunlukSoruHedefi} soru çöz!`;
   d.onclick=()=>{
     d.remove();
     const item=[...document.querySelectorAll('.dn-item')].find(e=>e.textContent.includes('Acil Kurtarma Planı'));
@@ -14667,16 +14667,16 @@ function sinavPlanimOlustur(kaydet){
   // Motivasyon mesajı
   let motiv;
   if(v.puanFarki<=0){
-    motiv='🎉 Tebrikler, hedef puanını zaten yakalamış durumdasın! Şimdi bu seviyeyi sağlamlaştırma ve hız kazanma zamanı.';
+    motiv='Tebrikler, hedef puanını zaten yakalamış durumdasın! Şimdi bu seviyeyi sağlamlaştırma ve hız kazanma zamanı.';
   }else if(v.kalanGun<14&&v.puanFarki>15){
-    motiv=`⚠️ Vakit daralıyor — ${v.kalanGun} günde ${v.puanFarki} puan fark büyük ama imkansız değil. Günlük ${v.gunlukSoruHedefi} soruyu aksatmadan çöz, en zayıf konuna öncelik ver.`;
+    motiv=`Vakit daralıyor — ${v.kalanGun} günde ${v.puanFarki} puan fark büyük ama imkansız değil. Günlük ${v.gunlukSoruHedefi} soruyu aksatmadan çöz, en zayıf konuna öncelik ver.`;
   }else{
     motiv=SP_MOTIVASYON[Math.floor(Math.random()*SP_MOTIVASYON.length)];
   }
 
   icerikEl.innerHTML=`
     <div class="sp-strateji">
-      <div class="sp-strateji-baslik">🚨 Acil Strateji Notu</div>
+      <div class="sp-strateji-baslik">Acil Strateji Notu</div>
       <div class="sp-strateji-metin">
         YDS/YÖKDİL'de <b>yanlış doğruyu götürmez</b>; her doğru <b>1,25 puan</b>.<br>
         Strateji: <b>Hiçbir soruyu boş bırakma</b> — boş = kesin 0, tahmin = %20 şans.<br>
@@ -14694,15 +14694,15 @@ function sinavPlanimOlustur(kaydet){
       <span style="font-size:12px;color:var(--muted)">${hedefPuan} puana ulaşmak için ~${v.gerekliDogruBosStrateji} doğru gerekiyor (yaklaşık ${v.gerekliNetArtis} doğru artışı)</span>
     </div>
     <div style="margin-top:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">🎯 Zayıf Alanların ${zayif.kaynak==='tahmini'?'<span style=\'font-size:10px;font-weight:600;color:var(--muted);text-transform:none\'>(tahmini — henüz pratik verisi yok)</span>':''}</div>
-      <div>${zayif.liste.map(z=>`<button type="button" class="sp-zayif-chip" onclick="spZayifGit('${z.mod}')" title="Bu konuya git">⚠️ ${z.etiket} →</button>`).join('')}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">Zayıf Alanların ${zayif.kaynak==='tahmini'?'<span style=\'font-size:10px;font-weight:600;color:var(--muted);text-transform:none\'>(tahmini — henüz pratik verisi yok)</span>':''}</div>
+      <div>${zayif.liste.map(z=>`<button type="button" class="sp-zayif-chip" onclick="spZayifGit('${z.mod}')" title="Bu konuya git">${z.etiket} →</button>`).join('')}</div>
       <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
         ${zayif.liste.map(z=>`<button type="button" class="sp-zayif-gorev" onclick="spZayifGit('${z.mod}')">${z.gorev} <span style="color:var(--signal);font-weight:700">Başla →</span></button>`).join('')}
       </div>
     </div>
     <div class="sp-checklist">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-        <div style="font-size:13px;font-weight:700;color:var(--ink)">✅ Günlük Kontrol Listesi</div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink)">Günlük Kontrol Listesi</div>
         <div style="font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--signal)">${checklistTamamlanan}/${SP_CHECKLIST_ITEMS.length}</div>
       </div>
       ${SP_CHECKLIST_ITEMS.map(i=>`
@@ -14711,10 +14711,10 @@ function sinavPlanimOlustur(kaydet){
           <span>${i.etiket}</span>
         </label>
       `).join('')}
-      <div class="sp-rapor">📊 Bu hafta ${rapor.tamamlananGun}/7 gün checklist'i tamamladın · Bu haftaki hedef: ~${v.gunlukSoruHedefi*7} soru</div>
+      <div class="sp-rapor">Bu hafta ${rapor.tamamlananGun}/7 gün checklist'i tamamladın · Bu haftaki hedef: ~${v.gunlukSoruHedefi*7} soru</div>
     </div>
     <div class="plan-section">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">📅 Kişisel Çalışma Programı — Haftalık Milestone'ların</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Kişisel Çalışma Programı — Haftalık Milestone'ların</div>
       ${milestones.map(m=>`
         <div class="sp-hafta">
           <div class="sp-hafta-no">H${m.hafta}</div>
@@ -14723,19 +14723,19 @@ function sinavPlanimOlustur(kaydet){
             <div class="sp-hafta-baslik">Hafta ${m.hafta} hedefi: ${m.hedefPuan} puan</div>
             <div class="sp-hafta-detay">${m.faz.detay}</div>
             <div class="sp-hafta-detay" style="margin-top:2px">Odak: <b>${m.odak.etiket}</b> · ${m.gunSayisi} günde ${m.soru} soru</div>
-            <div class="sp-hafta-deneme">📝 Cumartesi: Tam Deneme Sınavı Günü</div>
+            <div class="sp-hafta-deneme">Cumartesi: Tam Deneme Sınavı Günü</div>
           </div>
         </div>
       `).join('')}
     </div>
     <div class="sp-motiv">${motiv}</div>
-    <button onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" style="margin-top:12px;width:100%;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">🚀 Bugünün Çalışmasına Başla</button>
+    <button onclick="dtab(document.querySelectorAll('.dtab')[0],'sinyal')" style="margin-top:12px;width:100%;background:var(--surface);color:#f8fafc;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Bugünün Çalışmasına Başla</button>
   `;
   if(typeof sinavKurtarmaKartRender==='function')sinavKurtarmaKartRender();
   if(typeof bugunKartiRender==='function')bugunKartiRender();
 }
 
-// ─── DASHBOARD KARTI — 🚨 Acil Kurtarma Planı ──────────────────────────────
+// ─── DASHBOARD KARTI — Acil Kurtarma Planı ──────────────────────────────
 function sinavKurtarmaKartRender(){
   const kartEl=document.getElementById('sk-kart');
   if(!kartEl)return;
@@ -16214,7 +16214,7 @@ function puanAnaliziOlustur(){
     </div>
     <div class="pa-yorum"><b>${paYorum(v.mevcutPuan)}</b></div>
     <div style="margin-top:16px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">📅 Faz Bazlı Çalışma Planın — ${planFazlari.length} faz</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Faz Bazlı Çalışma Planın — ${planFazlari.length} faz</div>
       ${planFazlari.map(f=>`
         <div class="pa-faz-block">
           <div class="pa-faz-eyebrow">${f.haftaAraligi} · ${f.etiket}</div>
@@ -16233,14 +16233,14 @@ function puanAnaliziOlustur(){
       `).join('')}
     </div>
     <div class="pa-haftalik">
-      <div style="font-size:13px;font-weight:700;color:var(--ink)">🎯 Bu Hafta Hedefin</div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink)">Bu Hafta Hedefin</div>
       <div class="pa-haftalik-grid">
         <div class="pa-haftalik-stat"><div class="pa-haftalik-val">${haftalikSoru}</div><div class="pa-haftalik-lbl">Soru Çöz</div></div>
         <div class="pa-haftalik-stat"><div class="pa-haftalik-val">${haftalikKelime}</div><div class="pa-haftalik-lbl">Yeni Kelime</div></div>
         <div class="pa-haftalik-stat"><div class="pa-haftalik-val" style="font-size:13px">${buHaftaKonu}</div><div class="pa-haftalik-lbl">KLOD Konusu</div></div>
       </div>
     </div>
-    <a class="pa-full-link" href="/klod-sosyal-bilimler-prompt-seti.html" target="_blank" rel="noopener">📖 Tüm 10 Haftalık KLOD Prompt Setini Gör →</a>
+    <a class="pa-full-link" href="/klod-sosyal-bilimler-prompt-seti.html" target="_blank" rel="noopener">Tüm 10 Haftalık KLOD Prompt Setini Gör →</a>
   `;
 }
 function paPromptKopyala(btn){
@@ -16286,14 +16286,13 @@ async function liderTabloGoster(){
   gercekListe=gercekListe.filter(u=>u.isim!==kullaniciAdi);
   const tumListe=[...gercekListe,{isim:kullaniciAdi,emoji:'🎯',xp:xp.hafta||0,seviye:seviyeAl(xp.toplam||0).ad,benim:true}];
   tumListe.sort((a,b)=>b.xp-a.xp);
-  const RANK_EMOJILER=['🥇','🥈','🥉'];
-  // u.isim kullanıcının kendi profil adından geliyor (doğrulanmamış); XSS'i
+    // u.isim kullanıcının kendi profil adından geliyor (doğrulanmamış); XSS'i
   // önlemek için innerHTML yerine DOM API + textContent kullanılıyor.
   lb_el.innerHTML='';
   if(tumListe.length===1&&(xp.hafta||0)===0){
     const bos=document.createElement('div');
     bos.style.cssText='font-size:13px;color:var(--muted);text-align:center;padding:16px 0';
-    bos.textContent='Bu hafta henüz kimse XP kazanmadı — ilk sen ol! 🚀';
+    bos.textContent='Bu hafta henüz kimse XP kazanmadı. İlk sen ol!';
     lb_el.appendChild(bos);
     if(benim_el)benim_el.textContent=(xp.hafta||0).toLocaleString('tr-TR')+' XP';
     return;
@@ -16304,11 +16303,11 @@ async function liderTabloGoster(){
 
     const rank=document.createElement('div');
     rank.className='lb-rank'+(i===0?' gold':i===1?' silver':i===2?' bronze':'');
-    rank.textContent=i<3?RANK_EMOJILER[i]:String(i+1);
+    rank.textContent=String(i+1);
 
     const avatar=document.createElement('div');
     avatar.className='lb-avatar';
-    avatar.textContent=u.emoji;
+    avatar.textContent=(String(u.isim||'?').trim().charAt(0)||'?').toLocaleUpperCase('tr-TR');
 
     const isim=document.createElement('div');
     isim.className='lb-isim';
