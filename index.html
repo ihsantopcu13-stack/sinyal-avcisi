@@ -688,6 +688,29 @@ footer{background:var(--surface);color:var(--ink);padding:56px 5vw 32px;display:
 .p-seviye{background:#131f30;color:#f87171;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px}.p-seviye.zor{background:#2a1414;color:var(--trap)}
 .popt-btn.ok{background:#0f2418!important;border-color:#22c55e!important;color:#22c55e!important}.popt-btn.err{background:#2a1414!important;border-color:var(--trap)!important;color:var(--trap)!important}
 .pfb.ok{background:#0f2418;border-left:3px solid #22c55e}.pfb.err{background:#2a1414;border-left:3px solid var(--trap)}
+/* Öğrenme Teknikleri (koyu taban) */
+#mod-teknik{background:linear-gradient(135deg,#0d1624,#131f30);border-radius:16px;padding:4px}
+.tk-hero{background:linear-gradient(135deg,#0d1624,#131f30);border-radius:20px;padding:28px;margin-bottom:24px;color:#f8fafc}
+.tk-hero-ust{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.1em;opacity:.85;margin-bottom:10px}
+.tk-hero-baslik{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+.tk-hero-alt{font-size:16px;opacity:.9;line-height:1.7}
+.tk-kart{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--signal);border-radius:16px;padding:22px;margin-bottom:14px;cursor:pointer;transition:box-shadow .25s,transform .25s}
+.tk-kart:hover{box-shadow:0 8px 32px rgba(0,0,0,.12);transform:translateY(-2px)}
+.tk-ikon{width:44px;height:44px;border-radius:12px;background:var(--sl);color:var(--signal);display:grid;place-items:center;flex-shrink:0}
+.tk-ikon .ik{width:24px;height:24px}
+.tk-baslik{font-size:17px;font-weight:800;color:var(--ink)}
+.tk-ing{font-size:15px;font-weight:500;color:var(--muted);font-style:italic}
+.tk-ozet{font-size:15px;color:var(--muted);margin-top:2px}
+.teknik-arrow{font-size:20px;transition:transform .2s;flex-shrink:0}
+.tk-kart.acik .teknik-arrow{transform:rotate(90deg)}
+.teknik-detay{margin-top:20px;border-top:1px solid var(--border);padding-top:18px}
+.tk-etiket{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px}
+.tk-metin{font-size:15px;color:var(--ink);line-height:1.7}
+.tk-yds{background:var(--sl);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
+.tk-yds .tk-etiket{color:var(--signal)}
+.tk-bilim{background:#0d1624;border-radius:10px;padding:14px;margin-bottom:14px}
+.tk-rozet{display:inline-flex;align-items:center;gap:6px;font-size:15px;background:var(--sl);color:var(--signal);padding:4px 12px;border-radius:20px;font-weight:600}
+.tk-nokta{display:inline-flex;gap:3px}.tk-nokta i{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.25}.tk-nokta i.dolu{opacity:1}
 /* S+V+O (koyu taban; açık tema tema-adacayi.css'te) */
 #mod-svo{background:linear-gradient(135deg,#0d1624,#0f2418);border-radius:16px;padding:4px}
 .svo-tab{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .2s}
@@ -1702,7 +1725,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108h">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108i">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -2192,7 +2215,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   </div>
 </section>
 <section id="dashboard" class="dash">
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="ik-gunes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol><symbol id="ik-kisi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></symbol><symbol id="ik-hedef" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol><symbol id="ik-lab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3M7.5 15h9"/></symbol><symbol id="ik-tuzak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol><symbol id="ik-hiz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="ik-kitap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol><symbol id="ik-yapi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h12M3 18h6"/></symbol><symbol id="ik-kart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v12"/></symbol><symbol id="ik-nisan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol><symbol id="ik-harita" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol><symbol id="ik-robot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13v1M15 13v1M9.5 17h5"/></symbol><symbol id="ik-kep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c3 2 9 2 12 0v-5"/></symbol><symbol id="ik-dunya" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol><symbol id="ik-grafik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="ik-not" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5zM9 11h6M9 15h6"/></symbol><symbol id="ik-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></symbol><symbol id="ik-cubuk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6M3 20h18"/></symbol><symbol id="ik-kupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v1a3 3 0 0 1-3 3M7 5H4v1a3 3 0 0 0 3 3"/></symbol><symbol id="ik-kulaklik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></symbol><symbol id="ik-ampul" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></symbol><symbol id="ik-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></symbol><symbol id="ik-takvim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol><symbol id="ik-simit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M5.6 5.6l3.6 3.6M14.8 14.8l3.6 3.6M14.8 9.2l3.6-3.6M5.6 18.4l3.6-3.6"/></symbol><symbol id="ik-klasor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="ik-onay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol><symbol id="ik-sinyal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 19.1a10 10 0 0 1 0-14.2M19.1 4.9a10 10 0 0 1 0 14.2"/></symbol><symbol id="ik-yon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol><symbol id="ik-yasak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol><symbol id="ik-saat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol></defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="ik-gunes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol><symbol id="ik-kisi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></symbol><symbol id="ik-tekrar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></symbol><symbol id="ik-karistir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></symbol><symbol id="ik-hedef" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol><symbol id="ik-lab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3M7.5 15h9"/></symbol><symbol id="ik-tuzak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol><symbol id="ik-hiz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol><symbol id="ik-kitap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol><symbol id="ik-yapi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h12M3 18h6"/></symbol><symbol id="ik-kart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v12"/></symbol><symbol id="ik-nisan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></symbol><symbol id="ik-harita" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></symbol><symbol id="ik-robot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4v4M9 13v1M15 13v1M9.5 17h5"/></symbol><symbol id="ik-kep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c3 2 9 2 12 0v-5"/></symbol><symbol id="ik-dunya" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol><symbol id="ik-grafik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="ik-not" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5zM9 11h6M9 15h6"/></symbol><symbol id="ik-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l6-6"/></symbol><symbol id="ik-cubuk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6M3 20h18"/></symbol><symbol id="ik-kupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v1a3 3 0 0 1-3 3M7 5H4v1a3 3 0 0 0 3 3"/></symbol><symbol id="ik-kulaklik" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/></symbol><symbol id="ik-ampul" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></symbol><symbol id="ik-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></symbol><symbol id="ik-takvim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol><symbol id="ik-simit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M5.6 5.6l3.6 3.6M14.8 14.8l3.6 3.6M14.8 9.2l3.6-3.6M5.6 18.4l3.6-3.6"/></symbol><symbol id="ik-klasor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol><symbol id="ik-onay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol><symbol id="ik-sinyal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M7.8 16.2a6 6 0 0 1 0-8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 19.1a10 10 0 0 1 0-14.2M19.1 4.9a10 10 0 0 1 0 14.2"/></symbol><symbol id="ik-yon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol><symbol id="ik-yasak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol><symbol id="ik-saat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol></defs></svg>
   <div class="dash-inner">
     <div class="dash-header">
       <div class="eyebrow" style="color:var(--signal)">Çalışma Alanın</div>
@@ -2348,7 +2371,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           <div id="paragraf-icerik-container"></div>
         </div>
         <div class="dmod" id="mod-svo" style="display:none"><button class="tam-ekran-btn" data-saf-odak-btn="svo" onclick="tamEkranAcKapat('mod-svo')" title="Odak Modu: tam ekran çalış" aria-label="Odak Modu: tam ekran çalış" aria-pressed="false">⛶</button><div id="svo-icerik-container"></div></div>
-        <div class="dmod" id="mod-teknik" style="display:none;background:linear-gradient(135deg,#0d1624,#131f30);border-radius:16px;padding:4px"><div id="teknik-icerik-container"></div></div>
+        <div class="dmod" id="mod-teknik" style="display:none"><div id="teknik-icerik-container"></div></div>
         <div class="dmod" id="mod-avci" style="display:none">
   <!-- AVCI ÖĞRENME YOLU WIDGET — izole, #aoy- prefix, mevcut sisteme dokunmaz -->
   <div id="aoy-container" style="margin-bottom:12px"></div>
@@ -11105,34 +11128,31 @@ const SVO_DERSLER=[
 const TEKNIKLER=[
   {
     id:'spaced',
-    icon:'📅',
-    renk:'#38bdf8',
+    ikon:'takvim',
     baslik:'Aralıklı Tekrar',
     ingilizce:'Spaced Repetition',
     ozet:'Beyin, bilgiyi unutmak üzereyken tekrar ederse en iyi öğrenir.',
     nasil:'Bugün öğrendiğin bir kelimeyi yarın, 3 gün sonra, 1 hafta sonra tekrar et. Her seferinde hatırlarsan aralığı uzat.',
     yds:'Kelime Kartları bölümünde SM-2 algoritması tam olarak bunu yapıyor — hatırladıkça aralık uzuyor.',
-    bilim:'Ebbinghaus Unutma Eğrisi: Öğrendikten 1 saat sonra yüzde 56sini, 1 gün sonra yüzde 33unu hatırlıyoruz. Aralıklı tekrar bu eğrisi tersine çevirir.',
+    bilim:'Ebbinghaus Unutma Eğrisi: Öğrendikten 1 saat sonra yaklaşık yüzde 44\'ünü, 1 gün sonra yaklaşık yüzde 33\'ünü hatırlıyoruz. Aralıklı tekrar bu eğriyi yavaşlatır.',
     sure:'Günde 10-15 dk',
-    etki:'⭐⭐⭐⭐⭐'
+    etki:5
   },
   {
     id:'recall',
-    icon:'🔁',
-    renk:'#ef4444',
+    ikon:'tekrar',
     baslik:'Aktif Hatırlama',
     ingilizce:'Active Recall',
-    ozet:'Okumak değil, kendinizi sınamak öğretir.',
-    nasil:'Bir konu okuduktan sonra kitabı kapat. "Şimdi ne öğrendim?" diye kendinize sorun. Zorlanmak normaldir — beyin bu sırada güçlenir.',
+    ozet:'Okumak değil, kendini sınamak öğretir.',
+    nasil:'Bir konu okuduktan sonra kitabı kapat. "Şimdi ne öğrendim?" diye kendine sor. Zorlanmak normaldir — beyin bu sırada güçlenir.',
     yds:'Sinyal Lab\'da her soruyu çözdüğünde aktif hatırlama yapıyorsun. Şıkları tahmin etmeden önce cevabı düşün.',
     bilim:'2006 Roediger - Karpicke araştırması: Aktif hatırlama, pasif okumadan yüzde 50 daha fazla bilgi kalıcılığı sağlıyor.',
     sure:'Her çalışma sonrası 5 dk',
-    etki:'⭐⭐⭐⭐⭐'
+    etki:5
   },
   {
     id:'pomodoro',
-    icon:'🍅',
-    renk:'#dc2626',
+    ikon:'saat',
     baslik:'Pomodoro Tekniği',
     ingilizce:'Pomodoro Technique',
     ozet:'25 dakika tam odak, 5 dakika mola. Beyin maratonda değil, sprint\'te çalışır.',
@@ -11140,25 +11160,23 @@ const TEKNIKLER=[
     yds:'Platform içindeki Pomodoro sayacını kullan (sol alt köşe). SAT Modunun 45 saniyelik sayacı da aynı mantıkla çalışıyor.',
     bilim:'Odak süresi araştırmaları: İnsan beyni ortalama 25-50 dk konsantrasyonu sürdürebiliyor. Düzenli molalar odaklanmayı korumaya yardımcı olur.',
     sure:'25+5 dk döngüleri',
-    etki:'⭐⭐⭐⭐'
+    etki:4
   },
   {
     id:'interleaving',
-    icon:'🔀',
-    renk:'#0284c7',
+    ikon:'karistir',
     baslik:'Karıştırarak Çalışma',
     ingilizce:'Interleaving',
     ozet:'Aynı konuyu blok halinde değil, farklı konularla karıştırarak çalış.',
     nasil:'Önce bağlaçlar, sonra modal, sonra bağlaçlar tekrar... Bu şekilde her konuyu aktif olarak ayırt etmen gerekiyor.',
     yds:'Sinyal Lab\'da alan filtresi "Genel" ayarında — farklı konular karışık geliyor. Bu kasıtlı bir tasarım!',
-    bilim:'Kornell - Bjork 2008: Karışık pratik, blok pratikten test anında yüzde 43 daha iyi performans gösteriyor.',
+    bilim:'Kornell ve Bjork 2008: Karışık çalışanlar, testte yeni örnekleri blok halinde çalışanlardan belirgin şekilde daha iyi ayırt etti.',
     sure:'Her çalışmada 2-3 farklı konu',
-    etki:'⭐⭐⭐⭐'
+    etki:4
   },
   {
     id:'feynman',
-    icon:'🎓',
-    renk:'#16a34a',
+    ikon:'kep',
     baslik:'Feynman Tekniği',
     ingilizce:'Feynman Technique',
     ozet:'Bir konuyu öğrenmişsen, onu 10 yaşındaki birine anlatabilirsin.',
@@ -11166,47 +11184,46 @@ const TEKNIKLER=[
     yds:'KLOD\'a despite ile although arasındaki farkı bana basitçe anlat diye sor. Sonra sen de KLOD\'a anlat. Anlatamazsan henüz öğrenmemişsin.',
     bilim:'Nobel fizik ödüllü Richard Feynman\'in kendi öğrenme yöntemi. Eğer basitçe açıklayamıyorsan, yeterince anlamamışsın.',
     sure:'Konu başına 10-15 dk',
-    etki:'⭐⭐⭐⭐⭐'
+    etki:5
   }
 ];
 
 function teknikModulHTML(){
+  const ik=ad=>`<svg class="ik" aria-hidden="true"><use href="#ik-${ad}"/></svg>`;
   return `<div style="max-width:720px;padding:8px">
-    <div style="background:linear-gradient(135deg,#0d1624,#131f30);border-radius:20px;padding:28px;margin-bottom:24px;color:#f8fafc;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%"></div>
-      <div style="position:absolute;bottom:-30px;left:20px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%"></div>
-      <div style="font-size:13px;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:10px">🧠 BİLİMSEL ÖĞRENME</div>
-      <div style="font-size:24px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px">Dünyaca Kanıtlanmış Teknikler</div>
-      <div style="font-size:15px;opacity:.85;line-height:1.7">Nobel ödüllü araştırmalar ve bilişsel psikoloji — YDS/YÖKDİL çalışmana direkt uygula.</div>
+    <div class="tk-hero">
+      <div class="tk-hero-ust">${ik('ampul')} BİLİMSEL ÖĞRENME</div>
+      <div class="tk-hero-baslik">Araştırmayla Desteklenen Teknikler</div>
+      <div class="tk-hero-alt">Bilişsel psikoloji araştırmalarından çıkan yöntemler. YDS/YÖKDİL çalışmana doğrudan uygula.</div>
     </div>
     ${TEKNIKLER.map((t,i)=>`
-      <div style="background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .25s;cursor:pointer;border-left:4px solid ${t.renk};box-shadow:0 2px 12px rgba(0,0,0,.05)" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,.05)';this.style.transform='none'" onclick="teknikToggle(this)" role="button" tabindex="0">
-        <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="tk-kart" onclick="teknikToggle(this)" role="button" tabindex="0" aria-expanded="false">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
           <div style="display:flex;align-items:center;gap:12px">
-            <div style="width:44px;height:44px;border-radius:12px;background:${t.renk}15;display:grid;place-items:center;font-size:22px;flex-shrink:0">${t.icon}</div>
+            <div class="tk-ikon">${ik(t.ikon)}</div>
             <div>
-              <div style="font-size:16px;font-weight:800;color:var(--ink)">${t.baslik} <span style="font-size:15px;font-weight:500;color:var(--muted);font-style:italic">${t.ingilizce}</span></div>
-              <div style="font-size:14px;color:var(--muted);margin-top:2px">${t.ozet}</div>
+              <div class="tk-baslik">${t.baslik} <span class="tk-ing">${t.ingilizce}</span></div>
+              <div class="tk-ozet">${t.ozet}</div>
             </div>
           </div>
-          <div style="font-size:20px;transition:transform .2s;flex-shrink:0" class="teknik-arrow">▸</div>
+          <div class="teknik-arrow">▸</div>
         </div>
-        <div class="teknik-detay" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:18px">
+        <div class="teknik-detay" style="display:none">
           <div style="margin-bottom:14px">
-            <div style="font-size:15px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px">NASIL UYGULANIR?</div>
-            <div style="font-size:15px;color:var(--ink);line-height:1.7">${t.nasil}</div>
+            <div class="tk-etiket">NASIL UYGULANIR?</div>
+            <div class="tk-metin">${t.nasil}</div>
           </div>
-          <div style="background:${t.renk}08;border:1px solid ${t.renk}20;border-radius:10px;padding:14px;margin-bottom:14px">
-            <div style="font-size:15px;font-weight:700;color:${t.renk};letter-spacing:.05em;margin-bottom:6px">🎯 YDS/YÖKDİL'E UYGULAMASI</div>
-            <div style="font-size:14px;color:var(--ink);line-height:1.7">${t.yds}</div>
+          <div class="tk-yds">
+            <div class="tk-etiket">${ik('hedef')} YDS/YÖKDİL'E UYGULAMASI</div>
+            <div class="tk-metin">${t.yds}</div>
           </div>
-          <div style="background:#0d1624;border-radius:10px;padding:14px;margin-bottom:14px">
-            <div style="font-size:15px;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:6px">🔬 BİLİMSEL DAYANAK</div>
-            <div style="font-size:15px;color:var(--ink);line-height:1.7;font-style:italic">${t.bilim}</div>
+          <div class="tk-bilim">
+            <div class="tk-etiket">${ik('kitap')} BİLİMSEL DAYANAK</div>
+            <div class="tk-metin" style="font-style:italic">${t.bilim}</div>
           </div>
-          <div style="display:flex;gap:12px">
-            <span style="font-size:15px;background:var(--sl);color:var(--signal);padding:4px 12px;border-radius:20px;font-weight:600">⏱ ${t.sure}</span>
-            <span style="font-size:15px;background:#131f30;color:#c4b5fd;padding:4px 12px;border-radius:20px;font-weight:600">Etki: ${t.etki}</span>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <span class="tk-rozet">${ik('saat')} ${t.sure}</span>
+            <span class="tk-rozet tk-etki" aria-label="Etki: 5 üzerinden ${t.etki}">Etki: <span class="tk-nokta">${[1,2,3,4,5].map(n=>`<i class="${n<=t.etki?'dolu':''}"></i>`).join('')}</span> ${t.etki}/5</span>
           </div>
         </div>
       </div>
@@ -11216,10 +11233,10 @@ function teknikModulHTML(){
 
 function teknikToggle(el){
   const detay=el.querySelector('.teknik-detay');
-  const arrow=el.querySelector('.teknik-arrow');
   const open=detay.style.display==='block';
   detay.style.display=open?'none':'block';
-  arrow.style.transform=open?'rotate(0)':'rotate(90deg)';
+  el.classList.toggle('acik',!open);
+  el.setAttribute('aria-expanded',String(!open));
 }
 
 let svoDersIdx=0,svoOrnek=0;
