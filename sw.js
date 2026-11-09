@@ -2,7 +2,7 @@
 // alıyor; /api/ yanıtları HİÇ önbelleğe girmiyor (bkz. fetch). Ad değişince
 // activate'teki temizlik, v3'te biriken API yanıtlarıyla birlikte eski
 // önbelleği siler.
-const CACHE_NAME = 'sinyal-avcisi-v5';
+const CACHE_NAME = 'sinyal-avcisi-v6';
 const CACHE_URLS = ['/', '/index.html'];
 // Haftalık rapor özeti: sayfa (index.html → hrOzetCacheYaz) yazar, Pazar
 // bildirimi gelince burada okunur. Sürüm temizliğinde SİLİNMEZ.
