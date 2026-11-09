@@ -80,6 +80,16 @@
   gtag('js', new Date());
   gtag('config', 'G-PM25HTL46K');
 </script>
+<!-- PostHog (EU) — autocapture açık, session replay kapalı, yalnız tanımlı kişilere profil.
+     phOlay(): merkezi yardımcı; posthog yoksa/engellenmişse SESSİZCE geçer, siteyi bozmaz. -->
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  try{posthog.init('phc_yW5W2YDSJqpCneeEuoumEfHF8LcoqnCH7cxYFnTJy7Ro',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only',autocapture:true,capture_pageview:true,disable_session_recording:true});}catch(e){}
+  function phOlay(ad,ek){try{if(window.posthog&&typeof posthog.capture==='function')posthog.capture(ad,ek||{});}catch(e){}}
+  // SPA: sekme/sayfa değişiminde manuel $pageview (dnav/dtab çağırır). Aynı ekran üst üste sayılmaz.
+  var _phSonEkran=null;
+  function phEkran(ekran){if(!ekran||ekran===_phSonEkran)return;_phSonEkran=ekran;phOlay('$pageview',{ekran:ekran});}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Caveat:wght@500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -7376,6 +7386,7 @@ function tamEkranAcKapat(modId){safOdakDegistir(String(modId).replace(/^mod-/,''
 // değişkeni CANLI okur — cache/snapshot YOK.
 let _aktifSoruModulu=null;
 function dtab(el,mod){
+  if(typeof phEkran==='function')phEkran('sekme:'+mod);
   if(typeof safOdakEkranDegisti==='function')safOdakEkranDegisti(); // açık Odak Modu kapanır
   // KATMAN 5B — AKTİF SORU MODÜLÜ TRACKER (2026-09-18): dnavChat()'in
   // Sinyal Lab context'ini SADECE gerçekten Sinyal Lab görünürken
@@ -7468,6 +7479,7 @@ function dnav(el){
   const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
   const txt=el.textContent.trim();const main=document.querySelector('.dash-main');
+  if(typeof phEkran==='function')phEkran('menu:'+txt.replace(/\s+/g,' ').slice(0,40));
   if(!txt.includes('KLOD'))_klodDonusGorunumu=null; // menüden başka yere gidildi: normal akış
   document.querySelector('.dash-inner')?.classList.toggle('dash-inner-klod',txt.includes('KLOD'));
   klodOdakAyarla(txt.includes('KLOD'),oncekiAktif);
@@ -8215,6 +8227,7 @@ async function dnavChat(){
   // guard'a otomatik olarak tabidir, ayrıca bir değişiklik GEREKMEZ.
   if(dnavTurnState!=='IDLE')return;
   dnavTurnState='THINKING';
+  if(typeof phOlay==='function')phOlay('klod_soru_sordu',{kaynak:hedef?'diger_ekran':'klod',tekrar:tekrar});
   // Bu turun kendi nesil numarası - ⏹ Dur (dnavAvciSustur) bu sayacı
   // ilerletirse, bu turun GECİKMELİ (stale) callback'leri artık
   // dnavTurnState'i DEĞİŞTİREMEZ (bkz. dnavTurNesil tanımı, yukarıda).
@@ -18711,6 +18724,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.ge
       bitti: false,
     };
     ss.timerId = setInterval(ssTimerTick, 1000);
+    if (typeof phOlay === 'function') phOlay('mini_exam_basladi', { modul:'sinav_simulatoru', soru_sayisi:SS_TOPLAM_SORU });
     ssSoruRender();
   }
 
@@ -18799,6 +18813,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){const o=document.ge
       localStorage.setItem('sa_sinav_simulator_son', JSON.stringify({ tarih, dogruSayisi:dogru, yanlisSayisi:yanlis, bosSayisi:bos, puan }));
     } catch(e) {}
 
+    if (typeof phOlay === 'function') phOlay('mini_exam_bitti', { modul:'sinav_simulatoru', dogru, yanlis, bos, puan:Math.round(puan), sure_bitti:ss.kalanSaniye<=0 });
     ssSonucRender({ dogru, yanlis, bos, puan, tipIstatistik });
   }
 
