@@ -87,7 +87,7 @@
   try{posthog.init('phc_yW5W2YDSJqpCneeEuoumEfHF8LcoqnCH7cxYFnTJy7Ro',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only',autocapture:true,capture_pageview:true,disable_session_recording:true});}catch(e){}
   function phOlay(ad,ek){try{if(window.posthog&&typeof posthog.capture==='function')posthog.capture(ad,ek||{});}catch(e){}}
   // SPA: sekme/sayfa değişiminde manuel $pageview (dnav/dtab çağırır). Aynı ekran üst üste sayılmaz.
-  // Bazı menü öğeleri sekmeyi de açar (dnav → dtab, ~1-4 ms): menüden hemen sonra (<50 ms) gelen sekme ayrı sayılmaz.
+  // 14 menü öğesinin onclick'i dnav(this);dtab(...) diye art arda çağırır (~1-4 ms): menüden hemen sonra (<50 ms) gelen sekme ayrı sayılmaz.
   var _phSonEkran=null,_phSonZaman=0;
   function phEkran(ekran){if(!ekran||ekran===_phSonEkran)return;var t=Date.now(),menuIle=ekran.indexOf('sekme:')===0&&!!_phSonEkran&&_phSonEkran.indexOf('menu:')===0&&t-_phSonZaman<50;_phSonEkran=ekran;_phSonZaman=t;if(menuIle)return;phOlay('$pageview',{ekran:ekran});}
 </script>
