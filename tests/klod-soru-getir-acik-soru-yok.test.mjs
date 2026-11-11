@@ -52,6 +52,11 @@ const BLOK_5HB = slice("// KATMAN 5H-B", "\n\n  // Typing göstergesi", DNAVCHAT
   kontrol("S7) AKTİF SORU kartı yeniden çiziliyor (klodSoruKartiBaslat)", /klodSoruKartiBaslat\(\)/.test(BLOK_5HB));
   kontrol("S8) yalnız KLOD ekranında (hedef yokken) çalışıyor", /if\(!hedef&&/.test(BLOK_5HB));
   kontrol("S9) kartı gizleyen tam odak (klod-tam) kapatılıyor: klodTamAyarla(false), kart çiziminden SONRA", /klodTamAyarla\(false\)/.test(BLOK_5HB) && BLOK_5HB.indexOf("klodTamAyarla(false)") > BLOK_5HB.indexOf("klodSoruKartiBaslat()"));
+  const SLRENDER_KAYNAK = slice("function slRender(){", "// S+V+O AKADEMİ");
+  kontrol("S11) 5H-B sessiz bayrağını slSonraki çevresinde açıp finally ile kapatıyor", /window\.__slSessizAcilis=true;\s*\n\s*try\{slSonraki\(\);\}finally\{window\.__slSessizAcilis=false;\}/.test(BLOK_5HB));
+  kontrol("S12) slRender bayrağı EN BAŞTA okuyor ve otomatik okuma zamanlayıcılarından ÖNCE çıkıyor", SLRENDER_KAYNAK.indexOf("const _slSessiz=window.__slSessizAcilis===true;") > -1 && SLRENDER_KAYNAK.indexOf("const _slSessiz=") < SLRENDER_KAYNAK.indexOf("if(window.__slDeepLinkSoru)") && SLRENDER_KAYNAK.indexOf("if(_slSessiz)return;") < SLRENDER_KAYNAK.indexOf("ttsSpeak(slTemizCumle"));
+  const avciCozum = readFileSync(path.join(ROOT, "assets", "modules", "avci-cozum.js"), "utf-8");
+  kontrol("S13) kuyruk yolu (avciKuyrukSonraki → soruGoster) slRender'ı SENKRON çağırıyor — bayrak bu yolu da kapsar", /window\.__slDeepLinkSoru=s;slRender\(\);/.test(avciCozum));
   kontrol("S10) tam odak sınıfı kartı gerçekten gizliyor (S9'un nedeni — CSS hâlâ böyle)", /body\.klod-odak\.klod-tam [^{]*\.klod-soru-karti\{display:none!important\}/.test(html));
 }
 
@@ -81,21 +86,27 @@ const fakeInp = () => ({ disabled: true, _focused: false, focus() { this._focuse
 
 function sandboxKur() {
   const fetchCagrilari = [];
+  const zamanlayicilar = []; // slRender'ın kurduğu setTimeout'lar — elle çalıştırılır
+  const ttsCagrilari = [];
   const sandbox = {
     console: { warn: () => {}, log: () => {}, error: () => {} },
     document: { getElementById: () => null, createElement: () => ({}) },
     window: {},
     curAlan: undefined,
-    setTimeout: () => {},
+    setTimeout: (fn, ms) => { zamanlayicilar.push({ fn, ms }); return zamanlayicilar.length; },
     rtBaslat: () => 1000,
     avciTeshisPaneliTemizle: () => {},
+    // Gerçek ttsSpeak /api/tts (OpenAI) ve /api/tts-eleven'e gider; burada yalnız sayılır.
+    ttsSpeak: (metin, dil) => { ttsCagrilari.push({ metin, dil }); },
     SL_HAVUZ: [Q1, Q2, Q3],
     fetch: async (...args) => { fetchCagrilari.push(args); throw new Error("fetch ÇAĞRILMAMALIYDI"); },
   };
   const context = vm.createContext(sandbox);
   vm.runInContext(FULL_SRC, context, { filename: "index.html (5H-B soru getir)" });
   context.slRender(); // sayfa açılışındaki ilk render (q001) — kart yine de "açık soru yok" der, çünkü tracker null
-  return { context, fetchCagrilari };
+  zamanlayicilar.length = 0; // açılış render'ının zamanlayıcıları bu testlerin konusu değil
+  const zamanlayicilariCalistir = () => { const l = zamanlayicilar.splice(0); l.forEach((z) => z.fn()); return l.length; };
+  return { context, fetchCagrilari, zamanlayicilar, ttsCagrilari, zamanlayicilariCalistir, sandbox };
 }
 
 // 1) Açık soru yokken "Soru getir." → bankadan soru açılır, kart güncellenir
@@ -118,6 +129,44 @@ function sandboxKur() {
   kontrol("1h) fetch HİÇ çağrılmadı (0 token)", t.fetchCagrilari.length === 0);
   const baglam = t.context.avciAktifSinyalLabBaglamiAl();
   kontrol("1i) açılan soru KLOD bağlamında aktif soru olarak görünüyor (q002, cevaplanmamış)", !!baglam && baglam.question_id === Q2.id && baglam.answered === false);
+  // Sessiz açılış: otomatik okuma zamanlayıcısı HİÇ kurulmadı; kalanlar çalışsa bile TTS/fetch yok
+  const kurulanZamanlayici = t.zamanlayicilar.length;
+  t.zamanlayicilariCalistir();
+  kontrol("1j) sessiz açılış: otomatik okuma zamanlayıcısı KURULMADI", kurulanZamanlayici === 0, kurulanZamanlayici);
+  kontrol("1k) sessiz açılış: ttsSpeak HİÇ çağrılmadı (/api/tts ve /api/tts-eleven yok)", t.ttsCagrilari.length === 0, JSON.stringify(t.ttsCagrilari));
+  kontrol("1l) sessiz açılış: fetch HİÇ çağrılmadı", t.fetchCagrilari.length === 0);
+  kontrol("1m) sessiz bayrağı çağrıdan sonra kapandı (sızıntı yok)", t.sandbox.window.__slSessizAcilis === false);
+}
+
+// 6) Sinyal Lab'ın NORMAL açılışı (sonraki soru düğmesi = slSonraki) okumayı HÂLÂ başlatıyor
+{
+  const t = sandboxKur();
+  t.context.__t_setAktifModul("sinyal_lab");
+  t.context.slSonraki();
+  const kurulan = t.zamanlayicilar.map((z) => z.ms);
+  t.zamanlayicilariCalistir();
+  kontrol("6a) normal açılışta 2 okuma zamanlayıcısı kuruldu (600 ms cümle, 2500 ms soru)", JSON.stringify(kurulan) === "[600,2500]", JSON.stringify(kurulan));
+  kontrol("6b) normal açılışta ttsSpeak 2 kez çağrıldı: İngilizce cümle (en-US) + Türkçe soru (tr-TR)", t.ttsCagrilari.length === 2 && t.ttsCagrilari[0].dil === "en-US" && t.ttsCagrilari[1].dil === "tr-TR" && t.ttsCagrilari[1].metin === Q2.q, JSON.stringify(t.ttsCagrilari));
+}
+
+// 7) Sessiz açılıştan SONRAKİ normal açılış yine okunuyor (bayrak sızmadı)
+{
+  const t = sandboxKur();
+  t.context.__probe5HB("soru getir", fakeBody(), fakeInp(), null); // sessiz (q002)
+  t.zamanlayicilariCalistir();
+  const sessizTts = t.ttsCagrilari.length;
+  t.context.slSonraki(); // Sinyal Lab'daki "Sonraki soru" (q003)
+  t.zamanlayicilariCalistir();
+  kontrol("7) 5H-B sessiz açılışında 0 TTS, ardından normal açılışta 2 TTS (bayrak sızmadı)", sessizTts === 0 && t.ttsCagrilari.length === 2 && t.context.__t_durum().soruId === Q3.id, `${sessizTts} → ${t.ttsCagrilari.length}`);
+}
+
+// 8) slSonraki hata atsa bile bayrak kapanıyor (finally)
+{
+  const t = sandboxKur();
+  t.context.slSonraki = () => { throw new Error("test: seçici patladı"); };
+  let hata = null;
+  try { t.context.__probe5HB("soru getir", fakeBody(), fakeInp(), null); } catch (e) { hata = e; }
+  kontrol("8) slSonraki hata atsa bile sessiz bayrağı kapandı (finally)", !!hata && t.sandbox.window.__slSessizAcilis === false);
 }
 
 // 2) 4 ifadenin hepsi (noktalama/büyük harf dahil) tetikler; her seferinde seçici ilerler

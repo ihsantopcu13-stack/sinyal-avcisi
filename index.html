@@ -8327,7 +8327,12 @@ async function dnavChat(){
   if(!hedef&&['soru getir','soru ver','bana soru','bir soru sor'].includes(_soruGetirNorm)&&_aktifSoruModulu!=='sinyal_lab'&&typeof slSonraki==='function'){
     dnavHistory.push({role:'user',content:val});
     _aktifSoruModulu='sinyal_lab';
-    slSonraki();
+    // Sessiz açılış: KLOD'dan açılan soru otomatik sesli okunmaz (ücretli
+    // /api/tts + /api/tts-eleven). Bayrak yalnız bu senkron çağrıda açık;
+    // slSonraki → (kuyruk varsa avciKuyrukSonraki → soruGoster) → slRender
+    // yollarının hepsi senkron olduğu için hepsini kapsar, finally sızıntıyı önler.
+    window.__slSessizAcilis=true;
+    try{slSonraki();}finally{window.__slSessizAcilis=false;}
     if(typeof klodSoruKartiBaslat==='function')klodSoruKartiBaslat();
     // Mesaj gönderilirken (yukarıda) KLOD tam odağa geçti; tam odak AKTİF SORU
     // kartını gizler (body.klod-odak.klod-tam). Kart görünsün diye kapatılır.
@@ -11115,6 +11120,10 @@ function faz2DeepLinkUygula(){
 
 function slRender(){
   let havuz,soru;
+  // Sessiz açılış (KATMAN 5H-B, KLOD "soru getir"): çağıran taraf bayrağı
+  // yalnız bu senkron çağrı süresince açar ve finally ile kapatır; burada
+  // en başta okunur ki aşağıdaki otomatik okuma zamanlayıcıları kurulmasın.
+  const _slSessiz=window.__slSessizAcilis===true;
   // FAZ 2 deep-link override — bir kerelik: tüketilince temizlenir ki
   // sonraki "Sonraki soru" tıklaması normal filtreli akışa döner.
   if(window.__slDeepLinkSoru){
@@ -11202,7 +11211,9 @@ function slRender(){
   if(typeof avciBoardTemizle==='function')avciBoardTemizle(); // KATMAN 5E — önceki sorunun tahta vurgusu/paneli yeni soruya sızmaz
   _slRtBaslangic=rtBaslat(); // QUESTION_VISIBLE — soru DOM'a şimdi yazıldı
   if(typeof avciMotorSoruAcildi==='function')avciMotorSoruAcildi(soru); // AVCI çözüm motoru: mod çubuğu + ipucu sıfırlanır
-  // TTS: İngilizce cümle, sonra Türkçe soru
+  // TTS: İngilizce cümle, sonra Türkçe soru (sessiz açılışta HİÇ kurulmaz:
+  // /api/tts ve /api/tts-eleven ücretli)
+  if(_slSessiz)return;
   const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
   setTimeout(()=>{
     ttsSpeak(slTemizCumle,'en-US',()=>{
