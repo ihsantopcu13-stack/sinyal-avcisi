@@ -14180,7 +14180,7 @@ function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomod
     if(document.getElementById('sa-cerez-banner'))return;
     const div=document.createElement('div');
     div.id='sa-cerez-banner';
-    div.style.cssText='position:fixed;bottom:0;inset:auto 0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
+    div.style.cssText='position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
     div.innerHTML=`<div style="font-size:15px;color:var(--muted);flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="/privacy.html" style="color:var(--signal)">KVKK Aydınlatma Metni</a></div>
       <div style="display:flex;gap:8px;flex-shrink:0">
         <button onclick="saCerezKabul(this)" style="background:var(--signal);color:#031018;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
