@@ -252,6 +252,13 @@ function slRenderSetActive(t, soru) {
 }
 
 // 10) Sinyal Lab AKTİF DEĞİLKEN komut eşleşse bile state mutasyonu OLMAZ
+// GÜNCELLEME (KATMAN 5H-B, 2026-11-11): "aktif değilken yan etki yok" artık
+// 5H/5I KÖPRÜLERİ için geçerli. 5H listesindeki 'soru getir' ailesi (soru
+// getir/soru ver/bana soru/bir soru sor) modül aktif değilken TOKEN
+// COUNTING'den sonraki ayrı KATMAN 5H-B bloğunda BİLEREK bankadan soru açar.
+// 5I komutları ("bu sinyalden başka soru sor" vb.) o listede DEĞİL; aktif
+// soru/sinyal olmadan anlamları yok, bu yüzden 5I davranışı DEĞİŞMEDİ ve
+// bu test olduğu gibi geçerli. 5H-B: tests/klod-soru-getir-acik-soru-yok.test.mjs
 {
   const t = sandboxKur();
   t.context.__t_setAktifModul(null);
@@ -262,7 +269,7 @@ function slRenderSetActive(t, soru) {
   t.context.__komutBridgeProbe("Bu sinyalden başka soru sor.", body, inp);
   const after = t.context.__t_getSlState();
   kontrol("10) Sinyal Lab aktif DEĞİLKEN komut eşleşse bile state mutasyonu OLMAZ (soru DEĞİŞMEDİ)", after.soruId === once.soruId);
-  kontrol("10b) modül aktif değilken köprü hiçbir UI/history yan etkisi üretmiyor (fail-open)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
+  kontrol("10b) modül aktif değilken 5I köprüsü hiçbir UI/history yan etkisi üretmiyor (fail-open; 'soru getir' ailesinin bilinçli yan etkisi 5H-B'de, ayrı test)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
 }
 
 // 39/40) aynı sinyalden BAŞKA canonical aday YOKSA — state mutasyonu YOK, güvenli deterministik mesaj

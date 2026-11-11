@@ -50,7 +50,17 @@ function slice(startMarker, endMarker, fromIdx) {
 {
   kontrol("S1) _aktifSoruModulu TAM OLARAK 1 kez tanımlı (duplicate YOK)", (html.match(/let _aktifSoruModulu=null;/g) || []).length === 1);
   kontrol("S2) dtab() mod!=='sinyal' olan HER durumda tracker'ı null'a çekiyor", /_aktifSoruModulu=\(mod==='sinyal'\)\?'sinyal_lab':null;/.test(html));
-  kontrol("S3) dnav() 'Dashboard' ve 'Sinyal Lab' dallarında tracker'ı 'sinyal_lab' yapıyor", (html.match(/_aktifSoruModulu='sinyal_lab';/g) || []).length === 2);
+  // GÜNCELLEME (KATMAN 5H-B, 2026-11-11): tracker'ı 'sinyal_lab' yapan yer
+  // artık 3: dnav()'ın 'Dashboard' ve 'Sinyal Lab' dalları (2) + dnavChat()
+  // içindeki 5H-B bloğu (açık soru yokken "soru getir" bankadan soru açar, 1).
+  // Sayım dosya geneli yerine YERİNE göre yapılıyor ki başka bir yere
+  // habersiz yeni atama eklenirse test yine yakalasın.
+  kontrol("S3) dnav() 'Dashboard' ve 'Sinyal Lab' dallarında tracker'ı 'sinyal_lab' yapıyor; dosyada tek ek atama dnavChat'teki 5H-B bloğunda", (() => {
+    const dnavGovde = slice("function dnav(el){", "\n}\n", html.indexOf("function dnav(el){"));
+    const blok5hb = slice("// KATMAN 5H-B", "\n\n  // Typing göstergesi", html.indexOf("async function dnavChat(){"));
+    const toplamAtama = (html.match(/_aktifSoruModulu='sinyal_lab';/g) || []).length;
+    return (dnavGovde.match(/_aktifSoruModulu='sinyal_lab';/g) || []).length === 2 && (blok5hb.match(/_aktifSoruModulu='sinyal_lab';/g) || []).length === 1 && toplamAtama === 3;
+  })());
   kontrol("S4) dnav() 'KLOD' dalında tracker'a DOKUNULMUYOR (context KLOD'a geçince kaybolmamalı)", (() => {
     const klodDali = slice("} else if(txt.includes('KLOD')){", "} else if(txt.includes('Kelime')){");
     return !/_aktifSoruModulu/.test(klodDali);

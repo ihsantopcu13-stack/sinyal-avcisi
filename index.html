@@ -8313,7 +8313,34 @@ async function dnavChat(){
     uyari.innerHTML='Konuşma uzadı. <button onclick="dnavHistory=[];this.parentElement.remove()" style="color:var(--signal);background:none;border:none;cursor:pointer;font-weight:700">Yeni sohbet başlat</button>';
     body.appendChild(uyari);
   }
-  
+
+  // KATMAN 5H-B — AÇIK SORU YOKKEN "SORU GETİR" (2026-11-11): 5H listesindeki
+  // 'soru getir' ailesi (4 ifade, BİREBİR — avciSonrakiSoruKomutuMu ile aynı
+  // normalize) Sinyal Lab aktif DEĞİLKEN gelirse sohbet LLM'e gitmez: tracker
+  // 'sinyal_lab' yapılır, soru 5H'nin kullandığı AYNI seçiciyle (slSonraki →
+  // slRender, ilk soru sabit DEĞİL) bankadan açılır ve KLOD'daki AKTİF SORU
+  // kartı yeniden çizilir. API çağrısı/token YOK. 5H/5I köprüleri (yukarıda)
+  // değişmedi; "sonraki soru" gibi diğer 5H ifadeleri aktif değilken eskisi
+  // gibi sohbete düşer. Yalnız KLOD ekranında (hedef yok): Canlı Ders gibi
+  // başka ekranlarda AKTİF SORU kartı olmadığı için davranış değişmez.
+  const _soruGetirNorm=val.trim().toLocaleLowerCase('tr-TR').replace(/[.!?…]+$/,'').trim();
+  if(!hedef&&['soru getir','soru ver','bana soru','bir soru sor'].includes(_soruGetirNorm)&&_aktifSoruModulu!=='sinyal_lab'&&typeof slSonraki==='function'){
+    dnavHistory.push({role:'user',content:val});
+    _aktifSoruModulu='sinyal_lab';
+    slSonraki();
+    if(typeof klodSoruKartiBaslat==='function')klodSoruKartiBaslat();
+    // Mesaj gönderilirken (yukarıda) KLOD tam odağa geçti; tam odak AKTİF SORU
+    // kartını gizler (body.klod-odak.klod-tam). Kart görünsün diye kapatılır.
+    if(typeof klodTamAyarla==='function')klodTamAyarla(false);
+    const cevap='Bankadan bir soru açtım; soru ve şıklar AKTİF SORU kartında.';
+    const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
+    body.appendChild(km);body.scrollTop=body.scrollHeight;
+    dnavHistory.push({role:'assistant',content:cevap});
+    inp.disabled=false;inp.focus();
+    dnavTurnState='IDLE';
+    return;
+  }
+
   // Typing göstergesi
   const tp=document.createElement('div');tp.className='msg k';
   tp.innerHTML='<span class="chat-typing"><span></span><span></span><span></span></span>';

@@ -236,7 +236,15 @@ function sandboxKur() {
   kontrol("17) board reset korunur — geçiş SONRASI temizlenecekler listesi BOŞ (avciBoardTemizle slRender üzerinden çalıştı)", t.context.__t_getBoardTemizlenecekler().length === 0);
 }
 
-// 11) Sinyal Lab AKTİF DEĞİLKEN aynı komut slSonraki()'yi TETİKLEMEZ (fail-open)
+// 11) Sinyal Lab AKTİF DEĞİLKEN 5H KÖPRÜSÜ slSonraki()'yi TETİKLEMEZ (fail-open)
+// GÜNCELLEME (KATMAN 5H-B, 2026-11-11): Bu test YALNIZ 5H köprü dilimini
+// (BRIDGE_BRANCH, "// 20. TOKEN COUNTING"e kadar) çalıştırır ve o dilim
+// değişmedi. Ancak 'soru getir' ailesi (soru getir/soru ver/bana soru/bir
+// soru sor) artık modül aktif DEĞİLKEN, TOKEN COUNTING'den SONRAKİ ayrı
+// KATMAN 5H-B bloğunda BİLEREK yan etki üretir: tracker'ı 'sinyal_lab' yapıp
+// bankadan soru açar (açık soru yokken "soru getir" sohbete düşmesin diye).
+// Bu yüzden "aktif değilken yan etki yok" artık 5H/5I KÖPRÜLERİ için geçerli;
+// 5H-B davranışı tests/klod-soru-getir-acik-soru-yok.test.mjs'te test edilir.
 {
   const t = sandboxKur();
   t.context.__t_setAktifModul(null); // başka modül / hiçbiri
@@ -245,9 +253,10 @@ function sandboxKur() {
   const body = fakeBody();
   const inp = fakeInp();
   t.context.__komutBridgeProbe("Sonraki soruya geç.", body, inp);
+  t.context.__komutBridgeProbe("Soru getir.", body, inp); // 'soru getir' ailesi de 5H köprüsünde aktif değilken iş yapmaz (5H-B ayrı blokta)
   const after = t.context.__t_getSlState();
-  kontrol("11) Sinyal Lab aktif DEĞİLKEN komut eşleşse bile slSonraki() ÇAĞRILMAZ (soru/idx DEĞİŞMEDİ)", after.soruId === once.soruId && t.context.__t_getSlIdx() === 0);
-  kontrol("11b) modül aktif değilken köprü hiçbir UI/history yan etkisi üretmiyor (normal chat akışına düşer)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
+  kontrol("11) Sinyal Lab aktif DEĞİLKEN 5H köprüsü ('Sonraki soruya geç.' ve 'Soru getir.') slSonraki() ÇAĞIRMAZ (soru/idx DEĞİŞMEDİ)", after.soruId === once.soruId && t.context.__t_getSlIdx() === 0);
+  kontrol("11b) modül aktif değilken 5H KÖPRÜ dilimi UI/history yan etkisi üretmiyor ('soru getir' ailesinin bilinçli yan etkisi 5H-B'de, ayrı test)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
   kontrol("21b) fetch yine tetiklenmedi (bu testte zaten hiç API çağrısı simüle edilmedi)", t.fetchCagrilari.length === 0);
 }
 
