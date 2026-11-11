@@ -8265,7 +8265,12 @@ async function dnavChat(){
   // diğer modüllerin davranışı HİÇ değişmez.
   if(avciSonrakiSoruKomutuMu(val)&&_aktifSoruModulu==='sinyal_lab'){
     dnavHistory.push({role:'user',content:val});
-    if(typeof slSonraki==='function')slSonraki();
+    // 'soru getir' ailesi (5H-B ile AYNI 4 ifade) Sinyal Lab aktifken de buraya
+    // düşer: KLOD'dan istenen soru otomatik sesli okunmaz (ücretli /api/tts*,
+    // başarısızsa tarayıcı sesi). "Sonraki soru" vb. diğer 5H ifadeleri eskisi gibi.
+    const _sessizKomut=['soru getir','soru ver','bana soru','bir soru sor'].includes(val.trim().toLocaleLowerCase('tr-TR').replace(/[.!?…]+$/,'').trim());
+    if(_sessizKomut)window.__slSessizAcilis=true;
+    try{if(typeof slSonraki==='function')slSonraki();}finally{if(_sessizKomut)window.__slSessizAcilis=false;}
     const cevap='Yeni soruya geçtik.';
     const km=document.createElement('div');km.className='msg k';km.textContent=cevap;
     body.appendChild(km);body.scrollTop=body.scrollHeight;

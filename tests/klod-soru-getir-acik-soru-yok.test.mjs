@@ -58,6 +58,11 @@ const BLOK_5HB = slice("// KATMAN 5H-B", "\n\n  // Typing göstergesi", DNAVCHAT
   const avciCozum = readFileSync(path.join(ROOT, "assets", "modules", "avci-cozum.js"), "utf-8");
   kontrol("S13) kuyruk yolu (avciKuyrukSonraki → soruGoster) slRender'ı SENKRON çağırıyor — bayrak bu yolu da kapsar", /window\.__slDeepLinkSoru=s;slRender\(\);/.test(avciCozum));
   kontrol("S10) tam odak sınıfı kartı gerçekten gizliyor (S9'un nedeni — CSS hâlâ böyle)", /body\.klod-odak\.klod-tam [^{]*\.klod-soru-karti\{display:none!important\}/.test(html));
+  // 5H köprüsü (Sinyal Lab AKTİFKEN — ör. Sinyal Lab → KLOD → "soru ver") da aynı sessiz bayrağı kullanmalı
+  const kopru = slice("if(avciSonrakiSoruKomutuMu(val)&&_aktifSoruModulu==='sinyal_lab'){", "\n\n  // KATMAN 5I");
+  const kopruIfadeleri = (kopru.match(/const _sessizKomut=\[([^\]]+)\]/) || [, ""])[1].match(/'([^']+)'/g)?.map((s) => s.slice(1, -1)) || [];
+  kontrol("S14) 5H köprüsündeki sessiz ifade listesi 5H-B ile BİREBİR aynı (4 ifade)", JSON.stringify(kopruIfadeleri) === JSON.stringify(["soru getir", "soru ver", "bana soru", "bir soru sor"]), JSON.stringify(kopruIfadeleri));
+  kontrol("S15) 5H köprüsü bayrağı yalnız bu ifadelerde açıyor ve finally ile kapatıyor; slSonraki satırı korunuyor", /if\(_sessizKomut\)window\.__slSessizAcilis=true;\s*\n\s*try\{if\(typeof slSonraki==='function'\)slSonraki\(\);\}finally\{if\(_sessizKomut\)window\.__slSessizAcilis=false;\}/.test(kopru));
 }
 
 // ---- GERÇEK ÇALIŞTIRMA ----
@@ -72,6 +77,10 @@ function __t_durum(){return {modul:_aktifSoruModulu,slIdx:slIdx,soruId:slCurrent
 function __t_turSifirla(){dnavTurnState='THINKING';}
 function __probe5HB(val, body, inp, hedef){
 ${BLOK_5HB}
+  return 'sohbete-devam';
+}
+function __probe5H(val, body, inp){
+${slice("if(avciSonrakiSoruKomutuMu(val)&&_aktifSoruModulu==='sinyal_lab'){", "\n\n  // 20. TOKEN COUNTING")}
   return 'sohbete-devam';
 }
 `;
@@ -211,6 +220,31 @@ function sandboxKur() {
   const r = t.context.__probe5HB("soru getir", fakeBody(), fakeInp(), { inp: {}, body: {} });
   const d = t.context.__t_durum();
   kontrol("5) hedef varken (KLOD dışı ekran) 5H-B tetiklenmez", r === "sohbete-devam" && d.modul === null && d.slIdx === 0);
+}
+
+// 9) Sinyal Lab AKTİFKEN (Sinyal Lab → KLOD) "soru ver" → 5H köprüsü; otomatik okuma YOK
+//    (gerçek tarayıcıda bulunan hata: 5H-B yalnız modül aktif DEĞİLKEN çalışıyordu)
+{
+  for (const metin of ["soru ver", "Soru getir.", "BANA SORU", "bir soru sor"]) {
+    const t = sandboxKur();
+    t.context.__t_setAktifModul("sinyal_lab");
+    const r = t.context.__probe5H(metin, fakeBody(), fakeInp());
+    const kurulan = t.zamanlayicilar.length;
+    t.zamanlayicilariCalistir();
+    const d = t.context.__t_durum();
+    kontrol(`9) modül aktifken "${metin}" → 5H köprüsü soruyu açtı, okuma zamanlayıcısı 0, ttsSpeak 0, fetch 0, bayrak kapalı`,
+      r === undefined && d.soruId === Q2.id && kurulan === 0 && t.ttsCagrilari.length === 0 && t.fetchCagrilari.length === 0 && t.sandbox.window.__slSessizAcilis === false,
+      `${r} ${d.soruId} z=${kurulan} tts=${t.ttsCagrilari.length}`);
+  }
+}
+
+// 10) KONTROL: modül aktifken "Sonraki soru" (5H'nin diğer ifadeleri) okumayı HÂLÂ başlatıyor
+{
+  const t = sandboxKur();
+  t.context.__t_setAktifModul("sinyal_lab");
+  const r = t.context.__probe5H("Sonraki soru.", fakeBody(), fakeInp());
+  t.zamanlayicilariCalistir();
+  kontrol("10) KONTROL: modül aktifken 'Sonraki soru.' → ttsSpeak 2 kez (en-US + tr-TR), davranış değişmedi", r === undefined && t.ttsCagrilari.length === 2 && t.ttsCagrilari[0].dil === "en-US" && t.ttsCagrilari[1].dil === "tr-TR", JSON.stringify(t.ttsCagrilari));
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
