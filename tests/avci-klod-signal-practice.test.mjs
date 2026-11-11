@@ -56,6 +56,12 @@ function slice(startMarker, endMarker, fromIdx) {
     const kom5i = slice("const AVCI_SINYAL_PRATIK_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => s.slice(1, -1));
     return !kom5h.some((k) => kom5i.includes(k));
   })());
+  kontrol("S4b) 5H'nin 'soru getir' ailesi (4 ifade) listede ve 5I listesiyle ÇAKIŞMIYOR; 5H toplam 9 ifade", (() => {
+    const kom5h = slice("const AVCI_SONRAKI_SORU_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => s.slice(1, -1));
+    const kom5i = slice("const AVCI_SINYAL_PRATIK_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => s.slice(1, -1));
+    const yeni = ["soru getir", "soru ver", "bana soru", "bir soru sor"];
+    return kom5h.length === 9 && yeni.every((k) => kom5h.includes(k) && !kom5i.includes(k));
+  })());
   kontrol("S5) 5I köprüsü mevcut SL_SINYAL_LOOKUP.indeksleriBul()'u REUSE ediyor (yeni harita YAZILMADI)", /SL_SINYAL_LOOKUP\.indeksleriBul\(sinyalNorm\)/.test(html) && (html.match(/var SL_SINYAL_LOOKUP=\(function\(\)\{/g) || []).length === 1);
   kontrol("S6) 5I geçişi mevcut window.__slDeepLinkSoru + slRender() mekanizmasını (deep-link ile AYNI) reuse ediyor", /window\.__slDeepLinkSoru=SL_HAVUZ\[adayRawIdx\];\s*\n\s*slRender\(\);/.test(html));
   kontrol("S7) 5I bloğu Anthropic/fetch çağrısı YAPMIYOR", (() => {

@@ -123,10 +123,14 @@ const RETEACH_BLOK = SYSTEM_PROMPT.slice(
   kontrol("37) index.html'de slSonraki()/window.__slDeepLinkSoru referansları hâlâ TAM OLARAK 5H/5I'deki gibi (bu turda YENİ bir çağrı EKLENMEDİ)", (html.match(/if\(typeof slSonraki==='function'\)slSonraki\(\);/g) || []).length === 1 && (html.match(/window\.__slDeepLinkSoru=SL_HAVUZ\[adayRawIdx\];/g) || []).length === 1);
   kontrol("38) 5H komut eşleştirici (avciSonrakiSoruKomutuMu) TAM OLARAK 1 kez, DEĞİŞMEDİ", (html.match(/function avciSonrakiSoruKomutuMu\(metin\)\{/g) || []).length === 1);
   kontrol("39) 5I komut eşleştirici (avciSinyalPratikKomutuMu) TAM OLARAK 1 kez, DEĞİŞMEDİ", (html.match(/function avciSinyalPratikKomutuMu\(metin\)\{/g) || []).length === 1);
-  kontrol("40) 5H/5I komut listeleri bu turda BÜYÜMEDİ (hâlâ 5'er sabit ifade)", (() => {
+  kontrol("40) 5H/5I komut listeleri bu turda BÜYÜMEDİ (5H: 9 sabit ifade — 5 asıl + 4 'soru getir' ailesi; 5I: 5)", (() => {
     const kom5h = html.match(/const AVCI_SONRAKI_SORU_KOMUTLARI=\[([\s\S]*?)\];/)[1].match(/'/g).length;
     const kom5i = html.match(/const AVCI_SINYAL_PRATIK_KOMUTLARI=\[([\s\S]*?)\];/)[1].match(/'/g).length;
-    return kom5h === 10 && kom5i === 10; // 5 ifade x 2 tırnak
+    return kom5h === 18 && kom5i === 10; // ifade sayısı x 2 tırnak
+  })());
+  kontrol("40b) 5H'nin 'soru getir' ailesi reteach/açıklama isteklerini YAKALAMIYOR (birebir eşleşme)", (() => {
+    const kom5h = html.match(/const AVCI_SONRAKI_SORU_KOMUTLARI=\[([\s\S]*?)\];/)[1].match(/'([^']+)'/g).map((s) => s.slice(1, -1));
+    return !["bana soruyu açıkla", "bu soruyu çöz", "soruyu açıkla", "tekrar anlat"].some((c) => kom5h.includes(c));
   })());
 }
 
