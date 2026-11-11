@@ -72,19 +72,30 @@
 <meta name="theme-color" content="#F8F7F3">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"EducationalOrganization","name":"Sinyal Avcısı","url":"https://sinyal-avcisi.com","description":"YDS ve YÖKDİL sınavlarına hazırlık platformu."}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"YDS mi, YÖKDİL mi — platform ikisine de uygun mu?","acceptedAnswer":{"@type":"Answer","text":"Evet, her ikisi için de uygundur. Alanını seçiyorsun — Sosyal, Fen, Sağlık veya Hukuk — ve platform sana özel metinler, sorular ve kelime bankasıyla çalışmaya başlıyor. İstediğin zaman alan değiştirebilirsin."}},{"@type":"Question","name":"Gerçekten ücretsiz mi — gizli bir ücret var mı?","acceptedAnswer":{"@type":"Answer","text":"Gerçekten ücretsiz. Tek kuruş yok, kredi kartı yok, abonelik yok, 7 gün sonra sürpriz ücret yok. Platform tamamen ücretsiz ve öyle kalacak. Çünkü bilgi, parasıyla satılacak bir şey değil."}},{"@type":"Question","name":"KLOD gerçek bir yapay zeka mı, yoksa hazır cevaplar mı veriyor?","acceptedAnswer":{"@type":"Answer","text":"KLOD, gerçek bir yapay zeka — Claude API üzerine kurulu. Sana verdiği her cevap, yazdığın soruya göre anlık üretiliyor. Hazır şablon yok, her açıklama sana özel."}},{"@type":"Question","name":"Kayıt olmak zorunda mıyım?","acceptedAnswer":{"@type":"Answer","text":"Hayır. Kayıt olmadan da her şeyi kullanabilirsin. Ama kaydolursan streak'in, XP'n ve hata defterin kaybolmaz — kaldığın yerden devam edersin. Kayıt tamamen isteğe bağlı ve ücretsiz."}},{"@type":"Question","name":"Sınavıma ne kadar kaldıysa o kadar vaktim var — yetişir mi?","acceptedAnswer":{"@type":"Answer","text":"Sinyal metodunun güzelliği hız. Gramer kural kitabı ezberlemek yerine 7 sinyal tipini tanımak yeterli. Düzenli çalışmanın 1 ayı bile fark yaratır — hemen başla."}},{"@type":"Question","name":"İngilizce seviyem çok düşük, kullanabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Tüm açıklamalar Türkçe, KLOD Türkçe anlatıyor. YDS/YÖKDİL sınavı gramer bilgisi değil, sinyal okuma becerisi ölçüyor. B2 seviyesi olmasan da bu sinyalleri öğrenebilirsin."}},{"@type":"Question","name":"Ses Kurs ve E-Kitap da ücretsiz mi?","acceptedAnswer":{"@type":"Answer","text":"Evet, ikisi de tamamen ücretsiz. E-Kitabı e-posta adresinle indirebilirsin. 19 konuluk Ses Kursu da dahil — tüm içerik açık, hiçbir şey kilitli değil."}}]}</script>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K"></script>
+<!-- Google Analytics — yalnız sa_cookie_ok==='1' iken yüklenir. İzin yoksa gtag tanımsız kalır,
+     gtag.js indirilmez ve hiçbir GA isteği gitmez. gaBaslat() Kabul Et'te sayfa yenilenmeden çağrılır. -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PM25HTL46K');
+  function gaBaslat(){try{
+    if(window.__gaBasladi)return;window.__gaBasladi=true;
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=function(){dataLayer.push(arguments);};
+    gtag('js',new Date());
+    gtag('config','G-PM25HTL46K');
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-PM25HTL46K';
+    document.head.appendChild(s);
+  }catch(e){}}
+  (function(){var onay=null;try{onay=localStorage.getItem('sa_cookie_ok');}catch(e){}
+    if(onay==='1')gaBaslat();})();
 </script>
 <!-- PostHog (EU) — autocapture açık, session replay kapalı, yalnız tanımlı kişilere profil.
      phOlay(): merkezi yardımcı; posthog yoksa/engellenmişse SESSİZCE geçer, siteyi bozmaz. -->
 <script>
   !function(t,e){var o,n,p,r;e.__SV||(window.posthog&&window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-  try{posthog.init('phc_yW5W2YDSJqpCneeEuoumEfHF8LcoqnCH7cxYFnTJy7Ro',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only',autocapture:true,capture_pageview:true,disable_session_recording:true});}catch(e){}
+  // Çerez onayı: yalnız sa_cookie_ok==='1' (Kabul) ise init; aksi halde hiçbir şey gönderilmez.
+  function phBaslat(){try{if(window.__phBasladi)return;window.__phBasladi=true;posthog.init('phc_yW5W2YDSJqpCneeEuoumEfHF8LcoqnCH7cxYFnTJy7Ro',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only',autocapture:true,capture_pageview:true,disable_session_recording:true});}catch(e){}}
+  (function(){var onay=null;try{onay=localStorage.getItem('sa_cookie_ok');}catch(e){}
+    if(onay==='1')phBaslat();else{try{posthog.opt_out_capturing();}catch(e){}}})();
   function phOlay(ad,ek){try{if(window.posthog&&typeof posthog.capture==='function')posthog.capture(ad,ek||{});}catch(e){}}
   // SPA: sekme/sayfa değişiminde manuel $pageview (dnav/dtab çağırır). Aynı ekran üst üste sayılmaz.
   // 14 menü öğesinin onclick'i dnav(this);dtab(...) diye art arda çağırır (~1-4 ms): menüden hemen sonra (<50 ms) gelen sekme ayrı sayılmaz.
@@ -6829,6 +6840,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <span onclick="sinavSimulatoruAc()" style="color:var(--signal);font-weight:700" role="button" tabindex="0">Deneme Sınavı</span>
     <a href="/privacy" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Gizlilik Politikası</a>
     <a href="/terms" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Kullanım Şartları</a>
+    <a href="#" onclick="event.preventDefault();saCerezTercihDegistir()" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Çerez tercihlerini değiştir</a>
   </div>
   <nav aria-label="Rehberler" class="footer-rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
     <span style="color:var(--signal);font-weight:700">Rehberler</span>
@@ -14142,17 +14154,41 @@ function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomod
 // 9. COOKIE / KVKK BANNER
 // ============================================================
 (function(){
-  if(localStorage.getItem('sa_cookie_ok'))return;
+  // Tercih: sa_cookie_ok='1' kabul, '0' ret — ikisi de kayıtlıysa banner tekrar çıkmaz.
+  window.saCerezKabul=function(btn){
+    try{localStorage.setItem('sa_cookie_ok','1');}catch(e){}
+    try{window['ga-disable-G-PM25HTL46K']=false;gaBaslat();}catch(e){}
+    try{phBaslat();posthog.opt_in_capturing();}catch(e){}
+    btn.parentElement.parentElement.remove();
+  };
+  window.saCerezRed=function(btn){
+    try{localStorage.setItem('sa_cookie_ok','0');}catch(e){}
+    // GA bu sayfada önceden başlatıldıysa (tercih değiştirildiyse) gönderimi durdur.
+    window['ga-disable-G-PM25HTL46K']=true;
+    try{posthog.opt_out_capturing();}catch(e){}
+    btn.parentElement.parentElement.remove();
+  };
+  // Altbilgideki "Çerez tercihlerini değiştir": kaydı siler, bannerı hemen yeniden gösterir.
+  window.saCerezTercihDegistir=function(){
+    try{localStorage.removeItem('sa_cookie_ok');}catch(e){}
+    bannerGoster(0);
+  };
+  let tercih=null;try{tercih=localStorage.getItem('sa_cookie_ok');}catch(e){}
+  if(!tercih)bannerGoster(2000);
+  function bannerGoster(gecikme){
   setTimeout(()=>{
+    if(document.getElementById('sa-cerez-banner'))return;
     const div=document.createElement('div');
-    div.style.cssText='position:fixed;bottom:0;inset:auto 0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
-    div.innerHTML=`<div style="font-size:15px;color:var(--muted);flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="#" style="color:var(--signal)">KVKK Aydınlatma Metni</a></div>
+    div.id='sa-cerez-banner';
+    div.style.cssText='position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
+    div.innerHTML=`<div style="font-size:15px;color:var(--muted);flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="/privacy.html" style="color:var(--signal)">KVKK Aydınlatma Metni</a></div>
       <div style="display:flex;gap:8px;flex-shrink:0">
-        <button onclick="localStorage.setItem('sa_cookie_ok','1');this.parentElement.parentElement.remove()" style="background:var(--signal);color:#031018;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
-        <button onclick="this.parentElement.parentElement.remove()" style="background:#0d1624;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;color:var(--ink)">Reddet</button>
+        <button onclick="saCerezKabul(this)" style="background:var(--signal);color:#031018;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
+        <button onclick="saCerezRed(this)" style="background:#0d1624;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;color:var(--ink)">Reddet</button>
       </div>`;
     document.body.appendChild(div);
-  },2000);
+  },gecikme);
+  }
 })();
 
 // ============================================================

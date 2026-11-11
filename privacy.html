@@ -37,7 +37,7 @@ a.contact{color:var(--signal);text-decoration:none}
 <div class="wrap">
   <a class="back" href="/">← Sinyal Avcısı'na dön</a>
   <h1>Gizlilik Politikası</h1>
-  <p class="updated">Son güncelleme: 17 Eylül 2026</p>
+  <p class="updated">Son güncelleme: 11 Kasım 2026</p>
 
   <p>Bu metin, genel bilgilendirme amacıyla hazırlanmıştır ve Sinyal Avcısı'nı ("platform", "biz") kullanırken hangi verilerin toplanabileceğini, nasıl kullanıldığını ve hangi üçüncü taraf hizmetlerin devrede olduğunu açıklar.</p>
 
@@ -55,7 +55,19 @@ a.contact{color:var(--signal);text-decoration:none}
   </ul>
 
   <h2>Teknik ve analitik veriler</h2>
-  <p>Platformu nasıl kullandığınızı anlamak için Google Analytics (GA4) kullanılır — sayfa görüntülemeleri ve site içi etkileşimler ölçülür. Bu veriler bireysel kimliğinizi hedeflemek için değil, platformu geliştirmek için kullanılır.</p>
+  <p>Platformu nasıl kullandığınızı anlamak için iki analitik aracı kullanılır: Google Analytics (GA4) ve PostHog. İkisi de <strong>yalnızca çerez bildiriminde "Kabul Et" seçerseniz</strong> çalışır; izin vermezseniz bu hizmetlere hiçbir istek gönderilmez. Bu veriler bireysel kimliğinizi hedeflemek için değil, platformu geliştirmek için kullanılır.</p>
+
+  <h2>Analitik (izne bağlı): Google Analytics ve PostHog</h2>
+  <p><strong>Google Analytics (GA4):</strong> izin verirseniz sayfa görüntülemeleri ve site içi etkileşimler ölçülür.</p>
+  <p><strong>PostHog:</strong> izin verirseniz kullanılır. Veriler PostHog'un Avrupa Birliği sunucularında (eu.i.posthog.com) işlenir.</p>
+  <ul>
+    <li><strong>Ne toplanır:</strong> görüntülenen sayfalar, butonlara ve bağlantılara yapılan tıklamalar ve genel kullanım bilgisi (örn. tarayıcı türü, ekran boyutu, hangi sayfadan gelindiği).</li>
+    <li><strong>Nasıl tanımlanır:</strong> veriler rastgele bir tanımlayıcı ile, adınız veya e-postanızla eşleştirilmeden toplanır.</li>
+    <li><strong>Oturum kaydı kapalı:</strong> ekranınız ya da fare hareketleriniz kaydedilmez (session replay kullanılmaz).</li>
+    <li><strong>Amaç:</strong> hangi bölümlerin kullanıldığını, nerede takılındığını görmek ve platformu buna göre geliştirmek.</li>
+    <li><strong>İzin:</strong> Google Analytics ve PostHog yalnızca çerez bildiriminde "Kabul Et" seçerseniz çalışır. "Reddet" seçerseniz hiçbir veri gönderilmez ve tercihiniz tarayıcınızda saklanır. Kararınızı ana sayfanın altındaki "Çerez tercihlerini değiştir" bağlantısından istediğiniz zaman değiştirebilirsiniz.</li>
+    <li><strong>Saklama:</strong> kullanım verileri yalnızca analiz için gereken süre boyunca tutulur; PostHog hesabımızdaki saklama süresi dolduğunda otomatik olarak silinir.</li>
+  </ul>
 
   <h2>UTM / kampanya bilgisi (attribution)</h2>
   <p>Instagram, YouTube gibi kanallardan bir bağlantıyla geldiyseniz, bağlantıdaki kampanya bilgisi (örn. hangi platform, hangi içerik) tarayıcınızın oturum belleğinde (sessionStorage) tutulur. Bu bilgi sadece hangi içeriğin işe yaradığını ölçmek için kullanılır ve kişisel bir veri olarak sunucuya kaydedilmez.</p>
@@ -66,7 +78,8 @@ a.contact{color:var(--signal);text-decoration:none}
   <h2>Üçüncü taraf hizmetler</h2>
   <ul>
     <li><strong>Supabase:</strong> veritabanı, kimlik doğrulama ve dosya depolama altyapısı.</li>
-    <li><strong>Google Analytics:</strong> anonim/toplu kullanım ölçümü.</li>
+    <li><strong>Google Analytics:</strong> izninizle, toplu kullanım ölçümü.</li>
+    <li><strong>PostHog (AB):</strong> izninizle, rastgele bir tanımlayıcı ile kullanım analitiği (oturum kaydı kapalı).</li>
     <li><strong>Resend:</strong> e-kitap ve bildirim e-postalarının gönderimi.</li>
     <li><strong>Anthropic Claude API (KLOD):</strong> platformdaki AI mentor KLOD'a yazdığınız soru metni, size bir açıklama üretmek amacıyla işlenir; bu metin hesap bilginizle ilişkilendirilmeden işlenir.</li>
   </ul>
