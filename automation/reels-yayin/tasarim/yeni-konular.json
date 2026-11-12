@@ -1,5 +1,5 @@
 {
-  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak) ve konu 78 Passive (25 Ekim 2026, İhsan'ın notundan). uret_yeni.py bunlardan video ve kuyruk kaydı üretir. \"once\" verilmişse kuyruk kaydı o konunun önüne girer.",
+  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak) ve konu 78 Passive (25 Ekim 2026, İhsan'ın notundan). Konu 79-88 (12 Kasım 2026: kelime/kalıp, dilbilgisi tuzağı, paragraf tekniği, sınav stratejisi; metinler emojisiz). uret_yeni.py bunlardan video ve kuyruk kaydı üretir. \"once\" verilmişse kuyruk kaydı o konunun önüne girer.",
   "konular": [
     {
       "konu": 56, "baslik": "Paragraph Completion", "tuzak": false,
@@ -178,7 +178,7 @@
       "kural": "No sooner than ile, hardly when ile gelir. İlk kısım devrik past perfect, ikinci kısım past simple.",
       "tuzak_metin": "No sooner when tuzaktır. Devriksiz no sooner I had arrived da yanlıştır.",
       "sinyal": "no sooner, hardly, scarcely, than, when",
-      "ilk_yorum": "Mini test 🎯\nHardly had the film started ____ the lights went out.\n\"when\" mi, \"than\" mı?",
+      "ilk_yorum": "Mini test\nHardly had the film started ____ the lights went out.\n\"when\" mi, \"than\" mı?",
       "etiket": "#yds #yökdil #sinyalavcısı #devrikcümle #ingilizcegramer"
     },
     {
@@ -190,7 +190,7 @@
       "kural": "Şimdiki pişmanlıkta wish'ten sonra geçmiş zaman, geçmiş pişmanlıkta had ve üçüncü hal gelir.",
       "tuzak_metin": "I wish I have tuzaktır. Wish'ten sonra present gelmez.",
       "sinyal": "wish, if only, last year, yesterday",
-      "ilk_yorum": "Mini test 🎯\nI wish I ____ the answer yesterday.\n\"knew\" mi, \"had known\" mu?",
+      "ilk_yorum": "Mini test\nI wish I ____ the answer yesterday.\n\"knew\" mi, \"had known\" mu?",
       "etiket": "#yds #yökdil #sinyalavcısı #wishclauses #ingilizcegramer"
     },
     {
@@ -202,7 +202,7 @@
       "kural": "Had better ve would rather'dan sonra yalın fiil gelir. Başka özne gelirse would rather özne artı geçmiş zaman.",
       "tuzak_metin": "Had better to see tuzaktır. To kullanılmaz.",
       "sinyal": "had better, would rather, than",
-      "ilk_yorum": "Mini test 🎯\nI'd rather you ____ smoke here.\n\"didn't\" mi, \"don't\" mu?",
+      "ilk_yorum": "Mini test\nI'd rather you ____ smoke here.\n\"didn't\" mi, \"don't\" mu?",
       "etiket": "#yds #yökdil #sinyalavcısı #modals #ingilizcegramer"
     },
     {
@@ -216,6 +216,126 @@
       "sinyal": "by + kişi, will be, has been, being, get + V3",
       "ilk_yorum": "Mini test 🎯\nThe results ____ next week.\n\"will announce\" mı, \"will be announced\" mı?",
       "etiket": "#yds #yökdil #sinyalavcısı #passivevoice #ingilizcegramer"
+    },
+    {
+      "konu": 79, "baslik": "Affect / Effect", "tuzak": true,
+      "kanca": "Affect mi, effect mi? Boşluğun önüne bak.",
+      "cumle": "The new law had a significant ____ on small businesses.",
+      "dogru": "effect",
+      "hap": "a / the + EFFECT", "hap_alt": "affect = fiil, etkilemek",
+      "kural": "Affect fiildir, etkilemek demektir. Effect isimdir, etki demektir ve çoğu zaman have an effect on kalıbıyla gelir.",
+      "tuzak_metin": "Affect on tuzaktır, affect'ten sonra edat gelmez. Önünde artikel ya da sıfat varsa effect gelir.",
+      "sinyal": "a, an, the, have, on",
+      "ilk_yorum": "Mini test\nStress can seriously ____ your sleep.\n\"affect\" mi, \"effect\" mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #affecteffect #ydskelime"
+    },
+    {
+      "konu": 80, "baslik": "Rise / Raise", "tuzak": true,
+      "kanca": "Prices rose mu, prices raised mı? Nesne var mı diye bak.",
+      "cumle": "The central bank ____ interest rates twice last year.",
+      "dogru": "raised",
+      "hap": "raise + NESNE", "hap_alt": "rise nesne almaz",
+      "kural": "Raise bir şeyi yükseltmek demektir ve nesne alır. Rise kendiliğinden yükselmektir, nesne almaz.",
+      "tuzak_metin": "The bank rose interest rates tuzaktır. Boşluktan sonra nesne varsa raise gelir.",
+      "sinyal": "raise, raised, rise, rose, risen",
+      "ilk_yorum": "Mini test\nUnemployment ____ sharply after the crisis.\n\"rose\" mu, \"raised\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #riseraise #ydskelime"
+    },
+    {
+      "konu": 81, "baslik": "Economic / Economical", "tuzak": true,
+      "kanca": "Economic mi, economical mı? Biri ekonomiyle ilgili, öbürü hesaplı.",
+      "cumle": "The government announced a new ____ policy to reduce inflation.",
+      "dogru": "economic",
+      "hap": "economic = EKONOMİYLE İLGİLİ", "hap_alt": "economical = hesaplı, az harcayan",
+      "kural": "Economic ekonomiyle ilgili demektir, economic growth ve economic policy gibi. Economical ise az harcayan, hesaplı anlamına gelir.",
+      "tuzak_metin": "Economical policy tuzaktır. Economical daha çok az yakıt harcayan araba ya da ucuza gelen yöntem için kullanılır.",
+      "sinyal": "policy, growth, crisis, car, fuel",
+      "ilk_yorum": "Mini test\nSmall cars are more ____ because they use less fuel.\n\"economic\" mi, \"economical\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #karıştırılankelimeler #ydskelime"
+    },
+    {
+      "konu": 82, "baslik": "Used to / Be used to", "tuzak": true,
+      "kanca": "Used to live mı, used to living mi? Önündeki be fiiline bak.",
+      "cumle": "After ten years in Norway, she is used to ____ in cold weather.",
+      "dogru": "living",
+      "hap": "be used to + V-ING", "hap_alt": "used to + yalın fiil",
+      "kural": "Be used to alışkın olmak demektir, ardından isim ya da fiilin ing hali gelir. Used to ise eski bir alışkanlığı anlatır ve yalın fiil alır.",
+      "tuzak_metin": "Is used to live tuzaktır. Önünde be fiili varsa to edattır, yalın fiil gelmez.",
+      "sinyal": "be used to, get used to, used to",
+      "ilk_yorum": "Mini test\nI ____ play chess every weekend, but I don't have time now.\n\"used to\" mu, \"am used to\" mu?",
+      "etiket": "#yds #yökdil #sinyalavcısı #usedto #ingilizcegramer"
+    },
+    {
+      "konu": 83, "baslik": "Suggest / Recommend that", "tuzak": true,
+      "kanca": "Suggested that he rests mi, rest mi? Fiile s takısı gelir mi?",
+      "cumle": "The committee recommended that the manager ____ the report by Friday.",
+      "dogru": "submit",
+      "hap": "suggest that + YALIN FİİL", "hap_alt": "Özne he olsa da s takısı yok",
+      "kural": "Suggest, recommend, insist ve demand'den sonra gelen that cümlesinde fiil yalın kalır. Özne he ya da she olsa bile s takısı almaz.",
+      "tuzak_metin": "That the manager submits tuzaktır. Fiil yalın kalır ya da should ile kullanılır.",
+      "sinyal": "suggest, recommend, insist, demand, it is essential that",
+      "ilk_yorum": "Mini test\nIt is essential that every student ____ on time.\n\"be\" mi, \"is\" mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #subjunctive #ingilizcegramer"
+    },
+    {
+      "konu": 84, "baslik": "Other / Another / The other", "tuzak": true,
+      "kanca": "Another students mı, other students mı? İsim tekil mi, çoğul mu?",
+      "cumle": "Some students prefer online classes, while ____ students learn better in a classroom.",
+      "dogru": "other",
+      "hap": "other + ÇOĞUL İSİM", "hap_alt": "another + tekil isim",
+      "kural": "Another tekil isimle, other çoğul isimle kullanılır. İki şeyden geriye kalan için the other denir.",
+      "tuzak_metin": "Another students tuzaktır. Others ise tek başına durur, ardından isim gelmez.",
+      "sinyal": "some, while, one, the other, others",
+      "ilk_yorum": "Mini test\nI have two brothers. One is a doctor, ____ is a teacher.\n\"another\" mı, \"the other\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #otheranother #ingilizcegramer"
+    },
+    {
+      "konu": 85, "baslik": "Paragraph Completion: This + Noun", "tuzak": false,
+      "kanca": "Boşluktan sonra this delay yazıyor. Gecikmeyi hangi cümle anlatıyor?",
+      "cumle": "The city opened a new tram line last year. ____ Because of this delay, many shops on the route lost customers.",
+      "dogru": "However, its construction took two years longer than planned.",
+      "hap": "this + isim → GERİYE BAK", "hap_alt": "Karşılığı boşluktaki cümlede olmalı",
+      "kural": "Boşluktan sonraki cümle this ve bir isimle başlıyorsa, o ismin karşılığı boşluğa gelen cümlede geçmelidir.",
+      "tuzak_metin": "Tramvaydan söz eden ama gecikmeyi anlatmayan seçenek tuzaktır. Konu aynı kalsa da this delay karşılıksız kalır.",
+      "sinyal": "this, these, such, because of this",
+      "ilk_yorum": "Mini test\nThe museum raised its ticket prices. ____ Despite this drop, it made more money.\n\"Visitor numbers fell.\" mi, \"It opened a new hall.\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #paragraftamamlama #ydsokuma"
+    },
+    {
+      "konu": 86, "baslik": "Irrelevant Sentence: Zamir Takibi", "tuzak": false,
+      "kanca": "Dördüncü cümledeki they kim? Fazla cümleyi o ele verir.",
+      "cumle": "(I) Solar panels have become much cheaper. (II) As a result, more families install them on their roofs. (III) Wind turbines are usually built far from cities. (IV) They also sell the extra electricity to the grid.",
+      "dogru": "III",
+      "hap": "Zamiri takip et", "hap_alt": "They kime gidiyor?",
+      "kural": "Zamir kendinden önceki cümledeki isme bağlanır. Araya giren cümle bu bağı koparıyorsa fazla olan odur.",
+      "tuzak_metin": "Üçüncü cümle de enerjiden söz ediyor diye onu paragrafa ait saymak tuzaktır. O çıkınca they yeniden families'e bağlanır.",
+      "sinyal": "they, it, this, such, also",
+      "ilk_yorum": "Mini test\n(I) Many students study at night. (II) They say the house is quieter then. (III) Libraries close at ten. (IV) However, they often feel tired the next morning.\nHangisi fazla?",
+      "etiket": "#yds #yökdil #sinyalavcısı #anlamıbozancümle #ydsokuma"
+    },
+    {
+      "konu": 87, "baslik": "Süre Planı", "tuzak": false,
+      "kanca": "80 soru, 180 dakika. Bir soruya ortalama ne kadar süre düşüyor?",
+      "cumle": "80 soru, 180 dakika. Soru başına ortalama ____.",
+      "dogru": "2 dakika 15 saniye",
+      "hap": "Kısa soru: 1 dakika", "hap_alt": "Artan süre paragraflara kalır",
+      "kural": "Kelime ve dilbilgisi sorularını bir dakikanın altında bitir. Artan süre paragraf sorularına kalır.",
+      "tuzak_metin": "Tek bir soruda üç dakikayı geçmek tuzaktır. Soruyu işaretle, turun sonunda geri dön.",
+      "sinyal": "kısa sorular, paragraf soruları, işaretleyip geçmek",
+      "ilk_yorum": "Mini test\nBir paragraf sorusunda dört dakika geçti, hâlâ iki şık arasındasın.\nDevam mı edersin, işaretleyip geçer misin?",
+      "etiket": "#yds #yökdil #sinyalavcısı #sınavstratejisi #süreyönetimi"
+    },
+    {
+      "konu": 88, "baslik": "Boş Bırakma", "tuzak": false,
+      "kanca": "Emin olmadığın soruyu boş mu bırakmalısın?",
+      "cumle": "YDS ve YÖKDİL'de yanlış cevap doğruyu ____.",
+      "dogru": "götürmez",
+      "hap": "Boş bırakma", "hap_alt": "Yanlışın cezası yok",
+      "kural": "Bu iki sınavda puan yalnızca doğru sayısından hesaplanır. Boş bırakılan soru ile yanlış cevap aynı sonucu verir.",
+      "tuzak_metin": "Emin değilim diye boş bırakmak tuzaktır. İki seçeneği ele, kalanlardan birini işaretle.",
+      "sinyal": "boş soru, kalan süre, cevap kâğıdı",
+      "ilk_yorum": "Mini test\nSon iki dakikada beş soru boş kaldı.\nBoş mu bırakırsın, hepsini işaretler misin?",
+      "etiket": "#yds #yökdil #sinyalavcısı #sınavstratejisi #ydstaktik"
     }
   ]
 }

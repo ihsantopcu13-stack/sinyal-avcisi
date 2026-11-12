@@ -235,14 +235,17 @@ def video_uret(k, cikti):
 def kuyruk_kaydi(k):
     n = k["konu"]
     ornek = k["cumle"].replace("____", k["dogru"]) if "____" in k["cumle"] else f"{k['cumle']}\nCevap: {k['dogru']}"
-    govde = (f"{k['kanca']} 👇 Cevabını yoruma yaz!\n\n{k['kural']}\n\nSinyal kelimeler: {k['sinyal']}\n\n"
-             f"Örnek:\n{ornek}\n\n⚡ Avcı kuralı: {k['tuzak_metin']}\n\n"
+    # 12 Kasım 2026 (konu 79+): açıklama metinleri emojisiz ve ünlemsiz. Kuyruktaki eski kayıtlar
+    # (56-78) yeniden üretilmez; yayın anındaki dönüşümler (kuyruk-mantigi.mjs merakliAciklama,
+    # telegram-mantigi.mjs reelsAciklamasi) iki biçimi de tanır.
+    govde = (f"{k['kanca']} Cevabını yoruma yaz.\n\n{k['kural']}\n\nSinyal kelimeler: {k['sinyal']}\n\n"
+             f"Örnek:\n{ornek}\n\nAvcı kuralı: {k['tuzak_metin']}\n\n"
              f"Bu, serinin {n}. konusu. Her gün 08:30, 13:00 ve 17:30'da yeni konu.\n\n")
-    ai = "🤖 Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
-    ig = govde + ("🔔 Yarın yeni bir tuzak. Kaçırmamak için takip et.\n📌 Kaydet, sınav sabahı tekrar et.\n\n"
+    ai = "Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
+    ig = govde + ("Yarın yeni bir tuzak. Kaçırmamak için takip et.\nKaydet, sınav sabahı tekrar et.\n\n"
                   f"Ücretsiz çalışma planı. Link biyografide.\n\n{ai}\n\n{k['etiket']}")
-    yt = govde + ("🔔 Yarın yeni bir tuzak. Kaçırmamak için abone ol.\n📌 Kaydet, sınav sabahı tekrar et.\n"
-                  f"🗓️ Ücretsiz çalışma planı: sinyal-avcisi.com\n\n{ai}\n\n{k['etiket']}\n\n#Shorts")
+    yt = govde + ("Yarın yeni bir tuzak. Kaçırmamak için abone ol.\nKaydet, sınav sabahı tekrar et.\n"
+                  f"Ücretsiz çalışma planı: sinyal-avcisi.com\n\n{ai}\n\n{k['etiket']}\n\n#Shorts")
     yt_baslik = f"{k['kanca']} | {k['baslik']} | YDS YÖKDİL"
     if len(yt_baslik) > 100: yt_baslik = f"{k['baslik']} | YDS YÖKDİL"
     return {"konu": n, "baslik": k["baslik"], "video": f"konu{n:02d}.mp4", "aciklama": ig,

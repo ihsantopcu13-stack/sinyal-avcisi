@@ -55,6 +55,13 @@ await test("Reels açıklaması: kanalda yorum yok → 'yoruma yaz' düşünme �
   );
 });
 
+await test("Reels açıklaması: emojisiz şablon (konu 79+) Telegram'da da emojisiz kalır", () => {
+  assert.equal(
+    reelsAciklamasi("Soru? Cevabını yoruma yaz.\n\nÜcretsiz çalışma planı. Link biyografide.\n\nAnlatıcımız KLOD yapay zekâ ile oluşturulmuştur."),
+    "Soru? Cevabını düşün, sonra izle.\n\nÜcretsiz çalışma planı: sinyal-avcisi.com\n\nAnlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
+  );
+});
+
 const gercekKuyruk = JSON.parse(await readFile(new URL("../../reels-yayin/data/kuyruk.json", import.meta.url), "utf-8"));
 
 await test("gerçek kuyruktaki tüm açıklamalar Telegram sınırına sığar", () => {

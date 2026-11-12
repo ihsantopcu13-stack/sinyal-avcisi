@@ -35,6 +35,11 @@ kontrol("YouTube: 'Link biyografide.' çıkarılır, satır yapısı korunur",
     merakliAciklama(`A\n${GENEL_TAKIP_SATIRI}\nB`, { baslik: "Passive Voice" }) === "A\n🔔 Sıradaki video: Passive Voice. Kaçırmamak için takip et.\nB");
   kontrol("Merak: satırı olmayan açıklama aynı kalır", merakliAciklama("Takip et.", { baslik: "X" }) === "Takip et.");
   kontrol("Merak: sıradaki yoksa genel satır kalır", merakliAciklama(GENEL_TAKIP_SATIRI, null) === GENEL_TAKIP_SATIRI);
+  // Emojisiz şablon (konu 79+)
+  kontrol("Merak: emojisiz satır emojisiz değişir",
+    merakliAciklama("A\nYarın yeni bir tuzak. Kaçırmamak için takip et.\nB", { baslik: "Rise / Raise" }) === "A\nSıradaki video: Rise / Raise. Kaçırmamak için takip et.\nB");
+  kontrol("Merak: emojisiz satır, sıradaki yoksa aynı kalır",
+    merakliAciklama("Yarın yeni bir tuzak. Kaçırmamak için takip et.", null) === "Yarın yeni bir tuzak. Kaçırmamak için takip et.");
 }
 
 kontrol("kuyruk boş değil", Array.isArray(kuyruk.ogeler) && kuyruk.ogeler.length > 0);
