@@ -45,9 +45,20 @@ function slice(startMarker, endMarker, fromIdx) {
 // ============================================================
 {
   kontrol("S1) avciSonrakiSoruKomutuMu TAM OLARAK 1 kez tanımlı (duplicate YOK)", (html.match(/function avciSonrakiSoruKomutuMu\(metin\)\{/g) || []).length === 1);
-  kontrol("S2) AVCI_SONRAKI_SORU_KOMUTLARI TAM OLARAK 5 sabit ifade içeriyor (fuzzy liste büyümedi)", (() => {
+  kontrol("S2) AVCI_SONRAKI_SORU_KOMUTLARI TAM OLARAK 9 sabit ifade içeriyor (5 asıl + 4 'soru getir' ailesi; fuzzy liste büyümedi)", (() => {
     const blok = slice("const AVCI_SONRAKI_SORU_KOMUTLARI=[", "];");
-    return (blok.match(/'/g) || []).length === 10; // 5 ifade x 2 tırnak
+    return (blok.match(/'/g) || []).length === 18; // 9 ifade x 2 tırnak
+  })());
+  kontrol("S2b) 'soru getir' ailesinin 4 ifadesi listede BİREBİR var", (() => {
+    const kom5h = slice("const AVCI_SONRAKI_SORU_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => s.slice(1, -1));
+    return ["soru getir", "soru ver", "bana soru", "bir soru sor"].every((k) => kom5h.includes(k));
+  })());
+  kontrol("S2c) 5H listesi diğer deterministik komutlarla (5I listesi + KLOD_HIZLI_KOMUT) ÇAKIŞMIYOR", (() => {
+    const norm = (s) => s.trim().toLocaleLowerCase("tr-TR");
+    const kom5h = slice("const AVCI_SONRAKI_SORU_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => norm(s.slice(1, -1)));
+    const kom5i = slice("const AVCI_SINYAL_PRATIK_KOMUTLARI=[", "];").match(/'([^']+)'/g).map((s) => norm(s.slice(1, -1)));
+    const hizli = slice("const KLOD_HIZLI_KOMUT={", "};").match(/'([^']+)'/g).map((s) => norm(s.slice(1, -1)));
+    return kom5h.length === 9 && hizli.length === 5 && !kom5h.some((k) => kom5i.includes(k) || hizli.includes(k));
   })());
   kontrol("S3) dnavChat() içindeki köprü SADECE _aktifSoruModulu==='sinyal_lab' şartıyla slSonraki() çağırıyor", /if\(avciSonrakiSoruKomutuMu\(val\)&&_aktifSoruModulu==='sinyal_lab'\)\{/.test(html));
   kontrol("S4) köprü mevcut slSonraki()'yi ÇAĞIRIYOR, YENİ bir seçim algoritması YAZILMADI", /if\(typeof slSonraki==='function'\)slSonraki\(\);/.test(html) && (html.match(/function slSonraki\(\)\{/g) || []).length === 1);
@@ -110,6 +121,11 @@ kontrol("7) basit terminal punctuation güvenli (./!/?/… kırpılıyor, iç bo
 
 kontrol("8) alakasız mesaj tetiklemez", m.avciSonrakiSoruKomutuMu("Bu cümlede fiil hangisi?") === false && m.avciSonrakiSoruKomutuMu("Bugün hava çok güzel") === false && m.avciSonrakiSoruKomutuMu("") === false);
 kontrol("9) substring/fuzzy yanlış pozitif tetiklemez (exact-match, includes/startsWith DEĞİL)", m.avciSonrakiSoruKomutuMu("sonraki soruya geçmeden önce bir şey sorabilir miyim") === false && m.avciSonrakiSoruKomutuMu("acaba sonraki soru ne olacak") === false && m.avciSonrakiSoruKomutuMu("başka soru sormak istemiyorum") === false);
+kontrol('5b) "Soru getir." / "Soru ver!" / "Bana soru." / "Bir soru sor?" tetikler', m.avciSonrakiSoruKomutuMu("Soru getir.") === true && m.avciSonrakiSoruKomutuMu("Soru ver!") === true && m.avciSonrakiSoruKomutuMu("Bana soru.") === true && m.avciSonrakiSoruKomutuMu("Bir soru sor?") === true);
+kontrol("5c) 'soru getir' ailesi tr-TR büyük harfle de tetikler", m.avciSonrakiSoruKomutuMu("SORU GETİR") === true && m.avciSonrakiSoruKomutuMu("BANA SORU") === true && m.avciSonrakiSoruKomutuMu("BİR SORU SOR") === true);
+kontrol('9s1) "bana soruyu açıkla" sonraki-soru komutu olarak YAKALANMIYOR', m.avciSonrakiSoruKomutuMu("bana soruyu açıkla") === false && m.avciSonrakiSoruKomutuMu("Bana soruyu açıkla.") === false);
+kontrol('9s2) "bu soruyu çöz" (ve "soru çöz") sonraki-soru komutu olarak YAKALANMIYOR', m.avciSonrakiSoruKomutuMu("bu soruyu çöz") === false && m.avciSonrakiSoruKomutuMu("Bu soruyu çöz.") === false && m.avciSonrakiSoruKomutuMu("soru çöz") === false);
+kontrol("9s3) 'soru getir' ailesinde substring/fuzzy yanlış pozitif YOK", m.avciSonrakiSoruKomutuMu("bana bir soru getirir misin") === false && m.avciSonrakiSoruKomutuMu("bir soru sorabilir miyim") === false && m.avciSonrakiSoruKomutuMu("bu soru verilen cevaba göre yanlış mı") === false && m.avciSonrakiSoruKomutuMu("bana sorunun çözümünü anlat") === false);
 kontrol("9b) non-string girdi crash üretmiyor", m.avciSonrakiSoruKomutuMu(null) === false && m.avciSonrakiSoruKomutuMu(undefined) === false && m.avciSonrakiSoruKomutuMu(42) === false);
 
 // ============================================================
@@ -220,7 +236,15 @@ function sandboxKur() {
   kontrol("17) board reset korunur — geçiş SONRASI temizlenecekler listesi BOŞ (avciBoardTemizle slRender üzerinden çalıştı)", t.context.__t_getBoardTemizlenecekler().length === 0);
 }
 
-// 11) Sinyal Lab AKTİF DEĞİLKEN aynı komut slSonraki()'yi TETİKLEMEZ (fail-open)
+// 11) Sinyal Lab AKTİF DEĞİLKEN 5H KÖPRÜSÜ slSonraki()'yi TETİKLEMEZ (fail-open)
+// GÜNCELLEME (KATMAN 5H-B, 2026-11-11): Bu test YALNIZ 5H köprü dilimini
+// (BRIDGE_BRANCH, "// 20. TOKEN COUNTING"e kadar) çalıştırır ve o dilim
+// değişmedi. Ancak 'soru getir' ailesi (soru getir/soru ver/bana soru/bir
+// soru sor) artık modül aktif DEĞİLKEN, TOKEN COUNTING'den SONRAKİ ayrı
+// KATMAN 5H-B bloğunda BİLEREK yan etki üretir: tracker'ı 'sinyal_lab' yapıp
+// bankadan soru açar (açık soru yokken "soru getir" sohbete düşmesin diye).
+// Bu yüzden "aktif değilken yan etki yok" artık 5H/5I KÖPRÜLERİ için geçerli;
+// 5H-B davranışı tests/klod-soru-getir-acik-soru-yok.test.mjs'te test edilir.
 {
   const t = sandboxKur();
   t.context.__t_setAktifModul(null); // başka modül / hiçbiri
@@ -229,9 +253,10 @@ function sandboxKur() {
   const body = fakeBody();
   const inp = fakeInp();
   t.context.__komutBridgeProbe("Sonraki soruya geç.", body, inp);
+  t.context.__komutBridgeProbe("Soru getir.", body, inp); // 'soru getir' ailesi de 5H köprüsünde aktif değilken iş yapmaz (5H-B ayrı blokta)
   const after = t.context.__t_getSlState();
-  kontrol("11) Sinyal Lab aktif DEĞİLKEN komut eşleşse bile slSonraki() ÇAĞRILMAZ (soru/idx DEĞİŞMEDİ)", after.soruId === once.soruId && t.context.__t_getSlIdx() === 0);
-  kontrol("11b) modül aktif değilken köprü hiçbir UI/history yan etkisi üretmiyor (normal chat akışına düşer)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
+  kontrol("11) Sinyal Lab aktif DEĞİLKEN 5H köprüsü ('Sonraki soruya geç.' ve 'Soru getir.') slSonraki() ÇAĞIRMAZ (soru/idx DEĞİŞMEDİ)", after.soruId === once.soruId && t.context.__t_getSlIdx() === 0);
+  kontrol("11b) modül aktif değilken 5H KÖPRÜ dilimi UI/history yan etkisi üretmiyor ('soru getir' ailesinin bilinçli yan etkisi 5H-B'de, ayrı test)", body.children.length === 0 && t.context.__t_getDnavHistory().length === 0);
   kontrol("21b) fetch yine tetiklenmedi (bu testte zaten hiç API çağrısı simüle edilmedi)", t.fetchCagrilari.length === 0);
 }
 
