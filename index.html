@@ -1819,7 +1819,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261108q">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261112a">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -7488,6 +7488,7 @@ function modSinyalAsilGeriYukle(){
   t.innerHTML='';t.appendChild(_modSinyalAsil);_modSinyalAsil=null;
 }
 function dnav(el){
+  if(typeof klodKartDinleDurdur==='function')klodKartDinleDurdur(); // ekran değişti: çalan soru sesi kesilir
   if(typeof safOdakEkranDegisti==='function')safOdakEkranDegisti(); // açık Odak Modu kapanır
   const oncekiAktif=document.querySelector('.dn-item.active');
   document.querySelectorAll('.dn-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');
@@ -11145,6 +11146,7 @@ function slRender(){
     havuz=filtreliSorular.length>0?filtreliSorular:SL_HAVUZ;
     soru=havuz[slIdx%havuz.length];
   }
+  if(typeof klodKartDinleDurdur==='function'&&slCurrentSoru!==soru)klodKartDinleDurdur(); // başka soruya geçildi: çalan ses kesilir
   slCurrentSoru=soru;
   // FAZ 2 — question_view (aynı soru tekrar render edilirse duplicate atmaz)
   var __slQid=soru.id;
@@ -12323,6 +12325,7 @@ function klodSoruKartiCiz(){
   if(!kart)return;
   const h=(etiket,sinif,metin)=>{const e=document.createElement(etiket);if(sinif)e.className=sinif;if(metin!=null)e.textContent=metin;return e;};
   const duz=t=>String(t||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
+  klodKartDinleDurdur(); // kart yeniden çizilirken çalan soru sesi kesilir
   kart.textContent='';
   kart.append(h('div','klod-kart-etiket','AKTİF SORU'));
   const soru=(_aktifSoruModulu==='sinyal_lab'&&slCurrentSoru)?slCurrentSoru:null;
@@ -12335,12 +12338,62 @@ function klodSoruKartiCiz(){
   const cumle=h('p','klod-kart-cumle');
   klodKartCumleDoldur(cumle,duz(soru.sent));
   kart.append(cumle);
+  // Dinle: yalnız hazır mp3'ü olan havuz sorularında (assets/sl-ses). Tıklama merkezi data-action dinleyicisinde.
+  if(klodKartSesYolu(soru)){const d=h('button','klod-kart-dinle','Dinle');d.type='button';d.dataset.action='klod-kart-dinle';d.setAttribute('aria-pressed','false');kart.append(d);}
   const acik=[['S','Özne'],['V','Fiil'],['O','Nesne']].filter(([r])=>_klodKartRoller[r]);
   if(acik.length){const lj=h('div','klod-kart-lejant');acik.forEach(([r,ad])=>lj.append(h('span','klod-rol-'+r.toLowerCase(),'■ '+ad)));kart.append(lj);}
   if(soru.q)kart.append(h('p','klod-kart-soru',duz(soru.q)));
   // Şıklar A–E (harf CSS'teki upper-alpha'dan gelir; metinde zaten "A)" varsa çift olmasın)
   if(Array.isArray(soru.opts)&&soru.opts.length){const ol=h('ol','klod-kart-siklar');soru.opts.slice(0,5).forEach(o=>ol.append(h('li',null,duz(o).replace(/^[A-E][).]\s+/,''))));kart.append(ol);}
 }
+// ─── AKTİF SORU KARTI: "Dinle" (hazır mp3, 2026-11-12) ───────────────────
+// Sinyal Lab havuzundaki q001–q083 cümlelerinin sesi önceden üretilmiş dosyadır
+// (assets/sl-ses/qNNN.mp3). Ses üretim servisine istek atılmaz; Audio nesnesi
+// yalnız düğmeye basılınca oluşur (sayfa açılışında indirme yok). Havuz dışı
+// soruda yol null döner, düğme hiç çizilmez.
+const KLOD_KART_SES_ADET=83;
+function klodKartSesYolu(soru){
+  const m=/^q(\d{3})$/.exec(String(soru&&soru.id||''));
+  if(!m)return null;
+  const n=Number(m[1]);
+  return n>=1&&n<=KLOD_KART_SES_ADET?'assets/sl-ses/q'+m[1]+'.mp3':null;
+}
+let _klodKartSes=null; // {audio,id} — çalan soru sesi
+function klodKartDinleDugme(){
+  const b=document.querySelector('#klod-soru-karti .klod-kart-dinle');
+  if(!b)return;
+  const caliyor=!!_klodKartSes;
+  b.textContent=caliyor?'Durdur':'Dinle';
+  b.classList.toggle('caliyor',caliyor);
+  b.setAttribute('aria-pressed',caliyor?'true':'false');
+}
+function klodKartDinleDurdur(){
+  const s=_klodKartSes;_klodKartSes=null;
+  if(s){try{s.audio.onended=s.audio.onerror=null;s.audio.pause();}catch(e){}}
+  klodKartDinleDugme();
+}
+function klodKartDinleBasildi(){
+  if(_klodKartSes){klodKartDinleDurdur();return;}
+  const soru=(_aktifSoruModulu==='sinyal_lab'&&slCurrentSoru)?slCurrentSoru:null;
+  const yol=klodKartSesYolu(soru);
+  if(!yol)return;
+  if(typeof klodSesDurdur==='function')klodSesDurdur(); // KLOD konuşuyorsa üst üste binmesin
+  const a=new Audio(yol);
+  const bitti=()=>{if(_klodKartSes&&_klodKartSes.audio===a){_klodKartSes=null;klodKartDinleDugme();}};
+  a.onended=bitti;a.onerror=bitti;
+  _klodKartSes={audio:a,id:soru.id};
+  klodKartDinleDugme();
+  try{const p=a.play();if(p&&typeof p.catch==='function')p.catch(bitti);}catch(e){bitti();}
+}
+// Merkezi tıklama dinleyicisi: [data-action] taşıyan düğmeler tek yerden yönetilir (inline onclick yok).
+// Hedef gerçek <button> olduğu için iOS Safari'de belge düzeyinde yakalama sorunsuz çalışır.
+const MERKEZI_AKSIYONLAR={'klod-kart-dinle':klodKartDinleBasildi};
+document.addEventListener('click',function(e){
+  const el=e.target&&e.target.closest?e.target.closest('[data-action]'):null;
+  if(!el)return;
+  const f=MERKEZI_AKSIYONLAR[el.dataset.action];
+  if(typeof f==='function')f(el,e);
+});
 // Açıklanan rol metinlerini cümlede bulup (büyük/küçük harf duyarsız, çakışmasız) renkli span'lerle sarar
 function klodKartCumleDoldur(el,metin){
   const kucuk=metin.toLowerCase();const araliklar=[];
@@ -20184,6 +20237,8 @@ body.klod-odak .klod-govde .klod-ws{height:100%;min-height:0}
 .klod-kart-bos{font-size:16px;color:var(--muted);margin:0}
 .klod-kart-btn{background:linear-gradient(135deg,#15803d,#065f46);color:#f8fafc;border:none;border-radius:10px;padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
 .klod-kart-lejant{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;font-weight:700}
+.klod-kart-dinle{align-self:flex-start;flex-shrink:0;min-height:44px;min-width:96px;padding:8px 18px;background:transparent;color:#c4b5fd;border:1px solid rgba(196,181,253,.55);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;touch-action:manipulation}
+.klod-kart-dinle.caliyor{background:rgba(196,181,253,.16);color:var(--ink)}
 .klod-rol-s{color:#38bdf8}.klod-rol-v{color:#22c55e}.klod-rol-o{color:#c4b5fd}
 .klod-kart-cumle :is(.klod-rol-s,.klod-rol-v,.klod-rol-o){font-weight:700}
 
