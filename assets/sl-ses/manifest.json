@@ -1,0 +1,593 @@
+{
+ "ses": "af_heart",
+ "hiz": 0.8,
+ "model": "Kokoro-82M v1.0 (kokoro-onnx, Apache-2.0)",
+ "bicim": "mp3 mono 56k 24000 Hz",
+ "bas_son_sessizlik_sn": 0.35,
+ "sha1_kapsami": "metin alanının UTF-8 baytları",
+ "olusturma": "2026-11-11T19:16:42+00:00",
+ "kayit_sayisi": 83,
+ "kayitlar": [
+  {
+   "id": "q001",
+   "dosya": "q001.mp3",
+   "metin": "The appellate court ruled that, despite the irregularities, the verdict was by no means invalid.",
+   "sha1": "ffdb082463d701ab77b8a61085503776644e17bf",
+   "sure_sn": 7.953
+  },
+  {
+   "id": "q002",
+   "dosya": "q002.mp3",
+   "metin": "The researchers concluded that, despite the promising results, the treatment was far from guaranteed.",
+   "sha1": "79c582613a65c13b76bd0e889b2d8f67f7f59bc5",
+   "sure_sn": 7.889
+  },
+  {
+   "id": "q003",
+   "dosya": "q003.mp3",
+   "metin": "The statute was far from unambiguous, yet the court applied it strictly.",
+   "sha1": "fd2be5b3c58fab107fba04f480943b424643991f",
+   "sure_sn": 5.927
+  },
+  {
+   "id": "q004",
+   "dosya": "q004.mp3",
+   "metin": "The treatment was far from effective although it had shown promising results in trials.",
+   "sha1": "fd99990bfb1cfcc511ea88234c0ed5cd48ecf3a7",
+   "sure_sn": 6.588
+  },
+  {
+   "id": "q005",
+   "dosya": "q005.mp3",
+   "metin": "Sociologists argue that stratification hardly operates independently of cultural norms.",
+   "sha1": "116d25498164e90f9414ace029af9f4f9edfa46e",
+   "sure_sn": 8.145
+  },
+  {
+   "id": "q006",
+   "dosya": "q006.mp3",
+   "metin": "The catalyst failed to accelerate the reaction even though the temperature was optimal.",
+   "sha1": "f69ea749dc7be4e0ab069cbce24af096e5fc9387",
+   "sure_sn": 6.674
+  },
+  {
+   "id": "q007",
+   "dosya": "q007.mp3",
+   "metin": "The committee was by no means unanimous in its decision, nor did it reach a consensus.",
+   "sha1": "96b43fd71127161cb63014e374f350576e8b2fdb",
+   "sure_sn": 6.929
+  },
+  {
+   "id": "q008",
+   "dosya": "q008.mp3",
+   "metin": "Prior to the enactment of the law, companies were rarely held liable.",
+   "sha1": "b3adca969f991a3a516c8490625ddd281434a60c",
+   "sure_sn": 5.564
+  },
+  {
+   "id": "q009",
+   "dosya": "q009.mp3",
+   "metin": "Whereas early studies suggested a strong correlation, recent findings have failed to replicate these results.",
+   "sha1": "d33edc0ed8dd46e564f3801c0f6ac52ae0caf7df",
+   "sure_sn": 9.063
+  },
+  {
+   "id": "q010",
+   "dosya": "q010.mp3",
+   "metin": "The drug scarcely reduced inflammation despite being administered at the maximum dosage.",
+   "sha1": "e8285a9c2ac371923c11afb67f9f774330591755",
+   "sure_sn": 7.655
+  },
+  {
+   "id": "q011",
+   "dosya": "q011.mp3",
+   "metin": "The policy was anything but neutral; it disproportionately affected marginalized communities.",
+   "sha1": "7f49b4b68006f10fcd324cd4b4fe9b31e6c1b338",
+   "sure_sn": 8.188
+  },
+  {
+   "id": "q012",
+   "dosya": "q012.mp3",
+   "metin": "The experiment by no means confirmed the hypothesis; on the contrary, it contradicted previous assumptions.",
+   "sha1": "f29760729dc7683f7dd0b7f6a0292d2ab3dea772",
+   "sure_sn": 9.554
+  },
+  {
+   "id": "q013",
+   "dosya": "q013.mp3",
+   "metin": "No sooner had the new regulation been implemented than companies began lobbying against it.",
+   "sha1": "70f99888d2075e75d4f8d3f6be1358367db073b8",
+   "sure_sn": 7.569
+  },
+  {
+   "id": "q014",
+   "dosya": "q014.mp3",
+   "metin": "The defendant's argument was not without merit, yet the court ultimately ruled against him.",
+   "sha1": "9fe7b72a25432e5f1bf754ff1b5a9dfa23e6055f",
+   "sure_sn": 7.527
+  },
+  {
+   "id": "q015",
+   "dosya": "q015.mp3",
+   "metin": "While proponents argue the reform is essential, critics maintain it is far from sufficient.",
+   "sha1": "16a625f8ab828c83700b61f0160b92747394bf11",
+   "sure_sn": 7.079
+  },
+  {
+   "id": "q016",
+   "dosya": "q016.mp3",
+   "metin": "The defendant, notwithstanding the overwhelming evidence, pleaded not guilty.",
+   "sha1": "ffaddff7205386fa3b8073b3f021dc3e62eb8a47",
+   "sure_sn": 6.503
+  },
+  {
+   "id": "q017",
+   "dosya": "q017.mp3",
+   "metin": "By the time the symptoms appeared, the infection had already spread to adjacent tissue.",
+   "sha1": "ec98eb571e1ea5c95662558476a643ff9bb61bcb",
+   "sure_sn": 6.674
+  },
+  {
+   "id": "q018",
+   "dosya": "q018.mp3",
+   "metin": "The catalyst, rather than being consumed, facilitates the reaction without undergoing permanent change.",
+   "sha1": "062b309bb5504403d803e5a41aea202be978fc17",
+   "sure_sn": 8.402
+  },
+  {
+   "id": "q019",
+   "dosya": "q019.mp3",
+   "metin": "Consequently, urbanization rates declined in regions where agricultural subsidies were increased.",
+   "sha1": "7a0ac41fbff0d2ae3a17969c974a1e34ea6daa57",
+   "sure_sn": 8.252
+  },
+  {
+   "id": "q020",
+   "dosya": "q020.mp3",
+   "metin": "The statute provided that any contract signed under duress shall be deemed voidable at the discretion of the aggrieved party.",
+   "sha1": "775af43b78abd1f8c667ab6ce448b143f156b230",
+   "sure_sn": 9.703
+  },
+  {
+   "id": "q021",
+   "dosya": "q021.mp3",
+   "metin": "Although the drug demonstrated efficacy in clinical trials, its long-term safety profile remained uncertain.",
+   "sha1": "b5f2cbae7c64c5fbb71fc6c33b66efbb6a3b5c83",
+   "sure_sn": 9.425
+  },
+  {
+   "id": "q022",
+   "dosya": "q022.mp3",
+   "metin": "Prior to the discovery of penicillin, bacterial infections were often fatal.",
+   "sha1": "f4f12b7d1b12dddb99b956358631001b59b391c6",
+   "sure_sn": 6.588
+  },
+  {
+   "id": "q023",
+   "dosya": "q023.mp3",
+   "metin": "The study found that social mobility, contrary to popular belief, has declined over the past two decades.",
+   "sha1": "36b9d0167772a93cc33f5e7b3c0243a8da084ae6",
+   "sure_sn": 8.956
+  },
+  {
+   "id": "q024",
+   "dosya": "q024.mp3",
+   "metin": "The study's findings were far from conclusive, yet they sparked considerable debate among scholars.",
+   "sha1": "1c83e9e0d3c794846d2d0665cdb34e3ac319eaad",
+   "sure_sn": 8.124
+  },
+  {
+   "id": "q025",
+   "dosya": "q025.mp3",
+   "metin": "Although the experiment failed to yield the expected results, the researchers remained optimistic about future prospects.",
+   "sha1": "07c356b1c30ab10f17416fd2ba13f515f07381cd",
+   "sure_sn": 10.023
+  },
+  {
+   "id": "q026",
+   "dosya": "q026.mp3",
+   "metin": "The new policy was anything but popular despite the government's efforts to promote it.",
+   "sha1": "4ac23b33a612ef3c203a1236dea58467dcf5401a",
+   "sure_sn": 6.929
+  },
+  {
+   "id": "q027",
+   "dosya": "q027.mp3",
+   "metin": "The economy recovered more quickly than anticipated, even though analysts had predicted a prolonged recession.",
+   "sha1": "8998e7c93efdb7de65f520e5bb27c3b237db6a4b",
+   "sure_sn": 9.063
+  },
+  {
+   "id": "q028",
+   "dosya": "q028.mp3",
+   "metin": "The defendant's argument was by no means convincing, yet the jury deliberated for three days.",
+   "sha1": "37d98c7dfa77404382a90f3b485560f94960fed8",
+   "sure_sn": 7.911
+  },
+  {
+   "id": "q029",
+   "dosya": "q029.mp3",
+   "metin": "Despite the overwhelming evidence, the court was far from unanimous in its ruling.",
+   "sha1": "fff3a4e2115d9d80fad79e5fceed84f72098cb33",
+   "sure_sn": 6.524
+  },
+  {
+   "id": "q030",
+   "dosya": "q030.mp3",
+   "metin": "The contract's terms were hardly favorable to either party, yet both sides agreed to proceed.",
+   "sha1": "249cdc0a7dd1cafaf934f4d1c0a0e18f3eac3e16",
+   "sure_sn": 7.697
+  },
+  {
+   "id": "q031",
+   "dosya": "q031.mp3",
+   "metin": "The clinical trial results were nowhere near as promising as initially hoped, although researchers continued the study.",
+   "sha1": "bc2446a770f72aae003b836daead784f11a86e96",
+   "sure_sn": 9.596
+  },
+  {
+   "id": "q032",
+   "dosya": "q032.mp3",
+   "metin": "Despite years of research, scientists have yet to find a definitive cure for the disease.",
+   "sha1": "e3f0f3467ed8468797d6dd46967588a3c2659fb1",
+   "sure_sn": 7.313
+  },
+  {
+   "id": "q033",
+   "dosya": "q033.mp3",
+   "metin": "The medication proved far from harmless, even though it had passed initial safety screenings.",
+   "sha1": "339203c4451a3c2999100092ba1b8fea714c6422",
+   "sure_sn": 7.356
+  },
+  {
+   "id": "q034",
+   "dosya": "q034.mp3",
+   "metin": "The experiment's results were scarcely reproducible, despite the controlled laboratory conditions.",
+   "sha1": "6a38bacf82b868d16cb3984ce26dd089f390b515",
+   "sure_sn": 7.975
+  },
+  {
+   "id": "q035",
+   "dosya": "q035.mp3",
+   "metin": "Although the hypothesis seemed plausible, the data failed to provide sufficient support.",
+   "sha1": "0c9eb163fbb2e81a951fd67d955aecf1e66bbcb5",
+   "sure_sn": 7.015
+  },
+  {
+   "id": "q036",
+   "dosya": "q036.mp3",
+   "metin": "The social program was far from achieving its intended outcomes, despite significant funding.",
+   "sha1": "f515ba50397ecd9082f40fbe1cdeeb4464179c8c",
+   "sure_sn": 7.826
+  },
+  {
+   "id": "q037",
+   "dosya": "q037.mp3",
+   "metin": "Public support for the initiative was by no means guaranteed, even though surveys showed initial enthusiasm.",
+   "sha1": "b1f478e920e46684ec4384efb137ad9c1e7f5db9",
+   "sure_sn": 9.404
+  },
+  {
+   "id": "q038",
+   "dosya": "q038.mp3",
+   "metin": "Given the available evidence, the investigators concluded that the suspect must have been at the scene.",
+   "sha1": "e293be50d313ad8e8c23c270599eb29a151a88f0",
+   "sure_sn": 7.826
+  },
+  {
+   "id": "q039",
+   "dosya": "q039.mp3",
+   "metin": "The team should have consulted the experts before making such a critical decision.",
+   "sha1": "c8bb4051c3d352e7b77b2c89bc9b5a8896157169",
+   "sure_sn": 6.161
+  },
+  {
+   "id": "q040",
+   "dosya": "q040.mp3",
+   "metin": "The patient's symptoms could have been misdiagnosed, as they were consistent with multiple conditions.",
+   "sha1": "645cc0d7c7016a0b1ac48283d93716d4a8d0ff63",
+   "sure_sn": 7.783
+  },
+  {
+   "id": "q041",
+   "dosya": "q041.mp3",
+   "metin": "The project was severely underfunded; consequently, the team was forced to abandon several key objectives.",
+   "sha1": "745c28b630cdf0dc69b93b53a0a6a3e2eeef6338",
+   "sure_sn": 9.191
+  },
+  {
+   "id": "q042",
+   "dosya": "q042.mp3",
+   "metin": "The population grew exponentially over the decade; as a result, housing prices reached unprecedented levels.",
+   "sha1": "27623eb09cf0b66e10ce24986ef0e47d1eb2fa4d",
+   "sure_sn": 9.468
+  },
+  {
+   "id": "q043",
+   "dosya": "q043.mp3",
+   "metin": "The agreement will remain valid provided that both parties fulfill their obligations within the specified timeframe.",
+   "sha1": "06f3c7fb6aef1c88ebd1d30ac8d1bf7b2ad48890",
+   "sure_sn": 9.425
+  },
+  {
+   "id": "q044",
+   "dosya": "q044.mp3",
+   "metin": "The defendant will be released on condition that they comply with all restrictions imposed by the court.",
+   "sha1": "ace830a9a3459e4fbf29d736ae2cc50ac80ed546",
+   "sure_sn": 8.188
+  },
+  {
+   "id": "q045",
+   "dosya": "q045.mp3",
+   "metin": "The negotiations were nowhere near completion, yet both parties expressed optimism about reaching a deal.",
+   "sha1": "953d5dc0b31bf6d159af9af26725bf70aeae56be",
+   "sure_sn": 8.764
+  },
+  {
+   "id": "q046",
+   "dosya": "q046.mp3",
+   "metin": "Unless the appeal is filed within thirty days, the ruling will become final and binding.",
+   "sha1": "ba8167771291efcdbc150dc6665cd05bc7cae385",
+   "sure_sn": 7.143
+  },
+  {
+   "id": "q047",
+   "dosya": "q047.mp3",
+   "metin": "The clinical guidelines were revised after new evidence cast doubt on the drug's long-term safety.",
+   "sha1": "e92c0b193ba4c78eb0772ef6d0473db0151a4dd4",
+   "sure_sn": 8.273
+  },
+  {
+   "id": "q048",
+   "dosya": "q048.mp3",
+   "metin": "Contrary to earlier assumptions, the compound proved anything but stable at room temperature.",
+   "sha1": "65e09d50a3b3a6b76100a0b10284ceb6beeef814",
+   "sure_sn": 7.804
+  },
+  {
+   "id": "q049",
+   "dosya": "q049.mp3",
+   "metin": "As a consequence of declining birth rates, several countries have revised their pension systems.",
+   "sha1": "29d58b4a0e67a6bca2443d1ec56c70a4040a16f7",
+   "sure_sn": 7.697
+  },
+  {
+   "id": "q050",
+   "dosya": "q050.mp3",
+   "metin": "The proposal, while theoretically sound, has proven next to impossible to implement in practice.",
+   "sha1": "558572058effc5bbfe05b7642a763cd7a79b7fd0",
+   "sure_sn": 7.996
+  },
+  {
+   "id": "q051",
+   "dosya": "q051.mp3",
+   "metin": "Had the witness come forward earlier, the outcome of the trial might have been different.",
+   "sha1": "2a8f63f62d240741a8bc44b1bce919095e4d15d6",
+   "sure_sn": 6.14
+  },
+  {
+   "id": "q052",
+   "dosya": "q052.mp3",
+   "metin": "Once the infection had been misdiagnosed, treatment was delayed by several critical weeks.",
+   "sha1": "5e455126230800fbc81f510caafb719a5ef66eb9",
+   "sure_sn": 7.185
+  },
+  {
+   "id": "q053",
+   "dosya": "q053.mp3",
+   "metin": "The satellite's trajectory deviated only slightly from the projected path, a fact that nonetheless required immediate correction.",
+   "sha1": "b3b52f95f0632c7137b2d4526a41b0b9908a5671",
+   "sure_sn": 10.769
+  },
+  {
+   "id": "q054",
+   "dosya": "q054.mp3",
+   "metin": "Even though the survey sample was representative, critics claim the results were far from generalizable.",
+   "sha1": "5a29d1b6004695fbdc3eb6647bc834a9a1277004",
+   "sure_sn": 8.273
+  },
+  {
+   "id": "q055",
+   "dosya": "q055.mp3",
+   "metin": "Not only did the merger fail to boost profits, but it also triggered a wave of layoffs.",
+   "sha1": "8f8ceefb53a1b6064fbab34f2e6e60a997511563",
+   "sure_sn": 7.164
+  },
+  {
+   "id": "q056",
+   "dosya": "q056.mp3",
+   "metin": "The clause was drafted so as to prevent either party from unilaterally terminating the agreement.",
+   "sha1": "09c7eb76dbd7fd64d7acb76438b6138220a843f0",
+   "sure_sn": 8.081
+  },
+  {
+   "id": "q057",
+   "dosya": "q057.mp3",
+   "metin": "Despite its promising early results, the therapy was withheld from the general population pending further trials.",
+   "sha1": "a32ec041a2da8156bf36609f145b409786eec02e",
+   "sure_sn": 9.447
+  },
+  {
+   "id": "q058",
+   "dosya": "q058.mp3",
+   "metin": "Provided that the temperature remains stable, the reaction will proceed without further intervention.",
+   "sha1": "4c90c9e14122309184d6eab842bb4f9b57a96154",
+   "sure_sn": 7.634
+  },
+  {
+   "id": "q059",
+   "dosya": "q059.mp3",
+   "metin": "Public opinion on the reform has shifted markedly since the initial announcement, with support dwindling steadily.",
+   "sha1": "bbe390a062779738e6e7dbf2978267e932b29d17",
+   "sure_sn": 9.233
+  },
+  {
+   "id": "q060",
+   "dosya": "q060.mp3",
+   "metin": "Neither the manager nor the employees were informed about the restructuring plan before it was announced.",
+   "sha1": "40ac46df8a1fc579af76eb52fc0d469985424580",
+   "sure_sn": 7.996
+  },
+  {
+   "id": "q061",
+   "dosya": "q061.mp3",
+   "metin": "Either the director or the board members have to approve the budget before the project can commence.",
+   "sha1": "af9b5fc11ab5e79137bd8204704c4c6436718f63",
+   "sure_sn": 7.505
+  },
+  {
+   "id": "q062",
+   "dosya": "q062.mp3",
+   "metin": "Neither the research findings nor the clinical data support the hypothesis that the new compound is safer than existing treatments.",
+   "sha1": "09a9e4ed3a14d83d4780de4816b72a510b48c7db",
+   "sure_sn": 11.068
+  },
+  {
+   "id": "q063",
+   "dosya": "q063.mp3",
+   "metin": "Not only did the new policy reduce operational costs, but it also improved employee satisfaction significantly.",
+   "sha1": "b2b4ef2ab3787a6cbe9d7d12cde5a301d7f35572",
+   "sure_sn": 10.257
+  },
+  {
+   "id": "q064",
+   "dosya": "q064.mp3",
+   "metin": "Not only is she the youngest professor in the department, but she has also published more papers than anyone else.",
+   "sha1": "42ff899552198d88d88826584bfaaca4607ae809",
+   "sure_sn": 8.38
+  },
+  {
+   "id": "q065",
+   "dosya": "q065.mp3",
+   "metin": "Not only does the treatment eliminate the symptoms, but it also addresses the underlying cause of the disease.",
+   "sha1": "b3d20e9313364ec61df8c52af12b0f6242b23ca4",
+   "sure_sn": 8.721
+  },
+  {
+   "id": "q066",
+   "dosya": "q066.mp3",
+   "metin": "No sooner had the conference begun than the fire alarm disrupted the proceedings.",
+   "sha1": "eaf75be1663d64f2d002078769289c800423e4b4",
+   "sure_sn": 6.588
+  },
+  {
+   "id": "q067",
+   "dosya": "q067.mp3",
+   "metin": "Hardly had the scientists published their findings when a rival team announced a contradictory discovery.",
+   "sha1": "b180b69641769492b59550e4f1003cf48730e85f",
+   "sure_sn": 8.231
+  },
+  {
+   "id": "q068",
+   "dosya": "q068.mp3",
+   "metin": "Contrary to the initial projections, the economic recovery proved to be far more rapid than anticipated.",
+   "sha1": "da6e9cc4a1f4f0748609f8dabda16d2d534027af",
+   "sure_sn": 9.127
+  },
+  {
+   "id": "q069",
+   "dosya": "q069.mp3",
+   "metin": "As long as the funding remains available, the research team will continue its work on renewable energy sources.",
+   "sha1": "3b276c7bc26e33c62f3865e6d2ca8750fc4c9579",
+   "sure_sn": 8.913
+  },
+  {
+   "id": "q070",
+   "dosya": "q070.mp3",
+   "metin": "As long as employees adhere to the safety protocols, workplace accidents can be significantly reduced.",
+   "sha1": "602effa4d4b59d356b0d0cb7717520a96a14e7ae",
+   "sure_sn": 8.636
+  },
+  {
+   "id": "q071",
+   "dosya": "q071.mp3",
+   "metin": "As far as the committee is concerned, the proposal meets all the necessary criteria for approval.",
+   "sha1": "d662d5ab95b455b091bcf274a325e9dcaadd416f",
+   "sure_sn": 7.932
+  },
+  {
+   "id": "q072",
+   "dosya": "q072.mp3",
+   "metin": "As long as the patient takes the prescribed medication regularly, a full recovery is expected within three months.",
+   "sha1": "3ea1ef78289e021f18c993613abb4db44caee372",
+   "sure_sn": 9.255
+  },
+  {
+   "id": "q073",
+   "dosya": "q073.mp3",
+   "metin": "The government reduced import tariffs so that domestic manufacturers could access cheaper raw materials.",
+   "sha1": "187d069fdf882256daf9dfd2c9e0f3639cb61c34",
+   "sure_sn": 8.871
+  },
+  {
+   "id": "q074",
+   "dosya": "q074.mp3",
+   "metin": "The researchers simplified their methodology in order to make the study replicable by independent laboratories.",
+   "sha1": "98732914d8be8303f80ae50ebcac0db53c38d32f",
+   "sure_sn": 8.956
+  },
+  {
+   "id": "q075",
+   "dosya": "q075.mp3",
+   "metin": "The company updated its privacy policy so that users would have greater control over their personal data.",
+   "sha1": "ddbecb59a393e59e96fc5e0c710ab88fa60689a3",
+   "sure_sn": 8.615
+  },
+  {
+   "id": "q076",
+   "dosya": "q076.mp3",
+   "metin": "Rather than investing in expensive equipment, the startup decided to outsource its manufacturing operations.",
+   "sha1": "595347bddfada6a7ca369fd4dcf58202e18fd3f7",
+   "sure_sn": 9.084
+  },
+  {
+   "id": "q077",
+   "dosya": "q077.mp3",
+   "metin": "The scientist chose to publish preliminary results rather than wait for the final confirmation of her hypothesis.",
+   "sha1": "f0f19186c9a6ccfed4fef77483b1c97a254fa64d",
+   "sure_sn": 9.639
+  },
+  {
+   "id": "q078",
+   "dosya": "q078.mp3",
+   "metin": "Instead of expanding to new markets, the company focused on strengthening its position in existing ones.",
+   "sha1": "b954d3b2f5c930efca8f30e897fc869b087dc430",
+   "sure_sn": 8.145
+  },
+  {
+   "id": "q079",
+   "dosya": "q079.mp3",
+   "metin": "By no means should the experimental results be interpreted as conclusive without further peer review.",
+   "sha1": "6138d9ede0b8e1d72f0b976315fe05051a0a418e",
+   "sure_sn": 8.337
+  },
+  {
+   "id": "q080",
+   "dosya": "q080.mp3",
+   "metin": "The success of the pilot project is by no means a guarantee that the full-scale implementation will proceed smoothly.",
+   "sha1": "d4b9d89582f7be3a7a02ce77959da2f323037a9e",
+   "sure_sn": 9.66
+  },
+  {
+   "id": "q081",
+   "dosya": "q081.mp3",
+   "metin": "Far from being a burden, the regulations introduced by the new administration actually stimulated innovation in the sector.",
+   "sha1": "9b9226d25afff01f279c8f2dcbf652d2001dc998",
+   "sure_sn": 10.364
+  },
+  {
+   "id": "q082",
+   "dosya": "q082.mp3",
+   "metin": "By no means did the committee intend to exclude minority voices from the decision-making process.",
+   "sha1": "305ba2bec4c2392304f4d37526bec3f22eccb74b",
+   "sure_sn": 8.295
+  },
+  {
+   "id": "q083",
+   "dosya": "q083.mp3",
+   "metin": "The architect should have consulted the structural engineer before submitting the final design to the client.",
+   "sha1": "19020d81d4292d2296b6f0e07640832a058daf9a",
+   "sure_sn": 7.953
+  }
+ ]
+}

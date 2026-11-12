@@ -973,6 +973,8 @@ body.tema-adacayi #dashboard :is(.klod-geri-btn,.klod-hata-btn):hover{border-col
 body.tema-adacayi #dashboard .klod-soru-karti{background:var(--ad-kart);border-color:var(--ad-cizgi);box-shadow:var(--ad-golge)}
 body.tema-adacayi #dashboard .klod-kart-etiket{color:var(--ad-koyu)}
 body.tema-adacayi #dashboard .klod-kart-siklar li::marker{color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-kart-dinle{color:var(--ad-koyu);border-color:var(--ad-koyu)}
+body.tema-adacayi #dashboard .klod-kart-dinle.caliyor{background:var(--ad-koyu);color:#fff}
 body.tema-adacayi #dashboard .klod-rol-s{color:var(--ad-koyu-2);background:var(--ad-acik);border-radius:4px;padding:0 4px}
 body.tema-adacayi #dashboard .klod-rol-v{color:var(--ad-tuzak);background:var(--ad-tuzak-zemin);border-radius:4px;padding:0 4px}
 body.tema-adacayi #dashboard .klod-rol-o{color:var(--ad-metin);background:var(--ad-bej);border-radius:4px;padding:0 4px}
