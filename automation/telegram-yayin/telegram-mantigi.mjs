@@ -107,11 +107,12 @@ export function tekKonuSec(konuGirdi, kuyruk, reelsDurum, tg, simdi) {
 // Düz metin gönderilir (parse_mode yok) — kaçış hatası riski olmasın.
 export function reelsAciklamasi(aciklama) {
   const ham = String(aciklama ?? "");
-  // Emojisiz şablon (konu 79+, kanca satırı "Cevabını yoruma yaz." ile biter): Telegram metni de emojisiz kalır
-  const sade = ham.includes("Cevabını yoruma yaz.");
+  // Emojisiz şablon (konu 75+): Telegram metni de emojisiz kalır. İlk satır konudan konuya değişir,
+  // bu yüzden şablonun emojisiz takip satırı da tanınır; "yoruma yaz" çağrısı cümle içinde küçük harfle de gelebilir.
+  const sade = /[Cc]evabını yoruma yaz\./.test(ham) || /^Yarın yeni bir tuzak\. Kaçırmamak için takip et\.$/m.test(ham);
   let metin = (sade
     ? ham.replace(/\.\s*Link biyografide\.?/g, `: ${SITE}`).replace(/Link biyografide\.?/g, SITE)
-        .replace(/Cevabını yoruma yaz\./g, "Cevabını düşün, sonra izle.")
+        .replace(/([Cc])evabını yoruma yaz\./g, "$1evabını düşün, sonra izle.")
     : ham.replace(/Link biyografide\.?/g, `👉 ${SITE}`))
     .replace(/👇 Cevabını yoruma yaz!/g, "🤔 Cevabını düşün, sonra izle.")
     .trim();

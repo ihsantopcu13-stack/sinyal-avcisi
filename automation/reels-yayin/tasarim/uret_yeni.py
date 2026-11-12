@@ -238,7 +238,10 @@ def kuyruk_kaydi(k):
     # 12 Kasım 2026 (konu 79+): açıklama metinleri emojisiz ve ünlemsiz. Kuyruktaki eski kayıtlar
     # (56-78) yeniden üretilmez; yayın anındaki dönüşümler (kuyruk-mantigi.mjs merakliAciklama,
     # telegram-mantigi.mjs reelsAciklamasi) iki biçimi de tanır.
-    govde = (f"{k['kanca']} Cevabını yoruma yaz.\n\n{k['kural']}\n\nSinyal kelimeler: {k['sinyal']}\n\n"
+    # "aciklama_giris" varsa açıklamanın ilk satırı odur (videodaki kanca ve YouTube başlığı değişmez).
+    # Üç tip dönüşümlü yazılır: somut risk, meydan okuma, merak. Yoksa eski kalıp kullanılır.
+    giris = k.get("aciklama_giris") or f"{k['kanca']} Cevabını yoruma yaz."
+    govde = (f"{giris}\n\n{k['kural']}\n\nSinyal kelimeler: {k['sinyal']}\n\n"
              f"Örnek:\n{ornek}\n\nAvcı kuralı: {k['tuzak_metin']}\n\n"
              f"Bu, serinin {n}. konusu. Her gün 08:30, 13:00 ve 17:30'da yeni konu.\n\n")
     ai = "Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
