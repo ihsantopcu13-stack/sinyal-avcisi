@@ -220,6 +220,7 @@
     {
       "konu": 79, "baslik": "Affect / Effect", "tuzak": true,
       "kanca": "Affect mi, effect mi? Boşluğun önüne bak.",
+      "aciklama_giris": "Tek harf fark var ama biri fiil, öbürü isim. Karıştırırsan soru gider. Boşluğa hangisi gelir?",
       "cumle": "The new law had a significant ____ on small businesses.",
       "dogru": "effect",
       "hap": "a / the + EFFECT", "hap_alt": "affect = fiil, etkilemek",
@@ -232,6 +233,7 @@
     {
       "konu": 80, "baslik": "Rise / Raise", "tuzak": true,
       "kanca": "Prices rose mu, prices raised mı? Nesne var mı diye bak.",
+      "aciklama_giris": "Süre tut, bu soruyu 3 saniyede çöz. Tek ipucu: boşluktan sonra bir nesne var. Cevabını yoruma yaz.",
       "cumle": "The central bank ____ interest rates twice last year.",
       "dogru": "raised",
       "hap": "raise + NESNE", "hap_alt": "rise nesne almaz",
@@ -244,6 +246,7 @@
     {
       "konu": 81, "baslik": "Economic / Economical", "tuzak": true,
       "kanca": "Economic mi, economical mı? Biri ekonomiyle ilgili, öbürü hesaplı.",
+      "aciklama_giris": "Sınavda sık yapılan bir hata: economic ile economical'ı eş anlamlı sanmak. Biri ekonomiyle ilgili, öbürü hesaplı demek.",
       "cumle": "The government announced a new ____ policy to reduce inflation.",
       "dogru": "economic",
       "hap": "economic = EKONOMİYLE İLGİLİ", "hap_alt": "economical = hesaplı, az harcayan",
@@ -256,6 +259,7 @@
     {
       "konu": 82, "baslik": "Used to / Be used to", "tuzak": true,
       "kanca": "Used to live mı, used to living mi? Önündeki be fiiline bak.",
+      "aciklama_giris": "Cümlede küçücük bir is var. Onu görmezsen yalın fiili işaretler, soruyu kaybedersin. Boşluğa ne gelmeli?",
       "cumle": "After ten years in Norway, she is used to ____ in cold weather.",
       "dogru": "living",
       "hap": "be used to + V-ING", "hap_alt": "used to + yalın fiil",
@@ -268,6 +272,7 @@
     {
       "konu": 83, "baslik": "Suggest / Recommend that", "tuzak": true,
       "kanca": "Suggested that he rests mi, rest mi? Fiile s takısı gelir mi?",
+      "aciklama_giris": "Özne the manager, fiil submit. Sonuna s koyar mısın? 5 saniyede karar ver, cevabını yoruma yaz.",
       "cumle": "The committee recommended that the manager ____ the report by Friday.",
       "dogru": "submit",
       "hap": "suggest that + YALIN FİİL", "hap_alt": "Özne he olsa da s takısı yok",
@@ -280,6 +285,7 @@
     {
       "konu": 84, "baslik": "Other / Another / The other", "tuzak": true,
       "kanca": "Another students mı, other students mı? İsim tekil mi, çoğul mu?",
+      "aciklama_giris": "Another students kulağa doğru geliyor, o yüzden sık işaretleniyor. Neden yanlış olduğunu biliyor musun?",
       "cumle": "Some students prefer online classes, while ____ students learn better in a classroom.",
       "dogru": "other",
       "hap": "other + ÇOĞUL İSİM", "hap_alt": "another + tekil isim",
@@ -292,6 +298,7 @@
     {
       "konu": 85, "baslik": "Paragraph Completion: This + Noun", "tuzak": false,
       "kanca": "Boşluktan sonra this delay yazıyor. Gecikmeyi hangi cümle anlatıyor?",
+      "aciklama_giris": "Boşluktan sonraki this delay'i atlarsan konuyla ilgili görünen yanlış şıkka gidersin. Gecikmeyi hangi cümle anlatıyor?",
       "cumle": "The city opened a new tram line last year. ____ Because of this delay, many shops on the route lost customers.",
       "dogru": "However, its construction took two years longer than planned.",
       "hap": "this + isim → GERİYE BAK", "hap_alt": "Karşılığı boşluktaki cümlede olmalı",
@@ -304,6 +311,7 @@
     {
       "konu": 86, "baslik": "Irrelevant Sentence: Zamir Takibi", "tuzak": false,
       "kanca": "Dördüncü cümledeki they kim? Fazla cümleyi o ele verir.",
+      "aciklama_giris": "Dört cümleden biri fazla. Hepsini baştan okumadan, they zamirine bakarak 10 saniyede bul. Cevabını yoruma yaz.",
       "cumle": "(I) Solar panels have become much cheaper. (II) As a result, more families install them on their roofs. (III) Wind turbines are usually built far from cities. (IV) They also sell the extra electricity to the grid.",
       "dogru": "III",
       "hap": "Zamiri takip et", "hap_alt": "They kime gidiyor?",
@@ -316,6 +324,7 @@
     {
       "konu": 87, "baslik": "Süre Planı", "tuzak": false,
       "kanca": "80 soru, 180 dakika. Bir soruya ortalama ne kadar süre düşüyor?",
+      "aciklama_giris": "Sınava girmeden önce bilmen gereken bir sayı var: soru başına kaç dakikan olduğu. Hesapladın mı?",
       "cumle": "80 soru, 180 dakika. Soru başına ortalama ____.",
       "dogru": "2 dakika 15 saniye",
       "hap": "Kısa soru: 1 dakika", "hap_alt": "Artan süre paragraflara kalır",
@@ -328,6 +337,7 @@
     {
       "konu": 88, "baslik": "Boş Bırakma", "tuzak": false,
       "kanca": "Emin olmadığın soruyu boş mu bırakmalısın?",
+      "aciklama_giris": "Emin olmadığın beş soruyu boş bırakırsan beş ihtimali de masada bırakırsın. YDS'de yanlışın bir cezası var mı?",
       "cumle": "YDS ve YÖKDİL'de yanlış cevap doğruyu ____.",
       "dogru": "götürmez",
       "hap": "Boş bırakma", "hap_alt": "Yanlışın cezası yok",

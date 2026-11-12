@@ -62,7 +62,23 @@ await test("Reels açıklaması: emojisiz şablon (konu 79+) Telegram'da da emoj
   );
 });
 
+await test("Reels açıklaması: emojisiz şablonda ilk satır serbest; çağrı yoksa ya da küçük harfliyse de emojisiz kalır", () => {
+  assert.equal(
+    reelsAciklamasi("Boşluğa ne gelmeli?\n\nYarın yeni bir tuzak. Kaçırmamak için takip et.\n\nÜcretsiz çalışma planı. Link biyografide."),
+    "Boşluğa ne gelmeli?\n\nYarın yeni bir tuzak. Kaçırmamak için takip et.\n\nÜcretsiz çalışma planı: sinyal-avcisi.com"
+  );
+  assert.equal(
+    reelsAciklamasi("5 saniyede karar ver, cevabını yoruma yaz.\n\nÜcretsiz çalışma planı. Link biyografide."),
+    "5 saniyede karar ver, cevabını düşün, sonra izle.\n\nÜcretsiz çalışma planı: sinyal-avcisi.com"
+  );
+});
+
 const gercekKuyruk = JSON.parse(await readFile(new URL("../../reels-yayin/data/kuyruk.json", import.meta.url), "utf-8"));
+
+await test("gerçek kuyruk: konu 79-88 Telegram metninde emoji yok", () => {
+  for (const o of gercekKuyruk.ogeler.filter((x) => x.konu >= 79 && x.konu <= 88))
+    assert.doesNotMatch(reelsAciklamasi(o.aciklama), /\p{Extended_Pictographic}/u, `Konu ${o.konu}`);
+});
 
 await test("gerçek kuyruktaki tüm açıklamalar Telegram sınırına sığar", () => {
   for (const o of gercekKuyruk.ogeler) assert.ok(reelsAciklamasi(o.aciklama).length <= CAPTION_SINIR, `Konu ${o.konu}`);
