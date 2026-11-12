@@ -106,8 +106,13 @@ export function tekKonuSec(konuGirdi, kuyruk, reelsDurum, tg, simdi) {
 // Telegram kanalında yorum yok → "yoruma yaz" çağrısı düşünme çağrısına çevrilir.
 // Düz metin gönderilir (parse_mode yok) — kaçış hatası riski olmasın.
 export function reelsAciklamasi(aciklama) {
-  let metin = String(aciklama ?? "")
-    .replace(/Link biyografide\.?/g, `👉 ${SITE}`)
+  const ham = String(aciklama ?? "");
+  // Emojisiz şablon (konu 79+, kanca satırı "Cevabını yoruma yaz." ile biter): Telegram metni de emojisiz kalır
+  const sade = ham.includes("Cevabını yoruma yaz.");
+  let metin = (sade
+    ? ham.replace(/\.\s*Link biyografide\.?/g, `: ${SITE}`).replace(/Link biyografide\.?/g, SITE)
+        .replace(/Cevabını yoruma yaz\./g, "Cevabını düşün, sonra izle.")
+    : ham.replace(/Link biyografide\.?/g, `👉 ${SITE}`))
     .replace(/👇 Cevabını yoruma yaz!/g, "🤔 Cevabını düşün, sonra izle.")
     .trim();
   if (metin.length > CAPTION_SINIR) metin = metin.slice(0, CAPTION_SINIR - 1).trimEnd() + "…";

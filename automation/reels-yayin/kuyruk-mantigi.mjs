@@ -152,6 +152,7 @@ export function paylasilacakVideo(video, assetler) {
 // ("Sıradaki video: Passive Voice."). Tanıtım videoları (konu ≥ 200) sıradaki sayılmaz.
 // Satırı olmayan açıklama (konu 1-40, tanıtım) olduğu gibi kalır.
 export const GENEL_TAKIP_SATIRI = "🔔 Yarın yeni bir tuzak. Kaçırmamak için takip et.";
+const GENEL_TAKIP_SATIRI_SADE_RE = /^Yarın yeni bir tuzak\. Kaçırmamak için takip et\.$/m;
 
 export function sonrakiKonu(kuyruk, konu) {
   const i = kuyruk.ogeler.findIndex((o) => o.konu === konu);
@@ -168,6 +169,10 @@ export function siteCagrisi(aciklama) {
 
 export function merakliAciklama(aciklama, sonraki) {
   const metin = String(aciklama ?? "");
-  if (!sonraki?.baslik || !metin.includes(GENEL_TAKIP_SATIRI)) return metin;
-  return metin.replace(GENEL_TAKIP_SATIRI, `🔔 Sıradaki video: ${sonraki.baslik}. Kaçırmamak için takip et.`);
+  if (!sonraki?.baslik) return metin;
+  if (metin.includes(GENEL_TAKIP_SATIRI)) {
+    return metin.replace(GENEL_TAKIP_SATIRI, `🔔 Sıradaki video: ${sonraki.baslik}. Kaçırmamak için takip et.`);
+  }
+  // Emojisiz şablon (konu 79+): satır emojisiz yazılmıştır, sıradaki konu satırı da emojisiz kalır
+  return metin.replace(GENEL_TAKIP_SATIRI_SADE_RE, () => `Sıradaki video: ${sonraki.baslik}. Kaçırmamak için takip et.`);
 }
