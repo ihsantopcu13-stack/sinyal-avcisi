@@ -324,7 +324,7 @@
     {
       "konu": 87, "baslik": "Süre Planı", "tuzak": false,
       "kanca": "80 soru, 180 dakika. Bir soruya ortalama ne kadar süre düşüyor?",
-      "aciklama_giris": "Süre çoğu zaman zor sorularda değil, kolay sorularda oyalanırken bitiyor. Soru başına kaç dakikan olduğunu hesapladın mı?",
+      "aciklama_giris": "Sınava girmeden önce bilmen gereken bir sayı var: soru başına kaç dakikan olduğu. Hesapladın mı?",
       "cumle": "80 soru, 180 dakika. Soru başına ortalama ____.",
       "dogru": "2 dakika 15 saniye",
       "hap": "Kısa soru: 1 dakika", "hap_alt": "Artan süre paragraflara kalır",
