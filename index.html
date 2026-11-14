@@ -9916,6 +9916,8 @@ const TUZAK_HAVUZ=[
 
 let tuzakIdx=0,tuzakAnswered=false,_tuzakRtBaslangic=null,_tuzakRtIdx=null,_tuzakRtAnsweredSlot=null;
 function tuzakGetDailyIdx(){const day=Math.floor(Date.now()/(1000*60*60*24));return day%TUZAK_HAVUZ.length;}
+// Tuzak cümlesinin altındaki "Dinle" (tuzakRender + tuzakSonraki ortak): tıklanınca cümleyi okur.
+const TUZAK_DINLE_BTN=`<button type="button" class="sl-ceviri-btn" id="tuzak-dinle-btn" style="margin:0 0 12px" aria-label="Cümleyi sesli dinle" onclick="const s=this.previousElementSibling;if(s&&window.ttsKaraoke)ttsKaraoke(s.textContent.replace(/[\\x22]/g,''),s,null,{lang:'en-US',preserveMarkup:true})">Dinle</button>`;
 function tuzakRender(){
   const _ytIdx=tuzakGetDailyIdx();
   // Tuzak günlük olarak DETERMİNİSTİK aynı idx'i döner ve bu fonksiyon
@@ -9932,14 +9934,8 @@ function tuzakRender(){
   const z=adaptifZorlukBadge();
   if(lbl)lbl.innerHTML='Günlük Tuzak — '+bugun.getDate()+' '+aylar[bugun.getMonth()]+' '+bugun.getFullYear()+' · Soru '+(tuzakIdx+1)+'/'+TUZAK_HAVUZ.length+` <span class="zorluk-badge ${z.cls}">${z.seviye}</span>`;
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})"  onmouseenter="if(window.ttsKaraoke)ttsKaraoke('${o.replace(/'/g,"\\'")}',this,null,{lang:'tr-TR'})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn tuzak-paylas" style="display:none;margin-left:6px">Paylaş</button>`;
-  // TTS: İngilizce cümle sonra Türkçe soru
-  const tuzakCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
-  setTimeout(()=>{
-    ttsSpeak(tuzakCumle,'en-US',()=>{
-      });
-  },400);
-  setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),2500);
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div>${TUZAK_DINLE_BTN}<div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn tuzak-paylas" style="display:none;margin-left:6px">Paylaş</button>`;
+  // Otomatik okuma ve şık hover sesi yok (ücretli /api/tts*): ses yalnız #tuzak-dinle-btn tıklamasıyla.
 }
 function tuzakAns(btn,correct,dogru){
   if(tuzakAnswered)return;tuzakAnswered=true;
@@ -9978,7 +9974,7 @@ function tuzakSonraki(){
   tuzakIdx=_ytIdx;tuzakAnswered=false;
   const soru=TUZAK_HAVUZ[tuzakIdx];
   const cont=document.getElementById('tuzak-container');if(!cont)return;
-  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div><div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})" onmouseenter="if(window.ttsKaraoke)ttsKaraoke('${o.replace(/'/g,"\\'")}',this,null,{lang:'tr-TR'})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn tuzak-paylas" style="display:none;margin-left:6px">Paylaş</button>`;
+  cont.innerHTML=`<div class="tuzak-q">${soru.q}</div><div class="tuzak-sent">${soru.sent}</div>${TUZAK_DINLE_BTN}<div class="tuzak-opts" id="tuzak-opts-inner">${soru.opts.map((o,i)=>`<button class="tuzak-opt" onclick="tuzakAns(this,${i===soru.dogru},${soru.dogru})">${o}</button>`).join('')}</div><div class="tuzak-fb" id="tuzak-fb-inner"></div><button class="tuzak-next-btn" id="tuzak-next-btn" onclick="tuzakSonraki()">Sonraki soru →</button><button class="tuzak-next-btn" id="tuzak-paylas-btn tuzak-paylas" style="display:none;margin-left:6px">Paylaş</button>`;
 }
 // Tarih etiketini sayfa açılışında set et
 (function(){
@@ -11623,8 +11619,8 @@ function paragrafSec(idx){
         <span style="background:var(--sl);color:var(--signal);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em">${p.baslik.toUpperCase()}</span>
         <span class="p-seviye${p.seviye==='Zor'?' zor':''}">${p.seviye}</span>
       </div>
-      <div style="font-size:16px;line-height:1.9;color:var(--ink);border-left:3px solid var(--signal);padding-left:16px;cursor:pointer" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.innerText,this,null,{preserveMarkup:true})">${p.metin}</div>
-      <div style="font-size:13px;color:var(--muted);margin-top:12px">Paragrafın üstüne gel, kelime kelime sesli dinle.</div>
+      <div id="paragraf-metin" style="font-size:16px;line-height:1.9;color:var(--ink);border-left:3px solid var(--signal);padding-left:16px">${p.metin}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px"><button type="button" class="sl-ceviri-btn" id="paragraf-dinle-btn" aria-label="Paragrafı sesli dinle" onclick="const m=document.getElementById('paragraf-metin');if(m&&window.ttsKaraoke)ttsKaraoke(m.innerText,m,null,{preserveMarkup:true})">Dinle</button><span style="font-size:13px;color:var(--muted)">Dinle'ye bas, paragrafı kelime kelime sesli dinle.</span></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:14px">
       ${p.sorular.map((s,si)=>`
