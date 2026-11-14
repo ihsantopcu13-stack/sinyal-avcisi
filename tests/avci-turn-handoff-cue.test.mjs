@@ -133,6 +133,7 @@ function sandboxKur({ fetchOk = true, ttsOnEndGecikmeMs = 0, micBtnVarMi = true 
       if (!fetchOk) throw new Error("network hatası (simüle)");
       return { ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) };
     },
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: (text, lang, onEnd) => new Promise((resolve) => {
       setTimeout(() => { if (onEnd) onEnd(); resolve({ fakeAudio: true }); }, ttsOnEndGecikmeMs);
     }),

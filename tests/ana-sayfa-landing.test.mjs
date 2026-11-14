@@ -171,6 +171,13 @@ kontrol("slRender hiç otomatik okuma yapmıyor (ses yalnız #sl-dinle-btn)", ((
   const sat = fnGovde("satPratikRender");
   kontrol("SAT: cümle, vurgulu kelime ve şıklarda onmouseenter yok", sat.length > 0 && !/onmouseenter/i.test(sat));
   kontrol("SAT: soru açılışında otomatik okuma yok, yalnız #sat-dinle-btn tıklaması", !TTS_CAGRI.test(sat.replace(/<button[^>]*id="sat-dinle-btn"[\s\S]*?<\/button>/, "")) && /id="sat-dinle-btn"[^>]*onclick="[^"]*ttsKaraoke\(/.test(sat));
+
+  // ---- Ücretli ses anahtarı: otomatik okumalar varsayılan kapalı, "Sesi aç" ile oturumluk açılır ----
+  kontrol("Hoş geldin mesajı otomatik okunmuyor", (() => { const g = fnGovde("hosgeldinAnimasyonuGoster"); return g.length > 0 && !TTS_CAGRI.test(g); })());
+  kontrol("Ücretli ses anahtarı varsayılan kapalı (sessionStorage 'sa_ucretli_ses' yoksa false)", /function ucretliSesAcikMi\(\)\{\s*\n\s*try\{if\(sessionStorage\.getItem\(UCRETLI_SES_KEY\)==='1'\)return true;\}catch\(e\)\{\}\s*\n\s*return _ucretliSesBellek===true;/.test(html) && /let _ucretliSesBellek=false;/.test(html));
+  kontrol("KLOD cevabı yalnız ses açıksa okunuyor", /globalThis\._klodAdmin!==true&&typeof ucretliSesAcikMi==='function'&&ucretliSesAcikMi\(\)\)\{/.test(html));
+  kontrol("Konuşma pratiği cevabı yalnız ses açıksa okunuyor", (() => { const g = fnGovde("konusmaGonder"); return /if \(window\.ttsSpeakEleven && typeof ucretliSesAcikMi === 'function' && ucretliSesAcikMi\(\)\) ttsSpeakEleven\(/.test(g) && (g.match(/ttsSpeakEleven\(/g) || []).length === 1; })());
+  kontrol("'Sesi aç' düğmesi KLOD, Canlı Ders ve Konuşma pratiğinde (3 adet, aynı anahtar)", ["klod-ucretli-ses-btn", "cl-ucretli-ses-btn", "konusma-ucretli-ses-btn"].every((id) => new RegExp(`id="${id}" data-ucretli-ses[^>]*onclick="ucretliSesDegistir\\(\\)"`).test(html)));
 }
 
 // ---- ÖLÇÜM: davranış (vm) ----

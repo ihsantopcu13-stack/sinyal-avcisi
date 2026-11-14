@@ -159,6 +159,7 @@ function sandboxKur({ fetchOk = true, fetchGecikmeMs = 0, ttsOnEndGecikmeMs = 0,
       if (!fetchOk) throw new Error("network hatası (simüle)");
       return { ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) };
     },
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: (text, lang, onEnd) => new Promise((resolve) => {
       setTimeout(() => { if (onEnd) onEnd(); resolve({ fakeAudio: true }); }, ttsOnEndGecikmeMs);
     }),
@@ -303,6 +304,7 @@ function bekle(ms) { return new Promise((r) => setTimeout(r, ms)); }
     _aktifSoruModulu: null, avciAktifSinyalLabBaglamiAl: () => null,
     avciSonrakiSoruKomutuMu: () => false, avciSinyalPratikKomutuMu: () => false,
     fetch: async () => { fetchCagrilari.push(1); if (ilkSeferHataVersin) { ilkSeferHataVersin = false; throw new Error("ilk seferde hata"); } return { ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) }; },
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: (text, lang, onEnd) => new Promise((resolve) => { if (onEnd) onEnd(); resolve({}); }),
     ttsNesil: 0, pAudio: null,
   };
@@ -361,6 +363,32 @@ function bekle(ms) { return new Promise((r) => setTimeout(r, ms)); }
   // Şimdi Tur A'nın ESKİ, gecikmeli TTS callback'i ateşleniyor (200ms doldu)
   await bekle(220);
   kontrol("26) Tur A'nın GECİKMELİ/stale TTS bitişi, Tur B'nin state'ini (SPEAKING) BOZMADI — hâlâ SPEAKING", t.context.__t_getTurnState() === "SPEAKING");
+}
+
+// 27) Ücretli ses KAPALIYKEN (varsayılan, "Sesi aç"a basılmamış): KLOD cevabı okunmaz,
+//     ttsSpeak HİÇ çağrılmaz ve state takılmadan IDLE'a döner (mikrofon akışı kilitlenmez).
+{
+  const t = sandboxKur({ ttsOnEndGecikmeMs: 30 });
+  let ttsSayisi = 0;
+  t.context.ucretliSesAcikMi = () => false;
+  t.context.ttsSpeak = () => { ttsSayisi++; return Promise.resolve({}); };
+  t.inp.value = "merhaba";
+  await t.context.dnavChat();
+  kontrol("27a) ses kapalıyken KLOD cevabı için ttsSpeak HİÇ çağrılmadı", ttsSayisi === 0, String(ttsSayisi));
+  kontrol("27b) ses kapalıyken cevap gelince state hemen IDLE (SPEAKING'de takılmıyor)", t.context.__t_getTurnState() === "IDLE");
+  t.inp.value = "ikinci soru";
+  await t.context.dnavChat();
+  kontrol("27c) ses kapalıyken ikinci istek bloklanmıyor (2 fetch)", t.fetchCagrilari.length === 2, String(t.fetchCagrilari.length));
+}
+// 28) ucretliSesAcikMi tanımlı değilse (fail-safe) okuma YOK
+{
+  const t = sandboxKur();
+  let ttsSayisi = 0;
+  delete t.context.ucretliSesAcikMi;
+  t.context.ttsSpeak = () => { ttsSayisi++; return Promise.resolve({}); };
+  t.inp.value = "merhaba";
+  await t.context.dnavChat();
+  kontrol("28) anahtar fonksiyonu yoksa da ttsSpeak çağrılmıyor ve state IDLE", ttsSayisi === 0 && t.context.__t_getTurnState() === "IDLE");
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);
