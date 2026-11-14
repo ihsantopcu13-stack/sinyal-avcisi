@@ -54,7 +54,7 @@ const BLOK_5HB = slice("// KATMAN 5H-B", "\n\n  // Typing göstergesi", DNAVCHAT
   kontrol("S9) kartı gizleyen tam odak (klod-tam) kapatılıyor: klodTamAyarla(false), kart çiziminden SONRA", /klodTamAyarla\(false\)/.test(BLOK_5HB) && BLOK_5HB.indexOf("klodTamAyarla(false)") > BLOK_5HB.indexOf("klodSoruKartiBaslat()"));
   const SLRENDER_KAYNAK = slice("function slRender(){", "// S+V+O AKADEMİ");
   kontrol("S11) 5H-B sessiz bayrağını slSonraki çevresinde açıp finally ile kapatıyor", /window\.__slSessizAcilis=true;\s*\n\s*try\{slSonraki\(\);\}finally\{window\.__slSessizAcilis=false;\}/.test(BLOK_5HB));
-  kontrol("S12) slRender bayrağı EN BAŞTA okuyor ve otomatik okuma zamanlayıcılarından ÖNCE çıkıyor", SLRENDER_KAYNAK.indexOf("const _slSessiz=window.__slSessizAcilis===true;") > -1 && SLRENDER_KAYNAK.indexOf("const _slSessiz=") < SLRENDER_KAYNAK.indexOf("if(window.__slDeepLinkSoru)") && SLRENDER_KAYNAK.indexOf("if(_slSessiz)return;") < SLRENDER_KAYNAK.indexOf("ttsSpeak(slTemizCumle"));
+  kontrol("S12) slRender HİÇ otomatik okuma yapmıyor (ttsSpeak/ttsKaraoke yok; ses yalnız #sl-dinle-btn)", SLRENDER_KAYNAK.length > 0 && !/\b(ttsSpeak|ttsKaraoke)\s*\(|speechSynthesis\.speak/.test(SLRENDER_KAYNAK));
   const avciCozum = readFileSync(path.join(ROOT, "assets", "modules", "avci-cozum.js"), "utf-8");
   kontrol("S13) kuyruk yolu (avciKuyrukSonraki → soruGoster) slRender'ı SENKRON çağırıyor — bayrak bu yolu da kapsar", /window\.__slDeepLinkSoru=s;slRender\(\);/.test(avciCozum));
   kontrol("S10) tam odak sınıfı kartı gerçekten gizliyor (S9'un nedeni — CSS hâlâ böyle)", /body\.klod-odak\.klod-tam [^{]*\.klod-soru-karti\{display:none!important\}/.test(html));
@@ -147,26 +147,26 @@ function sandboxKur() {
   kontrol("1m) sessiz bayrağı çağrıdan sonra kapandı (sızıntı yok)", t.sandbox.window.__slSessizAcilis === false);
 }
 
-// 6) Sinyal Lab'ın NORMAL açılışı (sonraki soru düğmesi = slSonraki) okumayı HÂLÂ başlatıyor
+// 6) Sinyal Lab'ın NORMAL açılışı (Sonraki soru düğmesi = slSonraki) da artık SESSİZ
 {
   const t = sandboxKur();
   t.context.__t_setAktifModul("sinyal_lab");
   t.context.slSonraki();
   const kurulan = t.zamanlayicilar.map((z) => z.ms);
   t.zamanlayicilariCalistir();
-  kontrol("6a) normal açılışta 2 okuma zamanlayıcısı kuruldu (600 ms cümle, 2500 ms soru)", JSON.stringify(kurulan) === "[600,2500]", JSON.stringify(kurulan));
-  kontrol("6b) normal açılışta ttsSpeak 2 kez çağrıldı: İngilizce cümle (en-US) + Türkçe soru (tr-TR)", t.ttsCagrilari.length === 2 && t.ttsCagrilari[0].dil === "en-US" && t.ttsCagrilari[1].dil === "tr-TR" && t.ttsCagrilari[1].metin === Q2.q, JSON.stringify(t.ttsCagrilari));
+  kontrol("6a) normal açılışta okuma zamanlayıcısı (600/2500 ms) kurulmadı", !kurulan.includes(600) && !kurulan.includes(2500), JSON.stringify(kurulan));
+  kontrol("6b) normal açılışta ttsSpeak 0, fetch 0 (ücretli /api/tts* yok); soru yine açıldı", t.ttsCagrilari.length === 0 && t.fetchCagrilari.length === 0 && t.context.__t_durum().soruId === Q2.id, JSON.stringify(t.ttsCagrilari));
 }
 
-// 7) Sessiz açılıştan SONRAKİ normal açılış yine okunuyor (bayrak sızmadı)
+// 7) 5H-B sessiz açılışından sonra normal açılış da sessiz (bayrak ne olursa olsun okuma yok)
 {
   const t = sandboxKur();
-  t.context.__probe5HB("soru getir", fakeBody(), fakeInp(), null); // sessiz (q002)
+  t.context.__probe5HB("soru getir", fakeBody(), fakeInp(), null); // q002
   t.zamanlayicilariCalistir();
   const sessizTts = t.ttsCagrilari.length;
   t.context.slSonraki(); // Sinyal Lab'daki "Sonraki soru" (q003)
   t.zamanlayicilariCalistir();
-  kontrol("7) 5H-B sessiz açılışında 0 TTS, ardından normal açılışta 2 TTS (bayrak sızmadı)", sessizTts === 0 && t.ttsCagrilari.length === 2 && t.context.__t_durum().soruId === Q3.id, `${sessizTts} → ${t.ttsCagrilari.length}`);
+  kontrol("7) 5H-B açılışında 0 TTS, ardından normal açılışta da 0 TTS; bayrak kapalı", sessizTts === 0 && t.ttsCagrilari.length === 0 && t.context.__t_durum().soruId === Q3.id && t.sandbox.window.__slSessizAcilis === false, `${sessizTts} → ${t.ttsCagrilari.length}`);
 }
 
 // 8) slSonraki hata atsa bile bayrak kapanıyor (finally)
@@ -238,13 +238,13 @@ function sandboxKur() {
   }
 }
 
-// 10) KONTROL: modül aktifken "Sonraki soru" (5H'nin diğer ifadeleri) okumayı HÂLÂ başlatıyor
+// 10) Modül aktifken KLOD'da "Sonraki soru" (5H'nin diğer ifadeleri) de okuma başlatmıyor
 {
   const t = sandboxKur();
   t.context.__t_setAktifModul("sinyal_lab");
   const r = t.context.__probe5H("Sonraki soru.", fakeBody(), fakeInp());
   t.zamanlayicilariCalistir();
-  kontrol("10) KONTROL: modül aktifken 'Sonraki soru.' → ttsSpeak 2 kez (en-US + tr-TR), davranış değişmedi", r === undefined && t.ttsCagrilari.length === 2 && t.ttsCagrilari[0].dil === "en-US" && t.ttsCagrilari[1].dil === "tr-TR", JSON.stringify(t.ttsCagrilari));
+  kontrol("10) modül aktifken 'Sonraki soru.' → soru açıldı, ttsSpeak 0, fetch 0", r === undefined && t.context.__t_durum().soruId === Q2.id && t.ttsCagrilari.length === 0 && t.fetchCagrilari.length === 0, JSON.stringify(t.ttsCagrilari));
 }
 
 console.log(`\nTOPLAM: ${toplam} test, ${basarisiz} başarısız.`);

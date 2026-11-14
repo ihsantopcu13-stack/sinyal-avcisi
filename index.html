@@ -11215,10 +11215,8 @@ function faz2DeepLinkUygula(){
 
 function slRender(){
   let havuz,soru;
-  // Sessiz açılış (KATMAN 5H-B, KLOD "soru getir"): çağıran taraf bayrağı
-  // yalnız bu senkron çağrı süresince açar ve finally ile kapatır; burada
-  // en başta okunur ki aşağıdaki otomatik okuma zamanlayıcıları kurulmasın.
-  const _slSessiz=window.__slSessizAcilis===true;
+  // Otomatik sesli okuma YOK (ücretli /api/tts*): ses yalnız #sl-dinle-btn
+  // tıklamasıyla başlar. Çağıranların açtığı __slSessizAcilis bayrağı artık etkisiz.
   // FAZ 2 deep-link override — bir kerelik: tüketilince temizlenir ki
   // sonraki "Sonraki soru" tıklaması normal filtreli akışa döner.
   if(window.__slDeepLinkSoru){
@@ -11301,16 +11299,8 @@ function slRender(){
   if(typeof avciBoardTemizle==='function')avciBoardTemizle(); // KATMAN 5E — önceki sorunun tahta vurgusu/paneli yeni soruya sızmaz
   _slRtBaslangic=rtBaslat(); // QUESTION_VISIBLE — soru DOM'a şimdi yazıldı
   if(typeof avciMotorSoruAcildi==='function')avciMotorSoruAcildi(soru); // AVCI çözüm motoru: mod çubuğu + ipucu sıfırlanır
-  // TTS: İngilizce cümle, sonra Türkçe soru (sessiz açılışta HİÇ kurulmaz:
-  // /api/tts ve /api/tts-eleven ücretli)
-  if(_slSessiz)return;
-  const slTemizCumle=soru.sent.replace(/<[^>]*>/g,'').replace(/"/g,'');
-  setTimeout(()=>{
-    ttsSpeak(slTemizCumle,'en-US',()=>{
-    });
-  },600);
-  // Türkçe soru sesli oku
-  setTimeout(()=>ttsSpeak(soru.q,'tr-TR',null),2500);
+  // Otomatik okuma (600 ms İngilizce cümle + 2500 ms Türkçe soru) kaldırıldı:
+  // Sonraki soru / sabah listesi / Öğrenme Yolu / KLOD 5H dahil HİÇBİR açılışta ses yok.
 }
 // ============================================================
 // S+V+O AKADEMİ
