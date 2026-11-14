@@ -37,7 +37,7 @@ a.contact{color:var(--signal);text-decoration:none}
 <div class="wrap">
   <a class="back" href="/">← Sinyal Avcısı'na dön</a>
   <h1>Gizlilik Politikası</h1>
-  <p class="updated">Son güncelleme: 11 Kasım 2026</p>
+  <p class="updated">Son güncelleme: 14 Kasım 2026</p>
 
   <p>Bu metin, genel bilgilendirme amacıyla hazırlanmıştır ve Sinyal Avcısı'nı ("platform", "biz") kullanırken hangi verilerin toplanabileceğini, nasıl kullanıldığını ve hangi üçüncü taraf hizmetlerin devrede olduğunu açıklar.</p>
 
@@ -48,8 +48,8 @@ a.contact{color:var(--signal);text-decoration:none}
   <p>Toplanan veriler, platformu nasıl kullandığınıza göre değişir:</p>
   <ul>
     <li><strong>Hesap oluşturursanız:</strong> e-posta adresiniz ve (tercih ederseniz) e-posta/şifre kombinasyonunuz Supabase üzerinden saklanır. "Google ile giriş yap" seçeneğini kullanırsanız, Google hesabınızın Supabase Auth aracılığıyla paylaştığı temel profil bilgileri (ad, e-posta adresi) kimlik doğrulama amacıyla alınır — bu, sadece platforma giriş yapmanız için kullanılır.</li>
-    <li><strong>Ücretsiz e-kitap indirirseniz:</strong> e-posta adresiniz, e-kitabı göndermek amacıyla kaydedilir.</li>
-    <li><strong>İlerleme verileri:</strong> streak, XP, tamamlanan konular ve hata defteri gibi bilgiler — giriş yaptıysanız hesabınızla ilişkilendirilerek, giriş yapmadıysanız sadece kendi tarayıcınızda (bkz. "Yerel depolama" altında) saklanır.</li>
+    <li><strong>30 Günlük Metin Fetih Kılavuzu (ücretsiz e-kitap):</strong> ana sayfadaki formdan e-kitabı isterseniz e-posta adresiniz Supabase'deki e-posta listemize kaydedilir ve kılavuzun indirme bağlantısı Resend aracılığıyla bu adrese gönderilir. Adresiniz e-kitabı göndermek amacıyla kullanılır; silinmesini aşağıdaki iletişim adresinden isteyebilirsiniz.</li>
+    <li><strong>İlerleme verileri:</strong> streak, XP, çözdüğünüz sorular ve hata defteri gibi bilgiler tarayıcınızda tutulur ve sunucularımıza da eşitlenir (ayrıntılar: <a href="#anonim-oturum">"Giriş yapmadan kullanım: anonim oturum ve kurtarma kodu"</a>). Giriş yaptıysanız bu veriler hesabınızla ilişkilendirilir.</li>
     <li><strong>Bildirim izni verirseniz:</strong> tarayıcınızın oluşturduğu push bildirim abonelik bilgisi (bir bağlantı adresi ve şifreleme anahtarları) sadece size bildirim gönderebilmek için saklanır.</li>
     <li><strong>Yorum/testimonial gönderirseniz:</strong> giriş yapmış bir kullanıcı olarak yazdığınız metin, bir onay sürecinden sonra ana sayfada herkese görünür hâle gelebilir.</li>
   </ul>
@@ -70,17 +70,24 @@ a.contact{color:var(--signal);text-decoration:none}
   </ul>
 
   <h2>UTM / kampanya bilgisi (attribution)</h2>
-  <p>Instagram, YouTube gibi kanallardan bir bağlantıyla geldiyseniz, bağlantıdaki kampanya bilgisi (örn. hangi platform, hangi içerik) tarayıcınızın oturum belleğinde (sessionStorage) tutulur. Bu bilgi sadece hangi içeriğin işe yaradığını ölçmek için kullanılır ve kişisel bir veri olarak sunucuya kaydedilmez.</p>
+  <p>Instagram, YouTube gibi kanallardan bir bağlantıyla geldiyseniz, bağlantıdaki kampanya bilgisi (örn. hangi platform, hangi içerik) tarayıcınızın oturum belleğinde (sessionStorage) tutulur. Bu bilgi hangi içeriğin işe yaradığını ölçmek için kullanılır: çözdüğünüz soruların kaydına kampanya kaynağı olarak eklenir ve bu kayıtla birlikte sunucularımıza gönderilir (bkz. <a href="#anonim-oturum">"Giriş yapmadan kullanım: anonim oturum ve kurtarma kodu"</a>). Giriş yaptıysanız bu kayıtlar hesabınızla ilişkilendirilir; giriş yapmadıysanız adınız veya e-postanızla eşleştirilmez.</p>
 
-  <h2>Yerel depolama (localStorage / sessionStorage)</h2>
-  <p>Giriş yapmadan kullanıyorsanız ilerlemeniz (streak, XP, tercihler) tamamen kendi tarayıcınızda saklanır — bu bilgi cihazınızdan çıkmaz, bizim sunucularımıza gönderilmez. Tarayıcı verilerinizi temizlerseniz bu ilerleme kaybolur.</p>
+  <h2 id="anonim-oturum">Giriş yapmadan kullanım: anonim oturum ve kurtarma kodu</h2>
+  <p>Siteyi giriş yapmadan açtığınızda, sizden kişisel bilgi istenmeden Supabase üzerinde anonim bir oturum açılır ve tarayıcınıza rastgele bir tanımlayıcı yazılır. Bu tanımlayıcı adınız veya e-postanızla eşleştirilmez. Bu oturumla sunucularımıza şunlar gönderilir:</p>
+  <ul>
+    <li>Çözdüğünüz sorulara verdiğiniz cevaplar: soru kimliği, modül, seçtiğiniz ve doğru şık, doğru/yanlış bilgisi, cevaplama süresi, ilgili sinyal ve konu. Siteye bir kampanya bağlantısıyla geldiyseniz kampanya kaynağı da (örn. hangi platform) eklenir.</li>
+    <li>XP, seri (streak), son çalışma tarihi, ders ilerlemesi ve bir yanlış için seçtiğiniz neden.</li>
+    <li>Kurtarma profili: rastgele tanımlayıcı, size gösterilen kurtarma kodu (AVCI-XXXX-XXXX), XP, seri, hata defterinizin en fazla 100 kaydı ve girdiyseniz sınav tarihiniz. Bu profil günde en fazla bir kez güncellenir.</li>
+  </ul>
+  <p>Amaç ilerlemenizi korumak ve hangi soru tiplerinde zorlanıldığını görerek içeriği geliştirmektir. Bu eşitleme platformun temel işlevinin parçası olduğu için çerez tercihinizden bağımsız çalışır; Google Analytics ve PostHog ise yalnızca izninizle çalışır.</p>
+  <p>Tercihleriniz ve ilerlemeniz ayrıca tarayıcınızın yerel depolamasında (localStorage) tutulur. Tarayıcı verilerinizi temizlerseniz yerel kopya silinir. Sunucudaki anonim kayıtların silinmesini, kurtarma kodunuzu belirterek aşağıdaki iletişim adresinden isteyebilirsiniz.</p>
 
   <h2>Üçüncü taraf hizmetler</h2>
   <ul>
-    <li><strong>Supabase:</strong> veritabanı, kimlik doğrulama ve dosya depolama altyapısı.</li>
+    <li><strong>Supabase:</strong> veritabanı, kimlik doğrulama (giriş yapmayanlar için anonim oturum dahil) ve dosya depolama altyapısı.</li>
     <li><strong>Google Analytics:</strong> izninizle, toplu kullanım ölçümü.</li>
     <li><strong>PostHog (AB):</strong> izninizle, rastgele bir tanımlayıcı ile kullanım analitiği (oturum kaydı kapalı).</li>
-    <li><strong>Resend:</strong> e-kitap ve bildirim e-postalarının gönderimi.</li>
+    <li><strong>Resend:</strong> 30 Günlük Metin Fetih Kılavuzu e-postası ve bildirim e-postalarının gönderimi.</li>
     <li><strong>Anthropic Claude API (KLOD):</strong> platformdaki AI mentor KLOD'a yazdığınız soru metni, size bir açıklama üretmek amacıyla işlenir; bu metin hesap bilginizle ilişkilendirilmeden işlenir.</li>
   </ul>
 

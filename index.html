@@ -14328,18 +14328,55 @@ function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomod
 // ============================================================
 (function(){
   // Tercih: sa_cookie_ok='1' kabul, '0' ret — ikisi de kayıtlıysa banner tekrar çıkmaz.
+  // Bant açıkken sayfanın altına bant yüksekliği kadar boşluk: içerik (mobilde hero
+  // düğmesi dahil) bandın altında kalıp ulaşılamaz olmasın. Kapanınca geri alınır.
+  let _bantEskiPadding=null;
+  function bantBoslukAyarla(){
+    const b=document.getElementById('sa-cerez-banner');
+    if(!b||b.style.visibility==='hidden'){if(_bantEskiPadding!==null){document.body.style.paddingBottom=_bantEskiPadding;_bantEskiPadding=null;}return;}
+    if(_bantEskiPadding===null)_bantEskiPadding=document.body.style.paddingBottom||'';
+    document.body.style.paddingBottom=b.offsetHeight+'px';
+  }
+  window.addEventListener('resize',bantBoslukAyarla);
+  function bantKapat(){
+    const b=document.getElementById('sa-cerez-banner');
+    if(b)b.remove();
+    bantBoslukAyarla();
+  }
+  // Reddet: daha önce Kabul edilip yazılmış GA çerezlerini (_ga, _ga_PM25HTL46K, _gid, _gat*)
+  // hem bu alan adı hem üst alan adı (.sinyal-avcisi.com) için siler.
+  function gaCerezleriniSil(){
+    const adlar=document.cookie.split(';').map(c=>c.split('=')[0].trim())
+      .filter(a=>a==='_ga'||a.indexOf('_ga_')===0||a==='_gid'||a==='_gat'||a.indexOf('_gat_')===0);
+    const host=location.hostname,kok=host.replace(/^www\./,'');
+    const alanlar=['',host,kok,'.'+kok];
+    adlar.forEach(a=>alanlar.forEach(d=>{
+      document.cookie=a+'=; Max-Age=0; path=/'+(d?'; domain='+d:'');
+    }));
+    return adlar;
+  }
+  window.saGaCerezleriniSil=gaCerezleriniSil;
+  // Bant (alta sabit) görünür olsaydı hero'daki birincil düğmenin bir kısmını örter miydi?
+  function heroDugmesiniOrter(bant){
+    const hb=document.getElementById('hero-basla-btn');
+    if(!hb)return false;
+    const r=hb.getBoundingClientRect();
+    if(!r.height||r.bottom<=0||r.top>=window.innerHeight)return false;
+    return r.bottom>window.innerHeight-bant.offsetHeight;
+  }
   window.saCerezKabul=function(btn){
     try{localStorage.setItem('sa_cookie_ok','1');}catch(e){}
     try{window['ga-disable-G-PM25HTL46K']=false;gaBaslat();}catch(e){}
     try{phBaslat();posthog.opt_in_capturing();}catch(e){}
-    btn.parentElement.parentElement.remove();
+    bantKapat();
   };
   window.saCerezRed=function(btn){
     try{localStorage.setItem('sa_cookie_ok','0');}catch(e){}
     // GA bu sayfada önceden başlatıldıysa (tercih değiştirildiyse) gönderimi durdur.
     window['ga-disable-G-PM25HTL46K']=true;
+    try{gaCerezleriniSil();}catch(e){}
     try{posthog.opt_out_capturing();}catch(e){}
-    btn.parentElement.parentElement.remove();
+    bantKapat();
   };
   // Altbilgideki "Çerez tercihlerini değiştir": kaydı siler, bannerı hemen yeniden gösterir.
   window.saCerezTercihDegistir=function(){
@@ -14351,15 +14388,47 @@ function pomodoroSifirla(){pomodoroSure=25*60;clearInterval(pomodoroTimer);pomod
   function bannerGoster(gecikme){
   setTimeout(()=>{
     if(document.getElementById('sa-cerez-banner'))return;
+    if(!document.getElementById('sa-cerez-stil')){
+      const st=document.createElement('style');
+      st.id='sa-cerez-stil';
+      // Kabul ve Reddet: aynı zemin (koyu adaçayı), aynı boyut, aynı yazı ağırlığı — eşit belirginlik.
+      st.textContent="#sa-cerez-banner{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Sans',sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)}"
+        +"#sa-cerez-banner .cb-metin{font-size:15px;line-height:1.5;color:var(--muted);flex:1;min-width:200px}"
+        +"#sa-cerez-banner .cb-metin a{color:var(--signal)}"
+        +"#sa-cerez-banner .cb-dugmeler{display:flex;gap:8px;flex-shrink:0}"
+        +"#sa-cerez-banner .cb-btn{min-width:120px;min-height:44px;padding:8px 18px;border:none;border-radius:8px;background:var(--ad-koyu,#365C4B);color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer}"
+        +"#sa-cerez-banner .cb-btn:hover{background:var(--ad-koyu-2,#2B4A3C)}"
+        +"#sa-cerez-banner .cb-btn:focus-visible{outline:3px solid var(--signal);outline-offset:2px}"
+        +"@media(max-width:600px){#sa-cerez-banner{padding:10px 14px;gap:8px}#sa-cerez-banner .cb-metin{font-size:12.5px;line-height:1.4;min-width:0;flex-basis:100%}#sa-cerez-banner .cb-dugmeler{width:100%}#sa-cerez-banner .cb-btn{flex:1;min-width:0;font-size:14px;padding:6px 12px}}";
+      document.head.appendChild(st);
+    }
     const div=document.createElement('div');
     div.id='sa-cerez-banner';
-    div.style.cssText='position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid #22324a;z-index:450;padding:16px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:IBM Plex Sans,sans-serif;box-shadow:0 -4px 20px rgba(0,0,0,.08)';
-    div.innerHTML=`<div style="font-size:15px;color:var(--muted);flex:1;min-width:200px">🍪 Bu site deneyiminizi geliştirmek için çerezler kullanır. <a href="/privacy.html" style="color:var(--signal)">KVKK Aydınlatma Metni</a></div>
-      <div style="display:flex;gap:8px;flex-shrink:0">
-        <button onclick="saCerezKabul(this)" style="background:var(--signal);color:#031018;border:none;border-radius:8px;padding:8px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:IBM Plex Sans,sans-serif">Kabul Et</button>
-        <button onclick="saCerezRed(this)" style="background:#0d1624;border:none;border-radius:8px;padding:8px 16px;font-size:15px;cursor:pointer;font-family:IBM Plex Sans,sans-serif;color:var(--ink)">Reddet</button>
+    div.setAttribute('role','region');
+    div.setAttribute('aria-label','Çerez tercihi');
+    div.innerHTML=`<div class="cb-metin">🍪 Ölçüm için Google Analytics ve PostHog kullanmak istiyoruz: hangi sayfaların ve özelliklerin kullanıldığını görmek için. Kabul edersen bu araçlar çerez ve benzeri tanımlayıcılar kullanır; reddedersen onlara veri gönderilmez. <a href="/privacy.html">KVKK Aydınlatma Metni</a></div>
+      <div class="cb-dugmeler">
+        <button type="button" class="cb-btn" onclick="saCerezKabul(this)">Kabul Et</button>
+        <button type="button" class="cb-btn" onclick="saCerezRed(this)">Reddet</button>
       </div>`;
     document.body.appendChild(div);
+    // Kısa ekranlarda (ör. 360x640) bant, hero'daki birincil düğmeyi örtecekse ilk
+    // açılışta görünmez; kullanıcı düğme bandın üstünde kalacak kadar kaydırınca çıkar.
+    // Analitik yalnız onayla çalıştığı için bu sürede hiçbir veri gönderilmez.
+    // Altbilgiden açılan (gecikme 0) tercih değişikliği her zaman hemen görünür.
+    if(gecikme>0&&heroDugmesiniOrter(div)){
+      div.style.visibility='hidden';div.setAttribute('aria-hidden','true');
+      const kontrol=()=>{
+        if(!document.getElementById('sa-cerez-banner')){window.removeEventListener('scroll',kontrol);return;}
+        if(heroDugmesiniOrter(div))return;
+        window.removeEventListener('scroll',kontrol);
+        div.style.visibility='';div.removeAttribute('aria-hidden');
+        bantBoslukAyarla();
+      };
+      window.addEventListener('scroll',kontrol,{passive:true});
+      return;
+    }
+    bantBoslukAyarla();
   },gecikme);
   }
 })();
