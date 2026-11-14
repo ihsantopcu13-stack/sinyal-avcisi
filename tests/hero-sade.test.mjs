@@ -46,7 +46,7 @@ kontrol("hero-50-metin hiçbir yerde kalmadı", !indexHtml.includes("hero-50-met
 kontrol("hero-diger-yollar hiçbir yerde kalmadı", !indexHtml.includes("hero-diger-yollar"));
 const tema = readFileSync(path.join(ROOT, "assets", "tema-adacayi.css"), "utf-8");
 kontrol("temada kullanılmayan .hero-baglantilar a kuralı yok", !/\.hero-baglantilar a\{/.test(tema));
-kontrol("tema CSS sürümü önbellek için artırıldı", /tema-adacayi\.css\?v=20261114a/.test(indexHtml));
+kontrol("tema CSS sürümü önbellek için artırıldı (20261112a'dan yeni)", /tema-adacayi\.css\?v=2026111[4-9][a-z]/.test(indexHtml) && !/tema-adacayi\.css\?v=20261112a/.test(indexHtml));
 kontrol("sınav geçince geri sayım kutusu da gizleniyor (boş çizgili kutu kalmaz)", /satir\.closest\('\.hero-baglantilar'\)\|\|satir\)\.style\.display='none'/.test(indexHtml));
 
 // ---- Kaldırılan hedefler başka yerden erişilebilir ----

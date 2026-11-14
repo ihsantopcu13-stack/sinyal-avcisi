@@ -489,7 +489,6 @@ body.tema-adacayi .mmenu-daha[open] summary::after{content:" −"}
 body.tema-adacayi .mmenu-daha a{padding-left:14px}
 @media(max-width:640px){body.tema-adacayi #pwa-btn{display:none!important}}
 body.tema-adacayi .sosyal-ig{text-align:center;margin:22px 0 0;font-size:15px;color:var(--ad-metin)}
-body.tema-adacayi .sosyal-ig span{color:var(--ad-ikincil);font-size:13px}
 body.tema-adacayi .sosyal-ig a{color:var(--ad-koyu);font-weight:700}
 /* Instagram mesaj butonu: sarı/turuncu yerine koyu adaçayı */
 body.tema-adacayi #wa-destek-btn{background:var(--ad-koyu)!important;box-shadow:0 6px 18px rgba(54,92,75,.3)!important}

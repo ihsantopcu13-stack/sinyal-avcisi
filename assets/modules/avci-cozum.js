@@ -257,7 +257,9 @@ function bDusukGuven(c){
 }
 function adimlarHtml(c){
   var son=Math.min(D.adim,c.adimlar.length);
-  var h='<ol class="avm-adimlar" aria-label="Adım adım çözüm">';
+  // Bu maddeler ayrı bir yöntem değil: 7 adımlı AVCI yönteminin (KLOD şeridi) bu soruya uygulanışı.
+  var h='<p class="avm-yontem-not" style="font-size:13px;color:var(--muted);margin:0 0 8px">7 adımlı AVCI yönteminin bu soruya uygulanışı</p>'
+    +'<ol class="avm-adimlar" aria-label="7 adımlı AVCI yönteminin bu soruya uygulanışı">';
   c.adimlar.slice(0,son).forEach(function(a){
     var metin=a.metin;
     var ek='';
@@ -268,7 +270,7 @@ function adimlarHtml(c){
     h+='<li class="avm-adim'+(a.soru?' soru':'')+(a.no===10?' son':'')+'"><span class="no" aria-hidden="true">'+a.no+'</span><b>'+esc(a.baslik)+'</b>'+(metin?'<p>'+esc(metin)+'</p>':'')+ek+'</li>';
   });
   h+='</ol>';
-  if(son<c.adimlar.length)h+='<div class="avm-dugmeler"><button type="button" class="avm-btn avm-ana" data-avm-adim>Sonraki adım ('+(son+1)+'/'+c.adimlar.length+')</button><button type="button" class="avm-btn" data-avm-tumu>Çözümü tek seferde göster</button></div>';
+  if(son<c.adimlar.length)h+='<div class="avm-dugmeler"><button type="button" class="avm-btn avm-ana" data-avm-adim>Devam et ('+(son+1)+'/'+c.adimlar.length+')</button><button type="button" class="avm-btn" data-avm-tumu>Çözümü tek seferde göster</button></div>';
   return h;
 }
 function adimEtkisi(c){
