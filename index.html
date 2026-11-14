@@ -2052,15 +2052,16 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <div class="hero-sag">
   <span class="hero-sag-etiket">Canlı örnek</span>
   <div id="demo" class="demo-card">
-    <div class="demo-top"><span class="demo-lbl" id="dlbl">ÖSYM Tarzı Örnek Cümle - Genel</span></div>
-    <div class="demo-sent" id="dsent" onmouseenter="if(window.ttsKaraoke){const c=this.textContent.replace(/[\x22]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true})}">"The researchers concluded that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
+    <!-- Ses yalnız "Dinle"ye tıklanınca başlar (eskiden onmouseenter fareyle geçerken ücretli /api/tts'i tetikliyordu) -->
+    <div class="demo-top"><span class="demo-lbl" id="dlbl">ÖSYM Tarzı Örnek Cümle - Genel</span><button type="button" class="ad-btn-cizgi" id="demo-dinle" aria-label="Örnek cümleyi sesli dinle" onclick="if(window.ttsKaraoke){const s=document.getElementById('dsent');ttsKaraoke(s.textContent.replace(/[\x22]/g,''),s,null,{lang:'en-US',preserveMarkup:true})}">Dinle</button></div>
+    <div class="demo-sent" id="dsent">"The researchers concluded that, <span class="s-sig" data-tip="Zıtlık sinyali">despite</span> the promising results, the treatment was <span class="s-trap" data-tip="Gizli olumsuz tuzak!">far from</span> <span class="s-key">guaranteed</span>."</div>
     <div class="demo-legend">
       <div class="leg"><div class="leg-dot" style="background:var(--sl);border:1px solid var(--signal)"></div>Sinyal</div>
       <div class="leg"><div class="leg-dot" style="background:#2a1414;border:1px solid var(--trap)"></div>Tuzak</div>
       <div class="leg"><div class="leg-dot" style="background:#1c1a33;border:1px solid #f87171"></div>Kilit kelime</div>
     </div>
     <div class="demo-quiz">
-      <div class="demo-q" id="dq" onmouseenter="if(window.ttsKaraoke)ttsKaraoke(this.textContent,this,null,{lang:'tr-TR',preserveMarkup:true})">Bu cümleye göre araştırmacılar ne sonuca vardı?</div>
+      <div class="demo-q" id="dq">Bu cümleye göre araştırmacılar ne sonuca vardı?</div>
       <div class="demo-opts" id="dopts">
         <button class="dopt" onclick="demoAns(this,false)">Tedavi tüm hastalar için etkilidir.</button>
         <button class="dopt" onclick="demoAns(this,true)">Tedavi ümit verici ama garantili değildir.</button>
