@@ -2427,6 +2427,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
           </div>
           <div id="avci-mod-bar"></div>
           <div class="dm-sent" id="sl-sent"></div>
+          <!-- Ses yalnız "Dinle"ye tıklanınca başlar (eskiden cümle/kelime hover'ı ücretli /api/tts'i tetikliyordu) -->
+          <div class="sl-ceviri"><button type="button" class="sl-ceviri-btn" id="sl-dinle-btn" aria-label="Cümleyi sesli dinle" onclick="const s=document.getElementById('sl-sent');if(s&&window.ttsKaraoke)ttsKaraoke(s.textContent.replace(/[\x22\x27]/g,''),s,null,{lang:'en-US',preserveMarkup:true})">Dinle</button></div>
           <div class="sl-ceviri" id="sl-ceviri" hidden><button type="button" class="sl-ceviri-btn" id="sl-ceviri-btn" onclick="slCeviriAcKapat()" aria-expanded="false" aria-controls="sl-ceviri-metin">Türkçesini göster</button><div class="sl-ceviri-metin" id="sl-ceviri-metin" hidden></div></div>
           <div class="dm-q" id="sl-q"></div>
           <div class="dm-opts" id="dm-opts"></div>
@@ -11250,15 +11252,9 @@ function slRender(){
   if(eyebrow)eyebrow.textContent=soru.eye+' — Soru '+(slIdx%havuz.length+1)+'/'+havuz.length;
   if(sent){
     sent.innerHTML=soru.sent;
-    sent.onmouseenter=function(e){if(e.target===sent&&window.ttsKaraoke){const c=this.textContent.replace(/['"]/g,'');ttsKaraoke(c,this,null,{lang:'en-US',preserveMarkup:true});}};
-    // Highlight kelimelere hover ses ekle
+    // Hover ile ses (cümle ttsKaraoke + kelime ttsSpeak) kaldırıldı: ücretli /api/tts'i
+    // fare geçişiyle tetikliyordu. Ses yalnız #sl-dinle-btn tıklamasıyla başlar.
     setTimeout(()=>{
-      sent.querySelectorAll('.s-sig,.s-trap,.s-key').forEach(el=>{
-        el.addEventListener('mouseenter',function(e){
-          e.stopPropagation();
-          ttsSpeak(this.textContent,'en-US',null);
-        });
-      });
       // Sinyal Ping — despite/however/must have/far from/although/yet/unless/provided that
       sent.querySelectorAll('.s-sig,.s-trap').forEach(el=>{
         const kelime=sinyalPingKelimeBul(el.textContent);
