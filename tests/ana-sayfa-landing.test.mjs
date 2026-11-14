@@ -155,7 +155,7 @@ kontrol("yeni bölümlerde '60 saniye' yok", !/60 saniye/i.test(kimler + sss + s
 kontrol("yeni/değişen bölümlerde autoplay yok", !/autoplay/i.test(yeniler));
 kontrol("yeni bölümlerde ses çağrısı yok", !/ttsSpeak|new Audio|\.play\(/.test(kimler + sss + son));
 kontrol("sayfa açılışındaki ilk Sinyal Lab render'ı sessiz", !/setTimeout\(slRender,\s*\d+\)/.test(html) && /setTimeout\(\(\)=>\{window\.__slSessizAcilis=true;try\{slRender\(\);\}finally\{window\.__slSessizAcilis=false;\}\},100\)/.test(html));
-kontrol("slRender sessiz bayrağında ttsSpeak'ten önce döner", /const _slSessiz=window\.__slSessizAcilis===true;[\s\S]{0,20000}?if\(_slSessiz\)return;[\s\S]{0,300}ttsSpeak\(slTemizCumle/.test(html));
+kontrol("slRender hiç otomatik okuma yapmıyor (ses yalnız #sl-dinle-btn)", (() => { const i = html.indexOf("function slRender(){"), j = html.indexOf("// S+V+O AKADEMİ", i); const k = i > -1 && j > i ? html.slice(i, j) : ""; return k.length > 0 && !/\b(ttsSpeak|ttsKaraoke)\s*\(|speechSynthesis\.speak/.test(k); })() && /id="sl-dinle-btn"/.test(html));
 
 // ---- ÖLÇÜM: davranış (vm) ----
 const fnKaynak = (ad) => {
