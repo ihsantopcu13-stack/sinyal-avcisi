@@ -6715,6 +6715,13 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
             <div id="ist-son-cevaplar"></div>
             <div id="ist-attribution-kaynak" style="margin-top:10px;font-size:13px;color:var(--muted)"></div>
           </div>
+
+          <!-- Kurtarma kodu ile geri yükleme: yalnız bu ekranda (yanlışlıkla basılmasın diye hero/altbilgide yok) -->
+          <div class="ist-panel">
+            <div class="ist-panel-baslik">Başka cihazdaki ilerlemen</div>
+            <p style="font-size:14px;color:var(--muted);margin:0 0 10px;line-height:1.6">Kurtarma kodunla (AVCI-XXXX-XXXX) XP, seri ve hata listesini bu cihaza getirebilirsin. Bu cihazdaki ilerleme silinmez; büyük olan değer kalır.</p>
+            <button type="button" class="sl-ceviri-btn" id="kurtarma-geri-yukle-btn" onclick="kurtarmaKoduGir()">Başka cihazdaki ilerlemeni getir</button>
+          </div>
         </div>
       </div>
     </div>
@@ -20180,29 +20187,77 @@ async function profilBaslat(){
 }
 
 // Kurtarma kodu ile eski profili geri yükle
+// Kurtarma kodu ile geri yükleme — ÜZERİNE YAZMAZ, BİRLEŞTİRİR:
+//  - XP: büyük olan kalır (bugün/hafta sayaçları korunur)
+//  - Seri: mevcut sa_streak nesnesinin içine yazılır (rozetler, toplam soru vb. korunur);
+//    streak/enUzun'da büyük olan kalır, sunucunun serisi büyükse son gün streak_last'ten
+//  - Hata listesi: sa_hatalar ile 'soru' alanına göre tekrarsız birleşir
+// Başlamadan önce ilgili yerel anahtarlar sa_geri_yukleme_yedek'e kopyalanır; bir adım
+// hata verirse yedekten dönülür. Sonuç: {durum:'ok'|'bicim'|'bulunamadi'|'cok_fazla'|'ag'|'hata', profile?}
+const GY_YEDEK_KEY = 'sa_geri_yukleme_yedek';
+const GY_ANAHTARLAR = ['sa_xp','sa_streak','sa_hatalar','sa_yanlis_defteri','sa_anon_id','sa_recovery_code'];
+const KURTARMA_KODU_RE = /^AVCI-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+function kurtarmaKoduNormalize(kod){ return String(kod||'').toUpperCase().replace(/\s+/g,'').trim(); }
+function gyYedekAl(){
+  const degerler = {};
+  GY_ANAHTARLAR.forEach(k=>{ degerler[k] = localStorage.getItem(k); });
+  const yedek = {tarih: new Date().toISOString(), degerler};
+  localStorage.setItem(GY_YEDEK_KEY, JSON.stringify(yedek)); // yedek yazılamazsa hiç başlanmaz
+  return yedek;
+}
+function gyYedektenDon(yedek){
+  GY_ANAHTARLAR.forEach(k=>{
+    const v = yedek.degerler[k];
+    try{ if(v === null || v === undefined) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(_){}
+  });
+}
+function gyJson(k, varsayilan){ try{ const v = JSON.parse(localStorage.getItem(k)); return v == null ? varsayilan : v; }catch(_){ return varsayilan; } }
+function gyBirlestir(profile){
+  // XP
+  const xp = Object.assign({toplam:0,bugun:0,hafta:0,son:''}, gyJson('sa_xp', {}));
+  const sunucuXp = Number(profile.xp) || 0;
+  if(sunucuXp > (Number(xp.toplam) || 0)) xp.toplam = sunucuXp;
+  // Seri — sa_streak biçimi: {son: Date#toDateString, streak, enUzun, kazanilanRozetler, toplamSoru, ...}
+  let st = gyJson('sa_streak', {});
+  if(!st || typeof st !== 'object' || !st.son){
+    st = Object.assign({son:null,streak:0,enUzun:0,bugunCalistiMi:false,toplamSoru:0,modalDogru:0,kusursuzTur:0,kazanilanRozetler:[],buHaftaSoru:0}, st && typeof st === 'object' ? st : {});
+  }
+  const sunucuSeri = Number(profile.streak) || 0;
+  if(sunucuSeri > (Number(st.streak) || 0)){
+    st.streak = sunucuSeri;
+    const sonGun = profile.streak_last ? new Date(String(profile.streak_last).slice(0,10) + 'T00:00:00') : null;
+    if(sonGun && !isNaN(sonGun)) st.son = sonGun.toDateString();
+  }
+  st.enUzun = Math.max(Number(st.enUzun) || 0, Number(st.streak) || 0);
+  // Hata listesi
+  const yerelHata = Array.isArray(gyJson('sa_hatalar', [])) ? gyJson('sa_hatalar', []) : [];
+  const sunucuHata = Array.isArray(profile.hatalar) ? profile.hatalar : [];
+  const birlesik = yerelHata.slice();
+  sunucuHata.forEach(h=>{ if(h && h.soru && !birlesik.some(x=>x && x.soru === h.soru)) birlesik.push(h); });
+  // Yazım (setItem doğrudan: hata fırlatırsa çağıran yedekten döner)
+  localStorage.setItem('sa_xp', JSON.stringify(xp));
+  localStorage.setItem('sa_streak', JSON.stringify(st));
+  localStorage.setItem('sa_hatalar', JSON.stringify(birlesik.slice(0,100)));
+  localStorage.setItem(AP_KEY, profile.anon_id);
+  localStorage.setItem(APC_KEY, profile.recovery_code);
+}
 async function kurtarmaIleGeriYukle(kod){
-  if(!kod) return null;
-  try{
-    const res = await fetch(`/api/anon-profile?recovery=${encodeURIComponent(kod.toUpperCase().trim())}`);
-    if(!res.ok) return null;
-    const { found, profile } = await res.json();
-    if(!found || !profile) return null;
-
-    // anon_id'yi güncelle
-    lsSet(AP_KEY, profile.anon_id);
-    lsSet(APC_KEY, profile.recovery_code);
-
-    // XP + streak geri yükle (mevcut fonksiyonlar varsa)
-    if(typeof xpSave === 'function' && profile.xp > 0){
-      const xpd = {toplam: profile.xp, bugun: 0, hafta: 0, son: ''};
-      xpSave(xpd);
-    }
-    if(typeof streakSave === 'function' && profile.streak > 0){
-      const sd = {gun: profile.streak, hafta: 0, sonGun: profile.streak_last||''};
-      streakSave(sd);
-    }
-    return profile;
-  } catch(_){ return null; }
+  kod = kurtarmaKoduNormalize(kod);
+  if(!KURTARMA_KODU_RE.test(kod)) return {durum:'bicim'};
+  let res;
+  try{ res = await fetch(`/api/anon-profile?recovery=${encodeURIComponent(kod)}`); }
+  catch(_){ return {durum:'ag'}; }
+  if(res.status === 404) return {durum:'bulunamadi'};
+  if(res.status === 429) return {durum:'cok_fazla'};
+  if(!res.ok) return {durum:'hata'};
+  let veri;
+  try{ veri = await res.json(); }catch(_){ return {durum:'hata'}; }
+  if(!veri || !veri.found || !veri.profile || !veri.profile.anon_id) return {durum:'bulunamadi'};
+  let yedek;
+  try{ yedek = gyYedekAl(); }catch(_){ return {durum:'hata'}; }
+  try{ gyBirlestir(veri.profile); }
+  catch(_){ gyYedektenDon(yedek); return {durum:'hata'}; }
+  return {durum:'ok', profile: veri.profile};
 }
 
 // Günlük sync (XP + streak → Supabase)
@@ -20275,14 +20330,30 @@ function kurtarmaKoduGoster(kod){
 
 // Kurtarma girişi için global fonksiyon (menüden çağrılabilir)
 window.kurtarmaKoduGir = async function(){
-  const kod = prompt('Kurtarma kodunu gir (AVCI-XXXX-XXXX):');
-  if(!kod) return;
-  const profil = await kurtarmaIleGeriYukle(kod);
-  if(profil){
-    alert(`✅ İlerlemen geri yüklendi!\nXP: ${profil.xp} | Streak: ${profil.streak} gün`);
+  const girilen = prompt('Kurtarma kodunu gir (AVCI-XXXX-XXXX):');
+  if(girilen === null) return; // iptal
+  const kod = kurtarmaKoduNormalize(girilen);
+  if(!kod){ alert('Kod boş. Bu cihazdaki ilerlemen değişmedi.'); return; }
+  if(!KURTARMA_KODU_RE.test(kod)){ alert('Kod biçimi AVCI-XXXX-XXXX olmalı. Bu cihazdaki ilerlemen değişmedi.'); return; }
+  const mevcutKod = lsGet(APC_KEY);
+  if(mevcutKod && kurtarmaKoduNormalize(mevcutKod) === kod){ alert('Bu zaten bu cihazın kurtarma kodu.'); return; }
+  if(typeof ilerlemeVar === 'function' && ilerlemeVar()){
+    const onay = confirm(`Bu cihazdaki ilerleme, koddaki ilerlemeyle birleştirilecek; XP ve seride büyük olan kalır. Bu cihazın kurtarma kodu (${mevcutKod || '—'}) artık kullanılmayacak. Devam edilsin mi?`);
+    if(!onay) return;
+  }
+  const sonuc = await kurtarmaIleGeriYukle(kod);
+  const MESAJ = {
+    bicim: 'Kod biçimi AVCI-XXXX-XXXX olmalı. Bu cihazdaki ilerlemen değişmedi.',
+    bulunamadi: 'Kod bulunamadı. Doğru girdiğinden emin ol. Bu cihazdaki ilerlemen değişmedi.',
+    cok_fazla: 'Çok fazla deneme yaptın, bir dakika sonra tekrar dene. Bu cihazdaki ilerlemen değişmedi.',
+    ag: 'Bağlantı hatası, tekrar dene. Bu cihazdaki ilerlemen değişmedi.',
+    hata: 'Geri yükleme tamamlanamadı. Bu cihazdaki ilerlemen değişmedi.'
+  };
+  if(sonuc.durum === 'ok'){
+    alert(`İlerlemen bu cihazla birleştirildi.\nXP: ${xpLoad().toplam} | Seri: ${streakLoad().streak || 0} gün`);
     location.reload();
   } else {
-    alert('❌ Kod bulunamadı. Doğru girdiğinden emin ol.');
+    alert(MESAJ[sonuc.durum] || MESAJ.hata);
   }
 };
 
