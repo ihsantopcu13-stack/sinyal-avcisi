@@ -482,16 +482,16 @@ body.tema-adacayi .nsa-liste li{display:flex;gap:10px;align-items:flex-start;bac
 body.tema-adacayi .nsa-liste li>div{min-width:0}
 body.tema-adacayi .nsa-liste .nsa-ikon{flex-shrink:0;width:22px;height:22px;color:var(--ad-koyu)}
 body.tema-adacayi .nsa-liste b{display:block;font-size:16px;line-height:1.3;color:var(--ad-metin);margin-bottom:2px}
-body.tema-adacayi .nsa-liste li span:not(.nsa-ikon){font-size:14px;line-height:1.4;color:var(--ad-metin)}
+body.tema-adacayi .nsa-liste li span:not(.nsa-ikon){display:block;font-size:14px;line-height:1.4;color:var(--ad-metin)}
 @media(max-width:760px){
   body.tema-adacayi .nsa-liste{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   body.tema-adacayi .nsa-liste li{gap:8px;padding:9px 10px}
   body.tema-adacayi .nsa-liste .nsa-ikon{width:18px;height:18px}
   body.tema-adacayi .nsa-liste b{font-size:14px}
   body.tema-adacayi .nsa-liste li span:not(.nsa-ikon){font-size:13px}
-  /* "Hemen Başla — Kayıt Bile İstemez" düğmesi: mobilde ince, sağ alttaki yuvarlak düğmelere (≈130px) yer bırakır */
-  body.tema-adacayi .ad-karsilastirma .nsa-cta{padding:10px 20px!important;font-size:14px!important;border-radius:10px!important;max-width:calc(100% - 140px);white-space:normal;line-height:1.3}
-  body.tema-adacayi .ad-karsilastirma .nsa-cta-kap{margin-top:20px!important;text-align:left!important}
+  /* "Hemen Başla — Kayıt Bile İstemez" düğmesi: mobilde ince, tek satır; ortalı ve sol alttaki (yukarı çık) ile sağ alttaki yuvarlak düğmelere ≈60px yer bırakır */
+  body.tema-adacayi .ad-karsilastirma .nsa-cta{padding:10px 14px!important;font-size:13px!important;border-radius:10px!important;max-width:calc(100% - 120px);white-space:nowrap;line-height:1.3}
+  body.tema-adacayi .ad-karsilastirma .nsa-cta-kap{margin-top:20px!important}
 }
 body.tema-adacayi .mmenu-daha summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--ad-koyu);border-bottom:1px solid var(--ad-cizgi);list-style:none}
 body.tema-adacayi .mmenu-daha summary::after{content:" +"}
