@@ -157,6 +157,22 @@ kontrol("yeni bölümlerde ses çağrısı yok", !/ttsSpeak|new Audio|\.play\(/.
 kontrol("sayfa açılışındaki ilk Sinyal Lab render'ı sessiz", !/setTimeout\(slRender,\s*\d+\)/.test(html) && /setTimeout\(\(\)=>\{window\.__slSessizAcilis=true;try\{slRender\(\);\}finally\{window\.__slSessizAcilis=false;\}\},100\)/.test(html));
 kontrol("slRender hiç otomatik okuma yapmıyor (ses yalnız #sl-dinle-btn)", (() => { const i = html.indexOf("function slRender(){"), j = html.indexOf("// S+V+O AKADEMİ", i); const k = i > -1 && j > i ? html.slice(i, j) : ""; return k.length > 0 && !/\b(ttsSpeak|ttsKaraoke)\s*\(|speechSynthesis\.speak/.test(k); })() && /id="sl-dinle-btn"/.test(html));
 
+// ---- KELİME KARTLARI + SAT: hover/otomatik ses yok, ses yalnız tıklamayla ----
+{
+  const fnGovde = (ad) => { const i = html.indexOf(`function ${ad}(`); if (i < 0) return ""; const j = html.indexOf("\nfunction ", i + 10); return html.slice(i, j > i ? j : undefined); };
+  const TTS_CAGRI = /\b(ttsSpeak|ttsKaraoke|ttsEleven)\s*\(/;
+  const kk = (html.match(/<div class="dmod" id="mod-kelime"[\s\S]*?<div class="kk-actions"/) || [""])[0];
+  kontrol("kelime kartı HTML'inde onmouseenter yok", kk.length > 0 && !/onmouseenter/i.test(kk));
+  const kkBtn = kk.match(/<button[^>]*id="kk-dinle-btn"[^>]*>Dinle<\/button>/);
+  kontrol("kartın ön yüzünde 'Dinle' düğmesi: tıklama kartı çevirmez, kelimeyi okur", !!kkBtn && /onclick="event\.stopPropagation\(\);[^"]*ttsKaraoke\(kkCurrent\.en/.test(kkBtn[0]) && /onkeydown="event\.stopPropagation\(\)"/.test(kkBtn[0]));
+  kontrol("kartın arka yüzündeki örnek cümle tıklamayla okunmaya devam ediyor", /id="kk-ex-back"[^>]*onclick="event\.stopPropagation\(\);if\(kkCurrent&&window\.ttsKaraoke\)ttsKaraoke\(kkCurrent\.ex/.test(kk));
+  kontrol("'üstüne gel, sesli dinle' yönlendirmeleri kalmadı", !/üstüne gel, sesli dinle|Üzerine gel, sesli dinle/i.test(kk));
+  kontrol("kkShow yeni kartta kelimeyi otomatik okumuyor", (() => { const g = fnGovde("kkShow"); return g.length > 0 && !TTS_CAGRI.test(g); })());
+  const sat = fnGovde("satPratikRender");
+  kontrol("SAT: cümle, vurgulu kelime ve şıklarda onmouseenter yok", sat.length > 0 && !/onmouseenter/i.test(sat));
+  kontrol("SAT: soru açılışında otomatik okuma yok, yalnız #sat-dinle-btn tıklaması", !TTS_CAGRI.test(sat.replace(/<button[^>]*id="sat-dinle-btn"[\s\S]*?<\/button>/, "")) && /id="sat-dinle-btn"[^>]*onclick="[^"]*ttsKaraoke\(/.test(sat));
+}
+
 // ---- ÖLÇÜM: davranış (vm) ----
 const fnKaynak = (ad) => {
   const i = html.indexOf(`function ${ad}(`);
