@@ -171,6 +171,14 @@ kontrol("slRender hiç otomatik okuma yapmıyor (ses yalnız #sl-dinle-btn)", ((
   const sat = fnGovde("satPratikRender");
   kontrol("SAT: cümle, vurgulu kelime ve şıklarda onmouseenter yok", sat.length > 0 && !/onmouseenter/i.test(sat));
   kontrol("SAT: soru açılışında otomatik okuma yok, yalnız #sat-dinle-btn tıklaması", !TTS_CAGRI.test(sat.replace(/<button[^>]*id="sat-dinle-btn"[\s\S]*?<\/button>/, "")) && /id="sat-dinle-btn"[^>]*onclick="[^"]*ttsKaraoke\(/.test(sat));
+
+  // ---- TUZAK + PARAGRAF: hover/otomatik ses yok, ses yalnız Dinle tıklamasıyla ----
+  const tuzakR = fnGovde("tuzakRender"), tuzakS = fnGovde("tuzakSonraki"), paragraf = fnGovde("paragrafSec");
+  kontrol("Tuzak: tuzakRender ve tuzakSonraki'de onmouseenter ve otomatik ttsSpeak/ttsKaraoke yok", tuzakR.length > 0 && tuzakS.length > 0 && ![tuzakR, tuzakS].some((g) => /onmouseenter/i.test(g) || TTS_CAGRI.test(g)));
+  kontrol("Tuzak: iki render da cümlenin altına ortak Dinle düğmesini koyuyor", [tuzakR, tuzakS].every((g) => /<div class="tuzak-sent">\$\{soru\.sent\}<\/div>\$\{TUZAK_DINLE_BTN\}/.test(g)) && /const TUZAK_DINLE_BTN=`<button type="button" class="sl-ceviri-btn" id="tuzak-dinle-btn"[^`]*onclick="const s=this\.previousElementSibling;[^`]*ttsKaraoke\(/.test(html));
+  kontrol("Paragraf: paragrafSec'te onmouseenter yok, #paragraf-dinle-btn paragrafı okuyor", paragraf.length > 0 && !/onmouseenter/i.test(paragraf) && /id="paragraf-dinle-btn"[^>]*onclick="const m=document\.getElementById\('paragraf-metin'\);if\(m&&window\.ttsKaraoke\)ttsKaraoke\(/.test(paragraf));
+  kontrol("Paragraf: 'üstüne gel' yönlendirmesi tıklamaya göre güncellendi", !/Paragrafın üstüne gel/.test(html) && /Dinle'ye bas, paragrafı kelime kelime sesli dinle\./.test(paragraf));
+  kontrol("Sitede ses başlatan onmouseenter kalmadı", !/onmouseenter="[^"]*(ttsSpeak|ttsKaraoke|ttsEleven)/.test(html) && !/addEventListener\('mouseenter'[^)]*\)\s*=>\s*[^;]*tts/.test(html));
 }
 
 // ---- ÖLÇÜM: davranış (vm) ----
