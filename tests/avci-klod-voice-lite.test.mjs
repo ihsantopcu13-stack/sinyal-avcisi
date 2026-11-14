@@ -280,6 +280,7 @@ function sandboxKur({ srVarMi = true } = {}) {
   let reddedenPromiseYakalandiMi = false;
   const sandbox = {
     console: { warn: () => {}, log: () => {}, error: () => {} },
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: (text) => Promise.reject(new Error("simüle edilmiş TTS hatası")),
     dnavTurNesil: 1,
     dnavTurnState: 'THINKING',

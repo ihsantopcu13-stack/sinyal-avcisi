@@ -149,6 +149,7 @@ function sandboxKur({ fetchOk = true, ttsOnEndGecikmeMs = 0, srVarMi = true, bas
       if (!fetchOk) throw new Error("network hatası (simüle)");
       return { ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) };
     },
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: (text, lang, onEnd) => new Promise((resolve) => {
       setTimeout(() => { if (onEnd) onEnd(); resolve({ fakeAudio: true }); }, ttsOnEndGecikmeMs);
     }),
@@ -252,6 +253,7 @@ function bekle(ms) { return new Promise((r) => setTimeout(r, ms)); }
     _aktifSoruModulu: null, avciAktifSinyalLabBaglamiAl: () => null,
     avciSonrakiSoruKomutuMu: () => false, avciSinyalPratikKomutuMu: () => false,
     fetch: async () => ({ ok: true, json: async () => ({ content: [{ type: "text", text: "cevap" }] }) }),
+    ucretliSesAcikMi: () => true, // "Sesi aç" basılmış (ücretli ses açık) senaryosu
     ttsSpeak: () => new Promise(() => {}), // hiç bitmiyor - SPEAKING'de kalmasını simüle eder
     ttsNesil: 0, pAudio: null,
   };

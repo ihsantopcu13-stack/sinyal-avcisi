@@ -6607,6 +6607,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
               <span class="da-stat-ik"><svg class="ik" aria-hidden="true"><use href="#ik-mikrofon"/></svg></span>
               <div style="font-size:14px;font-weight:700;color:#365C4B">Konuşma Simülatörü</div>
               <span style="background:#DCE8DE;color:#365C4B;font-size:9px;font-weight:800;padding:2px 8px;border-radius:8px">YENİ</span>
+              <button type="button" class="sl-ceviri-btn" id="konusma-ucretli-ses-btn" data-ucretli-ses aria-pressed="false" onclick="ucretliSesDegistir()" title="DILA'nın cevaplarını sesli oku (bu oturumda)" style="margin-left:auto">🔈 Sesi aç</button>
             </div>
             <div style="font-size:12px;color:#4F5F57;margin-bottom:14px">DILA ile gerçek bir diyalog kur — hata yaparsan anında düzeltir</div>
             <div id="konusma-alani" style="background:#F8F7F3;border-radius:12px;padding:14px;margin-bottom:12px;min-height:60px;font-size:13px;color:#1F2A24;line-height:1.7">
@@ -7166,9 +7167,7 @@ function hosgeldinAnimasyonuGoster(isim){
     }
   },45);
 
-  if(typeof ttsSpeak==='function'){
-    setTimeout(()=>ttsSpeak(`Hoş geldiniz ${isim}. Sinyal Avcısı sizi bekliyor.`,'tr-TR',null),300);
-  }
+  // Hoş geldin mesajı yalnız yazıyla (otomatik ücretli ses yok).
 
   _hgKapatTimer=setTimeout(hosgeldinKapat,2800);
 }
@@ -7654,6 +7653,7 @@ function dnav(el){
           <button id="dnav-stop-btn" class="klod-ikon-btn" type="button" onclick="dnavAvciSustur()" title="AVCI'yı sustur" aria-label="AVCI'yı sustur"><svg class="ik" aria-hidden="true"><use href="#ik-dur"/></svg></button>
           <button class="chat-send klod-send" onclick="dnavChat()">Gönder →</button>
         </div>
+        <div style="margin-top:8px"><button type="button" class="sl-ceviri-btn" id="klod-ucretli-ses-btn" data-ucretli-ses aria-pressed="false" onclick="ucretliSesDegistir()" title="KLOD cevaplarını sesli oku (bu oturumda)">🔈 Sesi aç</button></div>
       </div>
       <aside class="klod-soru-karti" id="klod-soru-karti" aria-live="polite" aria-label="Aktif soru"></aside>
       </div>
@@ -8688,7 +8688,8 @@ ZORLUK: 1.Bebek 2.Kolay 3.Orta 4.OSYM 5.OSYM Tuzakli. Yeterli dogruluk olmadan s
     let _dnavSpeakingBitmis=false;
     const _dnavSpeakingBitir=()=>{if(_dnavSpeakingBitmis)return;_dnavSpeakingBitmis=true;if(benimTurNesil===dnavTurNesil){dnavTurnState='IDLE';dnavMicGorselGuncelle();}};
     // Admin'de mevcut otomatik okuma kapalı: yerine KLOD ADMIN SES ARAÇLARI'ndaki anahtar var.
-    if(typeof ttsSpeak==='function'&&globalThis._klodAdmin!==true){
+    // Ücretli ses varsayılan kapalı: yalnız kullanıcı "Sesi aç"a bastıysa okunur.
+    if(typeof ttsSpeak==='function'&&globalThis._klodAdmin!==true&&typeof ucretliSesAcikMi==='function'&&ucretliSesAcikMi()){
       try{
         const _ttsSonuc=ttsSpeak(temizCevap,'tr-TR',_dnavSpeakingBitir);
         if(_ttsSonuc&&typeof _ttsSonuc.then==='function'){
@@ -10074,6 +10075,39 @@ function ttsTurkceMi(text){
 // önleniyor.
 let ttsNesil=0;
 
+// ─── ÜCRETLİ SES ANAHTARI ────────────────────────────────────────────────
+// /api/tts ve /api/tts-eleven'e giden OTOMATİK okumalar (KLOD cevabı, Canlı Ders
+// anlatımı, Konuşma pratiği cevabı) varsayılan KAPALI. Kullanıcı "Sesi aç"a
+// basarsa bu sekme oturumunda (sessionStorage; engelliyse bellekte) açık kalır.
+// "Dinle" düğmeleri bu anahtardan bağımsızdır — onlar zaten açık bir tıklama.
+const UCRETLI_SES_KEY='sa_ucretli_ses';
+let _ucretliSesBellek=false;
+function ucretliSesAcikMi(){
+  try{if(sessionStorage.getItem(UCRETLI_SES_KEY)==='1')return true;}catch(e){}
+  return _ucretliSesBellek===true;
+}
+function ucretliSesDugmeleriGuncelle(){
+  const acik=ucretliSesAcikMi();
+  document.querySelectorAll('[data-ucretli-ses]').forEach(b=>{
+    b.textContent=acik?'🔊 Sesi kapat':'🔈 Sesi aç';
+    b.setAttribute('aria-pressed',acik?'true':'false');
+  });
+}
+function ucretliSesDegistir(){
+  const acik=!ucretliSesAcikMi();
+  _ucretliSesBellek=acik;
+  try{if(acik)sessionStorage.setItem(UCRETLI_SES_KEY,'1');else sessionStorage.removeItem(UCRETLI_SES_KEY);}catch(e){}
+  if(!acik){
+    // Kapatınca çalan/bekleyen ücretli sesi kes; Canlı Ders o anda sesin bitmesini
+    // bekliyorsa ders takılmasın diye bekleyen adım sessizce devam eder.
+    ttsNesil++;
+    try{if(window.speechSynthesis)speechSynthesis.cancel();if(pAudio)pAudio.pause();}catch(e){}
+    if(typeof clSesKapandi==='function')clSesKapandi();
+  }
+  ucretliSesDugmeleriGuncelle();
+}
+document.addEventListener('DOMContentLoaded',ucretliSesDugmeleriGuncelle);
+
 // OpenAI (nova) — İngilizce metinler için
 async function ttsOpenAINova(text,lang,onEnd,onAudioReady){
   if(!text||text.trim().length<2)return;
@@ -10737,6 +10771,7 @@ const CL_KONULAR=[
   }
 ];
 let clIdx=0,clTypeTimer=null;
+let clSessizTimer=null,clBekleyenSonraki=null; // ücretli ses kapalıyken ders ilerlemesi (bkz. clAsamaSes)
 function clModulHTML(){
   return `
     <div class="cl-progress" id="cl-progress"></div>
@@ -10776,6 +10811,7 @@ function clModulHTML(){
     <div class="cl-kontrol">
       <button class="cl-btn cl-btn-ghost" onclick="clTekrarAnlat()"><svg class="ik" aria-hidden="true"><use href="#ik-tekrar"/></svg> Tekrar Anlat</button>
       <button class="cl-btn cl-btn-primary" onclick="clSonrakiKonu()">Sonraki Konu →</button>
+      <button type="button" class="cl-btn cl-btn-ghost" id="cl-ucretli-ses-btn" data-ucretli-ses aria-pressed="${ucretliSesAcikMi()?'true':'false'}" onclick="ucretliSesDegistir()" title="Dersi sesli anlat (bu oturumda)">${ucretliSesAcikMi()?'🔊 Sesi kapat':'🔈 Sesi aç'}</button>
     </div>
   `;
 }
@@ -10833,6 +10869,7 @@ function clHookMouth(source){
 }
 function clDurdur(){
   clearInterval(clTypeTimer);
+  clearTimeout(clSessizTimer);clBekleyenSonraki=null; // sessiz ilerleme / bekleyen adım eski konudan sızmasın
   if(clYazDurum)clYazDurum.bitti=true; // konu değişince eski metni tamamlama, sadece bırak
   ttsNesil++; // devam eden (henüz cözülmemis) TTS fetch'lerini gecersiz kil — eski ses yeni konunun uzerine binmesin
   if(window.speechSynthesis)speechSynthesis.cancel();
@@ -10902,18 +10939,32 @@ function clOynatKonu(idx){
   clAsamaAciklama(k);
   clScrollIcerigeGetir();
 }
+// Ücretli ses kapalıysa (varsayılan) ders yazıyla ilerler: bir adımın yazısı bitince
+// kısa bir aradan sonra sonraki adıma geçilir. Ses açıksa eskisi gibi ses bitince geçilir.
+function clSessizIlerle(sonra){clearTimeout(clSessizTimer);clSessizTimer=setTimeout(sonra,900);}
+// Ses açıksa okur ve bitince sonra()'yı çağırır, true döner; kapalıysa hiç istek atmaz, false döner.
+function clAsamaSes(metin,lang,sonra){
+  if(!ucretliSesAcikMi())return false;
+  clBekleyenSonraki=sonra||null;
+  ttsSpeak(metin,lang,()=>{const f=clBekleyenSonraki;clBekleyenSonraki=null;if(f)f();},clHookMouth);
+  return true;
+}
+// Ders sırasında ses kapatılırsa sesin bitmesini bekleyen adım takılmasın.
+function clSesKapandi(){const f=clBekleyenSonraki;clBekleyenSonraki=null;if(f)clSessizIlerle(f);}
 function clAsamaAciklama(k){
   document.getElementById('cl-blok-aciklama').style.display='block';
-  clYaz('cl-metin-aciklama',k.aciklama,20,()=>sinyalPingVurgula(document.getElementById('cl-metin-aciklama')));
-  ttsSpeak(k.aciklama,'tr-TR',()=>clAsamaOrnek(k),clHookMouth);
+  const sonra=()=>clAsamaOrnek(k);
+  const sesli=clAsamaSes(k.aciklama,'tr-TR',sonra);
+  clYaz('cl-metin-aciklama',k.aciklama,20,()=>{sinyalPingVurgula(document.getElementById('cl-metin-aciklama'));if(!sesli)clSessizIlerle(sonra);});
 }
 function clAsamaOrnek(k){
   document.getElementById('cl-blok-ornek').style.display='block';
+  const sonra=()=>clAsamaSoru(k);
+  const sesli=clAsamaSes(k.ornekEn,'en-US',sonra);
   clYaz('cl-metin-ornek',k.ornekEn,26,()=>{
     sinyalPingVurgula(document.getElementById('cl-metin-ornek'));
-    clYaz('cl-metin-ornek-tr',k.ornekTr,18);
+    clYaz('cl-metin-ornek-tr',k.ornekTr,18,()=>{if(!sesli)clSessizIlerle(sonra);});
   });
-  ttsSpeak(k.ornekEn,'en-US',()=>clAsamaSoru(k),clHookMouth);
 }
 function clAsamaSoru(k){
   document.getElementById('cl-blok-soru').style.display='block';
@@ -10923,7 +10974,7 @@ function clAsamaSoru(k){
     wrap.innerHTML=k.secenekler.map((s,i)=>`<button class="cl-secenek" onclick="clCevapSec(${i})">${String.fromCharCode(65+i)}) ${s}</button>`).join('');
     if(typeof clHocaGoster==='function')clHocaGoster();
   });
-  ttsSpeak(k.soru,'en-US',null,clHookMouth);
+  clAsamaSes(k.soru,'en-US',null);
 }
 function clCevapSec(i){
   const k=CL_KONULAR[clIdx];
@@ -10936,7 +10987,7 @@ function clCevapSec(i){
   const on=i===k.cevap?'Doğru! ':`Yanlış, doğru cevap: ${String.fromCharCode(65+k.cevap)}) ${k.secenekler[k.cevap]}. `;
   const tamMetin=on+k.cevapAciklama;
   clYaz('cl-metin-cevap',tamMetin,18,()=>sinyalPingVurgula(document.getElementById('cl-metin-cevap')));
-  ttsSpeak(tamMetin,'tr-TR',null,clHookMouth);
+  clAsamaSes(tamMetin,'tr-TR',null); // ses kapalıysa (varsayılan) şık seçmek okuma başlatmaz
   if(typeof konuUstalikGuncelle==='function')konuUstalikGuncelle(k.baslik,i===k.cevap);
   if(typeof konuRadariCiz==='function')konuRadariCiz();
   // Yanlış cevapta "KLOD'la açıkla" (tahta görünümü zaten doğru cevabı ve açıklamayı veriyor)
@@ -17475,7 +17526,8 @@ async function konusmaGonder() {
     konusmaGecmisi.push({rol: 'dila', icerik: cevap});
     // Konuşma simülatörünü gerçek bir "speaking" pratiğine dönüştürmek için
     // DILA'nın cevabını sesli de okuyoruz (Türkçe düzeltme parantezleri hariç).
-    if (window.ttsSpeakEleven) ttsSpeakEleven(cevap.replace(/\(([^)]*)\)/g, '').trim());
+    // Ücretli ses varsayılan kapalı: cevap yalnız kullanıcı "Sesi aç"a bastıysa okunur.
+    if (window.ttsSpeakEleven && typeof ucretliSesAcikMi === 'function' && ucretliSesAcikMi()) ttsSpeakEleven(cevap.replace(/\(([^)]*)\)/g, '').trim());
     // XP ver
     const veri = dilavcisiVeriYukle();
     veri.xp += 5;
