@@ -968,7 +968,8 @@ function coz(soru){
   return sonuc;
 }
 
-// 10 adımlık anlatım
+// Çözüm paneli anlatımı: 7 adımlı AVCI yönteminin bu soruya uygulanmış 10 maddelik özeti
+// (ayrı bir "10 adımlı yöntem" değil; panelde de böyle adlandırılır).
 function adimlarUret(c,soru){
   var A=[];
   var bos=c.boslukSayisi>0;
