@@ -134,7 +134,6 @@ body.tema-adacayi .hero-onay{display:inline-flex;align-items:center;gap:8px;font
 body.tema-adacayi .hero-onay svg{width:18px;height:18px;color:var(--ad-koyu)}
 body.tema-adacayi .hero-baglantilar{margin-top:26px;padding-top:20px;border-top:1px solid var(--ad-cizgi);display:flex;flex-direction:column;gap:8px}
 body.tema-adacayi .hero-baglantilar div{font-size:15px!important;color:var(--ad-ikincil)!important;margin:0!important}
-body.tema-adacayi .hero-baglantilar a{color:var(--ad-koyu)!important}
 body.tema-adacayi #hero-geri-sayim{color:var(--ad-koyu)!important}
 
 /* Sağ: canlı örnek kartı + bilgi kutuları */

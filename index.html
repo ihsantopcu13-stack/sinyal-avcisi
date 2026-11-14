@@ -1819,7 +1819,7 @@ try{var _iaK=localStorage.getItem('sa_ilk_adim'),_iaS=JSON.parse(localStorage.ge
 html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
 @media(max-width:900px){html.yeni-ziyaretci body{padding-bottom:0}}
 </style>
-<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261112a">
+<link rel="stylesheet" href="/assets/tema-adacayi.css?v=20261114a">
 </head>
 <body class="dark-mode tema-adacayi">
 <div id="ydsk2-uyari" class="ydsk2-uyari" role="status" hidden>⚠️ YDS/2 başvuruları 8 Ekim'de bitiyor — <a href="https://ais.osym.gov.tr" target="_blank" rel="noopener">ÖSYM AİS'ten başvur</a></div>
@@ -1969,13 +1969,10 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <button type="button" class="hero-yol hero-yol-ana" id="hero-basla-btn" data-landing-cta="hero_test" onclick="landingCtaTikla('hero_test');basla()"><small>Giriş gerekmez · 5 soru</small><b>Ücretsiz AVCI Testini Başlat</b></button>
       <button type="button" class="hero-yol" data-landing-cta="hero_yontem" onclick="landingCtaTikla('hero_yontem');goTo('nasil')"><small>Nasıl çalıştığına bak</small><b>Yöntemi Gör</b></button>
     </div>
-    <div class="hero-diger-yollar" style="margin:0 0 12px;font-size:15px;line-height:1.7;color:var(--ad-ikincil,var(--muted))">Ders mi çalışacaksın? <a href="#dersler" onclick="event.preventDefault();goTo('dersler')" style="color:var(--ad-koyu,var(--signal));font-weight:700;text-decoration:underline">Derslere git →</a> · Soru mu çözeceksin? <a href="#antrenman" onclick="event.preventDefault();gunlukDenemeAc()" style="color:var(--ad-koyu,var(--signal));font-weight:700;text-decoration:underline">Günün denemesi · 5 soru →</a></div>
     <span class="hero-onay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>%100 ücretsiz, kayıt yok</span>
+    <!-- Hero'da birincil düğme + "Yöntemi Gör" dışında bağlantı yok (Instagram → test akışı).
+         Hedef Programı menüde; /hedef-rota, /50-puan-programi, /puan-hedefi altbilgideki Rehberler'de. -->
     <div class="hero-baglantilar">
-    <div style="margin-top:14px;font-size:14px;color:var(--ink)">Sınav tarihin ve hedef puanın belli mi? <a href="javascript:void(0)" onclick="hpAc()" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Programını kur →</a></div>
-    <div style="margin-top:6px;font-size:14px;color:var(--muted)">Kayıt olmadan hızlı bir plan mı istersin? <a href="/hedef-rota" style="color:var(--signal);font-weight:700;text-decoration:underline">Hedef Puan Rotanı çıkar →</a></div>
-    <div style="margin-top:6px;font-size:14px;color:var(--ink)"><span id="hero-50-metin">22 Kasım'a 50 puan mı hedefliyorsun?</span> <a href="/50-puan-programi" style="color:var(--signal);font-weight:700;text-decoration:underline">Gün gün 50 puan programı →</a></div>
-    <div style="margin-top:6px;font-size:14px;color:var(--muted)">90-100 mü hedefliyorsun? <a href="/puan-hedefi" style="color:var(--signal);font-weight:700;text-decoration:underline">Zor, sınava benzeyen soruları çöz →</a></div>
     <div id="hero-geri-sayim-satir" style="margin-top:10px;font-size:13px;color:var(--muted)">YDS/2'ye <b id="hero-geri-sayim" style="font-family:'IBM Plex Mono',monospace;color:var(--signal)">—</b> gün kaldı (22 Kasım)</div>
     </div>
     <style>
@@ -1999,8 +1996,8 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       if(hedef<bugun){
         // Sınav geçti: yanlış tarihe saymak yerine geri sayımı gizle, metni tarihsiz yap.
         // Yeni sınav tarihi ÖSYM'den kontrol edilince buraya yazılır.
-        var satir=document.getElementById('hero-geri-sayim-satir');if(satir)satir.style.display='none';
-        var m=document.getElementById('hero-50-metin');if(m)m.textContent='50 puan mı hedefliyorsun?';
+        // Kutuda yalnız geri sayım kaldığı için boş çizgili kutu bırakmamak adına kutu da gizlenir.
+        var satir=document.getElementById('hero-geri-sayim-satir');if(satir)(satir.closest('.hero-baglantilar')||satir).style.display='none';
         return;
       }
       var gun=Math.max(0,Math.round((hedef-bugun)/(1000*60*60*24)));

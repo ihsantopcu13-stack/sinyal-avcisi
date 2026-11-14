@@ -40,7 +40,7 @@ const heroYontem = hero.match(/<button[^>]*data-landing-cta="hero_yontem"[^>]*>[
 kontrol("ikincil düğme 'Yöntemi Gör'", !!heroYontem && duz(heroYontem[0]).includes("Yöntemi Gör"));
 kontrol("ikincil düğme #nasil'a kaydırır", !!heroYontem && /goTo\('nasil'\)/.test(heroYontem[0]));
 kontrol("#nasil bölümü mevcut", /<section id="nasil"/.test(html));
-kontrol("eski giriş yolları kaybolmadı (dersler + günün denemesi)", /goTo\('dersler'\)/.test(hero) && /gunlukDenemeAc\(\)/.test(hero));
+kontrol("hero'da test akışıyla yarışan metin bağlantısı yok (dersler/deneme bölümleri sayfada duruyor)", !/<a\s/.test(hero) && /<section id="dersler"/.test(html) && /<section id="antrenman"/.test(html));
 // (#medya'daki mevcut "60 Saniyede ÖSYM Avı" başlığı bu işin kapsamı dışında.)
 kontrol("hero'da '60 saniye' ifadesi yok", !/60 saniye/i.test(hero));
 
