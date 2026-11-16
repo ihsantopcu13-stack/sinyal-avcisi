@@ -1,5 +1,5 @@
 {
-  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak) ve konu 78 Passive (25 Ekim 2026, İhsan'ın notundan). Konu 79-88 (12 Kasım 2026: kelime/kalıp, dilbilgisi tuzağı, paragraf tekniği, sınav stratejisi; metinler emojisiz). uret_yeni.py bunlardan video ve kuyruk kaydı üretir. \"once\" verilmişse kuyruk kaydı o konunun önüne girer.",
+  "aciklama": "Konu 56-77 (22 Ekim 2026'da onaylanan taslak) ve konu 78 Passive (25 Ekim 2026, İhsan'ın notundan). Konu 79-88 (12 Kasım 2026: kelime/kalıp, dilbilgisi tuzağı, paragraf tekniği, sınav stratejisi; metinler emojisiz). Konu 89-93 (16 Kasım 2026: alan kelimeleri; sağlık, sosyal, fen, eğitim; kuyruk azaldı uyarısı üzerine). uret_yeni.py bunlardan video ve kuyruk kaydı üretir. \"once\" verilmişse kuyruk kaydı o konunun önüne girer.",
   "konular": [
     {
       "konu": 56, "baslik": "Paragraph Completion", "tuzak": false,
@@ -346,6 +346,71 @@
       "sinyal": "boş soru, kalan süre, cevap kâğıdı",
       "ilk_yorum": "Mini test\nSon iki dakikada beş soru boş kaldı.\nBoş mu bırakırsın, hepsini işaretler misin?",
       "etiket": "#yds #yökdil #sinyalavcısı #sınavstratejisi #ydstaktik"
+    },
+    {
+      "konu": 89, "baslik": "Render + Sıfat", "tuzak": false,
+      "kanca": "Antibiyotikler etkisiz kaldı. Boşluğa hangi fiil gelir?",
+      "aciklama_giris": "Sağlık parçalarında antibiyotik direnci sık geçen bir konu. Cümledeki ineffective kelimesi boşluğa gelecek fiili ele veriyor. Bulabilir misin?",
+      "cumle": "Overuse of antibiotics has ____ many common drugs ineffective.",
+      "dogru": "rendered",
+      "hap": "render + NESNE + SIFAT", "hap_alt": "bir şeyi ... hale getirmek",
+      "kural": "Render, bir nesne ve ardından bir sıfat alır: render something ineffective, bir şeyi etkisiz kılmak. Make ile aynı kalıpta kullanılır.",
+      "tuzak_metin": "Resulted kulağa yakın gelir ama nesne ve sıfat almaz. Result in arkasından isim ister.",
+      "sinyal": "ineffective, useless, obsolete, impossible",
+      "ilk_yorum": "Mini test\nThe heavy rain ____ the road impassable.\n\"rendered\" mı, \"resulted\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #yökdilsağlık #ydskelime"
+    },
+    {
+      "konu": 90, "baslik": "Reinforce: Echo Chamber", "tuzak": false,
+      "kanca": "Algoritma fikrini değiştirir mi, pekiştirir mi?",
+      "aciklama_giris": "Sosyal medyada hep aynı görüşleri görüyorsan bir yankı odasındasın. Cümledeki already hold ifadesi boşluğun cevabını veriyor.",
+      "cumle": "Social media algorithms often ____ the views that users already hold.",
+      "dogru": "reinforce",
+      "hap": "already hold → PEKİŞTİR", "hap_alt": "reinforce = güçlendirmek",
+      "kural": "Reinforce, var olan bir şeyi güçlendirmek demektir. Cümlede zaten sahip olunan görüşler geçiyorsa fiil onları değiştirmez, pekiştirir.",
+      "tuzak_metin": "Challenge da views ile kullanılır ama anlamı ters: görüşü sorgulatmak. Already hold, değişim değil süreklilik anlatır.",
+      "sinyal": "already, echo chamber, polarization, existing beliefs",
+      "ilk_yorum": "Mini test\nGood teachers ____ students' existing beliefs so they can think more critically.\n\"reinforce\" mı, \"challenge\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #yökdilsosyal #ydskelime"
+    },
+    {
+      "konu": 91, "baslik": "Degrade: Mikroplastik", "tuzak": false,
+      "kanca": "Plastik yok olur mu, küçülür mü?",
+      "aciklama_giris": "Mikroplastikler fen parçalarının yeni favorisi. Noktalı virgülden sonraki kısım boşluğu açıklıyor. Oku ve karar ver.",
+      "cumle": "Plastic does not fully ____ in nature; instead, it breaks into tiny pieces called microplastics.",
+      "dogru": "degrade",
+      "hap": "degrade = BOZUNMAK", "hap_alt": "tamamen ayrışıp yok olmak",
+      "kural": "Degrade, bir maddenin kimyasal olarak ayrışmasıdır. Not fully degrade, maddenin kaybolmadığını, parçalanıp kaldığını anlatır.",
+      "tuzak_metin": "Instead kelimesini atlayan, iki yarıyı aynı anlamda okur. Instead, ilk yarının olmadığını, ikincisinin olduğunu söyler.",
+      "sinyal": "instead, accumulate, persist, break into",
+      "ilk_yorum": "Mini test\nMicroplastics do not disappear; they ____ in the ocean for decades.\n\"persist\" mi, \"degrade\" mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #yökdilfen #ydskelime"
+    },
+    {
+      "konu": 92, "baslik": "Retrieval / Retention", "tuzak": true,
+      "kanca": "Retrieval mı, retention mı? İkisi de hafıza kelimesi.",
+      "aciklama_giris": "Listeyi beşinci kez okumak yerine kapatıp hatırlamaya çalışmak işe yarar. Peki bunun sonucu olan kelime hangisi?",
+      "cumle": "Testing yourself improves long-term ____ more than rereading the same notes.",
+      "dogru": "retention",
+      "hap": "retention = AKILDA TUTMA", "hap_alt": "retrieval = geri çağırma",
+      "kural": "Retrieval, bilgiyi hafızadan geri çağırma işidir. Retention ise bilginin akılda kalmasıdır. Long-term ile birlikte sonuç sorulur, cevap retention olur.",
+      "tuzak_metin": "Testing yourself zaten retrieval demektir. Cümle yöntemin neyi artırdığını soruyor, yöntemin adını değil.",
+      "sinyal": "long-term, improves, rereading, memory",
+      "ilk_yorum": "Mini test\nFlashcards force the brain to practise ____ instead of simple recognition.\n\"retrieval\" mı, \"retention\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydskelime #ydsçalışma"
+    },
+    {
+      "konu": 93, "baslik": "Impair / Improve", "tuzak": true,
+      "kanca": "Uykusuzluk hafızayı ne yapar? Cümle cevabı baştan söylüyor.",
+      "aciklama_giris": "Sınav gecesi sabahlamayı düşünüyorsan bu cümleyi oku. Deprivation kelimesi boşluğun yönünü belirliyor.",
+      "cumle": "Sleep deprivation is known to ____ memory and attention.",
+      "dogru": "impair",
+      "hap": "deprivation → OLUMSUZ", "hap_alt": "impair = zayıflatmak",
+      "kural": "Deprivation yoksunluk demektir, cümle olumsuz bir etki anlatır. Impair, bir yeteneği zayıflatmak ya da bozmak anlamına gelir.",
+      "tuzak_metin": "Improve ve impair aynı harflerle başlar, hızlı okuyan karıştırır. Önce cümlenin olumlu mu olumsuz mu olduğuna bak.",
+      "sinyal": "deprivation, lack of, damage, weaken",
+      "ilk_yorum": "Mini test\nA good night's sleep helps to ____ memory before an exam.\n\"impair\" mı, \"improve\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #yökdilsağlık #cümletamamlama"
     }
   ]
 }
