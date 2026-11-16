@@ -78,7 +78,8 @@ def kareler(v):
     return [sahne_ciz(s)[0] for s in v["sahneler"]] + [son_ciz()]
 
 
-def video_uret(v, son_ses, cikti, sessiz=False):
+def video_uret(v, son_ses, cikti, sessiz=False, kare_listesi=None):
+    """kare_listesi: sahneler + son kare (verilmezse tanıtımın PLAN kartı); uret_senaryo.py kullanır."""
     sesler = [s["ses"] for s in v["sahneler"]] + [son_ses]
     with tempfile.TemporaryDirectory() as tmp:
         p = lambda n: os.path.join(tmp, n)
@@ -96,7 +97,7 @@ def video_uret(v, son_ses, cikti, sessiz=False):
                                 "-ar", "44100", "-ac", "2", p(f"s{i}.wav")], check=True)
             sureler.append(sn); sesl.append(p(f"s{i}.wav"))
         with open(p("kareler.txt"), "w") as o:
-            for i, (im, sn) in enumerate(zip(kareler(v), sureler)):
+            for i, (im, sn) in enumerate(zip(kare_listesi or kareler(v), sureler)):
                 im.save(p(f"k{i}.png")); o.write(f"file '{p(f'k{i}.png')}'\nduration {sn:.3f}\n")
             o.write(f"file '{p(f'k{len(sureler) - 1}.png')}'\n")
         with open(p("sesler.txt"), "w") as o:

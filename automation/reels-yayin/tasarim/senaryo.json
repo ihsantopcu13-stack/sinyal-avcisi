@@ -1,0 +1,133 @@
+{
+  "aciklama": "Takipçi kazanmak için yazılmış, ders şablonundan farklı KLOD sesli Reels (konu 401+; 16 Kasım 2026). Paylaşma/gönderme odaklı: sınav taktiği, hızlı çözüm, alan kimliği. uret_senaryo.py sahneleri uret_tanitim.py'nin çizimiyle çizer; son sahne her videoda kendi kapanış cümlesi + TAKİP ET. once: kuyrukta bu konunun önüne girer. Türkçe alt satır yok (video Türkçe); kapağı kapak.py ekler.",
+  "videolar": [
+    {
+      "konu": 401, "once": 98,
+      "baslik": "No sooner ... than",
+      "kanca": "Bu soruyu okumadan çözersin",
+      "sahneler": [
+        {"etiket": "CÜMLE TAMAMLAMA", "baslik": "BU SORUYU OKUMADAN ÇÖZERSİN", "ses": "Bu cümle tamamlama sorusunu baştan sona okumana gerek yok."},
+        {"etiket": "SORU", "maddeler": ["No sooner had the researchers published their findings ____ ."], "ses": "Cümle no sooner ile başlıyor."},
+        {"etiket": "ŞIKLAR", "maddeler": ["A) when the funding ended", "B) than other scientists questioned their method", "C) that the results were confirmed", "D) so the journal withdrew it"], "ses": "Şıklara bak. Anlamı düşünme, tek bir kelime ara."},
+        {"etiket": "SİNYAL", "baslik": "NO SOONER görünce THAN ara", "buyuk": "B", "ses": "No sooner varsa than ararsın. Than yalnız bir şıkta var: B."},
+        {"etiket": "ANLAMI", "maddeler": ["No sooner ... than = ...ar ...maz", "Hardly / Scarcely ... when"], "ses": "Anlamı: yayımlar yayımlamaz. Hardly ve scarcely ise when ister."}
+      ],
+      "kapanis": {"baslik": "Kaydet, sınavda saniye kazandırır", "ses": "Kaydet, sınavda saniye kazandırır. Takip et."},
+      "metin": "No sooner görürsen cümleyi okuma, şıklarda than ara.\n\nNo sooner had the researchers published their findings than other scientists questioned their method.\nBulgularını yayımlar yayımlamaz başka bilim insanları yöntemlerini sorguladı.\n\nNo sooner ... than\nHardly / Scarcely ... when\n\nKaydet, sınavdan önceki akşam bir kez bak. YDS'ye çalışan arkadaşına da gönder.",
+      "ilk_yorum": "Mini test\nScarcely had the meeting started ____ the power went out.\n\"than\" mı, \"when\" mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #cümletamamlama #ydsgramer"
+    },
+    {
+      "konu": 402, "once": 162,
+      "baslik": "Aynı Kelime, Üç Alan",
+      "kanca": "Sağlık mı, sosyal mi, fen mi?",
+      "sahneler": [
+        {"etiket": "YÖKDİL", "baslik": "SAĞLIK MI, SOSYAL Mİ, FEN Mİ?", "ses": "Aynı kelime, üç YÖKDİL alanında üç ayrı anlam."},
+        {"etiket": "BUGÜNÜN KELİMESİ", "buyuk": "RESISTANCE", "ses": "Resistance."},
+        {"etiket": "SAĞLIK", "baslik": "antibiotic resistance = antibiyotik direnci", "maddeler": ["Overuse of antibiotics has accelerated bacterial resistance."], "ses": "Sağlıkta antibiyotik direnci. Aşırı kullanım bakterilerin direncini hızlandırdı."},
+        {"etiket": "FEN", "baslik": "electrical resistance = elektriksel direnç", "maddeler": ["Resistance increases as the wire gets longer."], "ses": "Fende elektriksel direnç. Tel uzadıkça direnç artar."},
+        {"etiket": "SOSYAL", "baslik": "resistance to change = değişime direnç", "maddeler": ["The reform met strong resistance from local communities."], "ses": "Sosyalde karşı koyma, direniş. Reform yerel halktan güçlü bir direnişle karşılaştı."}
+      ],
+      "kapanis": {"baslik": "Senin alanın hangisi? Yoruma yaz", "ses": "Senin alanın hangisi? Yoruma yaz. Takip et."},
+      "metin": "Senin alanın hangisi: sağlık, sosyal, fen?\n\nResistance üç alanda da çıkar ama aynı şeyi söylemez.\nSağlık: antibiotic resistance, antibiyotik direnci\nFen: electrical resistance, elektriksel direnç\nSosyal: resistance to change, değişime direnç\n\nAlanını yorumlara yaz. Başka alandan çalışan arkadaşına gönder, o da kendi anlamını görsün.",
+      "ilk_yorum": "Ben başlatayım: sosyal. Sen hangi alandan giriyorsun?",
+      "etiket": "#yökdil #yökdilsağlık #yökdilsosyal #yökdilfen #sinyalavcısı"
+    },
+    {
+      "konu": 403, "once": 186,
+      "baslik": "However = ancak mı?",
+      "kanca": "However her zaman ancak değildir",
+      "sahneler": [
+        {"etiket": "ÇEVİRİ TUZAĞI", "baslik": "HOWEVER = ANCAK. HER ZAMAN DEĞİL.", "ses": "However'ı hep ancak diye çeviriyorsan bu cümlede yanılırsın."},
+        {"etiket": "CÜMLE", "maddeler": ["However carefully the data are collected, some errors are inevitable."], "ses": "However carefully the data are collected."},
+        {"etiket": "YANLIŞ", "maddeler": ["Ancak veriler dikkatle toplanır..."], "ses": "Ancak diye başlarsan cümle dağılır."},
+        {"etiket": "DOĞRU", "maddeler": ["Veriler ne kadar dikkatle toplanırsa toplansın, bazı hatalar kaçınılmazdır."], "ses": "Doğrusu: ne kadar dikkatle toplanırsa toplansın, bazı hatalar kaçınılmazdır."},
+        {"etiket": "KURAL", "baslik": "However + sıfat/zarf", "maddeler": ["= ne kadar ... olursa olsun"], "ses": "However'dan hemen sonra sıfat ya da zarf geliyorsa anlam: ne kadar olursa olsun."}
+      ],
+      "kapanis": {"baslik": "Bunu bilmeyen arkadaşına gönder", "ses": "Bunu bilmeyen arkadaşına gönder. Takip et."},
+      "metin": "However'dan sonra sıfat ya da zarf geliyorsa \"ancak\" değil.\n\nHowever carefully the data are collected, some errors are inevitable.\nVeriler ne kadar dikkatle toplanırsa toplansın, bazı hatalar kaçınılmazdır.\n\nHowever + sıfat/zarf = ne kadar ... olursa olsun\nHowever hard you try = ne kadar uğraşırsan uğraş\n\nÇeviri sorularında bu fark doğru şıkkı ayırır. Kaydet.",
+      "ilk_yorum": "Çevir bakalım: However difficult the task may seem, it can be completed in a week.",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydsçeviri #ingilizceçeviri"
+    },
+    {
+      "konu": 404, "once": 216,
+      "baslik": "Süreyi Böl",
+      "kanca": "Soru başına 2 dakika 15 saniye",
+      "sahneler": [
+        {"etiket": "180 DAKİKA, 80 SORU", "buyuk": "2:15", "maddeler": ["soru başına ortalama"], "ses": "Yüz seksen dakika, seksen soru. Soru başına iki dakika on beş saniyen var. Ama hepsine eşit dağıtma."},
+        {"etiket": "1", "baslik": "Kelime ve dilbilgisi: hızlı geç", "ses": "Kelime ve dilbilgisi sorusunda uzun düşünmek cevabı nadiren değiştirir."},
+        {"etiket": "2", "baslik": "Kazandığın süre paragrafa", "ses": "Oradan kazandığın dakikaları paragrafa aktar."},
+        {"etiket": "3", "baslik": "Takıldın mı? İşaretle, geç, sonra dön", "ses": "Takıldığın soruyu işaretle ve geç. Sona dönersin."},
+        {"etiket": "4", "baslik": "Son 10 dakika: boş soru bırakma", "ses": "Son on dakikada boş soru bırakma. Yanlış doğruyu götürmez."}
+      ],
+      "kapanis": {"baslik": "Önce denemede dene. Kaydet.", "ses": "Bunu sınav günü değil, denemede dene. Kaydet, takip et."},
+      "metin": "180 dakika, 80 soru: soru başına ortalama 2 dakika 15 saniye.\n\nOrtalama yanıltır. Kelime ve dilbilgisi sorusunda uzun düşünmek nadiren cevabı değiştirir. Oradan kazandığın süreyi paragrafa aktar.\n\nTakıldığın soruyu işaretle, geç, sona dön.\nSon 10 dakikada boş soru bırakma.\n\nBu dağılımı önce denemede dene. Kaydet.",
+      "ilk_yorum": "Sen hangi bölümden başlıyorsun: baştan mı, paragraftan mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydstaktik #ydsdeneme"
+    },
+    {
+      "konu": 405, "once": 243,
+      "baslik": "Çeviride 2 Şık Ele",
+      "kanca": "Çeviride anlamı okumadan 2 şık ele",
+      "sahneler": [
+        {"etiket": "ÇEVİRİ", "baslik": "ANLAMI OKUMADAN 2 ŞIK ELE", "ses": "Çeviri sorusunda anlamı düşünmeden önce iki şık elenir."},
+        {"etiket": "SORU", "maddeler": ["Bu ilacın yan etkileri henüz tam olarak anlaşılamamıştır."], "ses": "Bu ilacın yan etkileri henüz tam olarak anlaşılamamıştır."},
+        {"etiket": "BAK", "baslik": "zaman + olumsuzluk + henüz", "ses": "Üç şeye bak: zaman, olumsuzluk, henüz."},
+        {"etiket": "ELENİR", "maddeler": ["The side effects of this drug were fully understood years ago.", "The side effects of this drug will never be understood."], "ses": "Yıllar önce tamamen anlaşıldı diyen şık gider. Asla anlaşılmayacak diyen de gider."},
+        {"etiket": "DOĞRU", "maddeler": ["The side effects of this drug have not yet been fully understood."], "ses": "Henüz anlaşılamamış: have not yet been understood."}
+      ],
+      "kapanis": {"baslik": "Önce zamanı eşleştir, sonra anlamı", "ses": "Önce zamanı ve olumsuzluğu eşleştir, anlama sonra bak. Takip et."},
+      "metin": "Çeviri sorusunda anlamdan önce üç şeye bak: zaman, olumsuzluk, zarf.\n\n\"Bu ilacın yan etkileri henüz tam olarak anlaşılamamıştır.\"\nThe side effects of this drug have not yet been fully understood.\n\n-mıştır + henüz → have not yet been\nOlumlu ya da gelecek zamanlı şıklar ilk bakışta gider.\n\nKaydet, bir sonraki denemende dene.",
+      "ilk_yorum": "Sıra sende: \"Bu bulgular önceki çalışmalarla kısmen çelişmektedir.\" Kısmen karşılığı hangisi: partly mi, mostly mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydsçeviri #yökdilsağlık"
+    },
+    {
+      "konu": 406, "once": 270,
+      "baslik": "Must have / May have",
+      "kanca": "Bu iki cümle aynı değil",
+      "sahneler": [
+        {"etiket": "ANLAMCA EN YAKIN", "baslik": "BU İKİ CÜMLE AYNI DEĞİL", "ses": "Bu iki cümle aynı şeyi söylemiyor. Anlamca en yakın sorusunda fark tam burada."},
+        {"etiket": "CÜMLE", "maddeler": ["The ancient city must have been abandoned after the earthquake."], "ses": "The ancient city must have been abandoned after the earthquake."},
+        {"etiket": "MUST HAVE", "baslik": "= neredeyse kesin", "ses": "Must have, neredeyse eminim demek."},
+        {"etiket": "TUZAK ŞIK", "maddeler": ["The ancient city may have been abandoned after the earthquake."], "ses": "Bu şık çok benziyor ama may have, belki demek. Emin değil."},
+        {"etiket": "DOĞRU ŞIK", "maddeler": ["It is almost certain that the ancient city was abandoned after the earthquake."], "ses": "Doğru şık bu. Almost certain, must have ile aynı kesinlikte."},
+        {"etiket": "KURAL", "maddeler": ["must have = neredeyse kesin", "may / might have = belki", "can't have = olmuş olamaz"], "ses": "Anlamca en yakın sorusunda kelimeler değil, kesinlik derecesi eşleşmeli."}
+      ],
+      "kapanis": {"baslik": "Bu tuzağa düşen arkadaşına gönder", "ses": "Bu tuzağa düşen birini biliyorsan gönder. Takip et."},
+      "metin": "Must have ile may have arasındaki fark bir soru demek.\n\nThe ancient city must have been abandoned after the earthquake.\n= It is almost certain that the ancient city was abandoned after the earthquake.\n\nmust have = neredeyse kesin\nmay / might have = belki, olası\ncan't have = olmuş olamaz\n\nAnlamca en yakın cümle sorusunda kesinlik derecesini eşleştir. Kaydet.",
+      "ilk_yorum": "Mini test\nHe can't have seen the email.\n\"It is impossible that he saw the email.\" mi, \"Perhaps he didn't see the email.\" mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #anlamcaenyakın #ydsgramer"
+    },
+    {
+      "konu": 407, "once": 300,
+      "baslik": "Adapt / Adopt Testi",
+      "kanca": "Tek harf, iki ayrı anlam",
+      "sahneler": [
+        {"etiket": "KARIŞTIRILAN İKİZLER", "baslik": "TEK HARF, İKİ AYRI ANLAM", "ses": "Adapt ve adopt. Tek harf farkı, sınavda tek soru."},
+        {"etiket": "SORU 1", "maddeler": ["Many hospitals have ____ new protocols to reduce infection rates.", "adapted mı, adopted mı?"], "ses": "Birinci cümle. Adapted mı, adopted mı?"},
+        {"etiket": "CEVAP 1", "buyuk": "adopted", "maddeler": ["adopt = benimsemek, kabul edip uygulamak"], "ses": "Adopted. Yeni protokolü benimsemişler."},
+        {"etiket": "SORU 2", "maddeler": ["Species that cannot ____ to rapid climate change may disappear.", "adapt mı, adopt mu?"], "ses": "İkinci cümle. Adapt mı, adopt mu?"},
+        {"etiket": "CEVAP 2", "buyuk": "adapt", "maddeler": ["adapt to = uyum sağlamak"], "ses": "Adapt. Arkasından to geliyorsa uyum sağlamak."}
+      ],
+      "kapanis": {"baslik": "Kaçta kaç? Yoruma yaz", "ses": "İkisini de bildiysen yoruma iki yaz. Takip et."},
+      "metin": "Adapt mı, adopt mu? Kaçta kaç yaptın?\n\nadopt = benimsemek, kabul edip uygulamak\nMany hospitals have adopted new protocols to reduce infection rates.\n\nadapt (to) = uyum sağlamak, uyarlamak\nSpecies that cannot adapt to rapid climate change may disappear.\n\nİpucu: arkasından \"to\" geliyorsa büyük ihtimalle adapt.\n\nSkorunu yorumla, arkadaşına gönder, o da denesin.",
+      "ilk_yorum": "Sıradaki ikiz çift hangisi olsun: principle / principal mı, economic / economical mı?",
+      "etiket": "#yds #yökdil #sinyalavcısı #karıştırılankelimeler #ydskelime"
+    },
+    {
+      "konu": 408, "once": 336,
+      "baslik": "Boş Bırakan Puan Bırakır",
+      "kanca": "YDS'de boş bırakıyorsan dur",
+      "sahneler": [
+        {"etiket": "SINAV TAKTİĞİ", "baslik": "YDS'DE BOŞ BIRAKIYORSAN DUR", "ses": "YDS'de soru boş bırakıyorsan bunu YKS'den kalma bir alışkanlıkla yapıyorsun."},
+        {"etiket": "YKS", "baslik": "4 yanlış 1 doğruyu götürür", "ses": "YKS'de dört yanlış bir doğruyu götürüyordu."},
+        {"etiket": "YDS / YÖKDİL", "baslik": "Yanlış doğruyu", "buyuk": "GÖTÜRMEZ", "ses": "YDS'de ve YÖKDİL'de götürmüyor. Boş bıraktığın soru kesin sıfır."},
+        {"etiket": "SON 10 DAKİKA", "baslik": "Boş kalanları işaretle", "maddeler": ["Önce 2 şıkkı ele, sonra seç"], "ses": "Son on dakikada boş kalan her soruyu işaretle. Önce iki şıkkı ele, kalanlardan birini seç."}
+      ],
+      "kapanis": {"baslik": "Hâlâ boş bırakan arkadaşına gönder", "ses": "Bunu hâlâ boş bırakan bir arkadaşın varsa ona gönder. Takip et."},
+      "metin": "YDS'de boş bıraktığın soru kesin sıfır.\n\nYKS'de 4 yanlış 1 doğruyu götürüyordu, o alışkanlık burada işine yaramaz. YDS ve YÖKDİL'de yanlış doğruyu götürmez.\n\nSon 10 dakikada boş kalan her soruyu işaretle. Önce emin olduğun yanlış şıkları ele, kalanlardan birini seç.\n\nHâlâ boş bırakan arkadaşına gönder.",
+      "ilk_yorum": "Sen sınavda en çok hangi bölümü boş bırakıyordun? Paragraf mı, çeviri mi, kelime mi?",
+      "etiket": "#yds #yökdil #sinyalavcısı #ydstaktik #sınavtaktiği"
+    }
+  ]
+}
