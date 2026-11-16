@@ -112,6 +112,24 @@ def cumle_parcalari(k, cevapli):
     return [(w, BEYAZ) for w in kel], ([(w, NANE) for w in k["dogru"].split()] if cevapli else [])
 
 
+def secenekler(k):
+    """A/B sırası konu numarasına göre değişir (doğru cevap hep aynı yerde olmasın)."""
+    ikisi = [k["dogru"], k["celdirici"]]
+    return ikisi if k["konu"] % 2 == 0 else ikisi[::-1]
+
+
+def secenekler_ciz(d, k, ust):
+    """Kartın altına iki hap: "A) ..." ve "B) ..." (her biri en fazla 440 px)."""
+    yazilar = [f"{h}) {m}" for h, m in zip("AB", secenekler(k))]
+    n = 50
+    while max(f(n).getlength(y) for y in yazilar) > 400 and n > 26: n -= 2
+    fn = f(n)
+    for i, y in enumerate(yazilar):
+        x0 = 60 + i * 490
+        d.rounded_rectangle([x0, ust + 20, x0 + 470, ust + 120], radius=50, outline=NANE, width=5, fill=KOYU)
+        d.text((x0 + (470 - fn.getlength(y)) / 2, ust + 70 - fn.getbbox("Ag")[3] / 2 - 2), y, font=fn, fill=BEYAZ)
+
+
 def kare(k, asama, sayac=None, tr=None):
     im = Image.new("RGB", (W, H), ZEMIN); d = ImageDraw.Draw(im)
     bas = baslik_metni(k); n = 64
@@ -132,17 +150,22 @@ def kare(k, asama, sayac=None, tr=None):
     # Türkçe alt satır (turkce.py): cevap açıklanınca kartın altında; cümle alanı daralır
     tr = tr if asama in ("kural", "tuzak") else None
     alt = 1200
+    # Kanca karesinde iki şık (doğru + çeldirici): izleyici 3-2-1 sırasında seçim yapar
+    secenek = asama == "kanca" and k.get("celdirici")
+    if secenek: alt = 1200 - 140
     if tr:
         ft, st, arat = sigdir([(w, GRI) for w in tr.split()], 900, 150, 38, 28)
         alt = 1200 - len(st) * arat - 56
     alan = (470 if not ek else 250) - (1200 - alt)
     fn, s, ara = sigdir(ana, 920, alan, 64, 30)
-    y = (720 if ek else (952 if not tr else (712 + alt) / 2) - len(s) * ara / 2)
+    y = (720 if ek else (952 if not (tr or secenek) else (712 + alt) / 2) - len(s) * ara / 2)
     y = satir_ciz(d, s, fn, y, ara)
     if ek:
         d.line([140, y + 10, 940, y + 10], fill=NANE, width=3)
         fn2, s2, ara2 = sigdir(ek, 920, alt - y - 30, 56, 30)
         satir_ciz(d, s2, fn2, y + 30, ara2)
+    if secenek:
+        secenekler_ciz(d, k, alt)
     if tr:
         fe = f(24); et = "TÜRKÇESİ"
         ew = fe.getlength(et)
@@ -245,7 +268,7 @@ def kuyruk_kaydi(k):
              f"Örnek:\n{ornek}\n\nAvcı kuralı: {k['tuzak_metin']}\n\n"
              f"Bu, serinin {n}. konusu. Her gün 08:30, 13:00 ve 17:30'da yeni konu.\n\n")
     ai = "Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
-    ig = govde + ("Yarın yeni bir tuzak. Kaçırmamak için takip et.\nKaydet, sınav sabahı tekrar et.\n\n"
+    ig = govde + ("Yarın yeni bir tuzak. Kaçırmamak için takip et.\nKaydet, YDS'ye çalışan arkadaşına gönder.\n\n"
                   f"Ücretsiz çalışma planı. Link biyografide.\n\n{ai}\n\n{k['etiket']}")
     yt = govde + ("Yarın yeni bir tuzak. Kaçırmamak için abone ol.\nKaydet, sınav sabahı tekrar et.\n"
                   f"Ücretsiz çalışma planı: sinyal-avcisi.com\n\n{ai}\n\n{k['etiket']}\n\n#Shorts")
