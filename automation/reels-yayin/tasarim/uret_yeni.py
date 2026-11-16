@@ -250,6 +250,8 @@ def kuyruk_kaydi(k):
     yt = govde + ("Yarın yeni bir tuzak. Kaçırmamak için abone ol.\nKaydet, sınav sabahı tekrar et.\n"
                   f"Ücretsiz çalışma planı: sinyal-avcisi.com\n\n{ai}\n\n{k['etiket']}\n\n#Shorts")
     yt_baslik = f"{k['kanca']} | {k['baslik']} | YDS YÖKDİL"
+    # Kanca kapakta da kullanılır (kapak.py soru()); sığmazsa önce konu adı düşer, kanca kalır
+    if len(yt_baslik) > 100: yt_baslik = f"{k['kanca']} | YDS YÖKDİL"
     if len(yt_baslik) > 100: yt_baslik = f"{k['baslik']} | YDS YÖKDİL"
     return {"konu": n, "baslik": k["baslik"], "video": f"konu{n:02d}.mp4", "aciklama": ig,
             "ilk_yorum": k["ilk_yorum"], "youtube": {"baslik": yt_baslik, "aciklama": yt}}
