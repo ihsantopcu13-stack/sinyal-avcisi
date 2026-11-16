@@ -1,7 +1,7 @@
 name: Reels — takipçi senaryoları (KLOD sesli)
 
 # tasarim/senaryo.json'daki takipçi senaryolarını (konu 401+) OpenAI TTS sesiyle üretir.
-# PR'da: üç örnek (401, 404, 408) kapaklarıyla "reels-onizleme" ön sürümüne konur (onay için).
+# PR'da: en son eklenen senaryo (şu an 409) kapağıyla "reels-onizleme" ön sürümüne konur (onay için).
 # main'de: Release'te olmayan videolar üretilir ve reels-medya-v1'e yüklenir (üzerine yazmaz).
 # Kapaklı sürümü günlük yayın (reels-yayin.yml → kapak.py) kendisi hazırlar.
 
@@ -47,8 +47,8 @@ jobs:
       - name: Önizleme (PR)
         if: github.event_name == 'pull_request'
         run: |
-          python3 uret_senaryo.py --video 401 404 408
-          python3 kapak.py --ornek 401 404 408 --cikti "$CIKTI_KLASORU"
+          python3 uret_senaryo.py --video 409
+          python3 kapak.py --ornek 409 --cikti "$CIKTI_KLASORU"
           gh release view reels-onizleme >/dev/null 2>&1 || \
             gh release create reels-onizleme --prerelease --title "Reels önizleme" --notes "Onay için örnek videolar; yayın hattı kullanmaz."
           gh release upload reels-onizleme "$CIKTI_KLASORU"/konu40?.mp4 "$CIKTI_KLASORU"/kapak40?.png --clobber
