@@ -6925,7 +6925,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <a href="/terms" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Kullanım Şartları</a>
     <a href="#" onclick="event.preventDefault();saCerezTercihDegistir()" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Çerez tercihlerini değiştir</a>
   </div>
-  <nav id="rehberler" aria-label="Rehberler" class="footer-rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
+  <nav id="rehberler" aria-label="Rehberler" class="footer-rehberler" style="scroll-margin-top:70px;grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
     <span style="color:var(--signal);font-weight:700">Rehberler</span>
     <a href="/yds-cikmis-sorular" style="color:rgba(220,227,236,.62);text-decoration:none">YDS çıkmış sorular nasıl çalışılır</a>
     <a href="/yokdil-sinyal-kelimeler" style="color:rgba(220,227,236,.62);text-decoration:none">YÖKDİL sinyal kelimeler</a>
@@ -7183,7 +7183,7 @@ function hosgeldinKapat(){
   if(window.speechSynthesis)speechSynthesis.cancel();
   goTo('dashboard');
 }
-function goTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function goTo(id){const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{const r=el.getBoundingClientRect();if(r.top>innerHeight*0.5||r.bottom<0)el.scrollIntoView({behavior:'smooth',block:'start'});},900);}
 function toggleMenu(){document.getElementById('mmenu').classList.toggle('open');}
 function closeMenu(){document.getElementById('mmenu').classList.remove('open');}
 function closeMenuGoTo(id){closeMenu();setTimeout(()=>goTo(id),120);}
