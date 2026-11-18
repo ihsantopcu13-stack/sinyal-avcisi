@@ -162,7 +162,7 @@ nav{position:fixed;inset:0 0 auto;height:60px;z-index:200;background:rgba(5,7,13
 .btn-nav{background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;padding:9px 20px;border-radius:var(--r-sm);cursor:pointer;border:none;font-family:'IBM Plex Sans',sans-serif;letter-spacing:-.01em;transition:all var(--t-fast);box-shadow:var(--shadow-sm)}
 .btn-nav:hover{background:#0d1624;transform:translateY(-1px);box-shadow:var(--shadow-md)}
 .hamburger{display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:7px 10px;cursor:pointer;font-size:16px}
-.mmenu{display:none;position:fixed;top:56px;inset:auto 0;background:rgba(5,7,13,.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:199;padding:8px 5vw 16px;flex-direction:column}
+.mmenu{display:none;position:fixed;inset:60px 0 auto 0;max-height:calc(100vh - 60px);overflow-y:auto;background:rgba(5,7,13,.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:199;padding:8px 5vw 16px;flex-direction:column}
 .mmenu.open{display:flex}
 .mmenu a{display:block;padding:13px 0;font-size:15px;font-weight:500;color:var(--ink);border-bottom:1px solid var(--border);cursor:pointer}
 .mmenu a:last-child{color:var(--signal);font-weight:700;border:none;margin-top:4px}
