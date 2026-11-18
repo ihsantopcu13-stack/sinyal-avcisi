@@ -51,6 +51,7 @@
     { "source": "/yds-cikmis-sorular", "destination": "/yds-cikmis-sorular.html" },
     { "source": "/yokdil-sinyal-kelimeler", "destination": "/yokdil-sinyal-kelimeler.html" },
     { "source": "/yds-sinav-teknikleri", "destination": "/yds-sinav-teknikleri.html" },
+    { "source": "/yok-denklik-yds-yokdil-60-puan-rehberi", "destination": "/yok-denklik-yds-yokdil-60-puan-rehberi.html" },
     { "source": "/api/testimonial-bildirim", "destination": "/api/admin-testimonials?kaynak=webhook" }
   ],
   "redirects": [
