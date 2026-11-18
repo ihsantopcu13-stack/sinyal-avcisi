@@ -1858,6 +1858,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <a href="/soru-lab/" style="text-decoration:none"><span>Soru Lab</span></a>
     <span onclick="goTo('klod')" role="button" tabindex="0">Yapay Zekâ</span>
     <span onclick="goTo('calisma-plani')" role="button" tabindex="0">Çalışma Planı</span>
+    <span onclick="goTo('rehberler')" role="button" tabindex="0">Rehberler</span>
     <span onclick="goTo('sss')" role="button" tabindex="0">SSS</span>
   </div>
   <button onclick="globalAramaAc()" id="arama-btn" style="background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:15px;cursor:pointer;color:var(--ink);font-family:IBM Plex Sans,sans-serif;margin-right:6px;display:none" class="nav-desktop-only" title="Ara (Ctrl+K)">🔍</button>
@@ -1928,6 +1929,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
   <a href="/soru-lab/" style="text-decoration:none">Soru Lab</a>
   <a onclick="closeMenuGoTo('klod')">Yapay Zekâ (KLOD)</a>
   <a onclick="closeMenuGoTo('calisma-plani')">Çalışma Planı</a>
+  <a onclick="closeMenuGoTo('rehberler')">Rehberler</a>
   <a onclick="closeMenuGoTo('sss')">SSS</a>
   <a onclick="toggleMenu();globalAramaAc()">Ara</a>
   <details class="mmenu-daha">
@@ -6923,7 +6925,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
     <a href="/terms" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Kullanım Şartları</a>
     <a href="#" onclick="event.preventDefault();saCerezTercihDegistir()" style="color:rgba(220,227,236,.62);text-decoration:none;font-size:15px;transition:color .2s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(220,227,236,.62)'">Çerez tercihlerini değiştir</a>
   </div>
-  <nav aria-label="Rehberler" class="footer-rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
+  <nav id="rehberler" aria-label="Rehberler" class="footer-rehberler" style="grid-column:1/-1;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;font-size:15px">
     <span style="color:var(--signal);font-weight:700">Rehberler</span>
     <a href="/yds-cikmis-sorular" style="color:rgba(220,227,236,.62);text-decoration:none">YDS çıkmış sorular nasıl çalışılır</a>
     <a href="/yokdil-sinyal-kelimeler" style="color:rgba(220,227,236,.62);text-decoration:none">YÖKDİL sinyal kelimeler</a>
