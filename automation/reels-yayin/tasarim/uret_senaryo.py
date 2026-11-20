@@ -49,7 +49,7 @@ def kuyruga_ekle(veri):
     var = {o["konu"] for o in d["ogeler"]}
     eklenen = 0
     for v in veri["videolar"]:
-        if v["konu"] in var: continue
+        if v["konu"] in var or v.get("kuyruk") is False: continue  # "kuyruk": false → elle paylaşıldı
         sira = next((i for i, o in enumerate(d["ogeler"]) if o["konu"] == v.get("once")), len(d["ogeler"]))
         d["ogeler"].insert(sira, kuyruk_kaydi(v)); eklenen += 1
     open(KUYRUK, "w", encoding="utf-8").write(json.dumps(d, ensure_ascii=False, indent=2) + "\n")
