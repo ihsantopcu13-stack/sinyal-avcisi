@@ -1,7 +1,8 @@
 name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 
 # Günde bir kez (21:00 TR) çalışır; önündeki yayın saatlerini (bugünün kalanı + yarın;
-# 08:30, 13:00, 17:30 İstanbul) sıradaki konularla doldurup Buffer'a TAM O SAAT için zamanlar.
+# 25 Kas 2026'dan itibaren 10:00 ve 18:00 İstanbul) sıradaki konularla doldurup Buffer'a TAM O SAAT için zamanlar.
+# 10:00 saatine o gün üretilen "3 saniyede çöz" videosu gider (cozum-ekle.mjs).
 # GitHub zamanlanmış işleri saatlerce geciktirebildiği için yayın saatini Buffer tutar.
 # GÜVENLİK KİLİDİ: zamanlanmış çalışmalar repo değişkeni REELS_YAYIN=acik
 # olmadıkça SADECE deneme yapar (hiçbir şey paylaşmaz, bağlantıları test eder).
@@ -49,7 +50,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Kuyruğu ve ilerleme kurallarını doğrula
-        run: node test/kuyruk.test.mjs && node test/durum.test.mjs
+        run: node test/kuyruk.test.mjs && node test/durum.test.mjs && node test/cozum.test.mjs
 
       # Sıradaki konuların Türkçe alt satırlı (tasarim/turkce.py) ve kapaklı (tasarim/kapak.py)
       # videolarını üretip Release'e koyar; yalnız eksik olanlar, üzerine yazmaz. Başarısız olursa
@@ -75,6 +76,36 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: python3 tasarim/kapak.py --hepsi --yukle
 
+      # "3 saniyede çöz" günlük videosu (10:00): kuyrukta saati atanmamış bir tane yoksa sıradaki soru
+      # için üretir (OpenAI TTS + Remotion), Release'e koyar ve kuyruğa ekler. Yalnız yayinla modunda.
+      # Başarısız olursa kuyruk eski hâline döner ve 10:00 saati hazır kuyruktan dolar.
+      - name: "3 saniyede çöz: araçları kur"
+        id: cozum_kur
+        if: env.REELS_MOD == 'yayinla'
+        continue-on-error: true
+        working-directory: automation/video-pipeline
+        run: |
+          sudo apt-get install -y -qq \
+            libnss3 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+            libasound2t64 libpango-1.0-0 libpangocairo-1.0-0
+          npm install --no-audit --no-fund
+          npx remotion browser ensure
+
+      - name: "3 saniyede çöz: yarının videosunu hazırla"
+        if: env.REELS_MOD == 'yayinla' && steps.cozum_kur.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if ! (node cozum-ekle.mjs && node test/kuyruk.test.mjs); then
+            git checkout -- data/kuyruk.json
+            echo "::warning::3 saniyede çöz videosu hazırlanamadı; 10:00 hazır kuyruktan dolacak."
+            exit 1
+          fi
+
       - name: "Reels (${{ env.REELS_MOD }})"
         run: node reels-yayin.mjs
         env:
@@ -89,6 +120,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/durum.json
+          git add data/durum.json data/kuyruk.json
           git diff --staged --quiet || git commit -m "chore: reels yayın ilerlemesi [skip ci]"
           git pull --rebase --autostash && git push

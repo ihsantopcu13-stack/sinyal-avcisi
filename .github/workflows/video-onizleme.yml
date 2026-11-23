@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - automation/video-pipeline/scripts/onizleme.mjs
+      - automation/video-pipeline/scripts/cozum-video.mjs
       - automation/video-pipeline/scripts/generate-audio.mjs
       - automation/video-pipeline/src/ShortVideo.jsx
       - .github/workflows/video-onizleme.yml

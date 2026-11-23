@@ -43,6 +43,25 @@ const isle = (d, plan, basarisiz = {}) => {
 }
 
 {
+  // "3 saniyede çöz" (tur: cozum) 10:00'a, hazır kuyruk 18:00'e; aranan tür yoksa diğeri
+  const k = { ogeler: [{ konu: 1 }, { konu: 2 }, { konu: 501, tur: "cozum" }, { konu: 3 }, { konu: 502, tur: "cozum" }] };
+  const d = durumHazirla({});
+  const p = planla(k, d, ist("2026-11-24 21:00"));
+  kontrol("çözüm videosu 10:00'a, hazır kuyruk 18:00'e", ozet(p) === "501@11-25T10:00 1@11-25T18:00", ozet(p));
+  isle(d, p);
+  const p2 = planla(k, d, ist("2026-11-25 21:00"));
+  kontrol("ertesi gün sıradaki çözüm 10:00'a", ozet(p2) === "502@11-26T10:00 2@11-26T18:00", ozet(p2));
+  isle(d, p2);
+  const p3 = planla(k, d, ist("2026-11-26 21:00"));
+  kontrol("çözüm yoksa 10:00 hazır kuyruktan dolar", ozet(p3) === "3@11-27T10:00", ozet(p3));
+  const k2 = { ogeler: [{ konu: 503, tur: "cozum" }, { konu: 504, tur: "cozum" }] };
+  const p4 = planla(k2, durumHazirla({}), ist("2026-11-24 21:00"));
+  kontrol("hazır kuyruk bitince 18:00 çözümle dolar", ozet(p4) === "503@11-25T10:00 504@11-25T18:00", ozet(p4));
+  const p5 = planla(k, durumHazirla({}), ist("2026-11-23 21:00"));
+  kontrol("eski saatlerde (10:00 yok) çözüm videosu bekler", !p5.some((x) => x.konu > 500), ozet(p5));
+}
+
+{
   const s = gelecekSlotlar(ist("2026-10-04 21:00"));
   kontrol("21:00 çalışması yarının 3 saatini görür", s.join() === "2026-10-05T08:30:00+03:00,2026-10-05T13:00:00+03:00,2026-10-05T17:30:00+03:00", s.join());
   const s2 = gelecekSlotlar(ist("2026-10-04 12:50"));

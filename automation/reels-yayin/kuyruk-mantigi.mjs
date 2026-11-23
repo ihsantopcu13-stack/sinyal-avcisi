@@ -25,7 +25,10 @@ export const ESKI_SLOTLAR = ["08:30", "13:00", "17:30"];
 export const SLOTLAR = ["10:00", "18:00"];
 export const SLOT_DEGISIM_GUNU = "2026-11-25";
 export const gununSlotlari = (gun) => (gun < SLOT_DEGISIM_GUNU ? ESKI_SLOTLAR : SLOTLAR);
-export const ON_SURE_DK = 15; // Buffer'a verilen saat en az bu kadar ileride olmalı
+export const ON_SURE_DK = 15;
+// "3 saniyede çöz" günlük videosu bu saate gider (cozum-ekle.mjs her çalışmada bir tane hazır tutar)
+export const COZUM_SAATI = "10:00";
+export const cozumMu = (o) => o?.tur === "cozum"; // Buffer'a verilen saat en az bu kadar ileride olmalı
 
 const IST_MS = 3 * 60 * 60 * 1000;
 const istanbulGunu = (t) => new Date(t + IST_MS).toISOString().slice(0, 10);
@@ -71,13 +74,18 @@ export function planla(kuyruk, durum, simdi, onSureDk = ON_SURE_DK) {
     }
   }
 
-  // 2) Boş gelecek saatlere, saati hiç atanmamış sıradaki konular
+  // 2) Boş gelecek saatlere, saati hiç atanmamış sıradaki konular.
+  //    10:00 saatine önce "3 saniyede çöz" (tur: "cozum") videosu, diğer saatlere önce hazır kuyruk.
+  //    Aranan tür yoksa diğeri kullanılır: saat boş kalmaz.
   const atanmamis = kuyruk.ogeler.filter((o) => !durum.konular[o.konu]?.slot);
-  let i = 0;
+  const kullanildi = new Set();
+  const ilkBos = (kosul) => atanmamis.find((o) => !kullanildi.has(o.konu) && kosul(o));
   for (const slot of gelecekSlotlar(simdi, onSureDk)) {
     if (doluSlotlar.has(slot)) continue;
-    const o = atanmamis[i++];
+    const cozumSaati = slot.includes(`T${COZUM_SAATI}:`);
+    const o = ilkBos((x) => cozumMu(x) === cozumSaati) || ilkBos(() => true);
     if (!o) break;
+    kullanildi.add(o.konu);
     plan.push({ konu: o.konu, slot, dueAt: new Date(Date.parse(slot)).toISOString(), platformlar: [...BUFFER_PLATFORMLARI], yeni: true });
   }
   return plan;
