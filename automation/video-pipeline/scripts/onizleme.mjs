@@ -64,7 +64,13 @@ s.narrasyon = s.satirlar.join(" ... ");
 await writeFile(yol, JSON.stringify(s, null, 2), "utf-8");
 console.log(`Soru ${soru.id}. Satırlar:\n- ` + s.satirlar.join("\n- "));
 
-process.env.TTS_HIZ ||= "1.15"; // önizlemede biraz daha hızlı anlatım: video kısalsın
+// İhsan'ın seçtiği ses (23 Kas 2026, ses örneği 2): Ash, genç ve enerjik eğitmen tonu
+process.env.OPENAI_TTS_VOICE ||= "ash";
+process.env.OPENAI_TTS_MODEL ||= "gpt-4o-mini-tts";
+process.env.OPENAI_TTS_INSTRUCTIONS ||=
+  "Türkçe konuş. Genç, enerjik, samimi bir YouTube eğitmeni gibi: sıcak, tok ve canlı bir ses, hızlı tempo, " +
+  "vurgulu ve heyecanlı. Öğrenciyi uyandıran, motive eden bir ton. Monoton olma.";
+process.env.TTS_HIZ ||= "1.1";
 await audioUret();
 await render();
 try {

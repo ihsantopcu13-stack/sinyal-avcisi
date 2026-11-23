@@ -39,7 +39,10 @@ async function openAiSesUret(text, voice, index) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "tts-1",
+      // Model ve ton talimatı ortamdan ayarlanabilir (ör. önizleme: gpt-4o-mini-tts + "enerjik eğitmen");
+      // tanımsızken günlük hat eskisi gibi tts-1 kullanır.
+      model: process.env.OPENAI_TTS_MODEL || "tts-1",
+      ...(process.env.OPENAI_TTS_INSTRUCTIONS ? { instructions: process.env.OPENAI_TTS_INSTRUCTIONS } : {}),
       input: text,
       voice,
       response_format: "mp3",
