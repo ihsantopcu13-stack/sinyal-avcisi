@@ -35,14 +35,15 @@ export function satirlarUret(soru) {
       ses: `${soru.soru_tr} Şıklara bak, 3 saniyen var! 3... 2... 1!`,
       kucuk: true,
     },
-    `Doğru cevap ${harf(d)}: ${soru.secenekler_tr[d]}`,
-    `Nasıl çözülür? Önce sinyali bul: ${soru.sinyal}${tur ? `. Bu bir ${tur} sinyali.` : "."}`,
-    `Kural: ${nokta(soru.aciklama_tr)}`,
+    // Ekranda cevabın tamamı yazar; ses yalnız harfi söyler (kısa video)
+    { ekran: `Doğru cevap ${harf(d)}: ${soru.secenekler_tr[d]}`, ses: `Doğru cevap ${harf(d)}!` },
+    `Nasıl çözülür? Sinyal: ${soru.sinyal}${tur ? `, yani ${tur}.` : "."}`,
   ];
-  if (soru.tuzak) {
-    const ipucu = temizle(soru.tuzak_ipucu);
-    satirlar.push(`Tuzak: "${soru.tuzak}" ifadesini kaçırma.${ipucu ? " " + buyuk(nokta(ipucu)) : ""}`);
-  }
+  // Kural ve tuzak tek satırda
+  const ipucu = soru.tuzak ? temizle(soru.tuzak_ipucu) : "";
+  satirlar.push(
+    `${nokta(soru.aciklama_tr)}` + (soru.tuzak ? ` Tuzak: "${soru.tuzak}"${ipucu ? `, ${ipucu.toLocaleLowerCase("tr").replace(/[.!]+$/, "")}` : ""}.` : "")
+  );
   satirlar.push(KAPANIS);
   return satirlar;
 }
