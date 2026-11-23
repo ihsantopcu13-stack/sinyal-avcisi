@@ -29,9 +29,12 @@ export function satirlarUret(soru) {
   const satirlar = [
     HOOK,
     soru.soru_en,
-    soru.soru_tr,
-    ...soru.secenekler_tr.map((s, i) => `${harf(i)}) ${s}`),
-    "3... 2... 1...",
+    // Şıklar ekranda yazılı durur, tek tek okunmaz (video kısa kalsın)
+    {
+      ekran: `${soru.soru_tr}\n\n` + soru.secenekler_tr.map((s, i) => `${harf(i)}) ${s}`).join("\n"),
+      ses: `${soru.soru_tr} Şıklara bak, 3 saniyen var! 3... 2... 1!`,
+      kucuk: true,
+    },
     `Doğru cevap ${harf(d)}: ${soru.secenekler_tr[d]}`,
     `Nasıl çözülür? Önce sinyali bul: ${soru.sinyal}${tur ? `. Bu bir ${tur} sinyali.` : "."}`,
     `Kural: ${nokta(soru.aciklama_tr)}`,
@@ -60,16 +63,16 @@ if (!soru) throw new Error("Seçilen soru sorular.json'da bulunamadı");
 s.senaryo.hook = HOOK;
 s.senaryo.kapanis_tr = KAPANIS;
 s.satirlar = satirlarUret(soru);
-s.narrasyon = s.satirlar.join(" ... ");
+s.narrasyon = s.satirlar.map((x) => (typeof x === "string" ? x : x.ses)).join(" ... ");
 await writeFile(yol, JSON.stringify(s, null, 2), "utf-8");
-console.log(`Soru ${soru.id}. Satırlar:\n- ` + s.satirlar.join("\n- "));
+console.log(`Soru ${soru.id}. Satırlar:\n- ` + s.satirlar.map((x) => (typeof x === "string" ? x : `[ekran] ${x.ekran.replace(/\n/g, " | ")} [ses] ${x.ses}`)).join("\n- "));
 
 // İhsan'ın seçtiği ses (23 Kas 2026, ses örneği 2): Ash, genç ve enerjik eğitmen tonu
 process.env.OPENAI_TTS_VOICE ||= "ash";
 process.env.OPENAI_TTS_MODEL ||= "gpt-4o-mini-tts";
 process.env.OPENAI_TTS_INSTRUCTIONS ||=
   "Türkçe konuş. Genç, enerjik, samimi bir YouTube eğitmeni gibi: sıcak, tok ve canlı bir ses, hızlı tempo, " +
-  "vurgulu ve heyecanlı. Öğrenciyi uyandıran, motive eden bir ton. Monoton olma.";
+  "vurgulu ve heyecanlı. Öğrenciyi uyandıran, motive eden bir ton. Monoton olma. Akıcı konuş, gereksiz duraklama yapma.";
 process.env.TTS_HIZ ||= "1.1";
 await audioUret();
 await render();

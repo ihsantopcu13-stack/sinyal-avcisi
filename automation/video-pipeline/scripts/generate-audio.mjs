@@ -74,6 +74,9 @@ async function sessizlikUret(seconds) {
   return filePath;
 }
 
+const sesMetni = (s) => (typeof s === "string" ? s : s.ses);
+const ekranMetni = (s) => (typeof s === "string" ? s : s.ekran);
+
 async function birlestirVeSureleriHesapla(satirlar) {
   const voice = process.env.OPENAI_TTS_VOICE || "onyx"; // onyx: erkek, derin — Yunus karakterine uygun
   if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY env değişkeni tanımlı değil");
@@ -82,7 +85,9 @@ async function birlestirVeSureleriHesapla(satirlar) {
 
   const lineFiles = [];
   for (let i = 0; i < satirlar.length; i++) {
-    lineFiles.push(await openAiSesUret(satirlar[i], voice, i));
+    // Satır ya düz metindir (hem okunur hem ekranda yazar) ya da { ekran, ses, kucuk }:
+    // ekranda "ekran" yazar, "ses" okunur (ör. şıklar yazılı görünür ama tek tek okunmaz).
+    lineFiles.push(await openAiSesUret(sesMetni(satirlar[i]), voice, i));
   }
   const silenceFile = await sessizlikUret(SILENCE_SECONDS);
 
@@ -108,7 +113,7 @@ async function birlestirVeSureleriHesapla(satirlar) {
   const concatLabels = [];
   for (let i = 0; i < lineFiles.length; i++) {
     const dur = await ffprobeDuration(lineFiles[i]);
-    captions.push({ text: satirlar[i], start: cursor, end: cursor + dur });
+    captions.push({ text: ekranMetni(satirlar[i]), ...(satirlar[i]?.kucuk ? { kucuk: true } : {}), start: cursor, end: cursor + dur });
     cursor += dur;
 
     concatLabels.push(ekle(lineFiles[i]));

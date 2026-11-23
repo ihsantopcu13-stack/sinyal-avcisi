@@ -17,7 +17,7 @@ const CYAN = "#22d3ee";
 const INK = "#ffffff";
 const YELLOW = "#faff00";
 
-function CaptionLine({ text, active }) {
+function CaptionLine({ text, active, kucuk = false }) {
   const frame = useCurrentFrame();
   const enter = spring({ frame, fps: 30, config: { damping: 200 } });
   const scale = interpolate(enter, [0, 1], [0.92, 1]);
@@ -38,10 +38,11 @@ function CaptionLine({ text, active }) {
       <div
         style={{
           fontFamily: "sans-serif",
-          fontSize: 58,
+          fontSize: kucuk ? 44 : 58,
           fontWeight: 800,
           lineHeight: 1.3,
-          textAlign: "center",
+          textAlign: kucuk ? "left" : "center",
+          whiteSpace: kucuk ? "pre-line" : "normal",
           color: active ? CYAN : INK,
           textShadow: "0 4px 24px rgba(0,0,0,0.6)",
         }}
@@ -84,7 +85,7 @@ export const ShortVideo = ({ captions, brand, audioFile, endCta }) => {
             from={Math.floor(captions[activeIndex].start * fps)}
             durationInFrames={Math.ceil((captions[activeIndex].end - captions[activeIndex].start) * fps)}
           >
-            <CaptionLine text={captions[activeIndex].text} active />
+            <CaptionLine text={captions[activeIndex].text} kucuk={!!captions[activeIndex].kucuk} active />
           </Sequence>
         )}
       </AbsoluteFill>
