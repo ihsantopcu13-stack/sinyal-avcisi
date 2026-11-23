@@ -24,7 +24,7 @@ const footerler = indexHtml.match(/<footer>[\s\S]*?<\/footer>/g) || [];
 const footer = footerler[0] || "";
 
 kontrol("index.html'de tek <footer> var", footerler.length === 1, `${footerler.length} adet`);
-kontrol("footer'da Rehberler nav'ı var", /<nav aria-label="Rehberler"/.test(footer));
+kontrol("footer'da Rehberler nav'ı var", /<nav[^>]*aria-label="Rehberler"/.test(footer));
 
 for (const ad of REHBERLER) {
   const etiket = footer.match(new RegExp(`<a href="/${ad}"[^>]*>([^<]+)</a>`));
