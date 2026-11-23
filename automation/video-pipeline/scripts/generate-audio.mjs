@@ -80,6 +80,7 @@ const ekranMetni = (s) => (typeof s === "string" ? s : s.ekran);
 async function birlestirVeSureleriHesapla(satirlar) {
   const voice = process.env.OPENAI_TTS_VOICE || "onyx"; // onyx: erkek, derin — Yunus karakterine uygun
   if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY env değişkeni tanımlı değil");
+  console.log(`Ses: ${voice} · model: ${process.env.OPENAI_TTS_MODEL || "tts-1"} · hız: ${process.env.TTS_HIZ || "1.0"} · talimat: ${process.env.OPENAI_TTS_INSTRUCTIONS ? "var" : "yok"}`);
 
   await mkdir(AUDIO_DIR, { recursive: true });
 

@@ -73,7 +73,7 @@ process.env.OPENAI_TTS_VOICE ||= "ash";
 process.env.OPENAI_TTS_MODEL ||= "gpt-4o-mini-tts";
 process.env.OPENAI_TTS_INSTRUCTIONS ||=
   "Türkçe konuş. Genç, enerjik, samimi bir YouTube eğitmeni gibi: sıcak, tok ve canlı bir ses, hızlı tempo, " +
-  "vurgulu ve heyecanlı. Öğrenciyi uyandıran, motive eden bir ton. Monoton olma. Akıcı konuş, gereksiz duraklama yapma.";
+  "vurgulu ve heyecanlı. Öğrenciyi uyandıran, motive eden bir ton. Monoton olma.";
 process.env.TTS_HIZ ||= "1.1";
 await audioUret();
 await render();
