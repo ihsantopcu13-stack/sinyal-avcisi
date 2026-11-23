@@ -1,0 +1,36 @@
+name: Ses örnekleri (paylaşmaz)
+
+# Aynı kısa metni farklı OpenAI seslerle okur ve "reels-onizleme" ön sürümüne koyar. Hiçbir şey paylaşılmaz.
+on:
+  pull_request:
+    paths:
+      - automation/video-pipeline/scripts/ses-ornekleri.mjs
+      - .github/workflows/ses-ornekleri.yml
+  workflow_dispatch: {}
+
+jobs:
+  ses:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # yalnız reels-onizleme ön sürümüne yüklemek için
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: node scripts/ses-ornekleri.mjs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Önizleme sürümüne koy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view reels-onizleme >/dev/null 2>&1 || \
+            gh release create reels-onizleme --prerelease --title "Reels önizleme" --notes "Onay için örnekler; yayın hattı kullanmaz."
+          gh release upload reels-onizleme out/ses-ornekleri/ses-*.mp3 out/ses-ornekleri/tum-sesler.mp3 --clobber
