@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - automation/video-pipeline/scripts/onizleme.mjs
+      - automation/video-pipeline/scripts/generate-audio.mjs
       - .github/workflows/video-onizleme.yml
   workflow_dispatch: {}
 

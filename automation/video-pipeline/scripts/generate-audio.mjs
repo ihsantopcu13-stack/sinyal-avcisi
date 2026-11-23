@@ -43,6 +43,8 @@ async function openAiSesUret(text, voice, index) {
       input: text,
       voice,
       response_format: "mp3",
+      // İsteğe bağlı konuşma hızı (ör. önizlemede 1.15); tanımsızken OpenAI varsayılanı (1.0)
+      ...(process.env.TTS_HIZ ? { speed: Number(process.env.TTS_HIZ) } : {}),
     }),
   });
 

@@ -1,6 +1,7 @@
 // ============================================================
 // ÖNİZLEME — "3 saniyede çöz" formatında TEK örnek video üretir, HİÇBİR YERE PAYLAŞMAZ.
-// Akış: soru seçimi → OpenAI TTS → Remotion → kapak. Buffer/Instagram/TikTok/YouTube adımı YOK.
+// Akış: soru seçimi → satırlar → OpenAI TTS → Remotion → kapak. Buffer/Instagram/TikTok/YouTube adımı YOK.
+// Format: soru → 3-2-1 → doğru cevap → "Nasıl çözülür?" (sinyal → kural → tuzak) → takip çağrısı.
 // Çıktı: out/video.mp4 (+ out/thumbnail.png). İş akışı bunu "reels-onizleme" ön sürümüne koyar.
 // ============================================================
 import { readFile, writeFile } from "node:fs/promises";
@@ -11,9 +12,37 @@ import { audioUret } from "./generate-audio.mjs";
 import { render } from "./render.mjs";
 import { kapakGoruntusuUret } from "./generate-thumbnail.mjs";
 
-const OUT_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "out");
+const KOK = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const OUT_DIR = path.join(KOK, "out");
+const SORULAR = path.join(KOK, "..", "..", "api", "data", "sorular.json");
 const HOOK = "3 saniyede çöz: bu sinyali kaçırırsan puan gider.";
 const KAPANIS = "Yarın 10:00'da yeni soru. Kaçırmamak için takip et.";
+
+const temizle = (m) => String(m || "").replace(/^\s*tuzak\s*:\s*/i, "").replace(/\s*sinyali\s*$/i, "").trim();
+const nokta = (m) => (/[.!?]$/.test(m) ? m : m + ".");
+const buyuk = (m) => (m ? m[0].toLocaleUpperCase("tr") + m.slice(1) : m);
+
+export function satirlarUret(soru) {
+  const harf = (i) => String.fromCharCode(65 + i);
+  const d = soru.dogru_index;
+  const tur = temizle(soru.sinyal_ipucu).toLocaleLowerCase("tr");
+  const satirlar = [
+    HOOK,
+    soru.soru_en,
+    soru.soru_tr,
+    ...soru.secenekler_tr.map((s, i) => `${harf(i)}) ${s}`),
+    "3... 2... 1...",
+    `Doğru cevap ${harf(d)}: ${soru.secenekler_tr[d]}`,
+    `Nasıl çözülür? Önce sinyali bul: ${soru.sinyal}${tur ? `. Bu bir ${tur} sinyali.` : "."}`,
+    `Kural: ${nokta(soru.aciklama_tr)}`,
+  ];
+  if (soru.tuzak) {
+    const ipucu = temizle(soru.tuzak_ipucu);
+    satirlar.push(`Tuzak: "${soru.tuzak}" ifadesini kaçırma.${ipucu ? " " + buyuk(nokta(ipucu)) : ""}`);
+  }
+  satirlar.push(KAPANIS);
+  return satirlar;
+}
 
 const sonuc = await scriptUret();
 if (sonuc.atlandi) {
@@ -21,17 +50,21 @@ if (sonuc.atlandi) {
   process.exit(1);
 }
 
-// Format: en çok izlenen videonun açılışı (2.199 görüntüleme) + takip çağrılı kapanış
+// Seçilen sorunun ham verisi (sinyal_ipucu, tuzak, tuzak_ipucu senaryoya taşınmıyor)
 const yol = path.join(OUT_DIR, "script.json");
 const s = JSON.parse(await readFile(yol, "utf-8"));
-const eskiHook = s.senaryo.hook, eskiKapanis = s.senaryo.kapanis_tr;
+const sorular = JSON.parse(await readFile(SORULAR, "utf-8"));
+const soru = sorular.find((q) => q.soru_en === s.senaryo.soru_en);
+if (!soru) throw new Error("Seçilen soru sorular.json'da bulunamadı");
+
 s.senaryo.hook = HOOK;
 s.senaryo.kapanis_tr = KAPANIS;
-s.satirlar = s.satirlar.map((x) => (x === eskiHook ? HOOK : x === eskiKapanis ? KAPANIS : x));
+s.satirlar = satirlarUret(soru);
 s.narrasyon = s.satirlar.join(" ... ");
 await writeFile(yol, JSON.stringify(s, null, 2), "utf-8");
-console.log("Satırlar:\n- " + s.satirlar.join("\n- "));
+console.log(`Soru ${soru.id}. Satırlar:\n- ` + s.satirlar.join("\n- "));
 
+process.env.TTS_HIZ ||= "1.15"; // önizlemede biraz daha hızlı anlatım: video kısalsın
 await audioUret();
 await render();
 try {
