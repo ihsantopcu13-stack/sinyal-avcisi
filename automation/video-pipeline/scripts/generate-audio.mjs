@@ -39,10 +39,15 @@ async function openAiSesUret(text, voice, index) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "tts-1",
+      // Model ve ton talimatı ortamdan ayarlanabilir (ör. önizleme: gpt-4o-mini-tts + "enerjik eğitmen");
+      // tanımsızken günlük hat eskisi gibi tts-1 kullanır.
+      model: process.env.OPENAI_TTS_MODEL || "tts-1",
+      ...(process.env.OPENAI_TTS_INSTRUCTIONS ? { instructions: process.env.OPENAI_TTS_INSTRUCTIONS } : {}),
       input: text,
       voice,
       response_format: "mp3",
+      // İsteğe bağlı konuşma hızı (ör. önizlemede 1.15); tanımsızken OpenAI varsayılanı (1.0)
+      ...(process.env.TTS_HIZ ? { speed: Number(process.env.TTS_HIZ) } : {}),
     }),
   });
 
@@ -69,15 +74,21 @@ async function sessizlikUret(seconds) {
   return filePath;
 }
 
+const sesMetni = (s) => (typeof s === "string" ? s : s.ses);
+const ekranMetni = (s) => (typeof s === "string" ? s : s.ekran);
+
 async function birlestirVeSureleriHesapla(satirlar) {
   const voice = process.env.OPENAI_TTS_VOICE || "onyx"; // onyx: erkek, derin — Yunus karakterine uygun
   if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY env değişkeni tanımlı değil");
+  console.log(`Ses: ${voice} · model: ${process.env.OPENAI_TTS_MODEL || "tts-1"} · hız: ${process.env.TTS_HIZ || "1.0"} · talimat: ${process.env.OPENAI_TTS_INSTRUCTIONS ? "var" : "yok"}`);
 
   await mkdir(AUDIO_DIR, { recursive: true });
 
   const lineFiles = [];
   for (let i = 0; i < satirlar.length; i++) {
-    lineFiles.push(await openAiSesUret(satirlar[i], voice, i));
+    // Satır ya düz metindir (hem okunur hem ekranda yazar) ya da { ekran, ses, kucuk }:
+    // ekranda "ekran" yazar, "ses" okunur (ör. şıklar yazılı görünür ama tek tek okunmaz).
+    lineFiles.push(await openAiSesUret(sesMetni(satirlar[i]), voice, i));
   }
   const silenceFile = await sessizlikUret(SILENCE_SECONDS);
 
@@ -103,7 +114,7 @@ async function birlestirVeSureleriHesapla(satirlar) {
   const concatLabels = [];
   for (let i = 0; i < lineFiles.length; i++) {
     const dur = await ffprobeDuration(lineFiles[i]);
-    captions.push({ text: satirlar[i], start: cursor, end: cursor + dur });
+    captions.push({ text: ekranMetni(satirlar[i]), ...(satirlar[i]?.kucuk ? { kucuk: true } : {}), start: cursor, end: cursor + dur });
     cursor += dur;
 
     concatLabels.push(ekle(lineFiles[i]));

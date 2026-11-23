@@ -2,7 +2,7 @@
 //
 // ZAMANLAMA: GitHub zamanlanmış işleri bu repoda saatlerce geç başlatıyor. Bu yüzden yayın saatini
 // GitHub değil Buffer tutar: iş akışı günde bir kez (21:00) çalışır ve önündeki yayın saatlerini
-// (bugünün kalanı + yarın; 08:30, 13:00, 17:30 İstanbul) sıradaki konularla doldurup Buffer'a TAM O
+// (bugünün kalanı + yarın; 25 Kasım 2026'dan itibaren 10:00 ve 18:00 İstanbul) sıradaki konularla doldurup Buffer'a TAM O
 // SAAT için zamanlanmış gönderir.
 //   - Her konu bir kez bir saate atanır (durum.konular[k].slot) ve asla iki kez gönderilmez.
 //   - Çalışma kaçarsa sonraki çalışma sıradan devam eder: geçmiş boş saatler doldurulmaz (rastgele
@@ -18,8 +18,17 @@
 export const MAX_DENEME = 3;
 export const BUFFER_PLATFORMLARI = ["instagram", "facebook"];
 export const YT_CALISMA_BASINA = 3;
-export const SLOTLAR = ["08:30", "13:00", "17:30"]; // İstanbul saati (UTC+3, yaz saati uygulaması yok)
-export const ON_SURE_DK = 15; // Buffer'a verilen saat en az bu kadar ileride olmalı
+// İstanbul saati (UTC+3, yaz saati uygulaması yok).
+// 25 Kasım 2026'dan itibaren günde 2 paylaşım (Metricool: kitle hafta içi 10:00 ve 18:00'de en aktif).
+// Önceki günler eski 3 saatte kalır: daha önce Buffer'a verilmiş gönderilerin günü çift dolmaz.
+export const ESKI_SLOTLAR = ["08:30", "13:00", "17:30"];
+export const SLOTLAR = ["10:00", "18:00"];
+export const SLOT_DEGISIM_GUNU = "2026-11-25";
+export const gununSlotlari = (gun) => (gun < SLOT_DEGISIM_GUNU ? ESKI_SLOTLAR : SLOTLAR);
+export const ON_SURE_DK = 15;
+// "3 saniyede çöz" günlük videosu bu saate gider (cozum-ekle.mjs her çalışmada bir tane hazır tutar)
+export const COZUM_SAATI = "10:00";
+export const cozumMu = (o) => o?.tur === "cozum"; // Buffer'a verilen saat en az bu kadar ileride olmalı
 
 const IST_MS = 3 * 60 * 60 * 1000;
 const istanbulGunu = (t) => new Date(t + IST_MS).toISOString().slice(0, 10);
@@ -44,7 +53,7 @@ export function gelecekSlotlar(simdi, onSureDk = ON_SURE_DK) {
   const t = simdi.getTime();
   const gunler = [istanbulGunu(t), istanbulGunu(t + 24 * 60 * 60 * 1000)];
   const sinir = t + onSureDk * 60 * 1000;
-  return gunler.flatMap((g) => SLOTLAR.map((s) => `${g}T${s}:00+03:00`)).filter((z) => Date.parse(z) >= sinir);
+  return gunler.flatMap((g) => gununSlotlari(g).map((s) => `${g}T${s}:00+03:00`)).filter((z) => Date.parse(z) >= sinir);
 }
 
 // Bu çalışmada Buffer'a gönderilecekler: [{ konu, slot, dueAt, platformlar, yeni }]
@@ -65,13 +74,18 @@ export function planla(kuyruk, durum, simdi, onSureDk = ON_SURE_DK) {
     }
   }
 
-  // 2) Boş gelecek saatlere, saati hiç atanmamış sıradaki konular
+  // 2) Boş gelecek saatlere, saati hiç atanmamış sıradaki konular.
+  //    10:00 saatine önce "3 saniyede çöz" (tur: "cozum") videosu, diğer saatlere önce hazır kuyruk.
+  //    Aranan tür yoksa diğeri kullanılır: saat boş kalmaz.
   const atanmamis = kuyruk.ogeler.filter((o) => !durum.konular[o.konu]?.slot);
-  let i = 0;
+  const kullanildi = new Set();
+  const ilkBos = (kosul) => atanmamis.find((o) => !kullanildi.has(o.konu) && kosul(o));
   for (const slot of gelecekSlotlar(simdi, onSureDk)) {
     if (doluSlotlar.has(slot)) continue;
-    const o = atanmamis[i++];
+    const cozumSaati = slot.includes(`T${COZUM_SAATI}:`);
+    const o = ilkBos((x) => cozumMu(x) === cozumSaati) || ilkBos(() => true);
     if (!o) break;
+    kullanildi.add(o.konu);
     plan.push({ konu: o.konu, slot, dueAt: new Date(Date.parse(slot)).toISOString(), platformlar: [...BUFFER_PLATFORMLARI], yeni: true });
   }
   return plan;
