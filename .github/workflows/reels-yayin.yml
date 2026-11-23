@@ -10,7 +10,7 @@ name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 on:
   schedule:
     # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
-    - cron: "0 18 * * *"  # 21:00 TR — ertesi günün 08:30, 13:00, 17:30 gönderilerini zamanlar
+    - cron: "0 18 * * *"  # 21:00 TR — ertesi günün 10:00 ve 18:00 gönderilerini zamanlar (25 Kas 2026 öncesi: 08:30, 13:00, 17:30)
   workflow_dispatch:
     inputs:
       mod:
