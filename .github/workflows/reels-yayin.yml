@@ -50,7 +50,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Kuyruğu ve ilerleme kurallarını doğrula
-        run: node test/kuyruk.test.mjs && node test/durum.test.mjs && node test/cozum.test.mjs
+        run: node test/kuyruk.test.mjs && node test/durum.test.mjs && node test/cozum.test.mjs && node test/sinyal.test.mjs
 
       # Sıradaki konuların Türkçe alt satırlı (tasarim/turkce.py) ve kapaklı (tasarim/kapak.py)
       # videolarını üretip Release'e koyar; yalnız eksik olanlar, üzerine yazmaz. Başarısız olursa
@@ -103,6 +103,24 @@ jobs:
           if ! (node cozum-ekle.mjs && node test/kuyruk.test.mjs); then
             git checkout -- data/kuyruk.json
             echo "::warning::3 saniyede çöz videosu hazırlanamadı; 10:00 hazır kuyruktan dolacak."
+            exit 1
+          fi
+
+      # 13:30 "sinyal kelime" günlük videosu: sitedeki sinyal sorularından (assets/data/sinyal-sorular.json)
+      # sıradaki için üretir (aynı araçlar ve ses), Release'e koyar ve kuyruğa ekler. Yalnız yayinla modunda.
+      # Başarısız olursa kuyruk eski hâline döner ve 13:30 saati hazır kuyruktan dolar.
+      - name: "Sinyal kelime: yarının 13:30 videosunu hazırla"
+        if: env.REELS_MOD == 'yayinla' && steps.cozum_kur.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          cp data/kuyruk.json "$RUNNER_TEMP/kuyruk-yedek.json" # çözüm adımının eklediği kalsın
+          if ! (node sinyal-ekle.mjs && node test/kuyruk.test.mjs); then
+            cp "$RUNNER_TEMP/kuyruk-yedek.json" data/kuyruk.json
+            echo "::warning::Sinyal kelime videosu hazırlanamadı; 13:30 hazır kuyruktan dolacak."
             exit 1
           fi
 

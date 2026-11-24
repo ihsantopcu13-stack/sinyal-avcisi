@@ -161,8 +161,8 @@ def main():
     # Türkçe satırlı sürüm varsa kapak onun üstüne yapılır (konuXX-tr-kapak.mp4).
     eksik = []
     for o in kuyruk:
-        # "3 saniyede çöz" videosu (tur: cozum) kapaksız kalır: ilk kare soru olmalı
-        if o.get("tur") == "cozum":
+        # "3 saniyede çöz" (tur: cozum) ve 13:30 sinyal (tur: sinyal) videoları kapaksız kalır: ilk kare soru olmalı
+        if o.get("tur") in ("cozum", "sinyal"):
             continue
         kaynak = tr_adi(o["video"]) if tr_adi(o["video"]) in varolan else o["video"]
         if not durum.get(str(o["konu"]), {}).get("slot") and kaynak in varolan and kapak_adi(kaynak) not in varolan:
