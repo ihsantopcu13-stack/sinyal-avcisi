@@ -31,8 +31,7 @@ KUYRUK = os.path.join(KOK, "..", "data", "kuyruk.json")
 DURUM = os.path.join(KOK, "..", "data", "durum.json")
 SATIRLAR = os.path.join(KOK, "turkce-satirlar.json")
 YENI = os.path.join(KOK, "yeni-konular.json")
-ETIKET = "reels-medya-v1"
-URL = "https://github.com/ihsantopcu13-stack/sinyal-avcisi/releases/download/" + ETIKET + "/"
+import medya
 
 W, H = 1080, 1920
 SAYAC_SN = 3.0       # eski şablonda satır 3-2-1 sayacından sonra görünür
@@ -183,7 +182,11 @@ def main():
             for n in [int(x) for x in arg[arg.index("--ornek") + 1:] if x.isdigit()]:
                 o = next(x for x in kuyruk if x["konu"] == n)
                 yol = os.path.join(tmp, o["video"])
-                urllib.request.urlretrieve(URL + o["video"], yol)
+                for adres in medya.url_adaylari(o["video"]):
+                    try:
+                        urllib.request.urlretrieve(adres, yol); break
+                    except Exception:
+                        continue
                 uret(o, turkcesi(o, s), yol, os.path.join(cikti, tr_adi(o["video"])), yeni)
         print(f"Örnekler: {cikti}")
         return
@@ -191,18 +194,18 @@ def main():
     if "--hepsi" not in arg:
         print(__doc__); sys.exit(1)
     durum = json.load(open(DURUM, encoding="utf-8"))["konular"]
-    varolan = set(gh("release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name").split())
+    varolan = medya.varolan()
     # Saati atanmış (Buffer'a gitmiş) konular atlanır; yalnız sıradakiler
     eksik = [o for o in kuyruk if not durum.get(str(o["konu"]), {}).get("slot") and turkcesi(o, s)
              and o["video"] in varolan and tr_adi(o["video"]) not in varolan]
     print(f"{len(eksik)} konunun Türkçe satırlı videosu eksik")
     with tempfile.TemporaryDirectory() as tmp:
         for o in eksik:
-            gh("release", "download", ETIKET, "-p", o["video"], "-D", tmp, "--clobber")
+            medya.indir(o["video"], tmp, varolan)
             hedef = os.path.join(cikti, tr_adi(o["video"]))
             uret(o, turkcesi(o, s), os.path.join(tmp, o["video"]), hedef, yeni)
             if "--yukle" in arg:
-                gh("release", "upload", ETIKET, hedef)  # --clobber yok: üzerine yazmaz
+                medya.yukle(hedef)  # --clobber yok: üzerine yazmaz
             print(f"✔ Konu {o['konu']}: {tr_adi(o['video'])}")
 
 

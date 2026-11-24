@@ -12,7 +12,7 @@ import json, os, subprocess, sys, tempfile
 
 KOK = os.path.dirname(os.path.abspath(__file__))
 KUYRUK = os.path.join(KOK, "..", "data", "kuyruk.json")
-ETIKET = "reels-medya-v1"
+import medya
 # Başlığı zaten Türkçe olan konulara "TUZAĞI" eklenmez
 TUZAKSIZ = ("İskeleti", "Refleksi", "Yapılar", "Uyumu", "Tuzağı")
 
@@ -22,7 +22,7 @@ def gh(*arg, **kw):
 def main():
     dene = "--dene" in sys.argv
     kuyruk = json.load(open(KUYRUK, encoding="utf-8"))
-    varolan = set(gh("release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name").split())
+    varolan = medya.varolan()
     eksik = [o for o in kuyruk["ogeler"] if "tekrar" in o and o["video"] not in varolan]
     print(f"{len(eksik)} tekrar videosu eksik")
     if dene: eksik = eksik[:1]
@@ -31,7 +31,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for o in eksik:
             asil = next(x for x in kuyruk["ogeler"] if x["konu"] == o["tekrar"] and "tekrar" not in x)
-            gh("release", "download", ETIKET, "-p", asil["video"], "-D", tmp, "--clobber")
+            medya.indir(asil["video"], tmp, varolan)
             hedef = os.path.join(cikti, o["video"])
             bayrak = "--tuzaksiz" if any(w in o["baslik"] for w in TUZAKSIZ) else "--tuzak"
             subprocess.run([sys.executable, os.path.join(KOK, "yenile.py"),
@@ -40,7 +40,7 @@ def main():
             if dene:
                 print(f"deneme: {hedef} üretildi, yüklenmedi"); continue
             # --clobber YOK: aynı adda dosya varsa gh hata verir, üzerine yazılmaz
-            gh("release", "upload", ETIKET, hedef)
+            medya.yukle(hedef)
             print(f"✔ Konu {o['konu']} ({o['baslik']}) → {o['video']} yüklendi")
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageFont
 KOK = os.path.dirname(os.path.abspath(__file__))
 KUYRUK = os.path.join(KOK, "..", "data", "kuyruk.json")
 DURUM = os.path.join(KOK, "..", "data", "durum.json")
-ETIKET = "reels-medya-v1"
+import medya
 KAPAK_SN = 0.12  # 3 kare (25 fps): izleyici fark etmez, Instagram kapak olarak alır
 
 W, H = 1080, 1920
@@ -156,7 +156,7 @@ def main():
     if "--hepsi" not in arg:
         print(__doc__); sys.exit(1)
     durum = json.load(open(DURUM, encoding="utf-8"))["konular"]
-    varolan = set(gh("release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name").split())
+    varolan = medya.varolan()
     # Saati atanmış (Buffer'a gitmiş) konular atlanır; yalnız sıradakiler.
     # Türkçe satırlı sürüm varsa kapak onun üstüne yapılır (konuXX-tr-kapak.mp4).
     eksik = []
@@ -170,13 +170,13 @@ def main():
     print(f"{len(eksik)} konunun kapaklı videosu eksik")
     with tempfile.TemporaryDirectory() as tmp:
         for o, kaynak in eksik:
-            gh("release", "download", ETIKET, "-p", kaynak, "-D", tmp, "--clobber")
+            medya.indir(kaynak, tmp, varolan)
             png = os.path.join(cikti, f"kapak{o['konu']}.png")
             hedef = os.path.join(cikti, kapak_adi(kaynak))
             kapak_ciz(o, png)
             kapakli_video(o, os.path.join(tmp, kaynak), png, hedef)
             if "--yukle" in arg:
-                gh("release", "upload", ETIKET, hedef)  # --clobber yok: üzerine yazmaz
+                medya.yukle(hedef)  # --clobber yok: üzerine yazmaz
             print(f"✔ Konu {o['konu']}: {kapak_adi(kaynak)}")
 
 

@@ -47,7 +47,8 @@ const DURUM_YOLU = process.env.REELS_DURUM_YOLU || path.join(__dirname, "data", 
 const INDIRME_DIZINI = path.join(__dirname, ".medya");
 
 const MOD = (process.env.REELS_MOD || "deneme").trim();
-const RELEASE_TAG = "reels-medya-v1";
+// reels-medya-v1 1000 dosya sınırında (24 Kas 2026); yeni videolar reels-medya-v2'de. Okuma ikisinden, aynı ad varsa v1.
+const RELEASE_TAGLARI = ["reels-medya-v1", "reels-medya-v2"];
 const BUFFER_URL = "https://api.buffer.com";
 
 const env = process.env;
@@ -130,10 +131,23 @@ async function ghApi(yol, secenek = {}) {
 }
 
 async function releaseAssetleri() {
-  const res = await ghApi(`/releases/tags/${RELEASE_TAG}`);
-  if (!res.ok) throw new Error(`GitHub Release "${RELEASE_TAG}" bulunamadı (${res.status}) — medya henüz yüklenmemiş`);
-  const rel = await res.json();
-  return Object.fromEntries((rel.assets || []).map((a) => [a.name, a]));
+  const sonuc = {};
+  for (const [i, etiket] of RELEASE_TAGLARI.entries()) {
+    const res = await ghApi(`/releases/tags/${etiket}`);
+    if (!res.ok) {
+      if (i === 0) throw new Error(`GitHub Release "${etiket}" bulunamadı (${res.status}) — medya henüz yüklenmemiş`);
+      continue; // v2 henüz açılmamış olabilir
+    }
+    const rel = await res.json();
+    for (let sayfa = 1; ; sayfa++) {
+      const r = await ghApi(`/releases/${rel.id}/assets?per_page=100&page=${sayfa}`);
+      if (!r.ok) throw new Error(`GitHub Release "${etiket}" dosya listesi okunamadı (${r.status})`);
+      const liste = await r.json();
+      for (const a of liste) sonuc[a.name] ??= a;
+      if (liste.length < 100) break;
+    }
+  }
+  return sonuc;
 }
 
 async function assetIndir(asset) {

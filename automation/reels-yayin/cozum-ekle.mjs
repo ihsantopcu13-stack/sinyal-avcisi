@@ -1,5 +1,5 @@
 // "3 SANİYEDE ÇÖZ" günlük videosu: kuyrukta saati atanmamış bir tane yoksa sıradaki soru için
-// video üretir, reels-medya-v1 Release'ine koyar (üzerine yazmaz) ve data/kuyruk.json'a ekler.
+// video üretir, reels-medya-v2 Release'ine koyar (v1 1000 dosya sınırında) (üzerine yazmaz) ve data/kuyruk.json'a ekler.
 // reels-yayin.yml bunu planlamadan ÖNCE çalıştırır; planlama onu 10:00 saatine koyar.
 //
 //   node cozum-ekle.mjs          → gerekiyorsa üret + yükle + kuyruğa ekle (GH_TOKEN, OPENAI_API_KEY)
@@ -15,7 +15,8 @@ const KUYRUK = path.join(DIR, "data", "kuyruk.json");
 const DURUM = path.join(DIR, "data", "durum.json");
 const SORULAR = path.join(DIR, "..", "..", "api", "data", "sorular.json");
 const PIPELINE = path.join(DIR, "..", "video-pipeline");
-const ETIKET = "reels-medya-v1";
+const OKUMA_ETIKETLERI = ["reels-medya-v1", "reels-medya-v2"];
+const ETIKET = "reels-medya-v2"; // yükleme: v1 GitHub'ın 1000 dosya sınırına ulaştı (24 Kas 2026)
 const KURU = process.argv.includes("--kuru");
 
 const oku = async (p) => JSON.parse(await readFile(p, "utf-8"));
@@ -42,7 +43,11 @@ if (KURU) {
 }
 
 const gh = (...a) => execFileSync("gh", a, { encoding: "utf-8" });
-const varolan = new Set(gh("release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name").split(/\s+/));
+const ghSessiz = (...a) => { try { return gh(...a); } catch { return null; } };
+const varolan = new Set(OKUMA_ETIKETLERI.flatMap((e, i) => {
+  const cikti = i === 0 ? gh("release", "view", e, "--json", "assets", "-q", ".assets[].name") : ghSessiz("release", "view", e, "--json", "assets", "-q", ".assets[].name");
+  return (cikti || "").split(/\s+/).filter(Boolean);
+}));
 
 if (varolan.has(oge.video)) {
   // Önceki çalışma yükleyip kuyruğu commit'leyemediyse: aynı videoyu yeniden üretme
@@ -51,6 +56,9 @@ if (varolan.has(oge.video)) {
   execFileSync("node", ["scripts/cozum-video.mjs", "--soru", soru.id], { cwd: PIPELINE, stdio: "inherit", env: process.env });
   const hedef = path.join(PIPELINE, "out", oge.video);
   await copyFile(path.join(PIPELINE, "out", "video.mp4"), hedef);
+  if (ghSessiz("release", "view", ETIKET) === null) {
+    ghSessiz("release", "create", ETIKET, "--title", "Reels medya v2", "--notes", "reels-medya-v1 1000 dosya sınırına ulaştı; yeni videolar burada.");
+  }
   gh("release", "upload", ETIKET, hedef); // --clobber YOK: var olan videonun üzerine yazılmaz
   console.log(`${oge.video} Release'e yüklendi.`);
 }
