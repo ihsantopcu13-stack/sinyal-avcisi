@@ -26,37 +26,41 @@ const isle = (d, plan, basarisiz = {}) => {
 };
 
 {
-  // 25 Kasım 2026'dan itibaren günde 2: 10:00 ve 18:00; önceki günler eski 3 saatte kalır
+  // 25 Kasım 2026'dan itibaren günde 3: 10:00, 13:30 ve 18:00; önceki günler eski 3 saatte kalır
   kontrol("24 Kas eski 3 saat", gununSlotlari("2026-11-24").join() === "08:30,13:00,17:30");
-  kontrol("25 Kas yeni 2 saat", gununSlotlari("2026-11-25").join() === "10:00,18:00");
+  kontrol("25 Kas yeni 3 saat", gununSlotlari("2026-11-25").join() === "10:00,13:30,18:00");
   const g = gelecekSlotlar(ist("2026-11-23 21:00"));
   kontrol("23 Kas 21:00: yarın (24 Kas) eski saatler", g.join() === "2026-11-24T08:30:00+03:00,2026-11-24T13:00:00+03:00,2026-11-24T17:30:00+03:00", g.join());
   const g2 = gelecekSlotlar(ist("2026-11-24 21:00"));
-  kontrol("24 Kas 21:00: 25 Kas 10:00 ve 18:00", g2.join() === "2026-11-25T10:00:00+03:00,2026-11-25T18:00:00+03:00", g2.join());
+  kontrol("24 Kas 21:00: 25 Kas 10:00, 13:30 ve 18:00", g2.join() === "2026-11-25T10:00:00+03:00,2026-11-25T13:30:00+03:00,2026-11-25T18:00:00+03:00", g2.join());
   const g3 = gelecekSlotlar(ist("2026-11-25 09:50"));
-  kontrol("25 Kas 09:50: 10:00 alınmaz (15 dk kuralı)", g3[0] === "2026-11-25T18:00:00+03:00" && g3.length === 3, g3.join());
+  kontrol("25 Kas 09:50: 10:00 alınmaz (15 dk kuralı)", g3[0] === "2026-11-25T13:30:00+03:00" && g3.length === 5, g3.join());
   // Gerçek durum: 24 Kas'ın 3 saati dolu; 23 Kas 21:00 çalışması yeni konu eklemez
   const d = durumHazirla({ konular: { 1: { slot: "2026-11-24T08:30:00+03:00", instagram: { tamam: true }, facebook: { tamam: true } }, 2: { slot: "2026-11-24T13:00:00+03:00", instagram: { tamam: true }, facebook: { tamam: true } }, 3: { slot: "2026-11-24T17:30:00+03:00", instagram: { tamam: true }, facebook: { tamam: true } } } });
   kontrol("24 Kas çift dolmaz", planla(kuyruk, d, ist("2026-11-23 21:00")).length === 0, ozet(planla(kuyruk, d, ist("2026-11-23 21:00"))));
   const p2 = planla(kuyruk, d, ist("2026-11-24 21:00"));
-  kontrol("24 Kas 21:00: 25 Kas'a 2 konu", ozet(p2) === "4@11-25T10:00 5@11-25T18:00", ozet(p2));
+  kontrol("24 Kas 21:00: 25 Kas'a 3 konu", ozet(p2) === "4@11-25T10:00 5@11-25T13:30 6@11-25T18:00", ozet(p2));
+  // Gerçek durum: 25 Kas 10:00 ve 18:00 Buffer'da önceden dolu; yalnız 13:30 eklenir (çift paylaşım yok)
+  const d25 = durumHazirla({ konular: { 4: { slot: "2026-11-25T10:00:00+03:00", instagram: { tamam: true }, facebook: { tamam: true } }, 5: { slot: "2026-11-25T18:00:00+03:00", instagram: { tamam: true }, facebook: { tamam: true } } } });
+  const p25 = planla(kuyruk, d25, ist("2026-11-24 21:00"));
+  kontrol("25 Kas dolu saatler çift dolmaz, yalnız 13:30", ozet(p25) === "1@11-25T13:30", ozet(p25));
 }
 
 {
-  // "3 saniyede çöz" (tur: cozum) 10:00'a, hazır kuyruk 18:00'e; aranan tür yoksa diğeri
-  const k = { ogeler: [{ konu: 1 }, { konu: 2 }, { konu: 501, tur: "cozum" }, { konu: 3 }, { konu: 502, tur: "cozum" }] };
+  // "3 saniyede çöz" (tur: cozum) 10:00'a, hazır kuyruk 13:30 ve 18:00'e; aranan tür yoksa diğeri
+  const k = { ogeler: [{ konu: 1 }, { konu: 2 }, { konu: 501, tur: "cozum" }, { konu: 3 }, { konu: 502, tur: "cozum" }, { konu: 4 }, { konu: 5 }] };
   const d = durumHazirla({});
   const p = planla(k, d, ist("2026-11-24 21:00"));
-  kontrol("çözüm videosu 10:00'a, hazır kuyruk 18:00'e", ozet(p) === "501@11-25T10:00 1@11-25T18:00", ozet(p));
+  kontrol("çözüm videosu 10:00'a, hazır kuyruk 18:00'e", ozet(p) === "501@11-25T10:00 1@11-25T13:30 2@11-25T18:00", ozet(p));
   isle(d, p);
   const p2 = planla(k, d, ist("2026-11-25 21:00"));
-  kontrol("ertesi gün sıradaki çözüm 10:00'a", ozet(p2) === "502@11-26T10:00 2@11-26T18:00", ozet(p2));
+  kontrol("ertesi gün sıradaki çözüm 10:00'a", ozet(p2) === "502@11-26T10:00 3@11-26T13:30 4@11-26T18:00", ozet(p2));
   isle(d, p2);
   const p3 = planla(k, d, ist("2026-11-26 21:00"));
-  kontrol("çözüm yoksa 10:00 hazır kuyruktan dolar", ozet(p3) === "3@11-27T10:00", ozet(p3));
+  kontrol("çözüm yoksa 10:00 hazır kuyruktan dolar", ozet(p3) === "5@11-27T10:00", ozet(p3));
   const k2 = { ogeler: [{ konu: 503, tur: "cozum" }, { konu: 504, tur: "cozum" }] };
   const p4 = planla(k2, durumHazirla({}), ist("2026-11-24 21:00"));
-  kontrol("hazır kuyruk bitince 18:00 çözümle dolar", ozet(p4) === "503@11-25T10:00 504@11-25T18:00", ozet(p4));
+  kontrol("hazır kuyruk bitince 13:30 çözümle dolar", ozet(p4) === "503@11-25T10:00 504@11-25T13:30", ozet(p4));
   const p5 = planla(k, durumHazirla({}), ist("2026-11-23 21:00"));
   kontrol("eski saatlerde (10:00 yok) çözüm videosu bekler", !p5.some((x) => x.konu > 500), ozet(p5));
 }

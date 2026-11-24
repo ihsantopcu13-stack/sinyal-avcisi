@@ -267,7 +267,7 @@ def kuyruk_kaydi(k):
     giris = k.get("aciklama_giris") or f"{k['kanca']} Cevabını yoruma yaz."
     govde = (f"{giris}\n\n{k['kural']}\n\nSinyal kelimeler: {k['sinyal']}\n\n"
              f"Örnek:\n{ornek}\n\nAvcı kuralı: {k['tuzak_metin']}\n\n"
-             f"Bu, serinin {n}. konusu. Her gün 08:30, 13:00 ve 17:30'da yeni konu.\n\n")
+             f"Bu, serinin {n}. konusu. Her gün 10:00, 13:30 ve 18:00'de yeni konu.\n\n")
     ai = "Anlatıcımız KLOD yapay zekâ ile oluşturulmuştur."
     ig = govde + ("Yarın yeni bir tuzak. Kaçırmamak için takip et.\nKaydet, YDS'ye çalışan arkadaşına gönder.\n\n"
                   f"Ücretsiz çalışma planı. Link biyografide.\n\n{ai}\n\n{k['etiket']}")
