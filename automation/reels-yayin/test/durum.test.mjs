@@ -66,6 +66,20 @@ const isle = (d, plan, basarisiz = {}) => {
 }
 
 {
+  // 13:30 sinyal (tur: sinyal): 10:00 çözüm, 13:30 sinyal, 18:00 hazır kuyruk; sinyal 18:00'e gitmez
+  const k = { ogeler: [{ konu: 1 }, { konu: 701, tur: "sinyal" }, { konu: 501, tur: "cozum" }, { konu: 2 }, { konu: 702, tur: "sinyal" }, { konu: 3 }] };
+  const d = durumHazirla({});
+  const p = planla(k, d, ist("2026-11-24 21:00"));
+  kontrol("çözüm 10:00, sinyal 13:30, hazır 18:00", ozet(p) === "501@11-25T10:00 701@11-25T13:30 1@11-25T18:00", ozet(p));
+  isle(d, p);
+  const p2 = planla(k, d, ist("2026-11-25 21:00"));
+  kontrol("çözüm yoksa 10:00 hazır kuyruktan, 13:30 sıradaki sinyal", ozet(p2) === "2@11-26T10:00 702@11-26T13:30 3@11-26T18:00", ozet(p2));
+  const k2 = { ogeler: [{ konu: 1 }, { konu: 2 }, { konu: 3 }] };
+  const p3 = planla(k2, durumHazirla({}), ist("2026-11-24 21:00"));
+  kontrol("sinyal yoksa 13:30 hazır kuyruktan dolar", ozet(p3) === "1@11-25T10:00 2@11-25T13:30 3@11-25T18:00", ozet(p3));
+}
+
+{
   const s = gelecekSlotlar(ist("2026-10-04 21:00"));
   kontrol("21:00 çalışması yarının 3 saatini görür", s.join() === "2026-10-05T08:30:00+03:00,2026-10-05T13:00:00+03:00,2026-10-05T17:30:00+03:00", s.join());
   const s2 = gelecekSlotlar(ist("2026-10-04 12:50"));

@@ -3,6 +3,7 @@
 // tek video üretir, HİÇBİR YERE PAYLAŞMAZ. Ses ve görünüm 10:00 çözüm videosuyla aynı.
 // Akış: açılış → boşluklu cümle + A–E şıklar + 3-2-1 → cevap → sinyal kelimeler → kural → tuzak → takip çağrısı.
 // Kullanım: node scripts/sinyal-video.mjs --soru ss001  → out/video.mp4
+// Yayına koyma işi automation/reels-yayin/sinyal-ekle.mjs'tedir (her gün 13:30).
 // ============================================================
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
