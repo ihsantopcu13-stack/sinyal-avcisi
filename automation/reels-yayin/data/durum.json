@@ -4134,6 +4134,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-11-22T23:29:36.782Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "-CE9Xx6K8vY",
+        "link": "https://youtube.com/shorts/-CE9Xx6K8vY",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-11-24T03:57:24.510Z"
       }
     },
     "145": {
@@ -4157,6 +4165,14 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-11-22T23:29:37.897Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "gcfG4Bn-tW0",
+        "link": "https://youtube.com/shorts/gcfG4Bn-tW0",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-11-24T03:57:25.789Z"
       }
     },
     "146": {
@@ -4180,6 +4196,60 @@
         "ilkYorum": false,
         "tamam": true,
         "gonderildi": "2026-11-22T23:29:39.028Z"
+      },
+      "youtube": {
+        "deneme": 1,
+        "id": "nL3bns6zhJ8",
+        "link": "https://youtube.com/shorts/nL3bns6zhJ8",
+        "gizlilik": "public",
+        "tamam": true,
+        "zaman": "2026-11-24T03:57:26.892Z"
+      }
+    },
+    "147": {
+      "slot": "2026-11-25T10:00:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6b050b20db52b449cf226e01",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-25T07:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-24T03:57:21.022Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6b050b216734c08a26ad1b10",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-25T07:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-24T03:57:21.464Z"
+      }
+    },
+    "148": {
+      "slot": "2026-11-25T18:00:00+03:00",
+      "instagram": {
+        "deneme": 1,
+        "id": "6b050b21db52b449cf226e48",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-25T15:00:00.000Z",
+        "ilkYorum": false,
+        "yzEtiketi": true,
+        "tamam": true,
+        "gonderildi": "2026-11-24T03:57:21.990Z"
+      },
+      "facebook": {
+        "deneme": 1,
+        "id": "6b050b22bc151fa8ad1f5e38",
+        "durum": "scheduled",
+        "zamanlandi": "2026-11-25T15:00:00.000Z",
+        "tur": "reel",
+        "ilkYorum": false,
+        "tamam": true,
+        "gonderildi": "2026-11-24T03:57:22.429Z"
       }
     },
     "201": {
@@ -4315,8 +4385,7 @@
     }
   },
   "youtube_bekleyen": [
-    144,
-    145,
-    146
+    147,
+    148
   ]
 }
