@@ -2,7 +2,7 @@ name: Reels — site tanıtım videoları
 
 # tasarim/tanitim.json'daki tanıtım videolarını (konu 201+) OpenAI TTS sesiyle üretir.
 # PR'da: hepsi üretilir ve kapaklarıyla "reels-onizleme" ön sürümüne konur (onay için).
-# main'de: Release'te olmayan videolar üretilir ve reels-medya-v1'e yüklenir (üzerine yazmaz).
+# main'de: Release'te olmayan videolar üretilir ve reels-medya-v2'ye yüklenir (v1 1000 dosya sınırında) (üzerine yazmaz).
 # Kapaklı sürümü günlük yayın (reels-yayin.yml → kapak.py) kendisi hazırlar.
 
 on:

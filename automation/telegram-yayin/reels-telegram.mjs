@@ -28,7 +28,8 @@ import { modBelirle, tgDurumHazirla, reelsSec, tekKonuSec, reelsAciklamasi, hata
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REELS_DATA = path.join(__dirname, "..", "reels-yayin", "data");
 const TG_DURUM_YOLU = path.join(__dirname, "data", "telegram-durum.json");
-const RELEASE_TAG = "reels-medya-v1";
+// reels-medya-v1 1000 dosya sınırında (24 Kas 2026); yeni videolar reels-medya-v2'de. Okuma ikisinden, aynı ad varsa v1.
+const RELEASE_TAGLARI = ["reels-medya-v1", "reels-medya-v2"];
 
 const env = process.env;
 const MOD = modBelirle(env);
@@ -50,12 +51,27 @@ const dene = (ad, is) => yenidenDene(is, { ad, log });
 
 async function releaseAssetleri() {
   return dene("Release listesi", async () => {
-    let res;
-    try { res = await ghApi(`/releases/tags/${RELEASE_TAG}`, { signal: AbortSignal.timeout(30_000) }); }
-    catch (e) { throw hataOlustur(`GitHub Release "${RELEASE_TAG}": bağlantı hatası (${e.message})`, { gecici: true }); }
-    if (!res.ok) throw hataOlustur(`GitHub Release "${RELEASE_TAG}" bulunamadı (${res.status})`, { status: res.status });
-    const rel = await res.json();
-    return Object.fromEntries((rel.assets || []).map((a) => [a.name, a]));
+    const sonuc = {};
+    const getir = async (yol, etiket) => {
+      try { return await ghApi(yol, { signal: AbortSignal.timeout(30_000) }); }
+      catch (e) { throw hataOlustur(`GitHub Release "${etiket}": bağlantı hatası (${e.message})`, { gecici: true }); }
+    };
+    for (const [i, etiket] of RELEASE_TAGLARI.entries()) {
+      const res = await getir(`/releases/tags/${etiket}`, etiket);
+      if (!res.ok) {
+        if (i === 0 || res.status !== 404) throw hataOlustur(`GitHub Release "${etiket}" bulunamadı (${res.status})`, { status: res.status });
+        continue; // v2 henüz açılmamış olabilir
+      }
+      const rel = await res.json();
+      for (let sayfa = 1; ; sayfa++) {
+        const r = await getir(`/releases/${rel.id}/assets?per_page=100&page=${sayfa}`, etiket);
+        if (!r.ok) throw hataOlustur(`GitHub Release "${etiket}" dosya listesi okunamadı (${r.status})`, { status: r.status });
+        const liste = await r.json();
+        for (const a of liste) sonuc[a.name] ??= a;
+        if (liste.length < 100) break;
+      }
+    }
+    return sonuc;
   });
 }
 

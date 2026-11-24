@@ -2,7 +2,7 @@ name: Reels — yeni konu videoları (nane yeşili şablon)
 
 # tasarim/yeni-konular.json'daki konuların videolarını OpenAI TTS sesiyle üretir.
 # PR'da: yalnız en son eklenen konu (şu an 89) üretilir ve "reels-onizleme" ön sürümüne konur (onay için).
-# main'de: Release'te olmayan videolar üretilir ve reels-medya-v1'e yüklenir (üzerine yazmaz).
+# main'de: Release'te olmayan videolar üretilir ve reels-medya-v2'ye yüklenir (v1 1000 dosya sınırında) (üzerine yazmaz).
 
 on:
   pull_request:

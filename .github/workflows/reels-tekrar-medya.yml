@@ -1,7 +1,7 @@
 name: Reels — tekrar turu videoları (yeni tasarım)
 
 # kuyruk.json'daki tekrar konularının (101–140 = konu 1–40) videolarını eski videodan
-# yeni tasarıma çevirir ve reels-medya-v1 Release'ine yükler. Var olan dosyaya dokunmaz.
+# yeni tasarıma çevirir ve reels-medya-v2 Release'ine yükler (v1 1000 dosya sınırında). Var olan dosyaya dokunmaz.
 # PR'da yalnız ilk eksik video üretilir ve önizleme olarak eklenir (yükleme yok).
 
 on:

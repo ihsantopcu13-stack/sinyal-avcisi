@@ -15,6 +15,7 @@ import json, os, subprocess, sys
 from uret_yeni import W, H, ZEMIN, KART, NANE, BEYAZ, KOYU, ETIKET, KUYRUK, f, sigdir, satir_ciz
 from uret_tanitim import AI, ortala, sahne_ciz, video_uret
 from PIL import Image, ImageDraw
+import medya
 
 KOK = os.path.dirname(os.path.abspath(__file__))
 VERI = os.path.join(KOK, "senaryo.json")
@@ -76,15 +77,14 @@ def main():
         for n in [x for x in a[a.index("--video") + 1:] if x.isdigit()]:
             uret(bul(n), os.path.join(cikti, f"konu{n}.mp4"), "--sessiz" in a)
     if "--hepsi" in a:
-        varolan = set(subprocess.run(["gh", "release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name"],
-                                     capture_output=True, text=True, check=True).stdout.split())
+        varolan = medya.varolan()
         for v in veri["videolar"]:
             ad = f"konu{v['konu']}.mp4"
             if ad in varolan: continue
             yol = os.path.join(cikti, ad)
             uret(v, yol)
             if "--yukle" in a:
-                subprocess.run(["gh", "release", "upload", ETIKET, yol], check=True)  # --clobber YOK
+                medya.yukle(yol)  # --clobber YOK
                 print(f"✔ Senaryo {v['konu']} yüklendi")
 
 

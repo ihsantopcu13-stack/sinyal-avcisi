@@ -19,7 +19,8 @@ from PIL import Image, ImageDraw, ImageFont
 KOK = os.path.dirname(os.path.abspath(__file__))
 VERI = os.path.join(KOK, "yeni-konular.json")
 KUYRUK = os.path.join(KOK, "..", "data", "kuyruk.json")
-ETIKET = "reels-medya-v1"
+ETIKET = "reels-medya-v1"  # eski ad; yükleme/okuma medya.py ile (v1 + v2)
+import medya
 
 W, H = 1080, 1920
 ZEMIN = (4, 36, 26)
@@ -308,8 +309,7 @@ def main():
         k = next(x for x in veri["konular"] if x["konu"] == int(a[a.index("--video") + 1]))
         video_uret(k, os.path.join(cikti, f"konu{k['konu']:02d}.mp4"))
     if "--hepsi" in a:
-        varolan = set(subprocess.run(["gh", "release", "view", ETIKET, "--json", "assets", "-q", ".assets[].name"],
-                                     capture_output=True, text=True, check=True).stdout.split())
+        varolan = medya.varolan()
         for k in veri["konular"]:
             ad = f"konu{k['konu']:02d}.mp4"
             if ad in varolan: continue
@@ -317,7 +317,7 @@ def main():
             video_uret(k, yol)
             if "--yukle" in a:
                 # --clobber YOK: var olan dosyanın üzerine yazılmaz
-                subprocess.run(["gh", "release", "upload", ETIKET, yol], check=True)
+                medya.yukle(yol)
                 print(f"✔ Konu {k['konu']} yüklendi")
 
 
