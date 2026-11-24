@@ -1,7 +1,7 @@
 name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 
 # Günde bir kez (21:00 TR) çalışır; önündeki yayın saatlerini (bugünün kalanı + yarın;
-# 25 Kas 2026'dan itibaren 10:00 ve 18:00 İstanbul) sıradaki konularla doldurup Buffer'a TAM O SAAT için zamanlar.
+# 25 Kas 2026'dan itibaren 10:00, 13:30 ve 18:00 İstanbul) sıradaki konularla doldurup Buffer'a TAM O SAAT için zamanlar.
 # 10:00 saatine o gün üretilen "3 saniyede çöz" videosu gider (cozum-ekle.mjs).
 # GitHub zamanlanmış işleri saatlerce geciktirebildiği için yayın saatini Buffer tutar.
 # GÜVENLİK KİLİDİ: zamanlanmış çalışmalar repo değişkeni REELS_YAYIN=acik
@@ -11,7 +11,7 @@ name: Reels — Instagram, Facebook (Buffer), YouTube Shorts
 on:
   schedule:
     # GitHub cron UTC'dir; Türkiye UTC+3 (yaz saati yok).
-    - cron: "0 18 * * *"  # 21:00 TR — ertesi günün 10:00 ve 18:00 gönderilerini zamanlar (25 Kas 2026 öncesi: 08:30, 13:00, 17:30)
+    - cron: "0 18 * * *"  # 21:00 TR — ertesi günün 10:00, 13:30 ve 18:00 gönderilerini zamanlar (25 Kas 2026 öncesi: 08:30, 13:00, 17:30)
   workflow_dispatch:
     inputs:
       mod:
