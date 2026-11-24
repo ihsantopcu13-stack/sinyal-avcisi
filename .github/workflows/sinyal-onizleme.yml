@@ -1,0 +1,49 @@
+name: Sinyal kelime önizleme (13:30, paylaşmaz)
+
+# 13:30 "sinyal kelime" formatından TEK örnek video üretir ve "reels-onizleme" ön sürümüne koyar.
+# Buffer, Instagram, TikTok, YouTube adımı YOK: hiçbir şey paylaşılmaz.
+on:
+  push:
+    branches: [sinyal-1330-onizleme]
+  workflow_dispatch: {}
+
+concurrency:
+  group: video-onizleme
+  cancel-in-progress: false
+
+jobs:
+  onizleme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # yalnız reels-onizleme ön sürümüne yüklemek için
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Chromium bağımlılıkları (Remotion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+            libasound2t64 libpango-1.0-0 libpangocairo-1.0-0 ffmpeg
+      - run: npm install
+      - run: npx remotion browser ensure
+      - name: Örnek videoyu üret (paylaşmaz)
+        run: node scripts/sinyal-video.mjs --soru ss001
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Önizleme sürümüne koy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cp out/video.mp4 out/ornek-sinyal-1330.mp4
+          gh release view reels-onizleme >/dev/null 2>&1 || \
+            gh release create reels-onizleme --prerelease --title "Reels önizleme" --notes "Onay için örnek videolar; yayın hattı kullanmaz."
+          gh release upload reels-onizleme out/ornek-sinyal-1330.mp4 --clobber
