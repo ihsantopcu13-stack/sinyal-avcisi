@@ -1,0 +1,312 @@
+[
+  {
+    "id": "sk001",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "alleviate",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: alleviate. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "The new drug was designed to ---- the chronic pain that many patients suffer from after surgery.",
+    "signalWords": [
+      {
+        "word": "designed to"
+      },
+      {
+        "word": "chronic pain"
+      }
+    ],
+    "mainSignal": {
+      "word": "alleviate",
+      "type": "anlam"
+    },
+    "options": [
+      "postpone",
+      "overlook",
+      "alleviate",
+      "imitate",
+      "aggravate"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: alleviate = hafifletmek, azaltmak. İlaç ağrı için yapılır, ağrıyı azaltır.",
+    "trap": "Aggravate da ağrıyla kullanılır ama tam tersi, kötüleştirmek demek. İlaç ağrıyı kötüleştirmek için yapılmaz.",
+    "translation": "Yeni ilaç, birçok hastanın ameliyattan sonra çektiği kronik ağrıyı hafifletmek için tasarlandı."
+  },
+  {
+    "id": "sk002",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "proliferate",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: proliferate. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "Without proper treatment, the bacteria can ---- rapidly in warm and humid conditions.",
+    "signalWords": [
+      {
+        "word": "Without proper treatment"
+      },
+      {
+        "word": "rapidly"
+      }
+    ],
+    "mainSignal": {
+      "word": "proliferate",
+      "type": "anlam"
+    },
+    "options": [
+      "hesitate",
+      "collapse",
+      "evaporate",
+      "proliferate",
+      "diminish"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Kural: proliferate = hızla çoğalmak. Tedavi yoksa ve ortam sıcaksa bakteri çoğalır.",
+    "trap": "Diminish (azalmak) seçen \"without\" kelimesini kaçırıyor. Tedavi YOKSA bakteri azalmaz.",
+    "translation": "Uygun tedavi olmadan bakteriler sıcak ve nemli ortamda hızla çoğalabilir."
+  },
+  {
+    "id": "sk003",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "covertly",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: covertly. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "The agents operated ---- for years, so even their closest colleagues were unaware of the mission.",
+    "signalWords": [
+      {
+        "word": "so"
+      },
+      {
+        "word": "unaware"
+      }
+    ],
+    "mainSignal": {
+      "word": "covertly",
+      "type": "anlam"
+    },
+    "options": [
+      "reluctantly",
+      "randomly",
+      "frequently",
+      "openly",
+      "covertly"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: covertly = gizlice. Kimse görevi bilmiyorsa iş gizli yapılmıştır.",
+    "trap": "Openly tam tersidir, açıkça demek. Kimse görevi bilmiyorsa iş açık yapılmamıştır.",
+    "translation": "Ajanlar yıllarca gizlice çalıştı, bu yüzden en yakın meslektaşları bile görevden habersizdi."
+  },
+  {
+    "id": "sk004",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "surge",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: surge. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "There has been a sharp ---- in online shopping since the pandemic, with sales nearly doubling in two years.",
+    "signalWords": [
+      {
+        "word": "sharp"
+      },
+      {
+        "word": "nearly doubling"
+      }
+    ],
+    "mainSignal": {
+      "word": "surge",
+      "type": "anlam"
+    },
+    "options": [
+      "surge",
+      "delay",
+      "halt",
+      "decline",
+      "shortage"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Kural: surge = ani ve büyük artış. Satış iki katına çıkıyorsa artış var.",
+    "trap": "\"Sharp decline\" da çok kullanılan bir kalıptır. Ama \"doubling\" (iki katına çıkma) azalmayı eler.",
+    "translation": "Pandemiden beri online alışverişte keskin bir artış oldu, satışlar iki yılda neredeyse iki katına çıktı."
+  },
+  {
+    "id": "sk005",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "mediocre",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: mediocre. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "Critics described the film as ----; it was neither particularly good nor terribly bad.",
+    "signalWords": [
+      {
+        "word": "neither"
+      },
+      {
+        "word": "nor"
+      }
+    ],
+    "mainSignal": {
+      "word": "mediocre",
+      "type": "anlam"
+    },
+    "options": [
+      "innovative",
+      "outstanding",
+      "terrible",
+      "controversial",
+      "mediocre"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: mediocre = vasat, ortalama. Ne iyi ne kötü olan şey vasattır.",
+    "trap": "Outstanding ve terrible cümlenin yarısına uyar. Neither-nor yapısı ikisini de eler.",
+    "translation": "Eleştirmenler filmi vasat buldu; ne özellikle iyiydi ne de çok kötü."
+  },
+  {
+    "id": "sk006",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "occurrence",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: occurrence. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "Earthquakes in this region are a rare ----, so most buildings were not designed to withstand them.",
+    "signalWords": [
+      {
+        "word": "rare"
+      },
+      {
+        "word": "so"
+      }
+    ],
+    "mainSignal": {
+      "word": "occurrence",
+      "type": "anlam"
+    },
+    "options": [
+      "outcome",
+      "remedy",
+      "occurrence",
+      "reluctance",
+      "requirement"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Kural: occurrence = olay, meydana gelen şey. Deprem bir olaydır, nadir görülür.",
+    "trap": "Outcome (sonuç) de \"rare\" ile kullanılır ama deprem bir sonuç değil, bir olaydır.",
+    "translation": "Bu bölgede depremler nadir görülen bir olaydır, bu yüzden çoğu bina depreme dayanacak şekilde tasarlanmadı."
+  },
+  {
+    "id": "sk007",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "remote",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: remote. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "Doctors can now treat patients in ---- villages through video calls, as travelling to the city takes hours.",
+    "signalWords": [
+      {
+        "word": "video calls"
+      },
+      {
+        "word": "takes hours"
+      }
+    ],
+    "mainSignal": {
+      "word": "remote",
+      "type": "anlam"
+    },
+    "options": [
+      "nearby",
+      "crowded",
+      "modern",
+      "urban",
+      "remote"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Kural: remote = uzak, ücra. Şehre gitmek saatler sürüyorsa köy uzaktır.",
+    "trap": "Nearby (yakın) tam tersidir. \"takes hours\" sinyalini kaçırırsan düşersin.",
+    "translation": "Doktorlar artık uzak köylerdeki hastaları görüntülü görüşmeyle tedavi edebiliyor, çünkü şehre gitmek saatler sürüyor."
+  },
+  {
+    "id": "sk008",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "charged with",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: charged with. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "The former manager was ---- fraud after auditors found millions missing from the accounts.",
+    "signalWords": [
+      {
+        "word": "fraud"
+      },
+      {
+        "word": "millions missing"
+      }
+    ],
+    "mainSignal": {
+      "word": "charged with",
+      "type": "anlam"
+    },
+    "options": [
+      "interested in",
+      "charged with",
+      "praised for",
+      "relieved of",
+      "composed of"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: charged with = ile suçlanmak. Hesaptan para kayıpsa yönetici dolandırıcılıkla suçlanır.",
+    "trap": "Aynı anlamdaki accused edatı \"of\" ister: accused of. Charged ise \"with\" ister. Edatı karıştırma.",
+    "translation": "Eski yönetici, denetçiler hesaplarda milyonların kayıp olduğunu bulunca dolandırıcılıkla suçlandı."
+  },
+  {
+    "id": "sk009",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "otherwise",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: otherwise. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "Students must submit their applications by Friday; ----, they will not be considered for the scholarship.",
+    "signalWords": [
+      {
+        "word": "must"
+      },
+      {
+        "word": "will not be considered"
+      }
+    ],
+    "mainSignal": {
+      "word": "otherwise",
+      "type": "anlam"
+    },
+    "options": [
+      "meanwhile",
+      "otherwise",
+      "likewise",
+      "moreover",
+      "therefore"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: otherwise = aksi halde. \"Şunu yap, yoksa şu olur\" yapısında gelir.",
+    "trap": "Therefore (bu yüzden) çok seçilir. Ama başvuru yapmak burs almamanın sebebi değil. Yapmazsan olacak olanı otherwise anlatır.",
+    "translation": "Öğrenciler başvurularını cumaya kadar yapmalı; aksi halde burs için değerlendirilmeyecekler."
+  },
+  {
+    "id": "sk010",
+    "seri": "22 Kasım'da çıkan kelimeler",
+    "kelime": "meanwhile",
+    "hook": "Adaylara göre 22 Kasım YDS'de çıktı: meanwhile. Biliyor musun?",
+    "kapanis": "Yarın 13:30'da 22 Kasım'ın bir kelimesi daha. Takip et.",
+    "questionText": "The government spent billions on new highways. ----, public schools were struggling with a shortage of teachers.",
+    "signalWords": [
+      {
+        "word": "spent billions"
+      },
+      {
+        "word": "were struggling"
+      }
+    ],
+    "mainSignal": {
+      "word": "meanwhile",
+      "type": "anlam"
+    },
+    "options": [
+      "Otherwise",
+      "Meanwhile",
+      "For instance",
+      "Likewise",
+      "Therefore"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kural: meanwhile = bu arada, aynı dönemde. İki farklı şey aynı anda oluyor.",
+    "trap": "Otherwise burada olmaz, çünkü cümlede bir koşul yok. Otherwise ile meanwhile'ı karıştırma.",
+    "translation": "Hükümet yeni otoyollara milyarlar harcadı. Bu arada devlet okulları öğretmen eksikliğiyle boğuşuyordu."
+  }
+]

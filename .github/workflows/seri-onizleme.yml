@@ -1,0 +1,50 @@
+name: Seri önizleme (13:30, paylaşmaz)
+
+# "22 Kasım'da çıkan kelimeler" serisinden TEK örnek video üretir ve "reels-onizleme" ön sürümüne koyar.
+# Hiçbir şey paylaşılmaz. Onaydan sonra bu dosya silinir.
+on:
+  push:
+    branches: [seri-22-kasim]
+    paths:
+      - automation/video-pipeline/scripts/sinyal-video.mjs
+      - automation/reels-yayin/data/seri-22-kasim.json
+      - .github/workflows/seri-onizleme.yml
+
+concurrency:
+  group: video-onizleme
+  cancel-in-progress: false
+
+jobs:
+  onizleme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: automation/video-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Chromium bağımlılıkları (Remotion)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 \
+            libasound2t64 libpango-1.0-0 libpangocairo-1.0-0 ffmpeg
+      - run: npm install
+      - run: npx remotion browser ensure
+      - name: Örnek videoyu üret (paylaşmaz)
+        run: node scripts/sinyal-video.mjs --soru sk001
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Önizleme sürümüne koy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          cp out/video.mp4 out/ornek-seri-22-kasim.mp4
+          gh release upload reels-onizleme out/ornek-seri-22-kasim.mp4 --clobber

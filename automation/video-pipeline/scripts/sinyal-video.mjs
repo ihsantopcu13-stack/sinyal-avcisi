@@ -6,6 +6,7 @@
 // Yayına koyma işi automation/reels-yayin/sinyal-ekle.mjs'tedir (her gün 13:30).
 // ============================================================
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SES, harf } from "./cozum-video.mjs";
@@ -15,6 +16,8 @@ const OUT_DIR = path.join(KOK, "out");
 export const SINYAL_SORULAR = path.join(KOK, "..", "..", "assets", "data", "sinyal-sorular.json");
 export const HOOK = "YDS'ye çalışıyorsan bunu 3 saniyede bil.";
 export const KAPANIS = "Cevabını yoruma yaz. Yarın 13:30'da yeni sinyal, takip et.";
+// Seri soruları (ör. "22 Kasım'da çıkan kelimeler") kendi açılış/kapanış cümlesini taşır
+export const SERI_SORULAR = path.join(KOK, "..", "reels-yayin", "data", "seri-22-kasim.json");
 
 const ilkCumle = (m) => {
   const t = String(m || "").replace(/^\s*(kural|tuzak)\s*:\s*/i, "").trim();
@@ -30,11 +33,11 @@ const TUR = { zitlik: "zıtlık", sebep: "sebep", sonuc: "sonuç", zaman: "zaman
 
 export function satirlarUret(s) {
   const d = s.correctAnswer;
-  const tur = TUR[s.mainSignal?.type] || s.mainSignal?.type || "";
+  const tur = TUR[s.mainSignal?.type] || "";
   const ipuclari = (s.signalWords || []).map((w) => `"${w.word}"`).join(" ve ");
   const tuzak = ikiCumle(s.trap);
   return [
-    HOOK,
+    s.hook || HOOK,
     {
       ekran: `${s.questionText}\n\n` + s.options.map((o, i) => `${harf(i)}) ${o}`).join("\n"),
       ses: "Boşluğa hangisi gelir? Şıklara bak, 3 saniyen var! 3... 2... 1!",
@@ -42,9 +45,9 @@ export function satirlarUret(s) {
     },
     { ekran: `Doğru cevap ${harf(d)}: ${s.options[d]}`, ses: `Doğru cevap ${harf(d)}, ${s.options[d]}!` },
     `Sinyal kelimeler: ${ipuclari}${tur ? `. Bu bir ${tur} sinyali.` : "."}`,
-    `Kural: ${ilkCumle(s.explanation)}`,
+    `Kural: ${s.hook ? ikiCumle(s.explanation.replace(/^\s*kural\s*:\s*/i, "")) : ilkCumle(s.explanation)}`,
     ...(tuzak ? [`Tuzak: ${tuzak}`] : []),
-    KAPANIS,
+    s.kapanis ? `Cevabını yoruma yaz. ${s.kapanis}` : KAPANIS,
   ];
 }
 
@@ -52,7 +55,7 @@ export async function sinyalVideosuUret(s) {
   if (!s.questionText || !Array.isArray(s.options) || s.options.length !== 5) throw new Error(`Soru ${s.id}: 5 şık yok`);
   for (const [k, v] of Object.entries(SES)) process.env[k] ||= v;
   const satirlar = satirlarUret(s);
-  const senaryo = { hook: HOOK, sinyal: s.mainSignal?.word, soru_en: s.questionText, kapanis_tr: KAPANIS, uretimKaynagi: "sinyal" };
+  const senaryo = { hook: s.hook || HOOK, sinyal: s.mainSignal?.word, soru_en: s.questionText, kapanis_tr: s.kapanis || KAPANIS, uretimKaynagi: "sinyal" };
   await mkdir(OUT_DIR, { recursive: true });
   const narrasyon = satirlar.map((x) => (typeof x === "string" ? x : x.ses)).join(" ... ");
   await writeFile(path.join(OUT_DIR, "script.json"), JSON.stringify({ senaryo, satirlar, narrasyon }, null, 2), "utf-8");
@@ -66,7 +69,7 @@ export async function sinyalVideosuUret(s) {
 if (import.meta.url === pathToFileURL(process.argv[1] || "").href) {
   const a = process.argv.slice(2);
   const id = a.includes("--soru") ? a[a.indexOf("--soru") + 1] : "ss001";
-  const sorular = JSON.parse(await readFile(SINYAL_SORULAR, "utf-8"));
+  const sorular = [SINYAL_SORULAR, SERI_SORULAR].flatMap((f) => { try { return JSON.parse(readFileSync(f, "utf-8")); } catch { return []; } });
   const s = sorular.find((q) => q.id === id);
   if (!s) throw new Error(`Soru bulunamadı: ${id}`);
   console.log("Video hazır:", await sinyalVideosuUret(s));
