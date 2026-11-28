@@ -1273,6 +1273,7 @@ body.dark-mode .sp-hafta{border-bottom-color:#22324a}
 /* PUAN TAHMİNİ — denemelerden tahmini puan, 50 hedefine mesafe (koyu yeşil + nane) */
 .pt-kart{background:#0b1f17;border:1px solid rgba(110,231,183,.4);border-left:4px solid #6ee7b7;border-radius:16px;padding:18px 22px;margin-bottom:14px;color:#f4fbf7;font-family:'IBM Plex Sans',sans-serif}
 .pt-kart:empty{display:none}
+.pt-kart.pt-bos{display:none!important}
 .pt-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:6px}
 .pt-baslik{font-size:21px;font-weight:700;margin-bottom:6px}
 .pt-skor{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
@@ -1969,6 +1970,7 @@ html.yeni-ziyaretci .mobile-bottom-nav{display:none!important}
       <!-- LANDING CTA: basla() = giriş istemeyen 5 soruluk seviye testi (iaAc). Testi bitirmiş / programı kurulu
            kullanıcıda basla() panoya gider ve iaHeroButonGuncelle()/heroGuncelle() bu düğmenin metnini değiştirir (id'yi koru). -->
       <button type="button" class="hero-yol hero-yol-ana" id="hero-basla-btn" data-landing-cta="hero_test" onclick="landingCtaTikla('hero_test');basla()"><small>Giriş gerekmez · 5 soru</small><b>Ücretsiz AVCI Testini Başlat</b></button>
+      <button type="button" data-landing-cta="hero_sifirdan" onclick="landingCtaTikla('hero_sifirdan');iaSifirdanBasla()" style="align-self:flex-start;background:none;border:none;padding:2px 4px;font:inherit;font-size:15px;font-weight:600;color:inherit;text-decoration:underline;cursor:pointer">🌱 İngilizceye sıfırdan başlıyorum</button>
       <button type="button" class="hero-yol" data-landing-cta="hero_yontem" onclick="landingCtaTikla('hero_yontem');goTo('nasil')"><small>Nasıl çalıştığına bak</small><b>Yöntemi Gör</b></button>
     </div>
     <span class="hero-onay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>%100 ücretsiz, kayıt yok</span>
@@ -16453,6 +16455,8 @@ function ptHesapla(denemeler,gecmis,simdi){
 function ptSayi(x){return String(x).replace('.',',');}
 function ptKartRender(){
   const el=document.getElementById('pt-kart');if(!el)return;
+  const bos=!ptDenemeleriOku().length&&!cevapGecmisiLoad().length;
+  el.classList.toggle('pt-bos',bos);if(bos)return;
   const t=ptHesapla(ptDenemeleriOku(),cevapGecmisiLoad(),Date.now());
   const not=`<div class="pt-not">Varsayım: YDS 80 soru, her doğru 1,25 puan, yanlış doğruyu götürmez. ÖSYM'den kontrol et.</div>`;
   if(t.tur==='yok'){
@@ -17714,8 +17718,29 @@ function iaSonucOku(){try{return JSON.parse(localStorage.getItem('sa_ilk_adim')|
 function basla(){
   if(typeof faz2GaEvent==='function')faz2GaEvent('platforma_eris');
   if(typeof hpVarMi==='function'&&hpVarMi()){hpAc('bugun');return;}
-  if(iaSonucOku()){goTo('dashboard');return;}
+  const iaKayit=iaSonucOku();
+  if(iaKayit&&iaKayit.sifirdan){iaA1Ac();return;}
+  if(iaKayit){goTo('dashboard');return;}
   iaAc();
+}
+// Dil Avcısı → A1: menüdeki mevcut Dil Avcısı öğesine tıklanır (masaüstü ve
+// mobil alt menü de aynı öğeyi kullanır), ardından A1 seçilip oraya kaydırılır.
+function iaA1Ac(){
+  const menu=document.querySelector('.dn-item[onclick*="\'dilavcisi\'"]');
+  if(menu)menu.click();
+  else if(typeof dtab==='function')dtab(document.querySelectorAll('.dtab')[13],'dilavcisi');
+  setTimeout(()=>{
+    const a1=document.querySelector('#ing-seviye-tabs .ing-stab');
+    if(a1&&typeof ingSeviyeSec==='function')ingSeviyeSec(a1,'A1');
+    document.getElementById('mod-dilavcisi')?.scrollIntoView({behavior:'smooth',block:'start'});
+  },150);
+}
+function iaSifirdanBasla(){
+  try{localStorage.setItem('sa_ilk_adim',JSON.stringify({tarih:new Date().toISOString(),sifirdan:true}));}catch(e){}
+  iaKapat();
+  document.documentElement.classList.remove('yeni-ziyaretci');
+  iaHeroButonGuncelle();
+  iaA1Ac();
 }
 function iaAc(){
   iaDurum={alan:'Genel',idx:0,dogru:0,yanlislar:[],cevaplandi:false};
@@ -17740,6 +17765,7 @@ function iaAlanRender(){
     <div class="ia-secenekler">
       ${IA_ALANLAR.map(a=>`<button class="ia-sec" onclick="iaAlanSec('${a.key}')">${a.ikon} ${a.ad}</button>`).join('')}
     </div>
+    <button class="ia-btn" style="background:rgba(255,255,255,.08);color:#dce3ec;border:1px solid rgba(56,189,248,.45)" onclick="iaSifirdanBasla()">🌱 İngilizceye sıfırdan başlıyorum</button>
     <button class="ia-link" onclick="iaAtla()">Testi atla, doğrudan çalışmaya geç</button>`;
 }
 function iaAlanSec(key){
@@ -17755,6 +17781,7 @@ function iaSoruRender(){
     <p class="ia-soru">${q.soru}</p>
     <div class="ia-secenekler" id="ia-secenekler">
       ${q.opts.map((o,i)=>`<button class="ia-sec" onclick="iaCevap(${i})">${'ABCDE'[i]}) ${o}</button>`).join('')}
+      <button class="ia-sec" style="opacity:.75" onclick="iaCevap(-1)">🤷 Bilmiyorum</button>
     </div>
     <div id="ia-fb-alan"></div>`;
 }
@@ -17767,10 +17794,11 @@ function iaCevap(i){
   btnlar[q.ans].classList.add('dogru');
   const dogru=i===q.ans;
   if(dogru)iaDurum.dogru++;
-  else{btnlar[i].classList.add('yanlis');iaDurum.yanlislar.push(q);}
+  else{if(i>=0)btnlar[i].classList.add('yanlis');iaDurum.yanlislar.push(q);}
   const son=iaDurum.idx===IA_SORULAR.length-1;
+  const fbBas=dogru?'✅ Doğru! ':(i<0?'🤷 Sorun değil. Doğru cevap: <b>':'❌ Doğru cevap: <b>')+(dogru?'':'ABCDE'[q.ans]+'</b>. ');
   document.getElementById('ia-fb-alan').innerHTML=`
-    <div class="ia-fb">${dogru?'✅ Doğru! ':'❌ Doğru cevap: <b>'+'ABCDE'[q.ans]+'</b>. '}${q.exp}</div>
+    <div class="ia-fb">${fbBas}${q.exp}</div>
     <button class="ia-btn" onclick="iaSonraki()">${son?'Sonucumu Gör →':'Sonraki Soru →'}</button>`;
 }
 function iaSonraki(){
@@ -17791,6 +17819,7 @@ function iaSonucRender(){
   const d=iaDurum.dogru,n=IA_SORULAR.length;
   const seviye=d<=1?1:(d<=3?2:3);
   const gorev=iaGorevBul();
+  const a1Ilk=(typeof ING_DERSLER!=='undefined'&&ING_DERSLER.A1&&ING_DERSLER.A1[0])?ING_DERSLER.A1[0].baslik:'İlk ders';
   const alan=IA_ALANLAR.find(a=>a.key===iaDurum.alan)||IA_ALANLAR[0];
   try{localStorage.setItem('sa_ilk_adim',JSON.stringify({tarih:new Date().toISOString(),alan:alan.key,dogru:d,toplam:n,seviye,zayif:iaDurum.yanlislar.map(q=>q.konu)}));}catch(e){}
   iaAlanUygula(alan);
@@ -17808,9 +17837,12 @@ function iaSonucRender(){
     <p class="ia-alt">${zayifMetin}</p>
     <div class="ia-gorev">
       <div class="ia-gorev-etiket">📡 BUGÜN ŞUNU YAP</div>
-      <div class="ia-gorev-baslik">${gorev.etiket} çöz</div>
+      <div class="ia-gorev-baslik">${d<=1?'A1 · '+a1Ilk+' dersini aç':gorev.etiket+' çöz'}</div>
     </div>
-    <button class="ia-btn" onclick="iaGoreveBasla('${gorev.dnAra}')">🚀 Göreve Başla →</button>
+    ${d<=1
+      ?`<button class="ia-btn" onclick="iaKapat();iaA1Ac()">🌱 Temelden başla (A1) →</button>
+    <button class="ia-link" onclick="iaGoreveBasla('${gorev.dnAra}')">Yine de YDS görevine başla</button>`
+      :`<button class="ia-btn" onclick="iaGoreveBasla('${gorev.dnAra}')">🚀 Göreve Başla →</button>`}
     <button class="ia-btn" style="background:rgba(255,255,255,.08);color:#dce3ec;border:1px solid rgba(56,189,248,.45);margin-top:10px" onclick="iaKapat();if(typeof hpAc==='function')hpAc()">📅 Sınav tarihim ve hedef puanım var → Programımı kur</button>
     <button class="ia-link" onclick="iaHesapAc()">💾 İlerlemen kaybolmasın — ücretsiz hesap aç (isteğe bağlı)</button>`;
 }
